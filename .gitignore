@@ -1,5 +1,6 @@
 .gradle
 **/build
+**/.DS_Store
 
 ### STS ###
 .apt_generated
@@ -39,7 +40,6 @@ target/*
 acceptance-tests/screenshot/
 acceptance-tests/output/
 acceptance-tests/.DS_Store
-
 
 src/main/resources/static/js/*
 src/main/resources/static/css/*
