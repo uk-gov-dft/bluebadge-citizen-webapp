@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ApplicationEndController {
 
-    public static final String URL_DECLARATION = "/apply-for-a-badge/declaration";
+    public static final String URL_DECLARATION_PAGE = "/apply-for-a-badge/declaration";
     public static final String TEMPLTE_DECLARATION = "application-end/declaration";
 
-    @GetMapping(URL_DECLARATION)
+    @GetMapping(URL_DECLARATION_PAGE)
     public String showDeclaration() {
         return TEMPLTE_DECLARATION;
     }
