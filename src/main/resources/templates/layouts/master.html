@@ -32,7 +32,18 @@
 
     <header th:replace="~{ fragments/header :: govuk-header }"></header>
 
-    <main layout:fragment="content"></main>
+    <div class="govuk-width-container">
+
+        <div th:replace="~{ fragments/header :: govuk-phase-banner }">></div>
+
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+
+                <div class="govuk-grid-column-two-thirds" layout:fragment="content"></div>
+
+            </div>
+        </main>
+    </div>
 
     <footer th:replace="~{ fragments/footer :: govuk-footer }"></footer>
 
