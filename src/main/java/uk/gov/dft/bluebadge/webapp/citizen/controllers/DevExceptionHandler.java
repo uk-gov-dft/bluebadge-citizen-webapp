@@ -20,7 +20,7 @@ public class DevExceptionHandler {
 
   @ExceptionHandler
   public ModelAndView handleError(HttpServletRequest req, ClientApiException ex) {
-    log.error("Request: " + req.getRequestURL() + " raised " + ex);
+    log.error("Request: {} raised {}.", req.getRequestURL(), ex.toString(), ex);
 
     ModelAndView mav = new ModelAndView();
     try {
@@ -38,7 +38,7 @@ public class DevExceptionHandler {
 
   @ExceptionHandler
   public ModelAndView handleError(HttpServletRequest req, Exception ex) {
-    log.error("Request: " + req.getRequestURL() + " raised " + ex);
+    log.error("Request: {} raised {}.", req.getRequestURL(), ex.toString(), ex);
 
     ModelAndView mav = new ModelAndView();
     mav.addObject("exception", ex);
