@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+/* ------------------------------------------------------------------------------
+
+* Error Summary
+
+@title - String: Overrides default error title
+@description - String: Adds description message to the error summary
+
+Individual input field errors will be displayed automatically
+if form validation fails. These errors are included inside the fields
+variable which comes from Thymleaf / Spring integration.
+
+
+-------------------------------------------------------------------------------- */
+
+<div th:fragment="govuk-error-summary(errorSummary})" tabindex="-1" role="alert"
+     class="govuk-error-summary"
+     th:aria-labelledby="error-summary-title"
+     th:if="${errorSummary} OR ${#fields.hasErrors('formRequest.*')}">
+
+    <h2 class="govuk-error-summary__title"
+        th:if="${errorSummary} AND ${errorSummary.title}"
+        id="error-summary-title"
+        th:data-uipath="${errorSummary.title}"
+        th:utext="#{${errorSummary.title}}" />
+
+    <div th:if="${errorSummary} AND ${errorSummary.description}"
+         th:utext="#{${errorSummary.description}}"
+         class="govuk-error-summary__body" />
+
+    <div th:if="${#fields.hasErrors('formRequest.*')}" class="govuk-c-error-summary__body">
+
+        <ul class="govuk-list govuk-error-summary__list">
+
+            <li th:if="${err.isGlobal()}"
+                th:each="err : ${#fields.detailedErrors('formRequest')}">
+
+                <p th:text="${err.message}"/>
+
+            </li>
+
+            <li th:if="${!err.isGlobal()}"
+                th:each="err : ${#fields.detailedErrors('formRequest.*')}"
+                th:data-uipath="${err.fieldName} + '.summary-error'">
+
+                <a th:href="'#' + ${err.fieldName}" th:text="${err.message}"/>
+
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+
+<!--
+    Generates an input html field with error handling
+
+    fields: It is the the binding result that allows access to the errors in the form. This is the BindingResult class in Spring MVC.
+    fieldId: field id as it appears in the id attribute of an html tag.
+    label: text of the label associated to the field
+    type: type of html input, i.e.: text, emailAddress, password
+-->
+<div class="govuk-o-form-group"
+     th:fragment="form-field-input(fields, fieldId, label, type)"
+     th:class="${#fields.hasErrors(fieldId)}? 'govuk-o-form-group govuk-o-form-group--error' : 'govuk-o-form-group'">
+
+    <label class="govuk-c-label govuk-c-label--dft-la"
+           th:data-uipath="${fieldId} + '.label'"
+           th:attr="for=${fieldId}"
+           th:text="${label}"></label>
+
+    <p class="govuk-c-error-message"
+       th:data-uipath="${fieldId} + '.error'"
+       th:if="${#fields.hasErrors(fieldId)}"
+       th:errors="*{__${fieldId}__}"></p>
+
+    <input class="govuk-c-input"
+           th:data-uipath="${fieldId} + '.field'"
+           th:id="${fieldId}"
+           th:name="${fieldId}"
+           th:attr="id=${fieldId}, name=${fieldId}, type=${fieldId}"
+           th:field="*{__${fieldId}__}">
+</div>
+
+</body>
+
+</html>
+
