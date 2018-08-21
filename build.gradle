@@ -1,10 +1,13 @@
 buildscript {
+    ext {
+        springBootVersion = '2.0.4.RELEASE'
+    }
     repositories {
         mavenCentral()
     }
 
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.1.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
 }
 
@@ -20,14 +23,33 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://artifactory.does.not.exist/artifactory/gradle-dev-local'
+    }
 }
 
 dependencies {
+    ext.commonVersion = '0.4.2-SNAPSHOT'
+
+    compile( group: 'uk.gov.dft.bluebadge', name: 'bluebadge-common', version: "${commonVersion}", changing: true ){
+        exclude group: 'org.mybatis.spring.boot', module: 'mybatis-spring-boot-starter'
+    }
+
     compile("org.springframework.boot:spring-boot-starter-web")
     compile('org.springframework.boot:spring-boot-starter-thymeleaf')
     compile('nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.3.0')
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.6'
+
+    compile('org.springframework.boot:spring-boot-starter-security')
+    compile('org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.3.RELEASE')
+    compile('org.springframework.boot:spring-boot-starter-actuator')
+
+    compileOnly ('org.projectlombok:lombok:1.16.22')
 
     runtime('org.springframework.boot:spring-boot-devtools')
+    runtime group: 'ch.qos.logback.contrib', name: 'logback-json-classic', version: '0.1.5'
+    runtime group: 'ch.qos.logback.contrib', name: 'logback-jackson', version: '0.1.5'
+    runtime group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.3'
 }
 
 bootRun {

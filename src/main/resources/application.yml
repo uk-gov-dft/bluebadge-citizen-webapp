@@ -19,6 +19,7 @@ blue-badge:
       connectiontimeout: 6000
       requesttimeout: 6000
       contextpath: /uk-gov-dft/reference-data-service/1.0.0
+
 logging:
   level:
     root: ${APP_LOGGING_LEVEL:-INFO}
@@ -42,6 +43,8 @@ spring:
       additional-exclude: sass/**,js/**
       poll-interval: 10
       quiet-period: 5
+  profiles:
+    active: dev
       # include: static/css/**,static/js/**
 
 server:
@@ -56,8 +59,5 @@ security:
       client-id: ${blue-badge.auth-server.client-id}
        ***REMOVED***
       access-token-uri: ${blue-badge.auth-server.url}/oauth/token
-      user-authorization-uri: ${blue-badge.auth-server.url}/oauth/authorize
-      # All scopes approve, else user redirect to auth server to approve the protected resource
       auto-approve-scopes: '.*'
-    resource:
-      user-info-uri: ${blue-badge.auth-server.url}/me
+      authorized-grant-types: client_credentials
