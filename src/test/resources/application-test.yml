@@ -1,0 +1,9 @@
+blue-badge:
+  auth-server:
+    url: http://localhost:8380/test-auth
+  referencedataservice:
+    servicehost:
+      contextpath: /test-referencedataservice
+  applicationmanagementservice:
+      contextpath: /test-applicationmanagementservice
+
