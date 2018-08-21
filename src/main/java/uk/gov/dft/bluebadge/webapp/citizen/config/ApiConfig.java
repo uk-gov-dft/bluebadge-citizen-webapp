@@ -52,7 +52,7 @@ public class ApiConfig {
     return new ServiceConfiguration();
   }
 
-  @Bean("referenceDataRestTemplate")
+  @Bean("applicationManagementServiceRestTemplate")
   OAuth2RestTemplate applicationManagementServiceRestTemplate(
       ClientCredentialsResourceDetails resourceDetails,
       ServiceConfiguration applicationManagementServiceApiConfig) {

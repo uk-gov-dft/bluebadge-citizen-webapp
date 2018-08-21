@@ -20,8 +20,8 @@ public class ApplicationManagementApiClient {
 
   @Autowired
   public ApplicationManagementApiClient(
-      @Qualifier("referenceDataRestTemplate") RestTemplate referenceDataRestTemplate) {
-    this.restTemplate = referenceDataRestTemplate;
+      @Qualifier("applicationManagementServiceRestTemplate") RestTemplate restTemplate) {
+    this.restTemplate = restTemplate;
   }
 
   public Application createApplication(Application application) {
