@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title>GOV.UK Manage Blue Badges</title>
+</head>
+<body>
+
+<main layout:fragment="content">
+
+    <h1>Error Page</h1>
+
+    <h2>Failed URL: <span th:text="${url}"/></h2>
+    <h2>Exception:  <span th:text="${exception.message}"/></h2>
+    <h3>Common Response</h3>
+    <pre th:text="${commonResponse}"/>
+    <h3>Stack trace</h3>
+    <pre th:each="st : ${exception.stackTrace}" th:text="${st}"/>
+
+</main>
+
+</body>
+</html>
