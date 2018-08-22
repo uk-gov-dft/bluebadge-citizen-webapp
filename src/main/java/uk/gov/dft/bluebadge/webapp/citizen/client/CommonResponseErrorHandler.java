@@ -23,12 +23,12 @@ public class CommonResponseErrorHandler extends DefaultResponseErrorHandler {
 
   @Override
   public void handleError(ClientHttpResponse httpResponse) throws IOException {
-    CommonResponse c;
     try {
-      c = om.readValue(httpResponse.getBody(), CommonResponse.class);
       if (httpResponse.getStatusCode().equals(BAD_REQUEST)) {
+        CommonResponse c = om.readValue(httpResponse.getBody(), CommonResponse.class);
         throw new BadRequestException(c);
       } else if (httpResponse.getStatusCode().equals(NOT_FOUND)) {
+        CommonResponse c = om.readValue(httpResponse.getBody(), CommonResponse.class);
         throw new NotFoundException(c);
       }
     } catch (IOException e) {
