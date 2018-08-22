@@ -1,7 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen;
 
 import org.springframework.boot.SpringApplication;
-
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication

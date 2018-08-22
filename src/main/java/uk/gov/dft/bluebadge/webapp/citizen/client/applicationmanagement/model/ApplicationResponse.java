@@ -1,9 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.Data;
-
 import org.springframework.validation.annotation.Validated;
 import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
 

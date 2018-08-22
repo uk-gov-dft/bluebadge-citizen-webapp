@@ -34,15 +34,9 @@
 
     <div class="govuk-width-container">
 
-        <div th:replace="~{ fragments/header :: govuk-phase-banner }">></div>
+        <div th:replace="~{ fragments/header :: govuk-phase-banner }"></div>
 
-        <main class="govuk-main-wrapper">
-            <div class="govuk-grid-row">
-
-                <div class="govuk-grid-column-two-thirds" layout:fragment="content"></div>
-
-            </div>
-        </main>
+        <main class="govuk-main-wrapper" id="main-content" layout:fragment="content"></main>
     </div>
 
     <footer th:replace="~{ fragments/footer :: govuk-footer }"></footer>
