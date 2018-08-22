@@ -14,10 +14,8 @@ public class HomeController {
 
   public static final String TEMPLTE_DECLARATION = "application-end/declaration";
 
-  @Autowired
-  ReferenceDataService referenceDataService;
-  @Autowired
-  ApplicationManagementApiClient applicationManagementApiClient;
+  @Autowired ReferenceDataService referenceDataService;
+  @Autowired ApplicationManagementApiClient applicationManagementApiClient;
 
   @GetMapping("/")
   public String showDeclaration() {

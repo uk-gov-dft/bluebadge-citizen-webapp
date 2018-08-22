@@ -48,7 +48,7 @@ public class ApplicationManagementApiClientTest {
     String response = objectMapper.writeValueAsString(applicationResponse);
 
     mockServer
-        .expect(once(), requestTo(TEST_URI+APPLICATION_ENDPOINT))
+        .expect(once(), requestTo(TEST_URI + APPLICATION_ENDPOINT))
         .andExpect(method(HttpMethod.POST))
         .andRespond(withSuccess(response, MediaType.APPLICATION_JSON));
 
@@ -62,9 +62,10 @@ public class ApplicationManagementApiClientTest {
     String commonResponseBody = objectMapper.writeValueAsString(new CommonResponse());
 
     mockServer
-        .expect(once(), requestTo(TEST_URI+APPLICATION_ENDPOINT))
+        .expect(once(), requestTo(TEST_URI + APPLICATION_ENDPOINT))
         .andExpect(method(HttpMethod.POST))
-        .andRespond(withBadRequest().body(commonResponseBody).contentType(MediaType.APPLICATION_JSON));
+        .andRespond(
+            withBadRequest().body(commonResponseBody).contentType(MediaType.APPLICATION_JSON));
 
     try {
       client.createApplication(new Application());

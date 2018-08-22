@@ -11,7 +11,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.slf4j.LoggerFactory.getLogger;
 
 import cucumber.api.DataTable;
 import cucumber.api.java.en.And;
@@ -243,9 +242,7 @@ public class SiteSteps extends AbstractSpringSteps {
   @And("^I should see signout link$")
   public void iShouldSeeSignoutLink() throws Throwable {
     assertThat(
-        "Sign out link expected",
-        signInPage.findElementWithUiPath(TOPBAR_SIGNOUT),
-        notNullValue());
+        "Sign out link expected", signInPage.findElementWithUiPath(TOPBAR_SIGNOUT), notNullValue());
     assertThat(
         "Sign out link expected",
         signInPage.findElementWithUiPath(TOPBAR_SIGNOUT).getAttribute(ATTRIBUTE_VALUE),
@@ -299,17 +296,17 @@ public class SiteSteps extends AbstractSpringSteps {
   public void iShouldSeeTheValidationMessageForAs(String arg0, String arg1) throws Throwable {
     if (arg0.equals("invalid email")) {
       assertThat(
-        VALIDATION_MESSAGE_EXPECTED,
+          VALIDATION_MESSAGE_EXPECTED,
           signInPage.findElementWithUiPath("emailAddress.summary-error").getText(),
           getMatcherForText(arg1));
     } else if (arg0.equals("invalid email or password")) {
       assertThat(
-        VALIDATION_MESSAGE_EXPECTED,
+          VALIDATION_MESSAGE_EXPECTED,
           signInPage.findElementWithUiPath("error.form.signin.invalid").getText(),
           getMatcherForText(arg1));
     } else if (arg0.equals("invalid name")) {
       assertThat(
-        VALIDATION_MESSAGE_EXPECTED,
+          VALIDATION_MESSAGE_EXPECTED,
           signInPage.findElementWithUiPath("name.summary-error").getText(),
           getMatcherForText(arg1));
     }
@@ -345,7 +342,8 @@ public class SiteSteps extends AbstractSpringSteps {
 
   @When("^I change email address and clicks on update button$")
   public void iChangeEmailAddressAndClicksOnUpdateButton() throws Throwable {
-    String newEmail = ng.get_email(sitePage.findPageElementById("name").getAttribute(ATTRIBUTE_VALUE));
+    String newEmail =
+        ng.get_email(sitePage.findPageElementById("name").getAttribute(ATTRIBUTE_VALUE));
 
     sitePage.findElementWithUiPath(EMAIL_ADDRESS_FIELD).clear();
     sitePage.findElementWithUiPath(EMAIL_ADDRESS_FIELD).sendKeys(newEmail);

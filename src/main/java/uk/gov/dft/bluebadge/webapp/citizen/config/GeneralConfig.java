@@ -11,5 +11,4 @@ public class GeneralConfig {
   public ObjectMapper objectMapper() {
     return new ObjectMapper();
   }
-
 }

@@ -18,8 +18,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.CommonResponseErrorHandler;
 public class ApiConfig {
 
   private OAuth2ClientContext oauth2ClientContext;
-  @Autowired
-  private ObjectMapper objectMapper;
+  @Autowired private ObjectMapper objectMapper;
 
   @Autowired
   public ApiConfig(OAuth2ClientContext oauth2ClientContext) {
@@ -27,7 +26,7 @@ public class ApiConfig {
   }
 
   @Bean
-  public CommonResponseErrorHandler commonResponseErrorHandler(){
+  public CommonResponseErrorHandler commonResponseErrorHandler() {
     return new CommonResponseErrorHandler(objectMapper);
   }
 

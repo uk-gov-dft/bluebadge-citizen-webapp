@@ -29,7 +29,7 @@ public class ApplicationManagementApiClient {
 
     HttpEntity<Application> request = new HttpEntity<>(application);
     return Objects.requireNonNull(
-        restTemplate.postForObject(CREATE_ENDPOINT, request, ApplicationResponse.class))
+            restTemplate.postForObject(CREATE_ENDPOINT, request, ApplicationResponse.class))
         .getData();
   }
 }

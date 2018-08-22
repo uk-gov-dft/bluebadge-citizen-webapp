@@ -22,8 +22,7 @@ public class CommonResponseErrorHandler extends DefaultResponseErrorHandler {
   }
 
   @Override
-  public void handleError(ClientHttpResponse httpResponse)
-      throws IOException {
+  public void handleError(ClientHttpResponse httpResponse) throws IOException {
     CommonResponse c;
     try {
       c = om.readValue(httpResponse.getBody(), CommonResponse.class);
@@ -33,7 +32,10 @@ public class CommonResponseErrorHandler extends DefaultResponseErrorHandler {
         throw new NotFoundException(c);
       }
     } catch (IOException e) {
-      log.error("Could not parse {} response. Falling back to default handling", httpResponse.getStatusCode(), e);
+      log.error(
+          "Could not parse {} response. Falling back to default handling",
+          httpResponse.getStatusCode(),
+          e);
     }
 
     super.handleError(httpResponse);
