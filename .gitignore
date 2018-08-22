@@ -30,7 +30,6 @@ out
 output
 package-lock.json
 node_modules/
-gradle/*
 .vscode
 
 target
