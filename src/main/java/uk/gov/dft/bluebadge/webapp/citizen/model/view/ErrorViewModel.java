@@ -1,4 +1,4 @@
-package uk.gov.dft.bluebadge.webapp.citizen.models.view;
+package uk.gov.dft.bluebadge.webapp.citizen.model.view;
 
 import java.util.Objects;
 import org.springframework.util.Assert;

@@ -1,4 +1,4 @@
-package uk.gov.dft.bluebadge.webapp.citizen.models.form;
+package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
 import javax.validation.constraints.AssertTrue;
 import lombok.Builder;
