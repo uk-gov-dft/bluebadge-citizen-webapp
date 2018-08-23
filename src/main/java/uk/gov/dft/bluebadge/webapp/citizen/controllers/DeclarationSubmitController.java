@@ -7,8 +7,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import uk.gov.dft.bluebadge.webapp.citizen.models.form.DeclarationRequestModel;
-import uk.gov.dft.bluebadge.webapp.citizen.models.view.ErrorViewModel;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationRequestModel;
+import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 
 @Controller
 public class DeclarationSubmitController {
