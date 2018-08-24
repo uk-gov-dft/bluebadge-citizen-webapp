@@ -30,7 +30,7 @@ public class CommonResponseErrorHandlerTest {
   private ObjectMapper objectMapper;
 
   @Before
-  public void setup(){
+  public void setup() {
     objectMapper = new ObjectMapper();
     errorHandler = new CommonResponseErrorHandler(objectMapper);
     restTemplate = new RestTemplate();
@@ -40,7 +40,7 @@ public class CommonResponseErrorHandlerTest {
 
   @Test
   @SneakyThrows
-  public void badRequestsHandled(){
+  public void badRequestsHandled() {
     String commonResponseBody = objectMapper.writeValueAsString(new CommonResponse());
     mockServer
         .expect(once(), requestTo("/bob"))
@@ -58,13 +58,15 @@ public class CommonResponseErrorHandlerTest {
 
   @Test
   @SneakyThrows
-  public void notFoundHandled(){
+  public void notFoundHandled() {
     String commonResponseBody = objectMapper.writeValueAsString(new CommonResponse());
     mockServer
         .expect(once(), requestTo("/bob"))
         .andExpect(method(HttpMethod.GET))
         .andRespond(
-            withStatus(HttpStatus.NOT_FOUND).body(commonResponseBody).contentType(MediaType.APPLICATION_JSON));
+            withStatus(HttpStatus.NOT_FOUND)
+                .body(commonResponseBody)
+                .contentType(MediaType.APPLICATION_JSON));
 
     try {
       restTemplate.getForObject("/bob", String.class);
@@ -76,7 +78,7 @@ public class CommonResponseErrorHandlerTest {
 
   @Test
   @SneakyThrows
-  public void internalServerErrorsHandledByDefaultHandler(){
+  public void internalServerErrorsHandledByDefaultHandler() {
     mockServer
         .expect(once(), requestTo("/bob"))
         .andExpect(method(HttpMethod.GET))

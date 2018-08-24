@@ -2,6 +2,19 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
+<span th:fragment="govuk-field-error(name)"
+      class="govuk-error-message"
+      th:data-uipath="${name} + '.error'"
+      th:id="${name} + '-hint'"
+      th:if="${#fields.hasErrors(name)}"
+      th:errors="*{__${name}__}" />
+
+<span th:fragment="govuk-field-hint(name, hint)"
+      class="govuk-hint"
+      th:utext="${hint}"
+      th:id="${#fields.hasErrors(name)} ? ${name} + '-hint ' + ${name} + '-error' : ${name} + '-hint'"
+      th:data-uipath="${name} + '.label_hint'" />
+
     /* ------------------------------------------------------------------------------
 
     * Input Field

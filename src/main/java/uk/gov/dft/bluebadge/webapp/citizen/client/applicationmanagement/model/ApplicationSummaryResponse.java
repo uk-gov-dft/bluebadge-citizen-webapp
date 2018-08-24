@@ -2,19 +2,30 @@ package uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
 
-/** ApplicationResponse */
+/** ApplicationSummaryResponse */
 @Validated
-public class ApplicationResponse extends CommonResponse {
+public class ApplicationSummaryResponse extends CommonResponse {
   @JsonProperty("data")
-  private Application data = null;
+  @Valid
+  private List<ApplicationSummary> data = null;
 
-  public ApplicationResponse data(Application data) {
+  public ApplicationSummaryResponse data(List<ApplicationSummary> data) {
     this.data = data;
+    return this;
+  }
+
+  public ApplicationSummaryResponse addDataItem(ApplicationSummary dataItem) {
+    if (this.data == null) {
+      this.data = new ArrayList<>();
+    }
+    this.data.add(dataItem);
     return this;
   }
 
@@ -25,11 +36,11 @@ public class ApplicationResponse extends CommonResponse {
    */
   @ApiModelProperty(value = "")
   @Valid
-  public Application getData() {
+  public List<ApplicationSummary> getData() {
     return data;
   }
 
-  public void setData(Application data) {
+  public void setData(List<ApplicationSummary> data) {
     this.data = data;
   }
 
@@ -41,8 +52,8 @@ public class ApplicationResponse extends CommonResponse {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ApplicationResponse applicationResponse = (ApplicationResponse) o;
-    return Objects.equals(this.data, applicationResponse.data) && super.equals(o);
+    ApplicationSummaryResponse applicationSummaryResponse = (ApplicationSummaryResponse) o;
+    return Objects.equals(this.data, applicationSummaryResponse.data) && super.equals(o);
   }
 
   @Override
@@ -53,7 +64,7 @@ public class ApplicationResponse extends CommonResponse {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ApplicationResponse {\n");
+    sb.append("class ApplicationSummaryResponse {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("    data: ").append(toIndentedString(data)).append("\n");
     sb.append("}");

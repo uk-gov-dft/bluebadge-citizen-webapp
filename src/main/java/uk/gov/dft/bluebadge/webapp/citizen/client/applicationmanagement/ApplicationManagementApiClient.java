@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.ApplicationResponse;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.CreateApplicationResponse;
 
 @Slf4j
 @Service
@@ -24,12 +24,11 @@ public class ApplicationManagementApiClient {
     this.restTemplate = restTemplate;
   }
 
-  public Application createApplication(Application application) {
+  public CreateApplicationResponse createApplication(Application application) {
     Assert.notNull(application, "createApplication - application must be set");
 
     HttpEntity<Application> request = new HttpEntity<>(application);
     return Objects.requireNonNull(
-            restTemplate.postForObject(CREATE_ENDPOINT, request, ApplicationResponse.class))
-        .getData();
+        restTemplate.postForObject(CREATE_ENDPOINT, request, CreateApplicationResponse.class));
   }
 }

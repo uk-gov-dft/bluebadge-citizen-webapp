@@ -20,6 +20,7 @@ import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.client.CommonResponseErrorHandler;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.ApplicationResponse;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.CreateApplicationResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.client.common.BadRequestException;
 
 public class ApplicationManagementApiClientTest {
@@ -42,7 +43,7 @@ public class ApplicationManagementApiClientTest {
 
   @Test
   public void createApplication() throws Exception {
-    Application createdApplication = new Application();
+    Application createdApplication = Application.builder().build();
     createdApplication.setApplicationId("bob");
     ApplicationResponse applicationResponse = new ApplicationResponse().data(createdApplication);
     String response = objectMapper.writeValueAsString(applicationResponse);
@@ -52,9 +53,10 @@ public class ApplicationManagementApiClientTest {
         .andExpect(method(HttpMethod.POST))
         .andRespond(withSuccess(response, MediaType.APPLICATION_JSON));
 
-    Application application = client.createApplication(new Application());
+    Application app = Application.builder().build();
+    CreateApplicationResponse application = client.createApplication(app);
     assertThat(application).isNotNull();
-    assertThat(application.getApplicationId()).isEqualTo("bob");
+    assertThat(application).isEqualTo("bob");
   }
 
   @Test
@@ -68,7 +70,7 @@ public class ApplicationManagementApiClientTest {
             withBadRequest().body(commonResponseBody).contentType(MediaType.APPLICATION_JSON));
 
     try {
-      client.createApplication(new Application());
+      client.createApplication(Application.builder().build());
       fail("No exception thrown");
     } catch (BadRequestException e) {
       assertThat(e.getCommonResponse()).isNotNull();

@@ -3,34 +3,32 @@ package uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Objects;
-import javax.validation.Valid;
+import javax.validation.constraints.*;
 import org.springframework.validation.annotation.Validated;
-import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
 
-/** ApplicationResponse */
+/** Blind */
 @Validated
-public class ApplicationResponse extends CommonResponse {
-  @JsonProperty("data")
-  private Application data = null;
+public class Blind {
+  @JsonProperty("registeredAtLaId")
+  private String registeredAtLaId = null;
 
-  public ApplicationResponse data(Application data) {
-    this.data = data;
+  public Blind registeredAtLaId(String registeredAtLaId) {
+    this.registeredAtLaId = registeredAtLaId;
     return this;
   }
 
   /**
-   * Get data
+   * Local Authority registered blind at
    *
-   * @return data
+   * @return registeredAtLaId
    */
-  @ApiModelProperty(value = "")
-  @Valid
-  public Application getData() {
-    return data;
+  @ApiModelProperty(example = "BIRM", value = "Local Authority registered blind at")
+  public String getRegisteredAtLaId() {
+    return registeredAtLaId;
   }
 
-  public void setData(Application data) {
-    this.data = data;
+  public void setRegisteredAtLaId(String registeredAtLaId) {
+    this.registeredAtLaId = registeredAtLaId;
   }
 
   @Override
@@ -41,21 +39,21 @@ public class ApplicationResponse extends CommonResponse {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ApplicationResponse applicationResponse = (ApplicationResponse) o;
-    return Objects.equals(this.data, applicationResponse.data) && super.equals(o);
+    Blind blind = (Blind) o;
+    return Objects.equals(this.registeredAtLaId, blind.registeredAtLaId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(data, super.hashCode());
+    return Objects.hash(registeredAtLaId);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ApplicationResponse {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    data: ").append(toIndentedString(data)).append("\n");
+    sb.append("class Blind {\n");
+
+    sb.append("    registeredAtLaId: ").append(toIndentedString(registeredAtLaId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

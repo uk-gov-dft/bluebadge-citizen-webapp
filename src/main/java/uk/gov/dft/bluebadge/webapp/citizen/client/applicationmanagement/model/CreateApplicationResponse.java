@@ -3,17 +3,16 @@ package uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Objects;
-import javax.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
 
-/** ApplicationResponse */
+/** CreateApplicationResponse */
 @Validated
-public class ApplicationResponse extends CommonResponse {
+public class CreateApplicationResponse extends CommonResponse {
   @JsonProperty("data")
-  private Application data = null;
+  private String data = null;
 
-  public ApplicationResponse data(Application data) {
+  public CreateApplicationResponse data(String data) {
     this.data = data;
     return this;
   }
@@ -23,13 +22,12 @@ public class ApplicationResponse extends CommonResponse {
    *
    * @return data
    */
-  @ApiModelProperty(value = "")
-  @Valid
-  public Application getData() {
+  @ApiModelProperty(example = "12341234-1234-1234-1234-123412341234", value = "")
+  public String getData() {
     return data;
   }
 
-  public void setData(Application data) {
+  public void setData(String data) {
     this.data = data;
   }
 
@@ -41,8 +39,8 @@ public class ApplicationResponse extends CommonResponse {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ApplicationResponse applicationResponse = (ApplicationResponse) o;
-    return Objects.equals(this.data, applicationResponse.data) && super.equals(o);
+    CreateApplicationResponse createApplicationResponse = (CreateApplicationResponse) o;
+    return Objects.equals(this.data, createApplicationResponse.data) && super.equals(o);
   }
 
   @Override
@@ -53,7 +51,7 @@ public class ApplicationResponse extends CommonResponse {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ApplicationResponse {\n");
+    sb.append("class CreateApplicationResponse {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("    data: ").append(toIndentedString(data)).append("\n");
     sb.append("}");

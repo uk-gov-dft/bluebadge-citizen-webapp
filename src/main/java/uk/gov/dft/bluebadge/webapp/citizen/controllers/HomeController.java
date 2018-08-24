@@ -12,25 +12,24 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataSe
 @Controller
 public class HomeController {
 
-  public static final String TEMPLTE_DECLARATION = "application-end/declaration";
+  public static final String TEMPLATE_HOME = "home";
 
   @Autowired ReferenceDataService referenceDataService;
   @Autowired ApplicationManagementApiClient applicationManagementApiClient;
 
   @GetMapping("/")
-  public String showDeclaration() {
+  public String show() {
     List<ReferenceData> referenceDatas = referenceDataService.retrieveLocalAuthorities();
     referenceDatas.stream().forEach(System.out::println);
 
-    return TEMPLTE_DECLARATION;
+    return TEMPLATE_HOME;
   }
 
   @GetMapping("/createApp")
   public String fakeAppCreate() {
-    Application app = new Application();
-    app.setApplicationId("bob");
+    Application app = Application.builder().applicationId("bob").build();
     applicationManagementApiClient.createApplication(app);
 
-    return TEMPLTE_DECLARATION;
+    return TEMPLATE_HOME;
   }
 }

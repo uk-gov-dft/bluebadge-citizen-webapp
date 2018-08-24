@@ -30,16 +30,16 @@
 
     <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
 
-    <header th:replace="~{ fragments/header :: govuk-header }"></header>
+    <header th:replace="~{ fragments/govuk-header :: govuk-header }"></header>
 
     <div class="govuk-width-container">
 
-        <div th:replace="~{ fragments/header :: govuk-phase-banner }"></div>
+        <div th:replace="~{ fragments/govuk-header :: govuk-phase-banner }"></div>
 
         <main class="govuk-main-wrapper" id="main-content" layout:fragment="content"></main>
     </div>
 
-    <footer th:replace="~{ fragments/footer :: govuk-footer }"></footer>
+    <footer th:replace="~{ fragments/govuk-footer :: govuk-footer }"></footer>
 
     <script th:src="@{/js/main.js}"></script>
 </body>

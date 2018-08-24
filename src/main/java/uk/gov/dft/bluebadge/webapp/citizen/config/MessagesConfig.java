@@ -12,27 +12,27 @@ import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 @Configuration
 public class MessagesConfig {
 
-    @Bean
-    public MessageSource messageSource() {
-        final ReloadableResourceBundleMessageSource messageSource =
-                new ReloadableResourceBundleMessageSource();
-        messageSource.setBasenames("classpath:messages", "classpath:order-a-badge-messages");
-        messageSource.setFallbackToSystemLocale(false);
-        messageSource.setCacheSeconds(0);
-        return messageSource;
-    }
+  @Bean
+  public MessageSource messageSource() {
+    final ReloadableResourceBundleMessageSource messageSource =
+        new ReloadableResourceBundleMessageSource();
+    messageSource.setBasenames("classpath:messages", "classpath:order-a-badge-messages");
+    messageSource.setFallbackToSystemLocale(false);
+    messageSource.setCacheSeconds(0);
+    return messageSource;
+  }
 
-    @Bean
-    public LocaleResolver localeResolver() {
-        AcceptHeaderLocaleResolver localeResolver = new AcceptHeaderLocaleResolver();
-        localeResolver.setDefaultLocale(Locale.ENGLISH);
-        return localeResolver;
-    }
+  @Bean
+  public LocaleResolver localeResolver() {
+    AcceptHeaderLocaleResolver localeResolver = new AcceptHeaderLocaleResolver();
+    localeResolver.setDefaultLocale(Locale.ENGLISH);
+    return localeResolver;
+  }
 
-    @Bean
-    public javax.validation.Validator validator() {
-        final LocalValidatorFactoryBean factory = new LocalValidatorFactoryBean();
-        factory.setValidationMessageSource(messageSource());
-        return factory;
-    }
+  @Bean
+  public javax.validation.Validator validator() {
+    final LocalValidatorFactoryBean factory = new LocalValidatorFactoryBean();
+    factory.setValidationMessageSource(messageSource());
+    return factory;
+  }
 }
