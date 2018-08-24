@@ -25,9 +25,9 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Wa
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingLengthOfTimeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingSpeedCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.models.form.DeclarationRequestModel;
-import uk.gov.dft.bluebadge.webapp.citizen.models.view.ErrorViewModel;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationRequestModel;
+import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 
 @Controller
 public class DeclarationSubmitController {
