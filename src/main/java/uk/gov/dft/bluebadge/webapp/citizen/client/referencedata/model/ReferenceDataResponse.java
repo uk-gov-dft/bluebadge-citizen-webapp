@@ -1,4 +1,4 @@
-package uk.gov.dft.bluebadge.webapp.citizen.client.referencedataservice.model;
+package uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;

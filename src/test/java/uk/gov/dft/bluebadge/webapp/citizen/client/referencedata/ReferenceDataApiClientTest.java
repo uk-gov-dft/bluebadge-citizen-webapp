@@ -1,4 +1,4 @@
-package uk.gov.dft.bluebadge.webapp.citizen.client.referencedataservice;
+package uk.gov.dft.bluebadge.webapp.citizen.client.referencedata;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.client.ExpectedCount.once;
@@ -16,8 +16,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedataservice.model.ReferenceData;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedataservice.model.ReferenceDataResponse;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceDataResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ReferenceDataUtils;
 import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.RefDataDomainEnum;
 

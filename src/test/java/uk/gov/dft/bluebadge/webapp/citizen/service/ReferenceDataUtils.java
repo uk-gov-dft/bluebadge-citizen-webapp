@@ -1,6 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.service;
 
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedataservice.model.ReferenceData;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 
 public class ReferenceDataUtils {
   public static final ReferenceData buildReferenceData(String groupShortCode, int i) {

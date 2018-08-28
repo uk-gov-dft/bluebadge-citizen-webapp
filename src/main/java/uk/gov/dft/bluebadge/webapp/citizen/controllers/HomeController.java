@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.ApplicationManagementApiClient;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedataservice.model.ReferenceData;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataService;
 
 @Controller

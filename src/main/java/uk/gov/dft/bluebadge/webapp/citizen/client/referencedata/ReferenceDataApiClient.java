@@ -1,4 +1,4 @@
-package uk.gov.dft.bluebadge.webapp.citizen.client.referencedataservice;
+package uk.gov.dft.bluebadge.webapp.citizen.client.referencedata;
 
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedataservice.model.ReferenceData;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedataservice.model.ReferenceDataResponse;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceDataResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.RefDataDomainEnum;
 
 @Slf4j

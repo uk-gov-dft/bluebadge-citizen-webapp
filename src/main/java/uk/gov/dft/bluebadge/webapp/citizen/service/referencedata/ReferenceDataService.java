@@ -7,8 +7,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedataservice.ReferenceDataApiClient;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedataservice.model.ReferenceData;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.ReferenceDataApiClient;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 
 @Service
 public class ReferenceDataService {
