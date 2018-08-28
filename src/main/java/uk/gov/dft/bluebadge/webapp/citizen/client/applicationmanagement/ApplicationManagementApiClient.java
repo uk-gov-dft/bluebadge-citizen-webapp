@@ -28,18 +28,8 @@ public class ApplicationManagementApiClient {
   public CreateApplicationResponse createApplication(Application application) {
     Assert.notNull(application, "createApplication - application must be set");
 
-    CreateApplicationResponse response = null;
-
-    try {
-      HttpEntity<Application> request = new HttpEntity<>(application);
-      response =
-          Objects.requireNonNull(
-              restTemplate.postForObject(
-                  CREATE_ENDPOINT, request, CreateApplicationResponse.class));
-    } catch (HttpClientErrorException e) {
-      log.error("Error whilst creating application", e);
-    }
-
-    return response;
+    HttpEntity<Application> request = new HttpEntity<>(application);
+    return Objects.requireNonNull(
+        restTemplate.postForObject(CREATE_ENDPOINT, request, CreateApplicationResponse.class));
   }
 }
