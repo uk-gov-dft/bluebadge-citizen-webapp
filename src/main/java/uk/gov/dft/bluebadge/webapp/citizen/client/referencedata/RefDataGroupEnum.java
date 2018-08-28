@@ -1,4 +1,4 @@
-package uk.gov.dft.bluebadge.webapp.citizen.service.referencedata;
+package uk.gov.dft.bluebadge.webapp.citizen.client.referencedata;
 
 @SuppressWarnings("SpellCheckingInspection")
 public enum RefDataGroupEnum {

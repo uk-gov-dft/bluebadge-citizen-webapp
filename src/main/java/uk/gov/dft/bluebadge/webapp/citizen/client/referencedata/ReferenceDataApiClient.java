@@ -9,7 +9,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceDataResponse;
-import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.RefDataDomainEnum;
 
 @Slf4j
 @Service
@@ -36,7 +35,7 @@ public class ReferenceDataApiClient {
             .getForEntity(
                 UriComponentsBuilder.newInstance()
                     .path("/")
-                    .pathSegment("reference-data", referenceDataDomain.getDomain())
+                    .pathSegment("reference-data", referenceDataDomain.name())
                     .toUriString(),
                 ReferenceDataResponse.class)
             .getBody();

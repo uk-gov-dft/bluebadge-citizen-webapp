@@ -1,0 +1,140 @@
+[
+  {
+    "shortCode": "WORCC",
+    "description": "Worcestershire County Council",
+    "metaData": {
+      "issuingAuthorityShortCode": "WORCC",
+      "issuingAuthorityName": "Worcestershire county council",
+      "nation": "England",
+      "contactUrl": "http://www.worcestershire.gov.uk/info/20397/blue_badge/1378/apply_for_or_renew_a_badge"
+    },
+    "groupShortCode": "LA",
+    "groupDescription": "Local authorities",
+    "subgroupShortCode": null,
+    "subgroupDescription": null,
+    "displayOrder": 2070
+  },
+  {
+    "shortCode": "YORK",
+    "description": "City of York Council",
+    "metaData": null,
+    "groupShortCode": "LA",
+    "groupDescription": "Local authorities",
+    "subgroupShortCode": null,
+    "subgroupDescription": null,
+    "displayOrder": 2100
+  },
+  {
+    "shortCode": "LBKUT",
+    "description": "Kingston upon Thames",
+    "groupShortCode": "LA",
+    "groupDescription": "Local authorities",
+    "subgroupShortCode": null,
+    "subgroupDescription": null,
+    "displayOrder": 980
+  },
+  {
+    "shortCode": "SPE",
+    "description": "Spelthorne borough council",
+    "metaData": {
+      "issuingAuthorityShortCode": "SURCC"
+    },
+    "groupShortCode": "LC",
+    "groupDescription": "Local Councils",
+    "subgroupShortCode": null,
+    "subgroupDescription": null,
+    "displayOrder": 0
+  },
+  {
+    "shortCode": "TON",
+    "description": "Tonbridge and Malling borough council",
+    "metaData": {
+      "issuingAuthorityShortCode": "KENTCC"
+    },
+    "groupShortCode": "LC",
+    "groupDescription": "Local Councils",
+    "subgroupShortCode": null,
+    "subgroupDescription": null,
+    "displayOrder": 0
+  },
+  {
+    "shortCode": "RETURNED",
+    "description": "Returned",
+    "metaData": null,
+    "groupShortCode": "STATUS",
+    "groupDescription": "Badge status",
+    "subgroupShortCode": null,
+    "subgroupDescription": null,
+    "displayOrder": 13
+  },
+  {
+    "shortCode": "PIP",
+    "description": "PIP",
+    "metaData": null,
+    "groupShortCode": "ELIGIBILIT",
+    "groupDescription": "Eligibility",
+    "subgroupShortCode": "ELIG_AUTO",
+    "subgroupDescription": "Automatic",
+    "displayOrder": 1
+  },
+  {
+    "shortCode": "MALE",
+    "description": "Male",
+    "metaData": null,
+    "groupShortCode": "GENDER",
+    "groupDescription": "Gender",
+    "subgroupShortCode": null,
+    "subgroupDescription": null,
+    "displayOrder": 1
+  },
+  {
+    "shortCode": "INPERSON",
+    "description": "In person",
+    "metaData": null,
+    "groupShortCode": "APPSOURCE",
+    "groupDescription": "Application source",
+    "subgroupShortCode": null,
+    "subgroupDescription": null,
+    "displayOrder": 3
+  },
+  {
+    "shortCode": "HOME",
+    "description": "Home address",
+    "metaData": null,
+    "groupShortCode": "DELIVER",
+    "groupDescription": "Deliver to",
+    "subgroupShortCode": null,
+    "subgroupDescription": null,
+    "displayOrder": 1
+  },
+  {
+    "shortCode": "FAST",
+    "description": "Fast track",
+    "metaData": null,
+    "groupShortCode": "DELOP",
+    "groupDescription": "Delivery option",
+    "subgroupShortCode": null,
+    "subgroupDescription": null,
+    "displayOrder": 2
+  },
+  {
+    "shortCode": "PERSON",
+    "description": "Person",
+    "metaData": null,
+    "groupShortCode": "PARTY",
+    "groupDescription": "Party type",
+    "subgroupShortCode": null,
+    "subgroupDescription": null,
+    "displayOrder": 1
+  },
+  {
+    "shortCode": "REVOKE",
+    "description": "Revoked",
+    "metaData": null,
+    "groupShortCode": "CANCEL",
+    "groupDescription": "Cancel reason",
+    "subgroupShortCode": null,
+    "subgroupDescription": null,
+    "displayOrder": 3
+  }
+]

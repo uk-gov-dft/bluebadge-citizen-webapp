@@ -7,6 +7,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataDomainEnum;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataGroupEnum;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.ReferenceDataApiClient;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 
@@ -17,11 +19,13 @@ public class ReferenceDataService {
   private Map<String, Map<String, String>> groupedReferenceDataMap = null;
 
   private final ReferenceDataApiClient referenceDataApiClient;
+  private final RefDataDomainEnum refDataDomain;
   private AtomicBoolean isLoaded = new AtomicBoolean();
 
   @Autowired
   public ReferenceDataService(ReferenceDataApiClient referenceDataApiClient) {
     this.referenceDataApiClient = referenceDataApiClient;
+    this.refDataDomain = RefDataDomainEnum.CITIZEN;
   }
 
   /**
@@ -31,8 +35,13 @@ public class ReferenceDataService {
   private void init() {
     if (!isLoaded.getAndSet(true)) {
 
-      List<ReferenceData> referenceDataList =
-          referenceDataApiClient.retrieveReferenceData(RefDataDomainEnum.BADGE);
+      List<ReferenceData> referenceDataList;
+      try {
+        referenceDataList = referenceDataApiClient.retrieveReferenceData(refDataDomain);
+      } catch (Exception e) {
+        isLoaded.getAndSet(false);
+        throw e;
+      }
 
       groupedReferenceDataList =
           referenceDataList
