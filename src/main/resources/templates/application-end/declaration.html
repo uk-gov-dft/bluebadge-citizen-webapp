@@ -33,14 +33,14 @@
 
                     <div class="govuk-checkboxes">
                         <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input dft-checkbox-fix" th:field="*{agreed}" id="agreed" type="checkbox">
+                            <input class="govuk-checkboxes__input dft-checkbox-fix" th:field="*{agreed}" id="agreed" data-uipath="declaration.option" type="checkbox">
                             <label class="govuk-label govuk-checkboxes__label" for="agreed"
                                    th:utext="#{declarationPage.checkbox.label}"></label>
                         </div>
                     </div>
                 </div>
 
-                <button type="submit" class="govuk-button" th:utext="#{btn.label.continue}"></button>
+                <button type="submit" class="govuk-button" data-uipath="button.continue" th:text="#{btn.label.continue}"></button>
             </form>
 
         </div>

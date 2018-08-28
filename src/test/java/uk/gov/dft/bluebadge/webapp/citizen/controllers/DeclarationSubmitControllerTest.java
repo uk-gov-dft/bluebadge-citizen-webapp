@@ -10,7 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.dft.bluebadge.webapp.citizen.models.form.DeclarationRequestModel;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationRequestModel;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
 public class DeclarationSubmitControllerTest {

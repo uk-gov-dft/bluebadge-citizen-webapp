@@ -19,7 +19,6 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.client.CommonResponseErrorHandler;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.ApplicationResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.CreateApplicationResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.client.common.BadRequestException;
 
@@ -45,7 +44,8 @@ public class ApplicationManagementApiClientTest {
   public void createApplication() throws Exception {
     Application createdApplication = Application.builder().build();
     createdApplication.setApplicationId("bob");
-    ApplicationResponse applicationResponse = new ApplicationResponse().data(createdApplication);
+
+    CreateApplicationResponse applicationResponse = new CreateApplicationResponse().data("bob");
     String response = objectMapper.writeValueAsString(applicationResponse);
 
     mockServer
@@ -53,10 +53,10 @@ public class ApplicationManagementApiClientTest {
         .andExpect(method(HttpMethod.POST))
         .andRespond(withSuccess(response, MediaType.APPLICATION_JSON));
 
-    Application app = Application.builder().build();
+    Application app = Application.builder().applicationId("bob").build();
     CreateApplicationResponse application = client.createApplication(app);
     assertThat(application).isNotNull();
-    assertThat(application).isEqualTo("bob");
+    assertThat(application.getData()).isEqualTo("bob");
   }
 
   @Test

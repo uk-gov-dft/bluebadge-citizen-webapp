@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.CreateApplicationResponse;
@@ -27,8 +28,18 @@ public class ApplicationManagementApiClient {
   public CreateApplicationResponse createApplication(Application application) {
     Assert.notNull(application, "createApplication - application must be set");
 
-    HttpEntity<Application> request = new HttpEntity<>(application);
-    return Objects.requireNonNull(
-        restTemplate.postForObject(CREATE_ENDPOINT, request, CreateApplicationResponse.class));
+    CreateApplicationResponse response = null;
+
+    try {
+      HttpEntity<Application> request = new HttpEntity<>(application);
+      response =
+          Objects.requireNonNull(
+              restTemplate.postForObject(
+                  CREATE_ENDPOINT, request, CreateApplicationResponse.class));
+    } catch (HttpClientErrorException e) {
+      log.error("Error whilst creating application", e);
+    }
+
+    return response;
   }
 }

@@ -2,7 +2,6 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
 import com.google.common.collect.Lists;
 import java.time.LocalDate;
-import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,9 +24,9 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Wa
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingLengthOfTimeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingSpeedCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationRequestModel;
 import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
+import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
 @Controller
 public class DeclarationSubmitController {
@@ -63,8 +62,8 @@ public class DeclarationSubmitController {
       return TEMPLATE_DECLARATION;
     }
 
-    UUID applicationId = appService.create(getDummyApplication());
-    model.addAttribute("applicationId", applicationId.toString());
+    Application app = getDummyApplication();
+    appService.create(app);
 
     return "redirect:" + URL_APPLICATION_SUBMITTED;
   }
