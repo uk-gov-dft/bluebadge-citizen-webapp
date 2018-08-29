@@ -14,4 +14,4 @@
       Then  I should see the page titled "Declaration - GOV.UK Apply for a Blue Badge"
       And   I can click on "Continue"
       Then  I should see the page titled "Declaration - GOV.UK Apply for a Blue Badge"
-      And   I should see errorbox
+      And   I should see error summary box

@@ -203,6 +203,12 @@ public class SiteSteps extends AbstractSpringSteps {
     sitePage.findPageElementById("submit").click();
   }
 
+  @And("^I should see error summary box$")
+  public void andIshouldSeeErrorSummaryBox() throws Throwable {
+    WebElement errorSummaryBox = sitePage.findElementWithUiPath("error-summary-box");
+    assertNotNull(errorSummaryBox);
+  }
+
   @And("^I should see \"([^\"]*)\" text on the page$")
   public void iShouldSeeTextOnPage(String content) throws Throwable {
     assertTrue(sitePage.getPageContent().contains(content));
