@@ -40,7 +40,6 @@ public class SiteSteps extends AbstractSpringSteps {
   public static final String PROPERTY_EMAIL = "email";
   public static final String PROPERTY_FULLNAME = "fullname";
   public static final String VALIDATION_MESSAGE_EXPECTED = "Validation message expected";
-  public static final String TOPBAR_SIGNOUT = "topbar.signout";
   public static final String EMAIL_ADDRESS_FIELD = "emailAddress.field";
 
   protected NameGenerator ng = new NameGenerator();
@@ -204,34 +203,6 @@ public class SiteSteps extends AbstractSpringSteps {
     sitePage.findPageElementById("submit").click();
   }
 
-  @And("^I select No$")
-  public void iSelectNo() throws Throwable {
-    sitePage.findPageElementById("renewal-or-new-application-new").click();
-  }
-
-  @And("^I can click Sign out button$")
-  public void andICanClickSignOutButton() throws Throwable {
-    sitePage.findElementWithUiPath(TOPBAR_SIGNOUT).click();
-  }
-
-  @When("^I enter full name and email address and clicks on create a new user button$")
-  public void iEnterFullNameAndEmailAddressAndClicksOnCreateANewUserButton() throws Throwable {
-
-    String name = ng.get_full_name();
-    String email = ng.get_email(name);
-    System.setProperty(PROPERTY_FULLNAME, name);
-    System.setProperty(PROPERTY_EMAIL, email);
-
-    sitePage.findPageElementById("name").sendKeys(name);
-    sitePage.findPageElementById("emailAddress").sendKeys(email);
-    sitePage.findElementWithUiPath("createUserButton").click();
-  }
-
-  @And("^I should see the newly created user is on the users list$")
-  public void iShouldSeeTheNewCreatedUserIsOnTheUsersList() throws Throwable {
-    sitePage.getPageContent().contains(System.getProperty(PROPERTY_EMAIL));
-  }
-
   @And("^I should see \"([^\"]*)\" text on the page$")
   public void iShouldSeeTextOnPage(String content) throws Throwable {
     assertTrue(sitePage.getPageContent().contains(content));
@@ -242,89 +213,11 @@ public class SiteSteps extends AbstractSpringSteps {
     assertFalse(sitePage.getPageContent().contains(content));
   }
 
-  @When("^I search for newly create user using email address$")
-  public void iSearchForNewlyCreateUserUsingEmailAddress() throws Throwable {
-    sitePage.findPageElementById("search").sendKeys(System.getProperty(PROPERTY_EMAIL));
-    sitePage.findElementWithUiPath("search.button").click();
-  }
-
-  @Then("^I should see the search results with newly created user$")
-  public void iShouldSeeTheSearchResultsWithNewlyCreatedUser() throws Throwable {
-    assertThat(
-        "Only 1 result is expected",
-        sitePage.findElementWithUiPath("search.count").getText(),
-        getMatcherForText("1 Result:"));
-    assert (sitePage
-        .findElementWithUiPath("table.body")
-        .getText()
-        .contains(System.getProperty(PROPERTY_EMAIL)));
-  }
-
-  @And("^I can click on the \"([^\"]*)\" button on manage user page$")
-  public void iCanClickOnTheButtonOnManageUserPage(String arg0) throws Throwable {
-    sitePage.findElementWithUiPath("createUserButton").click();
-  }
-
-  @When("^I click on the first name link from users table$")
-  public void iClickOnTheFirstNameLinkFromUsersTable() throws Throwable {
-    sitePage.findElementWithCssSelector("table>tbody>tr:nth-child(1)>td:nth-child(1)>a").click();
-  }
-
-  @When("^I change email address and clicks on update button$")
-  public void iChangeEmailAddressAndClicksOnUpdateButton() throws Throwable {
-    String newEmail =
-        ng.get_email(sitePage.findPageElementById("name").getAttribute(ATTRIBUTE_VALUE));
-
-    sitePage.findElementWithUiPath(EMAIL_ADDRESS_FIELD).clear();
-    sitePage.findElementWithUiPath(EMAIL_ADDRESS_FIELD).sendKeys(newEmail);
-    System.setProperty("updated_email", newEmail);
-
-    sitePage.findElementWithUiPath("updateUserButton").click();
-  }
-
-  @Then("^I should see the relevant email address has updated$")
-  public void iShouldSeeTheUpdatedUserIsOnTheUsersTable() throws Throwable {
-
-    assertThat(
-        "Updated email address expected",
-        sitePage
-            .findElementWithCssSelector("table>tbody>tr:nth-child(1)>td:nth-child(2)")
-            .getText(),
-        getMatcherForText(System.getProperty("updated_email")));
-  }
-
-  @When("^I enter invalid email address and clicks on update button$")
-  public void iEnterInvalidEmailAddressAndClicksOnUpdateButton() throws Throwable {
-
-    sitePage.findElementWithUiPath(EMAIL_ADDRESS_FIELD).clear();
-    sitePage.findElementWithUiPath(EMAIL_ADDRESS_FIELD).sendKeys("not valid email");
-
-    sitePage.findElementWithUiPath("updateUserButton").click();
-  }
-
   @And("^I (?:can )?click on element \"([^\"]+)\"(?: link| button)?$")
   public void AndICanClickOnElement(String uiPath) throws Throwable {
     sitePage.findElementWithUiPath(uiPath).click();
   }
 
-  @And("^I can click on the \"([^\"]*)\" link on left navigation$")
-  public void iCanClickOnTheLinkOnLeftNavigation(String linkTitle) throws Throwable {
-    String uipath = "sidebar-nav";
-    switch (linkTitle) {
-      case MANAGE_USERS:
-        uipath = "sidebar-nav.manage-users";
-        break;
-      case ORDER_A_BADGE:
-        uipath = "sidebar-nav.order-a-badge";
-        break;
-      case FIND_A_BADGE:
-        uipath = "sidebar-nav.find-a-badge";
-        break;
-      default:
-        break;
-    }
-    sitePage.findElementWithUiPath(uipath).click();
-  }
 
   @When("^I select option \"([^\"]*)\"$")
   public void iSelectOption(String arg0) throws Throwable {

@@ -24,7 +24,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Wa
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingLengthOfTimeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingSpeedCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationRequestModel;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
@@ -45,14 +45,14 @@ public class DeclarationSubmitController {
 
   @GetMapping(URL_DECLARATION)
   public String showDeclaration(
-      @Valid @ModelAttribute("formRequest") DeclarationRequestModel formRequest, Model model) {
+      @Valid @ModelAttribute("formRequest") DeclarationForm formRequest, Model model) {
 
     return TEMPLATE_DECLARATION;
   }
 
   @PostMapping(URL_DECLARATION)
   public String submitDeclaration(
-      @Valid @ModelAttribute("formRequest") DeclarationRequestModel formRequest,
+      @Valid @ModelAttribute("formRequest") DeclarationForm formRequest,
       BindingResult bindingResult,
       Model model) {
 

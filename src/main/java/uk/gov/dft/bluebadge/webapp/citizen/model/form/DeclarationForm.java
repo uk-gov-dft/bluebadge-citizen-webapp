@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class DeclarationRequestModel {
+public class DeclarationForm {
 
   @AssertTrue(message = "{declarationPage.validation.declaration}")
   private Boolean agreed;

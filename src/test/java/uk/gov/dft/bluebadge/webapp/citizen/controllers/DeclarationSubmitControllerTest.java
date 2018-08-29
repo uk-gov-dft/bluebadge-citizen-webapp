@@ -10,7 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationRequestModel;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
 public class DeclarationSubmitControllerTest {
@@ -30,7 +30,7 @@ public class DeclarationSubmitControllerTest {
   @Test
   public void show_declaration_ShouldDisplayDeclarationTemplate() throws Exception {
 
-    DeclarationRequestModel formRequest = DeclarationRequestModel.builder().build();
+    DeclarationForm formRequest = DeclarationForm.builder().build();
 
     mockMvc
         .perform(get("/apply-for-a-badge/declaration"))
@@ -43,7 +43,7 @@ public class DeclarationSubmitControllerTest {
   public void submit_declaration_ShouldDisplayApplicationSubmittedTemplate_WhenDeclarationIsAgreed()
       throws Exception {
 
-    DeclarationRequestModel formRequest = DeclarationRequestModel.builder().build();
+    DeclarationForm formRequest = DeclarationForm.builder().build();
 
     mockMvc
         .perform(post("/apply-for-a-badge/declaration").param("agreed", "true"))
