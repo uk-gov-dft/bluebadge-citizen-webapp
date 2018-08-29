@@ -1,4 +1,4 @@
-package uk.gov.dft.bluebadge.webapp.citizen.controllers.ErrorHandler;
+package uk.gov.dft.bluebadge.webapp.citizen.controllers.errorhandler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
