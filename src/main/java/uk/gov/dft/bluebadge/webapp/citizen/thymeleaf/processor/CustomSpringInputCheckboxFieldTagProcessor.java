@@ -95,7 +95,7 @@ public final class CustomSpringInputCheckboxFieldTagProcessor
         structureHandler,
         this.valueAttributeDefinition,
         VALUE_ATTR_NAME,
-        RequestDataValueProcessorUtils.processFormFieldValue(context, name, value, "checkbox"));
+        RequestDataValueProcessorUtils.processFormFieldValue(context, name, value, CHECKBOX_INPUT_TYPE_ATTR_VALUE));
     if (checked) {
       StandardProcessorUtils.setAttribute(
           structureHandler, this.checkedAttributeDefinition, CHECKED_ATTR_NAME, CHECKED_ATTR_NAME);
@@ -119,7 +119,7 @@ public final class CustomSpringInputCheckboxFieldTagProcessor
       final String hiddenName = WebDataBinder.DEFAULT_FIELD_MARKER_PREFIX + name;
       final String hiddenValue = "on";
 
-      final Map<String, String> hiddenAttributes = new LinkedHashMap<String, String>(4, 1.0f);
+      final Map<String, String> hiddenAttributes = new LinkedHashMap<>(4, 1.0f);
       hiddenAttributes.put(TYPE_ATTR_NAME, "hidden");
       hiddenAttributes.put(NAME_ATTR_NAME, hiddenName);
       hiddenAttributes.put(
