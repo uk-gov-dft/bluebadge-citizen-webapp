@@ -15,12 +15,6 @@ public class ApplicationManagementService {
   }
 
   public UUID create(Application app) {
-    String response = client.createApplication(app).getData();
-
-    if (response != null) {
-      return UUID.fromString(response);
-    }
-
-    return null;
+    return client.createApplication(app).getData();
   }
 }

@@ -62,6 +62,22 @@ public class ReferenceDataService {
     }
   }
 
+  private void initialise() {
+    if (!isLoaded.get()) {
+      init();
+    }
+  }
+
+  private List<ReferenceData> retrieveReferenceDataList(RefDataGroupEnum referenceDataGroup) {
+    initialise();
+    return groupedReferenceDataList.get(referenceDataGroup.getGroupKey());
+  }
+
+  private String retrieveReferenceDataDisplayValue(RefDataGroupEnum group, String key) {
+    initialise();
+    return groupedReferenceDataMap.get(group.getGroupKey()).get(key);
+  }
+
   public List<ReferenceData> retrieveCancellations() {
     return retrieveReferenceDataList(RefDataGroupEnum.CANCEL);
   }
@@ -94,13 +110,6 @@ public class ReferenceDataService {
     return retrieveReferenceDataList(RefDataGroupEnum.LA);
   }
 
-  private List<ReferenceData> retrieveReferenceDataList(RefDataGroupEnum referenceDataGroup) {
-    if (!isLoaded.get()) {
-      init();
-    }
-    return groupedReferenceDataList.get(referenceDataGroup.getGroupKey());
-  }
-
   public String retrieveEligibilityDisplayValue(String key) {
     return retrieveReferenceDataDisplayValue(RefDataGroupEnum.ELIGIBILITY, key);
   }
@@ -127,12 +136,5 @@ public class ReferenceDataService {
 
   public String retrieveLocalAuthorityDisplayValue(String key) {
     return retrieveReferenceDataDisplayValue(RefDataGroupEnum.LA, key);
-  }
-
-  private String retrieveReferenceDataDisplayValue(RefDataGroupEnum group, String key) {
-    if (!isLoaded.get()) {
-      init();
-    }
-    return groupedReferenceDataMap.get(group.getGroupKey()).get(key);
   }
 }

@@ -1,10 +1,13 @@
 package uk.gov.dft.bluebadge.webapp.citizen.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataGroupEnum.APP_SOURCE;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataGroupEnum.CANCEL;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataGroupEnum.DELIVERY_OPTIONS;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataGroupEnum.DELIVER_TO;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataGroupEnum.ELIGIBILITY;
@@ -55,6 +58,40 @@ public class ReferenceDataServiceTest {
   public void apiCalledWithConfiguredDomain() {
     referenceDataService.retrieveLocalAuthorities();
     verify(mockApiClient).retrieveReferenceData(RefDataDomainEnum.CITIZEN);
+  }
+
+  @Test
+  public void onceLoaded_thenDoesNotCallAPI() {
+    referenceDataService.retrieveLocalAuthorities();
+    referenceDataService.retrieveLocalAuthorities();
+    verify(mockApiClient, times(1)).retrieveReferenceData(RefDataDomainEnum.CITIZEN);
+  }
+
+  @Test
+  public void whenExceptionFromAPI_thenLoadedSetBackToFalse() {
+    when(mockApiClient.retrieveReferenceData(RefDataDomainEnum.CITIZEN))
+        .thenThrow(new IllegalArgumentException("testing"));
+
+    try {
+      referenceDataService.retrieveLocalAuthorities();
+      fail("No exception thrown");
+    } catch (IllegalArgumentException e) {
+    }
+
+    try {
+      referenceDataService.retrieveLocalAuthorities();
+      fail("No exception thrown");
+    } catch (IllegalArgumentException e) {
+    }
+
+    verify(mockApiClient, times(2)).retrieveReferenceData(RefDataDomainEnum.CITIZEN);
+  }
+
+  @Test
+  public void retrieveCancellations_ShouldReturnCancellations() {
+    List<ReferenceData> cancellations = referenceDataService.retrieveCancellations();
+    assertThat(cancellations).extracting("groupShortCode").containsOnly(CANCEL.getGroupKey());
+    assertThat(cancellations).extracting("shortCode").containsOnly("REVOKE");
   }
 
   @Test

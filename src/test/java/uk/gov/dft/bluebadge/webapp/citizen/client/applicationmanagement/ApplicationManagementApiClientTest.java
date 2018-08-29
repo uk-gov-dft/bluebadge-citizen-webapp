@@ -9,6 +9,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpMethod;
@@ -42,10 +43,9 @@ public class ApplicationManagementApiClientTest {
 
   @Test
   public void createApplication() throws Exception {
-    Application createdApplication = Application.builder().build();
-    createdApplication.setApplicationId("bob");
-
-    CreateApplicationResponse applicationResponse = new CreateApplicationResponse().data("bob");
+    UUID createUuid = UUID.randomUUID();
+    CreateApplicationResponse applicationResponse = new CreateApplicationResponse();
+    applicationResponse.setData(createUuid);
     String response = objectMapper.writeValueAsString(applicationResponse);
 
     mockServer
@@ -54,9 +54,9 @@ public class ApplicationManagementApiClientTest {
         .andRespond(withSuccess(response, MediaType.APPLICATION_JSON));
 
     Application app = Application.builder().applicationId("bob").build();
-    CreateApplicationResponse application = client.createApplication(app);
-    assertThat(application).isNotNull();
-    assertThat(application.getData()).isEqualTo("bob");
+    CreateApplicationResponse createdApp = client.createApplication(app);
+    assertThat(createdApp).isNotNull();
+    assertThat(createdApp.getData()).isEqualTo(createUuid);
   }
 
   @Test

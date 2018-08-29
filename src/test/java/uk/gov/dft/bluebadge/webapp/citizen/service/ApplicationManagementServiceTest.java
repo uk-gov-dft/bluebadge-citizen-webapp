@@ -1,9 +1,9 @@
 package uk.gov.dft.bluebadge.webapp.citizen.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import java.util.UUID;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -26,11 +26,12 @@ public class ApplicationManagementServiceTest {
   @Test
   public void createApplication_WithCorrectApplicationDetails() {
     CreateApplicationResponse response = new CreateApplicationResponse();
-    response.setData("36b93430-11e4-4694-b67c-b15f6fd2ea2e");
+    UUID createUuid = UUID.fromString("36b93430-11e4-4694-b67c-b15f6fd2ea2e");
+    response.setData(createUuid);
 
     when(clientMock.createApplication(ApplicationTestData.APPLICATION)).thenReturn(response);
 
     UUID uuid = appService.create(ApplicationTestData.APPLICATION);
-    Assert.assertEquals(uuid.toString(), response.getData());
+    assertThat(uuid).isEqualTo(createUuid);
   }
 }
