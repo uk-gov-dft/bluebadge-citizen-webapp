@@ -20,6 +20,7 @@ variable which comes from Thymleaf / Spring integration.
 
 <div th:fragment="govuk-error-summary(errorSummary})" tabindex="-1" role="alert"
      class="govuk-error-summary"
+     data-uipath="error-summary-box"
      th:aria-labelledby="error-summary-title"
      th:if="${errorSummary} OR ${#fields.hasErrors('formRequest.*')}">
 

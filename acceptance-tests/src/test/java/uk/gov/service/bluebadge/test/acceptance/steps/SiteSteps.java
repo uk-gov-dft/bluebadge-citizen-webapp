@@ -214,6 +214,12 @@ public class SiteSteps extends AbstractSpringSteps {
     sitePage.findElementWithUiPath(TOPBAR_SIGNOUT).click();
   }
 
+  @And("^I should see error summary box$")
+  public void andIshouldSeeErrorSummaryBox() throws Throwable {
+    WebElement errorSummaryBox = sitePage.findElementWithUiPath("error-summary-box");
+    assertNotNull(errorSummaryBox);
+  }
+
   @When("^I enter full name and email address and clicks on create a new user button$")
   public void iEnterFullNameAndEmailAddressAndClicksOnCreateANewUserButton() throws Throwable {
 
