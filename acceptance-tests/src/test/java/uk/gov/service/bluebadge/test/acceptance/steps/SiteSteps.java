@@ -217,7 +217,6 @@ public class SiteSteps extends AbstractSpringSteps {
     sitePage.findElementWithUiPath(uiPath).click();
   }
 
-
   @When("^I select option \"([^\"]*)\"$")
   public void iSelectOption(String arg0) throws Throwable {
     sitePage.findElementWithUiPath(arg0).click();
