@@ -32,15 +32,8 @@ import uk.gov.service.bluebadge.test.acceptance.util.TestContentUrls;
 
 public class SiteSteps extends AbstractSpringSteps {
 
-  public static final String MANAGE_USERS = "Manage users";
-  public static final String ORDER_A_BADGE = "Order a badge";
-  public static final String FIND_A_BADGE = "Find a badge";
   public static final String ATTRIBUTE_VALUE = "value";
   public static final String TAG_INPUT = "input";
-  public static final String PROPERTY_EMAIL = "email";
-  public static final String PROPERTY_FULLNAME = "fullname";
-  public static final String VALIDATION_MESSAGE_EXPECTED = "Validation message expected";
-  public static final String EMAIL_ADDRESS_FIELD = "emailAddress.field";
 
   protected NameGenerator ng = new NameGenerator();
   protected LocalDateGenerator ldg = new LocalDateGenerator();
