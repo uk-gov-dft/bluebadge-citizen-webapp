@@ -50,41 +50,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http.authorizeRequests().anyRequest().permitAll();
   }
-
-  //  @Bean
-  //  public RemoteTokenServices tokenService() {
-  //    RemoteTokenServices tokenService = new RemoteTokenServices();
-  //    tokenService.setCheckTokenEndpointUrl(authServerUrl + "/oauth/check_token");
-  //    tokenService.setClientId(clientId);
-  //    tokenService.setClientSecret(clientSecret);
-  //    tokenService.setAccessTokenConverter(jwtAccessTokenConverter());
-  //    return tokenService;
-  //  }
-  //
-  //  @Bean
-  //  public JwtAccessTokenConverter jwtAccessTokenConverter() {
-  //    JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-  //    converter.setAccessTokenConverter(accessTokenConverter());
-  //    return converter;
-  //  }
-  //
-  //  @Bean
-  //  public BBAccessTokenConverter accessTokenConverter() {
-  //    BBAccessTokenConverter converter = new BBAccessTokenConverter();
-  //    DefaultUserAuthenticationConverter userTokenConverter =
-  //        new DefaultUserAuthenticationConverter();
-  //    userTokenConverter.setUserDetailsService(userDetailsTokenService());
-  //    converter.setUserTokenConverter(userTokenConverter);
-  //    return converter;
-  //  }
-  //
-  //  @Bean
-  //  public UserDetailsTokenService userDetailsTokenService() {
-  //    return new UserDetailsTokenService();
-  //  }
-  //
-  //  @Bean
-  //  public SecurityUtils securityUtils() {
-  //    return new SecurityUtils();
-  //  }
 }

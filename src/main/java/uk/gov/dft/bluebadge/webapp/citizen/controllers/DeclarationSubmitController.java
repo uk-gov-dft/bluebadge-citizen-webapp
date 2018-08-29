@@ -44,14 +44,14 @@ public class DeclarationSubmitController {
   }
 
   @GetMapping(URL_DECLARATION)
-  public String show_declaration(
+  public String showDeclaration(
       @Valid @ModelAttribute("formRequest") DeclarationRequestModel formRequest, Model model) {
 
     return TEMPLATE_DECLARATION;
   }
 
   @PostMapping(URL_DECLARATION)
-  public String submit_declaration(
+  public String submitDeclaration(
       @Valid @ModelAttribute("formRequest") DeclarationRequestModel formRequest,
       BindingResult bindingResult,
       Model model) {
@@ -117,7 +117,7 @@ public class DeclarationSubmitController {
   }
 
   @GetMapping(URL_APPLICATION_SUBMITTED)
-  public String show_submitted() {
+  public String showSubmitted() {
     return TEMPLATE_APPLICATION_SUBMITTED;
   }
 }
