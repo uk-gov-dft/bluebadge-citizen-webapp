@@ -24,7 +24,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.config.AcceptanceTestProperties;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.SignInPage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.SitePage;
 import uk.gov.service.bluebadge.test.acceptance.util.LocalDateGenerator;
 import uk.gov.service.bluebadge.test.acceptance.util.NameGenerator;
@@ -49,8 +48,6 @@ public class SiteSteps extends AbstractSpringSteps {
   protected PostCodeGenerator pcg = new PostCodeGenerator();
 
   @Autowired protected SitePage sitePage;
-
-  @Autowired private SignInPage signInPage;
 
   @Autowired private AcceptanceTestProperties acceptanceTestProperties;
 
@@ -181,17 +178,6 @@ public class SiteSteps extends AbstractSpringSteps {
     assertNull("Element is not on page", sitePage.findElementWithTitle(title));
   }
 
-  @And("^I type username \"([^\"]+)\" and  ***REMOVED***)
-  public void andITypeUsernameAndPassword(String username, String password) throws Throwable {
-    signInPage.findPageElementById("username").sendKeys(username);
-    signInPage.findPageElementById("password").sendKeys(password);
-  }
-
-  @And("^I can click Sign in button$")
-  public void andICanClickSignInButton() throws Throwable {
-    signInPage.findElementWithUiPath("button").click();
-  }
-
   @Then("^I should see the title \"([^\"]*)\"$")
   public void iShouldSeeTheTitle(String title) throws Throwable {
     assertThat("Incorrect page title", sitePage.getH1Tag(), getMatcherForText(title));
@@ -223,45 +209,9 @@ public class SiteSteps extends AbstractSpringSteps {
     sitePage.findPageElementById("renewal-or-new-application-new").click();
   }
 
-  @And("^I should see LA name as \"([^\"]*)\"$")
-  public void iShouldSeeLANameAs(String la) throws Throwable {
-    assertThat(
-        "LA name expected",
-        signInPage.findElementWithUiPath("topbar.title").getText(),
-        getMatcherForText(la));
-  }
-
-  @And("^I should see username as \"([^\"]*)\"$")
-  public void iShouldSeeUsernameAs(String username) throws Throwable {
-    assertThat(
-        "Username expected",
-        signInPage.findElementWithUiPath("topbar.username").getText(),
-        getMatcherForText(username));
-  }
-
-  @And("^I should see signout link$")
-  public void iShouldSeeSignoutLink() throws Throwable {
-    assertThat(
-        "Sign out link expected", signInPage.findElementWithUiPath(TOPBAR_SIGNOUT), notNullValue());
-    assertThat(
-        "Sign out link expected",
-        signInPage.findElementWithUiPath(TOPBAR_SIGNOUT).getAttribute(ATTRIBUTE_VALUE),
-        getMatcherForText("Sign out"));
-  }
-
   @And("^I can click Sign out button$")
   public void andICanClickSignOutButton() throws Throwable {
     sitePage.findElementWithUiPath(TOPBAR_SIGNOUT).click();
-  }
-
-  @When("^I type \"([^\"]+)\" for \"([^\"]+)\" field$")
-  public void whenItypeTextForField(String text, String field) throws Throwable {
-    signInPage.findPageElementById(field).sendKeys(text);
-  }
-
-  @When("^I type \"([^\"]+)\" for \"([^\"]+)\" field by uipath$")
-  public void whenItypeTextForFieldUiPath(String text, String fieldUiPath) throws Throwable {
-    signInPage.findElementWithUiPath(fieldUiPath).sendKeys(text);
   }
 
   @When("^I enter full name and email address and clicks on create a new user button$")
@@ -290,26 +240,6 @@ public class SiteSteps extends AbstractSpringSteps {
   @And("^I should not see \"([^\"]*)\" text on the page$")
   public void iShouldNotSeeTextOnPage(String content) throws Throwable {
     assertFalse(sitePage.getPageContent().contains(content));
-  }
-
-  @Then("^I should see the validation message for \"([^\"]*)\" as \"([^\"]*)\"$")
-  public void iShouldSeeTheValidationMessageForAs(String arg0, String arg1) throws Throwable {
-    if (arg0.equals("invalid email")) {
-      assertThat(
-          VALIDATION_MESSAGE_EXPECTED,
-          signInPage.findElementWithUiPath("emailAddress.summary-error").getText(),
-          getMatcherForText(arg1));
-    } else if (arg0.equals("invalid email or password")) {
-      assertThat(
-          VALIDATION_MESSAGE_EXPECTED,
-          signInPage.findElementWithUiPath("error.form.signin.invalid").getText(),
-          getMatcherForText(arg1));
-    } else if (arg0.equals("invalid name")) {
-      assertThat(
-          VALIDATION_MESSAGE_EXPECTED,
-          signInPage.findElementWithUiPath("name.summary-error").getText(),
-          getMatcherForText(arg1));
-    }
   }
 
   @When("^I search for newly create user using email address$")

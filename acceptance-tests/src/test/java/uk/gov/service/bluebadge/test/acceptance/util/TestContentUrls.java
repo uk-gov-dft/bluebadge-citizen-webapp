@@ -30,11 +30,7 @@ public class TestContentUrls {
 
   private void setup() {
 
-    add("home", "/");
-    add("manage-users", "/manage-users");
-    add("order-a-badge", "/order-a-badge/");
-    add("order-a-badge/details", "/order-a-badge/details");
-    add("order-a-badge/processing", "/order-a-badge/processing");
+    add("apply-for-a-badge/declaration", "/apply-for-a-badge/declaration");
   }
 
   private void add(String pageName, String url) {

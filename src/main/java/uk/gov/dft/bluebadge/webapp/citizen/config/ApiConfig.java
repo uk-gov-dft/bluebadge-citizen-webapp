@@ -18,8 +18,10 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.CommonResponseErrorHandler;
 public class ApiConfig {
 
   private OAuth2ClientContext oauth2ClientContext;
+
   @SuppressWarnings("squid:S3305")
-  @Autowired private ObjectMapper objectMapper;
+  @Autowired
+  private ObjectMapper objectMapper;
 
   @Autowired
   public ApiConfig(OAuth2ClientContext oauth2ClientContext) {

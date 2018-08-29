@@ -15,7 +15,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.thymeleaf.processor.CustomSpringInput
 @Configuration
 public class TemplateEngineAndResolverConfig {
   @Bean
-  public SpringTemplateEngine springTemplateEngine(SpringResourceTemplateResolver templateResolver){
+  public SpringTemplateEngine springTemplateEngine(
+      SpringResourceTemplateResolver templateResolver) {
     SpringTemplateEngine result = new SpringTemplateEngine();
     result.setDialect(new CustomSpringStandardDialect());
     result.setTemplateResolver(templateResolver);

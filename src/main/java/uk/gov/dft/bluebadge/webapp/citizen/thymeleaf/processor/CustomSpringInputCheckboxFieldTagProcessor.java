@@ -95,7 +95,8 @@ public final class CustomSpringInputCheckboxFieldTagProcessor
         structureHandler,
         this.valueAttributeDefinition,
         VALUE_ATTR_NAME,
-        RequestDataValueProcessorUtils.processFormFieldValue(context, name, value, CHECKBOX_INPUT_TYPE_ATTR_VALUE));
+        RequestDataValueProcessorUtils.processFormFieldValue(
+            context, name, value, CHECKBOX_INPUT_TYPE_ATTR_VALUE));
     if (checked) {
       StandardProcessorUtils.setAttribute(
           structureHandler, this.checkedAttributeDefinition, CHECKED_ATTR_NAME, CHECKED_ATTR_NAME);
