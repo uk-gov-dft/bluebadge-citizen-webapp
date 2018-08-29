@@ -15,7 +15,7 @@ gradle bootRun
 It will show 80% complete but it is ready to be tested in the browser
 
 From browser:
-(http://localhost:8080/sign-in)
+(http://localhost:8780/apply-for-a-badge/declaration)
 
 ## BUILD
 
@@ -26,26 +26,6 @@ From browser:
 
 ### BUILD
 
-#### DEPENDENCIES
-This project depends on some usermanagement-service artifacts that you have to build and install in your maven local
-repository before (Eventually this will not be needed but for the time being it works like this):
-
-```
-cd usermanagement-service
-git pull
-git checkout whateverbranch
-cd model
-gradle install
-cd ../client
-gradle install
-```
-
-
-```
-./gradlew build
-
-```
-
 ### CONTINUOUS BUILD
 Rebuilds if there is a change
 ```
@@ -55,7 +35,7 @@ Rebuilds if there is a change
 ## RUN
 ### RUN FROM INTELLIJ
 Go to this class and run from the intellij context menu with a mouse right click:
-org.dft.bluebadge.seed.BlueBadgeApplication
+uk.gov.dft.bluebadge.webapp.citizen.CitizenApplication
 
 ### RUN FROM COMMAND LINE
 From your parent project directory:
@@ -69,16 +49,12 @@ java -jar build/libs/citizen-webapp-0.0.1-SNAPSHOT.jar
 ```
 
 ## PLAY WITH IT
-(http://localhost:8080/sign-in)
-(http://localhost:8080/applications/1/show)
-(http://localhost:8080/applications/showAll)
-(http://localhost:8080/applications/showCreate)
-(http://localhost:8080/applications/1/showUpdate)
+http://localhost:8780/apply-for-a-badge/declaration
 
 
 ### SWAGGER
-(http://localhost:8080/v2/api-docs)
-(http://localhost:8080/swagger-ui.html)
+(http://localhost:8780/v2/api-docs)
+(http://localhost:8780/swagger-ui.html)
 
 ### SONARQUBE:
 You need the sonarqube server running in this place:
@@ -197,7 +173,7 @@ $VIM :wq!
 $Vagrant source ./env.sh
 $Vagrant ./rubild
 (Wait a few seconds)
-BROWSER: http://dft.local:8080/sign-in
+BROWSER: http://dft.local:8780/sign-in
 ```
 
 To run Acceptance Test against virtual computer, from terminal prompt (host computer):
