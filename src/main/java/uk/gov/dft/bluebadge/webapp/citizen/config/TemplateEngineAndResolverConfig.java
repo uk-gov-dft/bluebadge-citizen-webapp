@@ -3,7 +3,6 @@ package uk.gov.dft.bluebadge.webapp.citizen.config;
 import java.util.Set;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import nz.net.ultraq.thymeleaf.decorators.strategies.GroupingStrategy;
-import org.springframework.beans.BeansException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.processor.IProcessor;
@@ -16,14 +15,12 @@ import uk.gov.dft.bluebadge.webapp.citizen.thymeleaf.processor.CustomSpringInput
 @Configuration
 public class TemplateEngineAndResolverConfig {
   @Bean
-  public SpringTemplateEngine springTemplateEngine(SpringResourceTemplateResolver templateResolver)
-      throws BeansException {
+  public SpringTemplateEngine springTemplateEngine(SpringResourceTemplateResolver templateResolver){
     SpringTemplateEngine result = new SpringTemplateEngine();
     result.setDialect(new CustomSpringStandardDialect());
     result.setTemplateResolver(templateResolver);
     result.setEnableSpringELCompiler(true);
     result.addDialect(new LayoutDialect(new GroupingStrategy()));
-
     return result;
   }
 
