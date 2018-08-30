@@ -6,7 +6,7 @@
         <div class="govuk-header__container govuk-width-container">
             <div th:replace="~{ :: govuk-logo }"></div>
             <div class="govuk-header__content">
-                <a href="#" class="govuk-header__link govuk-header__link--service-name">Apply for Blue Badge</a>
+                <a href="#" class="govuk-header__link govuk-header__link--service-name" th:text="#{service.name}"></a>
             </div>
         </div>
     </header>

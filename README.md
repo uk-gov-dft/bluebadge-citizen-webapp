@@ -9,8 +9,8 @@ brew install gradle
 git clone git@github.com:uk-gov-dft/citizen-webapp.git
 cd citizen-webapp
 gradle wrapper
-gradle build
-gradle bootRun
+./gradlew build
+./gradlew bootRun
 ```
 It will show 80% complete but it is ready to be tested in the browser
 
