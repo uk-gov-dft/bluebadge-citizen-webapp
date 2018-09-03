@@ -94,7 +94,7 @@ artifactory {
 
         publishArtifacts=true
         publishPom=true
-        Defaults {
+        defaults {
             publications('project_webapp')
             publishArtifacts=true
             publishPom=true
