@@ -1,7 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
 import java.io.Serializable;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,6 +9,6 @@ import lombok.Data;
 @Builder
 public class ApplicantForm implements Serializable {
 
-  @NotBlank(message = "{applicantType.NotBlank}")
+  @NotNull(message = "{applicantType.NotNull}")
   private String applicantType;
 }

@@ -29,7 +29,7 @@ public class TestContentUrls {
   }
 
   private void setup() {
-
+    add("applicant", "/applicant");
     add("apply-for-a-badge/declaration", "/apply-for-a-badge/declaration");
   }
 

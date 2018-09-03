@@ -2,7 +2,6 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
 import com.google.common.collect.Lists;
 import java.util.List;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,14 +9,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
-import uk.gov.dft.bluebadge.webapp.citizen.model.JourneySessionState;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 
 @Controller
-public class ApplicantController {
+public class ApplicantController extends BaseController {
 
   private static final String URL_APPLICANT = "/applicant";
   private static final String TEMPLATE_APPLICANT = "applicant";
@@ -46,10 +46,10 @@ public class ApplicantController {
 
   @PostMapping(URL_APPLICANT)
   public String submit(
+      @SessionAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute("formRequest") ApplicantForm formRequest,
       BindingResult bindingResult,
-      Model model,
-      HttpSession session) {
+      Model model) {
 
     model.addAttribute("errorSummary", new ErrorViewModel());
 
@@ -59,8 +59,7 @@ public class ApplicantController {
       return TEMPLATE_APPLICANT;
     }
 
-    session.setAttribute(
-        JOURNEY_SESSION_KEY, JourneySessionState.builder().applicantForm(formRequest));
+    journey.setApplicantForm(formRequest);
 
     return "redirect:/apply-for-a-badge/declaration";
   }

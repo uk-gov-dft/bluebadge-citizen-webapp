@@ -29,7 +29,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
 @Controller
-public class DeclarationSubmitController {
+public class DeclarationSubmitController extends BaseController {
 
   public static final String URL_DECLARATION = "/apply-for-a-badge/declaration";
   public static final String TEMPLATE_DECLARATION = "application-end/declaration";
