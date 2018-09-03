@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:utext="#{declarationPage.page.title} + ' - ' + #{common.title.suffix}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l" th:utext="#{declarationPage.page.title}"></h1>
+
+            <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"/>
+
+            <p class="govuk-body" th:utext="#{declarationPage.content.p1}"></p>
+
+            <ul class="govuk-list govuk-list--bullet">
+                <li th:utext="#{declarationPage.content.ul.one}"></li>
+                <li th:utext="#{declarationPage.content.ul.two}"></li>
+                <li th:utext="#{declarationPage.content.ul.three}"></li>
+                <li th:utext="#{declarationPage.content.ul.four}"></li>
+                <li th:utext="#{declarationPage.content.ul.five}"></li>
+            </ul>
+
+            <form th:action="@{/apply-for-a-badge/declaration}" th:object="${formRequest}" method="post" novalidate>
+                <div th:class="${#fields.hasErrors('agreed')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+
+                    <span class="govuk-error-message" th:if="${#fields.hasErrors('agreed')}" th:errors="*{agreed}"></span>
+
+                    <div class="govuk-checkboxes">
+                        <div class="govuk-checkboxes__item">
+                            <input class="govuk-checkboxes__input" th:field="*{agreed}" id="agreed" data-uipath="declaration.option" type="checkbox">
+                            <label class="govuk-label govuk-checkboxes__label" for="agreed"
+                                   th:utext="#{declarationPage.checkbox.label}"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="govuk-button" data-uipath="button.continue" th:text="#{btn.label.continue}"></button>
+            </form>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

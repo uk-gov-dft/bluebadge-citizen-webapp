@@ -1,0 +1,14 @@
+// ---------------------------------------------
+// GOVUK overrides
+
+$govuk-global-styles: true;
+$govuk-show-breakpoints: false;
+$govuk-assets-path: "../govuk/";
+
+
+// ---------------------------------------------
+// DFT Specific Colors
+
+$dft-blue: #1754B9;
+$dft-white: #fff;
+$dft-blue-dark: darken($dft-blue, 15%);
