@@ -79,7 +79,7 @@ publishing {
     publications {
         project_webapp(MavenPublication) {
             from components.java
-            artifactId "la-webapp"
+            artifactId "citizen-webapp"
         }
     }
 }
@@ -94,7 +94,7 @@ artifactory {
 
         publishArtifacts=true
         publishPom=true
-        Defaults {
+        defaults {
             publications('project_webapp')
             publishArtifacts=true
             publishPom=true
