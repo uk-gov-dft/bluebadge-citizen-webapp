@@ -79,7 +79,7 @@ publishing {
     publications {
         project_webapp(MavenPublication) {
             from components.java
-            artifactId "la-webapp"
+            artifactId "citizen-webapp"
         }
     }
 }
