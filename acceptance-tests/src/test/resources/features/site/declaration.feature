@@ -4,7 +4,6 @@
 
     Scenario: Verify declaration checkbox is checked
       Given I navigate to the "apply-for-a-blue-badge/declaration" page
-      And I wait 20s
       Then  I should see the page titled "Declaration - GOV.UK Apply for a Blue Badge"
       And   I select option "declaration.option"
       And   I can click on "Continue"
