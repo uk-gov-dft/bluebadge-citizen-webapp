@@ -13,7 +13,7 @@
         <div class="govuk-grid-column-two-thirds">
 
             <div class="govuk-panel govuk-panel--confirmation">
-                <h1 class="govuk-panel__title govuk-!-margin-top-5" th:text="#{submittedPage.page.title}"></h1>
+                <h1 class="govuk-panel__title govuk-!-margin-top-5" th:text="#{submittedPage.title}"></h1>
 
                 <!-- Code commented out for when we display the reference number on this page -->
                 <!-- <div class="govuk-panel__body">
@@ -23,7 +23,7 @@
 
             <h2 class="govuk-heading-m" th:text="#{submittedPage.content.title}"></h2>
 
-            <p class="govuk-body" th:text="#{submittedPage.content.p1}"></p>
+            <p class="govuk-body" th:text="#{${JOURNEY.applicantContextContent('submittedPage.content.p1')}}"></p>
 
             <p class="govuk-body" th:text="#{submittedPage.content.p2}"></p>
 

@@ -58,7 +58,8 @@ public class ApplicantControllerTest {
   public void submitApplicant_ShouldStoreApplicantFormIntoSessionAndDisplayNextPageInTheJourney()
       throws Exception {
     mockMvc
-        .perform(post("/applicant")
+        .perform(
+            post("/applicant")
                 .param("applicantType", "YOURSELF")
                 .sessionAttr("JOURNEY", new Journey()))
         .andExpect(status().isFound())
@@ -66,10 +67,10 @@ public class ApplicantControllerTest {
   }
 
   @Test
-  public void submitApplicant_shouldDisplayValidationMessageWhenNoApplicantTypeIsSelected() throws Exception {
+  public void submitApplicant_shouldDisplayValidationMessageWhenNoApplicantTypeIsSelected()
+      throws Exception {
     mockMvc
-        .perform(post("/applicant")
-                .sessionAttr("JOURNEY", new Journey()))
+        .perform(post("/applicant").sessionAttr("JOURNEY", new Journey()))
         .andExpect(status().isOk())
         .andExpect(view().name("applicant"))
         .andExpect(model().attributeHasFieldErrorCode("formRequest", "applicantType", "NotNull"));

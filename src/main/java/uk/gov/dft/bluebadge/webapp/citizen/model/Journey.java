@@ -14,8 +14,16 @@ public class Journey implements Serializable {
 
   public Boolean isApplicantYourself() {
     if (applicantForm != null) {
-      return applicantForm.getApplicantType().equals(ApplicantType.YOURSELF);
+      return applicantForm.getApplicantType().equals(ApplicantType.YOURSELF.toString());
     }
     return null;
+  }
+
+  public String applicantContextContent(String messageKey) {
+    if (!isApplicantYourself()) {
+      return messageKey;
+    }
+
+    return "someone." + messageKey;
   }
 }

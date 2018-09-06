@@ -25,7 +25,8 @@ public class DeclarationSubmitControllerTest {
   public void setup() {
     MockitoAnnotations.initMocks(this);
     controller = new DeclarationSubmitController(appService);
-    mockMvc = MockMvcBuilders.standaloneSetup(controller)
+    mockMvc =
+        MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
   }
@@ -65,7 +66,8 @@ public class DeclarationSubmitControllerTest {
   }
 
   @Test
-  public void showApplicationSubmitted_ShouldDisplayApplicationSubmittedTemplate() throws Exception {
+  public void showApplicationSubmitted_ShouldDisplayApplicationSubmittedTemplate()
+      throws Exception {
 
     mockMvc
         .perform(get("/application-submitted"))

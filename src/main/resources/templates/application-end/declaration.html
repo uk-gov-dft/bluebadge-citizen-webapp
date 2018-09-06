@@ -4,7 +4,7 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/master.html}">
 <head>
-    <title th:utext="#{declarationPage.page.title} + ' - ' + #{common.title.suffix}"></title>
+    <title th:text="#{declarationPage.page.title} + ' - ' + #{common.title.suffix}"></title>
 </head>
 <body>
 
@@ -12,18 +12,18 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-            <h1 class="govuk-heading-l" th:utext="#{declarationPage.page.title}"></h1>
+            <h1 class="govuk-heading-l" th:text="#{declarationPage.title}"></h1>
 
             <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"/>
 
-            <p class="govuk-body" th:utext="#{declarationPage.content.p1}"></p>
+            <p class="govuk-body" th:text="#{${JOURNEY.applicantContextContent('declarationPage.content.p1')}}"></p>
 
             <ul class="govuk-list govuk-list--bullet">
-                <li th:utext="#{declarationPage.content.ul.one}"></li>
-                <li th:utext="#{declarationPage.content.ul.two}"></li>
-                <li th:utext="#{declarationPage.content.ul.three}"></li>
-                <li th:utext="#{declarationPage.content.ul.four}"></li>
-                <li th:utext="#{declarationPage.content.ul.five}"></li>
+                <li th:text="#{${JOURNEY.applicantContextContent('declarationPage.content.ul.one')}}"></li>
+                <li th:text="#{${JOURNEY.applicantContextContent('declarationPage.content.ul.two')}}"></li>
+                <li th:text="#{${JOURNEY.applicantContextContent('declarationPage.content.ul.three')}}"></li>
+                <li th:text="#{${JOURNEY.applicantContextContent('declarationPage.content.ul.four')}}"></li>
+                <li th:text="#{${JOURNEY.applicantContextContent('declarationPage.content.ul.five')}}"></li>
             </ul>
 
             <form th:action="@{/apply-for-a-badge/declaration}" th:object="${formRequest}" method="post" novalidate>
@@ -35,7 +35,7 @@
                         <div class="govuk-checkboxes__item">
                             <input class="govuk-checkboxes__input" th:field="*{agreed}" id="agreed" data-uipath="declaration.option" type="checkbox">
                             <label class="govuk-label govuk-checkboxes__label" for="agreed"
-                                   th:utext="#{declarationPage.checkbox.label}"></label>
+                                   th:text="#{${JOURNEY.applicantContextContent('declarationPage.checkbox.label')}}"></label>
                         </div>
                     </div>
                 </div>
