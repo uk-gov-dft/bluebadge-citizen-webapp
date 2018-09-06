@@ -20,7 +20,7 @@ public class Journey implements Serializable {
   }
 
   public String applicantContextContent(String messageKey) {
-    if (!isApplicantYourself()) {
+    if (isApplicantYourself()) {
       return messageKey;
     }
 

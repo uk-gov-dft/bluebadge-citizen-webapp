@@ -4,7 +4,7 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/master.html}">
 <head>
-    <title th:text="#{declarationPage.page.title} + ' - ' + #{common.title.suffix}"></title>
+    <title th:utext="#{declarationPage.title} + ' - ' + #{common.title.suffix}"></title>
 </head>
 <body>
 
@@ -12,7 +12,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-            <h1 class="govuk-heading-l" th:text="#{declarationPage.title}"></h1>
+            <h1 class="govuk-heading-l" th:utext="#{declarationPage.title}"></h1>
 
             <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"/>
 
