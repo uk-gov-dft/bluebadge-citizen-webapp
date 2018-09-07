@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="'Something went wrong - ' + #{common.title.suffix}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+
+    <h1 class="govuk-heading-l">Something went wrong</h1>
+
+    <p class="govuk-body">We're currently experiencing technical difficulties.</p>
+
+    <p class="govuk-body">Please try again later.</p>
+
+</main>
+
+</body>
+</html>

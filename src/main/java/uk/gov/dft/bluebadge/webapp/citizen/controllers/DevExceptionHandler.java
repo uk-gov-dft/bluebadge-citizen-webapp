@@ -5,13 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 import uk.gov.dft.bluebadge.webapp.citizen.client.common.ClientApiException;
 
 //@Profile("dev")
-@ControllerAdvice
+// @ControllerAdvice
 @Slf4j
 public class DevExceptionHandler {
   @Autowired ObjectMapper objectMapper;

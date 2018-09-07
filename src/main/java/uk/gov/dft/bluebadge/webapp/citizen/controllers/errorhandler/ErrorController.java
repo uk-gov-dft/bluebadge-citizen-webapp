@@ -9,16 +9,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ErrorController {
 
-  public static final String URL_ERROR = "/general-error";
-  public static final String REDIRECT_URL_ERROR = "redirect:" + URL_ERROR;
-  public static final String TEMPLATE_ERROR = "error/general";
+    public static final String URL_500_ERROR = "/something-went-wrong";
+    public static final String TEMPLATE_500_ERROR = "error/500";
 
-  @GetMapping(URL_ERROR)
-  public String show(Model model) {
-    Exception ex = (Exception) model.asMap().get("exception");
-    model.addAttribute("errorMessage", ex.getClass().getName());
-    model.addAttribute("exceptionMessage", ex.getMessage());
-    log.debug("exception [()]", ex);
-    return TEMPLATE_ERROR;
-  }
+    public static final String URL_400_ERROR = "/page-not-found";
+    public static final String TEMPLATE_400_ERROR = "error/400";
+
+    @GetMapping(URL_500_ERROR)
+    public String show500(Model model) {
+        return TEMPLATE_500_ERROR;
+    }
+
+    @GetMapping(URL_400_ERROR)
+    public String show400() {
+        return TEMPLATE_400_ERROR;
+    }
 }
