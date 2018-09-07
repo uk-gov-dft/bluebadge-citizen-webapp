@@ -37,7 +37,7 @@ public class DeclarationSubmitControllerTest {
     DeclarationForm formRequest = DeclarationForm.builder().build();
 
     mockMvc
-        .perform(get("/apply-for-a-badge/declaration"))
+        .perform(get("/apply-for-a-blue-badge/declaration"))
         .andExpect(status().isOk())
         .andExpect(view().name("application-end/declaration"))
         .andExpect(model().attribute("formRequest", formRequest));
@@ -50,7 +50,7 @@ public class DeclarationSubmitControllerTest {
     DeclarationForm formRequest = DeclarationForm.builder().build();
 
     mockMvc
-        .perform(post("/apply-for-a-badge/declaration").param("agreed", "true"))
+        .perform(post("/apply-for-a-blue-badge/declaration").param("agreed", "true"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/application-submitted"));
   }
@@ -59,7 +59,7 @@ public class DeclarationSubmitControllerTest {
   public void submitDeclaration_ShouldThrowValidationError_WhenDeclarationIsNotAgreed()
       throws Exception {
     mockMvc
-        .perform(post("/apply-for-a-badge/declaration").param("agreed", "false"))
+        .perform(post("/apply-for-a-blue-badge/declaration").param("agreed", "false"))
         .andExpect(status().isOk())
         .andExpect(view().name("application-end/declaration"))
         .andExpect(model().attributeHasFieldErrorCode("formRequest", "agreed", "AssertTrue"));

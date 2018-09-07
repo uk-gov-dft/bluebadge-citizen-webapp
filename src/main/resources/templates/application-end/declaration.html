@@ -26,7 +26,7 @@
                 <li th:text="#{${JOURNEY.applicantContextContent('declarationPage.content.ul.five')}}"></li>
             </ul>
 
-            <form th:action="@{/apply-for-a-badge/declaration}" th:object="${formRequest}" method="post" novalidate>
+            <form th:action="@{/apply-for-a-blue-badge/declaration}" th:object="${formRequest}" method="post" novalidate>
                 <div th:class="${#fields.hasErrors('agreed')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
 
                     <span class="govuk-error-message" th:if="${#fields.hasErrors('agreed')}" th:errors="*{agreed}"></span>

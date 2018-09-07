@@ -31,7 +31,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 @Controller
 public class DeclarationSubmitController extends BaseController {
 
-  public static final String URL_DECLARATION = "/apply-for-a-badge/declaration";
+  public static final String URL_DECLARATION = "/apply-for-a-blue-badge/declaration";
   public static final String TEMPLATE_DECLARATION = "application-end/declaration";
 
   public static final String URL_APPLICATION_SUBMITTED = "/application-submitted";
