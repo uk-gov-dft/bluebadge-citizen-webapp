@@ -61,6 +61,6 @@ public class ApplicantController extends BaseController {
 
     journey.setApplicantForm(formRequest);
 
-    return "redirect:/apply-for-a-badge/declaration";
+    return "redirect:" + DeclarationSubmitController.URL_DECLARATION;
   }
 }
