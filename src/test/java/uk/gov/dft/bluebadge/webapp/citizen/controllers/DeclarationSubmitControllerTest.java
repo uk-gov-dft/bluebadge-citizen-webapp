@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
@@ -24,11 +25,14 @@ public class DeclarationSubmitControllerTest {
   public void setup() {
     MockitoAnnotations.initMocks(this);
     controller = new DeclarationSubmitController(appService);
-    mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+    mockMvc =
+        MockMvcBuilders.standaloneSetup(controller)
+            .setViewResolvers(new StandaloneMvcTestViewResolver())
+            .build();
   }
 
   @Test
-  public void show_declaration_ShouldDisplayDeclarationTemplate() throws Exception {
+  public void showDeclaration_ShouldDisplayDeclarationTemplate() throws Exception {
 
     DeclarationForm formRequest = DeclarationForm.builder().build();
 
@@ -40,7 +44,7 @@ public class DeclarationSubmitControllerTest {
   }
 
   @Test
-  public void submit_declaration_ShouldDisplayApplicationSubmittedTemplate_WhenDeclarationIsAgreed()
+  public void submitDeclaration_ShouldDisplayApplicationSubmittedTemplate_WhenDeclarationIsAgreed()
       throws Exception {
 
     DeclarationForm formRequest = DeclarationForm.builder().build();
@@ -52,7 +56,7 @@ public class DeclarationSubmitControllerTest {
   }
 
   @Test
-  public void submit_declaration_ShouldThrowValidationError_WhenDeclarationIsNotAgreed()
+  public void submitDeclaration_ShouldThrowValidationError_WhenDeclarationIsNotAgreed()
       throws Exception {
     mockMvc
         .perform(post("/apply-for-a-blue-badge/declaration").param("agreed", "false"))
@@ -62,7 +66,8 @@ public class DeclarationSubmitControllerTest {
   }
 
   @Test
-  public void show_declaration_ShouldDisplayApplicationSubmittedTemplate() throws Exception {
+  public void showApplicationSubmitted_ShouldDisplayApplicationSubmittedTemplate()
+      throws Exception {
 
     mockMvc
         .perform(get("/application-submitted"))
