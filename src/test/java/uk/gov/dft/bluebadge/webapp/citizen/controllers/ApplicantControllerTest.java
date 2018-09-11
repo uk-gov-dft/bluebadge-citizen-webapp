@@ -63,7 +63,7 @@ public class ApplicantControllerTest {
                 .param("applicantType", "YOURSELF")
                 .sessionAttr("JOURNEY", new Journey()))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/apply-for-a-badge/declaration"));
+        .andExpect(redirectedUrl("/apply-for-a-blue-badge/declaration"));
   }
 
   @Test
