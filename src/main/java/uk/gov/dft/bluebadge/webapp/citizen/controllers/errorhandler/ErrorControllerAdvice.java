@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -14,7 +13,11 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.common.ClientApiException;
 @ControllerAdvice
 public class ErrorControllerAdvice {
 
-  @Autowired ObjectMapper objectMapper;
+  private ObjectMapper objectMapper;
+
+  public ErrorControllerAdvice(ObjectMapper objectMapper) {
+    this.objectMapper = objectMapper;
+  }
 
   @ExceptionHandler(Exception.class)
   public String handleException(
@@ -25,8 +28,8 @@ public class ErrorControllerAdvice {
   }
 
   @ExceptionHandler(ClientApiException.class)
-  public String handleHttpException(
-      ClientApiException ex, RedirectAttributes redirectAttributes, HttpServletRequest req) {
+  public String handleClientApiException(
+      ClientApiException ex, HttpServletRequest req, RedirectAttributes redirectAttributes) {
     log.error("Request: {} raised {}.", req.getRequestURL(), ex.toString(), ex);
 
     try {

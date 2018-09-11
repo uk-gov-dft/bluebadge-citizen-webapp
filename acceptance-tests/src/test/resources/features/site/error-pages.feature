@@ -7,4 +7,4 @@ Feature: Dft BlueBadge Display Error Pages
 
   Scenario: Verify I see 404 page not found when navigate to url that doesn't exist
     Given   I navigate to the "page-that-does-not-exist" page
-    #Then    I should see the page titled "Page not found - GOV.UK Apply for a Blue Badge"
+    Then    I should see the page titled "Page not found - GOV.UK Apply for a Blue Badge"
