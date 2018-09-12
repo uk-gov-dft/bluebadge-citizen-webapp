@@ -4,19 +4,19 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/master.html}">
 <head>
-    <title th:text="'Page not found - ' + #{common.title.suffix}"></title>
+    <title th:text="#{error404Page.title} + ' - ' + #{common.title.suffix}"></title>
 </head>
 <body>
 
 <main layout:fragment="content">
 
-    <h1 class="govuk-heading-l">Page not found</h1>
+    <h1 class="govuk-heading-l" th:text="#{error404Page.title}"></h1>
 
-    <p class="govuk-body">If you typed the web address, check it is correct.</p>
+    <p class="govuk-body" th:text="#{error404Page.p1}"></p>
 
-    <p class="govuk-body">If you pasted the web address check you copied the entire address.</p>
+    <p class="govuk-body" th:text="#{error404Page.p2}"></p>
 
-    <a href="/" class="govuk-button">Return to start</a>
+    <a href="/" class="govuk-button" th:text="#{error404Page.btn.label}"></a>
 
 </main>
 
