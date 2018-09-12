@@ -62,8 +62,7 @@ public class DeclarationSubmitController extends BaseController {
       return TEMPLATE_DECLARATION;
     }
 
-    Application app = getDummyApplication();
-    appService.create(app);
+    appService.create(getDummyApplication());
 
     return "redirect:" + URL_APPLICATION_SUBMITTED;
   }
