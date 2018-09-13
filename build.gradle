@@ -28,12 +28,9 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-apply plugin: 'pmd'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
-
-//apply plugin: 'findbugs'
 
 def getTheVersion() {
     def version = rootProject.file('VERSION').text.trim()
@@ -109,19 +106,6 @@ artifactory {
         }
     }
 
-}
-
-tasks.withType(FindBugs) {
-    reports {
-        xml.enabled = false
-        html.enabled = true
-    }
-}
-tasks.withType(Pmd) {
-    reports {
-        xml.enabled false
-        html.enabled true
-    }
 }
 
 configurations.all {
