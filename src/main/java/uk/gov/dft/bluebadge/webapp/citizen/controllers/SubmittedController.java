@@ -9,7 +9,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings.U
 @Controller
 public class SubmittedController  implements StepController {
 
-  public static final String TEMPLATE_APPLICATION_SUBMITTED = "application-end/submitted";
+  private static final String TEMPLATE_APPLICATION_SUBMITTED = "application-end/submitted";
 
   @GetMapping(URL_APPLICATION_SUBMITTED)
   public String showSubmitted() {

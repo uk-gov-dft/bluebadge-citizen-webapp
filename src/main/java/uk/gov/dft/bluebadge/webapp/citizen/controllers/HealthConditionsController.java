@@ -26,7 +26,6 @@ public class HealthConditionsController implements StepController {
 
   @GetMapping(Mappings.URL_HEALTH_CONDITIONS)
   public String show(
-      Model model,
       @ModelAttribute("formRequest") HealthConditionsForm healthConditionsForm,
       @SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 

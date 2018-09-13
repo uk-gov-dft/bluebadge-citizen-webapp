@@ -36,7 +36,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings.U
 @Controller
 public class DeclarationSubmitController implements StepController {
 
-  public static final String TEMPLATE_DECLARATION = "application-end/declaration";
+  private static final String TEMPLATE_DECLARATION = "application-end/declaration";
 
   private ApplicationManagementService appService;
 
