@@ -1,5 +1,8 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+
+import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,10 +17,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinitionEnu
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
-
-import javax.validation.Valid;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 public class HealthConditionsController implements StepController {

@@ -19,7 +19,7 @@ public enum StepDefinitionEnum {
     return url;
   }
 
-  String getToUrl(){
+  String getToUrl() {
     return toUrl;
   }
 }

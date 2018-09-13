@@ -31,8 +31,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings.URL_APPLICATION_SUBMITTED;
-
 @Controller
 public class DeclarationSubmitController implements StepController {
 

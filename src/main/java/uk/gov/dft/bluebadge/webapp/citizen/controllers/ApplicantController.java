@@ -1,9 +1,11 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinitionEnum.APPLICANT_TYPE;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+
 import com.google.common.collect.Lists;
 import java.util.List;
 import javax.validation.Valid;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,17 +23,17 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinitionEnum.APPLICANT_TYPE;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-
 @Controller
 public class ApplicantController implements StepController {
   private static final String TEMPLATE_APPLICANT = "applicant";
 
   @GetMapping(Mappings.URL_APPLICANT_TYPE)
-  public String show(Model model, @ModelAttribute("formRequest") ApplicantForm formRequest, @SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+  public String show(
+      Model model,
+      @ModelAttribute("formRequest") ApplicantForm formRequest,
+      @SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if(null != journey.getApplicantForm()){
+    if (null != journey.getApplicantForm()) {
       BeanUtils.copyProperties(journey.getApplicantForm(), formRequest);
     }
     List<ReferenceData> applicantOptions = getApplicantOptions();
