@@ -56,7 +56,7 @@ node {
 
             timeout(time: 10, unit: 'MINUTES') {
                 try {
-                    sh 'bash -c "echo $PATH && cd acceptance-tests && ./run-regression.sh"'
+                    sh 'echo $PATH && cd acceptance-tests && bash run-regression.sh'
                 }
                 finally {
                     archiveArtifacts allowEmptyArchive: true, artifacts: '**/docker.log'
