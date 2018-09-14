@@ -64,14 +64,4 @@ public class DeclarationSubmitControllerTest {
         .andExpect(view().name("application-end/declaration"))
         .andExpect(model().attributeHasFieldErrorCode("formRequest", "agreed", "AssertTrue"));
   }
-
-  @Test
-  public void showApplicationSubmitted_ShouldDisplayApplicationSubmittedTemplate()
-      throws Exception {
-
-    mockMvc
-        .perform(get("/application-submitted"))
-        .andExpect(status().isOk())
-        .andExpect(view().name("application-end/submitted"));
-  }
 }

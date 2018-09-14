@@ -47,7 +47,7 @@ public class ApplicantControllerTest {
     List<ReferenceData> applicantOptions = Lists.newArrayList(yourself, someone);
 
     mockMvc
-        .perform(get("/applicant"))
+        .perform(get("/applicant").sessionAttr("JOURNEY", new Journey()))
         .andExpect(status().isOk())
         .andExpect(view().name("applicant"))
         .andExpect(model().attribute("applicantOptions", applicantOptions))
@@ -63,7 +63,7 @@ public class ApplicantControllerTest {
                 .param("applicantType", "YOURSELF")
                 .sessionAttr("JOURNEY", new Journey()))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/apply-for-a-blue-badge/declaration"));
+        .andExpect(redirectedUrl("/health-conditions"));
   }
 
   @Test
