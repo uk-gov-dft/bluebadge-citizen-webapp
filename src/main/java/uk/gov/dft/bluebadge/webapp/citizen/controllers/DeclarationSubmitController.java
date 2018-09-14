@@ -61,8 +61,7 @@ public class DeclarationSubmitController implements StepController {
       return TEMPLATE_DECLARATION;
     }
 
-    Application app = getDummyApplication();
-    appService.create(app);
+    appService.create(getDummyApplication());
 
     return RouteMaster.redirectToOnSuccess(this);
   }
