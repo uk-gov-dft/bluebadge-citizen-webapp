@@ -4,29 +4,42 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_
 
 import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinitionEnum;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 
 @Controller
+@RequestMapping(Mappings.URL_HEALTH_CONDITIONS)
 public class HealthConditionsController implements StepController {
 
   private static final String TEMPLATE_HEALTH_CONDITIONS = "health-conditions";
 
-  @GetMapping(Mappings.URL_HEALTH_CONDITIONS)
+  private final RouteMaster routeMaster;
+
+  @Autowired
+  public HealthConditionsController(RouteMaster routeMaster) {
+    this.routeMaster = routeMaster;
+  }
+
+  @GetMapping
   public String show(
       @ModelAttribute("formRequest") HealthConditionsForm healthConditionsForm,
-      @SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+
+    if (!journey.isValidState(getStepDefinition())) {
+      return routeMaster.backToCompletedPrevious();
+    }
 
     if (null != journey.getHealthConditionsForm()) {
       BeanUtils.copyProperties(journey.getHealthConditionsForm(), healthConditionsForm);
@@ -41,9 +54,9 @@ public class HealthConditionsController implements StepController {
     return TEMPLATE_HEALTH_CONDITIONS;
   }
 
-  @PostMapping(Mappings.URL_HEALTH_CONDITIONS)
+  @PostMapping
   public String submit(
-      @SessionAttribute(JOURNEY_SESSION_KEY) Journey journey,
+      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute("formRequest") HealthConditionsForm healthConditionsForm,
       BindingResult bindingResult,
       Model model) {
@@ -59,11 +72,11 @@ public class HealthConditionsController implements StepController {
 
     journey.setHealthConditionsForm(healthConditionsForm);
 
-    return RouteMaster.redirectToOnSuccess(this);
+    return routeMaster.redirectToOnSuccess(this);
   }
 
   @Override
-  public StepDefinitionEnum getStepDefinition() {
-    return StepDefinitionEnum.HEALTH_CONDITIONS;
+  public StepDefinition getStepDefinition() {
+    return StepDefinition.HEALTH_CONDITIONS;
   }
 }

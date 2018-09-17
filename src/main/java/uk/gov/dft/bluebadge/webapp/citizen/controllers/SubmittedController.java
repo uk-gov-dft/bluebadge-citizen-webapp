@@ -4,7 +4,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings.U
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinitionEnum;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 
 @Controller
 public class SubmittedController implements StepController {
@@ -17,7 +17,7 @@ public class SubmittedController implements StepController {
   }
 
   @Override
-  public StepDefinitionEnum getStepDefinition() {
-    return StepDefinitionEnum.SUBMITTED;
+  public StepDefinition getStepDefinition() {
+    return StepDefinition.SUBMITTED;
   }
 }
