@@ -227,4 +227,9 @@ public class SiteSteps extends AbstractSpringSteps {
   public void iCanClickButton(String uiPath) throws Throwable {
     sitePage.findElementWithUiPath(uiPath).click();
   }
+
+  @When("^I type \"([^\"]+)\" for \"([^\"]+)\" field by id$")
+  public void whenItypeTextForFieldUiPath(String text, String fieldId) throws Throwable {
+    sitePage.findPageElementById(fieldId).sendKeys(text);
+  }
 }
