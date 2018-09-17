@@ -3,7 +3,6 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import javax.validation.Valid;
-
 import org.mockito.Mock;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
@@ -22,24 +22,28 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 
 @Controller
+@RequestMapping(Mappings.URL_APPLICANT_NAME)
 public class ApplicantNameController implements StepController {
 
   public static final String TEMPLATE_APPLICANT_NAME = "applicant-name";
 
   private final RouteMaster routeMaster;
 
-  @Mock
-  private RouteMaster mockRouteMaster;
+  @Mock private RouteMaster mockRouteMaster;
 
   @Autowired
   public ApplicantNameController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
-  @GetMapping(Mappings.URL_APPLICANT_NAME)
+  @GetMapping
   public String show(
       @ModelAttribute("formRequest") ApplicantNameForm applicantNameForm,
       @SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+
+    if (!journey.isValidState(getStepDefinition())) {
+      return routeMaster.backToCompletedPrevious();
+    }
 
     if (null != journey.getApplicantNameForm()) {
       BeanUtils.copyProperties(journey.getApplicantNameForm(), applicantNameForm);
@@ -48,7 +52,7 @@ public class ApplicantNameController implements StepController {
     return TEMPLATE_APPLICANT_NAME;
   }
 
-  @PostMapping(Mappings.URL_APPLICANT_NAME)
+  @PostMapping
   public String submit(
       @SessionAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute("formRequest") ApplicantNameForm applicantNameForm,
