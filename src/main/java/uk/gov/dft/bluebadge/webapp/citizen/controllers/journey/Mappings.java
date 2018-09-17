@@ -12,7 +12,9 @@ public class Mappings {
   public static final String URL_DECLARATIONS = "/apply-for-a-blue-badge/declaration";
   public static final String URL_APPLICATION_SUBMITTED = "/application-submitted";
 
-  private static final BiMap<StepDefinition, String> mappings =
+  private Mappings(){}
+
+  private static final BiMap<StepDefinition, String> stepToUrlMapping =
       ImmutableBiMap.of(
           StepDefinition.HOME,
           URL_ROOT,
@@ -26,10 +28,10 @@ public class Mappings {
           URL_APPLICATION_SUBMITTED);
 
   public static StepDefinition getStep(String url) {
-    return mappings.inverse().get(url);
+    return stepToUrlMapping.inverse().get(url);
   }
 
   public static String getUrl(StepDefinition step) {
-    return mappings.get(step);
+    return stepToUrlMapping.get(step);
   }
 }
