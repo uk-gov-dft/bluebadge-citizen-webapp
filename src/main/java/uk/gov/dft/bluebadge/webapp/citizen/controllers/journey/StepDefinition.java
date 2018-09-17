@@ -7,10 +7,10 @@ import lombok.Getter;
 
 @Getter
 public enum StepDefinition {
-  SUBMITTED(null),
+  SUBMITTED(),
   DECLARATIONS(SUBMITTED),
   HEALTH_CONDITIONS(DECLARATIONS),
-  APPLICANT_TYPE(DECLARATIONS),
+  APPLICANT_TYPE(HEALTH_CONDITIONS),
   HOME(APPLICANT_TYPE);
 
   private Set<StepDefinition> next;
