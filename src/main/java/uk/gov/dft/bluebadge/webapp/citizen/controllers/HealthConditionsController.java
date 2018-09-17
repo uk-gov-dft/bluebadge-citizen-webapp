@@ -37,7 +37,7 @@ public class HealthConditionsController implements StepController {
       @ModelAttribute("formRequest") HealthConditionsForm healthConditionsForm,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!routeMaster.isValidState(this, journey)) {
+    if (!journey.isValidState(getStepDefinition())) {
       return routeMaster.backToCompletedPrevious();
     }
 

@@ -1,6 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -53,7 +52,6 @@ public class HealthConditionsControllerTest {
   @Test
   public void show_givenNoSession_ShouldRedirectBackToStart() throws Exception {
 
-    when(mockRouteMaster.isValidState(any(), any())).thenReturn(false);
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
 
     mockMvc
