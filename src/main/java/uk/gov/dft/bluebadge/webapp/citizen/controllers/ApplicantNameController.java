@@ -3,7 +3,10 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import javax.validation.Valid;
+
+import org.mockito.Mock;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinitionEnum;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
@@ -22,6 +25,16 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 public class ApplicantNameController implements StepController {
 
   public static final String TEMPLATE_APPLICANT_NAME = "applicant-name";
+
+  private final RouteMaster routeMaster;
+
+  @Mock
+  private RouteMaster mockRouteMaster;
+
+  @Autowired
+  public ApplicantNameController(RouteMaster routeMaster) {
+    this.routeMaster = routeMaster;
+  }
 
   @GetMapping(Mappings.URL_APPLICANT_NAME)
   public String show(
@@ -56,11 +69,11 @@ public class ApplicantNameController implements StepController {
     }
 
     journey.setApplicantNameForm(applicantNameForm);
-    return RouteMaster.redirectToOnSuccess(this);
+    return routeMaster.redirectToOnSuccess(this);
   }
 
   @Override
-  public StepDefinitionEnum getStepDefinition() {
-    return StepDefinitionEnum.NAME;
+  public StepDefinition getStepDefinition() {
+    return StepDefinition.NAME;
   }
 }
