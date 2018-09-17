@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
@@ -36,7 +35,11 @@ public class HealthConditionsController implements StepController {
   @GetMapping
   public String show(
       @ModelAttribute("formRequest") HealthConditionsForm healthConditionsForm,
-      @SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+
+    if (!routeMaster.isValidState(this, journey)) {
+      return routeMaster.backToCompletedPrevious();
+    }
 
     if (null != journey.getHealthConditionsForm()) {
       BeanUtils.copyProperties(journey.getHealthConditionsForm(), healthConditionsForm);
@@ -53,7 +56,7 @@ public class HealthConditionsController implements StepController {
 
   @PostMapping
   public String submit(
-      @SessionAttribute(JOURNEY_SESSION_KEY) Journey journey,
+      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute("formRequest") HealthConditionsForm healthConditionsForm,
       BindingResult bindingResult,
       Model model) {
