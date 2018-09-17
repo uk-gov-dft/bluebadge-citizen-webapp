@@ -5,18 +5,23 @@ import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings.U
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinitionEnum;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 
 @Controller
 public class HomeController implements StepController {
+  private final RouteMaster routeMaster;
+
+  public HomeController(RouteMaster routeMaster) {
+    this.routeMaster = routeMaster;
+  }
 
   @GetMapping(URL_ROOT)
   public String show() {
-    return RouteMaster.redirectToOnSuccess(this);
+    return routeMaster.redirectToOnSuccess(this);
   }
 
   @Override
-  public StepDefinitionEnum getStepDefinition() {
-    return StepDefinitionEnum.HOME;
+  public StepDefinition getStepDefinition() {
+    return StepDefinition.HOME;
   }
 }
