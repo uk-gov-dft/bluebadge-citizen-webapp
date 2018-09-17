@@ -19,4 +19,8 @@ public class RouteMaster {
 
     return "redirect:" + Mappings.getUrl(nextStep);
   }
+
+  public String backToCompletedPrevious() {
+    return "redirect:" + Mappings.getUrl(StepDefinition.HOME);
+  }
 }

@@ -30,7 +30,8 @@ public class TestContentUrls {
 
   private void setup() {
     add("applicant", "/");
-    add("apply-for-a-blue-badge/declaration", "/apply-for-a-blue-badge/declaration");
+    add("describe health conditions", "/health-conditions");
+    add("declaration", "/apply-for-a-blue-badge/declaration");
   }
 
   private void add(String pageName, String url) {

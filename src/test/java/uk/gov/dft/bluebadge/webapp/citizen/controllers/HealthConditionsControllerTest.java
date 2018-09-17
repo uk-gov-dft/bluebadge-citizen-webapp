@@ -50,6 +50,17 @@ public class HealthConditionsControllerTest {
   }
 
   @Test
+  public void show_givenNoSession_ShouldRedirectBackToStart() throws Exception {
+
+    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
+
+    mockMvc
+        .perform(get("/health-conditions"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/backToStart"));
+  }
+
+  @Test
   public void submit_givenValidForm_thenShouldDisplayRedirectToSuccess() throws Exception {
 
     when(mockRouteMaster.redirectToOnSuccess(controller)).thenReturn("redirect:/testSuccess");
