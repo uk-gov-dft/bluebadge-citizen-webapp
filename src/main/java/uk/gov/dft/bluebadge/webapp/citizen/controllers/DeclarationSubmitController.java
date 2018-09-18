@@ -87,7 +87,8 @@ public class DeclarationSubmitController implements StepController {
             : healthConditionsForm.getDescriptionOfConditions();
 
     String fullName = applicantNameForm == null ? "John Doe" : applicantNameForm.getFullName();
-    String birthName = applicantNameForm == null ? "John Doe Birth" : applicantNameForm.getBirthName();
+    String birthName =
+        applicantNameForm == null ? "John Doe Birth" : applicantNameForm.getBirthName();
 
     Party party =
         new Party()
