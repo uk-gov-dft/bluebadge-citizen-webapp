@@ -2,7 +2,6 @@ package uk.gov.dft.bluebadge.webapp.citizen.model;
 
 import java.io.Serializable;
 import lombok.Data;
-
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
