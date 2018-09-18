@@ -81,12 +81,9 @@ public class ReferenceDataServiceTest {
   }
 
   @Test
-  public void retrieveLocalAuthorities_ShouldReturnLocalAuthorities() {
-    List<ReferenceData> las =
-        referenceDataService.retrieveReferenceDataList(RefDataGroupEnum.COUNCIL);
-    assertThat(las)
-        .extracting("groupShortCode")
-        .containsOnly(RefDataGroupEnum.COUNCIL.getGroupKey());
-    assertThat(las).extracting("shortCode").contains("ABERC");
+  public void retrieveLocalCouncil_ShouldReturnLocalAuthorities() {
+    List<ReferenceData> las = referenceDataService.retrieveReferenceDataList(RefDataGroupEnum.COUNCIL);
+    assertThat(las).extracting("groupShortCode").containsOnly(RefDataGroupEnum.COUNCIL.getGroupKey());
+    assertThat(las).extracting("shortCode").contains("TON");
   }
 }
