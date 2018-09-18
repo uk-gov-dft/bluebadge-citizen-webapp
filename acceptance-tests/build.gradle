@@ -1,6 +1,5 @@
 apply plugin : 'java'
 apply plugin : 'jacoco'
-apply plugin : 'org.akhikhl.gretty'
 
 repositories {
     maven { url "http://repo.maven.apache.org/maven2" }
@@ -12,24 +11,6 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.akhikhl.gretty:gretty:1.1.1'
-
-    }
-}
-
-configurations {
-    functTestCompile.extendsFrom testCompile
-    functTestRuntime.extendsFrom testRuntime
-
-}
-
-sourceSets{
-    functionalTest {
-        java.srcDir file('src/test/java/')
-        resources.srcDir('src/test/resources')
-
-        compileClasspath = sourceSets.main.output + configurations.functTestCompile
-        runtimeClasspath = output + compileClasspath + configurations.functTestRuntime
     }
 }
 
@@ -48,20 +29,6 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version:'4.12'
     testCompile group: 'org.hamcrest', name: 'java-hamcrest', version:'2.0.0.0'
     testCompile group: 'net.masterthought', name: 'cucumber-reporting', version:'3.8.0'
-    functionalTestCompile 'org.springframework:spring-test:4.0.5.RELEASE'
-}
-
-gretty {
-    contextConfigFile = "${projectDir}/tomcat-context.xml"
-    jvmArgs = ['-Dspring.profiles.active=test']
-    integrationTestTask = 'integrationTest'
-    servletContainer = 'tomcat7'
-
-
-    afterEvaluate {
-        // Add integration test classes to Jetty's war
-        tasks['prepareInplaceWebApp'].dependsOn 'copyIntegrationTestClasses', 'copyIntegrationTestResources'
-    }
 }
 
 jacocoTestReport {
@@ -69,11 +36,19 @@ jacocoTestReport {
 }
 
 test {
+    exclude '**/*AcceptanceTest*'
     reports.junitXml.destination = "$buildDir/test-results/unit"
     reports.html.destination = "$buildDir/reports/tests/unit"
 }
 
-if (!hasProperty('buildProfile')) ext.buildProfile = 'local'
-apply from: "./gradle/profiles/${buildProfile}.gradle"
+task acceptanceTests(type:Test) {
+    testLogging.showStandardStreams = true
+    // Make gradle JVM properties available to cucumber JVM
+    systemProperties System.getProperties()
 
-if (!hasProperty('os')) ext.os = 'mac'
+    group = "acceptancetests"
+    outputs.upToDateWhen { false }
+    description = "Run acceptance tests (located in acceptance-tests/...)."
+    reports.junitXml.destination = "$buildDir/test-results/acceptanceTest"
+    reports.html.destination = "$buildDir/reports/tests/acceptanceTest"
+}

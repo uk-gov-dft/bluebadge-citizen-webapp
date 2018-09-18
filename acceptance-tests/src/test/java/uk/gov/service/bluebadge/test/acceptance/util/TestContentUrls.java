@@ -29,8 +29,9 @@ public class TestContentUrls {
   }
 
   private void setup() {
-    add("applicant", "/applicant");
-    add("apply-for-a-blue-badge/declaration", "/apply-for-a-blue-badge/declaration");
+    add("applicant", "/");
+    add("describe health conditions", "/health-conditions");
+    add("declaration", "/apply-for-a-blue-badge/declaration");
   }
 
   private void add(String pageName, String url) {
