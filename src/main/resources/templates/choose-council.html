@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="#{chooseCouncilPage.title} + ' - ' + #{common.title.suffix}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l" th:text="#{chooseCouncilPage.title}"></h1>
+
+            <!--<div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>-->
+
+            <p class="govuk-body" th:text="#{chooseCouncilPage.content.p1}"></p>
+
+            <p class="govuk-body">
+                <span th:remove="tag" th:text="#{chooseCouncilPage.content.p2.phrase1}"></span>
+                <a href="https://www.gov.uk/blue-badge-scheme-information-council" target="_blank" th:text="#{chooseCouncilPage.content.p2.phrase2}"></a>
+                <span th:remove="tag" th:text="#{chooseCouncilPage.content.p2.phrase3}"></span>
+            </p>
+
+            <form th:action="@{/choose-council}" method="post" novalidate>
+
+                <div class="govuk-form-group">
+                    <label class="govuk-label" for="local-council-autocomplete">Select your country</label>
+                    <div id="local-council-autocomplete"></div>
+                </div>
+
+                <p class="govuk-body">
+                   <a href="https://bluebadge.direct.gov.uk/bluebadge/why-are-you-here" th:text="#{chooseCouncilPage.link.dontKnowCouncil}"></a>
+                </p>
+
+                <button type="submit" class="govuk-button" data-uipath="button.continue" th:text="#{btn.label.continue}"></button>
+
+            </form>
+
+
+        </div>
+    </div>
+
+    <script>
+        const countries = ['France'];
+    </script>
+</main>
+
+</body>
+</html>
