@@ -44,13 +44,6 @@ public class HealthConditionsController implements StepController {
     if (null != journey.getHealthConditionsForm()) {
       BeanUtils.copyProperties(journey.getHealthConditionsForm(), healthConditionsForm);
     }
-    // TODO formRequest is hard coded into errors fragment.
-    // 1 is valid to be here else last place from stack
-    // 1.1 will need to know what steps are complete + prerequisites
-    // 1.2 If not valid redirect to top of stack
-    // 2 is back button press or bookmark backwards
-    // 2.1 Clean up stack back to here?
-    // 3 if all ok Add this page to stack
     return TEMPLATE_HEALTH_CONDITIONS;
   }
 
@@ -60,11 +53,6 @@ public class HealthConditionsController implements StepController {
       @Valid @ModelAttribute("formRequest") HealthConditionsForm healthConditionsForm,
       BindingResult bindingResult,
       Model model) {
-
-    // 1 Check results.
-    // 2 If errors populate them and return to view
-    // 3 No errors store results
-    // 4 No errors, Get possible redirects and pick and redirect?
     if (bindingResult.hasErrors()) {
       model.addAttribute("errorSummary", new ErrorViewModel());
       return TEMPLATE_HEALTH_CONDITIONS;

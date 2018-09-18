@@ -37,7 +37,7 @@ public class ApplicantController implements StepController {
   public String show(
       Model model,
       @ModelAttribute("formRequest") ApplicantForm formRequest,
-      @SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
     if (null != journey.getApplicantForm()) {
       BeanUtils.copyProperties(journey.getApplicantForm(), formRequest);
@@ -62,7 +62,7 @@ public class ApplicantController implements StepController {
 
   @PostMapping
   public String submit(
-      @SessionAttribute(JOURNEY_SESSION_KEY) Journey journey,
+      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute("formRequest") ApplicantForm formRequest,
       BindingResult bindingResult,
       Model model) {
