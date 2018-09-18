@@ -69,7 +69,6 @@ public class DeclarationSubmitControllerTest {
         .perform(post("/apply-for-a-blue-badge/declaration").param("agreed", "true"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"))
-        .andExpect(request().sessionAttribute("JOURNEY", Matchers.nullValue()))
     ;
 
     verify(appService, times(1)).create(any());

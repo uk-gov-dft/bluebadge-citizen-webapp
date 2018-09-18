@@ -64,8 +64,7 @@ public class DeclarationSubmitController implements StepController {
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute("formRequest") DeclarationForm formRequest,
       BindingResult bindingResult,
-      Model model,
-      SessionStatus sessionStatus) {
+      Model model) {
 
     model.addAttribute("errorSummary", new ErrorViewModel());
 
@@ -74,8 +73,6 @@ public class DeclarationSubmitController implements StepController {
     }
 
     appService.create(getDummyApplication(journey));
-
-    sessionStatus.setComplete();
 
     return routeMaster.redirectToOnSuccess(this);
   }
