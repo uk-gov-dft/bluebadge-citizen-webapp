@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+
 import com.google.common.collect.Lists;
 import java.time.LocalDate;
 import javax.validation.Valid;
@@ -9,6 +11,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.support.SessionStatus;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.ApplicationTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Contact;
@@ -24,34 +28,40 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Wa
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingLengthOfTimeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingSpeedCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
 @Controller
-public class DeclarationSubmitController extends BaseController {
+@RequestMapping(Mappings.URL_DECLARATIONS)
+public class DeclarationSubmitController implements StepController {
 
-  public static final String URL_DECLARATION = "/apply-for-a-blue-badge/declaration";
-  public static final String TEMPLATE_DECLARATION = "application-end/declaration";
+  private static final String TEMPLATE_DECLARATION = "application-end/declaration";
 
-  public static final String URL_APPLICATION_SUBMITTED = "/application-submitted";
-  public static final String TEMPLATE_APPLICATION_SUBMITTED = "application-end/submitted";
+  private final ApplicationManagementService appService;
+  private final RouteMaster routeMaster;
 
-  private ApplicationManagementService appService;
-
-  public DeclarationSubmitController(ApplicationManagementService appService) {
+  public DeclarationSubmitController(
+      ApplicationManagementService appService, RouteMaster routeMaster) {
     this.appService = appService;
+    this.routeMaster = routeMaster;
   }
 
-  @GetMapping(URL_DECLARATION)
+  @GetMapping
   public String showDeclaration(
       @Valid @ModelAttribute("formRequest") DeclarationForm formRequest, Model model) {
 
     return TEMPLATE_DECLARATION;
   }
 
-  @PostMapping(URL_DECLARATION)
+  @PostMapping
   public String submitDeclaration(
+      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute("formRequest") DeclarationForm formRequest,
       BindingResult bindingResult,
       Model model) {
@@ -62,12 +72,18 @@ public class DeclarationSubmitController extends BaseController {
       return TEMPLATE_DECLARATION;
     }
 
-    appService.create(getDummyApplication());
+    appService.create(getDummyApplication(journey));
 
-    return "redirect:" + URL_APPLICATION_SUBMITTED;
+    return routeMaster.redirectToOnSuccess(this);
   }
 
-  private Application getDummyApplication() {
+  private Application getDummyApplication(Journey journey) {
+    HealthConditionsForm healthConditionsForm = journey.getHealthConditionsForm();
+    String condDesc =
+        healthConditionsForm == null
+            ? "Dummy condition"
+            : healthConditionsForm.getDescriptionOfConditions();
+
     Party party =
         new Party()
             .typeCode(PartyTypeCodeField.PERSON)
@@ -90,7 +106,7 @@ public class DeclarationSubmitController extends BaseController {
     Eligibility eligibility =
         new Eligibility()
             .typeCode(EligibilityCodeField.WALKD)
-            .descriptionOfConditions("This is a description")
+            .descriptionOfConditions(condDesc)
             .walkingDifficulty(
                 new WalkingDifficulty()
                     .walkingLengthOfTimeCode(WalkingLengthOfTimeCodeField.LESSMIN)
@@ -115,8 +131,8 @@ public class DeclarationSubmitController extends BaseController {
         .build();
   }
 
-  @GetMapping(URL_APPLICATION_SUBMITTED)
-  public String showSubmitted() {
-    return TEMPLATE_APPLICATION_SUBMITTED;
+  @Override
+  public StepDefinition getStepDefinition() {
+    return StepDefinition.DECLARATIONS;
   }
 }

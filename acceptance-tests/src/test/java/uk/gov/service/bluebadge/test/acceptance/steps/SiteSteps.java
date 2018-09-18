@@ -136,6 +136,7 @@ public class SiteSteps extends AbstractSpringSteps {
     }
   }
 
+  @SuppressWarnings("squid:S2925")
   @Then("^I wait (\\d+)s$")
   public void thenIWait(int sec) throws InterruptedException {
     Thread.sleep(sec * 1000L);
@@ -225,5 +226,10 @@ public class SiteSteps extends AbstractSpringSteps {
   @And("^I can click \"([^\"]*)\" button$")
   public void iCanClickButton(String uiPath) throws Throwable {
     sitePage.findElementWithUiPath(uiPath).click();
+  }
+
+  @When("^I type \"([^\"]+)\" for \"([^\"]+)\" field by id$")
+  public void whenItypeTextForFieldUiPath(String text, String fieldId) throws Throwable {
+    sitePage.findPageElementById(fieldId).sendKeys(text);
   }
 }
