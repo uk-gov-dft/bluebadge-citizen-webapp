@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.ApplicationTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Contact;
@@ -24,33 +25,36 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Wa
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingLengthOfTimeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingSpeedCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
 @Controller
-public class DeclarationSubmitController extends BaseController {
+@RequestMapping(Mappings.URL_DECLARATIONS)
+public class DeclarationSubmitController implements StepController {
 
-  public static final String URL_DECLARATION = "/apply-for-a-blue-badge/declaration";
-  public static final String TEMPLATE_DECLARATION = "application-end/declaration";
+  private static final String TEMPLATE_DECLARATION = "application-end/declaration";
 
-  public static final String URL_APPLICATION_SUBMITTED = "/application-submitted";
-  public static final String TEMPLATE_APPLICATION_SUBMITTED = "application-end/submitted";
+  private final ApplicationManagementService appService;
+  private final RouteMaster routeMaster;
 
-  private ApplicationManagementService appService;
-
-  public DeclarationSubmitController(ApplicationManagementService appService) {
+  public DeclarationSubmitController(
+      ApplicationManagementService appService, RouteMaster routeMaster) {
     this.appService = appService;
+    this.routeMaster = routeMaster;
   }
 
-  @GetMapping(URL_DECLARATION)
+  @GetMapping
   public String showDeclaration(
       @Valid @ModelAttribute("formRequest") DeclarationForm formRequest, Model model) {
 
     return TEMPLATE_DECLARATION;
   }
 
-  @PostMapping(URL_DECLARATION)
+  @PostMapping
   public String submitDeclaration(
       @Valid @ModelAttribute("formRequest") DeclarationForm formRequest,
       BindingResult bindingResult,
@@ -64,7 +68,7 @@ public class DeclarationSubmitController extends BaseController {
 
     appService.create(getDummyApplication());
 
-    return "redirect:" + URL_APPLICATION_SUBMITTED;
+    return routeMaster.redirectToOnSuccess(this);
   }
 
   private Application getDummyApplication() {
@@ -115,8 +119,8 @@ public class DeclarationSubmitController extends BaseController {
         .build();
   }
 
-  @GetMapping(URL_APPLICATION_SUBMITTED)
-  public String showSubmitted() {
-    return TEMPLATE_APPLICATION_SUBMITTED;
+  @Override
+  public StepDefinition getStepDefinition() {
+    return StepDefinition.DECLARATIONS;
   }
 }
