@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.support.SessionStatus;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.ApplicationTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Contact;
@@ -63,7 +64,8 @@ public class DeclarationSubmitController implements StepController {
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute("formRequest") DeclarationForm formRequest,
       BindingResult bindingResult,
-      Model model) {
+      Model model,
+      SessionStatus sessionStatus) {
 
     model.addAttribute("errorSummary", new ErrorViewModel());
 
@@ -72,6 +74,8 @@ public class DeclarationSubmitController implements StepController {
     }
 
     appService.create(getDummyApplication(journey));
+
+    sessionStatus.setComplete();
 
     return routeMaster.redirectToOnSuccess(this);
   }
