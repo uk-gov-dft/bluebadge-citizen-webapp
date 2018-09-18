@@ -3,7 +3,6 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import javax.validation.Valid;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,57 +24,57 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 @RequestMapping(Mappings.URL_APPLICANT_NAME)
 public class ApplicantNameController implements StepController {
 
-    public static final String TEMPLATE_APPLICANT_NAME = "applicant-name";
+  public static final String TEMPLATE_APPLICANT_NAME = "applicant-name";
 
-    private final RouteMaster routeMaster;
+  private final RouteMaster routeMaster;
 
-    @Autowired
-    public ApplicantNameController(RouteMaster routeMaster) {
-        this.routeMaster = routeMaster;
+  @Autowired
+  public ApplicantNameController(RouteMaster routeMaster) {
+    this.routeMaster = routeMaster;
+  }
+
+  @GetMapping
+  public String show(
+      @ModelAttribute("formRequest") ApplicantNameForm applicantNameForm,
+      @SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+
+    if (!journey.isValidState(getStepDefinition())) {
+      return routeMaster.backToCompletedPrevious();
     }
 
-    @GetMapping
-    public String show(
-            @ModelAttribute("formRequest") ApplicantNameForm applicantNameForm,
-            @SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
-
-        if (!journey.isValidState(getStepDefinition())) {
-            return routeMaster.backToCompletedPrevious();
-        }
-
-        if (null != journey.getApplicantNameForm()) {
-            BeanUtils.copyProperties(journey.getApplicantNameForm(), applicantNameForm);
-        }
-
-        return TEMPLATE_APPLICANT_NAME;
+    if (null != journey.getApplicantNameForm()) {
+      BeanUtils.copyProperties(journey.getApplicantNameForm(), applicantNameForm);
     }
 
-    @PostMapping
-    public String submit(
-            @SessionAttribute(JOURNEY_SESSION_KEY) Journey journey,
-            @Valid @ModelAttribute("formRequest") ApplicantNameForm applicantNameForm,
-            BindingResult bindingResult,
-            Model model) {
+    return TEMPLATE_APPLICANT_NAME;
+  }
 
-        if (!applicantNameForm.isBirthNameValid()) {
-            bindingResult.rejectValue("birthName", "field.birthName.NotBlank");
-        }
+  @PostMapping
+  public String submit(
+      @SessionAttribute(JOURNEY_SESSION_KEY) Journey journey,
+      @Valid @ModelAttribute("formRequest") ApplicantNameForm applicantNameForm,
+      BindingResult bindingResult,
+      Model model) {
 
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("errorSummary", new ErrorViewModel());
-            return TEMPLATE_APPLICANT_NAME;
-        }
-
-        if (!applicantNameForm.getHasBirthName() && applicantNameForm.getBirthName() != null) {
-            applicantNameForm.setBirthName(null);
-        }
-
-        journey.setApplicantNameForm(applicantNameForm);
-        return routeMaster.redirectToOnSuccess(this);
+    if (!applicantNameForm.isBirthNameValid()) {
+      bindingResult.rejectValue("birthName", "field.birthName.NotBlank");
     }
 
-    @Override
-    public StepDefinition getStepDefinition() {
-        return StepDefinition.NAME;
+    if (bindingResult.hasErrors()) {
+      model.addAttribute("errorSummary", new ErrorViewModel());
+      return TEMPLATE_APPLICANT_NAME;
     }
+
+    if (!applicantNameForm.getHasBirthName() && applicantNameForm.getBirthName() != null) {
+      applicantNameForm.setBirthName(null);
+    }
+
+    journey.setApplicantNameForm(applicantNameForm);
+    return routeMaster.redirectToOnSuccess(this);
+  }
+
+  @Override
+  public StepDefinition getStepDefinition() {
+    return StepDefinition.NAME;
+  }
 }
