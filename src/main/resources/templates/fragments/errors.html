@@ -18,7 +18,7 @@ variable which comes from Thymleaf / Spring integration.
 
 -------------------------------------------------------------------------------- */
 
-<div th:fragment="govuk-error-summary(errorSummary})" tabindex="-1" role="alert"
+<div th:fragment="govuk-error-summary(errorSummary)" tabindex="-1" role="alert"
      class="govuk-error-summary"
      data-uipath="error-summary-box"
      th:aria-labelledby="error-summary-title"
@@ -38,12 +38,12 @@ variable which comes from Thymleaf / Spring integration.
 
         <ul class="govuk-list govuk-error-summary__list">
 
-            <li th:if="${err.isGlobal()}"
+            <!--<li th:if="${err.isGlobal()}"
                 th:each="err : ${#fields.detailedErrors('formRequest')}">
 
                 <p th:text="${err.message}"/>
 
-            </li>
+            </li>-->
 
             <li th:if="${!err.isGlobal()}"
                 th:each="err : ${#fields.detailedErrors('formRequest.*')}"

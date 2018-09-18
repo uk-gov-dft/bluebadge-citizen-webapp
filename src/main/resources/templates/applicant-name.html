@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="#{whatsYourNamePage.title} + ' - ' + #{common.title.suffix}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.applicantContextContent('whatsYourNamePage.title')}}"></h1>
+
+            <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>
+
+            <form th:action="@{/name}" th:object="${formRequest}" method="POST" novalidate>
+
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{whatsYourNamePage.field.label}, 'fullName', null, 'text')}"></div>
+
+                <div class="govuk-form-group">
+                    <fieldset class="govuk-fieldset">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                            <h2 class="govuk-fieldset__heading"
+                                th:text="#{${JOURNEY.applicantContextContent('whatsYourNamePage.birthName.title')}}"></h2>
+                        </legend>
+
+                        <div class="govuk-radios" data-module="radios">
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input"
+                                       type="radio"
+                                       th:field="*{hasBirthName}"
+                                       id="hasBirthName.no"
+                                       name="hasBirthName"
+                                       value="no"
+                                       data-aria-controls="conditional-how-contacted-conditional-1">
+                                <label class="govuk-label govuk-radios__label"
+                                       for="hasBirthName.no"
+                                       th:text="#{${JOURNEY.applicantContextContent('whatsYourNamePage.birthName.field.option.no')}}"></label>
+                            </div>
+
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input"
+                                       type="radio"
+                                       th:field="*{hasBirthName}"
+                                       value="yes"
+                                       id="hasBirthName.yes"
+                                       name="hasBirthName"
+                                       data-aria-controls="conditional-how-contacted-conditional-1">
+                                <label class="govuk-label govuk-radios__label"
+                                       for="hasBirthName.yes"
+                                       th:text="#{${JOURNEY.applicantContextContent('whatsYourNamePage.birthName.field.option.yes')}}"></label>
+                            </div>
+                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
+                                 id="conditional-how-contacted-conditional-1">
+
+                                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.applicantContextContent('whatsYourNamePage.birthName.field.label')}}, 'birthName', null, 'text')}"></div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <button type="submit"
+                        class="govuk-button"
+                        data-uipath="button.continue"
+                        th:text="#{btn.label.continue}"></button>
+
+            </form>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
