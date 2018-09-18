@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+
 import com.google.common.collect.Lists;
 import java.time.LocalDate;
 import javax.validation.Valid;
@@ -28,7 +30,9 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Wa
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
@@ -56,6 +60,7 @@ public class DeclarationSubmitController implements StepController {
 
   @PostMapping
   public String submitDeclaration(
+      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute("formRequest") DeclarationForm formRequest,
       BindingResult bindingResult,
       Model model) {
@@ -66,12 +71,18 @@ public class DeclarationSubmitController implements StepController {
       return TEMPLATE_DECLARATION;
     }
 
-    appService.create(getDummyApplication());
+    appService.create(getDummyApplication(journey));
 
     return routeMaster.redirectToOnSuccess(this);
   }
 
-  private Application getDummyApplication() {
+  private Application getDummyApplication(Journey journey) {
+    HealthConditionsForm healthConditionsForm = journey.getHealthConditionsForm();
+    String condDesc =
+        healthConditionsForm == null
+            ? "Dummy condition"
+            : healthConditionsForm.getDescriptionOfConditions();
+
     Party party =
         new Party()
             .typeCode(PartyTypeCodeField.PERSON)
@@ -94,7 +105,7 @@ public class DeclarationSubmitController implements StepController {
     Eligibility eligibility =
         new Eligibility()
             .typeCode(EligibilityCodeField.WALKD)
-            .descriptionOfConditions("This is a description")
+            .descriptionOfConditions(condDesc)
             .walkingDifficulty(
                 new WalkingDifficulty()
                     .walkingLengthOfTimeCode(WalkingLengthOfTimeCodeField.LESSMIN)
