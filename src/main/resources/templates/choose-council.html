@@ -14,7 +14,7 @@
 
             <h1 class="govuk-heading-l" th:text="#{chooseCouncilPage.title}"></h1>
 
-            <!--<div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>-->
+            <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>
 
             <p class="govuk-body" th:text="#{chooseCouncilPage.content.p1}"></p>
 
@@ -28,7 +28,12 @@
 
                 <div class="govuk-form-group">
                     <label class="govuk-label" for="local-council-autocomplete">Select your country</label>
-                    <div id="local-council-autocomplete"></div>
+                    <select name="local-council-autocomplete" id="local-council-autocomplete">
+                        <option value="" selected="selected"></option>
+                        <option th:each="council : ${councils}"
+                                th:value="${council.shortCode}"
+                                th:text="${council.description}"></option>
+                    </select>
                 </div>
 
                 <p class="govuk-body">
@@ -38,18 +43,8 @@
                 <button type="submit" class="govuk-button" data-uipath="button.continue" th:text="#{btn.label.continue}"></button>
 
             </form>
-
-            <select>
-                <option th:each="council : ${councils}" th:value="${council.shortCode}" th:text="${council.description}"
-                ></option>
-            </select>
-
         </div>
     </div>
-
-    <script>
-        const countries = ['France'];
-    </script>
 </main>
 
 </body>
