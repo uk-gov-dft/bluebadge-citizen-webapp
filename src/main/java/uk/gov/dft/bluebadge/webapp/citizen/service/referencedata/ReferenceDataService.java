@@ -68,73 +68,8 @@ public class ReferenceDataService {
     }
   }
 
-  private List<ReferenceData> retrieveReferenceDataList(RefDataGroupEnum referenceDataGroup) {
+  public List<ReferenceData> retrieveReferenceDataList(RefDataGroupEnum referenceDataGroup) {
     initialise();
     return groupedReferenceDataList.get(referenceDataGroup.getGroupKey());
-  }
-
-  private String retrieveReferenceDataDisplayValue(RefDataGroupEnum group, String key) {
-    initialise();
-    return groupedReferenceDataMap.get(group.getGroupKey()).get(key);
-  }
-
-  public List<ReferenceData> retrieveCancellations() {
-    return retrieveReferenceDataList(RefDataGroupEnum.CANCEL);
-  }
-
-  public List<ReferenceData> retrieveEligilities() {
-    return retrieveReferenceDataList(RefDataGroupEnum.ELIGIBILITY);
-  }
-
-  public List<ReferenceData> retrieveGenders() {
-    return retrieveReferenceDataList(RefDataGroupEnum.GENDER);
-  }
-
-  public List<ReferenceData> retrieveApplicationChannels() {
-    return retrieveReferenceDataList(RefDataGroupEnum.APP_SOURCE);
-  }
-
-  public List<ReferenceData> retrieveDeliverTos() {
-    return retrieveReferenceDataList(RefDataGroupEnum.DELIVER_TO);
-  }
-
-  public List<ReferenceData> retrieveDeliveryOptions() {
-    return retrieveReferenceDataList(RefDataGroupEnum.DELIVERY_OPTIONS);
-  }
-
-  public List<ReferenceData> retrieveStatuses() {
-    return retrieveReferenceDataList(RefDataGroupEnum.STATUS);
-  }
-
-  public List<ReferenceData> retrieveLocalAuthorities() {
-    return retrieveReferenceDataList(RefDataGroupEnum.LA);
-  }
-
-  public String retrieveEligibilityDisplayValue(String key) {
-    return retrieveReferenceDataDisplayValue(RefDataGroupEnum.ELIGIBILITY, key);
-  }
-
-  public String retrieveGenderDisplayValue(String key) {
-    return retrieveReferenceDataDisplayValue(RefDataGroupEnum.GENDER, key);
-  }
-
-  public String retrieveApplicationChannelDisplayValue(String key) {
-    return retrieveReferenceDataDisplayValue(RefDataGroupEnum.APP_SOURCE, key);
-  }
-
-  public String retrieveDeliverToDisplayValue(String key) {
-    return retrieveReferenceDataDisplayValue(RefDataGroupEnum.DELIVER_TO, key);
-  }
-
-  public String retrieveDeliveryOptionDisplayValue(String key) {
-    return retrieveReferenceDataDisplayValue(RefDataGroupEnum.DELIVERY_OPTIONS, key);
-  }
-
-  public String retrieveStatusDisplayValue(String key) {
-    return retrieveReferenceDataDisplayValue(RefDataGroupEnum.STATUS, key);
-  }
-
-  public String retrieveLocalAuthorityDisplayValue(String key) {
-    return retrieveReferenceDataDisplayValue(RefDataGroupEnum.LA, key);
   }
 }

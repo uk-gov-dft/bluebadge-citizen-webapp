@@ -39,6 +39,10 @@
 
             </form>
 
+            <select>
+                <option th:each="council : ${councils}" th:value="${council.shortCode}" th:text="${council.description}"
+                ></option>
+            </select>
 
         </div>
     </div>
