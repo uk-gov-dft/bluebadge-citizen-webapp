@@ -3,8 +3,12 @@ package uk.gov.service.bluebadge.test.acceptance.pages.site;
 import java.util.ArrayList;
 import java.util.List;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import uk.gov.service.bluebadge.test.acceptance.pages.AbstractPage;
 import uk.gov.service.bluebadge.test.acceptance.pages.PageHelper;
 import uk.gov.service.bluebadge.test.acceptance.util.TestContentUrls;
@@ -60,6 +64,21 @@ public abstract class AbstractSitePage extends AbstractPage {
   public WebElement findElementWithUiPath(String uiPath) {
     return helper.findOptionalElement(By.xpath("//*[@data-uipath='" + uiPath + "']"));
   }
+
+
+  public void selectOptionWithText(String textToSelect){
+      WebElement autoOptions = (new WebDriverWait(getWebDriver(), 10))
+              .until(ExpectedConditions.elementToBeClickable(By.id("councilShortCode__listbox")));
+
+      List<WebElement> optionsToSelect = autoOptions.findElements(By.tagName("li"));
+      for(WebElement option : optionsToSelect){
+        if(option .getText().equals(textToSelect)) {
+          option.click();
+          break;
+        }
+      }
+  }
+
 
   public WebElement findElementByXpath(String xpath) {
     return helper.findElement(By.xpath(xpath));
