@@ -13,6 +13,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import cucumber.api.DataTable;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -232,4 +233,9 @@ public class SiteSteps extends AbstractSpringSteps {
   public void whenItypeTextForFieldUiPath(String text, String fieldId) throws Throwable {
     sitePage.findPageElementById(fieldId).sendKeys(text);
   }
+
+    @And("^I select \"([^\"]*)\" from autosuggest council list$")
+    public void iSelectFromAutosuggestCouncilList(String arg0) throws Throwable {
+        sitePage.selectOptionWithText(arg0);
+    }
 }
