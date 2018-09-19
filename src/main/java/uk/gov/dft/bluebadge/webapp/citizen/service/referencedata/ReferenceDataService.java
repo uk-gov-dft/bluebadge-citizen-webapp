@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,10 +66,10 @@ public class ReferenceDataService {
                           Collectors.toMap(
                               ReferenceData::getShortCode, ReferenceData::getDescription))));
 
-      for(ReferenceData item : referenceDataList){
-        if(item instanceof LocalCouncilRefData){
+      for (ReferenceData item : referenceDataList) {
+        if (item instanceof LocalCouncilRefData) {
           localCouncilMap.put(item.getShortCode(), (LocalCouncilRefData) item);
-        }else if(item instanceof LocalAuthorityRefData){
+        } else if (item instanceof LocalAuthorityRefData) {
           localAuthorityMap.put(item.getShortCode(), (LocalAuthorityRefData) item);
         }
       }
@@ -88,16 +87,17 @@ public class ReferenceDataService {
     return groupedReferenceDataList.get(referenceDataGroup.getGroupKey());
   }
 
-  public LocalAuthorityRefData lookupLaForLcCode(String localCouncilShortCode){
+  public LocalAuthorityRefData lookupLaForLcCode(String localCouncilShortCode) {
     initialise();
     LocalCouncilRefData council = localCouncilMap.get(localCouncilShortCode);
-    if(null == council){
+    if (null == council) {
       log.warn("No council found for {}.", localCouncilShortCode);
       return null;
     }
 
     if (council.getLocalCouncilMetaData().isPresent()) {
-      return localAuthorityMap.get(council.getLocalCouncilMetaData().get().getIssuingAuthorityShortCode());
+      return localAuthorityMap.get(
+          council.getLocalCouncilMetaData().get().getIssuingAuthorityShortCode());
     }
 
     return null;

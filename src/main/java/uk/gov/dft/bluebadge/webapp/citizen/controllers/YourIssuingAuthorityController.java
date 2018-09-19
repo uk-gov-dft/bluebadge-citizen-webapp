@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,10 +18,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataService;
-
-import javax.validation.Valid;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Slf4j
 @Controller
@@ -42,10 +40,6 @@ public class YourIssuingAuthorityController implements StepController {
 
     if (!journey.isValidState(getStepDefinition())) {
       return routeMaster.backToCompletedPrevious();
-    }
-
-    if (null != journey.getYourIssuingAuthorityForm()) {
-      model.addAttribute("formRequest", journey.getYourIssuingAuthorityForm());
     }
 
     if (!model.containsAttribute("formRequest")) {
