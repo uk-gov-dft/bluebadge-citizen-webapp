@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.support.SessionStatus;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.ApplicationTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Contact;
@@ -32,6 +31,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
@@ -78,11 +78,17 @@ public class DeclarationSubmitController implements StepController {
   }
 
   private Application getDummyApplication(Journey journey) {
+    ApplicantNameForm applicantNameForm = journey.getApplicantNameForm();
     HealthConditionsForm healthConditionsForm = journey.getHealthConditionsForm();
+
     String condDesc =
         healthConditionsForm == null
             ? "Dummy condition"
             : healthConditionsForm.getDescriptionOfConditions();
+
+    String fullName = applicantNameForm == null ? "John Doe" : applicantNameForm.getFullName();
+    String birthName =
+        applicantNameForm == null ? "John Doe Birth" : applicantNameForm.getBirthName();
 
     Party party =
         new Party()
@@ -98,7 +104,8 @@ public class DeclarationSubmitController implements StepController {
                     .emailAddress("nobody@thisisatestabc.com"))
             .person(
                 new Person()
-                    .badgeHolderName("John Smith")
+                    .badgeHolderName(fullName)
+                    .nameAtBirth(birthName)
                     .nino("NS123456A")
                     .dob(LocalDate.now())
                     .genderCode(GenderCodeField.FEMALE));

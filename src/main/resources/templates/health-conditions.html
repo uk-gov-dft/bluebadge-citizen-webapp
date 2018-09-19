@@ -13,17 +13,22 @@
         <div class="govuk-grid-column-two-thirds">
 
             <h1 class="govuk-heading-l" th:text="#{${JOURNEY.applicantContextContent('healthConditionsPage.body.title')}}"></h1>
-            <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"/>
+            
+            <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>
 
             <form th:action="@{/health-conditions}" th:object="${formRequest}" method="post" novalidate>
 
                 <div class="govuk-form-group">
-                    <label class="govuk-label" for="description-of-conditions" th:text="#{healthConditionsPage.descriptionOfConditions}" />
-                    <textarea class="govuk-textarea" th:field="${formRequest.descriptionOfConditions}"
-                              id="description-of-conditions" rows="5" name="descriptionOfConditions" aria-describedby="more-detail-hint"
+                    <label class="govuk-label" for="description-of-conditions" th:text="#{healthConditionsPage.descriptionOfConditions}"></label>
+                    <textarea class="govuk-textarea govuk-textarea--fixed" th:field="${formRequest.descriptionOfConditions}"
+                              id="description-of-conditions" rows="5" name="descriptionOfConditions"
                               data-uipath="healthconditions.text"></textarea>
                 </div>
-                <button type="submit" class="govuk-button" data-uipath="button.continue" th:text="#{btn.label.continue}"></button>
+
+                <button type="submit"
+                        class="govuk-button"
+                        data-uipath="button.continue"
+                        th:text="#{btn.label.continue}"></button>
 
             </form>
 

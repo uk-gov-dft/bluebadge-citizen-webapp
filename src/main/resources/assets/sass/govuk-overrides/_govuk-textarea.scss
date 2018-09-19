@@ -1,0 +1,6 @@
+.govuk-textarea {
+	&.govuk-textarea--fixed {
+		min-width: 100%;
+		max-width: 100%;
+	}
+}

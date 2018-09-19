@@ -8,24 +8,22 @@ import lombok.Getter;
 public class Mappings {
   public static final String URL_ROOT = "/";
   public static final String URL_APPLICANT_TYPE = "/applicant";
+  public static final String URL_APPLICANT_NAME = "/name";
   public static final String URL_HEALTH_CONDITIONS = "/health-conditions";
   public static final String URL_DECLARATIONS = "/apply-for-a-blue-badge/declaration";
   public static final String URL_APPLICATION_SUBMITTED = "/application-submitted";
 
-  private Mappings(){}
+  private Mappings() {}
 
   private static final BiMap<StepDefinition, String> stepToUrlMapping =
-      ImmutableBiMap.of(
-          StepDefinition.HOME,
-          URL_ROOT,
-          StepDefinition.APPLICANT_TYPE,
-          URL_APPLICANT_TYPE,
-          StepDefinition.HEALTH_CONDITIONS,
-          URL_HEALTH_CONDITIONS,
-          StepDefinition.DECLARATIONS,
-          URL_DECLARATIONS,
-          StepDefinition.SUBMITTED,
-          URL_APPLICATION_SUBMITTED);
+      ImmutableBiMap.<StepDefinition, String>builder()
+          .put(StepDefinition.HOME, URL_ROOT)
+          .put(StepDefinition.APPLICANT_TYPE, URL_APPLICANT_TYPE)
+          .put(StepDefinition.NAME, URL_APPLICANT_NAME)
+          .put(StepDefinition.HEALTH_CONDITIONS, URL_HEALTH_CONDITIONS)
+          .put(StepDefinition.DECLARATIONS, URL_DECLARATIONS)
+          .put(StepDefinition.SUBMITTED, URL_APPLICATION_SUBMITTED)
+          .build();
 
   public static StepDefinition getStep(String url) {
     return stepToUrlMapping.inverse().get(url);
