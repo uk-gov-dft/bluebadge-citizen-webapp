@@ -12,64 +12,71 @@ import org.junit.Test;
 
 public class RouteMasterTest {
   RouteMaster routeMaster;
+
   @Before
-  public void setup(){
+  public void setup() {
     routeMaster = new RouteMaster();
   }
 
   @Test
-  public void redirectOnSuccess_singleNextStep(){
+  public void redirectOnSuccess_singleNextStep() {
     assertThat(routeMaster.redirectToOnSuccess(StepDefinition.HOME))
         .isEqualTo("redirect:" + Mappings.URL_APPLICANT_TYPE);
   }
+
   @Test(expected = IllegalStateException.class)
-  public void redirectOnSuccess_whenMultiple_thenException(){
+  public void redirectOnSuccess_whenMultiple_thenException() {
     routeMaster.redirectToOnSuccess(StepDefinition.RECEIVE_BENEFITS);
   }
 
   @Test
-  public void redirectOnSuccessWithForm_singleNextStep(){
+  public void redirectOnSuccessWithForm_singleNextStep() {
     StepForm testForm = () -> HOME;
 
     assertThat(routeMaster.redirectToOnSuccess(testForm))
         .isEqualTo("redirect:" + Mappings.URL_APPLICANT_TYPE);
   }
+
   @Test(expected = IllegalStateException.class)
-  public void redirectOnSuccessWithForm_whenMultiple_thenExcpetion(){
+  public void redirectOnSuccessWithForm_whenMultiple_thenExcpetion() {
     StepForm testForm = () -> RECEIVE_BENEFITS;
 
     routeMaster.redirectToOnSuccess(testForm);
   }
-  @Test
-  public void redirectOnSuccessWithForm_whenMultiple_thenFormDetermines(){
-    StepForm testForm = new StepForm() {
-      @Override
-      public StepDefinition getAssociatedStep() {
-        return RECEIVE_BENEFITS;
-      }
 
-      @Override
-      public Optional<StepDefinition> determineNextStep() {
-        return Optional.of(ELIGIBLE);
-      }
-    };
+  @Test
+  public void redirectOnSuccessWithForm_whenMultiple_thenFormDetermines() {
+    StepForm testForm =
+        new StepForm() {
+          @Override
+          public StepDefinition getAssociatedStep() {
+            return RECEIVE_BENEFITS;
+          }
+
+          @Override
+          public Optional<StepDefinition> determineNextStep() {
+            return Optional.of(ELIGIBLE);
+          }
+        };
 
     assertThat(routeMaster.redirectToOnSuccess(testForm))
         .isEqualTo("redirect:" + Mappings.URL_ELIGIBLE);
   }
-  @Test(expected = IllegalStateException.class)
-  public void redirectOnSuccessWithForm_whenMultipleAndFormDeterminesInvalid_thenException(){
-    StepForm testForm = new StepForm() {
-      @Override
-      public StepDefinition getAssociatedStep() {
-        return RECEIVE_BENEFITS;
-      }
 
-      @Override
-      public Optional<StepDefinition> determineNextStep() {
-        return Optional.of(DECLARATIONS);
-      }
-    };
+  @Test(expected = IllegalStateException.class)
+  public void redirectOnSuccessWithForm_whenMultipleAndFormDeterminesInvalid_thenException() {
+    StepForm testForm =
+        new StepForm() {
+          @Override
+          public StepDefinition getAssociatedStep() {
+            return RECEIVE_BENEFITS;
+          }
+
+          @Override
+          public Optional<StepDefinition> determineNextStep() {
+            return Optional.of(DECLARATIONS);
+          }
+        };
 
     assertThat(routeMaster.redirectToOnSuccess(testForm));
   }

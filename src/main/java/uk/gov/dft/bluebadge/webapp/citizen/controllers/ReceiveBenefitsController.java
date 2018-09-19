@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
@@ -64,18 +65,26 @@ public class ReceiveBenefitsController implements StepController {
    */
   private List<ReferenceData> getBenefitOptions() {
     ReferenceData pip = new ReferenceData();
-    pip.setShortCode("pip");
+    pip.setShortCode(EligibilityCodeField.PIP.name());
     pip.setDescription("Personal Independence Payment (PIP)");
 
     ReferenceData dla = new ReferenceData();
-    dla.setShortCode("dla");
+    dla.setShortCode(EligibilityCodeField.DLA.name());
     dla.setDescription("Disability Living Allowance (DLA)");
 
+    ReferenceData afrfcs = new ReferenceData();
+    afrfcs.setShortCode(EligibilityCodeField.AFRFCS.name());
+    afrfcs.setDescription("Armed Forces Compensation scheme");
+
+    ReferenceData wpms = new ReferenceData();
+    wpms.setShortCode(EligibilityCodeField.WPMS.name());
+    wpms.setDescription("War Pensioners' Mobility Supplement");
+
     ReferenceData none = new ReferenceData();
-    none.setShortCode("none");
+    none.setShortCode(EligibilityCodeField.WALKD.name());
     none.setDescription("None of these benefits");
 
-    return Lists.newArrayList(pip, dla, none);
+    return Lists.newArrayList(pip, dla, afrfcs, wpms, none);
   }
 
   @PostMapping
