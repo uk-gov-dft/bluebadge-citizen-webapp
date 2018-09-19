@@ -15,7 +15,7 @@ public class ApplicantNameForm implements Serializable {
   @Size(max = 100)
   private String fullName;
 
-  @NotNull(message = "Select whether birth name has changed")
+  @NotNull(message = "{field.hasBirthName.NotNull}")
   private Boolean hasBirthName;
 
   @Size(max = 100)
