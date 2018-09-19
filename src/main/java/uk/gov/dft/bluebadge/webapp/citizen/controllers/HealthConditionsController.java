@@ -3,7 +3,6 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import javax.validation.Valid;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +17,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 
 @Controller
 @RequestMapping(Mappings.URL_HEALTH_CONDITIONS)
@@ -34,8 +32,7 @@ public class HealthConditionsController implements StepController {
   }
 
   @GetMapping
-  public String show(Model model,
-      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+  public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
     if (!journey.isValidState(getStepDefinition())) {
       return routeMaster.backToCompletedPrevious();
@@ -47,7 +44,7 @@ public class HealthConditionsController implements StepController {
     }
 
     // If navigating forward from previous form, reset
-    if(!model.containsAttribute("formRequest")){
+    if (!model.containsAttribute("formRequest")) {
       model.addAttribute("formRequest", HealthConditionsForm.builder().build());
     }
 
@@ -60,7 +57,8 @@ public class HealthConditionsController implements StepController {
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute("formRequest") HealthConditionsForm formRequest,
-      BindingResult bindingResult, RedirectAttributes attr) {
+      BindingResult bindingResult,
+      RedirectAttributes attr) {
 
     if (bindingResult.hasErrors()) {
       return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);

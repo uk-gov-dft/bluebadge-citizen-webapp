@@ -23,6 +23,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
@@ -78,9 +79,19 @@ public class DeclarationSubmitControllerTest {
     when(mockRouteMaster.redirectToOnSuccess(controller)).thenReturn("redirect:/testSuccess");
 
     Journey journey = new Journey();
+
     HealthConditionsForm healthConditionsForm =
         HealthConditionsForm.builder().descriptionOfConditions("test description").build();
+
+    ApplicantNameForm applicantNameForm =
+        ApplicantNameForm.builder()
+            .fullName("John Doe")
+            .hasBirthName(true)
+            .birthName("Johns Birth name")
+            .build();
+
     journey.setHealthConditionsForm(healthConditionsForm);
+    journey.setApplicantNameForm(applicantNameForm);
 
     mockMvc
         .perform(
@@ -106,7 +117,7 @@ public class DeclarationSubmitControllerTest {
     mockMvc
         .perform(post("/apply-for-a-blue-badge/declaration").param("agreed", "false"))
         .andExpect(status().isOk())
-        .andExpect(view().name("application-end/declaration"))
+        .andExpect(view().name("apply-for-a-blue-badge/declaration"))
         .andExpect(model().attributeHasFieldErrorCode("formRequest", "agreed", "AssertTrue"));
   }
 }

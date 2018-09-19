@@ -1,6 +1,10 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+
 import com.google.common.collect.Lists;
+import java.time.LocalDate;
+import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,15 +32,12 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
-
-import javax.validation.Valid;
-import java.time.LocalDate;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 @RequestMapping(Mappings.URL_DECLARATIONS)
@@ -56,7 +57,10 @@ public class DeclarationSubmitController implements StepController {
   @GetMapping
   public String showDeclaration(Model model) {
 
-    model.addAttribute("formRequest", DeclarationForm.builder().build());
+    if (!model.containsAttribute("formRequest")) {
+      model.addAttribute("formRequest", DeclarationForm.builder().build());
+    }
+
     return TEMPLATE_DECLARATION;
   }
 
@@ -77,6 +81,7 @@ public class DeclarationSubmitController implements StepController {
   }
 
   private Application getDummyApplication(Journey journey) {
+    ApplicantNameForm applicantNameForm = journey.getApplicantNameForm();
     HealthConditionsForm healthConditionsForm = journey.getHealthConditionsForm();
     YourIssuingAuthorityForm yourIssuingAuthorityForm = journey.getYourIssuingAuthorityForm();
     String la =
@@ -87,6 +92,10 @@ public class DeclarationSubmitController implements StepController {
         healthConditionsForm == null
             ? "Dummy condition"
             : healthConditionsForm.getDescriptionOfConditions();
+
+    String fullName = applicantNameForm == null ? "John Doe" : applicantNameForm.getFullName();
+    String birthName =
+        applicantNameForm == null ? "John Doe Birth" : applicantNameForm.getBirthName();
 
     Party party =
         new Party()
@@ -102,7 +111,8 @@ public class DeclarationSubmitController implements StepController {
                     .emailAddress("nobody@thisisatestabc.com"))
             .person(
                 new Person()
-                    .badgeHolderName("John Smith")
+                    .badgeHolderName(fullName)
+                    .nameAtBirth(birthName)
                     .nino("NS123456A")
                     .dob(LocalDate.now())
                     .genderCode(GenderCodeField.FEMALE));
