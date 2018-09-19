@@ -74,7 +74,7 @@ public class ApplicantNameControllerTest {
   @Test
   public void submitApplicantName_ShouldMoveDirectApplicantToNextStepInJourney() throws Exception {
     ApplicantNameForm applicantNameForm =
-        ApplicantNameForm.builder().fullName("John").hasBirthName(false).birthName(null).build();
+        ApplicantNameForm.builder().fullName("John").hasBirthName(false).birthName("John").build();
 
     when(mockRouteMaster.redirectToOnSuccess(controller)).thenReturn("redirect:/testSuccess");
 
