@@ -13,6 +13,7 @@
         <div class="govuk-grid-column-two-thirds">
 
             <h1 class="govuk-heading-l" th:text="#{${JOURNEY.applicantContextContent('healthConditionsPage.body.title')}}"></h1>
+
             <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"/>
 
             <form th:action="@{/health-conditions}" th:object="${formRequest}" method="post" novalidate>

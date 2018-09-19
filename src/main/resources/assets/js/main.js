@@ -3,10 +3,10 @@ import accessibleAutocomplete from 'accessible-autocomplete';
 
 All.initAll();
 
-const el = document.querySelector('#local-council-autocomplete');
+const el = document.querySelector('#councilShortCode');
 
 if (el) {
    accessibleAutocomplete.enhanceSelectElement({
-      selectElement: el
+      selectElement: el,
    });
 }

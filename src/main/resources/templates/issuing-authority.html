@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="#{chooseCouncilPage.title} + ' - ' + #{common.title.suffix}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.applicantContextContent('issuingAuthorityPage.title')}}"></h1>
+
+            <p class="govuk-body">
+                <strong th:text="'Council Name'"></strong>
+                <span th:remove="tag"
+                      th:text="#{${JOURNEY.applicantContextContent('issuingAuthorityPage.content.p1')}}"></span>
+            </p>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
