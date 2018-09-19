@@ -5,6 +5,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_
 import com.google.common.collect.Lists;
 import java.util.List;
 import javax.validation.Valid;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,9 +48,10 @@ public class ReceiveBenefitsController implements StepController {
 
     setupModel(model);
 
-    //    if (null != journey.getHealthConditionsForm()) {
-    //      BeanUtils.copyProperties(journey.getHealthConditionsForm(), receiveBenefitsForm);
-    //    }
+    if (null != journey.getReceiveBenefitsForm()) {
+      BeanUtils.copyProperties(journey.getReceiveBenefitsForm(), receiveBenefitsForm);
+    }
+
     return TEMPLATE;
   }
 
@@ -99,7 +101,7 @@ public class ReceiveBenefitsController implements StepController {
       return TEMPLATE;
     }
 
-    //    journey.setHealthConditionsForm(healthConditionsForm);
+    journey.setReceiveBenefitsForm(receiveBenefitsForm);
 
     return routeMaster.redirectToOnSuccess(receiveBenefitsForm);
   }

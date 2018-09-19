@@ -1,12 +1,14 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
 import java.io.Serializable;
+import javax.validation.Valid;
 import lombok.Data;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 
 @Data
 public class Journey implements Serializable {
@@ -16,6 +18,7 @@ public class Journey implements Serializable {
   private ApplicantForm applicantForm;
   private ApplicantNameForm applicantNameForm;
   private HealthConditionsForm healthConditionsForm;
+  private ReceiveBenefitsForm receiveBenefitsForm;
 
   public Boolean isApplicantYourself() {
     if (applicantForm != null) {
