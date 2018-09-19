@@ -60,7 +60,7 @@ public class HealthConditionsController implements StepController {
 
     journey.setHealthConditionsForm(healthConditionsForm);
 
-    return routeMaster.redirectToOnSuccess(this);
+    return routeMaster.redirectToOnSuccess(healthConditionsForm);
   }
 
   @Override

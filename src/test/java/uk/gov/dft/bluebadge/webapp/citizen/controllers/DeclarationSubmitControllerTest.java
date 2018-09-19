@@ -9,11 +9,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -68,8 +66,7 @@ public class DeclarationSubmitControllerTest {
     mockMvc
         .perform(post("/apply-for-a-blue-badge/declaration").param("agreed", "true"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"))
-    ;
+        .andExpect(redirectedUrl("/testSuccess"));
 
     verify(appService, times(1)).create(any());
   }

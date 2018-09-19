@@ -40,7 +40,7 @@ public class ReceiveBenefitsController implements StepController {
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       Model model) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!journey.isValidState(receiveBenefitsForm.getAssociatedStep())) {
       return routeMaster.backToCompletedPrevious();
     }
 
@@ -56,6 +56,12 @@ public class ReceiveBenefitsController implements StepController {
     model.addAttribute("benefitOptions", getBenefitOptions());
   }
 
+  /**
+   * This should move to the reference data service. But also need to think about the message code
+   * for the descriptions. Surely we need Welsh too?
+   *
+   * @return
+   */
   private List<ReferenceData> getBenefitOptions() {
     ReferenceData pip = new ReferenceData();
     pip.setShortCode("pip");
@@ -86,11 +92,11 @@ public class ReceiveBenefitsController implements StepController {
 
     //    journey.setHealthConditionsForm(healthConditionsForm);
 
-    return routeMaster.redirectToOnSuccess(this);
+    return routeMaster.redirectToOnSuccess(receiveBenefitsForm);
   }
 
   @Override
   public StepDefinition getStepDefinition() {
-    return StepDefinition.HEALTH_CONDITIONS;
+    return StepDefinition.RECEIVE_BENEFITS;
   }
 }

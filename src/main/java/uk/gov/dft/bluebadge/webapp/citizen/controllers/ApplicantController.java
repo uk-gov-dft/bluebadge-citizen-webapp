@@ -76,7 +76,7 @@ public class ApplicantController implements StepController {
 
     journey.setApplicantForm(formRequest);
 
-    return routeMaster.redirectToOnSuccess(this);
+    return routeMaster.redirectToOnSuccess(formRequest);
   }
 
   @Override

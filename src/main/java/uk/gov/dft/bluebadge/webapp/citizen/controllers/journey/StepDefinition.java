@@ -11,7 +11,9 @@ public enum StepDefinition {
   DECLARATIONS(SUBMITTED),
   HEALTH_CONDITIONS(DECLARATIONS),
   NAME(HEALTH_CONDITIONS),
-  RECEIVE_BENEFITS(NAME),
+  ELIGIBLE(NAME),
+  MAY_BE_ELIGIBLE(NAME),
+  RECEIVE_BENEFITS(ELIGIBLE, MAY_BE_ELIGIBLE),
   APPLICANT_TYPE(RECEIVE_BENEFITS),
   HOME(APPLICANT_TYPE);
 
@@ -19,5 +21,13 @@ public enum StepDefinition {
 
   StepDefinition(StepDefinition... whereNext) {
     next = Stream.of(whereNext).collect(Collectors.toSet());
+  }
+
+  public StepDefinition getDefaultNext() {
+    if (next.size() != 1) {
+      throw new IllegalStateException(
+          "Failed to determine single next step for current step:" + this + ". Got:" + next);
+    }
+    return next.iterator().next();
   }
 }

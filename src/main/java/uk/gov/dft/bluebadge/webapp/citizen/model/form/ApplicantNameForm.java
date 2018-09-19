@@ -5,10 +5,12 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 
 @Data
 @Builder
-public class ApplicantNameForm implements Serializable {
+public class ApplicantNameForm implements StepForm, Serializable {
 
   @NotBlank(message = "{field.fullName.NotBlank}")
   private String fullName;
@@ -23,5 +25,10 @@ public class ApplicantNameForm implements Serializable {
       return false;
     }
     return true;
+  }
+
+  @Override
+  public StepDefinition getAssociatedStep() {
+    return StepDefinition.NAME;
   }
 }
