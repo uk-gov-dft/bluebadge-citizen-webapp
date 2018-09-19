@@ -4,7 +4,7 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/master.html}">
 <head>
-    <title th:text="#{whatsYourNamePage.title} + ' - ' + #{common.title.suffix}"></title>
+    <title th:text="#{${JOURNEY.applicantContextContent('whatsYourNamePage.title')}} + ' - ' + #{common.title.suffix}"></title>
 </head>
 <body>
 
