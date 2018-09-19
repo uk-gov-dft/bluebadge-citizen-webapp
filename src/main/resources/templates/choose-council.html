@@ -34,14 +34,14 @@
 
                 <div th:class="${#fields.hasErrors('councilShortCode')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
 
-                    <label class="govuk-label" for="councilShortCode"
+                    <label id="councilShortCode-label" class="govuk-label" for="councilShortCode"
                            th:text="#{${JOURNEY.applicantContextContent('chooseCouncilPage.field.selectCouncil.label')}}"></label>
 
 
                     <span class="govuk-error-message" data-uipath="councilShortCode.error" th:errors="*{councilShortCode}"></span>
 
-                    <select th:field="*{councilShortCode}" id="councilShortCode" name="councilShortCode">
-                        <option value="" selected="selected"></option>
+                    <select aria-labelledby="councilShortCode-label" th:field="*{councilShortCode}" id="councilShortCode" name="councilShortCode">
+                        <option value=""></option>
                         <option th:each="council : ${councils}"
                                 th:value="${council.shortCode}"
                                 th:text="${council.description}">

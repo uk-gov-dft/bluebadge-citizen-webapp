@@ -1,12 +1,5 @@
 import All from 'govuk-frontend/all';
-import accessibleAutocomplete from 'accessible-autocomplete';
+import AutoComplete from './autocomplete';
 
 All.initAll();
-
-const el = document.querySelector('#councilShortCode');
-
-if (el) {
-   accessibleAutocomplete.enhanceSelectElement({
-      selectElement: el,
-   });
-}
+AutoComplete.init('councilShortCode');
