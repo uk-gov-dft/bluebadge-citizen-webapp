@@ -7,7 +7,7 @@ Feature: DFT Blue badge Citizen app new application
     Then  I should see the page titled "Who are you applying for? - GOV.UK Apply for a Blue Badge"
     And   I click on element "applicantType.label.SOMEONE_ELSE"
     And   I can click on "Continue"
-    Then  I should see the page titled "What's your name? - GOV.UK Apply for a Blue Badge"
+    Then  I should see the page titled "What's their name? - GOV.UK Apply for a Blue Badge"
     When  I type "Tom Richardson" for "fullName" field by id
     And   I select an option "hasBirthName.no"
     And   I can click on "Continue"
