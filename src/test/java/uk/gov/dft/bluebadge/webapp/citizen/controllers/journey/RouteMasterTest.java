@@ -78,6 +78,6 @@ public class RouteMasterTest {
           }
         };
 
-    assertThat(routeMaster.redirectToOnSuccess(testForm));
+    routeMaster.redirectToOnSuccess(testForm);
   }
 }
