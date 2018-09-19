@@ -53,7 +53,7 @@ server:
     protocol-header: x-forwarded-proto
   servlet:
     session:
-      timeout: 30
+      timeout: 60m
 
 security:
   oauth2:
