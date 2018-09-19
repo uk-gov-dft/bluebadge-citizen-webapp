@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
@@ -20,6 +21,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 
 @Controller
@@ -35,12 +37,16 @@ public class ApplicantController implements StepController {
   @GetMapping
   public String show(
       Model model,
-      @ModelAttribute("formRequest") ApplicantForm formRequest,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (null != journey.getApplicantForm()) {
-      BeanUtils.copyProperties(journey.getApplicantForm(), formRequest);
+    if (!model.containsAttribute("formRequest") && null != journey.getApplicantForm()) {
+      model.addAttribute("formRequest", journey.getApplicantForm());
     }
+
+    if (!model.containsAttribute("formRequest")) {
+      model.addAttribute("formRequest", ApplicantForm.builder().build());
+    }
+
     List<ReferenceData> applicantOptions = getApplicantOptions();
     model.addAttribute("applicantOptions", applicantOptions);
 
@@ -64,18 +70,13 @@ public class ApplicantController implements StepController {
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute("formRequest") ApplicantForm formRequest,
       BindingResult bindingResult,
-      Model model) {
-
-    model.addAttribute("errorSummary", new ErrorViewModel());
+      RedirectAttributes attr) {
 
     if (bindingResult.hasErrors()) {
-      List<ReferenceData> applicantOptions = getApplicantOptions();
-      model.addAttribute("applicantOptions", applicantOptions);
-      return TEMPLATE_APPLICANT;
+      return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
     }
 
     journey.setApplicantForm(formRequest);
-
     return routeMaster.redirectToOnSuccess(this);
   }
 

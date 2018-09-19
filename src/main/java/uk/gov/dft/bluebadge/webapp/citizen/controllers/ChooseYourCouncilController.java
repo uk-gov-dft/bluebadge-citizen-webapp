@@ -46,7 +46,7 @@ public class ChooseYourCouncilController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    if (null != journey.getChooseYourCouncilForm()) {
+    if (!model.containsAttribute("formRequest") && null != journey.getChooseYourCouncilForm()) {
       model.addAttribute("formRequest", journey.getChooseYourCouncilForm());
     }
 
@@ -63,19 +63,15 @@ public class ChooseYourCouncilController implements StepController {
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       Model model,
-      @Valid @ModelAttribute("formRequest") ChooseYourCouncilForm chooseYourCouncilForm,
+      @Valid @ModelAttribute("formRequest") ChooseYourCouncilForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
     if (bindingResult.hasErrors()) {
-      attr.addFlashAttribute("errorSummary", new ErrorViewModel());
-      attr.addFlashAttribute(
-          "org.springframework.validation.BindingResult.formRequest", bindingResult);
-      attr.addFlashAttribute("formRequest", chooseYourCouncilForm);
-      return "redirect:/choose-council";
+      return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
     }
 
-    journey.setChooseYourCouncilForm(chooseYourCouncilForm);
+    journey.setChooseYourCouncilForm(formRequest);
     return routeMaster.redirectToOnSuccess(this);
   }
 
