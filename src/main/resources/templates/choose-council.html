@@ -24,11 +24,11 @@
                 <span th:remove="tag" th:text="#{chooseCouncilPage.content.p2.phrase3}"></span>
             </p>
 
-            <form th:action="@{/choose-council}" method="post" novalidate>
+            <form th:action="@{/choose-council}" method="post" th:object="${formRequest}" novalidate>
 
                 <div class="govuk-form-group">
-                    <label class="govuk-label" for="local-council-autocomplete">Select your country</label>
-                    <select name="local-council-autocomplete" id="local-council-autocomplete">
+                    <label class="govuk-label" for="local-council-autocomplete" th:text="#{chooseCouncilPage.field.selectCouncil.label}"></label>
+                    <select name="local-council-autocomplete" id="local-council-autocomplete" th:field="${formRequest.councilShortCode}">
                         <option value="" selected="selected"></option>
                         <option th:each="council : ${councils}"
                                 th:value="${council.shortCode}"

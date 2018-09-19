@@ -5,6 +5,7 @@ import lombok.Data;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 
 @Data
@@ -14,6 +15,7 @@ public class Journey implements Serializable {
 
   private ApplicantForm applicantForm;
   private HealthConditionsForm healthConditionsForm;
+  private ChooseYourCouncilForm chooseYourCouncilForm;
 
   public Boolean isApplicantYourself() {
     if (applicantForm != null) {

@@ -11,21 +11,19 @@ public class Mappings {
   public static final String URL_HEALTH_CONDITIONS = "/health-conditions";
   public static final String URL_DECLARATIONS = "/apply-for-a-blue-badge/declaration";
   public static final String URL_APPLICATION_SUBMITTED = "/application-submitted";
+  public static final String URL_CHOOSE_YOUR_COUNCIL = "/choose-council";
 
-  private Mappings(){}
+  private Mappings() {}
 
   private static final BiMap<StepDefinition, String> stepToUrlMapping =
-      ImmutableBiMap.of(
-          StepDefinition.HOME,
-          URL_ROOT,
-          StepDefinition.APPLICANT_TYPE,
-          URL_APPLICANT_TYPE,
-          StepDefinition.HEALTH_CONDITIONS,
-          URL_HEALTH_CONDITIONS,
-          StepDefinition.DECLARATIONS,
-          URL_DECLARATIONS,
-          StepDefinition.SUBMITTED,
-          URL_APPLICATION_SUBMITTED);
+      new ImmutableBiMap.Builder<StepDefinition, String>()
+          .put(StepDefinition.HOME, URL_ROOT)
+          .put(StepDefinition.APPLICANT_TYPE, URL_APPLICANT_TYPE)
+          .put(StepDefinition.HEALTH_CONDITIONS, URL_HEALTH_CONDITIONS)
+          .put(StepDefinition.CHOOSE_COUNCIL, URL_CHOOSE_YOUR_COUNCIL)
+          .put(StepDefinition.DECLARATIONS, URL_DECLARATIONS)
+          .put(StepDefinition.SUBMITTED, URL_APPLICATION_SUBMITTED)
+          .build();
 
   public static StepDefinition getStep(String url) {
     return stepToUrlMapping.inverse().get(url);

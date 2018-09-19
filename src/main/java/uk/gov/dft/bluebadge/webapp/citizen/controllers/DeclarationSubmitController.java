@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.support.SessionStatus;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.ApplicationTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Contact;
