@@ -15,10 +15,16 @@
             <h1 class="govuk-heading-l" th:text="#{${JOURNEY.applicantContextContent('issuingAuthorityPage.title')}}"></h1>
 
             <p class="govuk-body">
-                <strong th:text="'Council Name'"></strong>
+                <strong th:text="${formRequest.localAuthorityDescription}"></strong>
                 <span th:remove="tag"
                       th:text="#{${JOURNEY.applicantContextContent('issuingAuthorityPage.content.p1')}}"></span>
             </p>
+
+            <form th:action="@{/your-issuing-authority}" method="post" th:object="${formRequest}" novalidate>
+                <input type="hidden" th:field="*{localAuthorityShortCode}">
+                <input type="hidden" th:field="*{localAuthorityDescription}">
+                <button type="submit" class="govuk-button" data-uipath="button.continue" th:text="#{btn.label.continue}"></button>
+            </form>
 
         </div>
     </div>

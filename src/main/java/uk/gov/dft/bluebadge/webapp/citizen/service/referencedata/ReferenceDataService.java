@@ -5,18 +5,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataDomainEnum;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataGroupEnum;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.ReferenceDataApiClient;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalCouncilRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 
 @Service
+@Slf4j
 public class ReferenceDataService {
 
   private Map<String, List<ReferenceData>> groupedReferenceDataList = null;
   private Map<String, Map<String, String>> groupedReferenceDataMap = null;
+  private Map<String, LocalCouncilRefData> localCouncilMap = new HashMap<>();
+  private Map<String, LocalAuthorityRefData> localAuthorityMap = new HashMap<>();
 
   private final ReferenceDataApiClient referenceDataApiClient;
   private final RefDataDomainEnum refDataDomain;
@@ -59,6 +66,14 @@ public class ReferenceDataService {
                       .collect(
                           Collectors.toMap(
                               ReferenceData::getShortCode, ReferenceData::getDescription))));
+
+      for(ReferenceData item : referenceDataList){
+        if(item instanceof LocalCouncilRefData){
+          localCouncilMap.put(item.getShortCode(), (LocalCouncilRefData) item);
+        }else if(item instanceof LocalAuthorityRefData){
+          localAuthorityMap.put(item.getShortCode(), (LocalAuthorityRefData) item);
+        }
+      }
     }
   }
 
@@ -71,5 +86,20 @@ public class ReferenceDataService {
   public List<ReferenceData> retrieveReferenceDataList(RefDataGroupEnum referenceDataGroup) {
     initialise();
     return groupedReferenceDataList.get(referenceDataGroup.getGroupKey());
+  }
+
+  public LocalAuthorityRefData lookupLaForLcCode(String localCouncilShortCode){
+    initialise();
+    LocalCouncilRefData council = localCouncilMap.get(localCouncilShortCode);
+    if(null == council){
+      log.warn("No council found for {}.", localCouncilShortCode);
+      return null;
+    }
+
+    if (council.getLocalCouncilMetaData().isPresent()) {
+      return localAuthorityMap.get(council.getLocalCouncilMetaData().get().getIssuingAuthorityShortCode());
+    }
+
+    return null;
   }
 }

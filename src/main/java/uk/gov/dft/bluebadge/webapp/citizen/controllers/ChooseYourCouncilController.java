@@ -27,7 +27,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataSe
 @RequestMapping(Mappings.URL_CHOOSE_YOUR_COUNCIL)
 public class ChooseYourCouncilController implements StepController {
 
-  public static final String TEMPLATE = "choose-council";
+  private static final String TEMPLATE = "choose-council";
 
   private ReferenceDataService referenceDataService;
   private final RouteMaster routeMaster;
