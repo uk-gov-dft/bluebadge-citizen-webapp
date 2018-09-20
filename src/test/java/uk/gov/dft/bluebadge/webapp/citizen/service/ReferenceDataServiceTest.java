@@ -21,6 +21,7 @@ import org.mockito.Mock;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataDomainEnum;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataGroupEnum;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.ReferenceDataApiClient;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataService;
 
@@ -88,5 +89,24 @@ public class ReferenceDataServiceTest {
         .extracting("groupShortCode")
         .containsOnly(RefDataGroupEnum.COUNCIL.getGroupKey());
     assertThat(las).extracting("shortCode").contains("TON");
+  }
+
+  @Test
+  public void getLAforLC() {
+    // Valid result
+    LocalAuthorityRefData la = referenceDataService.lookupLaForLcCode("TON");
+    assertThat(la).hasFieldOrPropertyWithValue("shortCode", "WORCC");
+
+    // No match
+    la = referenceDataService.lookupLaForLcCode("ZZZZZ");
+    assertThat(la).isNull();
+
+    // Null safe
+    la = referenceDataService.lookupLaForLcCode(null);
+    assertThat(la).isNull();
+
+    // And if lc hos no la
+    la = referenceDataService.lookupLaForLcCode("SPE");
+    assertThat(la).isNull();
   }
 }

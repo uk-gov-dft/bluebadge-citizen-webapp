@@ -96,8 +96,8 @@ public class ReferenceDataService {
     }
 
     if (council.getLocalCouncilMetaData().isPresent()) {
-      return localAuthorityMap.get(
-          council.getLocalCouncilMetaData().get().getIssuingAuthorityShortCode());
+      LocalCouncilRefData.LocalCouncilMetaData meta = council.getLocalCouncilMetaData().get();
+      return localAuthorityMap.get(meta.getIssuingAuthorityShortCode());
     }
 
     return null;
