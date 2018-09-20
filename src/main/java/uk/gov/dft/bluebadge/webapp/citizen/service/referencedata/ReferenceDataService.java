@@ -87,7 +87,7 @@ public class ReferenceDataService {
     return groupedReferenceDataList.get(referenceDataGroup.getGroupKey());
   }
 
-  public LocalAuthorityRefData lookupLaForLcCode(String localCouncilShortCode) {
+  public LocalAuthorityRefData lookupLocalAuthorityFromCouncilCode(String localCouncilShortCode) {
     initialise();
     LocalCouncilRefData council = localCouncilMap.get(localCouncilShortCode);
     if (null == council) {

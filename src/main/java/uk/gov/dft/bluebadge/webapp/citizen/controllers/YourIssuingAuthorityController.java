@@ -62,7 +62,7 @@ public class YourIssuingAuthorityController implements StepController {
 
   YourIssuingAuthorityForm populateFormFromCouncilCode(String councilCode) {
     LocalAuthorityRefData localAuthorityRefData =
-        referenceDataService.lookupLaForLcCode(councilCode);
+        referenceDataService.lookupLocalAuthorityFromCouncilCode(councilCode);
     if (null != localAuthorityRefData) {
       return YourIssuingAuthorityForm.builder()
           .localAuthorityDescription(localAuthorityRefData.getDescription())

@@ -1,6 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -42,7 +41,7 @@ public class YourIssuingAuthorityControllerTest {
     controller = new YourIssuingAuthorityController(mockRouteMaster, mockReferenceDataService);
     when(mockJourney.getChooseYourCouncilForm())
         .thenReturn(ChooseYourCouncilForm.builder().councilShortCode("TTT").build());
-    when(mockReferenceDataService.lookupLaForLcCode("TTT")).thenReturn(laRefData);
+    when(mockReferenceDataService.lookupLocalAuthorityFromCouncilCode("TTT")).thenReturn(laRefData);
     laRefData.setShortCode("HHH");
     laRefData.setDescription("An LA");
     mockMvc =

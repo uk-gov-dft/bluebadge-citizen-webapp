@@ -83,30 +83,30 @@ public class ReferenceDataServiceTest {
 
   @Test
   public void retrieveLocalCouncil_ShouldReturnLocalAuthorities() {
-    List<ReferenceData> las =
+    List<ReferenceData> referenceDataList =
         referenceDataService.retrieveReferenceDataList(RefDataGroupEnum.COUNCIL);
-    assertThat(las)
+    assertThat(referenceDataList)
         .extracting("groupShortCode")
         .containsOnly(RefDataGroupEnum.COUNCIL.getGroupKey());
-    assertThat(las).extracting("shortCode").contains("TON");
+    assertThat(referenceDataList).extracting("shortCode").contains("TON");
   }
 
   @Test
   public void getLAforLC() {
     // Valid result
-    LocalAuthorityRefData la = referenceDataService.lookupLaForLcCode("TON");
-    assertThat(la).hasFieldOrPropertyWithValue("shortCode", "WORCC");
+    LocalAuthorityRefData localAuthorityRefData = referenceDataService.lookupLocalAuthorityFromCouncilCode("TON");
+    assertThat(localAuthorityRefData).hasFieldOrPropertyWithValue("shortCode", "WORCC");
 
     // No match
-    la = referenceDataService.lookupLaForLcCode("ZZZZZ");
-    assertThat(la).isNull();
+    localAuthorityRefData = referenceDataService.lookupLocalAuthorityFromCouncilCode("ZZZZZ");
+    assertThat(localAuthorityRefData).isNull();
 
     // Null safe
-    la = referenceDataService.lookupLaForLcCode(null);
-    assertThat(la).isNull();
+    localAuthorityRefData = referenceDataService.lookupLocalAuthorityFromCouncilCode(null);
+    assertThat(localAuthorityRefData).isNull();
 
     // And if lc hos no la
-    la = referenceDataService.lookupLaForLcCode("SPE");
-    assertThat(la).isNull();
+    localAuthorityRefData = referenceDataService.lookupLocalAuthorityFromCouncilCode("SPE");
+    assertThat(localAuthorityRefData).isNull();
   }
 }
