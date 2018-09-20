@@ -21,12 +21,14 @@ public class ReceiveBenefitsFormTest {
   public void determineNextStep_whenAnythingElse_thenMayBeEligible() {
 
     EnumSet.complementOf(EnumSet.of(EligibilityCodeField.WPMS))
-        .forEach(e->{
-          ReceiveBenefitsForm form =
-              ReceiveBenefitsForm.builder().benefitType(e).build();
+        .forEach(
+            e -> {
+              ReceiveBenefitsForm form = ReceiveBenefitsForm.builder().benefitType(e).build();
 
-          assertThat(form.determineNextStep()).isNotEmpty();
-          assertThat(form.determineNextStep().get()).as("Eligibility %s result in Eligible", e).isEqualTo(StepDefinition.MAY_BE_ELIGIBLE);
-        });
+              assertThat(form.determineNextStep()).isNotEmpty();
+              assertThat(form.determineNextStep().get())
+                  .as("Eligibility %s result in Eligible", e)
+                  .isEqualTo(StepDefinition.MAY_BE_ELIGIBLE);
+            });
   }
 }
