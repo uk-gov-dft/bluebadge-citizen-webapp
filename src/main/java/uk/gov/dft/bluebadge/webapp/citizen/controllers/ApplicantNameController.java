@@ -65,12 +65,12 @@ public class ApplicantNameController implements StepController {
       return TEMPLATE_APPLICANT_NAME;
     }
 
-    if (!applicantNameForm.getHasBirthName() && applicantNameForm.getBirthName() != null) {
-      applicantNameForm.setBirthName(null);
+    if (!applicantNameForm.getHasBirthName()) {
+      applicantNameForm.setBirthName(applicantNameForm.getFullName());
     }
 
     journey.setApplicantNameForm(applicantNameForm);
-    return routeMaster.redirectToOnSuccess(applicantNameForm);
+    return routeMaster.redirectToOnSuccess(this);
   }
 
   @Override

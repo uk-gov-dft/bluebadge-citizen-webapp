@@ -4,7 +4,7 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/master.html}">
 <head>
-    <title th:text="#{whatsYourNamePage.title} + ' - ' + #{common.title.suffix}"></title>
+    <title th:text="#{${JOURNEY.applicantContextContent('whatsYourNamePage.title')}} + ' - ' + #{common.title.suffix}"></title>
 </head>
 <body>
 
@@ -20,12 +20,16 @@
 
                 <div th:replace="~{ fragments/govuk-input :: govuk-input(#{whatsYourNamePage.field.label}, 'fullName', null, 'text')}"></div>
 
-                <div class="govuk-form-group">
-                    <fieldset class="govuk-fieldset">
+                <div th:class="${#fields.hasErrors('hasBirthName')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+                    <fieldset class="govuk-fieldset" id="hasBirthName">
                         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
                             <h2 class="govuk-fieldset__heading"
                                 th:text="#{${JOURNEY.applicantContextContent('whatsYourNamePage.birthName.title')}}"></h2>
                         </legend>
+
+                        <span class="govuk-error-message"
+                              data-uipath="hasbirthName.error"
+                              th:errors="*{hasBirthName}"></span>
 
                         <div class="govuk-radios" data-module="radios">
                             <div class="govuk-radios__item">

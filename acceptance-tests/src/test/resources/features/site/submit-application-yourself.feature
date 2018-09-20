@@ -14,6 +14,10 @@ Feature: DFT Blue badge Citizen app new application
     Then  I should see the page titled "You may be eligible for a Blue Badge - GOV.UK Apply for a Blue Badge"
     And   I should see the title "You may be eligible for a Blue Badge"
     And   I can click on "Start Application"
+    Then  I should see the page titled "What's your name? - GOV.UK Apply for a Blue Badge"
+    When  I type "Tom Richardson" for "fullName" field by id
+    And   I select an option "hasBirthName.no"
+    And   I can click on "Continue"
     Then  I should see the page titled "Describe health conditions - GOV.UK Apply for a Blue Badge"
     And   I should see the title "Describe any health conditions that affect your mobility"
     When  I type "Sample health condition" for "description-of-conditions" field by id
@@ -40,6 +44,17 @@ Feature: DFT Blue badge Citizen app new application
     And   I can click on "Continue"
     Then  I should see the page titled "You may be eligible for a Blue Badge - GOV.UK Apply for a Blue Badge"
     And   I can click on "Start Application"
+    Then  I should see the page titled "What's your name? - GOV.UK Apply for a Blue Badge"
+    And   I can click on "Continue"
+    Then  I should see the page titled "What's your name? - GOV.UK Apply for a Blue Badge"
+    And   I should see error summary box
+    When  I type "Tom Richardson" for "fullName" field by id
+    And   I select an option "hasBirthName.yes"
+    And   I can click on "Continue"
+    Then  I should see the page titled "What's your name? - GOV.UK Apply for a Blue Badge"
+    And   I should see error summary box
+    When  I type "Tom Richardson BirthName" for "birthName" field by id
+    And   I can click on "Continue"
     Then  I should see the page titled "Describe health conditions - GOV.UK Apply for a Blue Badge"
     And   I can click on "Continue"
     Then  I should see the page titled "Describe health conditions - GOV.UK Apply for a Blue Badge"

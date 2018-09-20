@@ -20,8 +20,8 @@
 
                 <div class="govuk-form-group">
                     <label class="govuk-label" for="description-of-conditions" th:text="#{healthConditionsPage.descriptionOfConditions}"></label>
-                    <textarea class="govuk-textarea" th:field="${formRequest.descriptionOfConditions}"
-                              id="description-of-conditions" rows="5" name="descriptionOfConditions" aria-describedby="more-detail-hint"
+                    <textarea class="govuk-textarea govuk-textarea--fixed" th:field="${formRequest.descriptionOfConditions}"
+                              id="description-of-conditions" rows="5" name="descriptionOfConditions"
                               data-uipath="healthconditions.text"></textarea>
                 </div>
 
