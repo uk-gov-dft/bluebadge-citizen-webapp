@@ -9,29 +9,31 @@
 <body>
 
 <main layout:fragment="content">
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
 
-            <div class="govuk-panel govuk-panel--confirmation">
-                <h1 class="govuk-panel__title govuk-!-margin-top-5" th:text="#{${JOURNEY.applicantContextContent('eligiblePage.title')}}"></h1>
-
-                <!-- Code commented out for when we display the reference number on this page -->
-                <!-- <div class="govuk-panel__body">
-                    Your reference number<br><strong>HDJ2123F</strong>
-                </div> -->
+    <div class="guidance-layout">
+        <section class="guidance-container">
+            <div class="guidance-titles-wrapper">
+                <div class="guidance-page-title-wrapper">
+                    <h2 class="govuk-heading-l"></h2>
+                </div>
             </div>
 
-            <h2 class="govuk-heading-m" th:text="#{${JOURNEY.applicantContextContent('eligiblePage.title')}}"></h2>
+            <div class="middle-start-page">
+                <h1 class="govuk-heading-l" th:text="#{${JOURNEY.applicantContextContent('eligiblePage.title')}}"></h1>
+                <p class="govuk-body-l" th:text="#{${JOURNEY.applicantContextContent('eligiblePage.need.provide.text')}}">What you’ll need to provide</p>
+                <ul class="govuk-list govuk-list--bullet">
+                    <li th:text="#{eligiblePage.provide.contact.text}">contact details (phone number and email address)</li>
+                </ul>
 
-            <!--<p class="govuk-body" th:text="#{${JOURNEY.applicantContextContent('submittedPage.content.p1')}}"></p>
+                <a th:href="@{eligible/start}" role="button" class="govuk-button" th:text="#{eligiblePage.startApplication.link.title}"></a>
 
-            <p class="govuk-body" th:text="#{submittedPage.content.p2}"></p>
-            -->
-            <a th:href="@{eligible/start}" class="govuk-button" th:text="#{startApplication.link.title}"></a>
-        </div>
-
+                <p class="govuk-body" th:text="#{${JOURNEY.applicantContextContent('eligiblePage.council.timeframe.text')}}">Your council can take up to 4 weeks to make a decision</p>
+                <h2 class="govuk-heading-m" th:text="#{eligiblePage.not.apply.online.text}">Don’t want to apply online?</h2>
+                <p class="govuk-body"><span th:text="#{eligiblePage.council.contact.pretext}">Contact</span> Leeds City Council:</p>
+                <p class="govuk-body"><span th:text="#{eligiblePage.website.pretext}">Website:</span> <a href="#">www.leeds city council.gov.uk</a></p>
+            </div>
+        </section>
     </div>
-
 </main>
 
 </body>

@@ -13,7 +13,7 @@ Feature: DFT Blue badge Citizen app new application
     And   I can click on "Continue"
     Then  I should see the page titled "They may be eligible for a Blue Badge - GOV.UK Apply for a Blue Badge"
     And   I should see the title "They may be eligible for a Blue Badge"
-    And   I can click on "Start Application"
+    And   I can click on "Start application"
     Then  I should see the page titled "What's their name? - GOV.UK Apply for a Blue Badge"
     When  I type "Tom Richardson" for "fullName" field by id
     And   I select an option "hasBirthName.no"
