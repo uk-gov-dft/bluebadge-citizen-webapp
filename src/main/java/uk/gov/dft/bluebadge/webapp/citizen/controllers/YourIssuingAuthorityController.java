@@ -48,20 +48,28 @@ public class YourIssuingAuthorityController implements StepController {
       if (null == councilForm) {
         log.error("Got to issuing authority GET, without local council step being completed.");
       } else {
-        LocalAuthorityRefData localAuthorityRefData =
-            referenceDataService.lookupLaForLcCode(councilForm.getCouncilShortCode());
-        if (null != localAuthorityRefData) {
-          model.addAttribute(
-              "formRequest",
-              YourIssuingAuthorityForm.builder()
-                  .localAuthorityDescription(localAuthorityRefData.getDescription())
-                  .localAuthorityShortCode(localAuthorityRefData.getShortCode())
-                  .build());
+
+        YourIssuingAuthorityForm form =
+            populateFormFromCouncilCode(councilForm.getCouncilShortCode());
+        if (null != form) {
+          model.addAttribute("formRequest", form);
         }
       }
     }
 
     return TEMPLATE;
+  }
+
+  YourIssuingAuthorityForm populateFormFromCouncilCode(String councilCode) {
+    LocalAuthorityRefData localAuthorityRefData =
+        referenceDataService.lookupLaForLcCode(councilCode);
+    if (null != localAuthorityRefData) {
+      return YourIssuingAuthorityForm.builder()
+          .localAuthorityDescription(localAuthorityRefData.getDescription())
+          .localAuthorityShortCode(localAuthorityRefData.getShortCode())
+          .build();
+    }
+    return null;
   }
 
   @PostMapping
