@@ -19,15 +19,13 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 
 public class EligibleControllerTest {
 
   private MockMvc mockMvc;
   private EligibleController controller;
 
-  @Mock
-  private RouteMaster mockRouteMaster;
+  @Mock private RouteMaster mockRouteMaster;
   private Journey journey;
 
   @Before
@@ -55,12 +53,12 @@ public class EligibleControllerTest {
   @Test
   public void startApplication_ShouldRedirectToNextPage() throws Exception {
 
-    when(mockRouteMaster.redirectToOnSuccess(StepDefinition.ELIGIBLE)).thenReturn("redirect:/theNextPage");
+    when(mockRouteMaster.redirectToOnSuccess(StepDefinition.ELIGIBLE))
+        .thenReturn("redirect:/theNextPage");
 
     mockMvc
         .perform(get("/eligible/start"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/theNextPage"));
   }
-
 }

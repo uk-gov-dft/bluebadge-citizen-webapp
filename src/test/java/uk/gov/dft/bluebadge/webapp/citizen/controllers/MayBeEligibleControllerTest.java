@@ -25,8 +25,7 @@ public class MayBeEligibleControllerTest {
   private MockMvc mockMvc;
   private MayBeEligibleController controller;
 
-  @Mock
-  private RouteMaster mockRouteMaster;
+  @Mock private RouteMaster mockRouteMaster;
   private Journey journey;
 
   @Before
@@ -54,7 +53,8 @@ public class MayBeEligibleControllerTest {
   @Test
   public void startApplication_ShouldRedirectToNextPage() throws Exception {
 
-    when(mockRouteMaster.redirectToOnSuccess(StepDefinition.MAY_BE_ELIGIBLE)).thenReturn("redirect:/theNextPage");
+    when(mockRouteMaster.redirectToOnSuccess(StepDefinition.MAY_BE_ELIGIBLE))
+        .thenReturn("redirect:/theNextPage");
 
     mockMvc
         .perform(get("/may-be-eligible/start"))
