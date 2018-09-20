@@ -52,6 +52,7 @@ public class ChooseYourCouncilController implements StepController {
     if (!model.containsAttribute("formRequest")) {
       model.addAttribute("formRequest", ChooseYourCouncilForm.builder().build());
     }
+
     List<ReferenceData> councils =
         referenceDataService.retrieveReferenceDataList(RefDataGroupEnum.COUNCIL);
     model.addAttribute("councils", councils);

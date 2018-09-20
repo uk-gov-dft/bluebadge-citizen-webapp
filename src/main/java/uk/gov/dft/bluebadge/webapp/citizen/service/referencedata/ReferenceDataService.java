@@ -87,7 +87,7 @@ public class ReferenceDataService {
     return groupedReferenceDataList.get(referenceDataGroup.getGroupKey());
   }
 
-  public LocalAuthorityRefData lookupLaForLcCode(String localCouncilShortCode) {
+  public LocalAuthorityRefData lookupLocalAuthorityFromCouncilCode(String localCouncilShortCode) {
     initialise();
     LocalCouncilRefData council = localCouncilMap.get(localCouncilShortCode);
     if (null == council) {
@@ -95,9 +95,9 @@ public class ReferenceDataService {
       return null;
     }
 
-    if (council.getLocalCouncilMetaData().isPresent()) {
-      return localAuthorityMap.get(
-          council.getLocalCouncilMetaData().get().getIssuingAuthorityShortCode());
+    LocalCouncilRefData.LocalCouncilMetaData meta = council.getLocalCouncilMetaData().orElse(null);
+    if (null != meta) {
+      return localAuthorityMap.get(meta.getIssuingAuthorityShortCode());
     }
 
     return null;

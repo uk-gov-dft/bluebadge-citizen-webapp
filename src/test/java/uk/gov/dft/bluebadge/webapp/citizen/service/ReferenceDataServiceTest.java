@@ -21,6 +21,7 @@ import org.mockito.Mock;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataDomainEnum;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataGroupEnum;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.ReferenceDataApiClient;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataService;
 
@@ -82,11 +83,30 @@ public class ReferenceDataServiceTest {
 
   @Test
   public void retrieveLocalCouncil_ShouldReturnLocalAuthorities() {
-    List<ReferenceData> las =
+    List<ReferenceData> referenceDataList =
         referenceDataService.retrieveReferenceDataList(RefDataGroupEnum.COUNCIL);
-    assertThat(las)
+    assertThat(referenceDataList)
         .extracting("groupShortCode")
         .containsOnly(RefDataGroupEnum.COUNCIL.getGroupKey());
-    assertThat(las).extracting("shortCode").contains("TON");
+    assertThat(referenceDataList).extracting("shortCode").contains("TON");
+  }
+
+  @Test
+  public void getLAforLC() {
+    // Valid result
+    LocalAuthorityRefData localAuthorityRefData = referenceDataService.lookupLocalAuthorityFromCouncilCode("TON");
+    assertThat(localAuthorityRefData).hasFieldOrPropertyWithValue("shortCode", "WORCC");
+
+    // No match
+    localAuthorityRefData = referenceDataService.lookupLocalAuthorityFromCouncilCode("ZZZZZ");
+    assertThat(localAuthorityRefData).isNull();
+
+    // Null safe
+    localAuthorityRefData = referenceDataService.lookupLocalAuthorityFromCouncilCode(null);
+    assertThat(localAuthorityRefData).isNull();
+
+    // And if lc hos no la
+    localAuthorityRefData = referenceDataService.lookupLocalAuthorityFromCouncilCode("SPE");
+    assertThat(localAuthorityRefData).isNull();
   }
 }

@@ -79,6 +79,6 @@ public class ReferenceDataDeserialiseTest {
     assertThat(localCouncils).isNotEmpty();
     assertThat(localCouncils)
         .extracting("issuingAuthorityShortCode")
-        .containsOnly("KENTCC", "SURCC");
+        .containsOnly("WORCC", "SURCC");
   }
 }
