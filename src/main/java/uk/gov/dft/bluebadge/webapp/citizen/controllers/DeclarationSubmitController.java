@@ -1,10 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-
 import com.google.common.collect.Lists;
-import java.time.LocalDate;
-import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.ApplicationTypeCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Benefit;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Contact;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Eligibility;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
@@ -37,6 +34,11 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
+
+import javax.validation.Valid;
+import java.time.LocalDate;
+
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 @RequestMapping(Mappings.URL_DECLARATIONS)
@@ -83,6 +85,7 @@ public class DeclarationSubmitController implements StepController {
     ApplicantNameForm applicantNameForm = journey.getApplicantNameForm();
     HealthConditionsForm healthConditionsForm = journey.getHealthConditionsForm();
     YourIssuingAuthorityForm yourIssuingAuthorityForm = journey.getYourIssuingAuthorityForm();
+    EligibilityCodeField eligibiility = null != journey.getReceiveBenefitsForm() ? journey.getReceiveBenefitsForm().getBenefitType() : EligibilityCodeField.WPMS;
     String la =
         yourIssuingAuthorityForm == null
             ? "ABERD"
@@ -116,31 +119,39 @@ public class DeclarationSubmitController implements StepController {
                     .dob(LocalDate.now())
                     .genderCode(GenderCodeField.FEMALE));
 
-    Eligibility eligibility =
-        new Eligibility()
-            .typeCode(EligibilityCodeField.WALKD)
-            .descriptionOfConditions(condDesc)
-            .walkingDifficulty(
-                new WalkingDifficulty()
-                    .walkingLengthOfTimeCode(WalkingLengthOfTimeCodeField.LESSMIN)
-                    .walkingSpeedCode(WalkingSpeedCodeField.SLOW)
-                    .typeCodes(
-                        Lists.newArrayList(
-                            WalkingDifficultyTypeCodeField.PAIN,
-                            WalkingDifficultyTypeCodeField.BALANCE))
-                    .walkingAids(
-                        Lists.newArrayList(
-                            new WalkingAid()
-                                .description("walk aid description")
-                                .usage("walk aid usage")
-                                .howProvidedCode(HowProvidedCodeField.PRESCRIBE))));
-
+    Eligibility eligibilityObject;
+    if (eligibiility == null || EligibilityCodeField.WALKD == eligibiility) {
+      eligibilityObject =
+          new Eligibility()
+              .typeCode(EligibilityCodeField.WALKD)
+              .descriptionOfConditions(condDesc)
+              .walkingDifficulty(
+                  new WalkingDifficulty()
+                      .walkingLengthOfTimeCode(WalkingLengthOfTimeCodeField.LESSMIN)
+                      .walkingSpeedCode(WalkingSpeedCodeField.SLOW)
+                      .typeCodes(
+                          Lists.newArrayList(
+                              WalkingDifficultyTypeCodeField.PAIN,
+                              WalkingDifficultyTypeCodeField.BALANCE))
+                      .walkingAids(
+                          Lists.newArrayList(
+                              new WalkingAid()
+                                  .description("walk aid description")
+                                  .usage("walk aid usage")
+                                  .howProvidedCode(HowProvidedCodeField.PRESCRIBE))));
+    } else if (EligibilityCodeField.PIP == eligibiility
+        || EligibilityCodeField.DLA == eligibiility) {
+      eligibilityObject =
+          new Eligibility().typeCode(eligibiility).benefit(new Benefit().isIndefinite(true));
+    } else {
+      eligibilityObject = new Eligibility().typeCode(eligibiility).descriptionOfConditions(condDesc);
+    }
     return Application.builder()
         .applicationTypeCode(ApplicationTypeCodeField.NEW)
         .localAuthorityCode(la)
         .paymentTaken(false)
         .party(party)
-        .eligibility(eligibility)
+        .eligibility(eligibilityObject)
         .build();
   }
 
