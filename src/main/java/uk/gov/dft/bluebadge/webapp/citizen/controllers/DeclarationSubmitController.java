@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.ApplicationTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Contact;
@@ -33,7 +34,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
 @Controller
@@ -52,8 +53,11 @@ public class DeclarationSubmitController implements StepController {
   }
 
   @GetMapping
-  public String showDeclaration(
-      @Valid @ModelAttribute("formRequest") DeclarationForm formRequest, Model model) {
+  public String showDeclaration(Model model) {
+
+    if (!model.containsAttribute("formRequest")) {
+      model.addAttribute("formRequest", DeclarationForm.builder().build());
+    }
 
     return TEMPLATE_DECLARATION;
   }
@@ -63,12 +67,10 @@ public class DeclarationSubmitController implements StepController {
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute("formRequest") DeclarationForm formRequest,
       BindingResult bindingResult,
-      Model model) {
-
-    model.addAttribute("errorSummary", new ErrorViewModel());
+      RedirectAttributes attr) {
 
     if (bindingResult.hasErrors()) {
-      return TEMPLATE_DECLARATION;
+      return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
     }
 
     appService.create(getDummyApplication(journey));
@@ -79,7 +81,11 @@ public class DeclarationSubmitController implements StepController {
   private Application getDummyApplication(Journey journey) {
     ApplicantNameForm applicantNameForm = journey.getApplicantNameForm();
     HealthConditionsForm healthConditionsForm = journey.getHealthConditionsForm();
-
+    YourIssuingAuthorityForm yourIssuingAuthorityForm = journey.getYourIssuingAuthorityForm();
+    String la =
+        yourIssuingAuthorityForm == null
+            ? "ABERD"
+            : yourIssuingAuthorityForm.getLocalAuthorityShortCode();
     String condDesc =
         healthConditionsForm == null
             ? "Dummy condition"
@@ -130,7 +136,7 @@ public class DeclarationSubmitController implements StepController {
 
     return Application.builder()
         .applicationTypeCode(ApplicationTypeCodeField.NEW)
-        .localAuthorityCode("ABERD")
+        .localAuthorityCode(la)
         .paymentTaken(false)
         .party(party)
         .eligibility(eligibility)

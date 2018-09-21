@@ -12,6 +12,8 @@ public class Mappings {
   public static final String URL_HEALTH_CONDITIONS = "/health-conditions";
   public static final String URL_DECLARATIONS = "/apply-for-a-blue-badge/declaration";
   public static final String URL_APPLICATION_SUBMITTED = "/application-submitted";
+  public static final String URL_CHOOSE_YOUR_COUNCIL = "/choose-council";
+  public static final String URL_YOUR_ISSUING_AUTHORITY = "/your-issuing-authority";
   public static final String URL_DOB = "/date-of-birth";
 
   private Mappings() {}
@@ -23,6 +25,8 @@ public class Mappings {
           .put(StepDefinition.NAME, URL_APPLICANT_NAME)
           .put(StepDefinition.DOB, URL_DOB)
           .put(StepDefinition.HEALTH_CONDITIONS, URL_HEALTH_CONDITIONS)
+          .put(StepDefinition.CHOOSE_COUNCIL, URL_CHOOSE_YOUR_COUNCIL)
+          .put(StepDefinition.YOUR_ISSUING_AUTHORITY, URL_YOUR_ISSUING_AUTHORITY)
           .put(StepDefinition.DECLARATIONS, URL_DECLARATIONS)
           .put(StepDefinition.SUBMITTED, URL_APPLICATION_SUBMITTED)
           .build();
