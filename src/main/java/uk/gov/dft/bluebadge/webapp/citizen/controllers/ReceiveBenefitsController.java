@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
+import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 
@@ -69,28 +70,17 @@ public class ReceiveBenefitsController implements StepController {
    *
    * @return
    */
-  private List<ReferenceData> getBenefitOptions() {
-    ReferenceData pip = new ReferenceData();
-    pip.setShortCode(EligibilityCodeField.PIP.name());
-    pip.setDescription("Personal Independence Payment (PIP)");
+  private RadioOptionsGroup getBenefitOptions() {
+    RadioOption pip = new RadioOption(EligibilityCodeField.PIP.name(), "options.benefits.pip");
+    RadioOption dla = new RadioOption(EligibilityCodeField.DLA.name(), "options.benefits.dla");
+    RadioOption afrfcs =
+        new RadioOption(EligibilityCodeField.AFRFCS.name(), "options.benefits.afrfcs");
+    RadioOption wpms = new RadioOption(EligibilityCodeField.WPMS.name(), "options.benefits.wpms");
+    RadioOption none = new RadioOption(EligibilityCodeField.WALKD.name(), "options.benefits.none");
 
-    ReferenceData dla = new ReferenceData();
-    dla.setShortCode(EligibilityCodeField.DLA.name());
-    dla.setDescription("Disability Living Allowance (DLA)");
+    List<RadioOption> options = Lists.newArrayList(pip, dla, afrfcs, wpms, none);
 
-    ReferenceData afrfcs = new ReferenceData();
-    afrfcs.setShortCode(EligibilityCodeField.AFRFCS.name());
-    afrfcs.setDescription("Armed Forces Compensation Scheme");
-
-    ReferenceData wpms = new ReferenceData();
-    wpms.setShortCode(EligibilityCodeField.WPMS.name());
-    wpms.setDescription("War Pensioners' Mobility Supplement");
-
-    ReferenceData none = new ReferenceData();
-    none.setShortCode(EligibilityCodeField.WALKD.name());
-    none.setDescription("None of these benefits");
-
-    return Lists.newArrayList(pip, dla, afrfcs, wpms, none);
+    return new RadioOptionsGroup("receiveBenefitsPage.title", options);
   }
 
   @PostMapping
@@ -106,7 +96,6 @@ public class ReceiveBenefitsController implements StepController {
     }
 
     journey.setReceiveBenefitsForm(receiveBenefitsForm);
-
     return routeMaster.redirectToOnSuccess(receiveBenefitsForm);
   }
 
