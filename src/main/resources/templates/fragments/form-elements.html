@@ -79,7 +79,7 @@
             th:aria-describedby="${hint} ? ${date} + '-hint'" role="group">
 
             <legend class="govuk-fieldset__legend" th:if="${label}">
-                <h2 th:utext="${label}" data-uipath="${date} + '.legend'" class="govuk-heading-s" />
+                <h1 th:utext="${label}" data-uipath="${date} + '.legend'" class="govuk-heading-s" />
             </legend>
 
             <span th:id="${date} + '-hint'" class="govuk-hint" th:if="${hint}" th:utext="${hint}" />

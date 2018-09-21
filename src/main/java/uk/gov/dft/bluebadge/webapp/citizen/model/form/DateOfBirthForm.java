@@ -10,11 +10,9 @@ import lombok.Data;
 @Builder
 public class DateOfBirthForm {
 
-  @NotNull private Integer day;
-
-  @NotNull private Integer month;
-
-  @NotNull private Integer year;
+  private Integer day;
+  private Integer month;
+  private Integer year;
 
   /**
    * Validates the dob is a date in the past.
@@ -26,7 +24,7 @@ public class DateOfBirthForm {
 
     // Cannot evaluate the date
     if (datePartMissing()) {
-      return true;
+      return false;
     }
 
     // Attempt to parse and compare
