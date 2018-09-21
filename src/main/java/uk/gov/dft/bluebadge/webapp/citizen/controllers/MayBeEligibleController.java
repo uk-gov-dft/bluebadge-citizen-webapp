@@ -16,6 +16,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataSe
 
 @Controller
 @RequestMapping(Mappings.URL_MAY_BE_ELIGIBLE)
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class MayBeEligibleController implements StepController {
 
   private static final String TEMPLATE = "may-be-eligible";
@@ -31,7 +32,6 @@ public class MayBeEligibleController implements StepController {
   }
 
   @GetMapping
-  @SuppressWarnings("common-java:DuplicatedBlocks")
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
 
     if (!journey.isValidState(getStepDefinition())) {
