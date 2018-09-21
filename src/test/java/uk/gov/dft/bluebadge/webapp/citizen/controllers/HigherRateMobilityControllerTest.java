@@ -1,5 +1,11 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,12 +18,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class HigherRateMobilityControllerTest {
 
