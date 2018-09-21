@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -25,6 +26,8 @@ public class HealthConditionsControllerTest {
   private MockMvc mockMvc;
   private HealthConditionsController controller;
 
+  @Mock Journey mockJourney;
+
   @Mock private RouteMaster mockRouteMaster;
 
   @Before
@@ -39,11 +42,11 @@ public class HealthConditionsControllerTest {
 
   @Test
   public void show_ShouldDisplayHealthConditionsTemplate() throws Exception {
-
+    when(mockJourney.isValidState(any())).thenReturn(true);
     HealthConditionsForm formRequest = HealthConditionsForm.builder().build();
 
     mockMvc
-        .perform(get("/health-conditions").sessionAttr("JOURNEY", new Journey()))
+        .perform(get("/health-conditions").sessionAttr("JOURNEY", mockJourney))
         .andExpect(status().isOk())
         .andExpect(view().name("health-conditions"))
         .andExpect(model().attribute("formRequest", formRequest));

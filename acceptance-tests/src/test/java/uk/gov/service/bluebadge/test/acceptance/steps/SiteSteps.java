@@ -232,4 +232,9 @@ public class SiteSteps extends AbstractSpringSteps {
   public void whenItypeTextForFieldUiPath(String text, String fieldId) throws Throwable {
     sitePage.findPageElementById(fieldId).sendKeys(text);
   }
+
+  @And("^I select \"([^\"]*)\" from autosuggest council list$")
+  public void iSelectFromAutosuggestCouncilList(String arg0) throws Throwable {
+    sitePage.selectLocalCouncil(arg0);
+  }
 }

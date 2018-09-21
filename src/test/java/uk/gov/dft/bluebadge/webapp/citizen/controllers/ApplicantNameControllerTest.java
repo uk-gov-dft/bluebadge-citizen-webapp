@@ -85,7 +85,6 @@ public class ApplicantNameControllerTest {
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(model().attribute("formRequest", applicantNameForm))
         .andExpect(redirectedUrl("/testSuccess"));
   }
 
