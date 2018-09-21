@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import lombok.SneakyThrows;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,10 +16,13 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
+
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataService;
 
 public class EligibleControllerTest {
@@ -40,20 +44,38 @@ public class EligibleControllerTest {
             .build();
     journey = new Journey();
     journey.setApplicantForm(ApplicantForm.builder().build());
+    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
   }
 
   @Test
-  public void show_ShouldDisplayEligibleTemplate() throws Exception {
+  @SneakyThrows
+  public void show_ShouldDisplayEligibleTemplate() {
+    YourIssuingAuthorityForm yourIssuingAuthorityForm =
+        YourIssuingAuthorityForm.builder().localAuthorityShortCode("bob").build();
+    journey.setYourIssuingAuthorityForm(yourIssuingAuthorityForm);
+    LocalAuthorityRefData testLARefData = new LocalAuthorityRefData();
+    when(referenceDataService.retrieveLocalAuthority("bob")).thenReturn(testLARefData);
 
     mockMvc
         .perform(get("/eligible").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("eligible"))
-        .andExpect(model().attribute("formRequest", Matchers.nullValue()));
+        .andExpect(model().attribute("formRequest", Matchers.nullValue()))
+        .andExpect(model().attribute("localAuthority", testLARefData));
   }
 
   @Test
-  public void startApplication_ShouldRedirectToNextPage() throws Exception {
+  @SneakyThrows
+  public void whenIssuingFormNotSet_thenRedirectBackToStart() {
+    mockMvc
+        .perform(get("/eligible").sessionAttr("JOURNEY", journey))
+        .andExpect(status().isOk())
+        .andExpect(view().name("backToStart"));
+  }
+
+  @Test
+  @SneakyThrows
+  public void startApplication_ShouldRedirectToNextPage() {
 
     when(mockRouteMaster.redirectToOnSuccess(StepDefinition.ELIGIBLE))
         .thenReturn("redirect:/theNextPage");
