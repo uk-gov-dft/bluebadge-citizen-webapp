@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import javax.validation.constraints.AssertTrue;
 import lombok.Builder;
@@ -7,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class DateOfBirthForm {
+public class DateOfBirthForm implements Serializable {
 
   private Integer day;
   private Integer month;

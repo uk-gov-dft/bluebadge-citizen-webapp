@@ -22,9 +22,6 @@ public class ApplicantNameForm implements Serializable {
   private String birthName;
 
   public Boolean isBirthNameValid() {
-    if (hasBirthName != null && hasBirthName.equals(true) && birthName.isEmpty()) {
-      return false;
-    }
-    return true;
+    return (hasBirthName == null || !hasBirthName.equals(true) || !birthName.isEmpty());
   }
 }

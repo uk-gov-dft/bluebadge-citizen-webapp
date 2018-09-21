@@ -23,6 +23,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 public class HealthConditionsController implements StepController {
 
   private static final String TEMPLATE_HEALTH_CONDITIONS = "health-conditions";
+  public static final String FORM_REQUEST = "formRequest";
 
   private final RouteMaster routeMaster;
 
@@ -39,13 +40,13 @@ public class HealthConditionsController implements StepController {
     }
 
     //On returning to form, take previously submitted values.
-    if (!model.containsAttribute("formRequest") && null != journey.getHealthConditionsForm()) {
-      model.addAttribute("formRequest", journey.getHealthConditionsForm());
+    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getHealthConditionsForm()) {
+      model.addAttribute(FORM_REQUEST, journey.getHealthConditionsForm());
     }
 
     // If navigating forward from previous form, reset
-    if (!model.containsAttribute("formRequest")) {
-      model.addAttribute("formRequest", HealthConditionsForm.builder().build());
+    if (!model.containsAttribute(FORM_REQUEST)) {
+      model.addAttribute(FORM_REQUEST, HealthConditionsForm.builder().build());
     }
 
     // Otherwise, is redirect from post with binding errors.
@@ -56,7 +57,7 @@ public class HealthConditionsController implements StepController {
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute("formRequest") HealthConditionsForm formRequest,
+      @Valid @ModelAttribute(FORM_REQUEST) HealthConditionsForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 

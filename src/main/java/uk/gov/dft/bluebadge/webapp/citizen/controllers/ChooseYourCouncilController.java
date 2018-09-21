@@ -27,6 +27,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataSe
 public class ChooseYourCouncilController implements StepController {
 
   private static final String TEMPLATE = "choose-council";
+  public static final String FORM_REQUEST = "formRequest";
 
   private ReferenceDataService referenceDataService;
   private final RouteMaster routeMaster;
@@ -45,12 +46,12 @@ public class ChooseYourCouncilController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    if (!model.containsAttribute("formRequest") && null != journey.getChooseYourCouncilForm()) {
-      model.addAttribute("formRequest", journey.getChooseYourCouncilForm());
+    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getChooseYourCouncilForm()) {
+      model.addAttribute(FORM_REQUEST, journey.getChooseYourCouncilForm());
     }
 
-    if (!model.containsAttribute("formRequest")) {
-      model.addAttribute("formRequest", ChooseYourCouncilForm.builder().build());
+    if (!model.containsAttribute(FORM_REQUEST)) {
+      model.addAttribute(FORM_REQUEST, ChooseYourCouncilForm.builder().build());
     }
 
     List<ReferenceData> councils =
@@ -63,7 +64,7 @@ public class ChooseYourCouncilController implements StepController {
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       Model model,
-      @Valid @ModelAttribute("formRequest") ChooseYourCouncilForm formRequest,
+      @Valid @ModelAttribute(FORM_REQUEST) ChooseYourCouncilForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 

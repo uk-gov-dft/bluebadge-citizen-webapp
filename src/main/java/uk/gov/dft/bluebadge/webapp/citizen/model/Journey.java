@@ -38,10 +38,7 @@ public class Journey implements Serializable {
   }
 
   public boolean isValidState(StepDefinition step) {
-    if (null == getApplicantForm()) {
-      return false;
-    }
-    return true;
+    return null != getApplicantForm();
   }
 
   public ApplicantForm getApplicantForm() {

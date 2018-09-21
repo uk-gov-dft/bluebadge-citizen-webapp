@@ -9,6 +9,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 @Component
 public class RouteMaster {
 
+  public static final String REDIRECT = "redirect:";
+
   public String redirectToOnSuccess(StepController currentStep) {
     StepDefinition nextStep =
         currentStep
@@ -20,11 +22,11 @@ public class RouteMaster {
                 () ->
                     new IllegalStateException("Failed to determine next step for: " + currentStep));
 
-    return "redirect:" + Mappings.getUrl(nextStep);
+    return REDIRECT + Mappings.getUrl(nextStep);
   }
 
   public String backToCompletedPrevious() {
-    return "redirect:" + Mappings.getUrl(StepDefinition.HOME);
+    return REDIRECT + Mappings.getUrl(StepDefinition.HOME);
   }
 
   public String redirectToOnBindingError(
@@ -36,6 +38,6 @@ public class RouteMaster {
     attr.addFlashAttribute(
         "org.springframework.validation.BindingResult.formRequest", bindingResult);
     attr.addFlashAttribute("formRequest", formRequest);
-    return "redirect:" + Mappings.getUrl(currentStep.getStepDefinition());
+    return REDIRECT + Mappings.getUrl(currentStep.getStepDefinition());
   }
 }
