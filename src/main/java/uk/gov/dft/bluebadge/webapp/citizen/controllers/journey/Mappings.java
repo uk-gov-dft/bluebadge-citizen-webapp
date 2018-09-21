@@ -10,6 +10,7 @@ public class Mappings {
   public static final String URL_APPLICANT_TYPE = "/applicant";
   public static final String URL_APPLICANT_NAME = "/name";
   public static final String URL_RECEIVE_BENEFITS = "/benefits";
+  public static final String URL_HIGHER_RATE_MOBILITY = "/higher-rate-mobility";
   public static final String URL_ELIGIBLE = "/eligible";
   public static final String URL_MAY_BE_ELIGIBLE = "/may-be-eligible";
   public static final String URL_HEALTH_CONDITIONS = "/health-conditions";
@@ -25,6 +26,7 @@ public class Mappings {
           .put(StepDefinition.HOME, URL_ROOT)
           .put(StepDefinition.APPLICANT_TYPE, URL_APPLICANT_TYPE)
           .put(StepDefinition.RECEIVE_BENEFITS, URL_RECEIVE_BENEFITS)
+          .put(StepDefinition.HIGHER_RATE_MOBILITY, URL_HIGHER_RATE_MOBILITY)
           .put(StepDefinition.ELIGIBLE, URL_ELIGIBLE)
           .put(StepDefinition.MAY_BE_ELIGIBLE, URL_MAY_BE_ELIGIBLE)
           .put(StepDefinition.NAME, URL_APPLICANT_NAME)
