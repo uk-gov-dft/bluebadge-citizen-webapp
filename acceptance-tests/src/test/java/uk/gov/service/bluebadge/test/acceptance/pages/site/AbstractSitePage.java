@@ -63,7 +63,7 @@ public abstract class AbstractSitePage extends AbstractPage {
     return helper.findOptionalElement(By.xpath("//*[@data-uipath='" + uiPath + "']"));
   }
 
-  public void selectOptionWithText(String textToSelect) {
+  public void selectLocalCouncil(String textToSelect) {
     WebElement autoOptions =
         (new WebDriverWait(getWebDriver(), 10))
             .until(ExpectedConditions.elementToBeClickable(By.id("councilShortCode__listbox")));
