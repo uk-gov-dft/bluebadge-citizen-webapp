@@ -142,12 +142,12 @@ public class DeclarationSubmitController implements StepController {
                                   .usage("walk aid usage")
                                   .howProvidedCode(HowProvidedCodeField.PRESCRIBE))));
     } else if (EligibilityCodeField.PIP == eligibiility
-        || EligibilityCodeField.DLA == eligibiility) {
+        || EligibilityCodeField.DLA == eligibiility
+        || EligibilityCodeField.WPMS == eligibiility) {
       eligibilityObject =
           new Eligibility().typeCode(eligibiility).benefit(new Benefit().isIndefinite(true));
     } else {
-      eligibilityObject =
-          new Eligibility().typeCode(eligibiility).descriptionOfConditions(condDesc);
+      eligibilityObject = new Eligibility().typeCode(eligibiility);
     }
     return Application.builder()
         .applicationTypeCode(ApplicationTypeCodeField.NEW)
