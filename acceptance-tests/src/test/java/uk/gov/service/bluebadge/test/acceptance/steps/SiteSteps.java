@@ -13,6 +13,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import cucumber.api.DataTable;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -236,5 +237,13 @@ public class SiteSteps extends AbstractSpringSteps {
   @And("^I select \"([^\"]*)\" from autosuggest council list$")
   public void iSelectFromAutosuggestCouncilList(String arg0) throws Throwable {
     sitePage.selectLocalCouncil(arg0);
+  }
+
+  @When("^I type day as \"([^\"]*)\" month as \"([^\"]*)\" and year as \"([^\"]*)\" for applicant's date of birth$")
+  public void iTypeDayAsMonthAsAndYearAsForApplicantSDateOfBirth(String day, String month, String year) throws Throwable {
+    sitePage.findElementWithUiPath("localDateDob.day.field").sendKeys(day);
+    sitePage.findElementWithUiPath("localDateDob.month.field").sendKeys(month);
+    sitePage.findElementWithUiPath("localDateDob.year.field").sendKeys(year);
+
   }
 }

@@ -22,6 +22,10 @@ Feature: DFT Blue badge Citizen app new application
     And   I select an option "hasBirthName.no"
     And   I can click on "Continue"
 
+    Then  I should see the page titled "Their Date of Birth - GOV.UK Apply for a Blue Badge"
+    When  I type day as "02" month as "08" and year as "1966" for applicant's date of birth
+    And   I can click on "Continue"
+
     Then  I should see the page titled "Describe health conditions - GOV.UK Apply for a Blue Badge"
     And   I should see the title "Describe any health conditions that affect their mobility"
     When  I type "Sample health condition" for "description-of-conditions" field by id
