@@ -80,7 +80,7 @@ public class ReceiveBenefitsController implements StepController {
 
     ReferenceData afrfcs = new ReferenceData();
     afrfcs.setShortCode(EligibilityCodeField.AFRFCS.name());
-    afrfcs.setDescription("Armed Forces Compensation scheme");
+    afrfcs.setDescription("Armed Forces Compensation Scheme");
 
     ReferenceData wpms = new ReferenceData();
     wpms.setShortCode(EligibilityCodeField.WPMS.name());
