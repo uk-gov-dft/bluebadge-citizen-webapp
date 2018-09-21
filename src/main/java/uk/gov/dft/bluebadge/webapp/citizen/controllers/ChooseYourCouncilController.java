@@ -57,13 +57,13 @@ public class ChooseYourCouncilController implements StepController {
     List<ReferenceData> councils =
         referenceDataService.retrieveReferenceDataList(RefDataGroupEnum.COUNCIL);
     model.addAttribute("councils", councils);
+
     return TEMPLATE;
   }
 
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      Model model,
       @Valid @ModelAttribute(FORM_REQUEST) ChooseYourCouncilForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
