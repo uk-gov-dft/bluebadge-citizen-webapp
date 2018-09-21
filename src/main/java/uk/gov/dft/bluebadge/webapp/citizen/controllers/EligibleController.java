@@ -30,6 +30,7 @@ public class EligibleController implements StepController {
   }
 
   @GetMapping
+  @SuppressWarnings("common-java:DuplicatedBlocks")
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
 
     if (!journey.isValidState(getStepDefinition())) {
