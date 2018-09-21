@@ -11,17 +11,16 @@ public class JourneyFixture {
     Journey journey = new Journey();
 
     HealthConditionsForm healthConditionsForm =
-      HealthConditionsForm.builder().descriptionOfConditions("test description").build();
+        HealthConditionsForm.builder().descriptionOfConditions("test description").build();
 
     ApplicantNameForm applicantNameForm =
-      ApplicantNameForm.builder()
-        .fullName("John Doe")
-        .hasBirthName(true)
-        .birthName("Johns Birth name")
-        .build();
+        ApplicantNameForm.builder()
+            .fullName("John Doe")
+            .hasBirthName(true)
+            .birthName("Johns Birth name")
+            .build();
 
     DateOfBirthForm dateOfBirthForm = DateOfBirthForm.builder().day(1).month(1).year(1990).build();
-
 
     journey.setHealthConditionsForm(healthConditionsForm);
     journey.setApplicantNameForm(applicantNameForm);
@@ -29,5 +28,4 @@ public class JourneyFixture {
 
     return journey;
   }
-
 }

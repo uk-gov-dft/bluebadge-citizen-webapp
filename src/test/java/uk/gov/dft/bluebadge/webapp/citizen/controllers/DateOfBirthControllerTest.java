@@ -87,7 +87,7 @@ public class DateOfBirthControllerTest {
                 .sessionAttr("JOURNEY", new Journey()))
         .andExpect(status().isOk())
         .andExpect(view().name(VIEW_DATE_OF_BIRTH))
-        .andExpect(model().attributeHasFieldErrorCode("formRequest", "day", "NotNull"));
+        .andExpect(model().attributeHasFieldErrorCode("formRequest", "pastDate", "AssertTrue"));
   }
 
   @Test
@@ -100,7 +100,7 @@ public class DateOfBirthControllerTest {
                 .sessionAttr("JOURNEY", new Journey()))
         .andExpect(status().isOk())
         .andExpect(view().name(VIEW_DATE_OF_BIRTH))
-        .andExpect(model().attributeHasFieldErrorCode("formRequest", "month", "NotNull"));
+        .andExpect(model().attributeHasFieldErrorCode("formRequest", "pastDate", "AssertTrue"));
   }
 
   @Test
@@ -113,7 +113,7 @@ public class DateOfBirthControllerTest {
                 .sessionAttr("JOURNEY", new Journey()))
         .andExpect(status().isOk())
         .andExpect(view().name(VIEW_DATE_OF_BIRTH))
-        .andExpect(model().attributeHasFieldErrorCode("formRequest", "year", "NotNull"));
+        .andExpect(model().attributeHasFieldErrorCode("formRequest", "pastDate", "AssertTrue"));
   }
 
   @Test

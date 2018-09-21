@@ -1,5 +1,17 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -14,36 +26,22 @@ import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
 public class DeclarationSubmitControllerTest {
 
   private MockMvc mockMvc;
   private DeclarationSubmitController controller;
 
-  @Mock
-  ApplicationManagementService appService;
-  @Mock
-  private RouteMaster mockRouteMaster;
+  @Mock ApplicationManagementService appService;
+  @Mock private RouteMaster mockRouteMaster;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
     controller = new DeclarationSubmitController(appService, mockRouteMaster);
     mockMvc =
-      MockMvcBuilders.standaloneSetup(controller)
-        .setViewResolvers(new StandaloneMvcTestViewResolver())
-        .build();
+        MockMvcBuilders.standaloneSetup(controller)
+            .setViewResolvers(new StandaloneMvcTestViewResolver())
+            .build();
   }
 
   @Test
@@ -52,21 +50,23 @@ public class DeclarationSubmitControllerTest {
     DeclarationForm formRequest = DeclarationForm.builder().build();
 
     mockMvc
-      .perform(get("/apply-for-a-blue-badge/declaration"))
-      .andExpect(status().isOk())
-      .andExpect(view().name("application-end/declaration"))
-      .andExpect(model().attribute("formRequest", formRequest));
+        .perform(get("/apply-for-a-blue-badge/declaration"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("application-end/declaration"))
+        .andExpect(model().attribute("formRequest", formRequest));
   }
 
   @Test
   public void submitDeclaration_ShouldDisplayApplicationSubmittedTemplate_WhenDeclarationIsAgreed()
-    throws Exception {
+      throws Exception {
 
     when(mockRouteMaster.redirectToOnSuccess(controller)).thenReturn("redirect:/testSuccess");
 
     mockMvc
-      .perform(post("/apply-for-a-blue-badge/declaration").param("agreed", "true")
-        .sessionAttr("JOURNEY", JourneyFixture.getDefaultJourney()))
+        .perform(
+            post("/apply-for-a-blue-badge/declaration")
+                .param("agreed", "true")
+                .sessionAttr("JOURNEY", JourneyFixture.getDefaultJourney()))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
 
@@ -75,17 +75,17 @@ public class DeclarationSubmitControllerTest {
 
   @Test
   public void submitDeclaration_shouldSendFormDataWithinApplication_WhenDeclarationIsAgreed()
-    throws Exception {
+      throws Exception {
 
     when(mockRouteMaster.redirectToOnSuccess(controller)).thenReturn("redirect:/testSuccess");
 
     mockMvc
-      .perform(
-        post("/apply-for-a-blue-badge/declaration")
-          .param("agreed", "true")
-          .sessionAttr("JOURNEY", JourneyFixture.getDefaultJourney()))
-      .andExpect(status().isFound())
-      .andExpect(redirectedUrl("/testSuccess"));
+        .perform(
+            post("/apply-for-a-blue-badge/declaration")
+                .param("agreed", "true")
+                .sessionAttr("JOURNEY", JourneyFixture.getDefaultJourney()))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/testSuccess"));
 
     ArgumentCaptor<Application> captor = ArgumentCaptor.forClass(Application.class);
     verify(appService, times(1)).create(captor.capture());
@@ -94,12 +94,12 @@ public class DeclarationSubmitControllerTest {
     assertThat(captor.getValue()).isNotNull();
     assertThat(captor.getValue().getEligibility()).isNotNull();
     assertThat(captor.getValue().getEligibility().getDescriptionOfConditions())
-      .isEqualTo("test description");
+        .isEqualTo("test description");
   }
 
   @Test
   public void submitDeclaration_ShouldThrowValidationError_WhenDeclarationIsNotAgreed()
-    throws Exception {
+      throws Exception {
     mockMvc
         .perform(post("/apply-for-a-blue-badge/declaration").param("agreed", "false"))
         .andExpect(status().isOk())

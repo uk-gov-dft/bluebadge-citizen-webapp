@@ -2,7 +2,6 @@ package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
 import java.time.LocalDate;
 import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
