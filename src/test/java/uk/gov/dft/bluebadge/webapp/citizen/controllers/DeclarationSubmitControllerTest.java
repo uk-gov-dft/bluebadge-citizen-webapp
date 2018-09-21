@@ -62,7 +62,8 @@ public class DeclarationSubmitControllerTest {
   public void submitDeclaration_ShouldDisplayApplicationSubmittedTemplate_WhenDeclarationIsAgreed()
       throws Exception {
 
-    when(mockRouteMaster.redirectToOnSuccess(controller)).thenReturn("redirect:/testSuccess");
+    when(mockRouteMaster.redirectToOnSuccess(any(DeclarationForm.class)))
+        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(post("/apply-for-a-blue-badge/declaration").param("agreed", "true"))
@@ -76,7 +77,8 @@ public class DeclarationSubmitControllerTest {
   public void submitDeclaration_shouldSendFormDataWithinApplication_WhenDeclarationIsAgreed()
       throws Exception {
 
-    when(mockRouteMaster.redirectToOnSuccess(controller)).thenReturn("redirect:/testSuccess");
+    when(mockRouteMaster.redirectToOnSuccess(any(DeclarationForm.class)))
+        .thenReturn("redirect:/testSuccess");
 
     Journey journey = new Journey();
 

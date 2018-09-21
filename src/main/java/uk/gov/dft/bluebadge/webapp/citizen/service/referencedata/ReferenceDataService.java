@@ -102,4 +102,8 @@ public class ReferenceDataService {
 
     return null;
   }
+
+  public LocalAuthorityRefData retrieveLocalAuthority(String localAuthorityShortCode) {
+    return localAuthorityMap.get(localAuthorityShortCode);
+  }
 }

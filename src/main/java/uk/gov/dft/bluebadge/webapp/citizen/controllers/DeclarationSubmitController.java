@@ -66,17 +66,17 @@ public class DeclarationSubmitController implements StepController {
   @PostMapping
   public String submitDeclaration(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute("formRequest") DeclarationForm formRequest,
+      @Valid @ModelAttribute("formRequest") DeclarationForm declarationForm,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
     if (bindingResult.hasErrors()) {
-      return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
+      return routeMaster.redirectToOnBindingError(this, declarationForm, bindingResult, attr);
     }
 
     appService.create(getDummyApplication(journey));
 
-    return routeMaster.redirectToOnSuccess(this);
+    return routeMaster.redirectToOnSuccess(declarationForm);
   }
 
   private Application getDummyApplication(Journey journey) {

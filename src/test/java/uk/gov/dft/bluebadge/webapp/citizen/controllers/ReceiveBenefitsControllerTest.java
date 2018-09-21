@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import org.apache.commons.lang3.StringUtils;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -19,37 +19,40 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 
-public class HealthConditionsControllerTest {
+public class ReceiveBenefitsControllerTest {
 
   private MockMvc mockMvc;
-  private HealthConditionsController controller;
-
-  @Mock Journey mockJourney;
+  private ReceiveBenefitsController controller;
 
   @Mock private RouteMaster mockRouteMaster;
+  private Journey journey;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new HealthConditionsController(mockRouteMaster);
+    controller = new ReceiveBenefitsController(mockRouteMaster);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
+    journey = new Journey();
+    journey.setApplicantForm(ApplicantForm.builder().build());
   }
 
   @Test
-  public void show_ShouldDisplayHealthConditionsTemplate() throws Exception {
-    when(mockJourney.isValidState(any())).thenReturn(true);
-    HealthConditionsForm formRequest = HealthConditionsForm.builder().build();
+  public void show_ShouldDisplayBenefitsTemplate() throws Exception {
+
+    ReceiveBenefitsForm formRequest = ReceiveBenefitsForm.builder().build();
 
     mockMvc
-        .perform(get("/health-conditions").sessionAttr("JOURNEY", mockJourney))
+        .perform(get("/benefits").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
-        .andExpect(view().name("health-conditions"))
-        .andExpect(model().attribute("formRequest", formRequest));
+        .andExpect(view().name("receive-benefits"))
+        .andExpect(model().attribute("formRequest", formRequest))
+        .andExpect(model().attribute("benefitOptions", Matchers.notNullValue()));
   }
 
   @Test
@@ -58,7 +61,7 @@ public class HealthConditionsControllerTest {
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
 
     mockMvc
-        .perform(get("/health-conditions"))
+        .perform(get("/benefits"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/backToStart"));
   }
@@ -66,42 +69,21 @@ public class HealthConditionsControllerTest {
   @Test
   public void submit_givenValidForm_thenShouldDisplayRedirectToSuccess() throws Exception {
 
-    when(mockRouteMaster.redirectToOnSuccess(any(HealthConditionsForm.class)))
+    when(mockRouteMaster.redirectToOnSuccess(any(ReceiveBenefitsForm.class)))
         .thenReturn("redirect:/testSuccess");
 
     mockMvc
-        .perform(
-            post("/health-conditions")
-                .param("descriptionOfConditions", "test test")
-                .sessionAttr("JOURNEY", new Journey()))
+        .perform(post("/benefits").param("benefitType", "PIP").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
   }
 
   @Test
-  public void submit_whenMissingDescriptionOfConditions_ThenShouldHaveValidationError()
-      throws Exception {
+  public void submit_whenMissingBenefitsAnswer_ThenShouldHaveValidationError() throws Exception {
     mockMvc
-        .perform(post("/health-conditions").sessionAttr("JOURNEY", new Journey()))
+        .perform(post("/benefits").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
-        .andExpect(view().name("health-conditions"))
-        .andExpect(
-            model()
-                .attributeHasFieldErrorCode("formRequest", "descriptionOfConditions", "NotNull"));
-  }
-
-  @Test
-  public void submit_whenTooLongDescriptionOfConditions_ThenShouldHaveValidationError()
-      throws Exception {
-    String tooLong = StringUtils.leftPad("a", 101, 'b');
-    mockMvc
-        .perform(
-            post("/health-conditions")
-                .param("descriptionOfConditions", tooLong)
-                .sessionAttr("JOURNEY", new Journey()))
-        .andExpect(status().isOk())
-        .andExpect(view().name("health-conditions"))
-        .andExpect(
-            model().attributeHasFieldErrorCode("formRequest", "descriptionOfConditions", "Size"));
+        .andExpect(view().name("receive-benefits"))
+        .andExpect(model().attributeHasFieldErrorCode("formRequest", "benefitType", "NotNull"));
   }
 }

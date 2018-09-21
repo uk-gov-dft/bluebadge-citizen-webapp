@@ -72,7 +72,7 @@ public class ChooseYourCouncilController implements StepController {
     }
 
     journey.setChooseYourCouncilForm(formRequest);
-    return routeMaster.redirectToOnSuccess(this);
+    return routeMaster.redirectToOnSuccess(formRequest);
   }
 
   @Override

@@ -94,7 +94,8 @@ public class ReferenceDataServiceTest {
   @Test
   public void getLAforLC() {
     // Valid result
-    LocalAuthorityRefData localAuthorityRefData = referenceDataService.lookupLocalAuthorityFromCouncilCode("TON");
+    LocalAuthorityRefData localAuthorityRefData =
+        referenceDataService.lookupLocalAuthorityFromCouncilCode("TON");
     assertThat(localAuthorityRefData).hasFieldOrPropertyWithValue("shortCode", "WORCC");
 
     // No match
