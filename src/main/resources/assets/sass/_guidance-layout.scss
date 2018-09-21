@@ -1,0 +1,21 @@
+.guidance-layout {
+	padding: govuk-spacing(8) govuk-spacing(6) govuk-spacing(6);
+	background-color: govuk-colour("blue");
+
+	.govuk-list,
+	.govuk-body,
+	.govuk-body-l,
+	.govuk-heading-l,
+	.govuk-heading-m, {
+		color: govuk-colour("white");
+	}
+
+	.govuk-button {
+		color: govuk-colour("blue");
+		background-color: govuk-colour("white");
+
+		&:hover {
+			color: govuk-colour("blue");
+		}
+	}
+}
