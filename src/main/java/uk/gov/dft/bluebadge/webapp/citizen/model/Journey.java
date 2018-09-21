@@ -76,4 +76,20 @@ public class Journey implements Serializable {
   public DateOfBirthForm getDateOfBirthForm() {
     return dateOfBirthForm;
   }
+
+  public ChooseYourCouncilForm getChooseYourCouncilForm() {
+    return chooseYourCouncilForm;
+  }
+
+  public void setChooseYourCouncilForm(ChooseYourCouncilForm chooseYourCouncilForm) {
+    this.chooseYourCouncilForm = chooseYourCouncilForm;
+  }
+
+  public YourIssuingAuthorityForm getYourIssuingAuthorityForm() {
+    return yourIssuingAuthorityForm;
+  }
+
+  public void setYourIssuingAuthorityForm(YourIssuingAuthorityForm yourIssuingAuthorityForm) {
+    this.yourIssuingAuthorityForm = yourIssuingAuthorityForm;
+  }
 }
