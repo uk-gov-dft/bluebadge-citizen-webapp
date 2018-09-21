@@ -5,7 +5,6 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_
 import com.google.common.collect.Lists;
 import java.util.List;
 import javax.validation.Valid;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,16 +40,21 @@ public class ReceiveBenefitsController implements StepController {
       @ModelAttribute("formRequest") ReceiveBenefitsForm receiveBenefitsForm,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       Model model) {
-
-    if (!journey.isValidState(receiveBenefitsForm.getAssociatedStep())) {
+    if (!journey.isValidState(getStepDefinition())) {
       return routeMaster.backToCompletedPrevious();
     }
 
-    setupModel(model);
-
-    if (null != journey.getReceiveBenefitsForm()) {
-      BeanUtils.copyProperties(journey.getReceiveBenefitsForm(), receiveBenefitsForm);
+    //On returning to form, take previously submitted values.
+    if (!model.containsAttribute("formRequest") && null != journey.getReceiveBenefitsForm()) {
+      model.addAttribute("formRequest", journey.getReceiveBenefitsForm());
     }
+
+    // If navigating forward from previous form, reset
+    if (!model.containsAttribute("formRequest")) {
+      model.addAttribute("formRequest", ReceiveBenefitsForm.builder().build());
+    }
+
+    setupModel(model);
 
     return TEMPLATE;
   }
