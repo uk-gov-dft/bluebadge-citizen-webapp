@@ -5,18 +5,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataDomainEnum;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataGroupEnum;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.ReferenceDataApiClient;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalCouncilRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 
 @Service
+@Slf4j
 public class ReferenceDataService {
 
   private Map<String, List<ReferenceData>> groupedReferenceDataList = null;
   private Map<String, Map<String, String>> groupedReferenceDataMap = null;
+  private Map<String, LocalCouncilRefData> localCouncilMap = new HashMap<>();
+  private Map<String, LocalAuthorityRefData> localAuthorityMap = new HashMap<>();
 
   private final ReferenceDataApiClient referenceDataApiClient;
   private final RefDataDomainEnum refDataDomain;
@@ -59,6 +65,14 @@ public class ReferenceDataService {
                       .collect(
                           Collectors.toMap(
                               ReferenceData::getShortCode, ReferenceData::getDescription))));
+
+      for (ReferenceData item : referenceDataList) {
+        if (item instanceof LocalCouncilRefData) {
+          localCouncilMap.put(item.getShortCode(), (LocalCouncilRefData) item);
+        } else if (item instanceof LocalAuthorityRefData) {
+          localAuthorityMap.put(item.getShortCode(), (LocalAuthorityRefData) item);
+        }
+      }
     }
   }
 
@@ -68,73 +82,24 @@ public class ReferenceDataService {
     }
   }
 
-  private List<ReferenceData> retrieveReferenceDataList(RefDataGroupEnum referenceDataGroup) {
+  public List<ReferenceData> retrieveReferenceDataList(RefDataGroupEnum referenceDataGroup) {
     initialise();
     return groupedReferenceDataList.get(referenceDataGroup.getGroupKey());
   }
 
-  private String retrieveReferenceDataDisplayValue(RefDataGroupEnum group, String key) {
+  public LocalAuthorityRefData lookupLocalAuthorityFromCouncilCode(String localCouncilShortCode) {
     initialise();
-    return groupedReferenceDataMap.get(group.getGroupKey()).get(key);
-  }
+    LocalCouncilRefData council = localCouncilMap.get(localCouncilShortCode);
+    if (null == council) {
+      log.warn("No council found for {}.", localCouncilShortCode);
+      return null;
+    }
 
-  public List<ReferenceData> retrieveCancellations() {
-    return retrieveReferenceDataList(RefDataGroupEnum.CANCEL);
-  }
+    LocalCouncilRefData.LocalCouncilMetaData meta = council.getLocalCouncilMetaData().orElse(null);
+    if (null != meta) {
+      return localAuthorityMap.get(meta.getIssuingAuthorityShortCode());
+    }
 
-  public List<ReferenceData> retrieveEligilities() {
-    return retrieveReferenceDataList(RefDataGroupEnum.ELIGIBILITY);
-  }
-
-  public List<ReferenceData> retrieveGenders() {
-    return retrieveReferenceDataList(RefDataGroupEnum.GENDER);
-  }
-
-  public List<ReferenceData> retrieveApplicationChannels() {
-    return retrieveReferenceDataList(RefDataGroupEnum.APP_SOURCE);
-  }
-
-  public List<ReferenceData> retrieveDeliverTos() {
-    return retrieveReferenceDataList(RefDataGroupEnum.DELIVER_TO);
-  }
-
-  public List<ReferenceData> retrieveDeliveryOptions() {
-    return retrieveReferenceDataList(RefDataGroupEnum.DELIVERY_OPTIONS);
-  }
-
-  public List<ReferenceData> retrieveStatuses() {
-    return retrieveReferenceDataList(RefDataGroupEnum.STATUS);
-  }
-
-  public List<ReferenceData> retrieveLocalAuthorities() {
-    return retrieveReferenceDataList(RefDataGroupEnum.LA);
-  }
-
-  public String retrieveEligibilityDisplayValue(String key) {
-    return retrieveReferenceDataDisplayValue(RefDataGroupEnum.ELIGIBILITY, key);
-  }
-
-  public String retrieveGenderDisplayValue(String key) {
-    return retrieveReferenceDataDisplayValue(RefDataGroupEnum.GENDER, key);
-  }
-
-  public String retrieveApplicationChannelDisplayValue(String key) {
-    return retrieveReferenceDataDisplayValue(RefDataGroupEnum.APP_SOURCE, key);
-  }
-
-  public String retrieveDeliverToDisplayValue(String key) {
-    return retrieveReferenceDataDisplayValue(RefDataGroupEnum.DELIVER_TO, key);
-  }
-
-  public String retrieveDeliveryOptionDisplayValue(String key) {
-    return retrieveReferenceDataDisplayValue(RefDataGroupEnum.DELIVERY_OPTIONS, key);
-  }
-
-  public String retrieveStatusDisplayValue(String key) {
-    return retrieveReferenceDataDisplayValue(RefDataGroupEnum.STATUS, key);
-  }
-
-  public String retrieveLocalAuthorityDisplayValue(String key) {
-    return retrieveReferenceDataDisplayValue(RefDataGroupEnum.LA, key);
+    return null;
   }
 }

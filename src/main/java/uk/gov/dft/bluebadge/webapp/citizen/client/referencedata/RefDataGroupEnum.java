@@ -2,15 +2,8 @@ package uk.gov.dft.bluebadge.webapp.citizen.client.referencedata;
 
 @SuppressWarnings("SpellCheckingInspection")
 public enum RefDataGroupEnum {
-  ELIGIBILITY("ELIGIBILIT"),
-  APP_SOURCE("APPSOURCE"),
-  PARTY("PARTY"),
-  STATUS("STATUS"),
-  DELIVER_TO("DELIVER"),
-  DELIVERY_OPTIONS("DELOP"),
-  GENDER("GENDER"),
-  LA("LA"),
-  CANCEL("CANCEL");
+  COUNCIL("LC"),
+  NATION("NATION");
 
   public String getGroupKey() {
     return groupKey;

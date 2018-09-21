@@ -1,8 +1,5 @@
 @import "reset";
 @import "config";
 @import "govuk-frontend/all";
-
+@import "autocomplete";
 @import "govuk-overrides/govuk-textarea";
-
-// Commented for now incase we need it in the future
-// @import "checkbox-fix";

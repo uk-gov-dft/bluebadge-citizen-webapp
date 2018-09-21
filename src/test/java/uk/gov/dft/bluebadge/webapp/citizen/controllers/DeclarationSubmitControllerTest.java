@@ -119,7 +119,7 @@ public class DeclarationSubmitControllerTest {
     mockMvc
         .perform(post("/apply-for-a-blue-badge/declaration").param("agreed", "false"))
         .andExpect(status().isOk())
-        .andExpect(view().name("application-end/declaration"))
+        .andExpect(view().name("apply-for-a-blue-badge/declaration"))
         .andExpect(model().attributeHasFieldErrorCode("formRequest", "agreed", "AssertTrue"));
   }
 }

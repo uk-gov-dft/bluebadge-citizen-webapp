@@ -11,6 +11,7 @@
     "start": "npm run prod"
   },
   "dependencies": {
+    "accessible-autocomplete": "^1.6.1",
     "govuk-frontend": "1.1.1"
   },
   "devDependencies": {
