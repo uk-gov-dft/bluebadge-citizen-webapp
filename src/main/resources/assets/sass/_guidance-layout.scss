@@ -1,6 +1,7 @@
 .guidance-layout {
-	padding: govuk-spacing(8) govuk-spacing(6) govuk-spacing(6);
+	word-wrap: break-word;
 	background-color: govuk-colour("blue");
+	padding: govuk-spacing(8) govuk-spacing(6) govuk-spacing(6);
 
 	.govuk-list,
 	.govuk-body,
@@ -17,5 +18,9 @@
 		&:hover {
 			color: govuk-colour("blue");
 		}
+	}
+
+	a {
+		color: govuk-colour("white");	
 	}
 }

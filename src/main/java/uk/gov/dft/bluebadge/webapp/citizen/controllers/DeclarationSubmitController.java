@@ -1,6 +1,10 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+
 import com.google.common.collect.Lists;
+import java.time.LocalDate;
+import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,11 +38,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
-
-import javax.validation.Valid;
-import java.time.LocalDate;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 @RequestMapping(Mappings.URL_DECLARATIONS)
@@ -85,7 +84,10 @@ public class DeclarationSubmitController implements StepController {
     ApplicantNameForm applicantNameForm = journey.getApplicantNameForm();
     HealthConditionsForm healthConditionsForm = journey.getHealthConditionsForm();
     YourIssuingAuthorityForm yourIssuingAuthorityForm = journey.getYourIssuingAuthorityForm();
-    EligibilityCodeField eligibiility = null != journey.getReceiveBenefitsForm() ? journey.getReceiveBenefitsForm().getBenefitType() : EligibilityCodeField.WPMS;
+    EligibilityCodeField eligibiility =
+        null != journey.getReceiveBenefitsForm()
+            ? journey.getReceiveBenefitsForm().getBenefitType()
+            : EligibilityCodeField.WPMS;
     String la =
         yourIssuingAuthorityForm == null
             ? "ABERD"
@@ -144,7 +146,8 @@ public class DeclarationSubmitController implements StepController {
       eligibilityObject =
           new Eligibility().typeCode(eligibiility).benefit(new Benefit().isIndefinite(true));
     } else {
-      eligibilityObject = new Eligibility().typeCode(eligibiility).descriptionOfConditions(condDesc);
+      eligibilityObject =
+          new Eligibility().typeCode(eligibiility).descriptionOfConditions(condDesc);
     }
     return Application.builder()
         .applicationTypeCode(ApplicationTypeCodeField.NEW)

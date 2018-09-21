@@ -32,8 +32,9 @@
             <span th:remove="tag" th:text="${localAuthority.description}">Some Council</span>
         </p>
 
-        <p class="govuk-body">
-            <span th:remove="tag" th:if="${localAuthority.contactUrl}" th:text="#{eligiblePage.website.pretext}">Website:</span>
+        <p class="govuk-body" th:if="${localAuthority.contactUrl}">
+            <span th:remove="tag"
+                  th:text="#{eligiblePage.website.pretext}">Website:</span>
             <a th:href="${localAuthority.contactUrl}" th:text="${localAuthority.contactUrl}">www.leeds city council.gov.uk</a>
         </p>
     </section>
