@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="#{dateOfBirthPage.title} + ' - ' + #{common.title.suffix}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.who} + 'dateOfBirthPage.body.title'}"></h1>
+            <span class="govuk-hint" th:text="#{example.daymonthyear}"></span>
+
+            <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"/>
+
+            <form th:action="@{/date-of-birth}" th:object="${formRequest}" method="post" novalidate>
+
+                <div class="govuk-form-group">
+                    <div th:replace="~{ fragments/form-elements :: govuk-date(null, null, 'day', 'month', 'year', 'localDateDob') }"/>
+                </div>
+                <button type="submit" class="govuk-button" data-uipath="button.continue" th:text="#{btn.label.continue}"></button>
+
+            </form>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
