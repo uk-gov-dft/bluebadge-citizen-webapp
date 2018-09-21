@@ -29,8 +29,8 @@
 
                 <p class="govuk-body" th:text="#{${JOURNEY.applicantContextContent('eligiblePage.council.timeframe.text')}}">Your council can take up to 4 weeks to make a decision</p>
                 <h2 class="govuk-heading-m" th:text="#{eligiblePage.not.apply.online.text}">Don’t want to apply online?</h2>
-                <p class="govuk-body"><span th:text="#{eligiblePage.council.contact.pretext}">Contact</span> Leeds City Council:</p>
-                <p class="govuk-body"><span th:text="#{eligiblePage.website.pretext}">Website:</span> <a href="#">www.leeds city council.gov.uk</a></p>
+                <p class="govuk-body"><span th:text="#{eligiblePage.council.contact.pretext}">Contact</span> <span th:text="${localAuthority.description}">Some Council</span></p>
+                <p class="govuk-body"><span th:if="${localAuthority.contactUrl}" th:text="#{eligiblePage.website.pretext}">Website:</span> <a th:href="${localAuthority.contactUrl}" th:text="${localAuthority.contactUrl}">www.leeds city council.gov.uk</a></p>
             </div>
         </section>
     </div>

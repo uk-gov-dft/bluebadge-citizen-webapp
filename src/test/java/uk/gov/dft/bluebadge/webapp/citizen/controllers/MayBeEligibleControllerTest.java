@@ -19,6 +19,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
+import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataService;
 
 public class MayBeEligibleControllerTest {
 
@@ -26,12 +27,13 @@ public class MayBeEligibleControllerTest {
   private MayBeEligibleController controller;
 
   @Mock private RouteMaster mockRouteMaster;
+  @Mock private ReferenceDataService referenceDataService;
   private Journey journey;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new MayBeEligibleController(mockRouteMaster);
+    controller = new MayBeEligibleController(mockRouteMaster, referenceDataService);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())

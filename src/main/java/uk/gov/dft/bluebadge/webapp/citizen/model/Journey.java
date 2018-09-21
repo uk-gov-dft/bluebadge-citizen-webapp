@@ -42,6 +42,15 @@ public class Journey implements Serializable {
     if (null == getApplicantForm()) {
       return false;
     }
+
+    switch (step) {
+      case ELIGIBLE:
+      case MAY_BE_ELIGIBLE:
+        if (null == getYourIssuingAuthorityForm()) {
+          return false;
+        }
+    }
+
     return true;
   }
 }
