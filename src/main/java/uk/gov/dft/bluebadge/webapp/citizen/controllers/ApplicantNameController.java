@@ -67,8 +67,8 @@ public class ApplicantNameController implements StepController {
       return routeMaster.redirectToOnBindingError(this, applicantNameForm, bindingResult, attr);
     }
 
-    if (!formRequest.getHasBirthName()) {
-      formRequest.setBirthName(applicantNameForm.getFullName());
+    if (!applicantNameForm.getHasBirthName()) {
+      applicantNameForm.setBirthName(applicantNameForm.getFullName());
     }
 
     journey.setApplicantNameForm(applicantNameForm);

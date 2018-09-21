@@ -31,7 +31,6 @@ public class Mappings {
           .put(StepDefinition.HEALTH_CONDITIONS, URL_HEALTH_CONDITIONS)
           .put(StepDefinition.CHOOSE_COUNCIL, URL_CHOOSE_YOUR_COUNCIL)
           .put(StepDefinition.YOUR_ISSUING_AUTHORITY, URL_YOUR_ISSUING_AUTHORITY)
-          .put(StepDefinition.NAME, URL_APPLICANT_NAME)
           .put(StepDefinition.DECLARATIONS, URL_DECLARATIONS)
           .put(StepDefinition.SUBMITTED, URL_APPLICATION_SUBMITTED)
           .build();

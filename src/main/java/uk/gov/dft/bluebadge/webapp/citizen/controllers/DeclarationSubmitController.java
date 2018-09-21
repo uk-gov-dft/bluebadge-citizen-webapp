@@ -71,7 +71,7 @@ public class DeclarationSubmitController implements StepController {
       RedirectAttributes attr) {
 
     if (bindingResult.hasErrors()) {
-      return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
+      return routeMaster.redirectToOnBindingError(this, declarationForm, bindingResult, attr);
     }
 
     appService.create(getDummyApplication(journey));
