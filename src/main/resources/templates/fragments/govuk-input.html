@@ -16,8 +16,7 @@ for id and attaching label to the input field.
 <div th:fragment="govuk-input(label, name, hint, type)"
      th:class="${#fields.hasErrors(name)} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
 
-    <label
-            class="govuk-label"
+    <label class="govuk-label"
             th:attr="for=${name}"
             th:utext="${label}"
             th:data-uipath="${name} + '.label'" />
