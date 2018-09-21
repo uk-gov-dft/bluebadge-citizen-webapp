@@ -97,7 +97,7 @@ public class DeclarationSubmitControllerTest {
     journey.setHealthConditionsForm(healthConditionsForm);
     journey.setApplicantNameForm(applicantNameForm);
     journey.setReceiveBenefitsForm(
-        ReceiveBenefitsForm.builder().benefitType(EligibilityCodeField.WPMS).build());
+        ReceiveBenefitsForm.builder().benefitType(EligibilityCodeField.WALKD).build());
 
     mockMvc
         .perform(
