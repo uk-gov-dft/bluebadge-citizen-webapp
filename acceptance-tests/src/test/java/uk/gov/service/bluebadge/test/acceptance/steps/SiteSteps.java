@@ -235,6 +235,6 @@ public class SiteSteps extends AbstractSpringSteps {
 
   @And("^I select \"([^\"]*)\" from autosuggest council list$")
   public void iSelectFromAutosuggestCouncilList(String arg0) throws Throwable {
-    sitePage.selectOptionWithText(arg0);
+    sitePage.selectLocalCouncil(arg0);
   }
 }
