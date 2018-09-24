@@ -12,7 +12,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.applicantContextContent('healthConditionsPage.body.title')}}"></h1>
+            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.who} + 'healthConditionsPage.body.title'}"></h1>
             
             <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>
 
