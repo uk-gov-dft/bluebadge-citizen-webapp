@@ -13,14 +13,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
+import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 
 @Controller
 @RequestMapping(Mappings.URL_RECEIVE_BENEFITS)
@@ -36,10 +37,7 @@ public class ReceiveBenefitsController implements StepController {
   }
 
   @GetMapping
-  public String show(
-      @ModelAttribute("formRequest") ReceiveBenefitsForm receiveBenefitsForm,
-      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      Model model) {
+  public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     if (!journey.isValidState(getStepDefinition())) {
       return routeMaster.backToCompletedPrevious();
     }
@@ -54,43 +52,23 @@ public class ReceiveBenefitsController implements StepController {
       model.addAttribute("formRequest", ReceiveBenefitsForm.builder().build());
     }
 
-    setupModel(model);
+    model.addAttribute("benefitOptions", getBenefitOptions(journey));
 
     return TEMPLATE;
   }
 
-  private void setupModel(Model model) {
-    model.addAttribute("benefitOptions", getBenefitOptions());
-  }
+  private RadioOptionsGroup getBenefitOptions(Journey journey) {
+    RadioOption pip = new RadioOption(EligibilityCodeField.PIP.name(), "options.benefits.pip");
+    RadioOption dla = new RadioOption(EligibilityCodeField.DLA.name(), "options.benefits.dla");
+    RadioOption afrfcs =
+        new RadioOption(EligibilityCodeField.AFRFCS.name(), "options.benefits.afrfcs");
+    RadioOption wpms = new RadioOption(EligibilityCodeField.WPMS.name(), "options.benefits.wpms");
+    RadioOption none = new RadioOption(EligibilityCodeField.WALKD.name(), "options.benefits.none");
 
-  /**
-   * This should move to the reference data service. But also need to think about the message code
-   * for the descriptions. Surely we need Welsh too?
-   *
-   * @return
-   */
-  private List<ReferenceData> getBenefitOptions() {
-    ReferenceData pip = new ReferenceData();
-    pip.setShortCode(EligibilityCodeField.PIP.name());
-    pip.setDescription("Personal Independence Payment (PIP)");
+    List<RadioOption> options = Lists.newArrayList(pip, dla, afrfcs, wpms, none);
 
-    ReferenceData dla = new ReferenceData();
-    dla.setShortCode(EligibilityCodeField.DLA.name());
-    dla.setDescription("Disability Living Allowance (DLA)");
-
-    ReferenceData afrfcs = new ReferenceData();
-    afrfcs.setShortCode(EligibilityCodeField.AFRFCS.name());
-    afrfcs.setDescription("Armed Forces Compensation scheme");
-
-    ReferenceData wpms = new ReferenceData();
-    wpms.setShortCode(EligibilityCodeField.WPMS.name());
-    wpms.setDescription("War Pensioners' Mobility Supplement");
-
-    ReferenceData none = new ReferenceData();
-    none.setShortCode(EligibilityCodeField.WALKD.name());
-    none.setDescription("None of these benefits");
-
-    return Lists.newArrayList(pip, dla, afrfcs, wpms, none);
+    String title = journey.applicantContextContent("receiveBenefitsPage.title");
+    return new RadioOptionsGroup(title, options);
   }
 
   @PostMapping
@@ -98,15 +76,12 @@ public class ReceiveBenefitsController implements StepController {
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute("formRequest") ReceiveBenefitsForm receiveBenefitsForm,
       BindingResult bindingResult,
-      Model model) {
+      RedirectAttributes attr) {
     if (bindingResult.hasErrors()) {
-      model.addAttribute("errorSummary", new ErrorViewModel());
-      setupModel(model);
-      return TEMPLATE;
+      return routeMaster.redirectToOnBindingError(this, receiveBenefitsForm, bindingResult, attr);
     }
 
     journey.setReceiveBenefitsForm(receiveBenefitsForm);
-
     return routeMaster.redirectToOnSuccess(receiveBenefitsForm);
   }
 

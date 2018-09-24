@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.ApplicationTypeCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Benefit;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Contact;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Eligibility;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
@@ -83,6 +84,10 @@ public class DeclarationSubmitController implements StepController {
     ApplicantNameForm applicantNameForm = journey.getApplicantNameForm();
     HealthConditionsForm healthConditionsForm = journey.getHealthConditionsForm();
     YourIssuingAuthorityForm yourIssuingAuthorityForm = journey.getYourIssuingAuthorityForm();
+    EligibilityCodeField eligibiility =
+        null != journey.getReceiveBenefitsForm()
+            ? journey.getReceiveBenefitsForm().getBenefitType()
+            : EligibilityCodeField.WPMS;
     String la =
         yourIssuingAuthorityForm == null
             ? "ABERD"
@@ -116,31 +121,40 @@ public class DeclarationSubmitController implements StepController {
                     .dob(LocalDate.now())
                     .genderCode(GenderCodeField.FEMALE));
 
-    Eligibility eligibility =
-        new Eligibility()
-            .typeCode(EligibilityCodeField.WALKD)
-            .descriptionOfConditions(condDesc)
-            .walkingDifficulty(
-                new WalkingDifficulty()
-                    .walkingLengthOfTimeCode(WalkingLengthOfTimeCodeField.LESSMIN)
-                    .walkingSpeedCode(WalkingSpeedCodeField.SLOW)
-                    .typeCodes(
-                        Lists.newArrayList(
-                            WalkingDifficultyTypeCodeField.PAIN,
-                            WalkingDifficultyTypeCodeField.BALANCE))
-                    .walkingAids(
-                        Lists.newArrayList(
-                            new WalkingAid()
-                                .description("walk aid description")
-                                .usage("walk aid usage")
-                                .howProvidedCode(HowProvidedCodeField.PRESCRIBE))));
-
+    Eligibility eligibilityObject;
+    if (eligibiility == null || EligibilityCodeField.WALKD == eligibiility) {
+      eligibilityObject =
+          new Eligibility()
+              .typeCode(EligibilityCodeField.WALKD)
+              .descriptionOfConditions(condDesc)
+              .walkingDifficulty(
+                  new WalkingDifficulty()
+                      .walkingLengthOfTimeCode(WalkingLengthOfTimeCodeField.LESSMIN)
+                      .walkingSpeedCode(WalkingSpeedCodeField.SLOW)
+                      .typeCodes(
+                          Lists.newArrayList(
+                              WalkingDifficultyTypeCodeField.PAIN,
+                              WalkingDifficultyTypeCodeField.BALANCE))
+                      .walkingAids(
+                          Lists.newArrayList(
+                              new WalkingAid()
+                                  .description("walk aid description")
+                                  .usage("walk aid usage")
+                                  .howProvidedCode(HowProvidedCodeField.PRESCRIBE))));
+    } else if (EligibilityCodeField.PIP == eligibiility
+        || EligibilityCodeField.DLA == eligibiility
+        || EligibilityCodeField.WPMS == eligibiility) {
+      eligibilityObject =
+          new Eligibility().typeCode(eligibiility).benefit(new Benefit().isIndefinite(true));
+    } else {
+      eligibilityObject = new Eligibility().typeCode(eligibiility);
+    }
     return Application.builder()
         .applicationTypeCode(ApplicationTypeCodeField.NEW)
         .localAuthorityCode(la)
         .paymentTaken(false)
         .party(party)
-        .eligibility(eligibility)
+        .eligibility(eligibilityObject)
         .build();
   }
 

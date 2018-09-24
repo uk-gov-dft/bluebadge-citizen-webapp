@@ -16,7 +16,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataSe
 
 @Controller
 @RequestMapping(Mappings.URL_ELIGIBLE)
-@SuppressWarnings("common-java:DuplicatedBlocks")
 public class EligibleController implements StepController {
 
   private static final String TEMPLATE = "eligible";
