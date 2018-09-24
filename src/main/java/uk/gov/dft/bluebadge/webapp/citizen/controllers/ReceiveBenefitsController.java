@@ -64,12 +64,6 @@ public class ReceiveBenefitsController implements StepController {
     model.addAttribute("benefitOptions", getBenefitOptions());
   }
 
-  /**
-   * This should move to the reference data service. But also need to think about the message code
-   * for the descriptions. Surely we need Welsh too?
-   *
-   * @return
-   */
   private RadioOptionsGroup getBenefitOptions() {
     RadioOption pip = new RadioOption(EligibilityCodeField.PIP.name(), "options.benefits.pip");
     RadioOption dla = new RadioOption(EligibilityCodeField.DLA.name(), "options.benefits.dla");
