@@ -36,9 +36,7 @@ public class HigherRateMobilityController implements StepController {
   }
 
   @GetMapping
-  public String show(
-      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      Model model) {
+  public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
     if (!journey.isValidState(getStepDefinition())) {
       return routeMaster.backToCompletedPrevious();
     }
