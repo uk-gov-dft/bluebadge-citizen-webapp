@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:utext="#{${JOURNEY.applicantContextContent('eligiblePage.title')}} + ' - ' + #{common.title.suffix}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+
+    <section class="guidance-layout">
+        <h1 class="govuk-heading-l"
+            th:text="#{${JOURNEY.applicantContextContent('eligiblePage.title')}}"></h1>
+
+        <h2 class="govuk-body-l"
+           th:text="#{${JOURNEY.applicantContextContent('eligiblePage.need.provide.text')}}">What you’ll need to provide</h2>
+
+        <ul class="govuk-list govuk-list--bullet">
+            <li th:text="#{eligiblePage.provide.contact.text}">contact details (phone number and email address)</li>
+        </ul>
+
+        <a th:href="@{eligible/start}" role="button" class="govuk-button" th:text="#{eligiblePage.startApplication.link.title}"></a>
+
+        <p class="govuk-body" th:text="#{${JOURNEY.applicantContextContent('eligiblePage.council.timeframe.text')}}">Your council can take up to 4 weeks to make a decision</p>
+
+        <h2 class="govuk-heading-m" th:text="#{eligiblePage.not.apply.online.text}">Don’t want to apply online?</h2>
+
+        <p class="govuk-body">
+            <span th:remove="tag" th:text="#{eligiblePage.council.contact.pretext}">Contact</span>
+            <span th:remove="tag" th:text="${localAuthority.description} + ':'"></span>
+        </p>
+
+        <p class="govuk-body" th:if="${localAuthority.contactUrl}">
+            <span th:remove="tag"
+                  th:text="#{eligiblePage.website.pretext}">Website:</span>
+            <a th:href="${localAuthority.contactUrl}" th:text="${localAuthority.contactUrl}">www.leeds city council.gov.uk</a>
+        </p>
+    </section>
+</main>
+
+</body>
+</html>

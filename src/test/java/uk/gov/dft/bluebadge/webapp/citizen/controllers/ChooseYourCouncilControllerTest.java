@@ -81,7 +81,8 @@ public class ChooseYourCouncilControllerTest {
   @Test
   public void submit_givenValidForm_thenShouldDisplayRedirectToSuccess() throws Exception {
 
-    when(mockRouteMaster.redirectToOnSuccess(controller)).thenReturn("redirect:/testSuccess");
+    when(mockRouteMaster.redirectToOnSuccess(any(ChooseYourCouncilForm.class)))
+        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(

@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -61,7 +62,8 @@ public class ApplicantControllerTest {
   @Test
   public void submitApplicant_ShouldStoreApplicantFormIntoSessionAndDisplayNextPageInTheJourney()
       throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(controller)).thenReturn("redirect:/testSuccess");
+    when(mockRouteMaster.redirectToOnSuccess(any(ApplicantForm.class)))
+        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(
