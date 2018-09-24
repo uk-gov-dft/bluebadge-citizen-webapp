@@ -1,15 +1,20 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
-import java.io.Serializable;
 import lombok.Data;
+import org.apache.commons.lang3.NotImplementedException;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipMovingAroundForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
+
+import java.io.Serializable;
 
 @Data
 public class Journey implements Serializable {
@@ -22,6 +27,9 @@ public class Journey implements Serializable {
   private ReceiveBenefitsForm receiveBenefitsForm;
   private ChooseYourCouncilForm chooseYourCouncilForm;
   private YourIssuingAuthorityForm yourIssuingAuthorityForm;
+  private PipMovingAroundForm pipMovingAroundForm;
+  private PipDlaQuestionForm pipDlaQuestionForm;
+  private PipPlanningJourneyForm pipPlanningJourneyForm;
 
   public Boolean isApplicantYourself() {
     if (applicantForm != null) {
