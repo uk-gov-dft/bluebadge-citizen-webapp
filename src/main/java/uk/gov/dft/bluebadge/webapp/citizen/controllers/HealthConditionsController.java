@@ -38,7 +38,7 @@ public class HealthConditionsController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    //On returning to form, take previously submitted values.
+    // On returning to form, take previously submitted values.
     if (!model.containsAttribute("formRequest") && null != journey.getHealthConditionsForm()) {
       model.addAttribute("formRequest", journey.getHealthConditionsForm());
     }

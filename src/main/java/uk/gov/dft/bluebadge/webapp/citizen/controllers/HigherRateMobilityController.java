@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
+import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 
 @Controller
 @RequestMapping(Mappings.URL_HIGHER_RATE_MOBILITY)
@@ -37,21 +37,21 @@ public class HigherRateMobilityController implements StepController {
 
   @GetMapping
   public String show(
-      @ModelAttribute("formRequest") HigherRateMobilityForm formRequest,
+      HigherRateMobilityForm formRequest,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       Model model) {
     if (!journey.isValidState(getStepDefinition())) {
       return routeMaster.backToCompletedPrevious();
     }
 
-    //On returning to form, take previously submitted values.
+    // On returning to form, take previously submitted values.
     if (!model.containsAttribute("formRequest") && null != journey.getHigherRateMobilityForm()) {
       model.addAttribute("formRequest", journey.getHigherRateMobilityForm());
     }
 
     // If navigating forward from previous form, reset
     if (!model.containsAttribute("formRequest")) {
-      model.addAttribute("formRequest", ReceiveBenefitsForm.builder().build());
+      model.addAttribute("formRequest", HigherRateMobilityForm.builder().build());
     }
 
     setupModel(model);
@@ -64,11 +64,10 @@ public class HigherRateMobilityController implements StepController {
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute("formRequest") HigherRateMobilityForm formRequest,
       BindingResult bindingResult,
-      Model model) {
+      Model model,
+      RedirectAttributes attr) {
     if (bindingResult.hasErrors()) {
-      model.addAttribute("errorSummary", new ErrorViewModel());
-      setupModel(model);
-      return TEMPLATE;
+      return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
     }
 
     journey.setHigherRateMobilityForm(formRequest);
@@ -85,15 +84,12 @@ public class HigherRateMobilityController implements StepController {
     model.addAttribute("options", getOptions());
   }
 
-  private List<ReferenceData> getOptions() {
-    ReferenceData yes = new ReferenceData();
-    yes.setShortCode("true");
-    yes.setDescription("Yes");
+  private RadioOptionsGroup getOptions() {
+    RadioOption yes = new RadioOption("true", "radio.label.yes");
+    RadioOption no = new RadioOption("false", "radio.label.no");
 
-    ReferenceData no = new ReferenceData();
-    no.setShortCode("false");
-    no.setDescription("No");
+    List<RadioOption> options = Lists.newArrayList(yes, no);
 
-    return Lists.newArrayList(yes, no);
+    return new RadioOptionsGroup("higherRateMobilityPage.content.title", options);
   }
 }
