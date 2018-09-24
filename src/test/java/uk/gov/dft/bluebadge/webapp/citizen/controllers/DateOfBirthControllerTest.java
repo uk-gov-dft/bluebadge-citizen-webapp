@@ -16,8 +16,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 
 public class DateOfBirthControllerTest {
 
@@ -41,13 +41,14 @@ public class DateOfBirthControllerTest {
   @Test
   public void show_ShouldDateOfBirthTemplate() throws Exception {
 
-    DateOfBirthForm formRequest = DateOfBirthForm.builder().build();
+    // A pre-set up journey
+    Journey journey = JourneyFixture.getDefaultJourney();
 
     mockMvc
-        .perform(get(URL_DATE_OF_BIRTH).sessionAttr("JOURNEY", new Journey()))
+        .perform(get(URL_DATE_OF_BIRTH).sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("date-of-birth"))
-        .andExpect(model().attribute("formRequest", formRequest));
+        .andExpect(model().attribute("formRequest", journey.getDateOfBirthForm()));
   }
 
   @Test

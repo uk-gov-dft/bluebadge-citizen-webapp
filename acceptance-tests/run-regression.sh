@@ -87,7 +87,7 @@ if [[ "$testExitCode" -ne 0 ]]; then
 fi
 
 # Tear down
-tearDown
+#tearDown
 
 echo "Exiting with code:$testExitCode"
 

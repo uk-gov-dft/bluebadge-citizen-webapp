@@ -28,7 +28,7 @@ Feature: DFT Blue badge Citizen app new application
 
     Then  I should see the page titled "Describe health conditions - GOV.UK Apply for a Blue Badge"
     And   I should see the title "Describe any health conditions that affect their mobility"
-    When  I type "Sample health condition" for "description-of-conditions" field by id
+    When  I type "Sample health condition" for "descriptionOfConditions" field by id
     And   I can click on "Continue"
 
     Then  I should see the page titled "Declaration - GOV.UK Apply for a Blue Badge"
