@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
@@ -21,7 +22,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 
 @Controller
 @RequestMapping(Mappings.URL_RECEIVE_BENEFITS)
@@ -37,10 +37,7 @@ public class ReceiveBenefitsController implements StepController {
   }
 
   @GetMapping
-  public String show(
-      @ModelAttribute("formRequest") ReceiveBenefitsForm receiveBenefitsForm,
-      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      Model model) {
+  public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     if (!journey.isValidState(getStepDefinition())) {
       return routeMaster.backToCompletedPrevious();
     }
@@ -55,16 +52,12 @@ public class ReceiveBenefitsController implements StepController {
       model.addAttribute("formRequest", ReceiveBenefitsForm.builder().build());
     }
 
-    setupModel(model);
+    model.addAttribute("benefitOptions", getBenefitOptions(journey));
 
     return TEMPLATE;
   }
 
-  private void setupModel(Model model) {
-    model.addAttribute("benefitOptions", getBenefitOptions());
-  }
-
-  private RadioOptionsGroup getBenefitOptions() {
+  private RadioOptionsGroup getBenefitOptions(Journey journey) {
     RadioOption pip = new RadioOption(EligibilityCodeField.PIP.name(), "options.benefits.pip");
     RadioOption dla = new RadioOption(EligibilityCodeField.DLA.name(), "options.benefits.dla");
     RadioOption afrfcs =
@@ -74,7 +67,8 @@ public class ReceiveBenefitsController implements StepController {
 
     List<RadioOption> options = Lists.newArrayList(pip, dla, afrfcs, wpms, none);
 
-    return new RadioOptionsGroup("receiveBenefitsPage.title", options);
+    String title = journey.applicantContextContent("receiveBenefitsPage.title");
+    return new RadioOptionsGroup(title, options);
   }
 
   @PostMapping
@@ -82,11 +76,9 @@ public class ReceiveBenefitsController implements StepController {
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute("formRequest") ReceiveBenefitsForm receiveBenefitsForm,
       BindingResult bindingResult,
-      Model model) {
+      RedirectAttributes attr) {
     if (bindingResult.hasErrors()) {
-      model.addAttribute("errorSummary", new ErrorViewModel());
-      setupModel(model);
-      return TEMPLATE;
+      return routeMaster.redirectToOnBindingError(this, receiveBenefitsForm, bindingResult, attr);
     }
 
     journey.setReceiveBenefitsForm(receiveBenefitsForm);
