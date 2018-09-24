@@ -5,6 +5,7 @@ import lombok.Data;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Optional;
 
@@ -26,9 +27,18 @@ public class PipMovingAroundForm implements Serializable, StepForm {
 
   @Override
   public Optional<StepDefinition> determineNextStep() {
-    // TODO
-    return Optional.of(StepDefinition.ELIGIBLE);
+    switch (movingAroundPoints) {
+      case MOVING_POINTS_8:
+      case MOVING_POINTS_10:
+      case MOVING_POINTS_12:
+        return Optional.of(StepDefinition.ELIGIBLE);
+      case MOVING_POINTS_0:
+      case MOVING_POINTS_4:
+        // TODO England path!!!!
+        return Optional.of(StepDefinition.PIP_PLANNING_JOURNEY);
+    }
+    return Optional.empty();
   }
 
-  private PipMovingAroundOption movingAroundPoints;
+  @NotNull private PipMovingAroundOption movingAroundPoints;
 }

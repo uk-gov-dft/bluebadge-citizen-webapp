@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.model;
 
 import lombok.Data;
 import org.apache.commons.lang3.NotImplementedException;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
@@ -30,6 +31,7 @@ public class Journey implements Serializable {
   private PipMovingAroundForm pipMovingAroundForm;
   private PipDlaQuestionForm pipDlaQuestionForm;
   private PipPlanningJourneyForm pipPlanningJourneyForm;
+  private LocalAuthorityRefData localAuthority;
 
   public Boolean isApplicantYourself() {
     if (applicantForm != null) {

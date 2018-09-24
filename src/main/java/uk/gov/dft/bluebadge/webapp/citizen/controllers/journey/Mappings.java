@@ -3,6 +3,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 import lombok.Getter;
+import org.apache.tomcat.util.descriptor.web.ServletDef;
 
 @Getter
 public class Mappings {
@@ -17,9 +18,9 @@ public class Mappings {
   public static final String URL_APPLICATION_SUBMITTED = "/application-submitted";
   public static final String URL_CHOOSE_YOUR_COUNCIL = "/choose-council";
   public static final String URL_YOUR_ISSUING_AUTHORITY = "/your-issuing-authority";
-  public static final String URL_PIP_PLANNING_JOURNEY = "/pip-planning-journey";
-  public static final String URL_PIP_MOVING_AROUND = "/pip-moving-around";
-  public static final String URL_PIP_RECEIVED_DLA = "/pip-received-dla";
+  public static final String URL_PIP_PLANNING_JOURNEY = "/planning-and-following";
+  public static final String URL_PIP_MOVING_AROUND = "/moving-around";
+  public static final String URL_PIP_RECEIVED_DLA = "/dla-in-the-past";
 
   private Mappings() {}
 
@@ -28,6 +29,9 @@ public class Mappings {
           .put(StepDefinition.HOME, URL_ROOT)
           .put(StepDefinition.APPLICANT_TYPE, URL_APPLICANT_TYPE)
           .put(StepDefinition.RECEIVE_BENEFITS, URL_RECEIVE_BENEFITS)
+          .put(StepDefinition.PIP_MOVING_AROUND, URL_PIP_MOVING_AROUND)
+          .put(StepDefinition.PIP_DLA, URL_PIP_RECEIVED_DLA)
+          .put(StepDefinition.PIP_PLANNING_JOURNEY, URL_PIP_PLANNING_JOURNEY)
           .put(StepDefinition.ELIGIBLE, URL_ELIGIBLE)
           .put(StepDefinition.MAY_BE_ELIGIBLE, URL_MAY_BE_ELIGIBLE)
           .put(StepDefinition.NAME, URL_APPLICANT_NAME)

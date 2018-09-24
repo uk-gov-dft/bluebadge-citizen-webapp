@@ -4,7 +4,7 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/master.html}">
 <head>
-    <title th:text="#{${JOURNEY.applicantContextContent('pipMovingAroundPage.content.title')}} + ' - ' + #{common.title.suffix}"></title>
+    <title th:text="#{${JOURNEY.applicantContextContent('pipMovingAroundPage.title')}} + ' - ' + #{common.title.suffix}"></title>
 </head>
 <body>
 
@@ -14,7 +14,7 @@
 
             <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"/>
 
-            <form th:action="@{/pip-moving-around}" th:object="${formRequest}" method="post" novalidate>
+            <form th:action="@{/moving-around}" th:object="${formRequest}" method="post" novalidate>
 
                 <div th:replace="~{ fragments/govuk-radios :: govuk-radios('movingAroundPoints', ${formOptions}) }"></div>
 
