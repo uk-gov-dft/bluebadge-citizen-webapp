@@ -36,6 +36,7 @@ public class DateOfBirthControllerTest {
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
+    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
   }
 
   @Test
@@ -43,6 +44,7 @@ public class DateOfBirthControllerTest {
 
     // A pre-set up journey
     Journey journey = JourneyFixture.getDefaultJourney();
+
 
     mockMvc
         .perform(get(URL_DATE_OF_BIRTH).sessionAttr("JOURNEY", journey))
