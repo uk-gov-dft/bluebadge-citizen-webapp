@@ -35,6 +35,7 @@ public class DeclarationSubmitControllerTest {
 
   @Mock ApplicationManagementService appService;
   @Mock private RouteMaster mockRouteMaster;
+  @Mock Journey mockJourney;
 
   @Before
   public void setup() {
@@ -48,11 +49,12 @@ public class DeclarationSubmitControllerTest {
 
   @Test
   public void showDeclaration_ShouldDisplayDeclarationTemplate() throws Exception {
+    when(mockJourney.isValidState(any())).thenReturn(true);
 
     DeclarationForm formRequest = DeclarationForm.builder().build();
 
     mockMvc
-        .perform(get("/apply-for-a-blue-badge/declaration"))
+        .perform(get("/apply-for-a-blue-badge/declaration").sessionAttr("JOURNEY", mockJourney))
         .andExpect(status().isOk())
         .andExpect(view().name("application-end/declaration"))
         .andExpect(model().attribute("formRequest", formRequest));

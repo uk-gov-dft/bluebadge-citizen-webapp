@@ -10,6 +10,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 public class RouteMaster {
 
   public String redirectToOnSuccess(StepController currentStep) {
+
     StepDefinition nextStep =
         currentStep
             .getStepDefinition()

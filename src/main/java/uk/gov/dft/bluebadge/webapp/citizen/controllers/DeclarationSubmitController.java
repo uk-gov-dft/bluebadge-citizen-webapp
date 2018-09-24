@@ -54,7 +54,11 @@ public class DeclarationSubmitController implements StepController {
   }
 
   @GetMapping
-  public String showDeclaration(Model model) {
+  public String showDeclaration(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+
+    if (!journey.isValidState(getStepDefinition())) {
+      return routeMaster.backToCompletedPrevious();
+    }
 
     if (!model.containsAttribute("formRequest")) {
       model.addAttribute("formRequest", DeclarationForm.builder().build());
