@@ -19,6 +19,15 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyF
 @Data
 @Builder
 public class PipPlanningJourneyForm implements Serializable, StepForm {
+
+  public enum PipPlanningJourneyOption {
+    PLANNING_POINTS_12,
+    PLANNING_POINTS_10,
+    PLANNING_POINTS_8,
+    PLANNING_POINTS_4,
+    PLANNING_POINTS_0
+  }
+
   @Override
   public StepDefinition getAssociatedStep() {
     return StepDefinition.PIP_MOVING_AROUND;
@@ -30,38 +39,6 @@ public class PipPlanningJourneyForm implements Serializable, StepForm {
     return Optional.of(StepDefinition.ELIGIBLE);
   }
 
-  public enum PipPlanningJourneyOption implements Option {
-    PLANNING_POINTS_12("pip.planning.journey.12"),
-    PLANNING_POINTS_10("pip.planning.journey.12"),
-    PLANNING_POINTS_8("pip.planning.journey.12"),
-    PLANNING_POINTS_4("pip.planning.journey.12"),
-    PLANNING_POINTS_0("pip.planning.journey.12");
-
-    private String messageKey;
-
-    PipPlanningJourneyOption(String messageKey) {
-
-      this.messageKey = messageKey;
-    }
-
-    @Override
-    public String getShortCode() {
-      return this.name();
-    }
-
-    @Override
-    public String getMessageKey() {
-      return messageKey;
-    }
-  }
-
   private PipMovingAroundForm.PipMovingAroundOption movingAroundPoints;
 
-  public static final List<Option> options =
-      Lists.newArrayList(
-          PLANNING_POINTS_12,
-          PLANNING_POINTS_10,
-          PLANNING_POINTS_8,
-          PLANNING_POINTS_4,
-          PLANNING_POINTS_0);
 }

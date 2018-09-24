@@ -10,26 +10,27 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
+import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 
 import javax.validation.Valid;
 import java.util.List;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm.PipReceivedDlaOption.HAS_RECEIVED_DLA;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm.PipReceivedDlaOption.NEVER_RECEIVED_DLA;
 
 @Controller
-@RequestMapping(Mappings.URL_RECEIVE_BENEFITS)
+@RequestMapping(Mappings.URL_PIP_RECEIVED_DLA)
 public class PipDlaQuestionController implements StepController {
 
-  private static final String TEMPLATE = "receive-benefits";
+  private static final String TEMPLATE = "pip-received-dla";
 
   private final RouteMaster routeMaster;
 
@@ -47,7 +48,7 @@ public class PipDlaQuestionController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    //On returning to form, take previously submitted values.
+    // On returning to form, take previously submitted values.
     if (!model.containsAttribute("formRequest") && null != journey.getPipDlaQuestionForm()) {
       model.addAttribute("formRequest", journey.getPipDlaQuestionForm());
     }
@@ -57,9 +58,19 @@ public class PipDlaQuestionController implements StepController {
       model.addAttribute("formRequest", PipDlaQuestionForm.builder().build());
     }
 
-    model.addAttribute("formOptions", PipDlaQuestionForm.options);
+    model.addAttribute("formOptions", getOptions(journey));
 
     return TEMPLATE;
+  }
+
+  private RadioOptionsGroup getOptions(Journey journey) {
+    RadioOption hasReceived = new RadioOption(HAS_RECEIVED_DLA, "options.pip.has.received");
+    RadioOption neverReceived = new RadioOption(NEVER_RECEIVED_DLA, "options.pip.never.received");
+
+    List<RadioOption> options = Lists.newArrayList(hasReceived, neverReceived);
+
+    String title = journey.applicantContextContent("pip.dlaquestion.page.title");
+    return new RadioOptionsGroup(title, options);
   }
 
   @PostMapping

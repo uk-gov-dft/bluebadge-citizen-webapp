@@ -17,6 +17,9 @@ public class Mappings {
   public static final String URL_APPLICATION_SUBMITTED = "/application-submitted";
   public static final String URL_CHOOSE_YOUR_COUNCIL = "/choose-council";
   public static final String URL_YOUR_ISSUING_AUTHORITY = "/your-issuing-authority";
+  public static final String URL_PIP_PLANNING_JOURNEY = "/pip-planning-journey";
+  public static final String URL_PIP_MOVING_AROUND = "/pip-moving-around";
+  public static final String URL_PIP_RECEIVED_DLA = "/pip-received-dla";
 
   private Mappings() {}
 

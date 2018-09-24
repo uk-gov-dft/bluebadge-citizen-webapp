@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,18 +14,29 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
+import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipMovingAroundForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 
 import javax.validation.Valid;
 
+import java.util.List;
+
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm.PipReceivedDlaOption.HAS_RECEIVED_DLA;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm.PipReceivedDlaOption.NEVER_RECEIVED_DLA;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipMovingAroundForm.PipMovingAroundOption.MOVING_POINTS_0;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipMovingAroundForm.PipMovingAroundOption.MOVING_POINTS_10;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipMovingAroundForm.PipMovingAroundOption.MOVING_POINTS_12;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipMovingAroundForm.PipMovingAroundOption.MOVING_POINTS_4;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipMovingAroundForm.PipMovingAroundOption.MOVING_POINTS_8;
 
 @Controller
-@RequestMapping(Mappings.URL_RECEIVE_BENEFITS)
+@RequestMapping(Mappings.URL_PIP_MOVING_AROUND)
 public class PipMovingAroundController implements StepController {
 
-  private static final String TEMPLATE = "receive-benefits";
+  private static final String TEMPLATE = "pip-moving-around";
 
   private final RouteMaster routeMaster;
 
@@ -49,9 +61,22 @@ public class PipMovingAroundController implements StepController {
       model.addAttribute("formRequest", PipMovingAroundForm.builder().build());
     }
 
-    model.addAttribute("formOptions", PipMovingAroundForm.options);
+    model.addAttribute("formOptions", getOptions(journey));
 
     return TEMPLATE;
+  }
+
+  private RadioOptionsGroup getOptions(Journey journey) {
+    RadioOption points12 = new RadioOption(MOVING_POINTS_12, "options.pip.moving.points12");
+    RadioOption points10 = new RadioOption(MOVING_POINTS_10, "options.pip.moving.points10");
+    RadioOption points8 = new RadioOption(MOVING_POINTS_8, "options.pip.moving.points8");
+    RadioOption points4 = new RadioOption(MOVING_POINTS_4, "options.pip.moving.points4");
+    RadioOption points0 = new RadioOption(MOVING_POINTS_0, "options.pip.moving.points0");
+
+    List<RadioOption> options = Lists.newArrayList(points12, points10, points8, points4, points0);
+
+    String title = journey.applicantContextContent("pip.movingaround.page.title");
+    return new RadioOptionsGroup(title, options);
   }
 
   @PostMapping

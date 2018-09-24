@@ -10,26 +10,29 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
+import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 
 import javax.validation.Valid;
 import java.util.List;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_0;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_10;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_12;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_4;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_8;
 
 @Controller
-@RequestMapping(Mappings.URL_RECEIVE_BENEFITS)
+@RequestMapping(Mappings.URL_PIP_PLANNING_JOURNEY)
 public class PipPlanningJourneyController implements StepController {
 
-  private static final String TEMPLATE = "receive-benefits";
+  private static final String TEMPLATE = "pip-planning-journey";
 
   private final RouteMaster routeMaster;
 
@@ -39,14 +42,12 @@ public class PipPlanningJourneyController implements StepController {
   }
 
   @GetMapping
-  public String show(
-      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      Model model) {
+  public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
     if (!journey.isValidState(getStepDefinition())) {
       return routeMaster.backToCompletedPrevious();
     }
 
-    //On returning to form, take previously submitted values.
+    // On returning to form, take previously submitted values.
     if (!model.containsAttribute("formRequest") && null != journey.getPipPlanningJourneyForm()) {
       model.addAttribute("formRequest", journey.getPipPlanningJourneyForm());
     }
@@ -56,8 +57,21 @@ public class PipPlanningJourneyController implements StepController {
       model.addAttribute("formRequest", PipPlanningJourneyForm.builder().build());
     }
 
-    model.addAttribute("formOptions", PipPlanningJourneyForm.options);
+    model.addAttribute("formOptions", getOptions(journey));
     return TEMPLATE;
+  }
+
+  private RadioOptionsGroup getOptions(Journey journey) {
+    RadioOption points12 = new RadioOption(PLANNING_POINTS_12, "options.pip.planning.points12");
+    RadioOption points10 = new RadioOption(PLANNING_POINTS_10, "options.pip.planning.points10");
+    RadioOption points8 = new RadioOption(PLANNING_POINTS_8, "options.pip.planning.points8");
+    RadioOption points4 = new RadioOption(PLANNING_POINTS_4, "options.pip.planning.points4");
+    RadioOption points0 = new RadioOption(PLANNING_POINTS_0, "options.pip.planning.points0");
+
+    List<RadioOption> options = Lists.newArrayList(points12, points10, points8, points4, points0);
+
+    String title = journey.applicantContextContent("pip.planning.page.title");
+    return new RadioOptionsGroup(title, options);
   }
 
   @PostMapping
@@ -67,7 +81,8 @@ public class PipPlanningJourneyController implements StepController {
       BindingResult bindingResult,
       RedirectAttributes attr) {
     if (bindingResult.hasErrors()) {
-      return routeMaster.redirectToOnBindingError(this,pipPlanningJourneyForm,bindingResult, attr);
+      return routeMaster.redirectToOnBindingError(
+          this, pipPlanningJourneyForm, bindingResult, attr);
     }
 
     journey.setPipPlanningJourneyForm(pipPlanningJourneyForm);
