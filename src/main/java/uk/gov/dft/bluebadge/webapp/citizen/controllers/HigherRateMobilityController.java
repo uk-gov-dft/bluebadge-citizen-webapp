@@ -37,7 +37,6 @@ public class HigherRateMobilityController implements StepController {
 
   @GetMapping
   public String show(
-      HigherRateMobilityForm formRequest,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       Model model) {
     if (!journey.isValidState(getStepDefinition())) {
@@ -64,7 +63,6 @@ public class HigherRateMobilityController implements StepController {
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute("formRequest") HigherRateMobilityForm formRequest,
       BindingResult bindingResult,
-      Model model,
       RedirectAttributes attr) {
     if (bindingResult.hasErrors()) {
       return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
