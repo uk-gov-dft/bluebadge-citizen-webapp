@@ -38,7 +38,7 @@ public class DateOfBirthForm implements Serializable {
   /**
    * Builds a LocalDate from the individual date components.
    *
-   * @return
+   * @return LocalDate representation of the date
    */
   public LocalDate getLocalDateDob() {
     if (datePartMissing()) {
