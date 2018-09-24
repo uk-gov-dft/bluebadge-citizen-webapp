@@ -76,7 +76,8 @@ public class ApplicantNameControllerTest {
     ApplicantNameForm applicantNameForm =
         ApplicantNameForm.builder().fullName("John").hasBirthName(false).birthName("John").build();
 
-    when(mockRouteMaster.redirectToOnSuccess(controller)).thenReturn("redirect:/testSuccess");
+    when(mockRouteMaster.redirectToOnSuccess(applicantNameForm))
+        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(

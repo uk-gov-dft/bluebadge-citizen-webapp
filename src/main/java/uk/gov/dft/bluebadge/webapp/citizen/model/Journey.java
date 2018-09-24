@@ -8,6 +8,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 
 public class Journey implements Serializable {
@@ -17,6 +18,7 @@ public class Journey implements Serializable {
   private ApplicantForm applicantForm;
   private ApplicantNameForm applicantNameForm;
   private HealthConditionsForm healthConditionsForm;
+  private ReceiveBenefitsForm receiveBenefitsForm;
   private ChooseYourCouncilForm chooseYourCouncilForm;
   private YourIssuingAuthorityForm yourIssuingAuthorityForm;
   private DateOfBirthForm dateOfBirthForm;
@@ -38,7 +40,19 @@ public class Journey implements Serializable {
   }
 
   public boolean isValidState(StepDefinition step) {
-    return null != getApplicantForm();
+    if (null == getApplicantForm()) {
+      return false;
+    }
+
+    switch (step) {
+      case ELIGIBLE:
+      case MAY_BE_ELIGIBLE:
+        if (null == getYourIssuingAuthorityForm()) {
+          return false;
+        }
+    }
+
+    return true;
   }
 
   public ApplicantForm getApplicantForm() {
@@ -88,5 +102,13 @@ public class Journey implements Serializable {
 
   public void setYourIssuingAuthorityForm(YourIssuingAuthorityForm yourIssuingAuthorityForm) {
     this.yourIssuingAuthorityForm = yourIssuingAuthorityForm;
+  }
+
+  public ReceiveBenefitsForm getReceiveBenefitsForm() {
+    return receiveBenefitsForm;
+  }
+
+  public void setReceiveBenefitsForm(ReceiveBenefitsForm receiveBenefitsForm) {
+    this.receiveBenefitsForm = receiveBenefitsForm;
   }
 }

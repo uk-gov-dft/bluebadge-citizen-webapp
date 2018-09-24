@@ -57,16 +57,17 @@ public class HealthConditionsController implements StepController {
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute(FORM_REQUEST) HealthConditionsForm formRequest,
+      @Valid @ModelAttribute(FORM_REQUEST) HealthConditionsForm healthConditionsForm,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
     if (bindingResult.hasErrors()) {
-      return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
+      return routeMaster.redirectToOnBindingError(this, healthConditionsForm, bindingResult, attr);
     }
 
-    journey.setHealthConditionsForm(formRequest);
-    return routeMaster.redirectToOnSuccess(this);
+    journey.setHealthConditionsForm(healthConditionsForm);
+
+    return routeMaster.redirectToOnSuccess(healthConditionsForm);
   }
 
   @Override

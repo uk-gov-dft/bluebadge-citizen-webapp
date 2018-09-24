@@ -2,7 +2,7 @@
 Feature: DFT Blue badge Citizen app new application
   As a citizen user I want to be able to create a new application for myself
 
-  Scenario: Create a successfull new application for myself
+  Scenario: Create a successful new application for myself
     Given I navigate to the "applicant" page
     Then  I should see the page titled "Who are you applying for? - GOV.UK Apply for a Blue Badge"
     And   I click on element "applicantType.label.YOURSELF"
@@ -16,6 +16,15 @@ Feature: DFT Blue badge Citizen app new application
     Then  I should see the page titled "Your issuing authority - GOV.UK Apply for a Blue Badge"
     And   I should see "Worcestershire county council" text on the page
     And   I can click on "Continue"
+
+    Then  I should see the page titled "Do you receive any of these benefits? - GOV.UK Apply for a Blue Badge"
+    And   I should see the title "Do you receive any of these benefits?"
+    And   I select option "benefitType.option.PIP"
+    And   I can click on "Continue"
+
+    Then  I should see the page titled "You may be eligible for a Blue Badge - GOV.UK Apply for a Blue Badge"
+    And   I should see the title "You may be eligible for a Blue Badge"
+    And   I can click on "Start application"
 
     Then  I should see the page titled "What's your name? - GOV.UK Apply for a Blue Badge"
     When  I type "Tom Richardson" for "fullName" field by id
@@ -38,7 +47,6 @@ Feature: DFT Blue badge Citizen app new application
 
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
 
-
   Scenario: Displays error when required fields are not filled
     Given I navigate to the "applicant" page
     Then  I should see the page titled "Who are you applying for? - GOV.UK Apply for a Blue Badge"
@@ -55,9 +63,20 @@ Feature: DFT Blue badge Citizen app new application
     When  I type "Worcester" for "councilShortCode" field by id
     And   I select "Worcester city council" from autosuggest council list
     And   I can click on "Continue"
+
     Then  I should see the page titled "Your issuing authority - GOV.UK Apply for a Blue Badge"
     And   I should see "Worcestershire county council" text on the page
     And   I can click on "Continue"
+
+    Then  I should see the page titled "Do you receive any of these benefits? - GOV.UK Apply for a Blue Badge"
+    And   I can click on "Continue"
+    Then  I should see the page titled "Do you receive any of these benefits? - GOV.UK Apply for a Blue Badge"
+    And   I should see error summary box
+    And   I select option "benefitType.option.PIP"
+    And   I can click on "Continue"
+
+    Then  I should see the page titled "You may be eligible for a Blue Badge - GOV.UK Apply for a Blue Badge"
+    And   I can click on "Start application"
 
     Then  I should see the page titled "What's your name? - GOV.UK Apply for a Blue Badge"
     And   I can click on "Continue"

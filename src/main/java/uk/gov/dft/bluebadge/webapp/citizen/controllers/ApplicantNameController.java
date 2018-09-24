@@ -56,24 +56,24 @@ public class ApplicantNameController implements StepController {
   @PostMapping
   public String submit(
       @SessionAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute(FORM_REQUEST) ApplicantNameForm formRequest,
+      @Valid @ModelAttribute(FORM_REQUEST) ApplicantNameForm applicantNameForm,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
-    if (!formRequest.isBirthNameValid()) {
+    if (!applicantNameForm.isBirthNameValid()) {
       bindingResult.rejectValue("birthName", "field.birthName.NotBlank");
     }
 
     if (bindingResult.hasErrors()) {
-      return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
+      return routeMaster.redirectToOnBindingError(this, applicantNameForm, bindingResult, attr);
     }
 
-    if (!formRequest.getHasBirthName()) {
-      formRequest.setBirthName(formRequest.getFullName());
+    if (!applicantNameForm.getHasBirthName()) {
+      applicantNameForm.setBirthName(applicantNameForm.getFullName());
     }
 
-    journey.setApplicantNameForm(formRequest);
-    return routeMaster.redirectToOnSuccess(this);
+    journey.setApplicantNameForm(applicantNameForm);
+    return routeMaster.redirectToOnSuccess(applicantNameForm);
   }
 
   @Override
