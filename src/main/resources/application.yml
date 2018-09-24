@@ -51,6 +51,9 @@ server:
   tomcat:
     remote-ip-header: x-forwarded-for
     protocol-header: x-forwarded-proto
+  servlet:
+    session:
+      timeout: 60m
 
 security:
   oauth2:

@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 
 @Configuration
 @EnableOAuth2Client
@@ -48,6 +49,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.authorizeRequests().anyRequest().permitAll();
+    http.authorizeRequests()
+        .anyRequest()
+        .permitAll()
+        .and()
+        .sessionManagement()
+        .invalidSessionUrl(Mappings.URL_ROOT);
   }
 }

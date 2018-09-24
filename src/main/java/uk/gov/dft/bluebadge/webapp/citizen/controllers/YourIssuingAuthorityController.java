@@ -78,7 +78,7 @@ public class YourIssuingAuthorityController implements StepController {
       @ModelAttribute("formRequest") YourIssuingAuthorityForm yourIssuingAuthorityForm) {
 
     journey.setYourIssuingAuthorityForm(yourIssuingAuthorityForm);
-    return routeMaster.redirectToOnSuccess(this);
+    return routeMaster.redirectToOnSuccess(yourIssuingAuthorityForm);
   }
 
   @Override

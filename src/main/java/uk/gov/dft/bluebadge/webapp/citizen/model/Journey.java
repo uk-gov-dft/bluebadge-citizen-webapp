@@ -8,6 +8,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 
 @Data
@@ -18,6 +19,7 @@ public class Journey implements Serializable {
   private ApplicantForm applicantForm;
   private ApplicantNameForm applicantNameForm;
   private HealthConditionsForm healthConditionsForm;
+  private ReceiveBenefitsForm receiveBenefitsForm;
   private ChooseYourCouncilForm chooseYourCouncilForm;
   private YourIssuingAuthorityForm yourIssuingAuthorityForm;
 
@@ -40,6 +42,15 @@ public class Journey implements Serializable {
     if (null == getApplicantForm()) {
       return false;
     }
+
+    switch (step) {
+      case ELIGIBLE:
+      case MAY_BE_ELIGIBLE:
+        if (null == getYourIssuingAuthorityForm()) {
+          return false;
+        }
+    }
+
     return true;
   }
 }

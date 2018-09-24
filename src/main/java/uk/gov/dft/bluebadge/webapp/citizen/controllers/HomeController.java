@@ -17,7 +17,7 @@ public class HomeController implements StepController {
 
   @GetMapping(URL_ROOT)
   public String show() {
-    return routeMaster.redirectToOnSuccess(this);
+    return routeMaster.startingPoint();
   }
 
   @Override

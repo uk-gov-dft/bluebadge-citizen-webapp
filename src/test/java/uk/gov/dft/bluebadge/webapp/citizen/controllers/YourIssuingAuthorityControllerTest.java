@@ -70,7 +70,8 @@ public class YourIssuingAuthorityControllerTest {
   @Test
   public void submit_givenValidForm_thenShouldDisplayRedirectToSuccess() throws Exception {
 
-    when(mockRouteMaster.redirectToOnSuccess(controller)).thenReturn("redirect:/testSuccess");
+    when(mockRouteMaster.redirectToOnSuccess(any(YourIssuingAuthorityForm.class)))
+        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(post(Mappings.URL_YOUR_ISSUING_AUTHORITY).sessionAttr("JOURNEY", new Journey()))
