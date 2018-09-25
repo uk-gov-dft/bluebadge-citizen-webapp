@@ -20,7 +20,7 @@ public class ReceiveBenefitsFormTest {
   @Test
   public void determineNextStep_whenAnythingElse_thenMayBeEligible() {
 
-    EnumSet.complementOf(EnumSet.of(EligibilityCodeField.WPMS))
+    EnumSet.complementOf(EnumSet.of(EligibilityCodeField.WPMS, EligibilityCodeField.PIP))
         .forEach(
             e -> {
               ReceiveBenefitsForm form = ReceiveBenefitsForm.builder().benefitType(e).build();
@@ -29,6 +29,21 @@ public class ReceiveBenefitsFormTest {
               assertThat(form.determineNextStep().get())
                   .as("Eligibility %s result in Eligible", e)
                   .isEqualTo(StepDefinition.MAY_BE_ELIGIBLE);
+            });
+  }
+
+  @Test
+  public void determineNextStep_whenPIP_thenPipovingAround() {
+
+    EnumSet.of(EligibilityCodeField.PIP)
+        .forEach(
+            e -> {
+              ReceiveBenefitsForm form = ReceiveBenefitsForm.builder().benefitType(e).build();
+
+              assertThat(form.determineNextStep()).isNotEmpty();
+              assertThat(form.determineNextStep().get())
+                  .as("Eligibility %s result in Eligible", e)
+                  .isEqualTo(StepDefinition.PIP_MOVING_AROUND);
             });
   }
 }
