@@ -17,7 +17,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -41,7 +40,6 @@ public class PipDlaQuestionController implements StepController {
 
   @GetMapping
   public String show(
-      @ModelAttribute("formRequest") ReceiveBenefitsForm receiveBenefitsForm,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       Model model) {
     if (!journey.isValidState(getStepDefinition())) {
@@ -64,12 +62,12 @@ public class PipDlaQuestionController implements StepController {
   }
 
   private RadioOptionsGroup getOptions(Journey journey) {
-    RadioOption hasReceived = new RadioOption(HAS_RECEIVED_DLA, "options.pip.has.received");
-    RadioOption neverReceived = new RadioOption(NEVER_RECEIVED_DLA, "options.pip.never.received");
+    RadioOption hasReceived = new RadioOption(HAS_RECEIVED_DLA, journey.applicantContextContent("options.pip.has.received"));
+    RadioOption neverReceived = new RadioOption(NEVER_RECEIVED_DLA, journey.applicantContextContent("options.pip.never.received"));
 
     List<RadioOption> options = Lists.newArrayList(hasReceived, neverReceived);
 
-    String title = journey.applicantContextContent("pip.dlaquestion.page.title");
+    String title = journey.applicantContextContent("pipDlaQuestionPage.content.title");
     return new RadioOptionsGroup(title, options);
   }
 

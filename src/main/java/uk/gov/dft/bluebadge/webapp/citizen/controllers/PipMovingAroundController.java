@@ -17,15 +17,11 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipMovingAroundForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 
 import javax.validation.Valid;
-
 import java.util.List;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm.PipReceivedDlaOption.HAS_RECEIVED_DLA;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm.PipReceivedDlaOption.NEVER_RECEIVED_DLA;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipMovingAroundForm.PipMovingAroundOption.MOVING_POINTS_0;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipMovingAroundForm.PipMovingAroundOption.MOVING_POINTS_10;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipMovingAroundForm.PipMovingAroundOption.MOVING_POINTS_12;
@@ -92,7 +88,7 @@ public class PipMovingAroundController implements StepController {
 
     journey.setPipMovingAroundForm(pipMovingAroundForm);
 
-    return routeMaster.redirectToOnSuccess(pipMovingAroundForm);
+    return routeMaster.redirectToOnSuccess(pipMovingAroundForm, journey);
   }
 
   @Override

@@ -4,7 +4,7 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/master.html}">
 <head>
-    <title th:text="#{${JOURNEY.applicantContextContent('receiveBenefitsPage.content.title')}} + ' - ' + #{common.title.suffix}"></title>
+    <title th:text="#{${JOURNEY.applicantContextContent('pipPlanningAndFollowingPage.title')}} + ' - ' + #{common.title.suffix}"></title>
 </head>
 <body>
 
@@ -14,9 +14,9 @@
 
             <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"/>
 
-            <form th:action="@{/benefits}" th:object="${formRequest}" method="post" novalidate>
+            <form th:action="@{/planning-and-following}" th:object="${formRequest}" method="post" novalidate>
 
-                <div th:replace="~{ fragments/govuk-radios :: govuk-radios('benefitType', ${benefitOptions}) }"></div>
+                <div th:replace="~{ fragments/govuk-radios :: govuk-radios('planningJourneyOption', ${formOptions}) }"></div>
 
                 <button type="submit" class="govuk-button" data-uipath="button.continue" th:text="#{btn.label.continue}"></button>
 

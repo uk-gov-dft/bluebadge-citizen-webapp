@@ -70,7 +70,7 @@ public class PipPlanningJourneyController implements StepController {
 
     List<RadioOption> options = Lists.newArrayList(points12, points10, points8, points4, points0);
 
-    String title = journey.applicantContextContent("pip.planning.page.title");
+    String title = journey.applicantContextContent("pipPlanningAndFollowingPage.content.title");
     return new RadioOptionsGroup(title, options);
   }
 
@@ -87,11 +87,11 @@ public class PipPlanningJourneyController implements StepController {
 
     journey.setPipPlanningJourneyForm(pipPlanningJourneyForm);
 
-    return routeMaster.redirectToOnSuccess(pipPlanningJourneyForm);
+    return routeMaster.redirectToOnSuccess(pipPlanningJourneyForm, journey);
   }
 
   @Override
   public StepDefinition getStepDefinition() {
-    return StepDefinition.RECEIVE_BENEFITS;
+    return StepDefinition.PIP_PLANNING_JOURNEY;
   }
 }

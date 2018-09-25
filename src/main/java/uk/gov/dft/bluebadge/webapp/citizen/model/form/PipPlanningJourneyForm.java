@@ -3,8 +3,12 @@ package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 import com.google.common.collect.Lists;
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nations;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 import java.io.Serializable;
 import java.util.List;
@@ -18,6 +22,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyF
 
 @Data
 @Builder
+@Slf4j
 public class PipPlanningJourneyForm implements Serializable, StepForm {
 
   public enum PipPlanningJourneyOption {
@@ -34,11 +39,21 @@ public class PipPlanningJourneyForm implements Serializable, StepForm {
   }
 
   @Override
-  public Optional<StepDefinition> determineNextStep() {
-    // TODO
-    return Optional.of(StepDefinition.ELIGIBLE);
+  public Optional<StepDefinition> determineNextStep(Journey journey) {
+    LocalAuthorityRefData localAuthority = journey.getLocalAuthority();
+    if(PLANNING_POINTS_12.equals(planningJourneyOption)){
+      return Optional.of(StepDefinition.ELIGIBLE);
+    }
+    if(Nations.WALES.equals(localAuthority.getNation())){
+      return Optional.of(StepDefinition.MAY_BE_ELIGIBLE);
+    }
+    if(Nations.SCOTLAND.equals(localAuthority.getNation())){
+      return Optional.of(StepDefinition.PIP_DLA);
+    }
+    log.error("PipPlanningJourneyForm: could not determine next step. LA={}", localAuthority);
+    return Optional.empty();
   }
 
-  private PipMovingAroundForm.PipMovingAroundOption movingAroundPoints;
+  private PipPlanningJourneyForm.PipPlanningJourneyOption planningJourneyOption;
 
 }
