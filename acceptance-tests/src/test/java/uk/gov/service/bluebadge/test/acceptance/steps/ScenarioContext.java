@@ -16,18 +16,18 @@ public class ScenarioContext {
   }
 
   public void setContext(String key, Object value) {
-    log.debug("Saving [(),()] into ScenarioContext", key, value.toString());
+    log.debug("Saving [{},{}] into ScenarioContext", key, value.toString());
     scenarioContext.put(key, value);
   }
 
   public Object getContext(String key) {
-    log.debug("Retrieving [()] from ScenarioContext", key);
+    log.debug("Retrieving [{}] from ScenarioContext", key);
     return scenarioContext.get(key);
   }
 
   public Boolean isContains(String key) {
     boolean result = scenarioContext.containsKey(key);
-    log.debug("Scenario contains [()] equals [()]", key, result);
+    log.debug("Scenario contains [{}] equals [{}]", key, result);
     return result;
   }
 }

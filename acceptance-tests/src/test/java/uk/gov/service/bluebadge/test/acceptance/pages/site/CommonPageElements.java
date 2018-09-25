@@ -8,16 +8,20 @@ import uk.gov.service.bluebadge.test.acceptance.pages.PageHelper;
 
 public class CommonPageElements implements PageElements {
 
-  private static final Map<String, By> pageElements =
-      new HashMap<String, By>() {
-        {
-          put("Search Box", By.xpath("//input[@name='query']"));
-          put(
-              "Pagination page",
-              By.xpath(
-                  "//li[contains(@class, 'pagination-list__item pagination-list__item--current')]/span"));
-        }
-      };
+  private static final Map<String, By> pageElements;
+
+  static {
+    pageElements =
+        new HashMap<String, By>() {
+          {
+            put("Search Box", By.xpath("//input[@name='query']"));
+            put(
+                "Pagination page",
+                By.xpath(
+                    "//li[contains(@class, 'pagination-list__item pagination-list__item--current')]/span"));
+          }
+        };
+  }
 
   @Override
   public boolean contains(String elementName) {

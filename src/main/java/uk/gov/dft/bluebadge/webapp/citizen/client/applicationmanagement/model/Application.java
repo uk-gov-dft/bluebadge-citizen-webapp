@@ -14,31 +14,31 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 public class Application {
   @JsonProperty("applicationId")
-  private String applicationId = null;
+  private String applicationId;
 
   @JsonProperty("applicationTypeCode")
-  private ApplicationTypeCodeField applicationTypeCode = null;
+  private ApplicationTypeCodeField applicationTypeCode;
 
   @JsonProperty("localAuthorityCode")
-  private String localAuthorityCode = null;
+  private String localAuthorityCode;
 
   @JsonProperty("paymentTaken")
-  private Boolean paymentTaken = null;
+  private Boolean paymentTaken;
 
   @JsonProperty("submissionDate")
-  private OffsetDateTime submissionDate = null;
+  private OffsetDateTime submissionDate;
 
   @JsonProperty("existingBadgeNumber")
-  private String existingBadgeNumber = null;
+  private String existingBadgeNumber;
 
   @JsonProperty("party")
-  private Party party = null;
+  private Party party;
 
   @JsonProperty("eligibility")
-  private Eligibility eligibility = null;
+  private Eligibility eligibility;
 
   @JsonProperty("artifacts")
-  private Artifacts artifacts = null;
+  private Artifacts artifacts;
 
   public Application applicationId(String applicationId) {
     this.applicationId = applicationId;
