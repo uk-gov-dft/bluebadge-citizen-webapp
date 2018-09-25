@@ -22,7 +22,7 @@ Feature: DFT Blue badge Citizen app new application
     And   I select an option "hasBirthName.no"
     And   I can click on "Continue"
 
-    Then  I should see the page titled "Your Date of Birth - GOV.UK Apply for a Blue Badge"
+    Then  I should see the page titled "What's your date of birth - GOV.UK Apply for a Blue Badge"
     When  I type day as "02" month as "08" and year as "1966" for applicant's date of birth
     And   I can click on "Continue"
 
@@ -71,9 +71,9 @@ Feature: DFT Blue badge Citizen app new application
     When  I type "Tom Richardson BirthName" for "birthName" field by id
     And   I can click on "Continue"
 
-    Then  I should see the page titled "Your Date of Birth - GOV.UK Apply for a Blue Badge"
+    Then  I should see the page titled "What's your date of birth - GOV.UK Apply for a Blue Badge"
     And   I can click on "Continue"
-    Then  I should see the page titled "Your Date of Birth - GOV.UK Apply for a Blue Badge"
+    Then  I should see the page titled "What's your date of birth - GOV.UK Apply for a Blue Badge"
     And   I should see error summary box
     When  I type day as "02" month as "08" and year as "1966" for applicant's date of birth
     And   I can click on "Continue"
