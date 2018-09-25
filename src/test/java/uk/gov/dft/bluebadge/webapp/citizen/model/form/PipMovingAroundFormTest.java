@@ -1,14 +1,13 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
-import org.junit.Test;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
-import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-
-import java.util.EnumSet;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipMovingAroundForm.PipMovingAroundOption.MOVING_POINTS_0;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipMovingAroundForm.PipMovingAroundOption.MOVING_POINTS_4;
+
+import java.util.EnumSet;
+import org.junit.Test;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 public class PipMovingAroundFormTest extends JourneyFixture {
 
@@ -24,8 +23,7 @@ public class PipMovingAroundFormTest extends JourneyFixture {
               PipMovingAroundForm form =
                   PipMovingAroundForm.builder().movingAroundPoints(e).build();
               assertThat(form.determineNextStep(journey)).isNotEmpty();
-              assertThat(form.determineNextStep(journey).get())
-                  .isEqualTo(StepDefinition.ELIGIBLE);
+              assertThat(form.determineNextStep(journey).get()).isEqualTo(StepDefinition.ELIGIBLE);
             });
   }
 

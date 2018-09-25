@@ -1,6 +1,14 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
-import com.google.common.collect.Lists;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_0;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_10;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_12;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_4;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_8;
+
+import java.io.Serializable;
+import java.util.Optional;
+import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -9,17 +17,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nations;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.util.List;
-import java.util.Optional;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_0;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_10;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_12;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_4;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_8;
 
 @Data
 @Builder
@@ -42,20 +39,18 @@ public class PipPlanningJourneyForm implements Serializable, StepForm {
   @Override
   public Optional<StepDefinition> determineNextStep(Journey journey) {
     LocalAuthorityRefData localAuthority = journey.getLocalAuthority();
-    if(PLANNING_POINTS_12.equals(planningJourneyOption)){
+    if (PLANNING_POINTS_12.equals(planningJourneyOption)) {
       return Optional.of(StepDefinition.ELIGIBLE);
     }
-    if(Nations.WALES.equals(localAuthority.getNation())){
+    if (Nations.WALES.equals(localAuthority.getNation())) {
       return Optional.of(StepDefinition.MAY_BE_ELIGIBLE);
     }
-    if(Nations.SCOTLAND.equals(localAuthority.getNation())){
+    if (Nations.SCOTLAND.equals(localAuthority.getNation())) {
       return Optional.of(StepDefinition.PIP_DLA);
     }
     log.error("PipPlanningJourneyForm: could not determine next step. LA={}", localAuthority);
     return Optional.empty();
   }
 
-  @NotNull
-  private PipPlanningJourneyForm.PipPlanningJourneyOption planningJourneyOption;
-
+  @NotNull private PipPlanningJourneyForm.PipPlanningJourneyOption planningJourneyOption;
 }

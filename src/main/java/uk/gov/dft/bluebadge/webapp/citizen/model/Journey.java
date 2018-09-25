@@ -1,7 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
+import java.io.Serializable;
 import lombok.Data;
-import org.apache.commons.lang3.NotImplementedException;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
@@ -14,8 +14,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipMovingAroundForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
-
-import java.io.Serializable;
 
 @Data
 public class Journey implements Serializable {

@@ -1,6 +1,12 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm.PipReceivedDlaOption.HAS_RECEIVED_DLA;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm.PipReceivedDlaOption.NEVER_RECEIVED_DLA;
+
 import com.google.common.collect.Lists;
+import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,13 +24,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm;
 
-import javax.validation.Valid;
-import java.util.List;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm.PipReceivedDlaOption.HAS_RECEIVED_DLA;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm.PipReceivedDlaOption.NEVER_RECEIVED_DLA;
-
 @Controller
 @RequestMapping(Mappings.URL_PIP_RECEIVED_DLA)
 public class PipDlaQuestionController implements StepController {
@@ -39,9 +38,7 @@ public class PipDlaQuestionController implements StepController {
   }
 
   @GetMapping
-  public String show(
-      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      Model model) {
+  public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
     if (!journey.isValidState(getStepDefinition())) {
       return routeMaster.backToCompletedPrevious();
     }
@@ -62,8 +59,12 @@ public class PipDlaQuestionController implements StepController {
   }
 
   private RadioOptionsGroup getOptions(Journey journey) {
-    RadioOption hasReceived = new RadioOption(HAS_RECEIVED_DLA, journey.applicantContextContent("options.pip.has.received"));
-    RadioOption neverReceived = new RadioOption(NEVER_RECEIVED_DLA, journey.applicantContextContent("options.pip.never.received"));
+    RadioOption hasReceived =
+        new RadioOption(
+            HAS_RECEIVED_DLA, journey.applicantContextContent("options.pip.has.received"));
+    RadioOption neverReceived =
+        new RadioOption(
+            NEVER_RECEIVED_DLA, journey.applicantContextContent("options.pip.never.received"));
 
     List<RadioOption> options = Lists.newArrayList(hasReceived, neverReceived);
 

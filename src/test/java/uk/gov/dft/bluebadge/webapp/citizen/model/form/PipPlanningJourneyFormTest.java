@@ -1,12 +1,11 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.EnumSet;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-
-import java.util.EnumSet;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class PipPlanningJourneyFormTest extends JourneyFixture {
 
@@ -18,7 +17,8 @@ public class PipPlanningJourneyFormTest extends JourneyFixture {
     Journey journey = new JourneyBuilder().setEnglishLocalAuthority().build();
     twelveOrMore.forEach(
         e -> {
-          PipPlanningJourneyForm form = PipPlanningJourneyForm.builder().planningJourneyOption(e).build();
+          PipPlanningJourneyForm form =
+              PipPlanningJourneyForm.builder().planningJourneyOption(e).build();
           assertThat(form.determineNextStep(journey)).isNotEmpty();
           assertThat(form.determineNextStep(journey).get()).isEqualTo(StepDefinition.ELIGIBLE);
         });
@@ -47,8 +47,7 @@ public class PipPlanningJourneyFormTest extends JourneyFixture {
               PipPlanningJourneyForm form =
                   PipPlanningJourneyForm.builder().planningJourneyOption(e).build();
               assertThat(form.determineNextStep(journey)).isNotEmpty();
-              assertThat(form.determineNextStep(journey).get())
-                  .isEqualTo(StepDefinition.PIP_DLA);
+              assertThat(form.determineNextStep(journey).get()).isEqualTo(StepDefinition.PIP_DLA);
             });
   }
 }

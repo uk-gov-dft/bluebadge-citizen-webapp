@@ -3,7 +3,6 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 import lombok.Getter;
-import org.apache.tomcat.util.descriptor.web.ServletDef;
 
 @Getter
 public class Mappings {
