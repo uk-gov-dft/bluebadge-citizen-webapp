@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="#{${JOURNEY.applicantContextContent('afcs.compensationSchemePage.title')}} + ' - ' + #{common.title.suffix}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>
+
+            <form th:action="@{/lump-sum}" method="post" th:object="${formRequest}" novalidate>
+                <div th:replace="~{ fragments/govuk-radios :: govuk-radios('hasReceivedCompensation', ${radioOptions}) }"></div>
+
+                <button type="submit" class="govuk-button" data-uipath="button.continue" th:text="#{btn.label.continue}"></button>
+            </form>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

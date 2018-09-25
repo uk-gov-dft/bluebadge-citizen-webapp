@@ -4,7 +4,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -43,8 +42,8 @@ public class ReceiveBenefitsControllerTest {
     journey = new Journey();
     journey.setApplicantForm(ApplicantForm.builder().applicantType(YOURSELF.name()).build());
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
-    when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any())).thenReturn("redirect:/someValidationError");
-
+    when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))
+        .thenReturn("redirect:/someValidationError");
   }
 
   @Test

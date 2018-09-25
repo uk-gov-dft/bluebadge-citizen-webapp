@@ -3,6 +3,9 @@ package uk.gov.dft.bluebadge.webapp.citizen.model;
 import java.io.Serializable;
 import lombok.Data;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.AFCS.CompensationSchemeForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.AFCS.DisabilityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.AFCS.MentalDisorderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
@@ -19,9 +22,14 @@ public class Journey implements Serializable {
   private ApplicantForm applicantForm;
   private ApplicantNameForm applicantNameForm;
   private HealthConditionsForm healthConditionsForm;
-  private ReceiveBenefitsForm receiveBenefitsForm;
+  private ReceiveBenefitsForm receiveBenefitsForm;;
   private ChooseYourCouncilForm chooseYourCouncilForm;
   private YourIssuingAuthorityForm yourIssuingAuthorityForm;
+
+  // AFCS Journey Forms
+  private CompensationSchemeForm CompensationSchemeForm;
+  private DisabilityForm DisabilityForm;
+  private MentalDisorderForm MentalDisorderForm;
 
   public Boolean isApplicantYourself() {
     if (applicantForm != null) {

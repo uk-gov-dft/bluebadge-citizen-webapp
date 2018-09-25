@@ -18,6 +18,11 @@ public class Mappings {
   public static final String URL_CHOOSE_YOUR_COUNCIL = "/choose-council";
   public static final String URL_YOUR_ISSUING_AUTHORITY = "/your-issuing-authority";
 
+  // AFCS Journey Routes
+  public static final String URL_AFCS_COMPENSATION_SCHEME = "/lump-sum";
+  public static final String URL_AFCS_DISABILITY = "/permanent-and-substantial-disability";
+  public static final String URL_AFCS_MENTAL_DISORDER = "/permanent-mental-disorder";
+
   private Mappings() {}
 
   private static final BiMap<StepDefinition, String> stepToUrlMapping =
@@ -25,8 +30,13 @@ public class Mappings {
           .put(StepDefinition.HOME, URL_ROOT)
           .put(StepDefinition.APPLICANT_TYPE, URL_APPLICANT_TYPE)
           .put(StepDefinition.RECEIVE_BENEFITS, URL_RECEIVE_BENEFITS)
+          .put(StepDefinition.AFCS_COMPENSATION_SCHEME, URL_AFCS_COMPENSATION_SCHEME)
           .put(StepDefinition.ELIGIBLE, URL_ELIGIBLE)
+
+          // AFCS Journey Mappings
           .put(StepDefinition.MAY_BE_ELIGIBLE, URL_MAY_BE_ELIGIBLE)
+          .put(StepDefinition.AFCS_DISABILITY, URL_AFCS_DISABILITY)
+          .put(StepDefinition.AFCS_MENTAL_DISORDER, URL_AFCS_MENTAL_DISORDER)
           .put(StepDefinition.NAME, URL_APPLICANT_NAME)
           .put(StepDefinition.HEALTH_CONDITIONS, URL_HEALTH_CONDITIONS)
           .put(StepDefinition.CHOOSE_COUNCIL, URL_CHOOSE_YOUR_COUNCIL)

@@ -25,6 +25,8 @@ public class ReceiveBenefitsForm implements StepForm, Serializable {
     switch (benefitType) {
       case WPMS:
         return Optional.of(StepDefinition.ELIGIBLE);
+      case AFRFCS:
+        return Optional.of(StepDefinition.AFCS_COMPENSATION_SCHEME);
       default:
         return Optional.of(StepDefinition.MAY_BE_ELIGIBLE);
     }
