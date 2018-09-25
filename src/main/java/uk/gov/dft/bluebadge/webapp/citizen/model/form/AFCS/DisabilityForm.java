@@ -17,7 +17,7 @@ public class DisabilityForm implements Serializable, StepForm {
 
   @Override
   public StepDefinition getAssociatedStep() {
-    return StepDefinition.AFCS_COMPENSATION_SCHEME;
+    return StepDefinition.AFCS_DISABILITY;
   }
 
   @Override

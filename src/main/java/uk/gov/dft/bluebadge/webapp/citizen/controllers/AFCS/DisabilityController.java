@@ -56,16 +56,16 @@ public class DisabilityController implements StepController {
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute(FORM_REQUEST) DisabilityForm DisabilityForm,
+      @Valid @ModelAttribute(FORM_REQUEST) DisabilityForm disabilityForm,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
     if (bindingResult.hasErrors()) {
-      return routeMaster.redirectToOnBindingError(this, DisabilityForm, bindingResult, attr);
+      return routeMaster.redirectToOnBindingError(this, disabilityForm, bindingResult, attr);
     }
 
-    journey.setDisabilityForm(DisabilityForm);
-    return routeMaster.redirectToOnSuccess(DisabilityForm);
+    journey.setDisabilityForm(disabilityForm);
+    return routeMaster.redirectToOnSuccess(disabilityForm);
   }
 
   @Override
