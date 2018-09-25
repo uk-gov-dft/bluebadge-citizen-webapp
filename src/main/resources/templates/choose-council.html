@@ -4,7 +4,7 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/master.html}">
 <head>
-    <title th:text="#{${JOURNEY.applicantContextContent('chooseCouncilPage.title')}} + ' - ' + #{common.title.suffix}"></title>
+    <title th:text="#{${JOURNEY.who} + 'chooseCouncilPage.title'} + ' - ' + #{common.title.suffix}"></title>
 </head>
 <body>
 
@@ -12,21 +12,21 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.applicantContextContent('chooseCouncilPage.title')}}"></h1>
+            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.who} + 'chooseCouncilPage.title'}"></h1>
 
             <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>
 
-            <p class="govuk-body" th:text="#{chooseCouncilPage.content.p1}"></p>
+            <p class="govuk-body" th:text="#{${JOURNEY.who} + 'chooseCouncilPage.content.p1'}"></p>
 
             <p class="govuk-body">
                 <span th:remove="tag"
-                      th:text="#{${JOURNEY.applicantContextContent('chooseCouncilPage.content.p2.phrase1')}}"></span>
+                      th:text="#{${JOURNEY.who} + 'chooseCouncilPage.content.p2.phrase1'}"></span>
 
                 <a href="https://bluebadge.direct.gov.uk/bluebadge/why-are-you-here"
-                   th:text="#{${JOURNEY.applicantContextContent('chooseCouncilPage.content.p2.phrase2')}}"></a>
+                   th:text="#{${JOURNEY.who} + 'chooseCouncilPage.content.p2.phrase2'}"></a>
 
                 <span th:remove="tag"
-                      th:text="#{${JOURNEY.applicantContextContent('chooseCouncilPage.content.p2.phrase3')}}"></span>
+                      th:text="#{${JOURNEY.who} + 'chooseCouncilPage.content.p2.phrase3'}"></span>
             </p>
 
             <form th:action="@{/choose-council}" method="post" th:object="${formRequest}" novalidate>
@@ -34,7 +34,7 @@
                 <div th:class="${#fields.hasErrors('councilShortCode')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
 
                     <label id="councilShortCode-label" class="govuk-label" for="councilShortCode"
-                           th:text="#{${JOURNEY.applicantContextContent('chooseCouncilPage.field.selectCouncil.label')}}"></label>
+                           th:text="#{${JOURNEY.who} + 'chooseCouncilPage.field.selectCouncil.label'}"></label>
 
 
                     <span class="govuk-error-message" data-uipath="councilShortCode.error" th:errors="*{councilShortCode}"></span>
@@ -50,7 +50,7 @@
 
                 <p class="govuk-body">
                    <a target="_blank" href="https://www.gov.uk/blue-badge-scheme-information-council"
-                      th:text="#{${JOURNEY.applicantContextContent('chooseCouncilPage.link.dontKnowCouncil')}}"></a>
+                      th:text="#{${JOURNEY.who} + 'chooseCouncilPage.link.dontKnowCouncil'}"></a>
                 </p>
 
                 <button type="submit" class="govuk-button" data-uipath="button.continue" th:text="#{btn.label.continue}"></button>
