@@ -29,7 +29,7 @@
 
         <p class="govuk-body">
             <span th:remove="tag" th:text="#{eligiblePage.council.contact.pretext}">Contact</span>
-            <span th:remove="tag" th:text="${localAuthority.description}">Some Council</span>
+            <span th:remove="tag" th:text="${localAuthority.description} + ':'"></span>
         </p>
 
         <p class="govuk-body" th:if="${localAuthority.contactUrl}">
