@@ -89,8 +89,8 @@ public abstract class AbstractSitePage extends AbstractPage {
     return findPageElement(elementName, 0);
   }
 
-  public WebElement findElementWithCssSelector(String CssSelector) {
-    return helper.findOptionalElement(By.cssSelector(CssSelector));
+  public WebElement findElementWithCssSelector(String cssSelector) {
+    return helper.findOptionalElement(By.cssSelector(cssSelector));
   }
 
   public String getPageContent() {
