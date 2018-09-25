@@ -4,7 +4,7 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/master.html}">
 <head>
-    <title th:text="#{${JOURNEY.applicantContextContent('whatsYourNamePage.title')}} + ' - ' + #{common.title.suffix}"></title>
+    <title th:text="#{${JOURNEY.who} + 'whatsYourNamePage.title'} + ' - ' + #{common.title.suffix}"></title>
 </head>
 <body>
 
@@ -12,7 +12,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.applicantContextContent('whatsYourNamePage.title')}}"></h1>
+            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.who} + 'whatsYourNamePage.title'}"></h1>
 
             <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>
 
@@ -24,7 +24,7 @@
                     <fieldset class="govuk-fieldset" id="hasBirthName">
                         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
                             <h2 class="govuk-fieldset__heading"
-                                th:text="#{${JOURNEY.applicantContextContent('whatsYourNamePage.birthName.title')}}"></h2>
+                                th:text="#{${JOURNEY.who} + 'whatsYourNamePage.birthName.title'}"></h2>
                         </legend>
 
                         <span class="govuk-error-message"
@@ -42,7 +42,7 @@
                                        data-aria-controls="conditional-how-contacted-conditional-1">
                                 <label class="govuk-label govuk-radios__label"
                                        for="hasBirthName.no"
-                                       th:text="#{${JOURNEY.applicantContextContent('whatsYourNamePage.birthName.field.option.no')}}"></label>
+                                       th:text="#{${JOURNEY.who} + 'whatsYourNamePage.birthName.field.option.no'}"></label>
                             </div>
 
                             <div class="govuk-radios__item">
@@ -55,12 +55,12 @@
                                        data-aria-controls="conditional-how-contacted-conditional-1">
                                 <label class="govuk-label govuk-radios__label"
                                        for="hasBirthName.yes"
-                                       th:text="#{${JOURNEY.applicantContextContent('whatsYourNamePage.birthName.field.option.yes')}}"></label>
+                                       th:text="#{${JOURNEY.who} + 'whatsYourNamePage.birthName.field.option.yes'}"></label>
                             </div>
                             <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
                                  id="conditional-how-contacted-conditional-1">
 
-                                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.applicantContextContent('whatsYourNamePage.birthName.field.label')}}, 'birthName', null, 'text')}"></div>
+                                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + 'whatsYourNamePage.birthName.field.label'}, 'birthName', null, 'text')}"></div>
                             </div>
                         </div>
                     </fieldset>

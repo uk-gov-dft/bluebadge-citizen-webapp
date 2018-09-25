@@ -61,14 +61,14 @@ public class PipDlaQuestionController implements StepController {
   private RadioOptionsGroup getOptions(Journey journey) {
     RadioOption hasReceived =
         new RadioOption(
-            HAS_RECEIVED_DLA, journey.applicantContextContent("options.pip.has.received"));
+            HAS_RECEIVED_DLA, journey.who + "options.pip.has.received");
     RadioOption neverReceived =
         new RadioOption(
-            NEVER_RECEIVED_DLA, journey.applicantContextContent("options.pip.never.received"));
+            NEVER_RECEIVED_DLA, journey.who + "options.pip.never.received");
 
     List<RadioOption> options = Lists.newArrayList(hasReceived, neverReceived);
 
-    String title = journey.applicantContextContent("pipDlaQuestionPage.content.title");
+    String title = journey.who + "pipDlaQuestionPage.content.title";
     return new RadioOptionsGroup(title, options);
   }
 

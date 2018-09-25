@@ -16,19 +16,17 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 
 @Controller
-@RequestMapping(Mappings.URL_HEALTH_CONDITIONS)
-public class HealthConditionsController implements StepController {
-
-  private static final String TEMPLATE_HEALTH_CONDITIONS = "health-conditions";
+@RequestMapping(Mappings.URL_DOB)
+public class DateOfBirthController implements StepController {
+  private static final String TEMPLATE_DOB = "date-of-birth";
   public static final String FORM_REQUEST = "formRequest";
-
   private final RouteMaster routeMaster;
 
   @Autowired
-  public HealthConditionsController(RouteMaster routeMaster) {
+  public DateOfBirthController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
@@ -39,39 +37,35 @@ public class HealthConditionsController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    //On returning to form, take previously submitted values.
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getHealthConditionsForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getHealthConditionsForm());
+    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getDateOfBirthForm()) {
+      model.addAttribute(FORM_REQUEST, journey.getDateOfBirthForm());
     }
 
-    // If navigating forward from previous form, reset
     if (!model.containsAttribute(FORM_REQUEST)) {
-      model.addAttribute(FORM_REQUEST, HealthConditionsForm.builder().build());
+      model.addAttribute(FORM_REQUEST, journey.getDateOfBirthForm().builder().build());
     }
 
-    // Otherwise, is redirect from post with binding errors.
-
-    return TEMPLATE_HEALTH_CONDITIONS;
+    return TEMPLATE_DOB;
   }
 
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute(FORM_REQUEST) HealthConditionsForm healthConditionsForm,
+      @Valid @ModelAttribute(FORM_REQUEST) DateOfBirthForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
     if (bindingResult.hasErrors()) {
-      return routeMaster.redirectToOnBindingError(this, healthConditionsForm, bindingResult, attr);
+      return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
     }
 
-    journey.setHealthConditionsForm(healthConditionsForm);
+    journey.setDateOfBirthForm(formRequest);
 
-    return routeMaster.redirectToOnSuccess(healthConditionsForm);
+    return routeMaster.redirectToOnSuccess(formRequest);
   }
 
   @Override
   public StepDefinition getStepDefinition() {
-    return StepDefinition.HEALTH_CONDITIONS;
+    return StepDefinition.DOB;
   }
 }
