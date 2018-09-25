@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
@@ -23,7 +22,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 @RequestMapping(Mappings.URL_APPLICANT_NAME)
 public class ApplicantNameController implements StepController {
 
-  public static final String TEMPLATE_APPLICANT_NAME = "applicant-name";
+  private static final String TEMPLATE_APPLICANT_NAME = "applicant-name";
 
   private final RouteMaster routeMaster;
 
@@ -33,7 +32,7 @@ public class ApplicantNameController implements StepController {
   }
 
   @GetMapping
-  public String show(Model model, @SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+  public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
     if (!journey.isValidState(getStepDefinition())) {
       return routeMaster.backToCompletedPrevious();
@@ -54,7 +53,7 @@ public class ApplicantNameController implements StepController {
 
   @PostMapping
   public String submit(
-      @SessionAttribute(JOURNEY_SESSION_KEY) Journey journey,
+      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute("formRequest") ApplicantNameForm applicantNameForm,
       BindingResult bindingResult,
       RedirectAttributes attr) {

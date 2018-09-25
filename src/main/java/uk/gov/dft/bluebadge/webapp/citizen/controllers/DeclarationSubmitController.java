@@ -5,6 +5,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_
 import com.google.common.collect.Lists;
 import java.time.LocalDate;
 import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -48,6 +49,7 @@ public class DeclarationSubmitController implements StepController {
   private final ApplicationManagementService appService;
   private final RouteMaster routeMaster;
 
+  @Autowired
   public DeclarationSubmitController(
       ApplicationManagementService appService, RouteMaster routeMaster) {
     this.appService = appService;
