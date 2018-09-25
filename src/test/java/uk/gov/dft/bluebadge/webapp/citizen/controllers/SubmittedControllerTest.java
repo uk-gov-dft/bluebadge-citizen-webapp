@@ -61,4 +61,16 @@ public class SubmittedControllerTest {
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/backToStart"));
   }
+
+  @Test
+  public void showDeclaration_givenInvalidState_ShouldRedirectBackToStart() throws Exception {
+
+    when(mockJourney.isValidState(any())).thenReturn(false);
+    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
+
+    mockMvc
+        .perform(get("/application-submitted"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/backToStart"));
+  }
 }

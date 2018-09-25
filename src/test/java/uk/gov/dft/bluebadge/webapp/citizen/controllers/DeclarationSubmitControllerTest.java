@@ -63,6 +63,29 @@ public class DeclarationSubmitControllerTest {
   }
 
   @Test
+  public void showDeclaration_givenNoSession_ShouldRedirectBackToStart() throws Exception {
+
+    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
+
+    mockMvc
+        .perform(get("/apply-for-a-blue-badge/declaration"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/backToStart"));
+  }
+
+  @Test
+  public void showDeclaration_givenInvalidState_ShouldRedirectBackToStart() throws Exception {
+
+    when(mockJourney.isValidState(any())).thenReturn(false);
+    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
+
+    mockMvc
+        .perform(get("/apply-for-a-blue-badge/declaration"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/backToStart"));
+  }
+
+  @Test
   public void submitDeclaration_ShouldDisplayApplicationSubmittedTemplate_WhenDeclarationIsAgreed()
       throws Exception {
 
