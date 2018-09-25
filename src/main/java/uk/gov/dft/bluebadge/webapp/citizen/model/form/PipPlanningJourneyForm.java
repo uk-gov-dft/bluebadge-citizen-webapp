@@ -10,6 +10,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +36,7 @@ public class PipPlanningJourneyForm implements Serializable, StepForm {
 
   @Override
   public StepDefinition getAssociatedStep() {
-    return StepDefinition.PIP_MOVING_AROUND;
+    return StepDefinition.PIP_PLANNING_JOURNEY;
   }
 
   @Override
@@ -54,6 +55,7 @@ public class PipPlanningJourneyForm implements Serializable, StepForm {
     return Optional.empty();
   }
 
+  @NotNull
   private PipPlanningJourneyForm.PipPlanningJourneyOption planningJourneyOption;
 
 }

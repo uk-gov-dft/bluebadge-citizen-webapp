@@ -41,10 +41,10 @@ public class PipMovingAroundForm implements Serializable, StepForm {
       case MOVING_POINTS_0:
       case MOVING_POINTS_4:
         if (Nations.ENGLAND.equals(localAuthority.getNation())){
-          return Optional.of(StepDefinition.PIP_PLANNING_JOURNEY);
+          return Optional.of(StepDefinition.MAY_BE_ELIGIBLE);
         }
         if(Nations.SCOTLAND.equals(localAuthority.getNation()) || Nations.WALES.equals(localAuthority.getNation())){
-          return Optional.of(StepDefinition.MAY_BE_ELIGIBLE);
+          return Optional.of(StepDefinition.PIP_PLANNING_JOURNEY);
         }
         // TODO Northern Ireland
         log.error("Invalid nation in local authority ref data {}:{}", localAuthority.getShortCode(), localAuthority.getDescription());

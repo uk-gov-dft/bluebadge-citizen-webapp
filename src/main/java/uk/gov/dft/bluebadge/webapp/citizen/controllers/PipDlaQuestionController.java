@@ -77,6 +77,7 @@ public class PipDlaQuestionController implements StepController {
       @Valid @ModelAttribute("formRequest") PipDlaQuestionForm pipDlaQuestionForm,
       BindingResult bindingResult,
       RedirectAttributes attr) {
+
     if (bindingResult.hasErrors()) {
       return routeMaster.redirectToOnBindingError(this, pipDlaQuestionForm, bindingResult, attr);
     }
