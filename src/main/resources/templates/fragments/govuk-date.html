@@ -22,7 +22,7 @@
             th:aria-describedby="${hint} ? ${date} + '-hint'" role="group">
 
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l" th:if="${label}">
-                <h1 th:utext="${label}" data-uipath="${date} + '.legend'" class="govuk-fieldset__heading" />
+                <h1 th:text="${label}" data-uipath="${date} + '.legend'" class="govuk-fieldset__heading" />
             </legend>
 
             <span th:id="${date} + '-hint'" class="govuk-hint" th:if="${hint}" th:utext="${hint}"></span>
@@ -38,21 +38,21 @@
                 <div class="govuk-date-input__item">
                     <div class="govuk-form-group">
                         <label class="govuk-label govuk-date-input__label" th:data-uipath="${date} + '.day.label'" th:attr="for=${day}">Day</label>
-                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" th:data-uipath="${date} + '.day.field'" th:field="*{__${day}__}">
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" type="number" th:data-uipath="${date} + '.day.field'" th:field="*{__${day}__}">
                     </div>
                 </div>
 
                 <div class="govuk-date-input__item" th:if="${month}">
                     <div class="govuk-form-group">
                         <label class="govuk-label govuk-date-input__label" th:data-uipath="${date} + '.month.label'" th:attr="for=${month}">Month</label>
-                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" th:data-uipath="${date} + '.month.field'"  th:field="*{__${month}__}">
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" type="number" th:data-uipath="${date} + '.month.field'"  th:field="*{__${month}__}">
                     </div>
                 </div>
 
                 <div class="govuk-date-input__item" th:if="${year}">
                     <div class="govuk-form-group">
                         <label class="govuk-label govuk-date-input__label" th:data-uipath="${date} + '.year.label'" th:attr="for=${year}">Year</label>
-                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" th:data-uipath="${date} + '.year.field'" th:field="*{__${year}__}">
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" type="number" th:data-uipath="${date} + '.year.field'" th:field="*{__${year}__}">
                     </div>
                 </div>
 
