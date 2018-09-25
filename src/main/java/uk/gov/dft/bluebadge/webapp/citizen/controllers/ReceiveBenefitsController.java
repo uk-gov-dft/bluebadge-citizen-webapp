@@ -67,7 +67,7 @@ public class ReceiveBenefitsController implements StepController {
 
     List<RadioOption> options = Lists.newArrayList(pip, dla, afrfcs, wpms, none);
 
-    String title = journey.applicantContextContent("receiveBenefitsPage.title");
+    String title = journey.who + "receiveBenefitsPage.title";
     return new RadioOptionsGroup(title, options);
   }
 

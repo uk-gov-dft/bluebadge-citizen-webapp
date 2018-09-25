@@ -2,17 +2,20 @@ package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.AssertTrue;
 import lombok.Builder;
 import lombok.Data;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 
 @Data
 @Builder
-public class DateOfBirthForm implements Serializable {
+public class DateOfBirthForm implements StepForm, Serializable {
 
-  private Integer day;
-  private Integer month;
-  private Integer year;
+  private String day;
+  private String month;
+  private String year;
 
   /**
    * Validates the dob is a date in the past.
@@ -23,13 +26,14 @@ public class DateOfBirthForm implements Serializable {
   public boolean isPastDate() {
 
     // Cannot evaluate the date
-    if (datePartMissing()) {
-      return false;
+    if (isDatePartMissing()) {
+      return true; // picked up by other validation
     }
 
     // Attempt to parse and compare
     try {
-      return LocalDate.of(year, month, day).isBefore(LocalDate.now());
+      return LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day))
+          .isBefore(LocalDate.now());
     } catch (Exception e) {
       return false;
     }
@@ -41,18 +45,34 @@ public class DateOfBirthForm implements Serializable {
    * @return LocalDate representation of the date
    */
   public LocalDate getLocalDateDob() {
-    if (datePartMissing()) {
+    if (isDatePartMissing()) {
       return null;
     }
 
     try {
-      return LocalDate.of(year, month, day);
+      return LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
     } catch (Exception e) {
       return null;
     }
   }
 
-  private boolean datePartMissing() {
-    return null == year || null == month || null == day;
+  /** Validates the component parts for valid numbers. */
+  @AssertFalse(message = "{Invalid.dateofBirth}")
+  public boolean isDatePartMissing() {
+    return !isParsablePositive(year) || !isParsablePositive(month) || !isParsablePositive(day);
+  }
+
+  private boolean isParsablePositive(String number) {
+    try {
+      Integer n = Integer.parseInt(number);
+      return n > 0;
+    } catch (NumberFormatException e) {
+      return false;
+    }
+  }
+
+  @Override
+  public StepDefinition getAssociatedStep() {
+    return StepDefinition.DOB;
   }
 }

@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -18,6 +19,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 
 public class DateOfBirthControllerTest {
 
@@ -45,7 +47,6 @@ public class DateOfBirthControllerTest {
     // A pre-set up journey
     Journey journey = JourneyFixture.getDefaultJourney();
 
-
     mockMvc
         .perform(get(URL_DATE_OF_BIRTH).sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
@@ -67,7 +68,9 @@ public class DateOfBirthControllerTest {
   @Test
   public void submit_givenValidForm_thenShouldDisplayRedirectToSuccess() throws Exception {
 
-    when(mockRouteMaster.redirectToOnSuccess(controller)).thenReturn("redirect:/testSuccess");
+    Journey journey = JourneyFixture.getDefaultJourney();
+    when(mockRouteMaster.redirectToOnSuccess(any(DateOfBirthForm.class)))
+        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(
@@ -75,7 +78,7 @@ public class DateOfBirthControllerTest {
                 .param("year", "1990")
                 .param("month", "1")
                 .param("day", "2")
-                .sessionAttr("JOURNEY", new Journey()))
+                .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
   }
@@ -90,7 +93,8 @@ public class DateOfBirthControllerTest {
                 .sessionAttr("JOURNEY", new Journey()))
         .andExpect(status().isOk())
         .andExpect(view().name(VIEW_DATE_OF_BIRTH))
-        .andExpect(model().attributeHasFieldErrorCode("formRequest", "pastDate", "AssertTrue"));
+        .andExpect(
+            model().attributeHasFieldErrorCode("formRequest", "datePartMissing", "AssertFalse"));
   }
 
   @Test
@@ -103,7 +107,8 @@ public class DateOfBirthControllerTest {
                 .sessionAttr("JOURNEY", new Journey()))
         .andExpect(status().isOk())
         .andExpect(view().name(VIEW_DATE_OF_BIRTH))
-        .andExpect(model().attributeHasFieldErrorCode("formRequest", "pastDate", "AssertTrue"));
+        .andExpect(
+            model().attributeHasFieldErrorCode("formRequest", "datePartMissing", "AssertFalse"));
   }
 
   @Test
@@ -116,13 +121,16 @@ public class DateOfBirthControllerTest {
                 .sessionAttr("JOURNEY", new Journey()))
         .andExpect(status().isOk())
         .andExpect(view().name(VIEW_DATE_OF_BIRTH))
-        .andExpect(model().attributeHasFieldErrorCode("formRequest", "pastDate", "AssertTrue"));
+        .andExpect(
+            model().attributeHasFieldErrorCode("formRequest", "datePartMissing", "AssertFalse"));
   }
 
   @Test
   public void submit_givenFutureDate_ThenShouldHaveValidationError() throws Exception {
 
-    when(mockRouteMaster.redirectToOnSuccess(controller)).thenReturn("redirect:/testSuccess");
+    Journey journey = JourneyFixture.getDefaultJourney();
+    when(mockRouteMaster.redirectToOnSuccess(journey.getDateOfBirthForm()))
+        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(

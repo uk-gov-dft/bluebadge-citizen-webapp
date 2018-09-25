@@ -61,7 +61,7 @@ public class DateOfBirthController implements StepController {
 
     journey.setDateOfBirthForm(formRequest);
 
-    return routeMaster.redirectToOnSuccess(this);
+    return routeMaster.redirectToOnSuccess(formRequest);
   }
 
   @Override
