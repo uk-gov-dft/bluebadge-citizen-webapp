@@ -39,10 +39,6 @@ saveLogs() {
 
 set -a
 
-if [[ ! -e ~/.ssh/github_token ]]; then
-  echo "You need to create a personal access github token in ~/.ssh/github_token in order to access github"
-  exit 1
-fi
 
 # Cleanup existing containers
 tearDown

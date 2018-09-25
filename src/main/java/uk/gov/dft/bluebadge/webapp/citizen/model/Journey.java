@@ -113,4 +113,12 @@ public class Journey implements Serializable {
   public void setReceiveBenefitsForm(ReceiveBenefitsForm receiveBenefitsForm) {
     this.receiveBenefitsForm = receiveBenefitsForm;
   }
+
+  public HigherRateMobilityForm getHigherRateMobilityForm() {
+    return higherRateMobilityForm;
+  }
+
+  public void setHigherRateMobilityForm(HigherRateMobilityForm higherRateMobilityForm) {
+    this.higherRateMobilityForm = higherRateMobilityForm;
+  }
 }
