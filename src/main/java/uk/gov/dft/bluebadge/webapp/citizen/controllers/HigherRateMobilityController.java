@@ -54,7 +54,7 @@ public class HigherRateMobilityController implements StepController {
       model.addAttribute("formRequest", HigherRateMobilityForm.builder().build());
     }
 
-    setupModel(model);
+    setupModel(model, journey);
 
     return TEMPLATE;
   }
@@ -78,17 +78,18 @@ public class HigherRateMobilityController implements StepController {
     return StepDefinition.HIGHER_RATE_MOBILITY;
   }
 
-  private void setupModel(Model model) {
-    model.addAttribute("options", getOptions());
+  private void setupModel(Model model, Journey journey) {
+    model.addAttribute("options", getOptions(journey));
   }
 
-  private RadioOptionsGroup getOptions() {
+  private RadioOptionsGroup getOptions(Journey journey) {
     RadioOption yes = new RadioOption("true", "radio.label.yes");
     RadioOption no = new RadioOption("false", "radio.label.no");
 
     List<RadioOption> options = Lists.newArrayList(yes, no);
 
-    return new RadioOptionsGroup("higherRateMobilityPage.content.title", options);
+    return new RadioOptionsGroup(
+        journey.applicantContextContent("higherRateMobilityPage.content.title"), options);
   }
 
   @InitBinder
