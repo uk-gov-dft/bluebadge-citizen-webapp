@@ -1,10 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-
 import com.google.common.collect.Lists;
-import java.util.List;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomBooleanEditor;
 import org.springframework.stereotype.Controller;
@@ -24,6 +20,11 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
+
+import javax.validation.Valid;
+import java.util.List;
+
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 @RequestMapping(Mappings.URL_HIGHER_RATE_MOBILITY)
@@ -88,8 +89,7 @@ public class HigherRateMobilityController implements StepController {
 
     List<RadioOption> options = Lists.newArrayList(yes, no);
 
-    return new RadioOptionsGroup(
-        journey.applicantContextContent("higherRateMobilityPage.content.title"), options);
+    return new RadioOptionsGroup(journey.who + "higherRateMobilityPage.content.title", options);
   }
 
   @InitBinder

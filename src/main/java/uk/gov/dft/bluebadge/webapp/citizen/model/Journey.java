@@ -41,14 +41,6 @@ public class Journey implements Serializable {
     return null;
   }
 
-  public String applicantContextContent(String messageKey) {
-    if (isApplicantYourself()) {
-      return messageKey;
-    }
-
-    return "someone." + messageKey;
-  }
-
   public boolean isValidState(StepDefinition step) {
     if (null == getApplicantForm()) {
       return false;
