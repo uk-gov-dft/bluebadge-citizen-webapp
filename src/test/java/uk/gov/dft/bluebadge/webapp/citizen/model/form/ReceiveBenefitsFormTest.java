@@ -31,7 +31,10 @@ public class ReceiveBenefitsFormTest {
 
     EnumSet.complementOf(
             EnumSet.of(
-                EligibilityCodeField.WPMS, EligibilityCodeField.PIP, EligibilityCodeField.DLA))
+                EligibilityCodeField.WPMS,
+                EligibilityCodeField.AFRFCS,
+                EligibilityCodeField.PIP,
+                EligibilityCodeField.DLA))
         .forEach(
             e -> {
               ReceiveBenefitsForm form = ReceiveBenefitsForm.builder().benefitType(e).build();

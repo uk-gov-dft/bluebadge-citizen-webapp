@@ -6,8 +6,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.google.common.collect.Lists;
-import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -15,11 +13,10 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 
 public class ApplicantControllerTest {
 
@@ -42,14 +39,7 @@ public class ApplicantControllerTest {
 
     ApplicantForm formRequest = ApplicantForm.builder().build();
 
-    ReferenceData yourself = new ReferenceData();
-    ReferenceData someone = new ReferenceData();
-    yourself.setShortCode(ApplicantType.YOURSELF.toString());
-    yourself.setDescription("Yourself");
-    someone.setShortCode(ApplicantType.SOMEONE_ELSE.toString());
-    someone.setDescription("Someone else");
-
-    List<ReferenceData> applicantOptions = Lists.newArrayList(yourself, someone);
+    RadioOptionsGroup applicantOptions = controller.getApplicantOptions();
 
     mockMvc
         .perform(get("/applicant").sessionAttr("JOURNEY", new Journey()))
