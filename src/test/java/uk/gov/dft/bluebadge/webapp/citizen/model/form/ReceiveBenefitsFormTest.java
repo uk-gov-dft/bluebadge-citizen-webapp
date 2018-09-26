@@ -18,11 +18,18 @@ public class ReceiveBenefitsFormTest {
   }
 
   @Test
+  public void determineNextStep_whenDLA_thenEligible() {
+    ReceiveBenefitsForm form =
+        ReceiveBenefitsForm.builder().benefitType(EligibilityCodeField.DLA).build();
+
+    assertThat(form.determineNextStep()).isNotEmpty();
+    assertThat(form.determineNextStep().get()).isEqualTo(StepDefinition.HIGHER_RATE_MOBILITY);
+  }
+
+  @Test
   public void determineNextStep_whenAnythingElse_thenMayBeEligible() {
 
-    EnumSet.complementOf(
-            EnumSet.of(
-                EligibilityCodeField.WPMS, EligibilityCodeField.PIP, EligibilityCodeField.AFRFCS))
+    EnumSet.complementOf(EnumSet.of(EligibilityCodeField.WPMS, EligibilityCodeField.DLA))
         .forEach(
             e -> {
               ReceiveBenefitsForm form = ReceiveBenefitsForm.builder().benefitType(e).build();

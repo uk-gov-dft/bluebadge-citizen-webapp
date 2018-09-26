@@ -25,6 +25,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.AFCS.CompensationSchemeFor
 public class CompensationSchemeController implements StepController {
 
   public static final String TEMPLATE = "afcs/compensation-scheme";
+  public static final String FORM_REQUEST = "formRequest";
 
   private final RouteMaster routeMaster;
 
@@ -40,12 +41,12 @@ public class CompensationSchemeController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    if (!model.containsAttribute("formRequest") && null != journey.getCompensationSchemeForm()) {
-      model.addAttribute("formRequest", journey.getCompensationSchemeForm());
+    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getCompensationSchemeForm()) {
+      model.addAttribute(FORM_REQUEST, journey.getCompensationSchemeForm());
     }
 
-    if (!model.containsAttribute("formRequest")) {
-      model.addAttribute("formRequest", CompensationSchemeForm.builder().build());
+    if (!model.containsAttribute(FORM_REQUEST)) {
+      model.addAttribute(FORM_REQUEST, CompensationSchemeForm.builder().build());
     }
 
     RadioOptionsGroup radioOptions =
@@ -60,7 +61,7 @@ public class CompensationSchemeController implements StepController {
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute("formRequest") CompensationSchemeForm lumpSumCompensationForm,
+      @Valid @ModelAttribute(FORM_REQUEST) CompensationSchemeForm lumpSumCompensationForm,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 

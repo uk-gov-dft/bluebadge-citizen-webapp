@@ -25,6 +25,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 @RequestMapping(Mappings.URL_APPLICANT_TYPE)
 public class ApplicantController implements StepController {
   private static final String TEMPLATE_APPLICANT = "applicant";
+  public static final String FORM_REQUEST = "formRequest";
   private final RouteMaster routeMaster;
 
   public ApplicantController(RouteMaster routeMaster) {
@@ -34,12 +35,12 @@ public class ApplicantController implements StepController {
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!model.containsAttribute("formRequest") && null != journey.getApplicantForm()) {
-      model.addAttribute("formRequest", journey.getApplicantForm());
+    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getApplicantForm()) {
+      model.addAttribute(FORM_REQUEST, journey.getApplicantForm());
     }
 
-    if (!model.containsAttribute("formRequest")) {
-      model.addAttribute("formRequest", ApplicantForm.builder().build());
+    if (!model.containsAttribute(FORM_REQUEST)) {
+      model.addAttribute(FORM_REQUEST, ApplicantForm.builder().build());
     }
 
     RadioOptionsGroup applicantOptions = getApplicantOptions();
@@ -59,7 +60,7 @@ public class ApplicantController implements StepController {
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute("formRequest") ApplicantForm formRequest,
+      @Valid @ModelAttribute(FORM_REQUEST) ApplicantForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 

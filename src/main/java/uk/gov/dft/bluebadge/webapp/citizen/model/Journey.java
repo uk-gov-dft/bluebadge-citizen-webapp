@@ -12,6 +12,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipMovingAroundForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm;
@@ -25,7 +26,7 @@ public class Journey implements Serializable {
   private ApplicantForm applicantForm;
   private ApplicantNameForm applicantNameForm;
   private HealthConditionsForm healthConditionsForm;
-  private ReceiveBenefitsForm receiveBenefitsForm;;
+  private ReceiveBenefitsForm receiveBenefitsForm;
   private ChooseYourCouncilForm chooseYourCouncilForm;
   private YourIssuingAuthorityForm yourIssuingAuthorityForm;
   private PipMovingAroundForm pipMovingAroundForm;
@@ -33,6 +34,7 @@ public class Journey implements Serializable {
   private PipPlanningJourneyForm pipPlanningJourneyForm;
   private LocalAuthorityRefData localAuthority;
   private DateOfBirthForm dateOfBirthForm;
+  private HigherRateMobilityForm higherRateMobilityForm;
   public String who;
 
   // AFCS Journey Forms
@@ -182,5 +184,13 @@ public class Journey implements Serializable {
 
   public void setMentalDisorderForm(MentalDisorderForm mentalDisorderForm) {
     this.mentalDisorderForm = mentalDisorderForm;
+  }
+
+  public HigherRateMobilityForm getHigherRateMobilityForm() {
+    return higherRateMobilityForm;
+  }
+
+  public void setHigherRateMobilityForm(HigherRateMobilityForm higherRateMobilityForm) {
+    this.higherRateMobilityForm = higherRateMobilityForm;
   }
 }
