@@ -41,13 +41,13 @@ public class SubmittedControllerTest {
   @Test
   public void showSubmitted_ShouldDisplaySubmittedTemplate_WhenThereIsAJourney() throws Exception {
     when(mockJourney.isValidState(any())).thenReturn(true);
-    when(mockJourney.applicantContextContent("submittedPage.content.p1")).thenReturn("the message");
+    mockJourney.who = "you.";
 
     mockMvc
         .perform(get("/application-submitted").sessionAttr("JOURNEY", mockJourney))
         .andExpect(status().isOk())
         .andExpect(view().name("application-end/submitted"))
-        .andExpect(model().attribute("mainMessage", "the message"))
+        .andExpect(model().attribute("mainMessage", "you.submittedPage.content.p1"))
         .andExpect(request().sessionAttribute("JOURNEY", Matchers.nullValue()));
   }
 
