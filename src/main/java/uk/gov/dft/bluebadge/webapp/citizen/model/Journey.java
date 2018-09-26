@@ -2,6 +2,9 @@ package uk.gov.dft.bluebadge.webapp.citizen.model;
 
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.AFCS.CompensationSchemeForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.AFCS.DisabilityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.AFCS.MentalDisorderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
@@ -10,9 +13,9 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipMovingAroundForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipDlaQuestionForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipMovingAroundForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipPlanningJourneyForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 
@@ -28,7 +31,6 @@ public class Journey implements Serializable {
   private ApplicantNameForm applicantNameForm;
   private HealthConditionsForm healthConditionsForm;
   private ReceiveBenefitsForm receiveBenefitsForm;
-  private HigherRateMobilityForm higherRateMobilityForm;
   private ChooseYourCouncilForm chooseYourCouncilForm;
   private YourIssuingAuthorityForm yourIssuingAuthorityForm;
   private PipMovingAroundForm pipMovingAroundForm;
@@ -36,9 +38,15 @@ public class Journey implements Serializable {
   private PipPlanningJourneyForm pipPlanningJourneyForm;
   private LocalAuthorityRefData localAuthority;
   private DateOfBirthForm dateOfBirthForm;
+  private HigherRateMobilityForm higherRateMobilityForm;
   private GenderForm genderForm;
   public String who;
   public String ageGroup;
+
+  // AFCS Journey Forms
+  private CompensationSchemeForm compensationSchemeForm;
+  private DisabilityForm disabilityForm;
+  private MentalDisorderForm mentalDisorderForm;
 
   public Boolean isApplicantYourself() {
     if (applicantForm != null) {
@@ -158,6 +166,30 @@ public class Journey implements Serializable {
 
   public void setLocalAuthority(LocalAuthorityRefData localAuthority) {
     this.localAuthority = localAuthority;
+  }
+
+  public CompensationSchemeForm getCompensationSchemeForm() {
+    return compensationSchemeForm;
+  }
+
+  public void setCompensationSchemeForm(CompensationSchemeForm compensationSchemeForm) {
+    this.compensationSchemeForm = compensationSchemeForm;
+  }
+
+  public DisabilityForm getDisabilityForm() {
+    return disabilityForm;
+  }
+
+  public void setDisabilityForm(DisabilityForm disabilityForm) {
+    this.disabilityForm = disabilityForm;
+  }
+
+  public MentalDisorderForm getMentalDisorderForm() {
+    return mentalDisorderForm;
+  }
+
+  public void setMentalDisorderForm(MentalDisorderForm mentalDisorderForm) {
+    this.mentalDisorderForm = mentalDisorderForm;
   }
 
   public HigherRateMobilityForm getHigherRateMobilityForm() {

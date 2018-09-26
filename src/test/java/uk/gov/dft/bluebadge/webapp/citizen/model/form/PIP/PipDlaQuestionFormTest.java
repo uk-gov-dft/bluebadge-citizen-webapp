@@ -1,4 +1,4 @@
-package uk.gov.dft.bluebadge.webapp.citizen.model.form;
+package uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -1,7 +1,7 @@
-package uk.gov.dft.bluebadge.webapp.citizen.model.form;
+package uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm.PipReceivedDlaOption.HAS_RECEIVED_DLA;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm.PipReceivedDlaOption.NEVER_RECEIVED_DLA;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipDlaQuestionForm.PipReceivedDlaOption.HAS_RECEIVED_DLA;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipDlaQuestionForm.PipReceivedDlaOption.NEVER_RECEIVED_DLA;
 
 import java.io.Serializable;
 import java.util.Optional;

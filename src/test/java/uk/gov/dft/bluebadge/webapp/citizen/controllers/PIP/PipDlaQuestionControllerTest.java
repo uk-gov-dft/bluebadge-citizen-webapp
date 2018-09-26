@@ -1,4 +1,4 @@
-package uk.gov.dft.bluebadge.webapp.citizen.controllers;
+package uk.gov.dft.bluebadge.webapp.citizen.controllers.PIP;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -21,7 +21,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipDlaQuestionForm;
 
 public class PipDlaQuestionControllerTest {
   private MockMvc mockMvc;
@@ -53,7 +53,7 @@ public class PipDlaQuestionControllerTest {
     mockMvc
         .perform(get("/dla-in-the-past").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
-        .andExpect(view().name("pip-received-dla"))
+        .andExpect(view().name("pip/received-dla"))
         .andExpect(model().attribute("formRequest", formRequest))
         .andExpect(model().attribute("formOptions", Matchers.notNullValue()));
   }
