@@ -30,6 +30,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
 public class HigherRateMobilityController implements StepController {
 
   private static final String TEMPLATE = "higher-rate-mobility";
+  private static final String MODEL_FORM_REQUEST = "formRequest";
 
   private final RouteMaster routeMaster;
 
@@ -45,13 +46,14 @@ public class HigherRateMobilityController implements StepController {
     }
 
     // On returning to form, take previously submitted values.
-    if (!model.containsAttribute("formRequest") && null != journey.getHigherRateMobilityForm()) {
-      model.addAttribute("formRequest", journey.getHigherRateMobilityForm());
+    if (!model.containsAttribute(MODEL_FORM_REQUEST)
+        && null != journey.getHigherRateMobilityForm()) {
+      model.addAttribute(MODEL_FORM_REQUEST, journey.getHigherRateMobilityForm());
     }
 
     // If navigating forward from previous form, reset
-    if (!model.containsAttribute("formRequest")) {
-      model.addAttribute("formRequest", HigherRateMobilityForm.builder().build());
+    if (!model.containsAttribute(MODEL_FORM_REQUEST)) {
+      model.addAttribute(MODEL_FORM_REQUEST, HigherRateMobilityForm.builder().build());
     }
 
     setupModel(model, journey);
@@ -62,7 +64,7 @@ public class HigherRateMobilityController implements StepController {
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute("formRequest") HigherRateMobilityForm formRequest,
+      @Valid @ModelAttribute(MODEL_FORM_REQUEST) HigherRateMobilityForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
     if (bindingResult.hasErrors()) {

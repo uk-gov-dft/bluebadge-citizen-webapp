@@ -25,6 +25,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 @RequestMapping(Mappings.URL_APPLICANT_TYPE)
 public class ApplicantController implements StepController {
   private static final String TEMPLATE_APPLICANT = "applicant";
+  private static final String MODEL_FORM_REQUEST = "formRequest";
   private final RouteMaster routeMaster;
 
   public ApplicantController(RouteMaster routeMaster) {
@@ -34,12 +35,12 @@ public class ApplicantController implements StepController {
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!model.containsAttribute("formRequest") && null != journey.getApplicantForm()) {
-      model.addAttribute("formRequest", journey.getApplicantForm());
+    if (!model.containsAttribute(MODEL_FORM_REQUEST) && null != journey.getApplicantForm()) {
+      model.addAttribute(MODEL_FORM_REQUEST, journey.getApplicantForm());
     }
 
-    if (!model.containsAttribute("formRequest")) {
-      model.addAttribute("formRequest", ApplicantForm.builder().build());
+    if (!model.containsAttribute(MODEL_FORM_REQUEST)) {
+      model.addAttribute(MODEL_FORM_REQUEST, ApplicantForm.builder().build());
     }
 
     List<ReferenceData> applicantOptions = getApplicantOptions();
@@ -63,7 +64,7 @@ public class ApplicantController implements StepController {
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute("formRequest") ApplicantForm formRequest,
+      @Valid @ModelAttribute(MODEL_FORM_REQUEST) ApplicantForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 

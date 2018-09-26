@@ -28,6 +28,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 public class ReceiveBenefitsController implements StepController {
 
   private static final String TEMPLATE = "receive-benefits";
+  private static final String MODEL_FORM_REQUEST = "formRequest";
 
   private final RouteMaster routeMaster;
 
@@ -43,13 +44,13 @@ public class ReceiveBenefitsController implements StepController {
     }
 
     //On returning to form, take previously submitted values.
-    if (!model.containsAttribute("formRequest") && null != journey.getReceiveBenefitsForm()) {
-      model.addAttribute("formRequest", journey.getReceiveBenefitsForm());
+    if (!model.containsAttribute(MODEL_FORM_REQUEST) && null != journey.getReceiveBenefitsForm()) {
+      model.addAttribute(MODEL_FORM_REQUEST, journey.getReceiveBenefitsForm());
     }
 
     // If navigating forward from previous form, reset
-    if (!model.containsAttribute("formRequest")) {
-      model.addAttribute("formRequest", ReceiveBenefitsForm.builder().build());
+    if (!model.containsAttribute(MODEL_FORM_REQUEST)) {
+      model.addAttribute(MODEL_FORM_REQUEST, ReceiveBenefitsForm.builder().build());
     }
 
     model.addAttribute("benefitOptions", getBenefitOptions(journey));
@@ -74,7 +75,7 @@ public class ReceiveBenefitsController implements StepController {
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute("formRequest") ReceiveBenefitsForm receiveBenefitsForm,
+      @Valid @ModelAttribute(MODEL_FORM_REQUEST) ReceiveBenefitsForm receiveBenefitsForm,
       BindingResult bindingResult,
       RedirectAttributes attr) {
     if (bindingResult.hasErrors()) {

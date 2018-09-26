@@ -42,7 +42,7 @@ public class DateOfBirthController implements StepController {
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
-      model.addAttribute(FORM_REQUEST, journey.getDateOfBirthForm().builder().build());
+      model.addAttribute(FORM_REQUEST, DateOfBirthForm.builder().build());
     }
 
     return TEMPLATE_DOB;

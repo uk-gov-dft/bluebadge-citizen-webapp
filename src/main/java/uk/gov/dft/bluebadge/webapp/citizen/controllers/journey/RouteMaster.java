@@ -27,11 +27,11 @@ public class RouteMaster {
 
   public String redirectToOnSuccess(StepDefinition currentStep) {
     StepDefinition nextStep = currentStep.getDefaultNext();
-    return "redirect:" + Mappings.getUrl(nextStep);
+    return REDIRECT + Mappings.getUrl(nextStep);
   }
 
   public String startingPoint() {
-    return "redirect:" + Mappings.getUrl(StepDefinition.HOME.getDefaultNext());
+    return REDIRECT + Mappings.getUrl(StepDefinition.HOME.getDefaultNext());
   }
 
   public String backToCompletedPrevious() {
