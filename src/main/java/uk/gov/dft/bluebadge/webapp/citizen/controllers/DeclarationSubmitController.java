@@ -3,7 +3,6 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import com.google.common.collect.Lists;
-import java.time.LocalDate;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -124,7 +123,7 @@ public class DeclarationSubmitController implements StepController {
                     .badgeHolderName(fullName)
                     .nameAtBirth(birthName)
                     .nino("NS123456A")
-                    .dob(LocalDate.now())
+                    .dob(journey.getDateOfBirthForm().getLocalDateDob())
                     .genderCode(GenderCodeField.FEMALE));
 
     Eligibility eligibilityObject;

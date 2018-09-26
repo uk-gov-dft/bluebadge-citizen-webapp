@@ -12,16 +12,22 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.applicantContextContent('healthConditionsPage.body.title')}}"></h1>
+            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.who} + 'healthConditionsPage.body.title'}"></h1>
             
             <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>
 
             <form th:action="@{/health-conditions}" th:object="${formRequest}" method="post" novalidate>
 
-                <div class="govuk-form-group">
-                    <label class="govuk-label" for="description-of-conditions" th:text="#{healthConditionsPage.descriptionOfConditions}"></label>
-                    <textarea class="govuk-textarea govuk-textarea--fixed" th:field="${formRequest.descriptionOfConditions}"
-                              id="description-of-conditions" rows="5" name="descriptionOfConditions"
+                <div th:class="${#fields.hasErrors('descriptionOfConditions')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+
+                    <label class="govuk-label" for="descriptionOfConditions" th:text="#{healthConditionsPage.descriptionOfConditions}"></label>
+
+                    <span class="govuk-error-message"
+                          data-uipath="descriptionOfConditions.error"
+                          th:errors="*{descriptionOfConditions}"></span>
+
+                    <textarea class="govuk-textarea govuk-textarea--fixed" th:field="*{descriptionOfConditions}"
+                              id="descriptionOfConditions" rows="5" name="descriptionOfConditions"
                               data-uipath="healthconditions.text"></textarea>
                 </div>
 

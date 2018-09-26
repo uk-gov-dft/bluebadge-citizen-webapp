@@ -21,13 +21,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
-import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
 public class DeclarationSubmitControllerTest {
@@ -93,7 +89,10 @@ public class DeclarationSubmitControllerTest {
         .thenReturn("redirect:/testSuccess");
 
     mockMvc
-        .perform(post("/apply-for-a-blue-badge/declaration").param("agreed", "true"))
+        .perform(
+            post("/apply-for-a-blue-badge/declaration")
+                .param("agreed", "true")
+                .sessionAttr("JOURNEY", JourneyFixture.getDefaultJourney()))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
 
@@ -107,28 +106,11 @@ public class DeclarationSubmitControllerTest {
     when(mockRouteMaster.redirectToOnSuccess(any(DeclarationForm.class)))
         .thenReturn("redirect:/testSuccess");
 
-    Journey journey = new Journey();
-
-    HealthConditionsForm healthConditionsForm =
-        HealthConditionsForm.builder().descriptionOfConditions("test description").build();
-
-    ApplicantNameForm applicantNameForm =
-        ApplicantNameForm.builder()
-            .fullName("John Doe")
-            .hasBirthName(true)
-            .birthName("Johns Birth name")
-            .build();
-
-    journey.setHealthConditionsForm(healthConditionsForm);
-    journey.setApplicantNameForm(applicantNameForm);
-    journey.setReceiveBenefitsForm(
-        ReceiveBenefitsForm.builder().benefitType(EligibilityCodeField.WALKD).build());
-
     mockMvc
         .perform(
             post("/apply-for-a-blue-badge/declaration")
                 .param("agreed", "true")
-                .sessionAttr("JOURNEY", journey))
+                .sessionAttr("JOURNEY", JourneyFixture.getDefaultJourney()))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
 

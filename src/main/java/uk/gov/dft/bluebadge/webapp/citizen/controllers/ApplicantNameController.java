@@ -23,6 +23,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 public class ApplicantNameController implements StepController {
 
   private static final String TEMPLATE_APPLICANT_NAME = "applicant-name";
+  public static final String FORM_REQUEST = "formRequest";
 
   private final RouteMaster routeMaster;
 
@@ -39,13 +40,13 @@ public class ApplicantNameController implements StepController {
     }
 
     //On returning to form, take previously submitted values.
-    if (!model.containsAttribute("formRequest") && null != journey.getApplicantNameForm()) {
-      model.addAttribute("formRequest", journey.getApplicantNameForm());
+    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getApplicantNameForm()) {
+      model.addAttribute(FORM_REQUEST, journey.getApplicantNameForm());
     }
 
     // If navigating forward from previous form, reset
-    if (!model.containsAttribute("formRequest")) {
-      model.addAttribute("formRequest", ApplicantNameForm.builder().build());
+    if (!model.containsAttribute(FORM_REQUEST)) {
+      model.addAttribute(FORM_REQUEST, ApplicantNameForm.builder().build());
     }
 
     return TEMPLATE_APPLICANT_NAME;
@@ -54,7 +55,7 @@ public class ApplicantNameController implements StepController {
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute("formRequest") ApplicantNameForm applicantNameForm,
+      @Valid @ModelAttribute(FORM_REQUEST) ApplicantNameForm applicantNameForm,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
