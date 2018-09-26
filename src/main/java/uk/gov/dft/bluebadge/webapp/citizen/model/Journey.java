@@ -8,6 +8,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 
@@ -19,6 +20,7 @@ public class Journey implements Serializable {
   private ApplicantNameForm applicantNameForm;
   private HealthConditionsForm healthConditionsForm;
   private ReceiveBenefitsForm receiveBenefitsForm;
+  private HigherRateMobilityForm higherRateMobilityForm;
   private ChooseYourCouncilForm chooseYourCouncilForm;
   private YourIssuingAuthorityForm yourIssuingAuthorityForm;
   private DateOfBirthForm dateOfBirthForm;
@@ -110,5 +112,13 @@ public class Journey implements Serializable {
 
   public void setReceiveBenefitsForm(ReceiveBenefitsForm receiveBenefitsForm) {
     this.receiveBenefitsForm = receiveBenefitsForm;
+  }
+
+  public HigherRateMobilityForm getHigherRateMobilityForm() {
+    return higherRateMobilityForm;
+  }
+
+  public void setHigherRateMobilityForm(HigherRateMobilityForm higherRateMobilityForm) {
+    this.higherRateMobilityForm = higherRateMobilityForm;
   }
 }
