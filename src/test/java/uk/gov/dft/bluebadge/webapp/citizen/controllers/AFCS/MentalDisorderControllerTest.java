@@ -17,13 +17,13 @@ import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.AFCS.CompensationSchemeForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.AFCS.MentalDisorderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 
-public class CompensationSchemeControllerTest {
+public class MentalDisorderControllerTest {
 
   private MockMvc mockMvc;
-  private CompensationSchemeController controller;
+  private MentalDisorderController controller;
   @Mock private RouteMaster mockRouteMaster;
 
   private Journey journey;
@@ -31,30 +31,36 @@ public class CompensationSchemeControllerTest {
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new CompensationSchemeController(mockRouteMaster);
+
+    controller = new MentalDisorderController(mockRouteMaster);
+
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
 
     journey = new Journey();
+
     journey.setApplicantForm(ApplicantForm.builder().applicantType(YOURSELF.name()).build());
+
+    journey.setMentalDisorderForm(MentalDisorderForm.builder().hasMentalDisorder(true).build());
+
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
     when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))
         .thenReturn("redirect:/someValidationError");
   }
 
   @Test
-  public void show_ShouldDisplayCompensationScheme_WithRadioOptions() throws Exception {
+  public void show_ShouldDisplayDisabilityTemplate_WithRadioOptions() throws Exception {
     RadioOptionsGroup options =
-        new RadioOptionsGroup("you.afcs.compensationSchemePage.title").autoPopulateBooleanOptions();
+        new RadioOptionsGroup("you.afcs.mentalDisorderPage.title").autoPopulateBooleanOptions();
 
-    CompensationSchemeForm form = CompensationSchemeForm.builder().build();
+    MentalDisorderForm form = MentalDisorderForm.builder().hasMentalDisorder(true).build();
 
     mockMvc
-        .perform(get("/lump-sum").sessionAttr("JOURNEY", journey))
+        .perform(get("/permanent-mental-disorder").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
-        .andExpect(view().name("afcs/compensation-scheme"))
+        .andExpect(view().name("afcs/mental-disorder"))
         .andExpect(model().attribute("formRequest", form))
         .andExpect(model().attribute("radioOptions", options));
   }
@@ -63,8 +69,7 @@ public class CompensationSchemeControllerTest {
   public void submit_ShouldDisplayErrors_WhenNoOptionsAreSelected() throws Exception {
 
     mockMvc
-        .perform(post("/lump-sum").param("hasReceivedCompensation", ""))
-        .andExpect(status().isFound())
+        .perform(post("/permanent-mental-disorder").param("hasMentalDisorder", ""))
         .andExpect(redirectedUrl("/someValidationError"));
   }
 
@@ -74,7 +79,7 @@ public class CompensationSchemeControllerTest {
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
 
     mockMvc
-        .perform(get("/lump-sum"))
+        .perform(get("/permanent-mental-disorder"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/backToStart"));
   }

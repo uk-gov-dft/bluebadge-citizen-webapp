@@ -7,7 +7,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 public class JourneyFixture {
 
-  class JourneyBuilder {
+  public static class JourneyBuilder {
     Journey journey;
 
     public JourneyBuilder() {

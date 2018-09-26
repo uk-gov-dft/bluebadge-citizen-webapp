@@ -62,6 +62,6 @@ public class RouteMaster {
     attr.addFlashAttribute(
         "org.springframework.validation.BindingResult.formRequest", bindingResult);
     attr.addFlashAttribute("formRequest", formRequest);
-    return "redirect:" + Mappings.getUrl(currentStep.getStepDefinition()) + "#error";
+    return "redirect:" + Mappings.getUrl(currentStep.getStepDefinition());
   }
 }

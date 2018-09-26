@@ -37,6 +37,10 @@ public class DisabilityController implements StepController {
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
+    if (!journey.isValidState(getStepDefinition())) {
+      return routeMaster.backToCompletedPrevious();
+    }
+
     if (!model.containsAttribute(FORM_REQUEST) && null != journey.getDisabilityForm()) {
       model.addAttribute(FORM_REQUEST, journey.getDisabilityForm());
     }
@@ -46,7 +50,8 @@ public class DisabilityController implements StepController {
     }
 
     RadioOptionsGroup radioOptions =
-        new RadioOptionsGroup("afcs.disabilityPage.title").autoPopulateBooleanOptions();
+        new RadioOptionsGroup(journey.who + "afcs.disabilityPage.title")
+            .autoPopulateBooleanOptions();
 
     model.addAttribute("radioOptions", radioOptions);
 

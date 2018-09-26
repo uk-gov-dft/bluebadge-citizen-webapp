@@ -48,7 +48,7 @@ public class ApplicantController implements StepController {
     return TEMPLATE_APPLICANT;
   }
 
-  private RadioOptionsGroup getApplicantOptions() {
+  RadioOptionsGroup getApplicantOptions() {
     RadioOption yourself =
         new RadioOption(ApplicantType.YOURSELF.toString(), "options.applicantType.yourself");
     RadioOption someone =

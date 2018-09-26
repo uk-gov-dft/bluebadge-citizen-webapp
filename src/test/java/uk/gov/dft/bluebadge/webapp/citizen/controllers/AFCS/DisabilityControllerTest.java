@@ -55,7 +55,7 @@ public class DisabilityControllerTest {
   @Test
   public void show_ShouldDisplayDisabilityTemplate_WithRadioOptions() throws Exception {
     RadioOptionsGroup options =
-        new RadioOptionsGroup("afcs.disabilityPage.title").autoPopulateBooleanOptions();
+        new RadioOptionsGroup("you.afcs.disabilityPage.title").autoPopulateBooleanOptions();
 
     DisabilityForm form = DisabilityForm.builder().build();
 
@@ -73,5 +73,16 @@ public class DisabilityControllerTest {
     mockMvc
         .perform(post("/permanent-and-substantial-disability").param("hasDisability", ""))
         .andExpect(redirectedUrl("/someValidationError"));
+  }
+
+  @Test
+  public void show_givenNoSession_ShouldRedirectBackToStart() throws Exception {
+
+    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
+
+    mockMvc
+        .perform(get("/permanent-and-substantial-disability"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/backToStart"));
   }
 }

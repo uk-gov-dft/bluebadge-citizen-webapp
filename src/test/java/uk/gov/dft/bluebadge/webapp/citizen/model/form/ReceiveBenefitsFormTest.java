@@ -20,7 +20,9 @@ public class ReceiveBenefitsFormTest {
   @Test
   public void determineNextStep_whenAnythingElse_thenMayBeEligible() {
 
-    EnumSet.complementOf(EnumSet.of(EligibilityCodeField.WPMS, EligibilityCodeField.PIP))
+    EnumSet.complementOf(
+            EnumSet.of(
+                EligibilityCodeField.WPMS, EligibilityCodeField.PIP, EligibilityCodeField.AFRFCS))
         .forEach(
             e -> {
               ReceiveBenefitsForm form = ReceiveBenefitsForm.builder().benefitType(e).build();

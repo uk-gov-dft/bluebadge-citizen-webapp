@@ -36,6 +36,10 @@ public class CompensationSchemeController implements StepController {
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
+    if (!journey.isValidState(getStepDefinition())) {
+      return routeMaster.backToCompletedPrevious();
+    }
+
     if (!model.containsAttribute("formRequest") && null != journey.getCompensationSchemeForm()) {
       model.addAttribute("formRequest", journey.getCompensationSchemeForm());
     }
@@ -45,7 +49,8 @@ public class CompensationSchemeController implements StepController {
     }
 
     RadioOptionsGroup radioOptions =
-        new RadioOptionsGroup("afcs.compensationSchemePage.title").autoPopulateBooleanOptions();
+        new RadioOptionsGroup(journey.who + "afcs.compensationSchemePage.title")
+            .autoPopulateBooleanOptions();
 
     model.addAttribute("radioOptions", radioOptions);
 
@@ -65,7 +70,7 @@ public class CompensationSchemeController implements StepController {
     }
 
     journey.setCompensationSchemeForm(lumpSumCompensationForm);
-    return routeMaster.redirectToOnSuccess(lumpSumCompensationForm);
+    return routeMaster.redirectToOnSuccess(lumpSumCompensationForm, journey);
   }
 
   @Override
