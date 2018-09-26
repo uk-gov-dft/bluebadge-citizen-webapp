@@ -31,7 +31,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
 public class HigherRateMobilityController implements StepController {
 
   private static final String TEMPLATE = "higher-rate-mobility";
-  private static final String MODEL_FORM_REQUEST = "formRequest";
 
   private final RouteMaster routeMaster;
 

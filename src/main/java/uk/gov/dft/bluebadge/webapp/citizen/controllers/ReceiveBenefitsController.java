@@ -29,7 +29,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 public class ReceiveBenefitsController implements StepController {
 
   private static final String TEMPLATE = "receive-benefits";
-  private static final String MODEL_FORM_REQUEST = "formRequest";
 
   private final RouteMaster routeMaster;
 
