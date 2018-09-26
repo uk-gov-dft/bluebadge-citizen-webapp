@@ -12,4 +12,9 @@ public class RadioOption {
     this.shortCode = shortCode;
     this.messageKey = messageKey;
   }
+
+  public RadioOption(Enum<?> enumItem, String messageKey) {
+    this.shortCode = enumItem.name();
+    this.messageKey = messageKey;
+  }
 }

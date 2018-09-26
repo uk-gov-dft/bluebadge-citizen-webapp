@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import javax.validation.Valid;
@@ -22,7 +23,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 @RequestMapping(Mappings.URL_DOB)
 public class DateOfBirthController implements StepController {
   private static final String TEMPLATE_DOB = "date-of-birth";
-  public static final String FORM_REQUEST = "formRequest";
   private final RouteMaster routeMaster;
 
   @Autowired

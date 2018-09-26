@@ -89,10 +89,12 @@ public class DeclarationSubmitController implements StepController {
     ApplicantNameForm applicantNameForm = journey.getApplicantNameForm();
     HealthConditionsForm healthConditionsForm = journey.getHealthConditionsForm();
     YourIssuingAuthorityForm yourIssuingAuthorityForm = journey.getYourIssuingAuthorityForm();
-    EligibilityCodeField eligibiility =
+
+    EligibilityCodeField eligibility =
         null != journey.getReceiveBenefitsForm()
             ? journey.getReceiveBenefitsForm().getBenefitType()
             : EligibilityCodeField.WPMS;
+
     String la =
         yourIssuingAuthorityForm == null
             ? "ABERD"
@@ -127,7 +129,7 @@ public class DeclarationSubmitController implements StepController {
                     .genderCode(GenderCodeField.FEMALE));
 
     Eligibility eligibilityObject;
-    if (eligibiility == null || EligibilityCodeField.WALKD == eligibiility) {
+    if (eligibility == null || EligibilityCodeField.WALKD == eligibility) {
       eligibilityObject =
           new Eligibility()
               .typeCode(EligibilityCodeField.WALKD)
@@ -146,13 +148,13 @@ public class DeclarationSubmitController implements StepController {
                                   .description("walk aid description")
                                   .usage("walk aid usage")
                                   .howProvidedCode(HowProvidedCodeField.PRESCRIBE))));
-    } else if (EligibilityCodeField.PIP == eligibiility
-        || EligibilityCodeField.DLA == eligibiility
-        || EligibilityCodeField.WPMS == eligibiility) {
+    } else if (EligibilityCodeField.PIP == eligibility
+        || EligibilityCodeField.DLA == eligibility
+        || EligibilityCodeField.WPMS == eligibility) {
       eligibilityObject =
-          new Eligibility().typeCode(eligibiility).benefit(new Benefit().isIndefinite(true));
+          new Eligibility().typeCode(eligibility).benefit(new Benefit().isIndefinite(true));
     } else {
-      eligibilityObject = new Eligibility().typeCode(eligibiility);
+      eligibilityObject = new Eligibility().typeCode(eligibility);
     }
     return Application.builder()
         .applicationTypeCode(ApplicationTypeCodeField.NEW)

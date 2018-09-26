@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import com.google.common.collect.Lists;
@@ -46,14 +47,13 @@ public class HigherRateMobilityController implements StepController {
     }
 
     // On returning to form, take previously submitted values.
-    if (!model.containsAttribute(MODEL_FORM_REQUEST)
-        && null != journey.getHigherRateMobilityForm()) {
-      model.addAttribute(MODEL_FORM_REQUEST, journey.getHigherRateMobilityForm());
+    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getHigherRateMobilityForm()) {
+      model.addAttribute(FORM_REQUEST, journey.getHigherRateMobilityForm());
     }
 
     // If navigating forward from previous form, reset
-    if (!model.containsAttribute(MODEL_FORM_REQUEST)) {
-      model.addAttribute(MODEL_FORM_REQUEST, HigherRateMobilityForm.builder().build());
+    if (!model.containsAttribute(FORM_REQUEST)) {
+      model.addAttribute(FORM_REQUEST, HigherRateMobilityForm.builder().build());
     }
 
     setupModel(model, journey);
@@ -64,7 +64,7 @@ public class HigherRateMobilityController implements StepController {
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute(MODEL_FORM_REQUEST) HigherRateMobilityForm formRequest,
+      @Valid @ModelAttribute(FORM_REQUEST) HigherRateMobilityForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
     if (bindingResult.hasErrors()) {
@@ -90,8 +90,7 @@ public class HigherRateMobilityController implements StepController {
 
     List<RadioOption> options = Lists.newArrayList(yes, no);
 
-    return new RadioOptionsGroup(
-        journey.applicantContextContent("higherRateMobilityPage.content.title"), options);
+    return new RadioOptionsGroup(journey.who + "higherRateMobilityPage.content.title", options);
   }
 
   @InitBinder
