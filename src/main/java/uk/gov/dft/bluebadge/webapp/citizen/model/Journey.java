@@ -1,7 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
 import java.io.Serializable;
-import lombok.Data;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
@@ -10,6 +9,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipMovingAroundForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm;
@@ -24,6 +24,7 @@ public class Journey implements Serializable {
   private ApplicantNameForm applicantNameForm;
   private HealthConditionsForm healthConditionsForm;
   private ReceiveBenefitsForm receiveBenefitsForm;
+  private HigherRateMobilityForm higherRateMobilityForm;
   private ChooseYourCouncilForm chooseYourCouncilForm;
   private YourIssuingAuthorityForm yourIssuingAuthorityForm;
   private PipMovingAroundForm pipMovingAroundForm;
@@ -151,5 +152,13 @@ public class Journey implements Serializable {
 
   public void setLocalAuthority(LocalAuthorityRefData localAuthority) {
     this.localAuthority = localAuthority;
+  }
+
+  public HigherRateMobilityForm getHigherRateMobilityForm() {
+    return higherRateMobilityForm;
+  }
+
+  public void setHigherRateMobilityForm(HigherRateMobilityForm higherRateMobilityForm) {
+    this.higherRateMobilityForm = higherRateMobilityForm;
   }
 }

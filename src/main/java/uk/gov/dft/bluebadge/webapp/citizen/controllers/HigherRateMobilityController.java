@@ -1,17 +1,18 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm.PipReceivedDlaOption.HAS_RECEIVED_DLA;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm.PipReceivedDlaOption.NEVER_RECEIVED_DLA;
 
 import com.google.common.collect.Lists;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomBooleanEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,18 +23,18 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
 
 @Controller
-@RequestMapping(Mappings.URL_PIP_RECEIVED_DLA)
-public class PipDlaQuestionController implements StepController {
+@RequestMapping(Mappings.URL_HIGHER_RATE_MOBILITY)
+public class HigherRateMobilityController implements StepController {
 
-  private static final String TEMPLATE = "pip-received-dla";
+  private static final String TEMPLATE = "higher-rate-mobility";
 
   private final RouteMaster routeMaster;
 
   @Autowired
-  public PipDlaQuestionController(RouteMaster routeMaster) {
+  public HigherRateMobilityController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
@@ -44,49 +45,55 @@ public class PipDlaQuestionController implements StepController {
     }
 
     // On returning to form, take previously submitted values.
-    if (!model.containsAttribute("formRequest") && null != journey.getPipDlaQuestionForm()) {
-      model.addAttribute("formRequest", journey.getPipDlaQuestionForm());
+    if (!model.containsAttribute("formRequest") && null != journey.getHigherRateMobilityForm()) {
+      model.addAttribute("formRequest", journey.getHigherRateMobilityForm());
     }
 
     // If navigating forward from previous form, reset
     if (!model.containsAttribute("formRequest")) {
-      model.addAttribute("formRequest", PipDlaQuestionForm.builder().build());
+      model.addAttribute("formRequest", HigherRateMobilityForm.builder().build());
     }
 
-    model.addAttribute("formOptions", getOptions(journey));
+    setupModel(model, journey);
 
     return TEMPLATE;
-  }
-
-  private RadioOptionsGroup getOptions(Journey journey) {
-    RadioOption hasReceived =
-        new RadioOption(HAS_RECEIVED_DLA, journey.who + "options.pip.has.received");
-    RadioOption neverReceived =
-        new RadioOption(NEVER_RECEIVED_DLA, journey.who + "options.pip.never.received");
-
-    List<RadioOption> options = Lists.newArrayList(hasReceived, neverReceived);
-
-    String title = journey.who + "pipDlaQuestionPage.content.title";
-    return new RadioOptionsGroup(title, options);
   }
 
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute("formRequest") PipDlaQuestionForm pipDlaQuestionForm,
+      @Valid @ModelAttribute("formRequest") HigherRateMobilityForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
-
     if (bindingResult.hasErrors()) {
-      return routeMaster.redirectToOnBindingError(this, pipDlaQuestionForm, bindingResult, attr);
+      return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
     }
 
-    journey.setPipDlaQuestionForm(pipDlaQuestionForm);
-    return routeMaster.redirectToOnSuccess(pipDlaQuestionForm);
+    journey.setHigherRateMobilityForm(formRequest);
+    return routeMaster.redirectToOnSuccess(formRequest);
   }
 
   @Override
   public StepDefinition getStepDefinition() {
-    return StepDefinition.PIP_DLA;
+    return StepDefinition.HIGHER_RATE_MOBILITY;
+  }
+
+  private void setupModel(Model model, Journey journey) {
+    model.addAttribute("options", getOptions(journey));
+  }
+
+  private RadioOptionsGroup getOptions(Journey journey) {
+    RadioOption yes = new RadioOption("true", "radio.label.yes");
+    RadioOption no = new RadioOption("false", "radio.label.no");
+
+    List<RadioOption> options = Lists.newArrayList(yes, no);
+
+    return new RadioOptionsGroup(
+        journey.applicantContextContent("higherRateMobilityPage.content.title"), options);
+  }
+
+  @InitBinder
+  public void dataBinding(WebDataBinder binder) {
+    binder.registerCustomEditor(Boolean.class, new CustomBooleanEditor("true", "false", true));
   }
 }
