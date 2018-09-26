@@ -39,7 +39,7 @@ public class PipPlanningJourneyForm implements Serializable, StepForm {
       return Optional.of(StepDefinition.ELIGIBLE);
     }
     if (Nations.WALES.equals(localAuthority.getNation())) {
-      return Optional.of(StepDefinition.MAY_BE_ELIGIBLE);
+      return Optional.of(StepDefinition.MAIN_REASON);
     }
     if (Nations.SCOTLAND.equals(localAuthority.getNation())) {
       return Optional.of(StepDefinition.PIP_DLA);

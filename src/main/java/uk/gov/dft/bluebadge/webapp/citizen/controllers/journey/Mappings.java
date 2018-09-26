@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
+import com.sun.org.apache.xerces.internal.impl.xpath.XPath;
 import lombok.Getter;
 
 @Getter
@@ -30,6 +31,12 @@ public class Mappings {
   public static final String URL_AFCS_DISABILITY = "/permanent-and-substantial-disability";
   public static final String URL_AFCS_MENTAL_DISORDER = "/permanent-mental-disorder";
 
+  // Main reason sub journey
+  public static final String URL_MAIN_REASON = "/main-reason";
+  public static final String URL_WALKING_DIFFICULTY = "/walking-difficulty";
+  public static final String URL_NOT_ELIGIBLE = "/not-eligible";
+  public static final String URL_CONTACT_COUNCIL = "/contact-council";
+
   private Mappings() {}
 
   private static final BiMap<StepDefinition, String> stepToUrlMapping =
@@ -52,6 +59,12 @@ public class Mappings {
           .put(StepDefinition.AFCS_DISABILITY, URL_AFCS_DISABILITY)
           .put(StepDefinition.AFCS_MENTAL_DISORDER, URL_AFCS_MENTAL_DISORDER)
           .put(StepDefinition.AFCS_COMPENSATION_SCHEME, URL_AFCS_COMPENSATION_SCHEME)
+
+          // Main reason mappings
+          .put(StepDefinition.MAIN_REASON, URL_MAIN_REASON)
+          .put(StepDefinition.CONTACT_COUNCIL, URL_CONTACT_COUNCIL)
+          .put(StepDefinition.WALKING_DIFFICULTY, URL_WALKING_DIFFICULTY)
+          .put(StepDefinition.NOT_ELIGIBLE, URL_NOT_ELIGIBLE)
           .put(StepDefinition.HEALTH_CONDITIONS, URL_HEALTH_CONDITIONS)
           .put(StepDefinition.CHOOSE_COUNCIL, URL_CHOOSE_YOUR_COUNCIL)
           .put(StepDefinition.YOUR_ISSUING_AUTHORITY, URL_YOUR_ISSUING_AUTHORITY)

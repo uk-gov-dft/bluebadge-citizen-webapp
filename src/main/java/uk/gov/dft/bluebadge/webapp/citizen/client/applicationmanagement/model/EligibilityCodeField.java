@@ -10,5 +10,6 @@ public enum EligibilityCodeField {
   WALKD,
   ARMS,
   CHILDBULK,
-  CHILDVEHIC;
+  CHILDVEHIC,
+  TERMILL;
 }

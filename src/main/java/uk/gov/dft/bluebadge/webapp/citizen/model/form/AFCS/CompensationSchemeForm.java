@@ -34,6 +34,6 @@ public class CompensationSchemeForm implements Serializable, StepForm {
       return Optional.of(StepDefinition.AFCS_MENTAL_DISORDER);
     }
 
-    return Optional.of(StepDefinition.MAY_BE_ELIGIBLE);
+    return Optional.of(StepDefinition.MAIN_REASON);
   }
 }

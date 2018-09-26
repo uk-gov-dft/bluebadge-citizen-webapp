@@ -18,6 +18,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipMovingAroundForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipPlanningJourneyForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficultyForm;
 
 public class Journey implements Serializable {
 
@@ -36,6 +38,8 @@ public class Journey implements Serializable {
   private LocalAuthorityRefData localAuthority;
   private DateOfBirthForm dateOfBirthForm;
   private HigherRateMobilityForm higherRateMobilityForm;
+  private MainReasonForm mainReasonForm;
+  private WalkingDifficultyForm walkingDifficultyForm;
   public String who;
 
   // AFCS Journey Forms
@@ -185,5 +189,21 @@ public class Journey implements Serializable {
 
   public void setHigherRateMobilityForm(HigherRateMobilityForm higherRateMobilityForm) {
     this.higherRateMobilityForm = higherRateMobilityForm;
+  }
+
+  public MainReasonForm getMainReasonForm() {
+    return mainReasonForm;
+  }
+
+  public void setMainReasonForm(MainReasonForm mainReasonForm) {
+    this.mainReasonForm = mainReasonForm;
+  }
+
+  public WalkingDifficultyForm getWalkingDifficultyForm() {
+    return walkingDifficultyForm;
+  }
+
+  public void setWalkingDifficultyForm(WalkingDifficultyForm walkingDifficultyForm) {
+    this.walkingDifficultyForm = walkingDifficultyForm;
   }
 }
