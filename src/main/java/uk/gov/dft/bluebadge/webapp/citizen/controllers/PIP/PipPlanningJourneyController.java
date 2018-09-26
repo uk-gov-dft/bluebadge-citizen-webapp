@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.PIP;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_0;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_10;
@@ -48,13 +49,13 @@ public class PipPlanningJourneyController implements StepController {
     }
 
     // On returning to form, take previously submitted values.
-    if (!model.containsAttribute("formRequest") && null != journey.getPipPlanningJourneyForm()) {
-      model.addAttribute("formRequest", journey.getPipPlanningJourneyForm());
+    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getPipPlanningJourneyForm()) {
+      model.addAttribute(FORM_REQUEST, journey.getPipPlanningJourneyForm());
     }
 
     // If navigating forward from previous form, reset
-    if (!model.containsAttribute("formRequest")) {
-      model.addAttribute("formRequest", PipPlanningJourneyForm.builder().build());
+    if (!model.containsAttribute(FORM_REQUEST)) {
+      model.addAttribute(FORM_REQUEST, PipPlanningJourneyForm.builder().build());
     }
 
     model.addAttribute("formOptions", getOptions(journey));
@@ -77,7 +78,7 @@ public class PipPlanningJourneyController implements StepController {
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute("formRequest") PipPlanningJourneyForm pipPlanningJourneyForm,
+      @Valid @ModelAttribute(FORM_REQUEST) PipPlanningJourneyForm pipPlanningJourneyForm,
       BindingResult bindingResult,
       RedirectAttributes attr) {
     if (bindingResult.hasErrors()) {

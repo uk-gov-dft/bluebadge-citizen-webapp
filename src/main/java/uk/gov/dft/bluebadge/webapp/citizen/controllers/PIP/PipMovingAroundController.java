@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.PIP;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipMovingAroundForm.PipMovingAroundOption.MOVING_POINTS_0;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipMovingAroundForm.PipMovingAroundOption.MOVING_POINTS_10;
@@ -48,13 +49,13 @@ public class PipMovingAroundController implements StepController {
     }
 
     //On returning to form, take previously submitted values.
-    if (!model.containsAttribute("formRequest") && null != journey.getPipMovingAroundForm()) {
-      model.addAttribute("formRequest", journey.getPipMovingAroundForm());
+    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getPipMovingAroundForm()) {
+      model.addAttribute(FORM_REQUEST, journey.getPipMovingAroundForm());
     }
 
     // If navigating forward from previous form, reset
-    if (!model.containsAttribute("formRequest")) {
-      model.addAttribute("formRequest", PipMovingAroundForm.builder().build());
+    if (!model.containsAttribute(FORM_REQUEST)) {
+      model.addAttribute(FORM_REQUEST, PipMovingAroundForm.builder().build());
     }
 
     model.addAttribute("formOptions", getOptions(journey));
@@ -78,7 +79,7 @@ public class PipMovingAroundController implements StepController {
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute("formRequest") PipMovingAroundForm pipMovingAroundForm,
+      @Valid @ModelAttribute(FORM_REQUEST) PipMovingAroundForm pipMovingAroundForm,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 

@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.PIP;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipDlaQuestionForm.PipReceivedDlaOption.HAS_RECEIVED_DLA;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipDlaQuestionForm.PipReceivedDlaOption.NEVER_RECEIVED_DLA;
@@ -45,13 +46,13 @@ public class PipDlaQuestionController implements StepController {
     }
 
     // On returning to form, take previously submitted values.
-    if (!model.containsAttribute("formRequest") && null != journey.getPipDlaQuestionForm()) {
-      model.addAttribute("formRequest", journey.getPipDlaQuestionForm());
+    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getPipDlaQuestionForm()) {
+      model.addAttribute(FORM_REQUEST, journey.getPipDlaQuestionForm());
     }
 
     // If navigating forward from previous form, reset
-    if (!model.containsAttribute("formRequest")) {
-      model.addAttribute("formRequest", PipDlaQuestionForm.builder().build());
+    if (!model.containsAttribute(FORM_REQUEST)) {
+      model.addAttribute(FORM_REQUEST, PipDlaQuestionForm.builder().build());
     }
 
     model.addAttribute("formOptions", getOptions(journey));
@@ -74,7 +75,7 @@ public class PipDlaQuestionController implements StepController {
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute("formRequest") PipDlaQuestionForm pipDlaQuestionForm,
+      @Valid @ModelAttribute(FORM_REQUEST) PipDlaQuestionForm pipDlaQuestionForm,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 

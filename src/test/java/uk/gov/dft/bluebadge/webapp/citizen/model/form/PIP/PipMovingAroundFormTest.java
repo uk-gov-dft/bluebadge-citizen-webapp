@@ -9,7 +9,6 @@ import org.junit.Test;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.JourneyFixture;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipMovingAroundForm;
 
 public class PipMovingAroundFormTest extends JourneyFixture {
 
