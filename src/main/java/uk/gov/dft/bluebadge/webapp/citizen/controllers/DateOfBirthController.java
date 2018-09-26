@@ -22,7 +22,9 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 @Controller
 @RequestMapping(Mappings.URL_DOB)
 public class DateOfBirthController implements StepController {
+
   private static final String TEMPLATE_DOB = "date-of-birth";
+
   private final RouteMaster routeMaster;
 
   @Autowired

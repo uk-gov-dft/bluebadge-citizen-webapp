@@ -1,6 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
-import java.io.Serializable;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
@@ -8,6 +7,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm;
@@ -15,6 +15,9 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipMovingAroundForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
+
+import java.io.Serializable;
+import java.time.LocalDate;
 
 public class Journey implements Serializable {
 
@@ -33,11 +36,20 @@ public class Journey implements Serializable {
   private PipPlanningJourneyForm pipPlanningJourneyForm;
   private LocalAuthorityRefData localAuthority;
   private DateOfBirthForm dateOfBirthForm;
+  private GenderForm genderForm;
   public String who;
+  public String ageGroup;
 
   public Boolean isApplicantYourself() {
     if (applicantForm != null) {
       return applicantForm.getApplicantType().equals(ApplicantType.YOURSELF.toString());
+    }
+    return null;
+  }
+
+  public Boolean isApplicantYoung() {
+    if (dateOfBirthForm != null) {
+      return dateOfBirthForm.getLocalDateDob().isAfter(LocalDate.now().minusYears(16L));
     }
     return null;
   }
@@ -85,6 +97,7 @@ public class Journey implements Serializable {
 
   public void setDateOfBirthForm(DateOfBirthForm dateOfBirthForm) {
     this.dateOfBirthForm = dateOfBirthForm;
+    ageGroup = isApplicantYoung() ? "young." : "adult.";
   }
 
   public DateOfBirthForm getDateOfBirthForm() {
@@ -153,5 +166,13 @@ public class Journey implements Serializable {
 
   public void setHigherRateMobilityForm(HigherRateMobilityForm higherRateMobilityForm) {
     this.higherRateMobilityForm = higherRateMobilityForm;
+  }
+
+  public GenderForm getGenderForm() {
+    return genderForm;
+  }
+
+  public void setGenderForm(GenderForm genderForm) {
+    this.genderForm = genderForm;
   }
 }

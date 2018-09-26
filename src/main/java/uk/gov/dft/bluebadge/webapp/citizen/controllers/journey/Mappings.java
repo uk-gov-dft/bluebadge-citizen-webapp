@@ -22,6 +22,7 @@ public class Mappings {
   public static final String URL_PIP_MOVING_AROUND = "/moving-around";
   public static final String URL_PIP_RECEIVED_DLA = "/dla-in-the-past";
   public static final String URL_DOB = "/date-of-birth";
+  public static final String URL_GENDER = "/gender";
 
   private Mappings() {}
 
@@ -30,6 +31,7 @@ public class Mappings {
           .put(StepDefinition.HOME, URL_ROOT)
           .put(StepDefinition.APPLICANT_TYPE, URL_APPLICANT_TYPE)
           .put(StepDefinition.DOB, URL_DOB)
+          .put(StepDefinition.GENDER, URL_GENDER)
           .put(StepDefinition.NAME, URL_APPLICANT_NAME)
           .put(StepDefinition.RECEIVE_BENEFITS, URL_RECEIVE_BENEFITS)
           .put(StepDefinition.PIP_MOVING_AROUND, URL_PIP_MOVING_AROUND)
