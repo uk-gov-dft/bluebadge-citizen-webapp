@@ -2,6 +2,8 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm.PipReceivedDlaOption.HAS_RECEIVED_DLA;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm.PipReceivedDlaOption.NEVER_RECEIVED_DLA;
 
 import com.google.common.collect.Lists;
 import java.util.List;
@@ -15,79 +17,77 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm;
 
 @Controller
-@RequestMapping(Mappings.URL_RECEIVE_BENEFITS)
-public class ReceiveBenefitsController implements StepController {
+@RequestMapping(Mappings.URL_PIP_RECEIVED_DLA)
+public class PipDlaQuestionController implements StepController {
 
-  private static final String TEMPLATE = "receive-benefits";
+  private static final String TEMPLATE = "pip-received-dla";
 
   private final RouteMaster routeMaster;
 
   @Autowired
-  public ReceiveBenefitsController(RouteMaster routeMaster) {
+  public PipDlaQuestionController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping
-  public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+  public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
     if (!journey.isValidState(getStepDefinition())) {
       return routeMaster.backToCompletedPrevious();
     }
 
-    //On returning to form, take previously submitted values.
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getReceiveBenefitsForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getReceiveBenefitsForm());
+    // On returning to form, take previously submitted values.
+    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getPipDlaQuestionForm()) {
+      model.addAttribute(FORM_REQUEST, journey.getPipDlaQuestionForm());
     }
 
     // If navigating forward from previous form, reset
     if (!model.containsAttribute(FORM_REQUEST)) {
-      model.addAttribute(FORM_REQUEST, ReceiveBenefitsForm.builder().build());
+      model.addAttribute(FORM_REQUEST, PipDlaQuestionForm.builder().build());
     }
 
-    model.addAttribute("benefitOptions", getBenefitOptions(journey));
+    model.addAttribute("formOptions", getOptions(journey));
 
     return TEMPLATE;
   }
 
-  private RadioOptionsGroup getBenefitOptions(Journey journey) {
-    RadioOption pip = new RadioOption(EligibilityCodeField.PIP.name(), "options.benefits.pip");
-    RadioOption dla = new RadioOption(EligibilityCodeField.DLA.name(), "options.benefits.dla");
-    RadioOption afrfcs =
-        new RadioOption(EligibilityCodeField.AFRFCS.name(), "options.benefits.afrfcs");
-    RadioOption wpms = new RadioOption(EligibilityCodeField.WPMS.name(), "options.benefits.wpms");
-    RadioOption none = new RadioOption(EligibilityCodeField.WALKD.name(), "options.benefits.none");
+  private RadioOptionsGroup getOptions(Journey journey) {
+    RadioOption hasReceived =
+        new RadioOption(HAS_RECEIVED_DLA, journey.who + "options.pip.has.received");
+    RadioOption neverReceived =
+        new RadioOption(NEVER_RECEIVED_DLA, journey.who + "options.pip.never.received");
 
-    List<RadioOption> options = Lists.newArrayList(pip, dla, afrfcs, wpms, none);
+    List<RadioOption> options = Lists.newArrayList(hasReceived, neverReceived);
 
-    String title = journey.who + "receiveBenefitsPage.title";
+    String title = journey.who + "pipDlaQuestionPage.content.title";
     return new RadioOptionsGroup(title, options);
   }
 
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute(FORM_REQUEST) ReceiveBenefitsForm receiveBenefitsForm,
+      @Valid @ModelAttribute(FORM_REQUEST) PipDlaQuestionForm pipDlaQuestionForm,
       BindingResult bindingResult,
       RedirectAttributes attr) {
+
     if (bindingResult.hasErrors()) {
-      return routeMaster.redirectToOnBindingError(this, receiveBenefitsForm, bindingResult, attr);
+      return routeMaster.redirectToOnBindingError(this, pipDlaQuestionForm, bindingResult, attr);
     }
 
-    journey.setReceiveBenefitsForm(receiveBenefitsForm);
-    return routeMaster.redirectToOnSuccess(receiveBenefitsForm);
+    journey.setPipDlaQuestionForm(pipDlaQuestionForm);
+    return routeMaster.redirectToOnSuccess(pipDlaQuestionForm);
   }
 
   @Override
   public StepDefinition getStepDefinition() {
-    return StepDefinition.RECEIVE_BENEFITS;
+    return StepDefinition.PIP_DLA;
   }
 }

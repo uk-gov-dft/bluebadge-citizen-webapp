@@ -18,6 +18,9 @@ public class Mappings {
   public static final String URL_APPLICATION_SUBMITTED = "/application-submitted";
   public static final String URL_CHOOSE_YOUR_COUNCIL = "/choose-council";
   public static final String URL_YOUR_ISSUING_AUTHORITY = "/your-issuing-authority";
+  public static final String URL_PIP_PLANNING_JOURNEY = "/planning-and-following";
+  public static final String URL_PIP_MOVING_AROUND = "/moving-around";
+  public static final String URL_PIP_RECEIVED_DLA = "/dla-in-the-past";
   public static final String URL_DOB = "/date-of-birth";
 
   private Mappings() {}
@@ -29,6 +32,9 @@ public class Mappings {
           .put(StepDefinition.DOB, URL_DOB)
           .put(StepDefinition.NAME, URL_APPLICANT_NAME)
           .put(StepDefinition.RECEIVE_BENEFITS, URL_RECEIVE_BENEFITS)
+          .put(StepDefinition.PIP_MOVING_AROUND, URL_PIP_MOVING_AROUND)
+          .put(StepDefinition.PIP_DLA, URL_PIP_RECEIVED_DLA)
+          .put(StepDefinition.PIP_PLANNING_JOURNEY, URL_PIP_PLANNING_JOURNEY)
           .put(StepDefinition.HIGHER_RATE_MOBILITY, URL_HIGHER_RATE_MOBILITY)
           .put(StepDefinition.ELIGIBLE, URL_ELIGIBLE)
           .put(StepDefinition.MAY_BE_ELIGIBLE, URL_MAY_BE_ELIGIBLE)

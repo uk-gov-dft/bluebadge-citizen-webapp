@@ -1,6 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
 import java.io.Serializable;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
@@ -9,12 +10,16 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipMovingAroundForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 
 public class Journey implements Serializable {
 
   public static final String JOURNEY_SESSION_KEY = "JOURNEY";
+  public static final String FORM_REQUEST = "formRequest";
 
   private ApplicantForm applicantForm;
   private ApplicantNameForm applicantNameForm;
@@ -23,6 +28,10 @@ public class Journey implements Serializable {
   private HigherRateMobilityForm higherRateMobilityForm;
   private ChooseYourCouncilForm chooseYourCouncilForm;
   private YourIssuingAuthorityForm yourIssuingAuthorityForm;
+  private PipMovingAroundForm pipMovingAroundForm;
+  private PipDlaQuestionForm pipDlaQuestionForm;
+  private PipPlanningJourneyForm pipPlanningJourneyForm;
+  private LocalAuthorityRefData localAuthority;
   private DateOfBirthForm dateOfBirthForm;
   public String who;
 
@@ -31,14 +40,6 @@ public class Journey implements Serializable {
       return applicantForm.getApplicantType().equals(ApplicantType.YOURSELF.toString());
     }
     return null;
-  }
-
-  public String applicantContextContent(String messageKey) {
-    if (isApplicantYourself()) {
-      return messageKey;
-    }
-
-    return "someone." + messageKey;
   }
 
   public boolean isValidState(StepDefinition step) {
@@ -112,6 +113,38 @@ public class Journey implements Serializable {
 
   public void setReceiveBenefitsForm(ReceiveBenefitsForm receiveBenefitsForm) {
     this.receiveBenefitsForm = receiveBenefitsForm;
+  }
+
+  public PipMovingAroundForm getPipMovingAroundForm() {
+    return pipMovingAroundForm;
+  }
+
+  public void setPipMovingAroundForm(PipMovingAroundForm pipMovingAroundForm) {
+    this.pipMovingAroundForm = pipMovingAroundForm;
+  }
+
+  public PipDlaQuestionForm getPipDlaQuestionForm() {
+    return pipDlaQuestionForm;
+  }
+
+  public void setPipDlaQuestionForm(PipDlaQuestionForm pipDlaQuestionForm) {
+    this.pipDlaQuestionForm = pipDlaQuestionForm;
+  }
+
+  public PipPlanningJourneyForm getPipPlanningJourneyForm() {
+    return pipPlanningJourneyForm;
+  }
+
+  public void setPipPlanningJourneyForm(PipPlanningJourneyForm pipPlanningJourneyForm) {
+    this.pipPlanningJourneyForm = pipPlanningJourneyForm;
+  }
+
+  public LocalAuthorityRefData getLocalAuthority() {
+    return localAuthority;
+  }
+
+  public void setLocalAuthority(LocalAuthorityRefData localAuthority) {
+    this.localAuthority = localAuthority;
   }
 
   public HigherRateMobilityForm getHigherRateMobilityForm() {

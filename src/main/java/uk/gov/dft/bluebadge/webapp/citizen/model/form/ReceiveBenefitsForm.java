@@ -27,6 +27,8 @@ public class ReceiveBenefitsForm implements StepForm, Serializable {
         return Optional.of(StepDefinition.HIGHER_RATE_MOBILITY);
       case WPMS:
         return Optional.of(StepDefinition.ELIGIBLE);
+      case PIP:
+        return Optional.of(StepDefinition.PIP_MOVING_AROUND);
       default:
         return Optional.of(StepDefinition.MAY_BE_ELIGIBLE);
     }
