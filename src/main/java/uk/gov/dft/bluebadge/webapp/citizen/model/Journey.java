@@ -13,9 +13,9 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipDlaQuestionForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipMovingAroundForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipDlaQuestionForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipMovingAroundForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipPlanningJourneyForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 

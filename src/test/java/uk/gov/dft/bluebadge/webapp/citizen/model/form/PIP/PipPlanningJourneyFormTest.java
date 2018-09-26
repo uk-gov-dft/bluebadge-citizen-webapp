@@ -1,4 +1,4 @@
-package uk.gov.dft.bluebadge.webapp.citizen.model.form;
+package uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -6,6 +6,8 @@ import java.util.EnumSet;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipPlanningJourneyForm;
 
 public class PipPlanningJourneyFormTest extends JourneyFixture {
 

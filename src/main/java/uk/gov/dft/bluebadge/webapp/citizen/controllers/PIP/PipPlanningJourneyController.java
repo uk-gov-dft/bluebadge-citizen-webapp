@@ -1,11 +1,11 @@
-package uk.gov.dft.bluebadge.webapp.citizen.controllers;
+package uk.gov.dft.bluebadge.webapp.citizen.controllers.PIP;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_0;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_10;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_12;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_4;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_8;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_0;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_10;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_12;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_4;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_8;
 
 import com.google.common.collect.Lists;
 import java.util.List;
@@ -19,19 +19,20 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.StepController;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipPlanningJourneyForm;
 
 @Controller
 @RequestMapping(Mappings.URL_PIP_PLANNING_JOURNEY)
 public class PipPlanningJourneyController implements StepController {
 
-  private static final String TEMPLATE = "pip-planning-journey";
+  private static final String TEMPLATE = "pip/planning-journey";
 
   private final RouteMaster routeMaster;
 

@@ -1,6 +1,6 @@
-package uk.gov.dft.bluebadge.webapp.citizen.model.form;
+package uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_12;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_12;
 
 import java.io.Serializable;
 import java.util.Optional;
