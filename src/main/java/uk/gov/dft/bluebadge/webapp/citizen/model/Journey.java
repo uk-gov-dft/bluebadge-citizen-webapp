@@ -19,6 +19,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 public class Journey implements Serializable {
 
   public static final String JOURNEY_SESSION_KEY = "JOURNEY";
+  public static final String FORM_REQUEST = "formRequest";
 
   private ApplicantForm applicantForm;
   private ApplicantNameForm applicantNameForm;
