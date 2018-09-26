@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import com.google.common.collect.Lists;
@@ -34,12 +35,12 @@ public class ApplicantController implements StepController {
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!model.containsAttribute("formRequest") && null != journey.getApplicantForm()) {
-      model.addAttribute("formRequest", journey.getApplicantForm());
+    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getApplicantForm()) {
+      model.addAttribute(FORM_REQUEST, journey.getApplicantForm());
     }
 
-    if (!model.containsAttribute("formRequest")) {
-      model.addAttribute("formRequest", ApplicantForm.builder().build());
+    if (!model.containsAttribute(FORM_REQUEST)) {
+      model.addAttribute(FORM_REQUEST, ApplicantForm.builder().build());
     }
 
     List<ReferenceData> applicantOptions = getApplicantOptions();
@@ -63,7 +64,7 @@ public class ApplicantController implements StepController {
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute("formRequest") ApplicantForm formRequest,
+      @Valid @ModelAttribute(FORM_REQUEST) ApplicantForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
