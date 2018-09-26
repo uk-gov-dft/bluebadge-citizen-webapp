@@ -37,8 +37,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I can click on "Continue"
 
     Then  I should see the page titled "What's your date of birth - GOV.UK Apply for a Blue Badge"
-  And   I should see the title "What's your date of birth?"
-
+    And   I should see the title "What's your date of birth?"
     When  I type day as "02" month as "08" and year as "1966" for applicant's date of birth
     And   I can click on "Continue"
 
