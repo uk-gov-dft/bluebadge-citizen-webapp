@@ -1,5 +1,14 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,16 +22,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 public class GenderControllerTest {
 
@@ -73,10 +72,7 @@ public class GenderControllerTest {
         .thenReturn("redirect:/testSuccess");
 
     mockMvc
-        .perform(
-            post("/gender")
-                .param("gender", "MALE")
-                .sessionAttr("JOURNEY", journey))
+        .perform(post("/gender").param("gender", "MALE").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
   }
@@ -84,29 +80,23 @@ public class GenderControllerTest {
   @Test
   public void submit_givenFemaleOption_thenShouldDisplayRedirectToSuccess() throws Exception {
     when(mockRouteMaster.redirectToOnSuccess(any(GenderForm.class)))
-      .thenReturn("redirect:/testSuccess");
+        .thenReturn("redirect:/testSuccess");
 
     mockMvc
-      .perform(
-        post("/gender")
-          .param("gender", "FEMALE")
-          .sessionAttr("JOURNEY", journey))
-      .andExpect(status().isFound())
-      .andExpect(redirectedUrl("/testSuccess"));
+        .perform(post("/gender").param("gender", "FEMALE").sessionAttr("JOURNEY", journey))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/testSuccess"));
   }
 
   @Test
   public void submit_givenUnspecifiedOption_thenShouldDisplayRedirectToSuccess() throws Exception {
     when(mockRouteMaster.redirectToOnSuccess(any(GenderForm.class)))
-      .thenReturn("redirect:/testSuccess");
+        .thenReturn("redirect:/testSuccess");
 
     mockMvc
-      .perform(
-        post("/gender")
-          .param("gender", "UNSPECIFIE")
-          .sessionAttr("JOURNEY", journey))
-      .andExpect(status().isFound())
-      .andExpect(redirectedUrl("/testSuccess"));
+        .perform(post("/gender").param("gender", "UNSPECIFIE").sessionAttr("JOURNEY", journey))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/testSuccess"));
   }
 
   @Test
@@ -115,8 +105,6 @@ public class GenderControllerTest {
         .perform(post("/gender").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("gender"))
-        .andExpect(
-            model()
-                .attributeHasFieldErrorCode("formRequest", "gender", "NotNull"));
+        .andExpect(model().attributeHasFieldErrorCode("formRequest", "gender", "NotNull"));
   }
 }

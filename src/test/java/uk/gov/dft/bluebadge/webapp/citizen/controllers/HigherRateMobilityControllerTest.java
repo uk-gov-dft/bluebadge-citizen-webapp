@@ -92,7 +92,8 @@ public class HigherRateMobilityControllerTest {
   }
 
   @Test
-  public void submit_whenMissingHigherRateMobilityAnswer_ThenShouldHaveValidationError() throws Exception {
+  public void submit_whenMissingHigherRateMobilityAnswer_ThenShouldHaveValidationError()
+      throws Exception {
     mockMvc
         .perform(post("/higher-rate-mobility").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
