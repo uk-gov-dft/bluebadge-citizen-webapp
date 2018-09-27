@@ -23,6 +23,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
@@ -33,6 +34,7 @@ public class DeclarationSubmitControllerTest {
 
   @Mock ApplicationManagementService appService;
   @Mock private RouteMaster mockRouteMaster;
+  @Mock Journey mockJourney;
 
   @Before
   public void setup() {
@@ -46,14 +48,38 @@ public class DeclarationSubmitControllerTest {
 
   @Test
   public void showDeclaration_ShouldDisplayDeclarationTemplate() throws Exception {
+    when(mockJourney.isValidState(any())).thenReturn(true);
 
     DeclarationForm formRequest = DeclarationForm.builder().build();
 
     mockMvc
-        .perform(get("/apply-for-a-blue-badge/declaration"))
+        .perform(get("/apply-for-a-blue-badge/declaration").sessionAttr("JOURNEY", mockJourney))
         .andExpect(status().isOk())
         .andExpect(view().name("application-end/declaration"))
         .andExpect(model().attribute("formRequest", formRequest));
+  }
+
+  @Test
+  public void showDeclaration_givenNoSession_ShouldRedirectBackToStart() throws Exception {
+
+    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
+
+    mockMvc
+        .perform(get("/apply-for-a-blue-badge/declaration"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/backToStart"));
+  }
+
+  @Test
+  public void showDeclaration_givenInvalidState_ShouldRedirectBackToStart() throws Exception {
+
+    when(mockJourney.isValidState(any())).thenReturn(false);
+    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
+
+    mockMvc
+        .perform(get("/apply-for-a-blue-badge/declaration"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/backToStart"));
   }
 
   @Test

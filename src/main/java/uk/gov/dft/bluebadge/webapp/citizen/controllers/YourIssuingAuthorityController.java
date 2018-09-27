@@ -78,6 +78,10 @@ public class YourIssuingAuthorityController implements StepController {
       @ModelAttribute("formRequest") YourIssuingAuthorityForm yourIssuingAuthorityForm) {
 
     journey.setYourIssuingAuthorityForm(yourIssuingAuthorityForm);
+    journey.setLocalAuthority(
+        referenceDataService.retrieveLocalAuthority(
+            yourIssuingAuthorityForm.getLocalAuthorityShortCode()));
+
     return routeMaster.redirectToOnSuccess(yourIssuingAuthorityForm);
   }
 

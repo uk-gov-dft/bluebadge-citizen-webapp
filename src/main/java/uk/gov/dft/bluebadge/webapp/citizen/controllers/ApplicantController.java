@@ -1,9 +1,9 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import com.google.common.collect.Lists;
-import java.util.List;
 import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
+import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 
@@ -34,36 +35,32 @@ public class ApplicantController implements StepController {
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!model.containsAttribute("formRequest") && null != journey.getApplicantForm()) {
-      model.addAttribute("formRequest", journey.getApplicantForm());
+    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getApplicantForm()) {
+      model.addAttribute(FORM_REQUEST, journey.getApplicantForm());
     }
 
-    if (!model.containsAttribute("formRequest")) {
-      model.addAttribute("formRequest", ApplicantForm.builder().build());
+    if (!model.containsAttribute(FORM_REQUEST)) {
+      model.addAttribute(FORM_REQUEST, ApplicantForm.builder().build());
     }
 
-    List<ReferenceData> applicantOptions = getApplicantOptions();
+    RadioOptionsGroup applicantOptions = getApplicantOptions();
     model.addAttribute("applicantOptions", applicantOptions);
 
     return TEMPLATE_APPLICANT;
   }
 
-  private List<ReferenceData> getApplicantOptions() {
-    ReferenceData yourself = new ReferenceData();
-    yourself.setShortCode(ApplicantType.YOURSELF.toString());
-    yourself.setDescription("Yourself");
-
-    ReferenceData someone = new ReferenceData();
-    someone.setShortCode(ApplicantType.SOMEONE_ELSE.toString());
-    someone.setDescription("Someone else");
-
-    return Lists.newArrayList(yourself, someone);
+  RadioOptionsGroup getApplicantOptions() {
+    RadioOption yourself =
+        new RadioOption(ApplicantType.YOURSELF.toString(), "options.applicantType.yourself");
+    RadioOption someone =
+        new RadioOption(ApplicantType.SOMEONE_ELSE.toString(), "options.applicantType.someone");
+    return new RadioOptionsGroup("applicantPage.title", Lists.newArrayList(yourself, someone));
   }
 
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute("formRequest") ApplicantForm formRequest,
+      @Valid @ModelAttribute(FORM_REQUEST) ApplicantForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 

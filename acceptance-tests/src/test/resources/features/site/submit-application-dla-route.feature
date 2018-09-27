@@ -56,6 +56,8 @@ Feature: DFT Blue badge Citizen app new application - DLA
 
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
 
+  ################################################################################################
+
 
   Scenario: Create a successful new application for myself via DLA route - Yes
     Given I navigate to the "applicant" page
@@ -107,6 +109,7 @@ Feature: DFT Blue badge Citizen app new application - DLA
 
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
 
+    ################################################################################################
 
   # FOR SOMEONE ELSE
   Scenario: Create a successful new application for someone else - DLA rout - No
@@ -158,6 +161,8 @@ Feature: DFT Blue badge Citizen app new application - DLA
     And   I can click on "Continue"
 
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
+
+    ################################################################################################
 
 
   Scenario: Create a successful new application for someone else - DLA route - Yes
