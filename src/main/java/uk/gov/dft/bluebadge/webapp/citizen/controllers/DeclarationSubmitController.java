@@ -1,6 +1,8 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
 import com.google.common.collect.Lists;
+import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -52,6 +54,7 @@ public class DeclarationSubmitController implements StepController {
   private final ApplicationManagementService appService;
   private final RouteMaster routeMaster;
 
+  @Autowired
   public DeclarationSubmitController(
       ApplicationManagementService appService, RouteMaster routeMaster) {
     this.appService = appService;
@@ -59,7 +62,11 @@ public class DeclarationSubmitController implements StepController {
   }
 
   @GetMapping
-  public String showDeclaration(Model model) {
+  public String showDeclaration(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+
+    if (!journey.isValidState(getStepDefinition())) {
+      return routeMaster.backToCompletedPrevious();
+    }
 
     if (!model.containsAttribute("formRequest")) {
       model.addAttribute("formRequest", DeclarationForm.builder().build());

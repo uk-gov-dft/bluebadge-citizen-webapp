@@ -26,7 +26,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 @RequestMapping(Mappings.URL_APPLICANT_TYPE)
 public class ApplicantController implements StepController {
   private static final String TEMPLATE_APPLICANT = "applicant";
-  public static final String FORM_REQUEST = "formRequest";
   private final RouteMaster routeMaster;
 
   public ApplicantController(RouteMaster routeMaster) {
