@@ -2,7 +2,6 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
-import com.sun.org.apache.xerces.internal.impl.xpath.XPath;
 import lombok.Getter;
 
 @Getter

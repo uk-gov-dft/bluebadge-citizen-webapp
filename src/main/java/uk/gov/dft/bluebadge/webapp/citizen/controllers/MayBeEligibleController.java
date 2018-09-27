@@ -12,7 +12,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataService;
 
 @Controller
 @RequestMapping(Mappings.URL_MAY_BE_ELIGIBLE)
@@ -23,8 +22,7 @@ public class MayBeEligibleController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public MayBeEligibleController(
-      RouteMaster routeMaster) {
+  public MayBeEligibleController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 

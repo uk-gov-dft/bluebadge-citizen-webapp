@@ -35,8 +35,7 @@ public class PipMovingAroundFormTest extends JourneyFixture {
         e -> {
           PipMovingAroundForm form = PipMovingAroundForm.builder().movingAroundPoints(e).build();
           assertThat(form.determineNextStep(journey)).isNotEmpty();
-          assertThat(form.determineNextStep(journey).get())
-              .isEqualTo(StepDefinition.MAIN_REASON);
+          assertThat(form.determineNextStep(journey).get()).isEqualTo(StepDefinition.MAIN_REASON);
         });
   }
 

@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
@@ -44,7 +43,9 @@ public class PipPlanningJourneyForm implements Serializable, StepForm {
     if (Nation.SCO.equals(journey.getNation())) {
       return Optional.of(StepDefinition.PIP_DLA);
     }
-    log.error("PipPlanningJourneyForm: could not determine next step. LA={}", journey.getLocalAuthority());
+    log.error(
+        "PipPlanningJourneyForm: could not determine next step. LA={}",
+        journey.getLocalAuthority());
     return Optional.empty();
   }
 

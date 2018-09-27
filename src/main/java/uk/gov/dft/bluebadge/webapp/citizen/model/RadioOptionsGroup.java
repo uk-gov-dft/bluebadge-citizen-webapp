@@ -1,7 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
 import com.google.common.collect.Lists;
-
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
@@ -28,7 +27,7 @@ public class RadioOptionsGroup {
     return this;
   }
 
-  public static class Builder{
+  public static class Builder {
     private String titleKey;
     private final List<RadioOption> options;
 
@@ -36,33 +35,33 @@ public class RadioOptionsGroup {
       options = new ArrayList<>();
     }
 
-    public Builder titleMessageKey(String titleKey){
+    public Builder titleMessageKey(String titleKey) {
       this.titleKey = titleKey;
       return this;
     }
 
-    public Builder titleMessageKeyApplicantAware(String titleKey, Journey journey){
+    public Builder titleMessageKeyApplicantAware(String titleKey, Journey journey) {
       return titleMessageKey(journey.who + titleKey);
     }
 
-    public Builder addOption(Enum<?> value, String messageKey){
+    public Builder addOption(Enum<?> value, String messageKey) {
       return addOption(value.name(), messageKey);
     }
 
-    public Builder addOptionApplicantAware(Enum<?> value, String messageKey, Journey journey){
+    public Builder addOptionApplicantAware(Enum<?> value, String messageKey, Journey journey) {
       return addOption(value.name(), journey.who + messageKey);
     }
 
-    public Builder addOptionApplicantAware(String value, String messageKey, Journey journey){
+    public Builder addOptionApplicantAware(String value, String messageKey, Journey journey) {
       return addOption(value, journey.who + messageKey);
     }
 
-    public Builder addOption(String value, String messageKey){
+    public Builder addOption(String value, String messageKey) {
       options.add(new RadioOption(value, messageKey));
       return this;
     }
 
-    public RadioOptionsGroup build(){
+    public RadioOptionsGroup build() {
       return new RadioOptionsGroup(titleKey, options);
     }
   }

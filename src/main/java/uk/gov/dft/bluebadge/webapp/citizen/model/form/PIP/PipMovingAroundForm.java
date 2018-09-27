@@ -6,7 +6,6 @@ import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
@@ -41,8 +40,7 @@ public class PipMovingAroundForm implements Serializable, StepForm {
         if (Nation.ENG.equals(journey.getNation())) {
           return Optional.of(StepDefinition.MAIN_REASON);
         }
-        if (Nation.SCO.equals(journey.getNation())
-            || Nation.WLS.equals(journey.getNation())) {
+        if (Nation.SCO.equals(journey.getNation()) || Nation.WLS.equals(journey.getNation())) {
           return Optional.of(StepDefinition.PIP_PLANNING_JOURNEY);
         }
         log.error(

@@ -1,8 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
 import java.io.Serializable;
-import java.security.spec.ECField;
-
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
@@ -50,17 +48,18 @@ public class Journey implements Serializable {
   private DisabilityForm disabilityForm;
   private MentalDisorderForm mentalDisorderForm;
 
-  public Nation getNation(){
-    if(null != localAuthority){
+  public Nation getNation() {
+    if (null != localAuthority) {
       return localAuthority.getNation();
     }
     return null;
   }
 
-  public EligibilityCodeField getEligibilityCode(){
-    if(null != receiveBenefitsForm && EligibilityCodeField.NONE != receiveBenefitsForm.getBenefitType()){
+  public EligibilityCodeField getEligibilityCode() {
+    if (null != receiveBenefitsForm
+        && EligibilityCodeField.NONE != receiveBenefitsForm.getBenefitType()) {
       return receiveBenefitsForm.getBenefitType();
-    }else if(null != mainReasonForm){
+    } else if (null != mainReasonForm) {
       return mainReasonForm.getMainReasonOption();
     }
     return null;

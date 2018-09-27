@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+
 import com.google.common.collect.Lists;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +42,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
-
-import javax.validation.Valid;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 @RequestMapping(Mappings.URL_DECLARATIONS)
@@ -169,10 +167,19 @@ public class DeclarationSubmitController implements StepController {
                 .blind(new Blind().registeredAtLaId(journey.getLocalAuthority().getShortCode()));
         break;
       case ARMS:
-        eligibilityObject = new Eligibility().typeCode(eligibility).disabilityArms(new DisabilityArms().isAdaptedVehicle(false));
+        eligibilityObject =
+            new Eligibility()
+                .typeCode(eligibility)
+                .disabilityArms(new DisabilityArms().isAdaptedVehicle(false));
         break;
       case CHILDBULK:
-        eligibilityObject = new Eligibility().typeCode(eligibility).childUnder3(new ChildUnder3().bulkyMedicalEquipmentTypeCode(BulkyMedicalEquipmentTypeCodeField.OXYADMIN));
+        eligibilityObject =
+            new Eligibility()
+                .typeCode(eligibility)
+                .childUnder3(
+                    new ChildUnder3()
+                        .bulkyMedicalEquipmentTypeCode(
+                            BulkyMedicalEquipmentTypeCodeField.OXYADMIN));
         break;
       case CHILDVEHIC:
         eligibilityObject = new Eligibility().typeCode(eligibility);

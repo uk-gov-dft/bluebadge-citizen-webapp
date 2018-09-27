@@ -2,9 +2,8 @@ package uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.google.common.collect.ImmutableMap;
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 public enum Nation {
   ENG,
