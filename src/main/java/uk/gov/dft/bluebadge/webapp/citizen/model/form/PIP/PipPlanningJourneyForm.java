@@ -9,7 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nations;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
@@ -34,17 +34,17 @@ public class PipPlanningJourneyForm implements Serializable, StepForm {
 
   @Override
   public Optional<StepDefinition> determineNextStep(Journey journey) {
-    LocalAuthorityRefData localAuthority = journey.getLocalAuthority();
+
     if (PLANNING_POINTS_12.equals(planningJourneyOption)) {
       return Optional.of(StepDefinition.ELIGIBLE);
     }
-    if (Nations.WALES.equals(localAuthority.getNation())) {
+    if (Nation.WLS.equals(journey.getNation())) {
       return Optional.of(StepDefinition.MAIN_REASON);
     }
-    if (Nations.SCOTLAND.equals(localAuthority.getNation())) {
+    if (Nation.SCO.equals(journey.getNation())) {
       return Optional.of(StepDefinition.PIP_DLA);
     }
-    log.error("PipPlanningJourneyForm: could not determine next step. LA={}", localAuthority);
+    log.error("PipPlanningJourneyForm: could not determine next step. LA={}", journey.getLocalAuthority());
     return Optional.empty();
   }
 

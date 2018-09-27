@@ -36,7 +36,7 @@ public class MayBeEligibleControllerTest {
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new MayBeEligibleController(mockRouteMaster, referenceDataService);
+    controller = new MayBeEligibleController(mockRouteMaster);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -48,11 +48,9 @@ public class MayBeEligibleControllerTest {
   @Test
   @SneakyThrows
   public void show_ShouldDisplayEligibleTemplate() {
-    YourIssuingAuthorityForm yourIssuingAuthorityForm =
-        YourIssuingAuthorityForm.builder().localAuthorityShortCode("bob").build();
-    journey.setYourIssuingAuthorityForm(yourIssuingAuthorityForm);
     LocalAuthorityRefData testLARefData = new LocalAuthorityRefData();
-    when(referenceDataService.retrieveLocalAuthority("bob")).thenReturn(testLARefData);
+    testLARefData.setShortCode("Bob");
+    journey.setLocalAuthority(testLARefData);
 
     mockMvc
         .perform(get("/may-be-eligible").sessionAttr("JOURNEY", journey))

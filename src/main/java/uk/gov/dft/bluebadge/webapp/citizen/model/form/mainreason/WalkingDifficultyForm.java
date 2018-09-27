@@ -5,6 +5,7 @@ import lombok.Data;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 @Data
@@ -32,5 +33,6 @@ public class WalkingDifficultyForm implements StepForm {
     }
   }
 
+  @NotNull
   private WalkingDifficulty walkingDifficulty;
 }

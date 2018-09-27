@@ -1,6 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.mainreason;
 
-import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,29 +9,26 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.StepController;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipMovingAroundForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
 
 import javax.validation.Valid;
-import java.util.List;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.ARMS;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.BLIND;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDBULK;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDVEHIC;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.NONE;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipMovingAroundForm.PipMovingAroundOption.MOVING_POINTS_12;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm.MainReasonOption.ARMS;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm.MainReasonOption.BLIND;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm.MainReasonOption.CHILDB;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm.MainReasonOption.CHILDVEH;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm.MainReasonOption.NONE;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm.MainReasonOption.TERMILL;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm.MainReasonOption.WALKD;
 
 @Controller
 @RequestMapping(Mappings.URL_MAIN_REASON)
@@ -52,7 +48,7 @@ public class MainReasonController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    //On returning to form, take previously submitted values.
+    // On returning to form, take previously submitted values.
     if (!model.containsAttribute(FORM_REQUEST) && null != journey.getMainReasonForm()) {
       model.addAttribute(FORM_REQUEST, journey.getMainReasonForm());
     }
@@ -62,16 +58,27 @@ public class MainReasonController implements StepController {
       model.addAttribute(FORM_REQUEST, MainReasonForm.builder().build());
     }
 
-    model.addAttribute("formOptions",
-        new RadioOptionsGroup.Builder().titleMessageKeyApplicantAware("mainReasonPage.content.title", journey)
-    .addOptionApplicantAware(TERMILL, "options.mainReasonPage.termill", journey)
-            .addOptionApplicantAware(BLIND,"options.mainReasonPage.blind", journey)
-            .addOptionApplicantAware(WALKD,"options.mainReasonPage.walkd", journey)
-            .addOptionApplicantAware(ARMS,"options.mainReasonPage.arms", journey)
-            .addOptionApplicantAware(CHILDB,"options.mainReasonPage.childb", journey)
-            .addOptionApplicantAware(CHILDVEH,"options.mainReasonPage.childveh", journey)
-            .addOptionApplicantAware(NONE,"options.mainReasonPage.none", journey)
-    .build());
+    String walkingKey = "options.mainReasonPage.walkd";
+    if (Nation.ENG.equals(journey.getNation())) {
+      walkingKey = walkingKey + ".england";
+    } else if (Nation.SCO.equals(journey.getNation())) {
+      walkingKey = walkingKey + ".scotland";
+    } else if (Nation.WLS.equals(journey.getNation())) {
+      walkingKey = walkingKey + ".wales";
+    }
+
+    model.addAttribute(
+        "formOptions",
+        new RadioOptionsGroup.Builder()
+            .titleMessageKeyApplicantAware("mainReasonPage.content.title", journey)
+            .addOptionApplicantAware(EligibilityCodeField.TERMILL, "options.mainReasonPage.termill", journey)
+            .addOptionApplicantAware(BLIND, "options.mainReasonPage.blind", journey)
+            .addOptionApplicantAware(WALKD, walkingKey, journey)
+            .addOptionApplicantAware(ARMS, "options.mainReasonPage.arms", journey)
+            .addOptionApplicantAware(CHILDBULK, "options.mainReasonPage.childbulk", journey)
+            .addOptionApplicantAware(CHILDVEHIC, "options.mainReasonPage.childvehic", journey)
+            .addOptionApplicantAware(NONE, "options.mainReasonPage.none", journey)
+            .build());
 
     return TEMPLATE;
   }

@@ -21,13 +21,11 @@ public class MayBeEligibleController implements StepController {
   private static final String TEMPLATE = "may-be-eligible";
 
   private final RouteMaster routeMaster;
-  private final ReferenceDataService referenceDataService;
 
   @Autowired
   public MayBeEligibleController(
-      RouteMaster routeMaster, ReferenceDataService referenceDataService) {
+      RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
-    this.referenceDataService = referenceDataService;
   }
 
   @GetMapping
@@ -37,8 +35,7 @@ public class MayBeEligibleController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    String laShortCode = journey.getYourIssuingAuthorityForm().getLocalAuthorityShortCode();
-    model.addAttribute("localAuthority", referenceDataService.retrieveLocalAuthority(laShortCode));
+    model.addAttribute("localAuthority", journey.getLocalAuthority());
 
     return TEMPLATE;
   }

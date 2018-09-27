@@ -1,8 +1,11 @@
 package uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Optional;
+
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -21,7 +24,7 @@ public class LocalAuthorityRefData extends ReferenceData {
   }
 
   @JsonIgnore
-  public String getNation() {
+  public Nation getNation() {
     return localAuthorityMetaData.map(LocalAuthorityMetaData::getNation).orElse(null);
   }
 
@@ -29,7 +32,7 @@ public class LocalAuthorityRefData extends ReferenceData {
   public static class LocalAuthorityMetaData {
     private String issuingAuthorityShortCode;
     private String issuingAuthorityName;
-    private String nation;
+    private Nation nation;
     private String contactUrl;
   }
 }

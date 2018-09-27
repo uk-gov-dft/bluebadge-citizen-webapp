@@ -1,7 +1,11 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
 import java.io.Serializable;
+import java.security.spec.ECField;
+
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.AFCS.CompensationSchemeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.AFCS.DisabilityForm;
@@ -41,11 +45,26 @@ public class Journey implements Serializable {
   private MainReasonForm mainReasonForm;
   private WalkingDifficultyForm walkingDifficultyForm;
   public String who;
-
   // AFCS Journey Forms
   private CompensationSchemeForm compensationSchemeForm;
   private DisabilityForm disabilityForm;
   private MentalDisorderForm mentalDisorderForm;
+
+  public Nation getNation(){
+    if(null != localAuthority){
+      return localAuthority.getNation();
+    }
+    return null;
+  }
+
+  public EligibilityCodeField getEligibilityCode(){
+    if(null != receiveBenefitsForm && EligibilityCodeField.NONE != receiveBenefitsForm.getBenefitType()){
+      return receiveBenefitsForm.getBenefitType();
+    }else if(null != mainReasonForm){
+      return mainReasonForm.getMainReasonOption();
+    }
+    return null;
+  }
 
   public Boolean isApplicantYourself() {
     if (applicantForm != null) {
@@ -62,7 +81,7 @@ public class Journey implements Serializable {
     switch (step) {
       case ELIGIBLE:
       case MAY_BE_ELIGIBLE:
-        if (null == getYourIssuingAuthorityForm()) {
+        if (null == getLocalAuthority()) {
           return false;
         }
     }

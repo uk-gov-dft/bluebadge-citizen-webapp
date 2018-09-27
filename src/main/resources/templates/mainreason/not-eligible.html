@@ -9,13 +9,12 @@
 
 <main layout:fragment="content">
 
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
+    <section class="guidance-layout">
         <h1 class="govuk-heading-l"
             th:text="#{${JOURNEY.who} + 'notEligiblePage.content.title'}"></h1>
 
         <p class="govuk-body"
-           th:text="#{${JOURNEY.who} + 'notEligiblePage.based.on.answers.text'}">Based on  your answers...</p>
+           th:text="#{${JOURNEY.who} + 'notEligiblePage.based.on.answers.text'}">Based on your answers...</p>
 
         <p class="govuk-body">
             <span th:remove="tag" th:text="#{${JOURNEY.who} + 'notEligiblePage.council.contact.pretext'}"></span>
@@ -26,10 +25,10 @@
                 <span th:remove="tag"
                       th:text="#{eligiblePage.website.pretext}">Website:</span>
 
-            <a th:href="${localAuthority.contactUrl}" th:text="${localAuthority.contactUrl}">www.leeds city council.gov.uk</a>
+            <a th:href="${localAuthority.contactUrl}" th:text="${localAuthority.contactUrl}">www.leeds city
+                council.gov.uk</a>
         </p>
-        </div>
-    </div>
+    </section>
 
 </main>
 

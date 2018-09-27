@@ -5,7 +5,7 @@ import java.util.Optional;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nations;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
@@ -24,13 +24,13 @@ public class CompensationSchemeForm implements Serializable, StepForm {
 
   @Override
   public Optional<StepDefinition> determineNextStep(Journey journey) {
-    String nation = journey.getLocalAuthority().getNation();
+    Nation nation = journey.getLocalAuthority().getNation();
 
     if (hasReceivedCompensation) {
       return Optional.of(StepDefinition.AFCS_DISABILITY);
     }
 
-    if (Nations.WALES.equals(nation)) {
+    if (Nation.WLS.equals(nation)) {
       return Optional.of(StepDefinition.AFCS_MENTAL_DISORDER);
     }
 

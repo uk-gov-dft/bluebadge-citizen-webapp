@@ -1,11 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-
 import com.google.common.collect.Lists;
-import java.util.List;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +18,12 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
+
+import javax.validation.Valid;
+import java.util.List;
+
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 @RequestMapping(Mappings.URL_RECEIVE_BENEFITS)
@@ -64,7 +65,7 @@ public class ReceiveBenefitsController implements StepController {
     RadioOption afrfcs =
         new RadioOption(EligibilityCodeField.AFRFCS.name(), "options.benefits.afrfcs");
     RadioOption wpms = new RadioOption(EligibilityCodeField.WPMS.name(), "options.benefits.wpms");
-    RadioOption none = new RadioOption(EligibilityCodeField.WALKD.name(), "options.benefits.none");
+    RadioOption none = new RadioOption(EligibilityCodeField.NONE.name(), "options.benefits.none");
 
     List<RadioOption> options = Lists.newArrayList(pip, dla, afrfcs, wpms, none);
 

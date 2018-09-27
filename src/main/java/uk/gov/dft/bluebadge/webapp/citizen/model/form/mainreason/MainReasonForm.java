@@ -2,24 +2,16 @@ package uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason;
 
 import lombok.Builder;
 import lombok.Data;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 @Data
 @Builder
 public class MainReasonForm implements StepForm {
-
-  public enum MainReasonOption {
-    TERMILL,
-    BLIND,
-    WALKD,
-    ARMS,
-    CHILDB,
-    CHILDVEH,
-    NONE
-  }
 
   @Override
   public StepDefinition getAssociatedStep() {
@@ -34,8 +26,8 @@ public class MainReasonForm implements StepForm {
       case WALKD:
         return Optional.of(StepDefinition.WALKING_DIFFICULTY);
       case ARMS:
-      case CHILDB:
-      case CHILDVEH:
+      case CHILDBULK:
+      case CHILDVEHIC:
         return Optional.of(StepDefinition.MAY_BE_ELIGIBLE);
       case BLIND:
         return Optional.of(StepDefinition.ELIGIBLE);
@@ -45,5 +37,6 @@ public class MainReasonForm implements StepForm {
     return Optional.empty();
   }
 
-  private MainReasonOption mainReasonOption;
+  @NotNull
+  private EligibilityCodeField mainReasonOption;
 }
