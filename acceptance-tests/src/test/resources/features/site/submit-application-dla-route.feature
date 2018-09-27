@@ -31,31 +31,10 @@ Feature: DFT Blue badge Citizen app new application - DLA
     And   I select option "awardedHigherRateMobility.option.false"
     And   I can click on "Continue"
 
-    Then  I should see the page titled "You may be eligible for a Blue Badge - GOV.UK Apply for a Blue Badge"
-    And   I should see the title "You may be eligible for a Blue Badge"
-    And   I can click on "Start application"
-
-    Then  I should see the page titled "What's your name? - GOV.UK Apply for a Blue Badge"
-    When  I type "Tom Richardson" for "fullName" field by id
-    And   I select an option "hasBirthName.no"
+    Then  I should see the page titled "What is the main reason you need a badge? - GOV.UK Apply for a Blue Badge"
+    And   I should see the title "What is the main reason you need a badge?"
+    And   I select option "mainReasonOption.option.NONE"
     And   I can click on "Continue"
-
-    Then  I should see the page titled "What's your date of birth - GOV.UK Apply for a Blue Badge"
-    When  I type day as "02" month as "08" and year as "1966" for applicant's date of birth
-    And   I can click on "Continue"
-
-    Then  I should see the page titled "Describe health conditions - GOV.UK Apply for a Blue Badge"
-    And   I should see the title "Describe any health conditions that affect your mobility"
-    When  I type "Sample health condition" for "descriptionOfConditions" field by id
-    And   I can click on "Continue"
-
-    Then  I should see the page titled "Declaration - GOV.UK Apply for a Blue Badge"
-    And   I should see the content "I agree to this declaration"
-    And   I select option "declaration.option"
-    And   I can click on "Continue"
-
-    Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
-
   ################################################################################################
 
 
@@ -137,31 +116,10 @@ Feature: DFT Blue badge Citizen app new application - DLA
     And   I select option "awardedHigherRateMobility.option.false"
     And   I can click on "Continue"
 
-    Then  I should see the page titled "They may be eligible for a Blue Badge - GOV.UK Apply for a Blue Badge"
-    And   I should see the title "They may be eligible for a Blue Badge"
-    And   I can click on "Start application"
-
-    Then  I should see the page titled "What's their name? - GOV.UK Apply for a Blue Badge"
-    When  I type "Tom Richardson" for "fullName" field by id
-    And   I select an option "hasBirthName.no"
+    Then  I should see the page titled "What is the main reason they need a badge? - GOV.UK Apply for a Blue Badge"
+    And   I should see the title "What is the main reason they need a badge?"
+    And   I select option "mainReasonOption.option.NONE"
     And   I can click on "Continue"
-
-    Then  I should see the page titled "What's their date of birth - GOV.UK Apply for a Blue Badge"
-    When  I type day as "02" month as "08" and year as "1966" for applicant's date of birth
-    And   I can click on "Continue"
-
-    Then  I should see the page titled "Describe health conditions - GOV.UK Apply for a Blue Badge"
-    And   I should see the title "Describe any health conditions that affect their mobility"
-    When  I type "Sample health condition" for "descriptionOfConditions" field by id
-    And   I can click on "Continue"
-
-    Then  I should see the page titled "Declaration - GOV.UK Apply for a Blue Badge"
-    And   I should see the content "They agree to this declaration"
-    And   I select option "declaration.option"
-    And   I can click on "Continue"
-
-    Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
-
     ################################################################################################
 
 
