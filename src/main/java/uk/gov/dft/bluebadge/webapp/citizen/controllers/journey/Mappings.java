@@ -10,6 +10,7 @@ public class Mappings {
   public static final String URL_APPLICANT_TYPE = "/applicant";
   public static final String URL_APPLICANT_NAME = "/name";
   public static final String URL_RECEIVE_BENEFITS = "/benefits";
+  public static final String URL_HIGHER_RATE_MOBILITY = "/higher-rate-mobility";
   public static final String URL_ELIGIBLE = "/eligible";
   public static final String URL_MAY_BE_ELIGIBLE = "/may-be-eligible";
   public static final String URL_HEALTH_CONDITIONS = "/health-conditions";
@@ -18,6 +19,16 @@ public class Mappings {
   public static final String URL_CHOOSE_YOUR_COUNCIL = "/choose-council";
   public static final String URL_YOUR_ISSUING_AUTHORITY = "/your-issuing-authority";
   public static final String URL_DOB = "/date-of-birth";
+
+  // PIP Journey Routes
+  public static final String URL_PIP_PLANNING_JOURNEY = "/planning-and-following";
+  public static final String URL_PIP_MOVING_AROUND = "/moving-around";
+  public static final String URL_PIP_RECEIVED_DLA = "/dla-in-the-past";
+
+  // AFCS Journey Routes
+  public static final String URL_AFCS_COMPENSATION_SCHEME = "/lump-sum";
+  public static final String URL_AFCS_DISABILITY = "/permanent-and-substantial-disability";
+  public static final String URL_AFCS_MENTAL_DISORDER = "/permanent-mental-disorder";
 
   private Mappings() {}
 
@@ -28,8 +39,19 @@ public class Mappings {
           .put(StepDefinition.DOB, URL_DOB)
           .put(StepDefinition.NAME, URL_APPLICANT_NAME)
           .put(StepDefinition.RECEIVE_BENEFITS, URL_RECEIVE_BENEFITS)
+          .put(StepDefinition.HIGHER_RATE_MOBILITY, URL_HIGHER_RATE_MOBILITY)
           .put(StepDefinition.ELIGIBLE, URL_ELIGIBLE)
           .put(StepDefinition.MAY_BE_ELIGIBLE, URL_MAY_BE_ELIGIBLE)
+
+          // PIP Journey Mappings
+          .put(StepDefinition.PIP_MOVING_AROUND, URL_PIP_MOVING_AROUND)
+          .put(StepDefinition.PIP_DLA, URL_PIP_RECEIVED_DLA)
+          .put(StepDefinition.PIP_PLANNING_JOURNEY, URL_PIP_PLANNING_JOURNEY)
+
+          // AFCS Journey Mappings
+          .put(StepDefinition.AFCS_DISABILITY, URL_AFCS_DISABILITY)
+          .put(StepDefinition.AFCS_MENTAL_DISORDER, URL_AFCS_MENTAL_DISORDER)
+          .put(StepDefinition.AFCS_COMPENSATION_SCHEME, URL_AFCS_COMPENSATION_SCHEME)
           .put(StepDefinition.HEALTH_CONDITIONS, URL_HEALTH_CONDITIONS)
           .put(StepDefinition.CHOOSE_COUNCIL, URL_CHOOSE_YOUR_COUNCIL)
           .put(StepDefinition.YOUR_ISSUING_AUTHORITY, URL_YOUR_ISSUING_AUTHORITY)

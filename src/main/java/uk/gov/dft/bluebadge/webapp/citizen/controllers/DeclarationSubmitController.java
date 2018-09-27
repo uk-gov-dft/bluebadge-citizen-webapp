@@ -4,6 +4,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_
 
 import com.google.common.collect.Lists;
 import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -47,6 +48,7 @@ public class DeclarationSubmitController implements StepController {
   private final ApplicationManagementService appService;
   private final RouteMaster routeMaster;
 
+  @Autowired
   public DeclarationSubmitController(
       ApplicationManagementService appService, RouteMaster routeMaster) {
     this.appService = appService;
@@ -54,7 +56,11 @@ public class DeclarationSubmitController implements StepController {
   }
 
   @GetMapping
-  public String showDeclaration(Model model) {
+  public String showDeclaration(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+
+    if (!journey.isValidState(getStepDefinition())) {
+      return routeMaster.backToCompletedPrevious();
+    }
 
     if (!model.containsAttribute("formRequest")) {
       model.addAttribute("formRequest", DeclarationForm.builder().build());
@@ -83,10 +89,12 @@ public class DeclarationSubmitController implements StepController {
     ApplicantNameForm applicantNameForm = journey.getApplicantNameForm();
     HealthConditionsForm healthConditionsForm = journey.getHealthConditionsForm();
     YourIssuingAuthorityForm yourIssuingAuthorityForm = journey.getYourIssuingAuthorityForm();
-    EligibilityCodeField eligibiility =
+
+    EligibilityCodeField eligibility =
         null != journey.getReceiveBenefitsForm()
             ? journey.getReceiveBenefitsForm().getBenefitType()
             : EligibilityCodeField.WPMS;
+
     String la =
         yourIssuingAuthorityForm == null
             ? "ABERD"
@@ -121,7 +129,7 @@ public class DeclarationSubmitController implements StepController {
                     .genderCode(GenderCodeField.FEMALE));
 
     Eligibility eligibilityObject;
-    if (eligibiility == null || EligibilityCodeField.WALKD == eligibiility) {
+    if (eligibility == null || EligibilityCodeField.WALKD == eligibility) {
       eligibilityObject =
           new Eligibility()
               .typeCode(EligibilityCodeField.WALKD)
@@ -140,13 +148,13 @@ public class DeclarationSubmitController implements StepController {
                                   .description("walk aid description")
                                   .usage("walk aid usage")
                                   .howProvidedCode(HowProvidedCodeField.PRESCRIBE))));
-    } else if (EligibilityCodeField.PIP == eligibiility
-        || EligibilityCodeField.DLA == eligibiility
-        || EligibilityCodeField.WPMS == eligibiility) {
+    } else if (EligibilityCodeField.PIP == eligibility
+        || EligibilityCodeField.DLA == eligibility
+        || EligibilityCodeField.WPMS == eligibility) {
       eligibilityObject =
-          new Eligibility().typeCode(eligibiility).benefit(new Benefit().isIndefinite(true));
+          new Eligibility().typeCode(eligibility).benefit(new Benefit().isIndefinite(true));
     } else {
-      eligibilityObject = new Eligibility().typeCode(eligibiility);
+      eligibilityObject = new Eligibility().typeCode(eligibility);
     }
     return Application.builder()
         .applicationTypeCode(ApplicationTypeCodeField.NEW)

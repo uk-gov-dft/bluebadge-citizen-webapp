@@ -11,6 +11,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class LocalAuthorityRefData extends ReferenceData {
+
   @JsonProperty("metaData")
   private Optional<LocalAuthorityMetaData> localAuthorityMetaData = Optional.empty();
 
