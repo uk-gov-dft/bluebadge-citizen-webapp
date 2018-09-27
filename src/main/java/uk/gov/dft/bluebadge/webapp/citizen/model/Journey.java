@@ -56,7 +56,7 @@ public class Journey implements Serializable {
 
   public Boolean isApplicantYoung() {
     if (dateOfBirthForm != null) {
-      return dateOfBirthForm.getLocalDateDob().isAfter(LocalDate.now().minusYears(16L));
+      return dateOfBirthForm.getLocalDateDob().isAfter(LocalDate.now().minusYears(17L));
     }
     return null;
   }
