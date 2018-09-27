@@ -117,7 +117,7 @@ public class DeclarationSubmitController implements StepController {
                     .badgeHolderName(fullName)
                     .nameAtBirth(birthName)
                     .nino("NS123456A")
-                    .dob(journey.getDateOfBirthForm().getLocalDateDob())
+                    .dob(journey.getDateOfBirthForm().getDateOfBirth().getLocalDate())
                     .genderCode(GenderCodeField.FEMALE));
 
     Eligibility eligibilityObject;

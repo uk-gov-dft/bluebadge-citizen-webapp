@@ -14,10 +14,12 @@
 
             <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"/>
 
+
+
             <form th:action="@{/date-of-birth}" th:object="${formRequest}" method="post" novalidate>
 
                 <div class="govuk-form-group">
-                    <div th:replace="~{ fragments/govuk-date :: govuk-date(#{${JOURNEY.who} + 'dateOfBirthPage.body.title'}, #{example.daymonthyear}, 'day', 'month', 'year', 'pastDate') }"/>
+                    <div th:replace="~{ fragments/govuk-datecomponent :: govuk-datecomponent(#{${JOURNEY.who} + 'dateOfBirthPage.body.title'}, #{example.daymonthyear}, ${formRequest.dateOfBirth}, 'dateOfBirth') }"/>
                 </div>
 
                 <button type="submit" class="govuk-button" data-uipath="button.continue" th:text="#{btn.label.continue}"></button>
