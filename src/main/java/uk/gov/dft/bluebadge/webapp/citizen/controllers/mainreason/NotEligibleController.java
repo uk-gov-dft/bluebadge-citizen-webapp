@@ -35,8 +35,7 @@ public class NotEligibleController implements StepController {
     if (!journey.isValidState(getStepDefinition())) {
       return routeMaster.backToCompletedPrevious();
     }
-
-    String laShortCode = journey.getYourIssuingAuthorityForm().getLocalAuthorityShortCode();
+    
     model.addAttribute("localAuthority", journey.getLocalAuthority());
 
     sessionStatus.setComplete();

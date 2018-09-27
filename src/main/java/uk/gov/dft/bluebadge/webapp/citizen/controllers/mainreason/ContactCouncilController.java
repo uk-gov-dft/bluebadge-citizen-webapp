@@ -36,7 +36,6 @@ public class ContactCouncilController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    String laShortCode = journey.getYourIssuingAuthorityForm().getLocalAuthorityShortCode();
     model.addAttribute("localAuthority", journey.getLocalAuthority());
 
     sessionStatus.setComplete();
