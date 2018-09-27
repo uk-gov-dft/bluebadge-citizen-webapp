@@ -19,6 +19,7 @@ public class Mappings {
   public static final String URL_CHOOSE_YOUR_COUNCIL = "/choose-council";
   public static final String URL_YOUR_ISSUING_AUTHORITY = "/your-issuing-authority";
   public static final String URL_DOB = "/date-of-birth";
+  public static final String URL_ENTER_ADDRESS = "/enter-address";
 
   // PIP Journey Routes
   public static final String URL_PIP_PLANNING_JOURNEY = "/planning-and-following";
@@ -37,6 +38,7 @@ public class Mappings {
           .put(StepDefinition.HOME, URL_ROOT)
           .put(StepDefinition.APPLICANT_TYPE, URL_APPLICANT_TYPE)
           .put(StepDefinition.DOB, URL_DOB)
+          .put(StepDefinition.ADDRESS, URL_ENTER_ADDRESS)
           .put(StepDefinition.NAME, URL_APPLICANT_NAME)
           .put(StepDefinition.RECEIVE_BENEFITS, URL_RECEIVE_BENEFITS)
           .put(StepDefinition.HIGHER_RATE_MOBILITY, URL_HIGHER_RATE_MOBILITY)
