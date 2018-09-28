@@ -242,8 +242,8 @@ public class SiteSteps extends AbstractSpringSteps {
       "^I type day as \"([^\"]*)\" month as \"([^\"]*)\" and year as \"([^\"]*)\" for applicant's date of birth$")
   public void iTypeDayAsMonthAsAndYearAsForApplicantSDateOfBirth(
       String day, String month, String year) throws Throwable {
-    sitePage.findElementWithUiPath("pastDate.day.field").sendKeys(day);
-    sitePage.findElementWithUiPath("pastDate.month.field").sendKeys(month);
-    sitePage.findElementWithUiPath("pastDate.year.field").sendKeys(year);
+    sitePage.findElementWithUiPath("dateOfBirth.day.field").sendKeys(day);
+    sitePage.findElementWithUiPath("dateOfBirth.month.field").sendKeys(month);
+    sitePage.findElementWithUiPath("dateOfBirth.year.field").sendKeys(year);
   }
 }

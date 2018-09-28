@@ -14,12 +14,9 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.GenderCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
 
 public class NinoControllerTest {
@@ -29,8 +26,8 @@ public class NinoControllerTest {
   @Mock private RouteMaster mockRouteMaster;
 
   private Journey journey;
-  private String nino = "NS123456A";
-  private String invalidNino = "NS123456";
+  private static final String NINO = "NS123456A";
+  private static final String INVALID_NINO = "NS123456";
 
   @Before
   public void setup() {
@@ -66,7 +63,7 @@ public class NinoControllerTest {
         .thenReturn("redirect:/testSuccess");
 
     mockMvc
-        .perform(post("/nino").param("nino", nino))
+        .perform(post("/nino").param("nino", NINO))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
   }
@@ -84,7 +81,7 @@ public class NinoControllerTest {
   public void submit_whenInvalidNinoIsProvided_ThenShouldDisplayValidationError() throws Exception {
 
     mockMvc
-        .perform(post("/nino").sessionAttr("JOURNEY", new Journey()).param("nino", invalidNino))
+        .perform(post("/nino").sessionAttr("JOURNEY", new Journey()).param("nino", INVALID_NINO))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/someValidationError"));
   }
