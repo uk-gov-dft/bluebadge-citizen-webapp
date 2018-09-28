@@ -3,7 +3,10 @@ Feature: DFT Blue badge Citizen app new application - TERMILL
   As a citizen user I want to be able to get information on council details via TERMILL route
 
   Scenario: Child vehicle application for yourself
-    Given I complete application up to the Main Reason page for "yourself"
+    Given I complete applicant page for "yourself"
+    And   I complete select council page
+    And   I complete your local authority page
+    And   I complete receive benefit page for "NONE"
     Then  I should see the page titled "What is the main reason you need a badge?" with GOV.UK suffix
     And   I should see the title "What is the main reason you need a badge?"
     And   I can click on "Continue"
@@ -38,7 +41,10 @@ Feature: DFT Blue badge Citizen app new application - TERMILL
 
 
   Scenario: Child vehicle application for someone else
-    Given I complete application up to the Main Reason page for "someone else"
+    Given I complete applicant page for "someone else"
+    And   I complete select council page
+    And   I complete your local authority page
+    And   I complete receive benefit page for "NONE"
     Then  I should see the page titled "What is the main reason they need a badge?" with GOV.UK suffix
     And   I should see the title "What is the main reason they need a badge?"
     And   I select option "mainReasonOption.option.CHILDVEHIC"
