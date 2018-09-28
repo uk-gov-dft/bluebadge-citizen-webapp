@@ -113,6 +113,17 @@ public class DeclarationSubmitController implements StepController {
     GenderCodeField gender =
         null != genderForm ? journey.getGenderForm().getGender() : GenderCodeField.FEMALE;
 
+    Person person =
+        new Person()
+            .badgeHolderName(fullName)
+            .nameAtBirth(birthName)
+            .dob(journey.getDateOfBirthForm().getLocalDateDob())
+            .genderCode(gender);
+
+    if (journey.getNinoForm().getNino() != null) {
+      person.setNino(journey.getNinoForm().getNino());
+    }
+
     Party party =
         new Party()
             .typeCode(PartyTypeCodeField.PERSON)
@@ -125,13 +136,7 @@ public class DeclarationSubmitController implements StepController {
                     .primaryPhoneNumber("016111234567")
                     .secondaryPhoneNumber("079707777111")
                     .emailAddress("nobody@thisisatestabc.com"))
-            .person(
-                new Person()
-                    .badgeHolderName(fullName)
-                    .nameAtBirth(birthName)
-                    .nino("NS123456A")
-                    .dob(journey.getDateOfBirthForm().getLocalDateDob())
-                    .genderCode(gender));
+            .person(person);
 
     Eligibility eligibilityObject;
     if (eligibility == null || EligibilityCodeField.WALKD == eligibility) {

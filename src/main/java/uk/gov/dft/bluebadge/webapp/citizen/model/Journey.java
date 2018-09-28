@@ -15,6 +15,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipDlaQuestionForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipMovingAroundForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipPlanningJourneyForm;
@@ -39,6 +40,7 @@ public class Journey implements Serializable {
   private DateOfBirthForm dateOfBirthForm;
   private HigherRateMobilityForm higherRateMobilityForm;
   private GenderForm genderForm;
+  private NinoForm ninoForm;
   public String who;
   public String ageGroup;
 
@@ -205,5 +207,13 @@ public class Journey implements Serializable {
 
   public void setGenderForm(GenderForm genderForm) {
     this.genderForm = genderForm;
+  }
+
+  public NinoForm getNinoForm() {
+    return ninoForm;
+  }
+
+  public void setNinoForm(NinoForm ninoForm) {
+    this.ninoForm = ninoForm;
   }
 }
