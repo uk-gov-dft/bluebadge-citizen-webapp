@@ -28,4 +28,6 @@ public class ValidationPatterns {
           + "([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))[\\s]*[0-9][A-Za-z]{2})$";
 
   public static final String POSTCODE_CASE_INSENSITIVE = "(?i)" + POSTCODE;
+
+  public static final String EMPTY_OR_POSTCODE_CASE_INSENSITIVE = "^$|" + POSTCODE_CASE_INSENSITIVE;
 }
