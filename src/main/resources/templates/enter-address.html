@@ -12,23 +12,35 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.who} + 'enterAddressPage.body.title'}"></h1>
-
             <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>
 
             <form th:action="@{/enter-address}" th:object="${formRequest}" method="POST" novalidate>
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h1 class="govuk-fieldset__heading" th:text="#{${JOURNEY.who} + 'enterAddressPage.body.title'}"></h1>
+                    </legend>
 
-                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{enterAddressPage.buildingAndStreet.field.label}, 'buildingAndStreet', null, 'text')}"></div>
-                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{enterAddressPage.optionalAddress.field.label}, 'optionalAddress', null, 'text')}"></div>
-                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{enterAddressPage.townOrCity.field.label}, 'townOrCity', null, 'text')}"></div>
-                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{enterAddressPage.postcode.field.label}, 'postcode', null, 'text')}"></div>
+                    <div th:replace="~{ fragments/govuk-input :: govuk-input-with-hidden-label(#{enterAddressPage.buildingAndStreet.field.label}, #{enterAddressPage.buildingAndStreet.field.label.hidden.lineOne}, 'buildingAndStreet', null, 'text')}"></div>
+
+                    <div th:replace="~{ fragments/govuk-input :: govuk-input-with-hidden-label(null, #{enterAddressPage.buildingAndStreet.field.label.hidden.lineTwo}, 'optionalAddress', null, 'text')}"></div>
+
+                    <div class="govuk-!-width-two-thirds">
+                        <div th:replace="~{ fragments/govuk-input :: govuk-input(#{enterAddressPage.townOrCity.field.label}, 'townOrCity', null, 'text')}"></div>
+                    </div>
+
+                    <div class="govuk-input--width-10">
+                        <div th:replace="~{ fragments/govuk-input :: govuk-input(#{enterAddressPage.postcode.field.label}, 'postcode', null, 'text')}"></div>
+                    </div>
+
+                </fieldset>
 
                 <button type="submit"
                         class="govuk-button"
                         data-uipath="button.continue"
                         th:text="#{btn.label.continue}"></button>
 
-            </form>
+                </form>
+
 
         </div>
     </div>

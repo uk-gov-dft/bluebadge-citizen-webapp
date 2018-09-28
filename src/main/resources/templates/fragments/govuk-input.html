@@ -43,5 +43,37 @@ for id and attaching label to the input field.
 
 </div><!-- govuk-o-form-group -->
 
+<div th:fragment="govuk-input-with-hidden-label(label, hiddenLabel, name, hint, type)"
+     th:class="${#fields.hasErrors(name)} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+
+    <label class="govuk-label"
+           th:attr="for=${name}"
+           th:data-uipath="${name} + '.label'">
+        <span th:if="${label}" th:remove="tag" th:text="${label}"></span>
+        <span th:if="${hiddenLabel}" th:text="${hiddenLabel}" class="govuk-visually-hidden"></span>
+    </label>
+
+    <span class="govuk-hint"
+          th:if="${hint}"
+          th:utext="${hint}"
+          th:id="${#fields.hasErrors(name)} ? ${name} + '-hint ' + ${name} + '-error' : ${name} + '-hint'"
+          th:data-uipath="${name} + '.label_hint'" />
+
+    <span class="govuk-error-message"
+          th:data-uipath="${name} + '.error'"
+          th:id="${name} + '-hint'"
+          th:if="${#fields.hasErrors(name)}"
+          th:errors="*{__${name}__}" />
+
+    <input th:class="${#fields.hasErrors(name)} ? 'govuk-input govuk-input--error' : 'govuk-input'"
+           th:data-uipath="${name} + '.field'"
+           th:id="${name}"
+           th:name="${name}"
+           th:type="${type}"
+           th:field="*{__${name}__}"
+           th:aria-describedby="${hint} ? (${#fields.hasErrors(name)} ? ${name} + '-hint ' + ${name} + '-error' : ${name} + '-hint') : null " />
+
+</div><!-- govuk-o-form-group -->
+
 </body>
 </html>
