@@ -3,9 +3,9 @@ package uk.gov.dft.bluebadge.webapp.citizen.model;
 import java.io.Serializable;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.AFCS.CompensationSchemeForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.AFCS.DisabilityForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.AFCS.MentalDisorderForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.CompensationSchemeForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.DisabilityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.MentalDisorderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
@@ -13,9 +13,9 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipDlaQuestionForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipMovingAroundForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipPlanningJourneyForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipDlaQuestionForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipMovingAroundForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipPlanningJourneyForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 
@@ -38,7 +38,7 @@ public class Journey implements Serializable {
   private HigherRateMobilityForm higherRateMobilityForm;
   public String who;
 
-  // AFCS Journey Forms
+  // afcs Journey Forms
   private CompensationSchemeForm compensationSchemeForm;
   private DisabilityForm disabilityForm;
   private MentalDisorderForm mentalDisorderForm;

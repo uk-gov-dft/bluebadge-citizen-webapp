@@ -1,4 +1,4 @@
-package uk.gov.dft.bluebadge.webapp.citizen.controllers;
+package uk.gov.dft.bluebadge.webapp.citizen.controllers.pip;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -21,12 +21,11 @@ import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipMovingAroundForm;
 
-public class ReceiveBenefitsControllerTest {
-
+public class PipMovingAroundControllerTest {
   private MockMvc mockMvc;
-  private ReceiveBenefitsController controller;
+  private PipMovingAroundController controller;
 
   @Mock private RouteMaster mockRouteMaster;
   private Journey journey;
@@ -34,7 +33,7 @@ public class ReceiveBenefitsControllerTest {
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new ReceiveBenefitsController(mockRouteMaster);
+    controller = new PipMovingAroundController(mockRouteMaster);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -47,16 +46,16 @@ public class ReceiveBenefitsControllerTest {
   }
 
   @Test
-  public void show_ShouldDisplayBenefitsTemplate() throws Exception {
+  public void show_ShouldDisplayMovingroundTemplate() throws Exception {
 
-    ReceiveBenefitsForm formRequest = ReceiveBenefitsForm.builder().build();
+    PipMovingAroundForm formRequest = PipMovingAroundForm.builder().build();
 
     mockMvc
-        .perform(get("/benefits").sessionAttr("JOURNEY", journey))
+        .perform(get("/moving-around").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
-        .andExpect(view().name("receive-benefits"))
+        .andExpect(view().name("pip/moving-around"))
         .andExpect(model().attribute("formRequest", formRequest))
-        .andExpect(model().attribute("benefitOptions", Matchers.notNullValue()));
+        .andExpect(model().attribute("formOptions", Matchers.notNullValue()));
   }
 
   @Test
@@ -65,7 +64,7 @@ public class ReceiveBenefitsControllerTest {
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
 
     mockMvc
-        .perform(get("/benefits"))
+        .perform(get("/moving-around"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/backToStart"));
   }
@@ -73,19 +72,22 @@ public class ReceiveBenefitsControllerTest {
   @Test
   public void submit_givenValidForm_thenShouldDisplayRedirectToSuccess() throws Exception {
 
-    when(mockRouteMaster.redirectToOnSuccess(any(ReceiveBenefitsForm.class)))
+    when(mockRouteMaster.redirectToOnSuccess(any(PipMovingAroundForm.class), any(Journey.class)))
         .thenReturn("redirect:/testSuccess");
 
     mockMvc
-        .perform(post("/benefits").param("benefitType", "pip").sessionAttr("JOURNEY", journey))
+        .perform(
+            post("/moving-around")
+                .param("movingAroundPoints", "MOVING_POINTS_8")
+                .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
   }
 
   @Test
-  public void submit_whenMissingBenefitsAnswer_ThenShouldHaveValidationError() throws Exception {
+  public void submit_whenMissingMovingroundAnswer_ThenShouldHaveValidationError() throws Exception {
     mockMvc
-        .perform(post("/benefits").sessionAttr("JOURNEY", journey))
+        .perform(post("/moving-around").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/someValidationError"));
   }

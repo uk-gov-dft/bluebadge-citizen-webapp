@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="#{contact.page.title} + ' - ' + #{common.title.suffix}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l" th:text="#{contact.body.title}"></h1>
+
+            <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>
+
+            <form th:action="@{/contact-details}" th:object="${formRequest}" method="POST" novalidate>
+
+                <!-- fullName -->
+                <div th:class="${#fields.hasErrors('fullName')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+                    <span class="govuk-error-message"
+                          data-uipath="fullname.error"
+                          th:errors="*{fullname}"></span>
+
+                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.fullname.field.label}, 'fullName', #{contact.fullname.field.hint}, 'text')}"></div>
+                </div>
+
+                <!-- primaryContactNumber -->
+                <div th:class="${#fields.hasErrors('primaryContactNumber')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+                    <span class="govuk-error-message"
+                          data-uipath="primaryContactNumber.error"
+                          th:errors="*{primaryContactNumber}"></span>
+                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.primaryContactNumber.field.label}, 'primaryContactNumber', null, 'text')}"></div>
+                </div>
+
+                <!-- secondaryContactNumber -->
+                <div th:class="${#fields.hasErrors('secondaryContactNumber')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+                    <span class="govuk-error-message"
+                          data-uipath="secondaryContactNumber.error"
+                          th:errors="*{secondaryContactNumber}"></span>
+                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.secondaryContactNumber.field.label}, 'secondaryContactNumber', null, 'text')}"></div>
+                </div>
+
+                <div th:class="${#fields.hasErrors('email')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+                    <span class="govuk-error-message"
+                          data-uipath="email.error"
+                          th:errors="*{email}"></span>
+                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.email.field.label}, 'email', null, 'text')}"></div>
+                </div>
+
+                <button type="submit" class="govuk-button" data-uipath="button.continue" th:text="#{btn.label.continue}"></button>
+
+            </form>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
