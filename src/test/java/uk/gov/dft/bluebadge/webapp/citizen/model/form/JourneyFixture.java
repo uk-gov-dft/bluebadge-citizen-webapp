@@ -4,6 +4,7 @@ import java.util.Optional;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nations;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.component.CompoundDate;
 
 public class JourneyFixture {
 
@@ -27,7 +28,11 @@ public class JourneyFixture {
     }
 
     public JourneyBuilder setDateOfBirth(String year, String month, String day){
-      journey.setDateOfBirthForm(DateOfBirthForm.builder().year(year).month(month).day(day).build());
+      CompoundDate date = new CompoundDate();
+      date.setDay(day);
+      date.setMonth(month);
+      date.setYear(year);
+      journey.setDateOfBirthForm(DateOfBirthForm.builder().dateOfBirth(date).build());
       return this;
     }
 
