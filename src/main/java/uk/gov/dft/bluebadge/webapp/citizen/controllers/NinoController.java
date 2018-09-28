@@ -39,10 +39,6 @@ public class NinoController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    if (journey.isApplicantYoung()) {
-      return routeMaster.redirectToOnSuccess(NinoForm.builder().build());
-    }
-
     if (!model.containsAttribute(FORM_REQUEST) && null != journey.getNinoForm()) {
       model.addAttribute(FORM_REQUEST, journey.getNinoForm());
     }

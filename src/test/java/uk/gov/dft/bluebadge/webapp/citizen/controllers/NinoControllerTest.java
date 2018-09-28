@@ -53,33 +53,11 @@ public class NinoControllerTest {
 
     NinoForm form = NinoForm.builder().build();
 
-    DateOfBirthForm dob = DateOfBirthForm.builder()
-            .day("12").month("04").year("1988").build();
-    journey.setDateOfBirthForm(dob);
-
     mockMvc
             .perform(get("/nino").sessionAttr("JOURNEY", journey))
             .andExpect(status().isOk())
             .andExpect(view().name("nino"))
             .andExpect(model().attribute("formRequest", form));
-  }
-
-  @Test
-  public void show_ShouldByPassNinoTemplate_WhenApplicantIsYoung() throws Exception {
-
-    when(mockRouteMaster.redirectToOnSuccess(any(NinoForm.class)))
-            .thenReturn("redirect:/testSuccess");
-
-    NinoForm form = NinoForm.builder().build();
-    DateOfBirthForm dob = DateOfBirthForm.builder()
-            .day("12").month("04").year("2002").build();
-
-    journey.setDateOfBirthForm(dob);
-
-    mockMvc
-            .perform(get("/nino").sessionAttr("JOURNEY", journey))
-            .andExpect(status().isFound())
-            .andExpect(redirectedUrl("/testSuccess"));
   }
 
   @Test

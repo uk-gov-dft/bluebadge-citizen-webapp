@@ -26,6 +26,11 @@ public class JourneyFixture {
       return setNation(Nations.WALES);
     }
 
+    public JourneyBuilder setDateOfBirth(String year, String month, String day){
+      journey.setDateOfBirthForm(DateOfBirthForm.builder().year(year).month(month).day(day).build());
+      return this;
+    }
+
     private JourneyBuilder setNation(String nation) {
       LocalAuthorityRefData.LocalAuthorityMetaData meta =
           new LocalAuthorityRefData.LocalAuthorityMetaData();

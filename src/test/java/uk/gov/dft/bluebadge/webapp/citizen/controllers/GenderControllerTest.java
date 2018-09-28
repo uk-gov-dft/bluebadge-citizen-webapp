@@ -21,6 +21,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 
 public class GenderControllerTest {
@@ -42,6 +43,7 @@ public class GenderControllerTest {
     journey = new Journey();
     journey.setApplicantForm(
         ApplicantForm.builder().applicantType(ApplicantType.YOURSELF.name()).build());
+    journey.setDateOfBirthForm(DateOfBirthForm.builder().day("03").month("12").year("1988").build());
   }
 
   @Test
@@ -68,7 +70,7 @@ public class GenderControllerTest {
 
   @Test
   public void submit_givenMaleOption_thenShouldDisplayRedirectToSuccess() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(GenderForm.class)))
+    when(mockRouteMaster.redirectToOnSuccess(any(GenderForm.class), any(Journey.class)))
         .thenReturn("redirect:/testSuccess");
 
     mockMvc
@@ -79,7 +81,7 @@ public class GenderControllerTest {
 
   @Test
   public void submit_givenFemaleOption_thenShouldDisplayRedirectToSuccess() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(GenderForm.class)))
+    when(mockRouteMaster.redirectToOnSuccess(any(GenderForm.class), any(Journey.class)))
         .thenReturn("redirect:/testSuccess");
 
     mockMvc
@@ -90,7 +92,7 @@ public class GenderControllerTest {
 
   @Test
   public void submit_givenUnspecifiedOption_thenShouldDisplayRedirectToSuccess() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(GenderForm.class)))
+    when(mockRouteMaster.redirectToOnSuccess(any(GenderForm.class), any(Journey.class)))
         .thenReturn("redirect:/testSuccess");
 
     mockMvc
