@@ -27,6 +27,7 @@ public class EnterAddressForm implements StepForm, Serializable {
   @Size(groups= { First.class, Second.class}, max = 100, message = "{Size.optionalAddress}")
   private String optionalAddress;
 
+
   @NotBlank(groups= First.class, message = "{NotNull.townOrCity}")
   @Size(groups= Second.class,max = 100, min = 1, message = "{Size.townOrCity}")
   private String townOrCity;
