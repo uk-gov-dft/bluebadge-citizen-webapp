@@ -17,6 +17,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.component.CompoundDate;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 
 @Controller
@@ -44,7 +45,9 @@ public class DateOfBirthController implements StepController {
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
-      model.addAttribute(FORM_REQUEST, DateOfBirthForm.builder().build());
+      model.addAttribute(
+          FORM_REQUEST,
+          journey.getDateOfBirthForm().builder().dateOfBirth(new CompoundDate()).build());
     }
 
     return TEMPLATE_DOB;
