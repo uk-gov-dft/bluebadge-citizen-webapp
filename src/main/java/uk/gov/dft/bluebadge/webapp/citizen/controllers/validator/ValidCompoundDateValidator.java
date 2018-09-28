@@ -6,6 +6,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.component.CompoundDate;
 
 import java.time.LocalDate;
 
+@SuppressWarnings("squid:S2201")
 public class ValidCompoundDateValidator
     implements ConstraintValidator<ValidCompoundDate, CompoundDate> {
 
