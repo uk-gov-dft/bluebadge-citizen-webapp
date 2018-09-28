@@ -27,20 +27,20 @@
                     <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.fullname.field.label}, 'fullName', #{contact.fullname.field.hint}, 'text')}"></div>
                 </div>
 
-                <!-- primaryContactNumber -->
-                <div th:class="${#fields.hasErrors('primaryContactNumber')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+                <!-- primaryPhoneNumber -->
+                <div th:class="${#fields.hasErrors('primaryPhoneNumber')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
                     <span class="govuk-error-message"
-                          data-uipath="primaryContactNumber.error"
-                          th:errors="*{primaryContactNumber}"></span>
-                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.primaryContactNumber.field.label}, 'primaryContactNumber', null, 'text')}"></div>
+                          data-uipath="primaryPhoneNumber.error"
+                          th:errors="*{primaryPhoneNumber}"></span>
+                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.primaryPhoneNumber.field.label}, 'primaryPhoneNumber', null, 'text')}"></div>
                 </div>
 
-                <!-- secondaryContactNumber -->
-                <div th:class="${#fields.hasErrors('secondaryContactNumber')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+                <!-- secondaryPhoneNumber -->
+                <div th:class="${#fields.hasErrors('secondaryPhoneNumber')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
                     <span class="govuk-error-message"
-                          data-uipath="secondaryContactNumber.error"
-                          th:errors="*{secondaryContactNumber}"></span>
-                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.secondaryContactNumber.field.label}, 'secondaryContactNumber', null, 'text')}"></div>
+                          data-uipath="secondaryPhoneNumber.error"
+                          th:errors="*{secondaryPhoneNumber}"></span>
+                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.secondaryPhoneNumber.field.label}, 'secondaryPhoneNumber', null, 'text')}"></div>
                 </div>
 
                 <div th:class="${#fields.hasErrors('email')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">

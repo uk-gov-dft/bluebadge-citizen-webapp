@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.CompensationSchemeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.DisabilityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.MentalDisorderForm;
@@ -46,6 +47,7 @@ public class Journey implements Serializable {
   private CompensationSchemeForm compensationSchemeForm;
   private DisabilityForm disabilityForm;
   private MentalDisorderForm mentalDisorderForm;
+  private ContactDetailsForm contactDetailsForm;
 
   public Boolean isApplicantYourself() {
     if (applicantForm != null) {
@@ -205,5 +207,13 @@ public class Journey implements Serializable {
 
   public void setGenderForm(GenderForm genderForm) {
     this.genderForm = genderForm;
+  }
+
+  public ContactDetailsForm getContactDetailsForm() {
+    return contactDetailsForm;
+  }
+
+  public void setContactDetailsForm(ContactDetailsForm contactDetailsForm) {
+    this.contactDetailsForm = contactDetailsForm;
   }
 }

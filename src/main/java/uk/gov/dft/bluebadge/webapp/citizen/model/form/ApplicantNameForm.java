@@ -12,19 +12,23 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 @Data
 @Builder
 public class ApplicantNameForm implements StepForm, Serializable {
-
+  @NotBlank(message = "{field.fullName.NotBlank}")
   @Size(max = 100)
   private String fullName;
 
-  @Size(max = 100)
-  @NotNull
-  private String primaryContactNumber;
+  @NotNull(message = "{field.hasBirthName.NotNull}")
+  private Boolean hasBirthName;
 
   @Size(max = 100)
-  private String secondaryContactNumber;
+  private String birthName;
+
+  public Boolean isBirthNameValid() {
+    return (hasBirthName == null || !hasBirthName.equals(true) || !birthName.isEmpty());
+  }
 
   @Override
   public StepDefinition getAssociatedStep() {
-    return StepDefinition.CONTACT_DETAILS;
+    return StepDefinition.NAME;
   }
+
 }

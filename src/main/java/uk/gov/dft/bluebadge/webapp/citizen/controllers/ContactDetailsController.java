@@ -14,13 +14,14 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 
 import javax.validation.Valid;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
-@RequestMapping(Mappings.URL_APPLICANT_NAME)
+@RequestMapping(Mappings.URL_CONTACT_DETAILS)
 public class ContactDetailsController implements StepController {
 
   private static final String TEMPLATE_APPLICANT_NAME = "contact-details";
@@ -56,24 +57,21 @@ public class ContactDetailsController implements StepController {
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute(FORM_REQUEST) ApplicantNameForm applicantNameForm,
+      @Valid @ModelAttribute(FORM_REQUEST) ContactDetailsForm contactDetailsForm,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
-    if (!applicantNameForm.isBirthNameValid()) {
-      bindingResult.rejectValue("birthName", "field.birthName.NotBlank");
+    // Validation context sensitive to journey
+    if (contactDetailsForm.isFullnameInvalid(journey)) {
+      bindingResult.reject("fullName", "Invalid.fullname");
     }
 
     if (bindingResult.hasErrors()) {
-      return routeMaster.redirectToOnBindingError(this, applicantNameForm, bindingResult, attr);
+      return routeMaster.redirectToOnBindingError(this, contactDetailsForm, bindingResult, attr);
     }
 
-    if (!applicantNameForm.getHasBirthName()) {
-      applicantNameForm.setBirthName(applicantNameForm.getFullName());
-    }
-
-    journey.setApplicantNameForm(applicantNameForm);
-    return routeMaster.redirectToOnSuccess(applicantNameForm);
+    journey.setContactDetailsForm(contactDetailsForm);
+    return routeMaster.redirectToOnSuccess(contactDetailsForm);
   }
 
   @Override
