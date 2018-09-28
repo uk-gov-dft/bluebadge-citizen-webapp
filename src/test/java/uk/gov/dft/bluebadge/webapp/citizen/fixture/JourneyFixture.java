@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.fixture;
 
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.component.CompoundDate;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
@@ -27,7 +28,8 @@ public class JourneyFixture {
             .build();
 
     DateOfBirthForm dateOfBirthForm =
-        DateOfBirthForm.builder().day("1").month("1").year("1990").build();
+        DateOfBirthForm.builder().dateOfBirth(new CompoundDate("1", "1", "1990")).build();
+    //dateOfBirthForm.setDateOfBirth(new CompoundDate());
 
     journey.setApplicantForm(applicantForm);
     journey.setHealthConditionsForm(healthConditionsForm);
