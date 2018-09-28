@@ -4,7 +4,7 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/master.html}">
 <head>
-    <title th:text="#{${JOURNEY.who} + 'dateOfBirthPage.title'} + ' - ' + #{common.title.suffix}"></title>
+    <title th:text="#{${JOURNEY.who} + 'genderPage.title'} + ' - ' + #{common.title.suffix}"></title>
 </head>
 <body>
 
@@ -14,13 +14,9 @@
 
             <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"/>
 
+            <form th:action="@{/gender}" th:object="${formRequest}" method="post" novalidate>
 
-
-            <form th:action="@{/date-of-birth}" th:object="${formRequest}" method="post" novalidate>
-
-                <div class="govuk-form-group">
-                    <div th:replace="~{ fragments/govuk-datecomponent :: govuk-datecomponent(#{${JOURNEY.who} + 'dateOfBirthPage.body.title'}, #{example.daymonthyear}, ${formRequest.dateOfBirth}, 'dateOfBirth') }"/>
-                </div>
+                <div th:replace="~{ fragments/govuk-radios :: govuk-radios('gender', ${options}) }"></div>
 
                 <button type="submit" class="govuk-button" data-uipath="button.continue" th:text="#{btn.label.continue}"></button>
 
