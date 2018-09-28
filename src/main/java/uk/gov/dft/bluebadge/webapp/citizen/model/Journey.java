@@ -1,6 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.CompensationSchemeForm;
@@ -11,6 +12,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipDlaQuestionForm;
@@ -36,7 +38,9 @@ public class Journey implements Serializable {
   private LocalAuthorityRefData localAuthority;
   private DateOfBirthForm dateOfBirthForm;
   private HigherRateMobilityForm higherRateMobilityForm;
+  private GenderForm genderForm;
   public String who;
+  public String ageGroup;
 
   // afcs Journey Forms
   private CompensationSchemeForm compensationSchemeForm;
@@ -46,6 +50,13 @@ public class Journey implements Serializable {
   public Boolean isApplicantYourself() {
     if (applicantForm != null) {
       return applicantForm.getApplicantType().equals(ApplicantType.YOURSELF.toString());
+    }
+    return null;
+  }
+
+  public Boolean isApplicantYoung() {
+    if (dateOfBirthForm != null) {
+      return dateOfBirthForm.getDateOfBirth().getLocalDate().isAfter(LocalDate.now().minusYears(17L));
     }
     return null;
   }
@@ -93,6 +104,7 @@ public class Journey implements Serializable {
 
   public void setDateOfBirthForm(DateOfBirthForm dateOfBirthForm) {
     this.dateOfBirthForm = dateOfBirthForm;
+    ageGroup = isApplicantYoung() ? "young." : "adult.";
   }
 
   public DateOfBirthForm getDateOfBirthForm() {
@@ -185,5 +197,13 @@ public class Journey implements Serializable {
 
   public void setHigherRateMobilityForm(HigherRateMobilityForm higherRateMobilityForm) {
     this.higherRateMobilityForm = higherRateMobilityForm;
+  }
+
+  public GenderForm getGenderForm() {
+    return genderForm;
+  }
+
+  public void setGenderForm(GenderForm genderForm) {
+    this.genderForm = genderForm;
   }
 }

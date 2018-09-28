@@ -20,6 +20,7 @@ public class Mappings {
   public static final String URL_YOUR_ISSUING_AUTHORITY = "/your-issuing-authority";
   public static final String URL_DOB = "/date-of-birth";
   public static final String URL_CONTACT_DETAILS = "/contact-details";
+  public static final String URL_GENDER = "/gender";
 
   // pip Journey Routes
   public static final String URL_PIP_PLANNING_JOURNEY = "/planning-and-following";
@@ -39,6 +40,7 @@ public class Mappings {
           .put(StepDefinition.APPLICANT_TYPE, URL_APPLICANT_TYPE)
           .put(StepDefinition.DOB, URL_DOB)
           .put(StepDefinition.CONTACT_DETAILS, URL_CONTACT_DETAILS)
+          .put(StepDefinition.GENDER, URL_GENDER)
           .put(StepDefinition.NAME, URL_APPLICANT_NAME)
           .put(StepDefinition.RECEIVE_BENEFITS, URL_RECEIVE_BENEFITS)
           .put(StepDefinition.HIGHER_RATE_MOBILITY, URL_HIGHER_RATE_MOBILITY)

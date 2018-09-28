@@ -35,6 +35,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
@@ -87,6 +88,7 @@ public class DeclarationSubmitController implements StepController {
 
   private Application getDummyApplication(Journey journey) {
     ApplicantNameForm applicantNameForm = journey.getApplicantNameForm();
+    GenderForm genderForm = journey.getGenderForm();
     HealthConditionsForm healthConditionsForm = journey.getHealthConditionsForm();
     YourIssuingAuthorityForm yourIssuingAuthorityForm = journey.getYourIssuingAuthorityForm();
 
@@ -108,6 +110,9 @@ public class DeclarationSubmitController implements StepController {
     String birthName =
         applicantNameForm == null ? "John Doe Birth" : applicantNameForm.getBirthName();
 
+    GenderCodeField gender =
+        null != genderForm ? journey.getGenderForm().getGender() : GenderCodeField.FEMALE;
+
     Party party =
         new Party()
             .typeCode(PartyTypeCodeField.PERSON)
@@ -125,8 +130,8 @@ public class DeclarationSubmitController implements StepController {
                     .badgeHolderName(fullName)
                     .nameAtBirth(birthName)
                     .nino("NS123456A")
-                    .dob(journey.getDateOfBirthForm().getLocalDateDob())
-                    .genderCode(GenderCodeField.FEMALE));
+                    .dob(journey.getDateOfBirthForm().getDateOfBirth().getLocalDate())
+                    .genderCode(gender));
 
     Eligibility eligibilityObject;
     if (eligibility == null || EligibilityCodeField.WALKD == eligibility) {
