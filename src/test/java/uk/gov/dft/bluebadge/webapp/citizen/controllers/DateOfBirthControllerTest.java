@@ -130,19 +130,19 @@ public class DateOfBirthControllerTest {
 
     Journey journey = JourneyFixture.getDefaultJourney();
     when(mockRouteMaster.redirectToOnSuccess(journey.getDateOfBirthForm()))
-      .thenReturn("redirect:/testSuccess");
+        .thenReturn("redirect:/testSuccess");
 
     mockMvc
-      .perform(
-        post(URL_DATE_OF_BIRTH)
-          .param("dateOfBirth.year", "2500")
-          .param("dateOfBirth.month", "1")
-          .param("dateOfBirth.day", "2")
-          .sessionAttr("JOURNEY", new Journey()))
-      .andExpect(status().isOk())
-      .andExpect(view().name(VIEW_DATE_OF_BIRTH))
-      .andExpect(
-        model().attributeHasFieldErrorCode("formRequest", "dateOfBirth", "PastCompoundDate"));
+        .perform(
+            post(URL_DATE_OF_BIRTH)
+                .param("dateOfBirth.year", "2500")
+                .param("dateOfBirth.month", "1")
+                .param("dateOfBirth.day", "2")
+                .sessionAttr("JOURNEY", new Journey()))
+        .andExpect(status().isOk())
+        .andExpect(view().name(VIEW_DATE_OF_BIRTH))
+        .andExpect(
+            model().attributeHasFieldErrorCode("formRequest", "dateOfBirth", "PastCompoundDate"));
   }
 
   @Test
@@ -150,19 +150,18 @@ public class DateOfBirthControllerTest {
 
     Journey journey = JourneyFixture.getDefaultJourney();
     when(mockRouteMaster.redirectToOnSuccess(journey.getDateOfBirthForm()))
-      .thenReturn("redirect:/testSuccess");
+        .thenReturn("redirect:/testSuccess");
 
     mockMvc
-      .perform(
-        post(URL_DATE_OF_BIRTH)
-          .param("dateOfBirth.year", "1967")
-          .param("dateOfBirth.month", "1")
-          .param("dateOfBirth.day", "32")
-          .sessionAttr("JOURNEY", new Journey()))
-      .andExpect(status().isOk())
-      .andExpect(view().name(VIEW_DATE_OF_BIRTH))
-      .andExpect(
-        model().attributeHasFieldErrorCode("formRequest", "dateOfBirth", "ValidCompoundDate"));
+        .perform(
+            post(URL_DATE_OF_BIRTH)
+                .param("dateOfBirth.year", "1967")
+                .param("dateOfBirth.month", "1")
+                .param("dateOfBirth.day", "32")
+                .sessionAttr("JOURNEY", new Journey()))
+        .andExpect(status().isOk())
+        .andExpect(view().name(VIEW_DATE_OF_BIRTH))
+        .andExpect(
+            model().attributeHasFieldErrorCode("formRequest", "dateOfBirth", "ValidCompoundDate"));
   }
-
 }
