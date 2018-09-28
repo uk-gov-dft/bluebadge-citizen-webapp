@@ -1,4 +1,3 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.validation;
 
-public interface First {
-}
+public interface First {}
