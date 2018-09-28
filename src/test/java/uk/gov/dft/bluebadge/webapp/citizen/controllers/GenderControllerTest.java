@@ -4,7 +4,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -18,12 +21,12 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 
-public class HigherRateMobilityControllerTest {
+public class GenderControllerTest {
 
   private MockMvc mockMvc;
-  private HigherRateMobilityController controller;
+  private GenderController controller;
 
   @Mock private RouteMaster mockRouteMaster;
   private Journey journey;
@@ -31,7 +34,7 @@ public class HigherRateMobilityControllerTest {
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new HigherRateMobilityController(mockRouteMaster);
+    controller = new GenderController(mockRouteMaster);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -42,13 +45,13 @@ public class HigherRateMobilityControllerTest {
   }
 
   @Test
-  public void show_ShouldDisplayHigherRateMobilityTemplate() throws Exception {
-    HigherRateMobilityForm formRequest = HigherRateMobilityForm.builder().build();
+  public void show_ShouldDisplayGenderTemplate() throws Exception {
+    GenderForm formRequest = GenderForm.builder().build();
 
     mockMvc
-        .perform(get("/higher-rate-mobility").sessionAttr("JOURNEY", journey))
+        .perform(get("/gender").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
-        .andExpect(view().name("higher-rate-mobility"))
+        .andExpect(view().name("gender"))
         .andExpect(model().attribute("formRequest", formRequest))
         .andExpect(model().attribute("options", Matchers.notNullValue()));
   }
@@ -58,48 +61,50 @@ public class HigherRateMobilityControllerTest {
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
 
     mockMvc
-        .perform(get("/higher-rate-mobility"))
+        .perform(get("/gender"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/backToStart"));
   }
 
   @Test
-  public void submit_givenYesOption_thenShouldDisplayRedirectToSuccess() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(HigherRateMobilityForm.class)))
+  public void submit_givenMaleOption_thenShouldDisplayRedirectToSuccess() throws Exception {
+    when(mockRouteMaster.redirectToOnSuccess(any(GenderForm.class)))
         .thenReturn("redirect:/testSuccess");
 
     mockMvc
-        .perform(
-            post("/higher-rate-mobility")
-                .param("awardedHigherRateMobility", "true")
-                .sessionAttr("JOURNEY", journey))
+        .perform(post("/gender").param("gender", "MALE").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
   }
 
   @Test
-  public void submit_givenNoOption_thenShouldDisplayRedirectToSuccess() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(HigherRateMobilityForm.class)))
+  public void submit_givenFemaleOption_thenShouldDisplayRedirectToSuccess() throws Exception {
+    when(mockRouteMaster.redirectToOnSuccess(any(GenderForm.class)))
         .thenReturn("redirect:/testSuccess");
 
     mockMvc
-        .perform(
-            post("/higher-rate-mobility")
-                .param("awardedHigherRateMobility", "false")
-                .sessionAttr("JOURNEY", journey))
+        .perform(post("/gender").param("gender", "FEMALE").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
   }
 
   @Test
-  public void submit_whenMissingHigherRateMobilityAnswer_ThenShouldHaveValidationError()
-      throws Exception {
+  public void submit_givenUnspecifiedOption_thenShouldDisplayRedirectToSuccess() throws Exception {
+    when(mockRouteMaster.redirectToOnSuccess(any(GenderForm.class)))
+        .thenReturn("redirect:/testSuccess");
+
     mockMvc
-        .perform(post("/higher-rate-mobility").sessionAttr("JOURNEY", journey))
+        .perform(post("/gender").param("gender", "UNSPECIFIE").sessionAttr("JOURNEY", journey))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/testSuccess"));
+  }
+
+  @Test
+  public void submit_whenMissingGenderAnswer_ThenShouldHaveValidationError() throws Exception {
+    mockMvc
+        .perform(post("/gender").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
-        .andExpect(view().name("higher-rate-mobility"))
-        .andExpect(
-            model()
-                .attributeHasFieldErrorCode("formRequest", "awardedHigherRateMobility", "NotNull"));
+        .andExpect(view().name("gender"))
+        .andExpect(model().attributeHasFieldErrorCode("formRequest", "gender", "NotNull"));
   }
 }

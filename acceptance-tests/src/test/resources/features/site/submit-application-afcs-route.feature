@@ -41,6 +41,11 @@ Feature: DFT Blue badge Citizen app new application - AFCS
     When  I type day as "02" month as "08" and year as "1966" for applicant's date of birth
     And   I can click on "Continue"
 
+    Then  I should see the page titled "What's your gender? - GOV.UK Apply for a Blue Badge"
+    And   I should see the title "What's your gender?"
+    When  I select an option "gender.MALE"
+    And   I can click on "Continue"
+
     Then  I should see the page titled "Describe health conditions - GOV.UK Apply for a Blue Badge"
     And   I should see the title "Describe any health conditions that affect your mobility"
     When  I type "Sample health condition" for "descriptionOfConditions" field by id
@@ -92,6 +97,11 @@ Feature: DFT Blue badge Citizen app new application - AFCS
 
     Then  I should see the page titled "What's their date of birth - GOV.UK Apply for a Blue Badge"
     When  I type day as "02" month as "08" and year as "1966" for applicant's date of birth
+    And   I can click on "Continue"
+
+    Then  I should see the page titled "What's their gender? - GOV.UK Apply for a Blue Badge"
+    And   I should see the title "What's their gender?"
+    When  I select an option "gender.FEMALE"
     And   I can click on "Continue"
 
     Then  I should see the page titled "Describe health conditions - GOV.UK Apply for a Blue Badge"
@@ -153,6 +163,11 @@ Feature: DFT Blue badge Citizen app new application - AFCS
     When  I type day as "02" month as "08" and year as "1966" for applicant's date of birth
     And   I can click on "Continue"
 
+    Then  I should see the page titled "What's your gender? - GOV.UK Apply for a Blue Badge"
+    And   I should see the title "What's your gender?"
+    When  I select an option "gender.UNSPECIFIE"
+    And   I can click on "Continue"
+
     Then  I should see the page titled "Describe health conditions - GOV.UK Apply for a Blue Badge"
     And   I should see the title "Describe any health conditions that affect your mobility"
     When  I type "Sample health condition" for "descriptionOfConditions" field by id
@@ -209,6 +224,11 @@ Feature: DFT Blue badge Citizen app new application - AFCS
 
     Then  I should see the page titled "What's their date of birth - GOV.UK Apply for a Blue Badge"
     When  I type day as "02" month as "08" and year as "1966" for applicant's date of birth
+    And   I can click on "Continue"
+
+    Then  I should see the page titled "What's their gender? - GOV.UK Apply for a Blue Badge"
+    And   I should see the title "What's their gender?"
+    When  I select an option "gender.MALE"
     And   I can click on "Continue"
 
     Then  I should see the page titled "Describe health conditions - GOV.UK Apply for a Blue Badge"
@@ -270,6 +290,11 @@ Feature: DFT Blue badge Citizen app new application - AFCS
     When  I type day as "02" month as "08" and year as "1966" for applicant's date of birth
     And   I can click on "Continue"
 
+    Then  I should see the page titled "What's your gender? - GOV.UK Apply for a Blue Badge"
+    And   I should see the title "What's your gender?"
+    When  I select an option "gender.FEMALE"
+    And   I can click on "Continue"
+
     Then  I should see the page titled "Describe health conditions - GOV.UK Apply for a Blue Badge"
     And   I should see the title "Describe any health conditions that affect your mobility"
     When  I type "Sample health condition" for "descriptionOfConditions" field by id
@@ -326,6 +351,11 @@ Feature: DFT Blue badge Citizen app new application - AFCS
 
     Then  I should see the page titled "What's their date of birth - GOV.UK Apply for a Blue Badge"
     When  I type day as "02" month as "08" and year as "1966" for applicant's date of birth
+    And   I can click on "Continue"
+
+    Then  I should see the page titled "What's their gender? - GOV.UK Apply for a Blue Badge"
+    And   I should see the title "What's their gender?"
+    When  I select an option "gender.MALE"
     And   I can click on "Continue"
 
     Then  I should see the page titled "Describe health conditions - GOV.UK Apply for a Blue Badge"
@@ -387,6 +417,11 @@ Feature: DFT Blue badge Citizen app new application - AFCS
     When  I type day as "02" month as "08" and year as "1966" for applicant's date of birth
     And   I can click on "Continue"
 
+    Then  I should see the page titled "What's your gender? - GOV.UK Apply for a Blue Badge"
+    And   I should see the title "What's your gender?"
+    When  I select an option "gender.UNSPECIFIE"
+    And   I can click on "Continue"
+
     Then  I should see the page titled "Describe health conditions - GOV.UK Apply for a Blue Badge"
     And   I should see the title "Describe any health conditions that affect your mobility"
     When  I type "Sample health condition" for "descriptionOfConditions" field by id
@@ -443,6 +478,11 @@ Feature: DFT Blue badge Citizen app new application - AFCS
 
     Then  I should see the page titled "What's their date of birth - GOV.UK Apply for a Blue Badge"
     When  I type day as "02" month as "08" and year as "1966" for applicant's date of birth
+    And   I can click on "Continue"
+
+    Then  I should see the page titled "What's their gender? - GOV.UK Apply for a Blue Badge"
+    And   I should see the title "What's their gender?"
+    When  I select an option "gender.FEMALE"
     And   I can click on "Continue"
 
     Then  I should see the page titled "Describe health conditions - GOV.UK Apply for a Blue Badge"
@@ -504,6 +544,11 @@ Feature: DFT Blue badge Citizen app new application - AFCS
     When  I type day as "02" month as "08" and year as "1966" for applicant's date of birth
     And   I can click on "Continue"
 
+    Then  I should see the page titled "What's your gender? - GOV.UK Apply for a Blue Badge"
+    And   I should see the title "What's your gender?"
+    When  I select an option "gender.UNSPECIFIE"
+    And   I can click on "Continue"
+
     Then  I should see the page titled "Describe health conditions - GOV.UK Apply for a Blue Badge"
     And   I should see the title "Describe any health conditions that affect your mobility"
     When  I type "Sample health condition" for "descriptionOfConditions" field by id
@@ -560,6 +605,11 @@ Feature: DFT Blue badge Citizen app new application - AFCS
 
     Then  I should see the page titled "What's their date of birth - GOV.UK Apply for a Blue Badge"
     When  I type day as "02" month as "08" and year as "1966" for applicant's date of birth
+    And   I can click on "Continue"
+
+    Then  I should see the page titled "What's their gender? - GOV.UK Apply for a Blue Badge"
+    And   I should see the title "What's their gender?"
+    When  I select an option "gender.FEMALE"
     And   I can click on "Continue"
 
     Then  I should see the page titled "Describe health conditions - GOV.UK Apply for a Blue Badge"
