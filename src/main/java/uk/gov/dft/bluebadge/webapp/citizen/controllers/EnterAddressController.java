@@ -19,6 +19,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
 
+import javax.validation.Valid;
+
 @Controller
 @RequestMapping(Mappings.URL_ENTER_ADDRESS)
 public class EnterAddressController implements StepController {
@@ -53,7 +55,7 @@ public class EnterAddressController implements StepController {
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Validated @ModelAttribute(FORM_REQUEST) EnterAddressForm formRequest,
+      @Valid @ModelAttribute(FORM_REQUEST) EnterAddressForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
