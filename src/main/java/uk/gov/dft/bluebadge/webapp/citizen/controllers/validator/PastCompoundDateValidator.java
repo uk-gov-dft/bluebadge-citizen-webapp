@@ -24,7 +24,7 @@ public class PastCompoundDateValidator
     try {
       return compoundDate.getLocalDate().isBefore(LocalDate.now());
     } catch (Exception e) {
-      return false;
+      return true; // If part of the date is invalid then we cannot test
     }
   }
 }
