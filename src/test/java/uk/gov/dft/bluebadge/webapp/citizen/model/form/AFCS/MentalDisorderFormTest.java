@@ -16,11 +16,11 @@ public class MentalDisorderFormTest {
   }
 
   @Test
-  public void determineNextStep_whenMentalDisorderIsNo_thenMaybeEligible() {
+  public void determineNextStep_whenMentalDisorderIsNo_thenMainReason() {
 
     MentalDisorderForm form = MentalDisorderForm.builder().hasMentalDisorder(false).build();
 
     assertThat(form.determineNextStep()).isNotEmpty();
-    assertThat(form.determineNextStep().get()).isEqualTo(StepDefinition.MAY_BE_ELIGIBLE);
+    assertThat(form.determineNextStep().get()).isEqualTo(StepDefinition.MAIN_REASON);
   }
 }

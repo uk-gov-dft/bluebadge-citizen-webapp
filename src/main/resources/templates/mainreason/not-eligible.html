@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:utext="#{${JOURNEY.who} + 'notEligiblePage.title'} + ' - ' + #{common.title.suffix}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+
+    <section class="guidance-layout">
+        <h1 class="govuk-heading-l"
+            th:text="#{${JOURNEY.who} + 'notEligiblePage.content.title'}"></h1>
+
+        <p class="govuk-body"
+           th:text="#{${JOURNEY.who} + 'notEligiblePage.based.on.answers.text'}">Based on your answers...</p>
+
+        <p class="govuk-body">
+            <span th:remove="tag" th:text="#{${JOURNEY.who} + 'notEligiblePage.council.contact.pretext'}"></span>
+            <span th:remove="tag" th:text="${localAuthority.description} + ':'"></span>
+        </p>
+
+        <p class="govuk-body" th:if="${localAuthority.contactUrl}">
+                <span th:remove="tag"
+                      th:text="#{eligiblePage.website.pretext}">Website:</span>
+
+            <a th:href="${localAuthority.contactUrl}" th:text="${localAuthority.contactUrl}">www.leeds city
+                council.gov.uk</a>
+        </p>
+    </section>
+
+</main>
+
+</body>
+</html>

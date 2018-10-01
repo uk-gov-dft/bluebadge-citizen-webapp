@@ -64,7 +64,7 @@ public class ReceiveBenefitsController implements StepController {
     RadioOption afrfcs =
         new RadioOption(EligibilityCodeField.AFRFCS.name(), "options.benefits.afrfcs");
     RadioOption wpms = new RadioOption(EligibilityCodeField.WPMS.name(), "options.benefits.wpms");
-    RadioOption none = new RadioOption(EligibilityCodeField.WALKD.name(), "options.benefits.none");
+    RadioOption none = new RadioOption(EligibilityCodeField.NONE.name(), "options.benefits.none");
 
     List<RadioOption> options = Lists.newArrayList(pip, dla, afrfcs, wpms, none);
 
