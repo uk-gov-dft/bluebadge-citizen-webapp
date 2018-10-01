@@ -1,5 +1,7 @@
 package uk.gov.service.bluebadge.test.acceptance.pages.site;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -8,9 +10,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import uk.gov.service.bluebadge.test.acceptance.pages.PageHelper;
 import uk.gov.service.bluebadge.test.acceptance.util.TestContentUrls;
 import uk.gov.service.bluebadge.test.acceptance.webdriver.WebDriverProvider;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SitePage {
 
@@ -63,7 +62,7 @@ public class SitePage {
     selectFromAutoCompleteList("councilShortCode", textToSelect);
   }
 
-  public void selectFromAutoCompleteList(String component, String textToSelect){
+  public void selectFromAutoCompleteList(String component, String textToSelect) {
     WebElement autoOptions =
         (new WebDriverWait(getWebDriver(), 10))
             .until(ExpectedConditions.elementToBeClickable(By.id(component + "__listbox")));

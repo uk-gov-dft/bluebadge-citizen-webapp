@@ -75,9 +75,9 @@ public class DateOfBirthControllerTest {
     mockMvc
         .perform(
             post(URL_DATE_OF_BIRTH)
-                .param("year", "1990")
-                .param("month", "1")
-                .param("day", "2")
+                .param("dateOfBirth.year", "1990")
+                .param("dateOfBirth.month", "1")
+                .param("dateOfBirth.day", "2")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
@@ -88,13 +88,13 @@ public class DateOfBirthControllerTest {
     mockMvc
         .perform(
             post(URL_DATE_OF_BIRTH)
-                .param("year", "1990")
-                .param("month", "1")
+                .param("dateOfBirth.year", "1990")
+                .param("dateOfBirth.month", "1")
                 .sessionAttr("JOURNEY", new Journey()))
         .andExpect(status().isOk())
         .andExpect(view().name(VIEW_DATE_OF_BIRTH))
         .andExpect(
-            model().attributeHasFieldErrorCode("formRequest", "datePartMissing", "AssertFalse"));
+            model().attributeHasFieldErrorCode("formRequest", "dateOfBirth", "ValidCompoundDate"));
   }
 
   @Test
@@ -102,13 +102,13 @@ public class DateOfBirthControllerTest {
     mockMvc
         .perform(
             post(URL_DATE_OF_BIRTH)
-                .param("year", "1990")
-                .param("day", "1")
+                .param("dateOfBirth.year", "1990")
+                .param("dateOfBirth.day", "1")
                 .sessionAttr("JOURNEY", new Journey()))
         .andExpect(status().isOk())
         .andExpect(view().name(VIEW_DATE_OF_BIRTH))
         .andExpect(
-            model().attributeHasFieldErrorCode("formRequest", "datePartMissing", "AssertFalse"));
+            model().attributeHasFieldErrorCode("formRequest", "dateOfBirth", "ValidCompoundDate"));
   }
 
   @Test
@@ -116,13 +116,13 @@ public class DateOfBirthControllerTest {
     mockMvc
         .perform(
             post(URL_DATE_OF_BIRTH)
-                .param("month", "2")
-                .param("day", "1")
+                .param("dateOfBirth.month", "2")
+                .param("dateOfBirth.day", "1")
                 .sessionAttr("JOURNEY", new Journey()))
         .andExpect(status().isOk())
         .andExpect(view().name(VIEW_DATE_OF_BIRTH))
         .andExpect(
-            model().attributeHasFieldErrorCode("formRequest", "datePartMissing", "AssertFalse"));
+            model().attributeHasFieldErrorCode("formRequest", "dateOfBirth", "ValidCompoundDate"));
   }
 
   @Test
@@ -135,12 +135,33 @@ public class DateOfBirthControllerTest {
     mockMvc
         .perform(
             post(URL_DATE_OF_BIRTH)
-                .param("year", "2500")
-                .param("month", "1")
-                .param("day", "2")
+                .param("dateOfBirth.year", "2500")
+                .param("dateOfBirth.month", "1")
+                .param("dateOfBirth.day", "2")
                 .sessionAttr("JOURNEY", new Journey()))
         .andExpect(status().isOk())
         .andExpect(view().name(VIEW_DATE_OF_BIRTH))
-        .andExpect(model().attributeHasFieldErrorCode("formRequest", "pastDate", "AssertTrue"));
+        .andExpect(
+            model().attributeHasFieldErrorCode("formRequest", "dateOfBirth", "PastCompoundDate"));
+  }
+
+  @Test
+  public void submit_givenInvalidDate_ThenShouldHaveValidationError() throws Exception {
+
+    Journey journey = JourneyFixture.getDefaultJourney();
+    when(mockRouteMaster.redirectToOnSuccess(journey.getDateOfBirthForm()))
+        .thenReturn("redirect:/testSuccess");
+
+    mockMvc
+        .perform(
+            post(URL_DATE_OF_BIRTH)
+                .param("dateOfBirth.year", "1967")
+                .param("dateOfBirth.month", "1")
+                .param("dateOfBirth.day", "32")
+                .sessionAttr("JOURNEY", new Journey()))
+        .andExpect(status().isOk())
+        .andExpect(view().name(VIEW_DATE_OF_BIRTH))
+        .andExpect(
+            model().attributeHasFieldErrorCode("formRequest", "dateOfBirth", "ValidCompoundDate"));
   }
 }

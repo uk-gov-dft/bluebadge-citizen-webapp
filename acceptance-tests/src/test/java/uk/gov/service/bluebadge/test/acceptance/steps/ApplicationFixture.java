@@ -1,12 +1,12 @@
 package uk.gov.service.bluebadge.test.acceptance.steps;
 
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.MAIN_REASON_LIST;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Preamble.COUNCIL_INPUT;
+
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.SitePage;
-
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.MAIN_REASON_LIST;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Preamble.COUNCIL_INPUT;
 
 public class ApplicationFixture extends AbstractSpringSteps {
 
@@ -67,17 +67,17 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("I complete main reason page for \"(TERMILL|CHILDBULK|CHILDVEHIC|WALKD|ARMS|BLIND)\"")
   public void iCompleteMainReasonPageFor(String benefit) {
-    sitePage.findPageElementById(MAIN_REASON_LIST  + "." + benefit).click();
+    sitePage.findPageElementById(MAIN_REASON_LIST + "." + benefit).click();
     pressContinue();
   }
 
   @And("I complete may be eligible page")
-  public void iCompleteMayBeEligible(){
+  public void iCompleteMayBeEligible() {
     sitePage.findElementWithText("Start application").click();
   }
 
   @And("I complete what's your name page")
-  public void iCompleteWhatsYourNamePage(){
+  public void iCompleteWhatsYourNamePage() {
     sitePage.findPageElementById(Ids.Person.NAME).sendKeys("Test Username");
     sitePage.findPageElementById(Ids.Person.HAS_BIRTH_NAME_NO_OPTION).click();
     pressContinue();

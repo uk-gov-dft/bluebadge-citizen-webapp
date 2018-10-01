@@ -1,20 +1,5 @@
 package uk.gov.service.bluebadge.test.acceptance.steps;
 
-import cucumber.api.DataTable;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import org.hamcrest.Matcher;
-import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.Select;
-import org.springframework.beans.factory.annotation.Autowired;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.SitePage;
-
-import java.util.List;
-
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
@@ -26,6 +11,19 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+
+import cucumber.api.DataTable;
+import cucumber.api.java.en.And;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import java.util.List;
+import org.hamcrest.Matcher;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
+import org.springframework.beans.factory.annotation.Autowired;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.SitePage;
 
 public class SiteSteps extends AbstractSpringSteps {
 
@@ -39,18 +37,20 @@ public class SiteSteps extends AbstractSpringSteps {
     this.sitePage = sitePage;
   }
 
-  @Given("I complete application up to the Main Reason page for \"(yourself|someone else)\" in \"(england|scotland|wales)\"")
-  public void givenICompleteApplicationUpToTheMainReasonPageInCountry(String myselfOrOther, String country) {
+  @Given(
+      "I complete application up to the Main Reason page for \"(yourself|someone else)\" in \"(england|scotland|wales)\"")
+  public void givenICompleteApplicationUpToTheMainReasonPageInCountry(
+      String myselfOrOther, String country) {
     // default to england
     String council = "Worcester";
     String fullCouncil = "Worcester city council";
-    if("scotland".equalsIgnoreCase(country)){
+    if ("scotland".equalsIgnoreCase(country)) {
       council = "Aberdeenshire";
       fullCouncil = "Aberdeenshire council";
-    }else if ("wales".equalsIgnoreCase(country)){
+    } else if ("wales".equalsIgnoreCase(country)) {
       council = "Anglesey";
       fullCouncil = "Isle of Anglesey county council";
-    }else if("ireland".equalsIgnoreCase(country)){
+    } else if ("ireland".equalsIgnoreCase(country)) {
 
     }
 
@@ -58,7 +58,7 @@ public class SiteSteps extends AbstractSpringSteps {
     givenINavigateToPage("applicant");
     if (myselfOrOther.equalsIgnoreCase("yourself")) {
       andICanClickOnElement("applicantType.label.YOURSELF");
-    }else if(myselfOrOther.equalsIgnoreCase("someone else")){
+    } else if (myselfOrOther.equalsIgnoreCase("someone else")) {
       andICanClickOnElement("applicantType.label.SOMEONE_ELSE");
     }
     whenIClickOn("Continue");
@@ -108,7 +108,10 @@ public class SiteSteps extends AbstractSpringSteps {
 
   @Then("^I should see (?:.* )?page titled \"([^\"]+)\" with GOV.UK suffix")
   public void thenIShouldSeePageTitledWithGovUkSuffix(String pageTitle) {
-    assertThat("I should see page titled.", sitePage.getDocumentTitle(), is(pageTitle + " - GOV.UK Apply for a Blue Badge"));
+    assertThat(
+        "I should see page titled.",
+        sitePage.getDocumentTitle(),
+        is(pageTitle + " - GOV.UK Apply for a Blue Badge"));
   }
 
   @Then("^I should see the content \"([^\"]*)\"$")
@@ -277,9 +280,9 @@ public class SiteSteps extends AbstractSpringSteps {
   @When(
       "^I type day as \"([^\"]*)\" month as \"([^\"]*)\" and year as \"([^\"]*)\" for applicant's date of birth$")
   public void iTypeDayAsMonthAsAndYearAsForApplicantSDateOfBirth(
-      String day, String month, String year) {
-    sitePage.findElementWithUiPath("pastDate.day.field").sendKeys(day);
-    sitePage.findElementWithUiPath("pastDate.month.field").sendKeys(month);
-    sitePage.findElementWithUiPath("pastDate.year.field").sendKeys(year);
+      String day, String month, String year) throws Throwable {
+    sitePage.findElementWithUiPath("dateOfBirth.day.field").sendKeys(day);
+    sitePage.findElementWithUiPath("dateOfBirth.month.field").sendKeys(month);
+    sitePage.findElementWithUiPath("dateOfBirth.year.field").sendKeys(year);
   }
 }
