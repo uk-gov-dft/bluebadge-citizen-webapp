@@ -85,7 +85,8 @@ public class PipPlanningJourneyControllerTest {
   }
 
   @Test
-  public void submit_whenMissingMovingroundAnswer_ThenShouldHaveValidationError() throws Exception {
+  public void submit_whenMissingMovingAroundAnswer_ThenShouldHaveValidationError()
+      throws Exception {
     mockMvc
         .perform(post("/planning-and-following").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())

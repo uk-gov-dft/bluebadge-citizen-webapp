@@ -21,7 +21,7 @@ public class CompensationSchemeFormTest {
   }
 
   @Test
-  public void determineNextStep_whenDisabilityIsNo_AndNationIsNotWelsh_thenMaybeEligible() {
+  public void determineNextStep_whenDisabilityIsNo_AndNationIsNotWelsh_thenMainReason() {
 
     CompensationSchemeForm form =
         CompensationSchemeForm.builder().hasReceivedCompensation(false).build();
@@ -29,7 +29,7 @@ public class CompensationSchemeFormTest {
     Journey journey = new JourneyFixture.JourneyBuilder().setEnglishLocalAuthority().build();
 
     assertThat(form.determineNextStep(journey)).isNotEmpty();
-    assertThat(form.determineNextStep(journey).get()).isEqualTo(StepDefinition.MAY_BE_ELIGIBLE);
+    assertThat(form.determineNextStep(journey).get()).isEqualTo(StepDefinition.MAIN_REASON);
   }
 
   @Test

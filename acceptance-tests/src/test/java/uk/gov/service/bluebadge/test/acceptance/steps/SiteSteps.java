@@ -13,6 +13,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import cucumber.api.DataTable;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -23,64 +24,104 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.springframework.beans.factory.annotation.Autowired;
-import uk.gov.service.bluebadge.test.acceptance.config.AcceptanceTestProperties;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.SitePage;
-import uk.gov.service.bluebadge.test.acceptance.util.LocalDateGenerator;
-import uk.gov.service.bluebadge.test.acceptance.util.NameGenerator;
-import uk.gov.service.bluebadge.test.acceptance.util.PostCodeGenerator;
-import uk.gov.service.bluebadge.test.acceptance.util.TestContentUrls;
 
 public class SiteSteps extends AbstractSpringSteps {
 
-  public static final String ATTRIBUTE_VALUE = "value";
-  public static final String TAG_INPUT = "input";
+  private static final String ATTRIBUTE_VALUE = "value";
+  private static final String TAG_INPUT = "input";
 
-  protected NameGenerator ng = new NameGenerator();
-  protected LocalDateGenerator ldg = new LocalDateGenerator();
-  protected PostCodeGenerator pcg = new PostCodeGenerator();
+  private SitePage sitePage;
 
-  @Autowired protected SitePage sitePage;
+  @Autowired
+  public SiteSteps(SitePage sitePage) {
+    this.sitePage = sitePage;
+  }
 
-  @Autowired private AcceptanceTestProperties acceptanceTestProperties;
+  @Given(
+      "I complete application up to the Main Reason page for \"(yourself|someone else)\" in \"(england|scotland|wales)\"")
+  public void givenICompleteApplicationUpToTheMainReasonPageInCountry(
+      String myselfOrOther, String country) {
+    // default to england
+    String council = "Worcester";
+    String fullCouncil = "Worcester city council";
+    if ("scotland".equalsIgnoreCase(country)) {
+      council = "Aberdeenshire";
+      fullCouncil = "Aberdeenshire council";
+    } else if ("wales".equalsIgnoreCase(country)) {
+      council = "Anglesey";
+      fullCouncil = "Isle of Anglesey county council";
+    } else if ("ireland".equalsIgnoreCase(country)) {
 
-  @Autowired private TestContentUrls urlLookup;
+    }
 
-  @Autowired protected ScenarioContext scenarioContext;
+    // Applicant page
+    givenINavigateToPage("applicant");
+    if (myselfOrOther.equalsIgnoreCase("yourself")) {
+      andICanClickOnElement("applicantType.label.YOURSELF");
+    } else if (myselfOrOther.equalsIgnoreCase("someone else")) {
+      andICanClickOnElement("applicantType.label.SOMEONE_ELSE");
+    }
+    whenIClickOn("Continue");
+    // Council page
+    whenItypeTextForFieldUiPath(council, "councilShortCode");
+    iSelectFromAutosuggestCouncilList(fullCouncil);
+    whenIClickOn("Continue");
+    // Your Authority page
+    whenIClickOn("Continue");
+    // Receive Benefit page
+    iSelectAnOption("benefitType.NONE");
+    whenIClickOn("Continue");
+    // Main Reason Page
+  }
+
+  @Given("I complete application up to the Main Reason page for \"(yourself|someone else)\"")
+  public void givenICompleteApplicationUpToTheMainReasonPage(String myselfOrOther) {
+    givenICompleteApplicationUpToTheMainReasonPageInCountry(myselfOrOther, "england");
+  }
 
   @Given("^I navigate to (?:the )?\"([^\"]+)\" (?:.* )?page$")
-  public void givenINavigateToPage(String pageName) throws Throwable {
+  public void givenINavigateToPage(String pageName) {
     sitePage.openByPageName(pageName);
   }
 
   @When("^I (?:can )?click on(?: the| link)? \"([^\"]+)\"(?: link| button)?$")
-  public void whenIClickOn(String linkTitle) throws Throwable {
+  public void whenIClickOn(String linkTitle) {
     sitePage.findElementWithText(linkTitle).click();
   }
 
   @Then("^I (?:can )?see \"([^\"]+)\" (?:link|button|image)$")
-  public void thenISeeLink(String linkTitle) throws Throwable {
+  public void thenISeeLink(String linkTitle) {
     assertNotNull("Can see element", sitePage.findElementWithTitle(linkTitle));
   }
 
   @Then("^I (?:can )?see labelled element \"([^\"]+)\" with content \"([^\"]+)\"$")
-  public void thenISeeElementWithUiPathAndContent(String uiPath, String content) throws Throwable {
+  public void thenISeeElementWithUiPathAndContent(String uiPath, String content) {
     assertNotNull(
         "Can see element with data-uipath: " + uiPath, sitePage.findElementWithUiPath(uiPath));
     assertThat(sitePage.findElementWithUiPath(uiPath).getText(), containsString(content));
   }
 
   @Then("^I should see (?:.* )?page titled \"([^\"]+)\"$")
-  public void thenIShouldSeePageTitled(String pageTitle) throws Throwable {
+  public void thenIShouldSeePageTitled(String pageTitle) {
     assertThat("I should see page titled.", sitePage.getDocumentTitle(), is(pageTitle));
   }
 
+  @Then("^I should see (?:.* )?page titled \"([^\"]+)\" with GOV.UK suffix")
+  public void thenIShouldSeePageTitledWithGovUkSuffix(String pageTitle) {
+    assertThat(
+        "I should see page titled.",
+        sitePage.getDocumentTitle(),
+        is(pageTitle + " - GOV.UK Apply for a Blue Badge"));
+  }
+
   @Then("^I should see the content \"([^\"]*)\"$")
-  public void thenIShouldSeeTheContent(String content) throws Throwable {
+  public void thenIShouldSeeTheContent(String content) {
     assertThat(sitePage.getPageContent(), containsString(content));
   }
 
   @Then("^I should see the \"page not found\" error page$")
-  public void thenIShouldSeeThePageNotFoundErrorPage() throws Throwable {
+  public void thenIShouldSeeThePageNotFoundErrorPage() {
     // Ideally we would check the HTTP response code is 404 as well but it's not
     // currently possible to do this with the Selinium Web Driver.
     // See https://github.com/seleniumhq/selenium-google-code-issue-archive/issues/141
@@ -88,8 +129,8 @@ public class SiteSteps extends AbstractSpringSteps {
   }
 
   @Then("^I should (?:also )?see:?$")
-  public void thenIShouldAlsoSee(final DataTable pageSections) throws Throwable {
-    String elementName = null;
+  public void thenIShouldAlsoSee(final DataTable pageSections) {
+    String elementName;
     for (List<String> elementsContent : pageSections.raw()) {
       elementName = elementsContent.get(0);
       WebElement pageElement = sitePage.findPageElement(elementName);
@@ -104,8 +145,7 @@ public class SiteSteps extends AbstractSpringSteps {
   }
 
   @Then("^I should(?: also)? see \"([^\"]+)\" with:")
-  public void thenIShouldSeeItemsOf(String pageElementName, final DataTable elementItems)
-      throws Throwable {
+  public void thenIShouldSeeItemsOf(String pageElementName, final DataTable elementItems) {
     WebElement pageElement = sitePage.findPageElement(pageElementName);
 
     assertNotNull("I should find page element: " + pageElementName, pageElement);
@@ -121,7 +161,7 @@ public class SiteSteps extends AbstractSpringSteps {
   }
 
   @Then("^I should not see headers?:$")
-  public void thenIShouldNotSeeHeaders(DataTable headersTable) throws Throwable {
+  public void thenIShouldNotSeeHeaders(DataTable headersTable) {
     List<String> headers = headersTable.asList(String.class);
     for (String header : headers) {
       assertNull("Header should not be displayed", sitePage.findElementWithText(header));
@@ -129,7 +169,7 @@ public class SiteSteps extends AbstractSpringSteps {
   }
 
   @Then("^I should see headers?:$")
-  public void thenIShouldSeeHeaders(DataTable headersTable) throws Throwable {
+  public void thenIShouldSeeHeaders(DataTable headersTable) {
     List<String> headers = headersTable.asList(String.class);
     for (String header : headers) {
       assertNotNull("Header should be displayed: " + header, sitePage.findElementWithText(header));
@@ -167,74 +207,74 @@ public class SiteSteps extends AbstractSpringSteps {
   }
 
   @Then("^I should not see element with title \"([^\"]*)\"$")
-  public void thenIShouldNotSeeElementTitled(String title) throws Throwable {
+  public void thenIShouldNotSeeElementTitled(String title) {
     assertNull("Element is not on page", sitePage.findElementWithTitle(title));
   }
 
   @Then("^I should see the title \"([^\"]*)\"$")
-  public void iShouldSeeTheTitle(String title) throws Throwable {
+  public void iShouldSeeTheTitle(String title) {
     assertThat("Incorrect page title", sitePage.getH1Tag(), getMatcherForText(title));
   }
 
   @When("^I click on Start now button$")
-  public void iClickOnStartNowButton() throws Throwable {
+  public void iClickOnStartNowButton() {
     sitePage.findPageElementById("get-started");
   }
 
   @And("^I select an option \"([^\"]*)\"$")
-  public void iSelectAnOption(String value) throws Throwable {
+  public void iSelectAnOption(String value) {
     sitePage.findPageElementById(value).click();
   }
 
   @And("^I select an option \"([^\"]*)\" on \"([^\"]*)\"$")
-  public void iSelectAnOption(String value, String selectId) throws Throwable {
+  public void iSelectAnOption(String value, String selectId) {
     Select select = new Select(sitePage.findPageElementById(selectId));
     select.selectByVisibleText(value);
   }
 
   @And("^I click on Continue button$")
-  public void iClickOnContinueButton() throws Throwable {
+  public void iClickOnContinueButton() {
     sitePage.findPageElementById("submit").click();
   }
 
   @And("^I should see error summary box$")
-  public void andIshouldSeeErrorSummaryBox() throws Throwable {
+  public void andIshouldSeeErrorSummaryBox() {
     WebElement errorSummaryBox = sitePage.findElementWithUiPath("error-summary-box");
     assertNotNull(errorSummaryBox);
   }
 
   @And("^I should see \"([^\"]*)\" text on the page$")
-  public void iShouldSeeTextOnPage(String content) throws Throwable {
+  public void iShouldSeeTextOnPage(String content) {
     assertTrue(sitePage.getPageContent().contains(content));
   }
 
   @And("^I should not see \"([^\"]*)\" text on the page$")
-  public void iShouldNotSeeTextOnPage(String content) throws Throwable {
+  public void iShouldNotSeeTextOnPage(String content) {
     assertFalse(sitePage.getPageContent().contains(content));
   }
 
   @And("^I (?:can )?click on element \"([^\"]+)\"(?: link| button)?$")
-  public void AndICanClickOnElement(String uiPath) throws Throwable {
+  public void andICanClickOnElement(String uiPath) {
     sitePage.findElementWithUiPath(uiPath).click();
   }
 
   @When("^I select option \"([^\"]*)\"$")
-  public void iSelectOption(String arg0) throws Throwable {
+  public void iSelectOption(String arg0) {
     sitePage.findElementWithUiPath(arg0).click();
   }
 
   @And("^I can click \"([^\"]*)\" button$")
-  public void iCanClickButton(String uiPath) throws Throwable {
+  public void iCanClickButton(String uiPath) {
     sitePage.findElementWithUiPath(uiPath).click();
   }
 
   @When("^I type \"([^\"]+)\" for \"([^\"]+)\" field by id$")
-  public void whenItypeTextForFieldUiPath(String text, String fieldId) throws Throwable {
+  public void whenItypeTextForFieldUiPath(String text, String fieldId) {
     sitePage.findPageElementById(fieldId).sendKeys(text);
   }
 
   @And("^I select \"([^\"]*)\" from autosuggest council list$")
-  public void iSelectFromAutosuggestCouncilList(String arg0) throws Throwable {
+  public void iSelectFromAutosuggestCouncilList(String arg0) {
     sitePage.selectLocalCouncil(arg0);
   }
 
@@ -245,5 +285,16 @@ public class SiteSteps extends AbstractSpringSteps {
     sitePage.findElementWithUiPath("dateOfBirth.day.field").sendKeys(day);
     sitePage.findElementWithUiPath("dateOfBirth.month.field").sendKeys(month);
     sitePage.findElementWithUiPath("dateOfBirth.year.field").sendKeys(year);
+  }
+
+  @Then("^I should see \"(You're|They are|You may be|They may be|You're not|They're not)\" eligible page$")
+  public void iShouldSeeEligiblePage(String who) throws Throwable {
+    String page_title = who + " eligible for a Blue Badge - GOV.UK Apply for a Blue Badge";
+
+    if(who.equals("You're not")||who.equals("They're not")){
+      page_title = who + " eligible - GOV.UK Apply for a Blue Badge";
+    }
+
+    assertThat("I should see page titled.", sitePage.getDocumentTitle(), is(page_title));
   }
 }

@@ -25,7 +25,7 @@ public class HigherRateMobilityForm implements StepForm, Serializable {
     if (awardedHigherRateMobility) {
       return Optional.of(StepDefinition.ELIGIBLE);
     } else {
-      return Optional.of(StepDefinition.MAY_BE_ELIGIBLE);
+      return Optional.of(StepDefinition.MAIN_REASON);
     }
   }
 }
