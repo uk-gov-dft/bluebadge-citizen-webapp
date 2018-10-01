@@ -20,7 +20,6 @@ class Ids {
     static final String GENDER_MALE = "gender.MALE";
     static final String GENDER_FEMALE = "gender.FEMALE";
     static final String GENDER_UNSPECIFIED = "gender.UNSPECIFIE";
-
   }
 
   class Person {
@@ -29,7 +28,5 @@ class Ids {
     static final String DOB_DAY = "dateOfBirth.day";
     static final String DOB_MONTH = "dateOfBirth.month";
     static final String DOB_YEAR = "dateOfBirth.year";
-
-
   }
 }
