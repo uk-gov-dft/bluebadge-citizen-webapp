@@ -24,13 +24,9 @@
 
                     <div th:replace="~{ fragments/govuk-input :: govuk-input-with-hidden-label(null, #{enterAddressPage.buildingAndStreet.field.label.hidden.lineTwo}, 'optionalAddress', null, 'text')}"></div>
 
-                    <div class="govuk-!-width-two-thirds">
-                        <div th:replace="~{ fragments/govuk-input :: govuk-input(#{enterAddressPage.townOrCity.field.label}, 'townOrCity', null, 'text')}"></div>
-                    </div>
+                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{enterAddressPage.townOrCity.field.label}, 'townOrCity', null, 'text', 'govuk-!-width-two-thirds')}"></div>
 
-                    <div class="govuk-input--width-10">
-                        <div th:replace="~{ fragments/govuk-input :: govuk-input(#{enterAddressPage.postcode.field.label}, 'postcode', null, 'text')}"></div>
-                    </div>
+                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{enterAddressPage.postcode.field.label}, 'postcode', null, 'text', 'govuk-input--width-10')}"></div>
 
                 </fieldset>
 
