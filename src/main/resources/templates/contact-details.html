@@ -19,35 +19,15 @@
             <form th:action="@{/contact-details}" th:object="${formRequest}" method="POST" novalidate>
 
                 <!-- fullName -->
-                <div th:if="${!JOURNEY.isApplicantYourself()}" th:class="${#fields.hasErrors('fullName')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
-                    <span class="govuk-error-message"
-                          data-uipath="fullName.error"
-                          th:errors="*{fullName}"></span>
+                <div th:if="${!JOURNEY.isApplicantYourself()}" th:remove="tag">
                     <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.fullName.field.label}, 'fullName', #{contact.fullName.field.hint}, 'text')}"></div>
                 </div>
 
-                <!-- primaryPhoneNumber -->
-                <div th:class="${#fields.hasErrors('primaryPhoneNumber')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
-                    <span class="govuk-error-message"
-                          data-uipath="primaryPhoneNumber.error"
-                          th:errors="*{primaryPhoneNumber}"></span>
-                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.primaryPhoneNumber.field.label}, 'primaryPhoneNumber', null, 'text')}"></div>
-                </div>
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.primaryPhoneNumber.field.label}, 'primaryPhoneNumber', null, 'text')}"></div>
 
-                <!-- secondaryPhoneNumber -->
-                <div th:class="${#fields.hasErrors('secondaryPhoneNumber')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
-                    <span class="govuk-error-message"
-                          data-uipath="secondaryPhoneNumber.error"
-                          th:errors="*{secondaryPhoneNumber}"></span>
-                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.secondaryPhoneNumber.field.label}, 'secondaryPhoneNumber', null, 'text')}"></div>
-                </div>
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.secondaryPhoneNumber.field.label}, 'secondaryPhoneNumber', null, 'text')}"></div>
 
-                <div th:class="${#fields.hasErrors('emailAddress')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
-                    <span class="govuk-error-message"
-                          data-uipath="emailAddress.error"
-                          th:errors="*{emailAddress}"></span>
-                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.emailAddress.field.label}, 'emailAddress', null, 'text')}"></div>
-                </div>
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.emailAddress.field.label}, 'emailAddress', null, 'text')}"></div>
 
                 <button type="submit" class="govuk-button" data-uipath="button.continue" th:text="#{btn.label.continue}"></button>
 
