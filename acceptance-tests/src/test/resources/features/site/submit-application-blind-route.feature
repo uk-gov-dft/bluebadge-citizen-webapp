@@ -1,85 +1,47 @@
 @SubmitApplicationBLINDRoute
-Feature: DFT Blue badge Citizen app new application - TERMILL
-  As a citizen user I want to be able to get information on council details via TERMILL route
+Feature: DFT Blue badge Citizen app new application - BLIND
+  As a citizen user I want to be able to get information on council details via BLIND route
 
   Scenario: Blind application for yourself
     Given I complete applicant page for "yourself"
-    And   I complete select council page
+    And   I complete select council page for "england"
     And   I complete your local authority page
-    And   I complete receive benefit page for "NONE"
-    Then  I should see the page titled "What is the main reason you need a badge?" with GOV.UK suffix
-    And   I should see the title "What is the main reason you need a badge?"
-    And   I can click on "Continue"
-    And   I should see error summary box
-    And   I select option "mainReasonOption.option.BLIND"
-    And   I can click on "Continue"
+    And   I complete receive benefit page for "AFRFCS"
 
-    Then  I should see the page titled "You're eligible for a Blue Badge" with GOV.UK suffix
-    And   I should see the title "You're eligible for a Blue Badge"
-    And   I can click on "Start application"
-
-    Then  I should see the page titled "What's your name?" with GOV.UK suffix
-    When  I type "Tom Richardson" for "fullName" field by id
-    And   I select an option "hasBirthName.no"
+    Then  I should see the page titled "Have you received a lump sum payment within tariff levels 1 to 8 of the Armed Forces Compensation Scheme? - GOV.UK Apply for a Blue Badge"
+    And   I should see the title "Have you received a lump sum payment within tariff levels 1 to 8 of the Armed Forces Compensation Scheme?"
+    And   I select option "hasReceivedCompensation.option.no"
     And   I can click on "Continue"
 
-    Then  I should see the page titled "What's your date of birth" with GOV.UK suffix
-    When  I type day as "02" month as "08" and year as "1966" for applicant's date of birth
-    And   I can click on "Continue"
-
-    Then  I should see the page titled "Describe health conditions" with GOV.UK suffix
-    And   I should see the title "Describe any health conditions that affect your mobility"
-    When  I type "Sample health condition" for "descriptionOfConditions" field by id
-    And   I can click on "Continue"
-
-    Then  I should see the page titled "Declaration" with GOV.UK suffix
-    And   I should see the content "I agree to this declaration"
-    And   I select option "declaration.option"
-    And   I can click on "Continue"
-
-    Then  I should see the page titled "Application submitted" with GOV.UK suffix
+    And   I complete main reason page for "BLIND"
+    Then  I should see "You're" eligible page
+    When  I complete eligible page
+    And   I complete what's your name page
+    And   I complete date of birth page for "CHILD"
+    And   I complete gender page for "Boy"
+    And   I complete describe health conditions page
+    And   I complete declaration page
+    Then  I should see .* page titled "Application submitted" with GOV.UK suffix
 
 
   Scenario: Blind application for someone else
     Given I complete applicant page for "someone else"
-    And   I complete select council page
+    And   I complete select council page for "england"
     And   I complete your local authority page
-    And   I complete receive benefit page for "NONE"
-    Then  I should see the page titled "What is the main reason they need a badge?" with GOV.UK suffix
-    And   I should see the title "What is the main reason they need a badge?"
-    And   I select option "mainReasonOption.option.BLIND"
+    And   I complete receive benefit page for "AFRFCS"
+
+    Then  I should see the page titled "Have they received a lump sum payment within tariff levels 1 to 8 of the Armed Forces Compensation Scheme? - GOV.UK Apply for a Blue Badge"
+    And   I should see the title "Have they received a lump sum payment within tariff levels 1 to 8 of the Armed Forces Compensation Scheme?"
+    And   I select option "hasReceivedCompensation.option.no"
     And   I can click on "Continue"
 
-    Then  I should see the page titled "They are eligible for a Blue Badge" with GOV.UK suffix
-    And   I should see the title "They are eligible for a Blue Badge"
-    And   I can click on "Start application"
-
-    Then  I should see the page titled "What's their name?" with GOV.UK suffix
-    When  I type "Tom Richardson" for "fullName" field by id
-    And   I can click on "Continue"
-    And   I should see error summary box
-    And   I select an option "hasBirthName.no"
-    And   I can click on "Continue"
-
-    Then  I should see the page titled "What's their date of birth" with GOV.UK suffix
-    And   I can click on "Continue"
-    And   I should see error summary box
-    When  I type day as "02" month as "08" and year as "1966" for applicant's date of birth
-    And   I can click on "Continue"
-
-    Then  I should see the page titled "Describe health conditions" with GOV.UK suffix
-    And   I should see the title "Describe any health conditions that affect their mobility"
-    And   I can click on "Continue"
-    And   I should see error summary box
-    When  I type "Sample health condition" for "descriptionOfConditions" field by id
-    And   I can click on "Continue"
-
-    Then  I should see the page titled "Declaration" with GOV.UK suffix
-    And   I should see the content "They agree to this declaration"
-    And   I can click on "Continue"
-    And   I should see error summary box
-    And   I select option "declaration.option"
-    And   I can click on "Continue"
-
-    Then  I should see the page titled "Application submitted" with GOV.UK suffix
+    And   I complete main reason page for "BLIND"
+    Then  I should see "They are" eligible page
+    When  I complete eligible page
+    And   I complete what's your name page
+    And   I complete date of birth page for "CHILD"
+    And   I complete gender page for "Boy"
+    And   I complete describe health conditions page
+    And   I complete declaration page
+    Then  I should see .* page titled "Application submitted" with GOV.UK suffix
 

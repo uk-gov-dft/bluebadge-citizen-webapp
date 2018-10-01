@@ -1,12 +1,21 @@
 package uk.gov.service.bluebadge.test.acceptance.steps;
 
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.MAIN_REASON_LIST;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.*;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_DAY;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_MONTH;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_YEAR;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Preamble.COUNCIL_INPUT;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.SitePage;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class ApplicationFixture extends AbstractSpringSteps {
 
@@ -32,7 +41,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
-  @And("I complete select council page")
+  @And("^I complete select council page$")
   public void iCompleteSelectCouncilPage() {
     iCompleteSelectCouncilPage("england");
   }
@@ -59,13 +68,20 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
-  @And("I complete receive benefit page for \"(PIP|DLA|AFCS|WPMS|NONE)\"")
+  @And("I complete receive benefit page for \"(PIP|DLA|AFRFCS|WPMS|NONE)\"")
   public void iCompleteReceiveBenefitPageFor(String benefit) {
     sitePage.findPageElementById(Ids.EleCheck.BENEFIT_RECEIVED_LIST + "." + benefit).click();
     pressContinue();
   }
 
-  @And("I complete main reason page for \"(TERMILL|CHILDBULK|CHILDVEHIC|WALKD|ARMS|BLIND)\"")
+  @And("I complete moving around points page for \"(12|10|8|4|0)\"")
+  public void iCompleteMovingAroundPointsPageFor(String points) {
+    sitePage.findPageElementById(Ids.EleCheck.MOVING_POINTS + "_" + points).click();
+    pressContinue();
+  }
+
+
+  @And("I complete main reason page for \"(TERMILL|CHILDBULK|CHILDVEHIC|WALKD|ARMS|BLIND|NONE)\"")
   public void iCompleteMainReasonPageFor(String benefit) {
     sitePage.findPageElementById(MAIN_REASON_LIST + "." + benefit).click();
     pressContinue();
@@ -82,4 +98,71 @@ public class ApplicationFixture extends AbstractSpringSteps {
     sitePage.findPageElementById(Ids.Person.HAS_BIRTH_NAME_NO_OPTION).click();
     pressContinue();
   }
+
+  @And("^I complete date of birth page for \"(CHILD|ADULT)\"")
+  public void iCompleteDateOfBirthPage(String age_category) throws Throwable {
+    Calendar now = Calendar.getInstance();
+    int dob_year = 1900;
+
+    if(age_category.equals("CHILD"))
+      dob_year = now.get(Calendar.YEAR)-10;
+    else
+      dob_year = now.get(Calendar.YEAR)-30;
+
+    sitePage.findPageElementById(DOB_DAY).sendKeys("1");
+    sitePage.findPageElementById(DOB_MONTH).sendKeys("1");
+    sitePage.findPageElementById(DOB_YEAR).sendKeys(Integer.toString(dob_year));
+    pressContinue();
+  }
+
+  @And("^I complete eligible page$")
+  public void iCompleteEligiblePage() throws Throwable {
+    sitePage.findElementWithText("Start application").click();
+  }
+
+  @And("^I complete gender page for \"(Boy|Girl|Man|Woman|I identify in a different way)\"")
+  public void iCompleteGenderPageFor(String gender) throws Throwable {
+    if(gender.equals("Boy")||gender.equals("Man"))
+      sitePage.findPageElementById(GENDER_MALE).click();
+    else if(gender.equals("Girl")||gender.equals("Woman"))
+      sitePage.findPageElementById(GENDER_FEMALE).click();
+    else
+      sitePage.findPageElementById(GENDER_UNSPECIFIED).click();
+
+    pressContinue();
+  }
+
+  @And("^I complete describe health conditions page$")
+  public void iCompleteDescribeHealthConditionsPage() throws Throwable {
+    sitePage.findPageElementById("descriptionOfConditions").sendKeys("Sample health condition");
+    pressContinue();
+  }
+
+  @And("^I complete declaration page$")
+  public void iCompleteDeclarationPage() throws Throwable {
+    sitePage.findPageElementById("agreed").click();
+    pressContinue();
+  }
+
+  @And("^I complete planning points page for \"(12|10|8|4|0)\"")
+  public void iCompletePlanningPointsPageFor(String points) throws Throwable {
+    sitePage.findPageElementById(Ids.EleCheck.PLANNING_POINTS + "_" + points).click();
+    pressContinue();
+  }
+
+  @And("^I complete what makes walking difficult page for \"(HELP|PAIN|DANGEROUS|NONE)\"$")
+  public void iCompleteWhatMakesWalkingDifficultPageFor(String difficulty) throws Throwable {
+    sitePage.findPageElementById(Ids.EleCheck.WALKING_DIFFICULTY_LIST + "." + difficulty).click();
+    pressContinue();
+  }
+
+  @And("^I complete dla allowance page for \"(YES|NO)\"$")
+  public void iCompleteDlaAllowancePageFor(String option) throws Throwable {
+    if(option.equals("YES"))
+      sitePage.findPageElementById(HAS_RECEIVED_DLA).click();
+    else
+      sitePage.findPageElementById(NEVER_RECEIVED_DLA).click();
+    pressContinue();
+  }
 }
+
