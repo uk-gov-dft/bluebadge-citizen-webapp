@@ -4,23 +4,23 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.CompensationSchemeForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.DisabilityForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.MentalDisorderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.CompensationSchemeForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.DisabilityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.MentalDisorderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipDlaQuestionForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipMovingAroundForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipPlanningJourneyForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 
 public class Journey implements Serializable {
 
@@ -58,7 +58,10 @@ public class Journey implements Serializable {
 
   public Boolean isApplicantYoung() {
     if (dateOfBirthForm != null) {
-      return dateOfBirthForm.getDateOfBirth().getLocalDate().isAfter(LocalDate.now().minusYears(17L));
+      return dateOfBirthForm
+          .getDateOfBirth()
+          .getLocalDate()
+          .isAfter(LocalDate.now().minusYears(17L));
     }
     return null;
   }

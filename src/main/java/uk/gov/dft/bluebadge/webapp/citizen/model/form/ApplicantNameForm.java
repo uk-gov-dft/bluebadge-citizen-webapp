@@ -30,5 +30,4 @@ public class ApplicantNameForm implements StepForm, Serializable {
   public StepDefinition getAssociatedStep() {
     return StepDefinition.NAME;
   }
-
 }

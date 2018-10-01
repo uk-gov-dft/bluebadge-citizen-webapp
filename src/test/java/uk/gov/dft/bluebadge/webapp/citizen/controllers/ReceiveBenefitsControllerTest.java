@@ -78,7 +78,10 @@ public class ReceiveBenefitsControllerTest {
         .thenReturn("redirect:/testSuccess");
 
     mockMvc
-        .perform(post("/benefits").param("benefitType", EligibilityCodeField.PIP.name()).sessionAttr("JOURNEY", journey))
+        .perform(
+            post("/benefits")
+                .param("benefitType", EligibilityCodeField.PIP.name())
+                .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
   }

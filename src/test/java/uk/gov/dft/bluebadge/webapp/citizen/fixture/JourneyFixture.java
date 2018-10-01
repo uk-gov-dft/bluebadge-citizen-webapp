@@ -32,7 +32,8 @@ public class JourneyFixture {
         DateOfBirthForm.builder().dateOfBirth(new CompoundDate("1", "1", "1990")).build();
     //dateOfBirthForm.setDateOfBirth(new CompoundDate());
 
-    ContactDetailsForm contactDetailsForm = ContactDetailsForm.builder().build();
+    ContactDetailsForm contactDetailsForm =
+        ContactDetailsForm.builder().primaryPhoneNumber("01270646362").build();
 
     journey.setApplicantForm(applicantForm);
     journey.setHealthConditionsForm(healthConditionsForm);

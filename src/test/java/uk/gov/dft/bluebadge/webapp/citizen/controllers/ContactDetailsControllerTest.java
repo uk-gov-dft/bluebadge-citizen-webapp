@@ -1,5 +1,13 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -12,15 +20,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 public class ContactDetailsControllerTest {
 
@@ -42,7 +41,7 @@ public class ContactDetailsControllerTest {
             .build();
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
     when(mockRouteMaster.redirectToOnSuccess(any(DateOfBirthForm.class)))
-      .thenReturn("redirect:/testSuccess");
+        .thenReturn("redirect:/testSuccess");
   }
 
   @Test
@@ -66,15 +65,16 @@ public class ContactDetailsControllerTest {
     journey.getApplicantForm().setApplicantType(ApplicantType.SOMEONE_ELSE.toString());
 
     mockMvc
-      .perform(
-        post(URL_CONTACT_DETAILS)
-          .param("fullName", "") // empty - invalid
-          .param("primaryPhoneNumber", "01270161666")
-          .sessionAttr("JOURNEY", journey))
-      .andExpect(status().isOk())
-      .andExpect(view().name(VIEW_CONTACT_DETAILS))
-      .andExpect(
-        model().attributeHasFieldErrorCode("formRequest", "fullName", "Invalid.contact.fullName"));
+        .perform(
+            post(URL_CONTACT_DETAILS)
+                .param("fullName", "") // empty - invalid
+                .param("primaryPhoneNumber", "01270161666")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().isOk())
+        .andExpect(view().name(VIEW_CONTACT_DETAILS))
+        .andExpect(
+            model()
+                .attributeHasFieldErrorCode("formRequest", "fullName", "Invalid.contact.fullName"));
   }
 
   @Test
@@ -84,15 +84,14 @@ public class ContactDetailsControllerTest {
     givenDefaultJourney();
 
     mockMvc
-      .perform(
-        post(URL_CONTACT_DETAILS)
-          .param("fullName", "") // empty - valid
-          .param("primaryPhoneNumber", "01270161666")
-          .sessionAttr("JOURNEY", journey))
-      .andExpect(status().isOk())
-      .andExpect(view().name(VIEW_CONTACT_DETAILS))
-      .andExpect(
-        model().attributeDoesNotExist("fullName"));
+        .perform(
+            post(URL_CONTACT_DETAILS)
+                .param("fullName", "") // empty - valid
+                .param("primaryPhoneNumber", "01270161666")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().isOk())
+        .andExpect(view().name(VIEW_CONTACT_DETAILS))
+        .andExpect(model().attributeDoesNotExist("fullName"));
   }
 
   @Test
@@ -101,15 +100,15 @@ public class ContactDetailsControllerTest {
     givenDefaultJourney();
 
     mockMvc
-      .perform(
-        post(URL_CONTACT_DETAILS)
-          .param("fullName", "") // empty - valid
-          .param("primaryPhoneNumber", "")
-          .sessionAttr("JOURNEY", journey))
-      .andExpect(status().isOk())
-      .andExpect(view().name(VIEW_CONTACT_DETAILS))
-      .andExpect(
-        model().attributeHasFieldErrorCode("formRequest", "primaryPhoneNumber", "NotBlank"));
+        .perform(
+            post(URL_CONTACT_DETAILS)
+                .param("fullName", "") // empty - valid
+                .param("primaryPhoneNumber", "")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().isOk())
+        .andExpect(view().name(VIEW_CONTACT_DETAILS))
+        .andExpect(
+            model().attributeHasFieldErrorCode("formRequest", "primaryPhoneNumber", "NotBlank"));
   }
 
   @Test
@@ -118,15 +117,15 @@ public class ContactDetailsControllerTest {
     givenDefaultJourney();
 
     mockMvc
-      .perform(
-        post(URL_CONTACT_DETAILS)
-          .param("fullName", "") // empty - valid
-          .param("primaryPhoneNumber", "afaf123")
-          .sessionAttr("JOURNEY", journey))
-      .andExpect(status().isOk())
-      .andExpect(view().name(VIEW_CONTACT_DETAILS))
-      .andExpect(
-        model().attributeHasFieldErrorCode("formRequest", "primaryPhoneNumber", "Pattern"));
+        .perform(
+            post(URL_CONTACT_DETAILS)
+                .param("fullName", "") // empty - valid
+                .param("primaryPhoneNumber", "afaf123")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().isOk())
+        .andExpect(view().name(VIEW_CONTACT_DETAILS))
+        .andExpect(
+            model().attributeHasFieldErrorCode("formRequest", "primaryPhoneNumber", "Pattern"));
   }
 
   @Test
@@ -135,16 +134,16 @@ public class ContactDetailsControllerTest {
     givenDefaultJourney();
 
     mockMvc
-      .perform(
-        post(URL_CONTACT_DETAILS)
-          .param("fullName", "") // empty - valid
-          .param("primaryPhoneNumber", "01270646261")
-          .param("secondaryPhoneNumber", "afaf123")
-          .sessionAttr("JOURNEY", journey))
-      .andExpect(status().isOk())
-      .andExpect(view().name(VIEW_CONTACT_DETAILS))
-      .andExpect(
-        model().attributeHasFieldErrorCode("formRequest", "secondaryPhoneNumber", "Pattern"));
+        .perform(
+            post(URL_CONTACT_DETAILS)
+                .param("fullName", "") // empty - valid
+                .param("primaryPhoneNumber", "01270646261")
+                .param("secondaryPhoneNumber", "afaf123")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().isOk())
+        .andExpect(view().name(VIEW_CONTACT_DETAILS))
+        .andExpect(
+            model().attributeHasFieldErrorCode("formRequest", "secondaryPhoneNumber", "Pattern"));
   }
 
   @Test
@@ -153,16 +152,15 @@ public class ContactDetailsControllerTest {
     givenDefaultJourney();
 
     mockMvc
-      .perform(
-        post(URL_CONTACT_DETAILS)
-          .param("fullName", "") // empty - valid
-          .param("primaryPhoneNumber", "01270646261")
-          .param("emailAddress", "abc.com")
-          .sessionAttr("JOURNEY", journey))
-      .andExpect(status().isOk())
-      .andExpect(view().name(VIEW_CONTACT_DETAILS))
-      .andExpect(
-        model().attributeHasFieldErrorCode("formRequest", "emailAddress", "Pattern"));
+        .perform(
+            post(URL_CONTACT_DETAILS)
+                .param("fullName", "") // empty - valid
+                .param("primaryPhoneNumber", "01270646261")
+                .param("emailAddress", "abc.com")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().isOk())
+        .andExpect(view().name(VIEW_CONTACT_DETAILS))
+        .andExpect(model().attributeHasFieldErrorCode("formRequest", "emailAddress", "Pattern"));
   }
 
   @Test
@@ -171,22 +169,20 @@ public class ContactDetailsControllerTest {
     givenDefaultJourney();
 
     mockMvc
-      .perform(
-        post(URL_CONTACT_DETAILS)
-          .param("fullName", "") // empty - valid
-          .param("primaryPhoneNumber", "01270646261")
-          .param("emailAddress", "a@bc.com")
-          .sessionAttr("JOURNEY", journey))
-      .andExpect(status().isOk())
-      .andExpect(view().name(VIEW_CONTACT_DETAILS))
-      .andExpect(
-        model().attributeDoesNotExist( "emailAddress"));
+        .perform(
+            post(URL_CONTACT_DETAILS)
+                .param("fullName", "") // empty - valid
+                .param("primaryPhoneNumber", "01270646261")
+                .param("emailAddress", "a@bc.com")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().isOk())
+        .andExpect(view().name(VIEW_CONTACT_DETAILS))
+        .andExpect(model().attributeDoesNotExist("emailAddress"));
   }
 
   private void givenDefaultJourney() {
     // Set to applying for someone else
     journey = JourneyFixture.getDefaultJourney();
     journey.getApplicantForm().setApplicantType(ApplicantType.YOURSELF.toString());
-
   }
 }
