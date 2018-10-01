@@ -32,7 +32,7 @@ public class ReceiveBenefitsForm implements StepForm, Serializable {
       case PIP:
         return Optional.of(StepDefinition.PIP_MOVING_AROUND);
       default:
-        return Optional.of(StepDefinition.MAY_BE_ELIGIBLE);
+        return Optional.of(StepDefinition.MAIN_REASON);
     }
   }
 }

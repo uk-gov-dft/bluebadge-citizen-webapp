@@ -30,7 +30,7 @@ public class PipDlaQuestionForm implements Serializable, StepForm {
       return Optional.of(StepDefinition.ELIGIBLE);
     }
     if (NEVER_RECEIVED_DLA.equals(receivedDlaOption)) {
-      return Optional.of(StepDefinition.MAY_BE_ELIGIBLE);
+      return Optional.of(StepDefinition.MAIN_REASON);
     }
     return Optional.empty();
   }

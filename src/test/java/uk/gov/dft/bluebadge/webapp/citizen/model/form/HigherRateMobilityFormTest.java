@@ -16,11 +16,11 @@ public class HigherRateMobilityFormTest {
   }
 
   @Test
-  public void determineNextStep_whenNo_thenMayBeEligible() {
+  public void determineNextStep_whenNo_thenMainReason() {
     HigherRateMobilityForm form =
         HigherRateMobilityForm.builder().awardedHigherRateMobility(false).build();
 
     assertThat(form.determineNextStep()).isNotEmpty();
-    assertThat(form.determineNextStep().get()).isEqualTo(StepDefinition.MAY_BE_ELIGIBLE);
+    assertThat(form.determineNextStep().get()).isEqualTo(StepDefinition.MAIN_REASON);
   }
 }

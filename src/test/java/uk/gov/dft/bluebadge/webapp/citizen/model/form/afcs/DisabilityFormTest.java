@@ -16,11 +16,11 @@ public class DisabilityFormTest {
   }
 
   @Test
-  public void determineNextStep_whenDisabilityIsNo_thenMaybeEligible() {
+  public void determineNextStep_whenDisabilityIsNo_thenMainReason() {
 
     DisabilityForm form = DisabilityForm.builder().hasDisability(false).build();
 
     assertThat(form.determineNextStep()).isNotEmpty();
-    assertThat(form.determineNextStep().get()).isEqualTo(StepDefinition.MAY_BE_ELIGIBLE);
+    assertThat(form.determineNextStep().get()).isEqualTo(StepDefinition.MAIN_REASON);
   }
 }

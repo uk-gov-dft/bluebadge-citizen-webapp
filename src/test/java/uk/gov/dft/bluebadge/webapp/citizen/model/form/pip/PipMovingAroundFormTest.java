@@ -29,14 +29,13 @@ public class PipMovingAroundFormTest extends JourneyFixture {
   }
 
   @Test
-  public void determineNextStep_whenLessThan8PointsAndEngland_thenMayBeEligible() {
+  public void determineNextStep_whenLessThan8PointsAndEngland_thenMainReason() {
     Journey journey = new JourneyBuilder().setEnglishLocalAuthority().build();
     lessThan8.forEach(
         e -> {
           PipMovingAroundForm form = PipMovingAroundForm.builder().movingAroundPoints(e).build();
           assertThat(form.determineNextStep(journey)).isNotEmpty();
-          assertThat(form.determineNextStep(journey).get())
-              .isEqualTo(StepDefinition.MAY_BE_ELIGIBLE);
+          assertThat(form.determineNextStep(journey).get()).isEqualTo(StepDefinition.MAIN_REASON);
         });
   }
 

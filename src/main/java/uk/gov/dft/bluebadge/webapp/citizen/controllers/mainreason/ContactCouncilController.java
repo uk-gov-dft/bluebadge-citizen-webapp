@@ -1,4 +1,4 @@
-package uk.gov.dft.bluebadge.webapp.citizen.controllers;
+package uk.gov.dft.bluebadge.webapp.citizen.controllers.mainreason;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
@@ -8,43 +8,42 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.support.SessionStatus;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.StepController;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 @Controller
-@RequestMapping(Mappings.URL_ELIGIBLE)
-public class EligibleController implements StepController {
-
-  private static final String TEMPLATE = "eligible";
+@RequestMapping(Mappings.URL_CONTACT_COUNCIL)
+public class ContactCouncilController implements StepController {
+  private static final String TEMPLATE = "mainreason/contact-council";
 
   private final RouteMaster routeMaster;
 
   @Autowired
-  public EligibleController(RouteMaster routeMaster) {
+  public ContactCouncilController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping
-  public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
-
+  public String show(
+      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
+      Model model,
+      SessionStatus sessionStatus) {
     if (!journey.isValidState(getStepDefinition())) {
       return routeMaster.backToCompletedPrevious();
     }
 
     model.addAttribute("localAuthority", journey.getLocalAuthority());
 
+    sessionStatus.setComplete();
     return TEMPLATE;
-  }
-
-  @GetMapping("/start")
-  public String startApplication(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
-    return routeMaster.redirectToOnSuccess(StepDefinition.ELIGIBLE);
   }
 
   @Override
   public StepDefinition getStepDefinition() {
-    return StepDefinition.ELIGIBLE;
+    return StepDefinition.CONTACT_COUNCIL;
   }
 }

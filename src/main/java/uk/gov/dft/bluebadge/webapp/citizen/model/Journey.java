@@ -2,7 +2,9 @@ package uk.gov.dft.bluebadge.webapp.citizen.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
@@ -21,6 +23,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.MentalDisorderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipDlaQuestionForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipMovingAroundForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipPlanningJourneyForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficultyForm;
 
 public class Journey implements Serializable {
 
@@ -40,6 +44,8 @@ public class Journey implements Serializable {
   private DateOfBirthForm dateOfBirthForm;
   private HigherRateMobilityForm higherRateMobilityForm;
   private GenderForm genderForm;
+  private MainReasonForm mainReasonForm;
+  private WalkingDifficultyForm walkingDifficultyForm;
   public String who;
   public String ageGroup;
 
@@ -48,6 +54,25 @@ public class Journey implements Serializable {
   private DisabilityForm disabilityForm;
   private MentalDisorderForm mentalDisorderForm;
   private ContactDetailsForm contactDetailsForm;
+
+  public Nation getNation() {
+    if (null != localAuthority) {
+      return localAuthority.getNation();
+    }
+    return null;
+  }
+
+  public EligibilityCodeField getEligibilityCode() {
+    if (null != mainReasonForm
+        && EligibilityCodeField.NONE != mainReasonForm.getMainReasonOption()) {
+      return mainReasonForm.getMainReasonOption();
+    } else if (null != receiveBenefitsForm
+        && EligibilityCodeField.NONE != receiveBenefitsForm.getBenefitType()) {
+      return receiveBenefitsForm.getBenefitType();
+    }
+
+    return null;
+  }
 
   public Boolean isApplicantYourself() {
     if (applicantForm != null) {
@@ -74,7 +99,7 @@ public class Journey implements Serializable {
     switch (step) {
       case ELIGIBLE:
       case MAY_BE_ELIGIBLE:
-        if (null == getYourIssuingAuthorityForm()) {
+        if (null == getLocalAuthority()) {
           return false;
         }
     }
@@ -202,6 +227,22 @@ public class Journey implements Serializable {
 
   public void setHigherRateMobilityForm(HigherRateMobilityForm higherRateMobilityForm) {
     this.higherRateMobilityForm = higherRateMobilityForm;
+  }
+
+  public MainReasonForm getMainReasonForm() {
+    return mainReasonForm;
+  }
+
+  public void setMainReasonForm(MainReasonForm mainReasonForm) {
+    this.mainReasonForm = mainReasonForm;
+  }
+
+  public WalkingDifficultyForm getWalkingDifficultyForm() {
+    return walkingDifficultyForm;
+  }
+
+  public void setWalkingDifficultyForm(WalkingDifficultyForm walkingDifficultyForm) {
+    this.walkingDifficultyForm = walkingDifficultyForm;
   }
 
   public GenderForm getGenderForm() {
