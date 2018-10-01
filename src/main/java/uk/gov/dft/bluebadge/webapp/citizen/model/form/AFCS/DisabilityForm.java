@@ -26,6 +26,6 @@ public class DisabilityForm implements Serializable, StepForm {
       return Optional.of(StepDefinition.ELIGIBLE);
     }
 
-    return Optional.of(StepDefinition.MAY_BE_ELIGIBLE);
+    return Optional.of(StepDefinition.MAIN_REASON);
   }
 }

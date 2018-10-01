@@ -12,7 +12,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataService;
 
 @Controller
 @RequestMapping(Mappings.URL_ELIGIBLE)
@@ -21,12 +20,10 @@ public class EligibleController implements StepController {
   private static final String TEMPLATE = "eligible";
 
   private final RouteMaster routeMaster;
-  private final ReferenceDataService referenceDataService;
 
   @Autowired
-  public EligibleController(RouteMaster routeMaster, ReferenceDataService referenceDataService) {
+  public EligibleController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
-    this.referenceDataService = referenceDataService;
   }
 
   @GetMapping
@@ -36,8 +33,7 @@ public class EligibleController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    String laShortCode = journey.getYourIssuingAuthorityForm().getLocalAuthorityShortCode();
-    model.addAttribute("localAuthority", referenceDataService.retrieveLocalAuthority(laShortCode));
+    model.addAttribute("localAuthority", journey.getLocalAuthority());
 
     return TEMPLATE;
   }

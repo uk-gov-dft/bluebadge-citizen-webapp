@@ -27,7 +27,7 @@ public class ReceiveBenefitsFormTest {
   }
 
   @Test
-  public void determineNextStep_whenAnythingElse_thenMayBeEligible() {
+  public void determineNextStep_whenAnythingElse_thenMainReason() {
 
     EnumSet.complementOf(
             EnumSet.of(
@@ -41,8 +41,8 @@ public class ReceiveBenefitsFormTest {
 
               assertThat(form.determineNextStep()).isNotEmpty();
               assertThat(form.determineNextStep().get())
-                  .as("Eligibility %s result in Eligible", e)
-                  .isEqualTo(StepDefinition.MAY_BE_ELIGIBLE);
+                  .as("Eligibility %s result in Main Reason", e)
+                  .isEqualTo(StepDefinition.MAIN_REASON);
             });
   }
 

@@ -3,9 +3,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import com.google.common.collect.Lists;
-
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +16,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.ApplicationTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Benefit;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Blind;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.BulkyMedicalEquipmentTypeCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.ChildUnder3;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Contact;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.DisabilityArms;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Eligibility;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.GenderCodeField;
@@ -46,138 +48,169 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 @RequestMapping(Mappings.URL_DECLARATIONS)
 public class DeclarationSubmitController implements StepController {
 
-    private static final String TEMPLATE_DECLARATION = "application-end/declaration";
+  private static final String TEMPLATE_DECLARATION = "application-end/declaration";
 
-    private final ApplicationManagementService appService;
-    private final RouteMaster routeMaster;
+  private final ApplicationManagementService appService;
+  private final RouteMaster routeMaster;
 
-    @Autowired
-    public DeclarationSubmitController(
-            ApplicationManagementService appService, RouteMaster routeMaster) {
-        this.appService = appService;
-        this.routeMaster = routeMaster;
+  @Autowired
+  public DeclarationSubmitController(
+      ApplicationManagementService appService, RouteMaster routeMaster) {
+    this.appService = appService;
+    this.routeMaster = routeMaster;
+  }
+
+  @GetMapping
+  public String showDeclaration(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+
+    if (!journey.isValidState(getStepDefinition())) {
+      return routeMaster.backToCompletedPrevious();
     }
 
-    @GetMapping
-    public String showDeclaration(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
-
-        if (!journey.isValidState(getStepDefinition())) {
-            return routeMaster.backToCompletedPrevious();
-        }
-
-        if (!model.containsAttribute("formRequest")) {
-            model.addAttribute("formRequest", DeclarationForm.builder().build());
-        }
-
-        return TEMPLATE_DECLARATION;
+    if (!model.containsAttribute("formRequest")) {
+      model.addAttribute("formRequest", DeclarationForm.builder().build());
     }
 
-    @PostMapping
-    public String submitDeclaration(
-            @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-            @Valid @ModelAttribute("formRequest") DeclarationForm declarationForm,
-            BindingResult bindingResult,
-            RedirectAttributes attr) {
+    return TEMPLATE_DECLARATION;
+  }
 
-        if (bindingResult.hasErrors()) {
-            return routeMaster.redirectToOnBindingError(this, declarationForm, bindingResult, attr);
-        }
+  @PostMapping
+  public String submitDeclaration(
+      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
+      @Valid @ModelAttribute("formRequest") DeclarationForm declarationForm,
+      BindingResult bindingResult,
+      RedirectAttributes attr) {
 
-        appService.create(getDummyApplication(journey));
-
-        return routeMaster.redirectToOnSuccess(declarationForm);
+    if (bindingResult.hasErrors()) {
+      return routeMaster.redirectToOnBindingError(this, declarationForm, bindingResult, attr);
     }
 
-    private Application getDummyApplication(Journey journey) {
-        ApplicantNameForm applicantNameForm = journey.getApplicantNameForm();
-        GenderForm genderForm = journey.getGenderForm();
-        HealthConditionsForm healthConditionsForm = journey.getHealthConditionsForm();
-        YourIssuingAuthorityForm yourIssuingAuthorityForm = journey.getYourIssuingAuthorityForm();
+    appService.create(getDummyApplication(journey));
 
-        EligibilityCodeField eligibility =
-                null != journey.getReceiveBenefitsForm()
-                        ? journey.getReceiveBenefitsForm().getBenefitType()
-                        : EligibilityCodeField.WPMS;
+    return routeMaster.redirectToOnSuccess(declarationForm);
+  }
 
-        String la =
-                yourIssuingAuthorityForm == null
-                        ? "ABERD"
-                        : yourIssuingAuthorityForm.getLocalAuthorityShortCode();
-        String condDesc =
-                healthConditionsForm == null
-                        ? "Dummy condition"
-                        : healthConditionsForm.getDescriptionOfConditions();
+  private Application getDummyApplication(Journey journey) {
+    ApplicantNameForm applicantNameForm = journey.getApplicantNameForm();
+    GenderForm genderForm = journey.getGenderForm();
+    HealthConditionsForm healthConditionsForm = journey.getHealthConditionsForm();
+    YourIssuingAuthorityForm yourIssuingAuthorityForm = journey.getYourIssuingAuthorityForm();
 
-        String fullName = applicantNameForm == null ? "John Doe" : applicantNameForm.getFullName();
-        String birthName =
-                applicantNameForm == null ? "John Doe Birth" : applicantNameForm.getBirthName();
+    EligibilityCodeField eligibility = journey.getEligibilityCode();
 
-        GenderCodeField gender =
-                null != genderForm ? journey.getGenderForm().getGender() : GenderCodeField.FEMALE;
+    String la =
+        yourIssuingAuthorityForm == null
+            ? "ABERD"
+            : yourIssuingAuthorityForm.getLocalAuthorityShortCode();
+    String condDesc =
+        healthConditionsForm == null
+            ? "Dummy condition"
+            : healthConditionsForm.getDescriptionOfConditions();
 
-        String nino = journey.getNinoForm() == null ? "NS123456C" : journey.getNinoForm().getNino();
+    String fullName = applicantNameForm == null ? "John Doe" : applicantNameForm.getFullName();
+    String birthName =
+        applicantNameForm == null ? "John Doe Birth" : applicantNameForm.getBirthName();
 
-        Person person =
-                new Person()
-                        .badgeHolderName(fullName)
-                        .nameAtBirth(birthName)
-                        .dob(journey.getDateOfBirthForm().getDateOfBirth().getLocalDate())
-                        .genderCode(gender)
-                        .nino(nino);
+    GenderCodeField gender =
+        null != genderForm ? journey.getGenderForm().getGender() : GenderCodeField.FEMALE;
 
-        Party party =
-                new Party()
-                        .typeCode(PartyTypeCodeField.PERSON)
-                        .contact(
-                                new Contact()
-                                        .buildingStreet("65 Basil Chambers")
-                                        .line2("Northern Quarter")
-                                        .townCity("Manchester")
-                                        .postCode("SK6 8GH")
-                                        .primaryPhoneNumber("016111234567")
-                                        .secondaryPhoneNumber("079707777111")
-                                        .emailAddress("nobody@thisisatestabc.com"))
-                        .person(person);
+    String nino = journey.getNinoForm() == null ? "NS123456C" : journey.getNinoForm().getNino();
 
-        Eligibility eligibilityObject;
-        if (eligibility == null || EligibilityCodeField.WALKD == eligibility) {
-            eligibilityObject =
-                    new Eligibility()
-                            .typeCode(EligibilityCodeField.WALKD)
-                            .descriptionOfConditions(condDesc)
-                            .walkingDifficulty(
-                                    new WalkingDifficulty()
-                                            .walkingLengthOfTimeCode(WalkingLengthOfTimeCodeField.LESSMIN)
-                                            .walkingSpeedCode(WalkingSpeedCodeField.SLOW)
-                                            .typeCodes(
-                                                    Lists.newArrayList(
-                                                            WalkingDifficultyTypeCodeField.PAIN,
-                                                            WalkingDifficultyTypeCodeField.BALANCE))
-                                            .walkingAids(
-                                                    Lists.newArrayList(
-                                                            new WalkingAid()
-                                                                    .description("walk aid description")
-                                                                    .usage("walk aid usage")
-                                                                    .howProvidedCode(HowProvidedCodeField.PRESCRIBE))));
-        } else if (EligibilityCodeField.PIP == eligibility
-                || EligibilityCodeField.DLA == eligibility
-                || EligibilityCodeField.WPMS == eligibility) {
-            eligibilityObject =
-                    new Eligibility().typeCode(eligibility).benefit(new Benefit().isIndefinite(true));
-        } else {
-            eligibilityObject = new Eligibility().typeCode(eligibility);
-        }
-        return Application.builder()
-                .applicationTypeCode(ApplicationTypeCodeField.NEW)
-                .localAuthorityCode(la)
-                .paymentTaken(false)
-                .party(party)
-                .eligibility(eligibilityObject)
-                .build();
+    Person person =
+        new Person()
+            .badgeHolderName(fullName)
+            .nameAtBirth(birthName)
+            .dob(journey.getDateOfBirthForm().getDateOfBirth().getLocalDate())
+            .genderCode(gender)
+            .nino(nino);
+
+    Party party =
+        new Party()
+            .typeCode(PartyTypeCodeField.PERSON)
+            .contact(
+                new Contact()
+                    .buildingStreet("65 Basil Chambers")
+                    .line2("Northern Quarter")
+                    .townCity("Manchester")
+                    .postCode("SK6 8GH")
+                    .primaryPhoneNumber("016111234567")
+                    .secondaryPhoneNumber("079707777111")
+                    .emailAddress("nobody@thisisatestabc.com"))
+            .person(person);
+
+    Eligibility eligibilityObject = null;
+    switch (eligibility) {
+      case WALKD:
+        eligibilityObject =
+            new Eligibility()
+                .typeCode(EligibilityCodeField.WALKD)
+                .descriptionOfConditions(condDesc)
+                .walkingDifficulty(
+                    new WalkingDifficulty()
+                        .walkingLengthOfTimeCode(WalkingLengthOfTimeCodeField.LESSMIN)
+                        .walkingSpeedCode(WalkingSpeedCodeField.SLOW)
+                        .typeCodes(
+                            Lists.newArrayList(
+                                WalkingDifficultyTypeCodeField.PAIN,
+                                WalkingDifficultyTypeCodeField.BALANCE))
+                        .walkingAids(
+                            Lists.newArrayList(
+                                new WalkingAid()
+                                    .description("walk aid description")
+                                    .usage("walk aid usage")
+                                    .howProvidedCode(HowProvidedCodeField.PRESCRIBE))));
+        break;
+      case PIP:
+      case DLA:
+      case WPMS:
+        eligibilityObject =
+            new Eligibility().typeCode(eligibility).benefit(new Benefit().isIndefinite(true));
+        break;
+      case AFRFCS:
+        eligibilityObject = new Eligibility().typeCode(eligibility);
+        break;
+      case BLIND:
+        eligibilityObject =
+            new Eligibility()
+                .typeCode(eligibility)
+                .blind(new Blind().registeredAtLaId(journey.getLocalAuthority().getShortCode()));
+        break;
+      case ARMS:
+        eligibilityObject =
+            new Eligibility()
+                .typeCode(eligibility)
+                .disabilityArms(new DisabilityArms().isAdaptedVehicle(false));
+        break;
+      case CHILDBULK:
+        eligibilityObject =
+            new Eligibility()
+                .typeCode(eligibility)
+                .childUnder3(
+                    new ChildUnder3()
+                        .bulkyMedicalEquipmentTypeCode(
+                            BulkyMedicalEquipmentTypeCodeField.OXYADMIN));
+        break;
+      case CHILDVEHIC:
+        eligibilityObject = new Eligibility().typeCode(eligibility);
+        break;
+      case TERMILL:
+      case NONE:
+        // Invalid to get here with no eligibility if person route
+        // This code is all temporary too.
+        throw new RuntimeException("Invalid eligibility:" + eligibility);
     }
 
-    @Override
-    public StepDefinition getStepDefinition() {
-        return StepDefinition.DECLARATIONS;
-    }
+    return Application.builder()
+        .applicationTypeCode(ApplicationTypeCodeField.NEW)
+        .localAuthorityCode(la)
+        .paymentTaken(false)
+        .party(party)
+        .eligibility(eligibilityObject)
+        .build();
+  }
+
+  @Override
+  public StepDefinition getStepDefinition() {
+    return StepDefinition.DECLARATIONS;
+  }
 }

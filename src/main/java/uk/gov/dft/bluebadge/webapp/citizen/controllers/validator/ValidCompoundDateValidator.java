@@ -1,10 +1,9 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.validator;
 
+import java.time.LocalDate;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import uk.gov.dft.bluebadge.webapp.citizen.model.component.CompoundDate;
-
-import java.time.LocalDate;
 
 @SuppressWarnings("squid:S2201")
 public class ValidCompoundDateValidator
@@ -19,7 +18,10 @@ public class ValidCompoundDateValidator
 
     if (!compoundDate.isDatePartMissing()) {
       try {
-        LocalDate.of(Integer.parseInt(compoundDate.getYear()), Integer.parseInt(compoundDate.getMonth()), Integer.parseInt(compoundDate.getDay()));
+        LocalDate.of(
+            Integer.parseInt(compoundDate.getYear()),
+            Integer.parseInt(compoundDate.getMonth()),
+            Integer.parseInt(compoundDate.getDay()));
       } catch (Exception e) {
         return false; // If part of the date is invalid then we cannot test
       }

@@ -45,7 +45,8 @@ public class DateOfBirthController implements StepController {
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
-      model.addAttribute(FORM_REQUEST, DateOfBirthForm.builder().dateOfBirth(new CompoundDate()).build());
+      model.addAttribute(
+          FORM_REQUEST, DateOfBirthForm.builder().dateOfBirth(new CompoundDate()).build());
     }
 
     return TEMPLATE_DOB;
