@@ -63,7 +63,7 @@ public class ContactDetailsController implements StepController {
 
     // Validation context sensitive to journey
     if (contactDetailsForm.isFullnameInvalid(journey)) {
-      bindingResult.reject("fullName", "Invalid.fullname");
+      bindingResult.rejectValue("fullName", "Invalid.contact.fullName");
     }
 
     if (bindingResult.hasErrors()) {
@@ -76,6 +76,6 @@ public class ContactDetailsController implements StepController {
 
   @Override
   public StepDefinition getStepDefinition() {
-    return StepDefinition.NAME;
+    return StepDefinition.CONTACT_DETAILS;
   }
 }

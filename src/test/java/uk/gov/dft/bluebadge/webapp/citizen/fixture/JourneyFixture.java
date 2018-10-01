@@ -5,6 +5,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.component.CompoundDate;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
@@ -31,12 +32,15 @@ public class JourneyFixture {
         DateOfBirthForm.builder().dateOfBirth(new CompoundDate("1", "1", "1990")).build();
     //dateOfBirthForm.setDateOfBirth(new CompoundDate());
 
+    ContactDetailsForm contactDetailsForm = ContactDetailsForm.builder().build();
+
     journey.setApplicantForm(applicantForm);
     journey.setHealthConditionsForm(healthConditionsForm);
     journey.setApplicantNameForm(applicantNameForm);
     journey.setDateOfBirthForm(dateOfBirthForm);
     journey.setReceiveBenefitsForm(
         ReceiveBenefitsForm.builder().benefitType(EligibilityCodeField.WALKD).build());
+    journey.setContactDetailsForm(contactDetailsForm);
 
     return journey;
   }
