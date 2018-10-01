@@ -61,12 +61,14 @@ public class Journey implements Serializable {
   }
 
   public EligibilityCodeField getEligibilityCode() {
-    if (null != receiveBenefitsForm
+    if (null != mainReasonForm
+        && EligibilityCodeField.NONE != mainReasonForm.getMainReasonOption()) {
+      return mainReasonForm.getMainReasonOption();
+    } else if (null != receiveBenefitsForm
         && EligibilityCodeField.NONE != receiveBenefitsForm.getBenefitType()) {
       return receiveBenefitsForm.getBenefitType();
-    } else if (null != mainReasonForm) {
-      return mainReasonForm.getMainReasonOption();
     }
+
     return null;
   }
 
