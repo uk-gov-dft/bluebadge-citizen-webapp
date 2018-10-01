@@ -68,7 +68,7 @@ public class GenderControllerTest {
 
   @Test
   public void submit_givenMaleOption_thenShouldDisplayRedirectToSuccess() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(GenderForm.class)))
+    when(mockRouteMaster.redirectToOnSuccess(any(GenderForm.class), any(Journey.class)))
         .thenReturn("redirect:/testSuccess");
 
     mockMvc
@@ -79,7 +79,7 @@ public class GenderControllerTest {
 
   @Test
   public void submit_givenFemaleOption_thenShouldDisplayRedirectToSuccess() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(GenderForm.class)))
+    when(mockRouteMaster.redirectToOnSuccess(any(GenderForm.class), any(Journey.class)))
         .thenReturn("redirect:/testSuccess");
 
     mockMvc
@@ -90,7 +90,7 @@ public class GenderControllerTest {
 
   @Test
   public void submit_givenUnspecifiedOption_thenShouldDisplayRedirectToSuccess() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(GenderForm.class)))
+    when(mockRouteMaster.redirectToOnSuccess(any(GenderForm.class), any(Journey.class)))
         .thenReturn("redirect:/testSuccess");
 
     mockMvc
