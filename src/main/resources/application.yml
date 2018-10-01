@@ -64,4 +64,5 @@ security:
       auto-approve-scopes: '.*'
       authorized-grant-types: client_credentials
 
-GACode: 'UA-124760983-5'
+# Google Analytics Code
+GACode:  ${GACODE:UA-124760983-5}
