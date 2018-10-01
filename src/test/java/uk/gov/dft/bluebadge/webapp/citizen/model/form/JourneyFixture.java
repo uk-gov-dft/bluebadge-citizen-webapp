@@ -2,7 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
 import java.util.Optional;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nations;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 public class JourneyFixture {
@@ -15,18 +15,18 @@ public class JourneyFixture {
     }
 
     public JourneyBuilder setEnglishLocalAuthority() {
-      return setNation(Nations.ENGLAND);
+      return setNation(Nation.ENG);
     }
 
     public JourneyBuilder setScottishLocalAuthority() {
-      return setNation(Nations.SCOTLAND);
+      return setNation(Nation.SCO);
     }
 
     public JourneyBuilder setWelshLocalAuthority() {
-      return setNation(Nations.WALES);
+      return setNation(Nation.WLS);
     }
 
-    private JourneyBuilder setNation(String nation) {
+    private JourneyBuilder setNation(Nation nation) {
       LocalAuthorityRefData.LocalAuthorityMetaData meta =
           new LocalAuthorityRefData.LocalAuthorityMetaData();
       meta.setNation(nation);
