@@ -116,7 +116,8 @@ public class DeclarationSubmitController implements StepController {
     GenderCodeField gender =
         null != genderForm ? journey.getGenderForm().getGender() : GenderCodeField.FEMALE;
 
-    String nino = journey.getNinoForm() == null ? "NS123456C" : journey.getNinoForm().getNino().toUpperCase();
+    String nino =
+        journey.getNinoForm() == null ? "NS123456C" : journey.getNinoForm().getNino().toUpperCase();
 
     Person person =
         new Person()
@@ -135,10 +136,10 @@ public class DeclarationSubmitController implements StepController {
                     .line2(journey.getEnterAddressForm().getOptionalAddress())
                     .townCity(journey.getEnterAddressForm().getTownOrCity())
                     .postCode(journey.getEnterAddressForm().getPostcode())
-                  .fullName(contactDetailsForm.getFullName())
-                  .primaryPhoneNumber(contactDetailsForm.getPrimaryPhoneNumber())
-                  .secondaryPhoneNumber(contactDetailsForm.getSecondaryPhoneNumber())
-                  .emailAddress(contactDetailsForm.getEmailAddress()))
+                    .fullName(contactDetailsForm.getFullName())
+                    .primaryPhoneNumber(contactDetailsForm.getPrimaryPhoneNumber())
+                    .secondaryPhoneNumber(contactDetailsForm.getSecondaryPhoneNumber())
+                    .emailAddress(contactDetailsForm.getEmailAddress()))
             .person(person);
 
     Eligibility eligibilityObject = null;

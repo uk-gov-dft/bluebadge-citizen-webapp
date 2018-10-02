@@ -23,7 +23,6 @@ class Ids {
     static final String NI = "nino";
     static final String NO_NI_TEXT = "You don't have a National Insurance number";
     static final String NO_NI_LINK_TEXT = "Continue without a National Insurance number.";
-
   }
 
   class Person {
