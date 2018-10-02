@@ -5,7 +5,6 @@ import java.util.Optional;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.GenderCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
@@ -25,16 +24,11 @@ public class GenderForm implements StepForm, Serializable {
 
   @Override
   public Optional<StepDefinition> determineNextStep(Journey journey) {
-    EligibilityCodeField benefitType = journey.getEligibilityCode();
-    switch (benefitType) {
-      case DLA:
-      case WPMS:
-      case AFRFCS:
-      case PIP:
-      case BLIND:
-        return Optional.of(StepDefinition.DECLARATIONS);
-      default:
-        return Optional.of(StepDefinition.HEALTH_CONDITIONS);
+
+    if (journey.isApplicantYoung()) {
+      return Optional.of(StepDefinition.ADDRESS);
     }
+
+    return Optional.of(StepDefinition.NINO);
   }
 }

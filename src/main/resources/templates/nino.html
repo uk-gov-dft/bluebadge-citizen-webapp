@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="#{${JOURNEY.who} + 'ninoPage.title'} + ' - ' + #{common.title.suffix}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>
+
+            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.who} + 'ninoPage.title'}"></h1>
+
+            <form th:action="@{/nino}" method="post" th:object="${formRequest}" novalidate autocomplete="off">
+
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{nino.field.label}, 'nino', #{${JOURNEY.who} + 'nino.field.hint'}, 'text', 'govuk-!-width-one-half')}"></div>
+
+                <details class="govuk-details">
+                    <summary class="govuk-details__summary">
+                        <span class="govuk-details__summary-text" th:text="#{${JOURNEY.who + 'ninoPage.noNino.title'}}"></span>
+                    </summary>
+
+                    <div class="govuk-details__text">
+                        <span th:text="#{${JOURNEY.who + 'ninoPage.noNino.text'}}" th:remove="tag"></span>
+                        <a data-uid="skipNiLink" href="/enter-address" th:text="#{ninoPage.noNino.link}"></a>
+                    </div>
+                </details>
+
+                <button type="submit" class="govuk-button" data-uipath="button.continue"
+                        th:text="#{btn.label.continue}"></button>
+
+            </form>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

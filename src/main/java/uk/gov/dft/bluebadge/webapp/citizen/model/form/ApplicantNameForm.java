@@ -12,7 +12,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 @Data
 @Builder
 public class ApplicantNameForm implements StepForm, Serializable {
-
   @NotBlank(message = "{field.fullName.NotBlank}")
   @Size(max = 100)
   private String fullName;

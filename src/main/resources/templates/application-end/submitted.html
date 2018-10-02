@@ -25,6 +25,11 @@
 
             <p class="govuk-body" th:text="#{${mainMessage}}"></p>
 
+            <p class="govuk-body">
+                <a data-uipath="feedback.link" target="_blank" href="https://www.smartsurvey.co.uk/s/XIYJ6/" th:text="#{submittedPage.content.feedback.link}"></a>
+                <span th:remove="tag" th:text="#{submittedPage.content.feedback}"></span>
+            </p>
+
             <p class="govuk-body" th:text="#{submittedPage.content.p2}"></p>
 
         </div>
