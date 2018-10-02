@@ -13,7 +13,6 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import cucumber.api.DataTable;
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -287,11 +286,12 @@ public class SiteSteps extends AbstractSpringSteps {
     sitePage.findElementWithUiPath("dateOfBirth.year.field").sendKeys(year);
   }
 
-  @Then("^I should see \"(You're|They are|You may be|They may be|You're not|They're not)\" eligible page$")
+  @Then(
+      "^I should see \"(You're|They are|You may be|They may be|You're not|They're not)\" eligible page$")
   public void iShouldSeeEligiblePage(String who) throws Throwable {
     String page_title = who + " eligible for a Blue Badge - GOV.UK Apply for a Blue Badge";
 
-    if(who.equals("You're not")||who.equals("They're not")){
+    if (who.equals("You're not") || who.equals("They're not")) {
       page_title = who + " eligible - GOV.UK Apply for a Blue Badge";
     }
 

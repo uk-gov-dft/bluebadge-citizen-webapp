@@ -119,10 +119,10 @@ public class DeclarationSubmitController implements StepController {
             .typeCode(PartyTypeCodeField.PERSON)
             .contact(
                 new Contact()
-                    .buildingStreet("65 Basil Chambers")
-                    .line2("Northern Quarter")
-                    .townCity("Manchester")
-                    .postCode("SK6 8GH")
+                    .buildingStreet(journey.getEnterAddressForm().getBuildingAndStreet())
+                    .line2(journey.getEnterAddressForm().getOptionalAddress())
+                    .townCity(journey.getEnterAddressForm().getTownOrCity())
+                    .postCode(journey.getEnterAddressForm().getPostcode())
                     .primaryPhoneNumber("016111234567")
                     .secondaryPhoneNumber("079707777111")
                     .emailAddress("nobody@thisisatestabc.com"))
@@ -193,7 +193,7 @@ public class DeclarationSubmitController implements StepController {
       case NONE:
         // Invalid to get here with no eligibility if person route
         // This code is all temporary too.
-        throw new RuntimeException("Invalid eligibility:" + eligibility);
+        throw new IllegalStateException("Invalid eligibility:" + eligibility);
     }
 
     return Application.builder()

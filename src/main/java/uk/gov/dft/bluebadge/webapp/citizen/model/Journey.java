@@ -14,6 +14,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
@@ -41,6 +42,7 @@ public class Journey implements Serializable {
   private PipPlanningJourneyForm pipPlanningJourneyForm;
   private LocalAuthorityRefData localAuthority;
   private DateOfBirthForm dateOfBirthForm;
+  private EnterAddressForm enterAddressForm;
   private HigherRateMobilityForm higherRateMobilityForm;
   private GenderForm genderForm;
   private MainReasonForm mainReasonForm;
@@ -249,5 +251,13 @@ public class Journey implements Serializable {
 
   public void setGenderForm(GenderForm genderForm) {
     this.genderForm = genderForm;
+  }
+
+  public EnterAddressForm getEnterAddressForm() {
+    return enterAddressForm;
+  }
+
+  public void setEnterAddressForm(EnterAddressForm enterAddressForm) {
+    this.enterAddressForm = enterAddressForm;
   }
 }

@@ -17,19 +17,18 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.component.CompoundDate;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
 
 @Controller
-@RequestMapping(Mappings.URL_DOB)
-public class DateOfBirthController implements StepController {
+@RequestMapping(Mappings.URL_ENTER_ADDRESS)
+public class EnterAddressController implements StepController {
 
-  private static final String TEMPLATE_DOB = "date-of-birth";
+  private static final String TEMPLATE = "enter-address";
 
   private final RouteMaster routeMaster;
 
   @Autowired
-  public DateOfBirthController(RouteMaster routeMaster) {
+  public EnterAddressController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
@@ -40,22 +39,21 @@ public class DateOfBirthController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getDateOfBirthForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getDateOfBirthForm());
+    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getEnterAddressForm()) {
+      model.addAttribute(FORM_REQUEST, journey.getEnterAddressForm());
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
-      model.addAttribute(
-          FORM_REQUEST, DateOfBirthForm.builder().dateOfBirth(new CompoundDate()).build());
+      model.addAttribute(FORM_REQUEST, EnterAddressForm.builder().build());
     }
 
-    return TEMPLATE_DOB;
+    return TEMPLATE;
   }
 
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute(FORM_REQUEST) DateOfBirthForm formRequest,
+      @Valid @ModelAttribute(FORM_REQUEST) EnterAddressForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
@@ -63,13 +61,13 @@ public class DateOfBirthController implements StepController {
       return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
     }
 
-    journey.setDateOfBirthForm(formRequest);
+    journey.setEnterAddressForm(formRequest);
 
     return routeMaster.redirectToOnSuccess(formRequest);
   }
 
   @Override
   public StepDefinition getStepDefinition() {
-    return StepDefinition.DOB;
+    return StepDefinition.ADDRESS;
   }
 }
