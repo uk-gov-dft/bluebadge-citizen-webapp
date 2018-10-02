@@ -22,7 +22,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
-import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataService;
 
 public class EligibleControllerTest {
 
@@ -30,13 +29,12 @@ public class EligibleControllerTest {
   private EligibleController controller;
 
   @Mock private RouteMaster mockRouteMaster;
-  @Mock private ReferenceDataService referenceDataService;
   private Journey journey;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new EligibleController(mockRouteMaster, referenceDataService);
+    controller = new EligibleController(mockRouteMaster);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -51,15 +49,15 @@ public class EligibleControllerTest {
     YourIssuingAuthorityForm yourIssuingAuthorityForm =
         YourIssuingAuthorityForm.builder().localAuthorityShortCode("bob").build();
     journey.setYourIssuingAuthorityForm(yourIssuingAuthorityForm);
-    LocalAuthorityRefData testLARefData = new LocalAuthorityRefData();
-    when(referenceDataService.retrieveLocalAuthority("bob")).thenReturn(testLARefData);
+    LocalAuthorityRefData localAuthorityRefData = new LocalAuthorityRefData();
+    journey.setLocalAuthority(localAuthorityRefData);
 
     mockMvc
         .perform(get("/eligible").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("eligible"))
         .andExpect(model().attribute("formRequest", Matchers.nullValue()))
-        .andExpect(model().attribute("localAuthority", testLARefData));
+        .andExpect(model().attribute("localAuthority", localAuthorityRefData));
   }
 
   @Test

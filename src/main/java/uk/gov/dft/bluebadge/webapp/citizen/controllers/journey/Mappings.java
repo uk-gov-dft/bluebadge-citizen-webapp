@@ -20,6 +20,7 @@ public class Mappings {
   public static final String URL_YOUR_ISSUING_AUTHORITY = "/your-issuing-authority";
   public static final String URL_DOB = "/date-of-birth";
   public static final String URL_GENDER = "/gender";
+  public static final String URL_ENTER_ADDRESS = "/enter-address";
 
   // PIP Journey Routes
   public static final String URL_PIP_PLANNING_JOURNEY = "/planning-and-following";
@@ -31,6 +32,12 @@ public class Mappings {
   public static final String URL_AFCS_DISABILITY = "/permanent-and-substantial-disability";
   public static final String URL_AFCS_MENTAL_DISORDER = "/permanent-mental-disorder";
 
+  // Main reason sub journey
+  public static final String URL_MAIN_REASON = "/main-reason";
+  public static final String URL_WALKING_DIFFICULTY = "/walking-difficulty";
+  public static final String URL_NOT_ELIGIBLE = "/not-eligible";
+  public static final String URL_CONTACT_COUNCIL = "/contact-council";
+
   private Mappings() {}
 
   private static final BiMap<StepDefinition, String> stepToUrlMapping =
@@ -39,6 +46,7 @@ public class Mappings {
           .put(StepDefinition.APPLICANT_TYPE, URL_APPLICANT_TYPE)
           .put(StepDefinition.DOB, URL_DOB)
           .put(StepDefinition.GENDER, URL_GENDER)
+          .put(StepDefinition.ADDRESS, URL_ENTER_ADDRESS)
           .put(StepDefinition.NAME, URL_APPLICANT_NAME)
           .put(StepDefinition.RECEIVE_BENEFITS, URL_RECEIVE_BENEFITS)
           .put(StepDefinition.HIGHER_RATE_MOBILITY, URL_HIGHER_RATE_MOBILITY)
@@ -54,6 +62,12 @@ public class Mappings {
           .put(StepDefinition.AFCS_DISABILITY, URL_AFCS_DISABILITY)
           .put(StepDefinition.AFCS_MENTAL_DISORDER, URL_AFCS_MENTAL_DISORDER)
           .put(StepDefinition.AFCS_COMPENSATION_SCHEME, URL_AFCS_COMPENSATION_SCHEME)
+
+          // Main reason mappings
+          .put(StepDefinition.MAIN_REASON, URL_MAIN_REASON)
+          .put(StepDefinition.CONTACT_COUNCIL, URL_CONTACT_COUNCIL)
+          .put(StepDefinition.WALKING_DIFFICULTY, URL_WALKING_DIFFICULTY)
+          .put(StepDefinition.NOT_ELIGIBLE, URL_NOT_ELIGIBLE)
           .put(StepDefinition.HEALTH_CONDITIONS, URL_HEALTH_CONDITIONS)
           .put(StepDefinition.CHOOSE_COUNCIL, URL_CHOOSE_YOUR_COUNCIL)
           .put(StepDefinition.YOUR_ISSUING_AUTHORITY, URL_YOUR_ISSUING_AUTHORITY)
