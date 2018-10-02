@@ -20,6 +20,9 @@ class Ids {
     static final String GENDER_MALE = "gender.MALE";
     static final String GENDER_FEMALE = "gender.FEMALE";
     static final String GENDER_UNSPECIFIED = "gender.UNSPECIFIE";
+    static final String NI = "nino";
+    static final String NO_NI_TEXT = "You don't have a National Insurance number";
+    static final String NO_NI_LINK_TEXT = "Continue without a National Insurance number.";
   }
 
   class Person {
@@ -28,5 +31,12 @@ class Ids {
     static final String DOB_DAY = "dateOfBirth.day";
     static final String DOB_MONTH = "dateOfBirth.month";
     static final String DOB_YEAR = "dateOfBirth.year";
+  }
+
+  class Contact {
+    static final String FULL_NAME = "fullName";
+    static final String PRIMARY_CONTACT_NUMBER = "primaryPhoneNumber";
+    static final String SECONDARY_CONTACT_NUMBER = "secondaryPhoneNumber";
+    static final String EMAIL_ADDRESS = "emailAddress";
   }
 }
