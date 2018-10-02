@@ -38,6 +38,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
@@ -95,6 +96,7 @@ public class DeclarationSubmitController implements StepController {
     GenderForm genderForm = journey.getGenderForm();
     HealthConditionsForm healthConditionsForm = journey.getHealthConditionsForm();
     YourIssuingAuthorityForm yourIssuingAuthorityForm = journey.getYourIssuingAuthorityForm();
+    ContactDetailsForm contactDetailsForm = journey.getContactDetailsForm();
 
     EligibilityCodeField eligibility = journey.getEligibilityCode();
 
@@ -114,7 +116,8 @@ public class DeclarationSubmitController implements StepController {
     GenderCodeField gender =
         null != genderForm ? journey.getGenderForm().getGender() : GenderCodeField.FEMALE;
 
-    String nino = journey.getNinoForm() == null ? "NS123456C" : journey.getNinoForm().getNino().toUpperCase();
+    String nino =
+        journey.getNinoForm() == null ? "NS123456C" : journey.getNinoForm().getNino().toUpperCase();
 
     Person person =
         new Person()
@@ -133,9 +136,10 @@ public class DeclarationSubmitController implements StepController {
                     .line2(journey.getEnterAddressForm().getOptionalAddress())
                     .townCity(journey.getEnterAddressForm().getTownOrCity())
                     .postCode(journey.getEnterAddressForm().getPostcode())
-                    .primaryPhoneNumber("016111234567")
-                    .secondaryPhoneNumber("079707777111")
-                    .emailAddress("nobody@thisisatestabc.com"))
+                    .fullName(contactDetailsForm.getFullName())
+                    .primaryPhoneNumber(contactDetailsForm.getPrimaryPhoneNumber())
+                    .secondaryPhoneNumber(contactDetailsForm.getSecondaryPhoneNumber())
+                    .emailAddress(contactDetailsForm.getEmailAddress()))
             .person(person);
 
     Eligibility eligibilityObject = null;
