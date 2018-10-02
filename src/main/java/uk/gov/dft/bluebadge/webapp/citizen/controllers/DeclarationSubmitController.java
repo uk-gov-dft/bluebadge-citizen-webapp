@@ -116,6 +116,16 @@ public class DeclarationSubmitController implements StepController {
     GenderCodeField gender =
         null != genderForm ? journey.getGenderForm().getGender() : GenderCodeField.FEMALE;
 
+    String nino = journey.getNinoForm() == null ? "NS123456C" : journey.getNinoForm().getNino().toUpperCase();
+
+    Person person =
+        new Person()
+            .badgeHolderName(fullName)
+            .nameAtBirth(birthName)
+            .dob(journey.getDateOfBirthForm().getDateOfBirth().getLocalDate())
+            .genderCode(gender)
+            .nino(nino);
+
     Party party =
         new Party()
             .typeCode(PartyTypeCodeField.PERSON)
@@ -125,17 +135,11 @@ public class DeclarationSubmitController implements StepController {
                     .line2(journey.getEnterAddressForm().getOptionalAddress())
                     .townCity(journey.getEnterAddressForm().getTownOrCity())
                     .postCode(journey.getEnterAddressForm().getPostcode())
-                    .fullName(contactDetailsForm.getFullName())
-                    .primaryPhoneNumber(contactDetailsForm.getPrimaryPhoneNumber())
-                    .secondaryPhoneNumber(contactDetailsForm.getSecondaryPhoneNumber())
-                    .emailAddress(contactDetailsForm.getEmailAddress()))
-            .person(
-                new Person()
-                    .badgeHolderName(fullName)
-                    .nameAtBirth(birthName)
-                    .nino("NS123456A")
-                    .dob(journey.getDateOfBirthForm().getDateOfBirth().getLocalDate())
-                    .genderCode(gender));
+                  .fullName(contactDetailsForm.getFullName())
+                  .primaryPhoneNumber(contactDetailsForm.getPrimaryPhoneNumber())
+                  .secondaryPhoneNumber(contactDetailsForm.getSecondaryPhoneNumber())
+                  .emailAddress(contactDetailsForm.getEmailAddress()))
+            .person(person);
 
     Eligibility eligibilityObject = null;
     switch (eligibility) {
