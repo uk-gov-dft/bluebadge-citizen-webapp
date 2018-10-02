@@ -26,7 +26,7 @@ public class PipPlanningJourneyFormTest extends JourneyFixture {
   }
 
   @Test
-  public void determineNextStep_whenLessThan12PointsWales_thenMayBeEligible() {
+  public void determineNextStep_whenLessThan12PointsWales_thenMainReason() {
     Journey journey = new JourneyBuilder().setWelshLocalAuthority().build();
     EnumSet.complementOf(twelveOrMore)
         .forEach(
@@ -35,7 +35,7 @@ public class PipPlanningJourneyFormTest extends JourneyFixture {
                   PipPlanningJourneyForm.builder().planningJourneyOption(e).build();
               assertThat(form.determineNextStep(journey)).isNotEmpty();
               assertThat(form.determineNextStep(journey).get())
-                  .isEqualTo(StepDefinition.MAY_BE_ELIGIBLE);
+                  .isEqualTo(StepDefinition.MAIN_REASON);
             });
   }
 

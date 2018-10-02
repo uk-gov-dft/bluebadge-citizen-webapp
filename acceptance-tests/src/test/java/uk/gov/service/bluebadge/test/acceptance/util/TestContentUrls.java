@@ -2,10 +2,10 @@ package uk.gov.service.bluebadge.test.acceptance.util;
 
 import java.util.HashMap;
 import java.util.Map;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.AbstractSitePage;
 
 public class TestContentUrls {
 
+  public static final String URL = System.getProperty("baseUrl");
   private final Map<String, String> urlLookup = new HashMap<>();
 
   public TestContentUrls() {
@@ -17,14 +17,14 @@ public class TestContentUrls {
     if (url == null) {
       throw new RuntimeException("Unknown pageName: " + pageName);
     }
-    return AbstractSitePage.URL + url;
+    return URL + url;
   }
 
   public static String lookupUrlUnmapped(String pageName) {
     if (pageName.startsWith("/")) {
-      return AbstractSitePage.URL + pageName;
+      return URL + pageName;
     } else {
-      return AbstractSitePage.URL + "/" + pageName;
+      return URL + "/" + pageName;
     }
   }
 

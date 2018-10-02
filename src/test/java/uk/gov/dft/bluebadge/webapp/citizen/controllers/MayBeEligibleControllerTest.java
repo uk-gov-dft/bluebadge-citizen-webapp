@@ -21,7 +21,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataService;
 
 public class MayBeEligibleControllerTest {
@@ -36,7 +35,7 @@ public class MayBeEligibleControllerTest {
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new MayBeEligibleController(mockRouteMaster, referenceDataService);
+    controller = new MayBeEligibleController(mockRouteMaster);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -48,11 +47,9 @@ public class MayBeEligibleControllerTest {
   @Test
   @SneakyThrows
   public void show_ShouldDisplayEligibleTemplate() {
-    YourIssuingAuthorityForm yourIssuingAuthorityForm =
-        YourIssuingAuthorityForm.builder().localAuthorityShortCode("bob").build();
-    journey.setYourIssuingAuthorityForm(yourIssuingAuthorityForm);
     LocalAuthorityRefData testLARefData = new LocalAuthorityRefData();
-    when(referenceDataService.retrieveLocalAuthority("bob")).thenReturn(testLARefData);
+    testLARefData.setShortCode("Bob");
+    journey.setLocalAuthority(testLARefData);
 
     mockMvc
         .perform(get("/may-be-eligible").sessionAttr("JOURNEY", journey))

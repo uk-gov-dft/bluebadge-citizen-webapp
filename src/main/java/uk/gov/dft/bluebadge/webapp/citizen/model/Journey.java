@@ -2,7 +2,9 @@ package uk.gov.dft.bluebadge.webapp.citizen.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.AFCS.CompensationSchemeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.AFCS.DisabilityForm;
@@ -12,6 +14,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
@@ -20,6 +23,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipMovingAroundForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipPlanningJourneyForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficultyForm;
 
 public class Journey implements Serializable {
 
@@ -37,8 +42,11 @@ public class Journey implements Serializable {
   private PipPlanningJourneyForm pipPlanningJourneyForm;
   private LocalAuthorityRefData localAuthority;
   private DateOfBirthForm dateOfBirthForm;
+  private EnterAddressForm enterAddressForm;
   private HigherRateMobilityForm higherRateMobilityForm;
   private GenderForm genderForm;
+  private MainReasonForm mainReasonForm;
+  private WalkingDifficultyForm walkingDifficultyForm;
   public String who;
   public String ageGroup;
 
@@ -46,6 +54,25 @@ public class Journey implements Serializable {
   private CompensationSchemeForm compensationSchemeForm;
   private DisabilityForm disabilityForm;
   private MentalDisorderForm mentalDisorderForm;
+
+  public Nation getNation() {
+    if (null != localAuthority) {
+      return localAuthority.getNation();
+    }
+    return null;
+  }
+
+  public EligibilityCodeField getEligibilityCode() {
+    if (null != mainReasonForm
+        && EligibilityCodeField.NONE != mainReasonForm.getMainReasonOption()) {
+      return mainReasonForm.getMainReasonOption();
+    } else if (null != receiveBenefitsForm
+        && EligibilityCodeField.NONE != receiveBenefitsForm.getBenefitType()) {
+      return receiveBenefitsForm.getBenefitType();
+    }
+
+    return null;
+  }
 
   public Boolean isApplicantYourself() {
     if (applicantForm != null) {
@@ -72,7 +99,7 @@ public class Journey implements Serializable {
     switch (step) {
       case ELIGIBLE:
       case MAY_BE_ELIGIBLE:
-        if (null == getYourIssuingAuthorityForm()) {
+        if (null == getLocalAuthority()) {
           return false;
         }
     }
@@ -202,11 +229,35 @@ public class Journey implements Serializable {
     this.higherRateMobilityForm = higherRateMobilityForm;
   }
 
+  public MainReasonForm getMainReasonForm() {
+    return mainReasonForm;
+  }
+
+  public void setMainReasonForm(MainReasonForm mainReasonForm) {
+    this.mainReasonForm = mainReasonForm;
+  }
+
+  public WalkingDifficultyForm getWalkingDifficultyForm() {
+    return walkingDifficultyForm;
+  }
+
+  public void setWalkingDifficultyForm(WalkingDifficultyForm walkingDifficultyForm) {
+    this.walkingDifficultyForm = walkingDifficultyForm;
+  }
+
   public GenderForm getGenderForm() {
     return genderForm;
   }
 
   public void setGenderForm(GenderForm genderForm) {
     this.genderForm = genderForm;
+  }
+
+  public EnterAddressForm getEnterAddressForm() {
+    return enterAddressForm;
+  }
+
+  public void setEnterAddressForm(EnterAddressForm enterAddressForm) {
+    this.enterAddressForm = enterAddressForm;
   }
 }

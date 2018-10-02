@@ -6,8 +6,7 @@ import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nations;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
@@ -31,7 +30,6 @@ public class PipMovingAroundForm implements Serializable, StepForm {
 
   @Override
   public Optional<StepDefinition> determineNextStep(Journey journey) {
-    LocalAuthorityRefData localAuthority = journey.getLocalAuthority();
     switch (movingAroundPoints) {
       case MOVING_POINTS_8:
       case MOVING_POINTS_10:
@@ -39,18 +37,16 @@ public class PipMovingAroundForm implements Serializable, StepForm {
         return Optional.of(StepDefinition.ELIGIBLE);
       case MOVING_POINTS_0:
       case MOVING_POINTS_4:
-        if (Nations.ENGLAND.equals(localAuthority.getNation())) {
-          return Optional.of(StepDefinition.MAY_BE_ELIGIBLE);
+        if (Nation.ENG.equals(journey.getNation())) {
+          return Optional.of(StepDefinition.MAIN_REASON);
         }
-        if (Nations.SCOTLAND.equals(localAuthority.getNation())
-            || Nations.WALES.equals(localAuthority.getNation())) {
+        if (Nation.SCO.equals(journey.getNation()) || Nation.WLS.equals(journey.getNation())) {
           return Optional.of(StepDefinition.PIP_PLANNING_JOURNEY);
         }
-        // TODO Northern Ireland
         log.error(
             "Invalid nation in local authority ref data {}:{}",
-            localAuthority.getShortCode(),
-            localAuthority.getDescription());
+            journey.getLocalAuthority().getShortCode(),
+            journey.getLocalAuthority().getDescription());
         return Optional.empty();
     }
     return Optional.empty();
