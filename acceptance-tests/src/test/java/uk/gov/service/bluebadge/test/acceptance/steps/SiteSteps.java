@@ -297,4 +297,5 @@ public class SiteSteps extends AbstractSpringSteps {
 
     assertThat("I should see page titled.", sitePage.getDocumentTitle(), is(page_title));
   }
+
 }

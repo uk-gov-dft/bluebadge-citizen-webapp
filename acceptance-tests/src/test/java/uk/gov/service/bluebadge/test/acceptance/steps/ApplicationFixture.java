@@ -12,9 +12,12 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Preamble.COUNCI
 
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
+
+import java.time.LocalDate;
 import java.util.Calendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.SitePage;
+import uk.gov.service.bluebadge.test.acceptance.util.CustomState;
 
 public class ApplicationFixture extends AbstractSpringSteps {
 
@@ -37,6 +40,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
     } else if (myselfOrOther.equalsIgnoreCase("someone else")) {
       sitePage.findPageElementById(Ids.Preamble.APPLICANT_TYPE_SOMELSE_OPTION).click();
     }
+    CustomState.setState(CustomState.APPLICANT, myselfOrOther);
     pressContinue();
   }
 
@@ -108,6 +112,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
     sitePage.findPageElementById(DOB_DAY).sendKeys("1");
     sitePage.findPageElementById(DOB_MONTH).sendKeys("1");
     sitePage.findPageElementById(DOB_YEAR).sendKeys(Integer.toString(dob_year));
+    CustomState.setState(CustomState.DOB, LocalDate.of(dob_year, 1, 1));
     pressContinue();
   }
 

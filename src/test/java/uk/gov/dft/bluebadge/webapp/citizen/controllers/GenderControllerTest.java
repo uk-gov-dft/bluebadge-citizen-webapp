@@ -1,9 +1,11 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -63,6 +65,24 @@ public class GenderControllerTest {
         .andExpect(view().name("gender"))
         .andExpect(model().attribute("formRequest", formRequest))
         .andExpect(model().attribute("options", Matchers.notNullValue()));
+  }
+
+  @Test
+  public void show_ShouldDisplayYouGenderTerm() throws Exception {
+    GenderForm formRequest = GenderForm.builder().build();
+
+    journey.getApplicantForm().setApplicantType(ApplicantType.YOURSELF.toString());
+
+    mockMvc
+      .perform(get("/gender").sessionAttr("JOURNEY", journey))
+      .andExpect(status().isOk())
+      .andExpect(view().name("gender"))
+
+      .andExpect(content()
+      .string(
+        containsString("I identify in a different way")))
+      .andExpect(model().attribute("formRequest", formRequest))
+      .andExpect(model().attribute("options", Matchers.notNullValue()));
   }
 
   @Test
