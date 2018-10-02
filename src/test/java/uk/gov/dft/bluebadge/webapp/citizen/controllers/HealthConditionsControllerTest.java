@@ -93,7 +93,7 @@ public class HealthConditionsControllerTest {
   @Test
   public void submit_whenTooLongDescriptionOfConditions_ThenShouldHaveValidationError()
       throws Exception {
-    String tooLong = StringUtils.leftPad("a", 101, 'b');
+    String tooLong = StringUtils.leftPad("a", 9001, 'b');
     mockMvc
         .perform(
             post("/health-conditions")

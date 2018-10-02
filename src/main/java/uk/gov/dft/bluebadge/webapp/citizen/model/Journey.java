@@ -22,6 +22,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipDlaQuestionForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipMovingAroundForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipPlanningJourneyForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficultyForm;
@@ -47,6 +48,7 @@ public class Journey implements Serializable {
   private GenderForm genderForm;
   private MainReasonForm mainReasonForm;
   private WalkingDifficultyForm walkingDifficultyForm;
+  private WhereCanYouWalkForm whereCanYouWalkForm;
   public String who;
   public String ageGroup;
 
@@ -243,6 +245,14 @@ public class Journey implements Serializable {
 
   public void setWalkingDifficultyForm(WalkingDifficultyForm walkingDifficultyForm) {
     this.walkingDifficultyForm = walkingDifficultyForm;
+  }
+
+  public WhereCanYouWalkForm getWhereCanYouWalkForm() {
+    return whereCanYouWalkForm;
+  }
+
+  public void setWhereCanYouWalkForm(WhereCanYouWalkForm whereCanYouWalkForm) {
+    this.whereCanYouWalkForm = whereCanYouWalkForm;
   }
 
   public GenderForm getGenderForm() {

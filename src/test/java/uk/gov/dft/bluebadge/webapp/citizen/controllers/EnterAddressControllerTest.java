@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -31,12 +32,9 @@ public class EnterAddressControllerTest {
   public static final String TOWN_OR_CITY = "A random place in the world";
   public static final String POSTCODE = "UB6 0RQ";
   public static final String POSTCODE_WRONG = "WRONG";
-  public static final String BUILDING_AND_STREET_MAX =
-      "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
-  public static final String TOWN_OR_CITY_MAX =
-      "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
-  public static final String OPTIONAL_ADDRESS_MAX =
-      "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
+  public static final String BUILDING_AND_STREET_MAX = StringUtils.leftPad("a", 100, 'b');
+  public static final String TOWN_OR_CITY_MAX = StringUtils.leftPad("a", 100, 'b');
+  public static final String OPTIONAL_ADDRESS_MAX = StringUtils.leftPad("a", 100, 'b');
   public static final String BUILDING_AND_STREET_OVER_MAX = BUILDING_AND_STREET_MAX + "12345";
   public static final String TOWN_OR_CITY_OVER_MAX = TOWN_OR_CITY_MAX + "12345";
   public static final String OPTIONAL_ADDRESS_OVER_MAX = OPTIONAL_ADDRESS_MAX + "12345";

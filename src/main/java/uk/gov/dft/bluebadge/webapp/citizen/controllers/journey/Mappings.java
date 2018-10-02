@@ -35,6 +35,7 @@ public class Mappings {
   // Main reason sub journey
   public static final String URL_MAIN_REASON = "/main-reason";
   public static final String URL_WALKING_DIFFICULTY = "/walking-difficulty";
+  public static final String URL_WHERE_CAN_YOU_WALK = "/where-can-you-walk";
   public static final String URL_NOT_ELIGIBLE = "/not-eligible";
   public static final String URL_CONTACT_COUNCIL = "/contact-council";
 
@@ -67,6 +68,7 @@ public class Mappings {
           .put(StepDefinition.MAIN_REASON, URL_MAIN_REASON)
           .put(StepDefinition.CONTACT_COUNCIL, URL_CONTACT_COUNCIL)
           .put(StepDefinition.WALKING_DIFFICULTY, URL_WALKING_DIFFICULTY)
+          .put(StepDefinition.WHERE_CAN_YOU_WALK, URL_WHERE_CAN_YOU_WALK)
           .put(StepDefinition.NOT_ELIGIBLE, URL_NOT_ELIGIBLE)
           .put(StepDefinition.HEALTH_CONDITIONS, URL_HEALTH_CONDITIONS)
           .put(StepDefinition.CHOOSE_COUNCIL, URL_CHOOSE_YOUR_COUNCIL)
