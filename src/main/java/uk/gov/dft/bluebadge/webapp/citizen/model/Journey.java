@@ -88,7 +88,7 @@ public class Journey implements Serializable {
       return dateOfBirthForm
           .getDateOfBirth()
           .getLocalDate()
-          .isAfter(LocalDate.now().minusYears(17L));
+          .isAfter(LocalDate.now().minusYears(16L));
     }
     return null;
   }
