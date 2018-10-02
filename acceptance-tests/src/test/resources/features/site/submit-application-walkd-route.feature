@@ -1,4 +1,4 @@
-@SubmitApplicationWALKDRoute
+@SubmitApplicationPIPRoute
 Feature: DFT Blue badge Citizen app new application - TERMILL
   As a citizen user I want to be able to get information on council details via TERMILL route
 
@@ -21,7 +21,7 @@ Feature: DFT Blue badge Citizen app new application - TERMILL
     And   I complete date of birth page for "CHILD"
     And   I complete gender page for "Boy"
     And   I complete contact page for "yourself"
-
+    And   I complete address page
     And   I complete describe health conditions page
     And   I complete declaration page
     Then  I should see .* page titled "Application submitted" with GOV.UK suffix
@@ -46,7 +46,7 @@ Feature: DFT Blue badge Citizen app new application - TERMILL
     And   I complete date of birth page for "CHILD"
     And   I complete gender page for "Boy"
     And   I complete contact page for "someone else"
-
+    And   I complete address page
     And   I complete describe health conditions page
     And   I complete declaration page
     Then  I should see .* page titled "Application submitted" with GOV.UK suffix

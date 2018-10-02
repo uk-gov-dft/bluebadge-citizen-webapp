@@ -12,14 +12,11 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_MONT
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_YEAR;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Preamble.COUNCIL_INPUT;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
+import java.util.Calendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.SitePage;
-
-import java.util.Calendar;
-import java.util.Date;
 
 public class ApplicationFixture extends AbstractSpringSteps {
 
@@ -84,7 +81,6 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
-
   @And("I complete main reason page for \"(TERMILL|CHILDBULK|CHILDVEHIC|WALKD|ARMS|BLIND|NONE)\"")
   public void iCompleteMainReasonPageFor(String benefit) {
     sitePage.findPageElementById(MAIN_REASON_LIST + "." + benefit).click();
@@ -108,10 +104,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
     Calendar now = Calendar.getInstance();
     int dob_year = 1900;
 
-    if(age_category.equals("CHILD"))
-      dob_year = now.get(Calendar.YEAR)-10;
-    else
-      dob_year = now.get(Calendar.YEAR)-30;
+    if (age_category.equals("CHILD")) dob_year = now.get(Calendar.YEAR) - 10;
+    else dob_year = now.get(Calendar.YEAR) - 30;
 
     sitePage.findPageElementById(DOB_DAY).sendKeys("1");
     sitePage.findPageElementById(DOB_MONTH).sendKeys("1");
@@ -126,12 +120,11 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("^I complete gender page for \"(Boy|Girl|Man|Woman|I identify in a different way)\"")
   public void iCompleteGenderPageFor(String gender) throws Throwable {
-    if(gender.equals("Boy")||gender.equals("Man"))
+    if (gender.equals("Boy") || gender.equals("Man"))
       sitePage.findPageElementById(GENDER_MALE).click();
-    else if(gender.equals("Girl")||gender.equals("Woman"))
+    else if (gender.equals("Girl") || gender.equals("Woman"))
       sitePage.findPageElementById(GENDER_FEMALE).click();
-    else
-      sitePage.findPageElementById(GENDER_UNSPECIFIED).click();
+    else sitePage.findPageElementById(GENDER_UNSPECIFIED).click();
 
     pressContinue();
   }
@@ -162,10 +155,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("^I complete dla allowance page for \"(YES|NO)\"$")
   public void iCompleteDlaAllowancePageFor(String option) throws Throwable {
-    if(option.equals("YES"))
-      sitePage.findPageElementById(HAS_RECEIVED_DLA).click();
-    else
-      sitePage.findPageElementById(NEVER_RECEIVED_DLA).click();
+    if (option.equals("YES")) sitePage.findPageElementById(HAS_RECEIVED_DLA).click();
+    else sitePage.findPageElementById(NEVER_RECEIVED_DLA).click();
     pressContinue();
   }
 
@@ -180,5 +171,14 @@ public class ApplicationFixture extends AbstractSpringSteps {
     sitePage.findPageElementById(EMAIL_ADDRESS).sendKeys("some@contact.com");
     pressContinue();
   }
-}
 
+    @And("^I complete address page$")
+    public void iCompleteAddressPage() throws Throwable {
+      sitePage.findPageElementById("buildingAndStreet").sendKeys("120");
+      sitePage.findPageElementById("optionalAddress").sendKeys("London Road");
+      sitePage.findPageElementById("townOrCity").sendKeys("Manchester");
+      sitePage.findPageElementById("postcode").sendKeys("M4 1FS");
+
+      pressContinue();
+    }
+}

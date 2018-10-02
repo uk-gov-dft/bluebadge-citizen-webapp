@@ -17,6 +17,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 @Controller
 @RequestMapping(Mappings.URL_CONTACT_COUNCIL)
+@SuppressWarnings({"common-java:DuplicatedBlocksSource"})
 public class ContactCouncilController implements StepController {
   private static final String TEMPLATE = "mainreason/contact-council";
 

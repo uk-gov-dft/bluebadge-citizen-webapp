@@ -20,7 +20,6 @@ class Ids {
     static final String GENDER_MALE = "gender.MALE";
     static final String GENDER_FEMALE = "gender.FEMALE";
     static final String GENDER_UNSPECIFIED = "gender.UNSPECIFIE";
-
   }
 
   class Person {
