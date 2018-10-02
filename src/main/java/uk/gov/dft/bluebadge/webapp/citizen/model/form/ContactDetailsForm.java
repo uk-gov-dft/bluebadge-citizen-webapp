@@ -1,5 +1,8 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.validation.ValidationPatterns.EMPTY_OR_EMAIL;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.validation.ValidationPatterns.EMPTY_OR_PHONE_NUMBER;
+
 import java.io.Serializable;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -10,9 +13,6 @@ import org.apache.commons.lang3.StringUtils;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.model.validation.ValidationPatterns.EMPTY_OR_EMAIL;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.validation.ValidationPatterns.EMPTY_OR_PHONE_NUMBER;
 
 @Data
 @Builder

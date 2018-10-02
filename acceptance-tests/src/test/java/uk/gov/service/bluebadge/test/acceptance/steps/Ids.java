@@ -35,6 +35,5 @@ class Ids {
     static final String PRIMARY_CONTACT_NUMBER = "primaryPhoneNumber";
     static final String SECONDARY_CONTACT_NUMBER = "secondaryPhoneNumber";
     static final String EMAIL_ADDRESS = "emailAddress";
-
   }
 }

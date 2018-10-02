@@ -21,11 +21,11 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.CompensationSchemeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.DisabilityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.MentalDisorderForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficultyForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipDlaQuestionForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipMovingAroundForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipPlanningJourneyForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficultyForm;
 
 public class Journey implements Serializable {
 

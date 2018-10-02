@@ -1,7 +1,5 @@
 package uk.gov.service.bluebadge.test.acceptance.steps;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.EMAIL_ADDRESS;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.FULL_NAME;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.PRIMARY_CONTACT_NUMBER;
@@ -172,13 +170,13 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
-    @And("^I complete address page$")
-    public void iCompleteAddressPage() throws Throwable {
-      sitePage.findPageElementById("buildingAndStreet").sendKeys("120");
-      sitePage.findPageElementById("optionalAddress").sendKeys("London Road");
-      sitePage.findPageElementById("townOrCity").sendKeys("Manchester");
-      sitePage.findPageElementById("postcode").sendKeys("M4 1FS");
+  @And("^I complete address page$")
+  public void iCompleteAddressPage() throws Throwable {
+    sitePage.findPageElementById("buildingAndStreet").sendKeys("120");
+    sitePage.findPageElementById("optionalAddress").sendKeys("London Road");
+    sitePage.findPageElementById("townOrCity").sendKeys("Manchester");
+    sitePage.findPageElementById("postcode").sendKeys("M4 1FS");
 
-      pressContinue();
-    }
+    pressContinue();
+  }
 }
