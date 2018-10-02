@@ -29,7 +29,13 @@ class Ids {
     static final String DOB_DAY = "dateOfBirth.day";
     static final String DOB_MONTH = "dateOfBirth.month";
     static final String DOB_YEAR = "dateOfBirth.year";
+  }
 
+  class Contact {
+    static final String FULL_NAME = "fullName";
+    static final String PRIMARY_CONTACT_NUMBER = "primaryContactNumber";
+    static final String SECONDARY_CONTACT_NUMBER = "secondaryContactNumber";
+    static final String EMAIL_ADDRESS = "some@contact.com";
 
   }
 }

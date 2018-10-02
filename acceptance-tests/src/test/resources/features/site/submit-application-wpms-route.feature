@@ -41,6 +41,8 @@ Feature: DFT Blue badge Citizen app new application - WPMS or not listed benifit
     When  I select an option "gender.MALE"
     And   I can click on "Continue"
 
+    And   I complete contact page for "yourself"
+
     Then  I should see the page titled "Describe health conditions - GOV.UK Apply for a Blue Badge"
     And   I should see the title "Describe any health conditions that affect your mobility"
     When  I type "Sample health condition" for "descriptionOfConditions" field by id
@@ -93,6 +95,8 @@ Feature: DFT Blue badge Citizen app new application - WPMS or not listed benifit
     And   I should see the title "What's their gender?"
     When  I select an option "gender.MALE"
     And   I can click on "Continue"
+
+    And   I complete contact page for "someone else"
 
     Then  I should see the page titled "Describe health conditions - GOV.UK Apply for a Blue Badge"
     And   I should see the title "Describe any health conditions that affect their mobility"

@@ -19,6 +19,8 @@ Feature: DFT Blue badge Citizen app new application - DLA
     And   I complete what's your name page
     And   I complete date of birth page for "CHILD"
     And   I complete gender page for "Boy"
+    And   I complete contact page for "yourself"
+
     And   I complete describe health conditions page
     And   I complete declaration page
     Then  I should see .* page titled "Application submitted" with GOV.UK suffix
@@ -42,6 +44,8 @@ Feature: DFT Blue badge Citizen app new application - DLA
     And   I complete what's your name page
     And   I complete date of birth page for "CHILD"
     And   I complete gender page for "Boy"
+    And   I complete contact page for "yourself"
+
     And   I complete describe health conditions page
     And   I complete declaration page
     Then  I should see .* page titled "Application submitted" with GOV.UK suffix
@@ -63,6 +67,8 @@ Feature: DFT Blue badge Citizen app new application - DLA
     And   I complete what's your name page
     And   I complete date of birth page for "CHILD"
     And   I complete gender page for "Boy"
+    And   I complete contact page for "someone else"
+
     And   I complete describe health conditions page
     And   I complete declaration page
     Then  I should see .* page titled "Application submitted" with GOV.UK suffix
@@ -85,6 +91,8 @@ Feature: DFT Blue badge Citizen app new application - DLA
     And   I complete what's your name page
     And   I complete date of birth page for "CHILD"
     And   I complete gender page for "Boy"
+    And   I complete contact page for "someone else"
+
     And   I complete describe health conditions page
     And   I complete declaration page
     Then  I should see .* page titled "Application submitted" with GOV.UK suffix
