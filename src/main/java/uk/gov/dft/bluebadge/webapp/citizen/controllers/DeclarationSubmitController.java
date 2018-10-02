@@ -114,7 +114,7 @@ public class DeclarationSubmitController implements StepController {
     GenderCodeField gender =
         null != genderForm ? journey.getGenderForm().getGender() : GenderCodeField.FEMALE;
 
-    String nino = journey.getNinoForm() == null ? "NS123456C" : journey.getNinoForm().getNino();
+    String nino = journey.getNinoForm() == null ? "NS123456C" : journey.getNinoForm().getNino().toUpperCase();
 
     Person person =
         new Person()
