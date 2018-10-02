@@ -1,6 +1,9 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -14,18 +17,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
+import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.component.CompoundDate;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
+
+import java.util.Map;
+import java.util.Optional;
 
 public class GenderControllerTest {
 
@@ -60,29 +72,55 @@ public class GenderControllerTest {
     GenderForm formRequest = GenderForm.builder().build();
 
     mockMvc
-        .perform(get("/gender").sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
-        .andExpect(view().name("gender"))
-        .andExpect(model().attribute("formRequest", formRequest))
-        .andExpect(model().attribute("options", Matchers.notNullValue()));
+      .perform(get("/gender").sessionAttr("JOURNEY", journey))
+      .andExpect(status().isOk())
+      .andExpect(view().name("gender"))
+      .andExpect(model().attribute("formRequest", formRequest))
+      .andExpect(model().attribute("options", Matchers.notNullValue()));
+
   }
 
   @Test
   public void show_ShouldDisplayYouGenderTerm() throws Exception {
-    GenderForm formRequest = GenderForm.builder().build();
 
     journey.getApplicantForm().setApplicantType(ApplicantType.YOURSELF.toString());
 
-    mockMvc
+    MvcResult mvcResult = mockMvc
       .perform(get("/gender").sessionAttr("JOURNEY", journey))
       .andExpect(status().isOk())
       .andExpect(view().name("gender"))
+      .andReturn();
+    Map<String, Object> model = mvcResult.getModelAndView().getModel();
+    RadioOptionsGroup radioOptionsGroup = (RadioOptionsGroup) model.get("options");
+    Optional<RadioOption> foundRadioOption = radioOptionsGroup.getOptions().stream()
+      .filter(option -> option.getMessageKey().equals("you.adult.radio.label.unspecified"))
+      .findFirst();
 
-      .andExpect(content()
-      .string(
-        containsString("I identify in a different way")))
-      .andExpect(model().attribute("formRequest", formRequest))
-      .andExpect(model().attribute("options", Matchers.notNullValue()));
+    assertTrue(foundRadioOption.isPresent());
+
+  }
+
+
+  @Test
+  public void show_ShouldDisplayTheyGenderTerm() throws Exception {
+
+    journey.getApplicantForm().setApplicantType(ApplicantType.SOMEONE_ELSE.toString());
+    journey.setApplicantForm(journey.getApplicantForm());
+
+    MvcResult mvcResult = mockMvc
+      .perform(get("/gender").sessionAttr("JOURNEY", journey))
+      .andExpect(status().isOk())
+      .andExpect(view().name("gender"))
+      .andReturn();
+
+    Map<String, Object> model = mvcResult.getModelAndView().getModel();
+    RadioOptionsGroup radioOptionsGroup = (RadioOptionsGroup) model.get("options");
+    Optional<RadioOption> foundRadioOption = radioOptionsGroup.getOptions().stream()
+      .filter(option -> option.getMessageKey().equals("oth.adult.radio.label.unspecified"))
+      .findFirst();
+
+    assertTrue(foundRadioOption.isPresent());
+
   }
 
   @Test
