@@ -25,7 +25,7 @@ public class GenderForm implements StepForm, Serializable {
 
   @Override
   public Optional<StepDefinition> determineNextStep(Journey journey) {
-    EligibilityCodeField benefitType = journey.getReceiveBenefitsForm().getBenefitType();
+    EligibilityCodeField benefitType = journey.getEligibilityCode();
     switch (benefitType) {
       case DLA:
       case WPMS:
@@ -34,7 +34,7 @@ public class GenderForm implements StepForm, Serializable {
       case BLIND:
         return Optional.of(StepDefinition.DECLARATIONS);
       default:
-        return StepForm.super.determineNextStep(journey);
+        return Optional.of(StepDefinition.HEALTH_CONDITIONS);
     }
   }
 }
