@@ -1,4 +1,4 @@
-package uk.gov.dft.bluebadge.webapp.citizen.controllers;
+package uk.gov.dft.bluebadge.webapp.citizen.controllers.pip;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -18,16 +18,14 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipPlanningJourneyForm;
 
-public class ReceiveBenefitsControllerTest {
-
+public class PipPlanningJourneyControllerTest {
   private MockMvc mockMvc;
-  private ReceiveBenefitsController controller;
+  private PipPlanningJourneyController controller;
 
   @Mock private RouteMaster mockRouteMaster;
   private Journey journey;
@@ -35,7 +33,7 @@ public class ReceiveBenefitsControllerTest {
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new ReceiveBenefitsController(mockRouteMaster);
+    controller = new PipPlanningJourneyController(mockRouteMaster);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -48,16 +46,16 @@ public class ReceiveBenefitsControllerTest {
   }
 
   @Test
-  public void show_ShouldDisplayBenefitsTemplate() throws Exception {
+  public void show_ShouldDisplayMovingroundTemplate() throws Exception {
 
-    ReceiveBenefitsForm formRequest = ReceiveBenefitsForm.builder().build();
+    PipPlanningJourneyForm formRequest = PipPlanningJourneyForm.builder().build();
 
     mockMvc
-        .perform(get("/benefits").sessionAttr("JOURNEY", journey))
+        .perform(get("/planning-and-following").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
-        .andExpect(view().name("receive-benefits"))
+        .andExpect(view().name("pip/planning-journey"))
         .andExpect(model().attribute("formRequest", formRequest))
-        .andExpect(model().attribute("benefitOptions", Matchers.notNullValue()));
+        .andExpect(model().attribute("formOptions", Matchers.notNullValue()));
   }
 
   @Test
@@ -66,7 +64,7 @@ public class ReceiveBenefitsControllerTest {
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
 
     mockMvc
-        .perform(get("/benefits"))
+        .perform(get("/planning-and-following"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/backToStart"));
   }
@@ -74,22 +72,23 @@ public class ReceiveBenefitsControllerTest {
   @Test
   public void submit_givenValidForm_thenShouldDisplayRedirectToSuccess() throws Exception {
 
-    when(mockRouteMaster.redirectToOnSuccess(any(ReceiveBenefitsForm.class)))
+    when(mockRouteMaster.redirectToOnSuccess(any(PipPlanningJourneyForm.class), any(Journey.class)))
         .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(
-            post("/benefits")
-                .param("benefitType", EligibilityCodeField.PIP.name())
+            post("/planning-and-following")
+                .param("planningJourneyOption", "PLANNING_POINTS_8")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
   }
 
   @Test
-  public void submit_whenMissingBenefitsAnswer_ThenShouldHaveValidationError() throws Exception {
+  public void submit_whenMissingMovingAroundAnswer_ThenShouldHaveValidationError()
+      throws Exception {
     mockMvc
-        .perform(post("/benefits").sessionAttr("JOURNEY", journey))
+        .perform(post("/planning-and-following").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/someValidationError"));
   }

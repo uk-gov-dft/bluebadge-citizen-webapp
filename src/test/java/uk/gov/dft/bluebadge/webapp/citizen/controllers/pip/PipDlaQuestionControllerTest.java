@@ -1,4 +1,4 @@
-package uk.gov.dft.bluebadge.webapp.citizen.controllers;
+package uk.gov.dft.bluebadge.webapp.citizen.controllers.pip;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -18,16 +18,14 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipDlaQuestionForm;
 
-public class ReceiveBenefitsControllerTest {
-
+public class PipDlaQuestionControllerTest {
   private MockMvc mockMvc;
-  private ReceiveBenefitsController controller;
+  private PipDlaQuestionController controller;
 
   @Mock private RouteMaster mockRouteMaster;
   private Journey journey;
@@ -35,7 +33,7 @@ public class ReceiveBenefitsControllerTest {
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new ReceiveBenefitsController(mockRouteMaster);
+    controller = new PipDlaQuestionController(mockRouteMaster);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -48,16 +46,16 @@ public class ReceiveBenefitsControllerTest {
   }
 
   @Test
-  public void show_ShouldDisplayBenefitsTemplate() throws Exception {
+  public void show_ShouldDisplayDlaTemplate() throws Exception {
 
-    ReceiveBenefitsForm formRequest = ReceiveBenefitsForm.builder().build();
+    PipDlaQuestionForm formRequest = PipDlaQuestionForm.builder().build();
 
     mockMvc
-        .perform(get("/benefits").sessionAttr("JOURNEY", journey))
+        .perform(get("/dla-in-the-past").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
-        .andExpect(view().name("receive-benefits"))
+        .andExpect(view().name("pip/received-dla"))
         .andExpect(model().attribute("formRequest", formRequest))
-        .andExpect(model().attribute("benefitOptions", Matchers.notNullValue()));
+        .andExpect(model().attribute("formOptions", Matchers.notNullValue()));
   }
 
   @Test
@@ -66,7 +64,7 @@ public class ReceiveBenefitsControllerTest {
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
 
     mockMvc
-        .perform(get("/benefits"))
+        .perform(get("/dla-in-the-past"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/backToStart"));
   }
@@ -74,22 +72,22 @@ public class ReceiveBenefitsControllerTest {
   @Test
   public void submit_givenValidForm_thenShouldDisplayRedirectToSuccess() throws Exception {
 
-    when(mockRouteMaster.redirectToOnSuccess(any(ReceiveBenefitsForm.class)))
+    when(mockRouteMaster.redirectToOnSuccess(any(PipDlaQuestionForm.class)))
         .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(
-            post("/benefits")
-                .param("benefitType", EligibilityCodeField.PIP.name())
+            post("/dla-in-the-past")
+                .param("receivedDlaOption", "HAS_RECEIVED_DLA")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
   }
 
   @Test
-  public void submit_whenMissingBenefitsAnswer_ThenShouldHaveValidationError() throws Exception {
+  public void submit_whenMissingDlaAnswer_ThenShouldHaveValidationError() throws Exception {
     mockMvc
-        .perform(post("/benefits").sessionAttr("JOURNEY", journey))
+        .perform(post("/dla-in-the-past").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/someValidationError"));
   }

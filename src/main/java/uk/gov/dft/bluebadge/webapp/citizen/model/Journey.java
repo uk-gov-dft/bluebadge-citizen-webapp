@@ -6,26 +6,27 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.El
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.AFCS.CompensationSchemeForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.AFCS.DisabilityForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.AFCS.MentalDisorderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipDlaQuestionForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipMovingAroundForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipPlanningJourneyForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.CompensationSchemeForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.DisabilityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.MentalDisorderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficultyForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipDlaQuestionForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipMovingAroundForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipPlanningJourneyForm;
 
 public class Journey implements Serializable {
 
@@ -52,10 +53,11 @@ public class Journey implements Serializable {
   public String who;
   public String ageGroup;
 
-  // AFCS Journey Forms
+  // afcs Journey Forms
   private CompensationSchemeForm compensationSchemeForm;
   private DisabilityForm disabilityForm;
   private MentalDisorderForm mentalDisorderForm;
+  private ContactDetailsForm contactDetailsForm;
 
   public Nation getNation() {
     if (null != localAuthority) {
@@ -253,6 +255,14 @@ public class Journey implements Serializable {
 
   public void setGenderForm(GenderForm genderForm) {
     this.genderForm = genderForm;
+  }
+
+  public ContactDetailsForm getContactDetailsForm() {
+    return contactDetailsForm;
+  }
+
+  public void setContactDetailsForm(ContactDetailsForm contactDetailsForm) {
+    this.contactDetailsForm = contactDetailsForm;
   }
 
   public NinoForm getNinoForm() {
