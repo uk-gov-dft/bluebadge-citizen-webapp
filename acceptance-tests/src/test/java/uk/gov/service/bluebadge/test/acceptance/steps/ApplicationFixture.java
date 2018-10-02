@@ -6,6 +6,7 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_MONT
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_YEAR;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Preamble.COUNCIL_INPUT;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import java.util.Calendar;
@@ -163,4 +164,17 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
       pressContinue();
     }
+
+    @And("^I complete NI number page$")
+    public void iCompleteNINumberPage() throws Throwable {
+        sitePage.findPageElementById(NI).sendKeys("AB123456A");
+        pressContinue();
+    }
+
+  @And("^I complete NI number page without a NI$")
+  public void iCompleteNINumberPageWithoutNI() throws Throwable {
+    sitePage.findElementWithText(NO_NI_TEXT).click();
+    sitePage.findElementWithText(NO_NI_LINK_TEXT).click();
+    pressContinue();
+  }
 }
