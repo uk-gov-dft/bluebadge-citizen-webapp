@@ -70,7 +70,7 @@ public class GenderController implements StepController {
 
     journey.setGenderForm(formRequest);
 
-    return routeMaster.redirectToOnSuccess(formRequest);
+    return routeMaster.redirectToOnSuccess(formRequest, journey);
   }
 
   @Override

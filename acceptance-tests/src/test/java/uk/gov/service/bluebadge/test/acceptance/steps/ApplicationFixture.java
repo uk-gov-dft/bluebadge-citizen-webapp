@@ -1,5 +1,9 @@
 package uk.gov.service.bluebadge.test.acceptance.steps;
 
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.EMAIL_ADDRESS;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.FULL_NAME;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.PRIMARY_CONTACT_NUMBER;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.SECONDARY_CONTACT_NUMBER;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.*;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_DAY;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_MONTH;
@@ -154,13 +158,38 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
-    @And("^I complete address page$")
-    public void iCompleteAddressPage() throws Throwable {
-      sitePage.findPageElementById("buildingAndStreet").sendKeys("120");
-      sitePage.findPageElementById("optionalAddress").sendKeys("London Road");
-      sitePage.findPageElementById("townOrCity").sendKeys("Manchester");
-      sitePage.findPageElementById("postcode").sendKeys("M4 1FS");
-
-      pressContinue();
+  @And("I complete contact page for \"(yourself|someone else)\"")
+  public void iCompleteContactPage(String myselfOrOther) {
+    if ("someone else".equalsIgnoreCase(myselfOrOther)) {
+      sitePage.findPageElementById(FULL_NAME).sendKeys("Some Contact");
     }
+
+    sitePage.findPageElementById(PRIMARY_CONTACT_NUMBER).sendKeys("01270848484");
+    sitePage.findPageElementById(SECONDARY_CONTACT_NUMBER).sendKeys("01270848400");
+    sitePage.findPageElementById(EMAIL_ADDRESS).sendKeys("some@contact.com");
+    pressContinue();
+  }
+
+  @And("^I complete address page$")
+  public void iCompleteAddressPage() throws Throwable {
+    sitePage.findPageElementById("buildingAndStreet").sendKeys("120");
+    sitePage.findPageElementById("optionalAddress").sendKeys("London Road");
+    sitePage.findPageElementById("townOrCity").sendKeys("Manchester");
+    sitePage.findPageElementById("postcode").sendKeys("M4 1FS");
+
+    pressContinue();
+  }
+
+  @And("^I complete NI number page$")
+  public void iCompleteNINumberPage() throws Throwable {
+    sitePage.findPageElementById(NI).sendKeys("AB123456A");
+    pressContinue();
+  }
+
+  @And("^I complete NI number page without a NI$")
+  public void iCompleteNINumberPageWithoutNI() throws Throwable {
+    sitePage.findElementWithText(NO_NI_TEXT).click();
+    sitePage.findElementWithText(NO_NI_LINK_TEXT).click();
+    pressContinue();
+  }
 }
