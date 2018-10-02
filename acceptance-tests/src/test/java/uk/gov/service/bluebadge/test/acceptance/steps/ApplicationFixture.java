@@ -154,13 +154,13 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
-    @And("^I complete address page$")
-    public void iCompleteAddressPage() throws Throwable {
-      sitePage.findPageElementById("buildingAndStreet").sendKeys("120");
-      sitePage.findPageElementById("optionalAddress").sendKeys("London Road");
-      sitePage.findPageElementById("townOrCity").sendKeys("Manchester");
-      sitePage.findPageElementById("postcode").sendKeys("M4 1FS");
+  @And("^I complete address page$")
+  public void iCompleteAddressPage() throws Throwable {
+    sitePage.findPageElementById("buildingAndStreet").sendKeys("120");
+    sitePage.findPageElementById("optionalAddress").sendKeys("London Road");
+    sitePage.findPageElementById("townOrCity").sendKeys("Manchester");
+    sitePage.findPageElementById("postcode").sendKeys("M4 1FS");
 
-      pressContinue();
-    }
+    pressContinue();
+  }
 }
