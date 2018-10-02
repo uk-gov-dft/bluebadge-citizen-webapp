@@ -13,7 +13,6 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete what's your name page
     And   I complete date of birth page for "CHILD"
     And   I complete gender page for "Boy"
-    And   I complete describe health conditions page
     And   I complete declaration page
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
 
@@ -28,7 +27,6 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete what's your name page
     And   I complete date of birth page for "CHILD"
     And   I complete gender page for "Girl"
-    And   I complete describe health conditions page
     And   I complete declaration page
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
 
@@ -46,7 +44,6 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Man"
-    And   I complete describe health conditions page
     And   I complete declaration page
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
 
@@ -64,7 +61,6 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Woman"
-    And   I complete describe health conditions page
     And   I complete declaration page
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
 
@@ -81,7 +77,6 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete what's your name page
     And   I complete date of birth page for "CHILD"
     And   I complete gender page for "I identify in a different way"
-    And   I complete describe health conditions page
     And   I complete declaration page
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
 
@@ -98,7 +93,6 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "I identify in a different way"
-    And   I complete describe health conditions page
     And   I complete declaration page
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
 
@@ -116,7 +110,6 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete what's your name page
     And   I complete date of birth page for "CHILD"
     And   I complete gender page for "I identify in a different way"
-    And   I complete describe health conditions page
     And   I complete declaration page
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
 
@@ -134,7 +127,6 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Man"
-    And   I complete describe health conditions page
     And   I complete declaration page
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
 
@@ -154,7 +146,6 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Man"
-    And   I complete describe health conditions page
     And   I complete declaration page
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
 
@@ -174,7 +165,6 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Woman"
-    And   I complete describe health conditions page
     And   I complete declaration page
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
 
@@ -191,7 +181,6 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Man"
-    And   I complete describe health conditions page
     And   I complete declaration page
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
 
@@ -208,7 +197,6 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Man"
-    And   I complete describe health conditions page
     And   I complete declaration page
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
 
@@ -227,7 +215,6 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Man"
-    And   I complete describe health conditions page
     And   I complete declaration page
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
 
@@ -246,6 +233,5 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Man"
-    And   I complete describe health conditions page
     And   I complete declaration page
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
