@@ -18,6 +18,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipDlaQuestionForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipMovingAroundForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipPlanningJourneyForm;
@@ -45,6 +46,7 @@ public class Journey implements Serializable {
   private EnterAddressForm enterAddressForm;
   private HigherRateMobilityForm higherRateMobilityForm;
   private GenderForm genderForm;
+  private NinoForm ninoForm;
   private MainReasonForm mainReasonForm;
   private WalkingDifficultyForm walkingDifficultyForm;
   public String who;
@@ -86,7 +88,7 @@ public class Journey implements Serializable {
       return dateOfBirthForm
           .getDateOfBirth()
           .getLocalDate()
-          .isAfter(LocalDate.now().minusYears(17L));
+          .isAfter(LocalDate.now().minusYears(16L));
     }
     return null;
   }
@@ -251,6 +253,14 @@ public class Journey implements Serializable {
 
   public void setGenderForm(GenderForm genderForm) {
     this.genderForm = genderForm;
+  }
+
+  public NinoForm getNinoForm() {
+    return ninoForm;
+  }
+
+  public void setNinoForm(NinoForm ninoForm) {
+    this.ninoForm = ninoForm;
   }
 
   public EnterAddressForm getEnterAddressForm() {

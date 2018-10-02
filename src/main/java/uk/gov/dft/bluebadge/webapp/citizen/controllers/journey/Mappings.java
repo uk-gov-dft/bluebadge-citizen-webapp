@@ -20,6 +20,7 @@ public class Mappings {
   public static final String URL_YOUR_ISSUING_AUTHORITY = "/your-issuing-authority";
   public static final String URL_DOB = "/date-of-birth";
   public static final String URL_GENDER = "/gender";
+  public static final String URL_NINO = "/nino";
   public static final String URL_ENTER_ADDRESS = "/enter-address";
 
   // PIP Journey Routes
@@ -46,6 +47,7 @@ public class Mappings {
           .put(StepDefinition.APPLICANT_TYPE, URL_APPLICANT_TYPE)
           .put(StepDefinition.DOB, URL_DOB)
           .put(StepDefinition.GENDER, URL_GENDER)
+          .put(StepDefinition.NINO, URL_NINO)
           .put(StepDefinition.ADDRESS, URL_ENTER_ADDRESS)
           .put(StepDefinition.NAME, URL_APPLICANT_NAME)
           .put(StepDefinition.RECEIVE_BENEFITS, URL_RECEIVE_BENEFITS)
