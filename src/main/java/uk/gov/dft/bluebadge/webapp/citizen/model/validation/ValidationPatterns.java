@@ -5,6 +5,7 @@ public class ValidationPatterns {
   private ValidationPatterns() {}
 
   public static final String EMAIL = "^\\S+\\@\\S+";
+  public static final String EMPTY_OR_EMAIL = "^$|.+\\@.+";
 
   public static final String PERSON_NAME = "^[\\p{L} \\.'\\-]+$";
 
@@ -19,6 +20,10 @@ public class ValidationPatterns {
       "^(((\\+44\\s?\\d{4}|\\(?0\\d{4}\\)?)\\s?\\d{3}\\s?\\d{3})|"
           + "((\\+44\\s?\\d{3}|\\(?0\\d{3}\\)?)\\s?\\d{3}\\s?\\d{4})|"
           + "((\\+44\\s?\\d{2}|\\(?0\\d{2}\\)?)\\s?\\d{4}\\s?\\d{4}))(\\s?\\#(\\d{4}|\\d{3}))?$";
+
+  public static final String EMPTY_OR_PHONE_NUMBER =
+    "^$|^(((\\+44\\s?\\d{4}|\\(?0\\d{4}\\)?)\\s?\\d{3}\\s?\\d{3})|((\\+44\\s?\\d{3}|\\(?0\\d{3}\\)?)\\s?\\d{3}\\s?\\d{4})|((\\+44\\s?\\"
+      + "d{2}|\\(?0\\d{2}\\)?)\\s?\\d{4}\\s?\\d{4}))(\\s?\\#(\\d{4}|\\d{3}))?$";
 
   public static final String POSTCODE =
       "^([Gg][Ii][Rr] 0[Aa]{2})|"

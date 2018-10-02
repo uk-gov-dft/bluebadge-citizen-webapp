@@ -11,28 +11,27 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.validation.ValidationPatterns.EMPTY_OR_EMAIL;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.validation.ValidationPatterns.EMPTY_OR_PHONE_NUMBER;
+
 @Data
 @Builder
 public class ContactDetailsForm implements StepForm, Serializable {
-
-  private static final String PHONE_NUMBER_REGEX =
-      "^$|^(((\\+44\\s?\\d{4}|\\(?0\\d{4}\\)?)\\s?\\d{3}\\s?\\d{3})|((\\+44\\s?\\d{3}|\\(?0\\d{3}\\)?)\\s?\\d{3}\\s?\\d{4})|((\\+44\\s?\\d{2}|\\(?0\\d{2}\\)?)\\s?\\d{4}\\s?\\d{4}))(\\s?\\#(\\d{4}|\\d{3}))?$";
-  private static final String EMAIL_REGEX = "^$|.+\\@.+";
 
   @Size(max = 100)
   private String fullName;
 
   @Size(max = 20)
   @NotBlank
-  @Pattern(regexp = PHONE_NUMBER_REGEX, message = "{Invalid.primaryPhoneNumber}")
+  @Pattern(regexp = EMPTY_OR_PHONE_NUMBER, message = "{Invalid.primaryPhoneNumber}")
   private String primaryPhoneNumber;
 
   @Size(max = 20)
-  @Pattern(regexp = PHONE_NUMBER_REGEX, message = "{Invalid.secondaryPhoneNumber}")
+  @Pattern(regexp = EMPTY_OR_PHONE_NUMBER, message = "{Invalid.secondaryPhoneNumber}")
   private String secondaryPhoneNumber;
 
   @Size(max = 100)
-  @Pattern(regexp = EMAIL_REGEX, message = "{Invalid.emailAddress}")
+  @Pattern(regexp = EMPTY_OR_EMAIL, message = "{Invalid.emailAddress}")
   private String emailAddress;
 
   @Override
