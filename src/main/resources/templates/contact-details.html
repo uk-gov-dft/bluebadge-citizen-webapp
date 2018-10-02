@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="#{contact.page.title} + ' - ' + #{common.title.suffix}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l" th:text="#{contact.body.title}"></h1>
+
+            <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>
+
+            <form th:action="@{/contact-details}" th:object="${formRequest}" method="POST" novalidate>
+
+                <!-- fullName -->
+                <div th:if="${!JOURNEY.isApplicantYourself()}" th:remove="tag">
+                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.fullName.field.label}, 'fullName', #{contact.fullName.field.hint}, 'text', null)}"></div>
+                </div>
+
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.primaryPhoneNumber.field.label}, 'primaryPhoneNumber', null, 'text', 'govuk-input--width-20')}"></div>
+
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.secondaryPhoneNumber.field.label}, 'secondaryPhoneNumber', null, 'text', 'govuk-input--width-20')}"></div>
+
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.emailAddress.field.label}, 'emailAddress', null, 'text', 'govuk-!-width-three-quarters')}"></div>
+
+                <button type="submit" class="govuk-button" data-uipath="button.continue" th:text="#{btn.label.continue}"></button>
+
+            </form>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
