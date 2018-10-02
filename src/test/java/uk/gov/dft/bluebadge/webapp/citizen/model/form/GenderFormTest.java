@@ -26,6 +26,6 @@ public class GenderFormTest {
         new JourneyFixture.JourneyBuilder().setDateOfBirth("2010", "05", "29").build();
 
     assertThat(form.determineNextStep(journey)).isNotEmpty();
-    assertThat(form.determineNextStep(journey).get()).isEqualTo(StepDefinition.HEALTH_CONDITIONS);
+    assertThat(form.determineNextStep(journey).get()).isEqualTo(StepDefinition.ADDRESS);
   }
 }

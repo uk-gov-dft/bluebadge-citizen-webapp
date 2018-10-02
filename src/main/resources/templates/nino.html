@@ -18,7 +18,7 @@
 
             <form th:action="@{/nino}" method="post" th:object="${formRequest}" novalidate autocomplete="off">
 
-                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{nino.field.label}, 'nino', #{${JOURNEY.who} + 'nino.field.hint'}, 'text')}"></div>
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{nino.field.label}, 'nino', #{${JOURNEY.who} + 'nino.field.hint'}, 'text', 'govuk-!-width-one-half')}"></div>
 
                 <details class="govuk-details">
                     <summary class="govuk-details__summary">

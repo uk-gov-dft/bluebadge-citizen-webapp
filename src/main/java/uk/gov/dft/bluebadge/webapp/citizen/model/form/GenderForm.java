@@ -26,7 +26,7 @@ public class GenderForm implements StepForm, Serializable {
   public Optional<StepDefinition> determineNextStep(Journey journey) {
 
     if (journey.isApplicantYoung()) {
-      return Optional.of(StepDefinition.HEALTH_CONDITIONS);
+      return Optional.of(StepDefinition.ADDRESS);
     }
 
     return Optional.of(StepDefinition.NINO);

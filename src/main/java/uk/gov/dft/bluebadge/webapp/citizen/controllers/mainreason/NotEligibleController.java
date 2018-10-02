@@ -17,6 +17,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 @Controller
 @RequestMapping(Mappings.URL_NOT_ELIGIBLE)
+@SuppressWarnings({"common-java:DuplicatedBlocksSource"})
 public class NotEligibleController implements StepController {
   private static final String TEMPLATE = "mainreason/not-eligible";
 

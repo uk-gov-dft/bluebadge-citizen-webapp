@@ -153,4 +153,14 @@ public class ApplicationFixture extends AbstractSpringSteps {
     else sitePage.findPageElementById(NEVER_RECEIVED_DLA).click();
     pressContinue();
   }
+
+    @And("^I complete address page$")
+    public void iCompleteAddressPage() throws Throwable {
+      sitePage.findPageElementById("buildingAndStreet").sendKeys("120");
+      sitePage.findPageElementById("optionalAddress").sendKeys("London Road");
+      sitePage.findPageElementById("townOrCity").sendKeys("Manchester");
+      sitePage.findPageElementById("postcode").sendKeys("M4 1FS");
+
+      pressContinue();
+    }
 }
