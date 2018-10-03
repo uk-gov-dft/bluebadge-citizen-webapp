@@ -177,7 +177,7 @@ public class DeclarationSubmitController implements StepController {
         eligibilityObject =
             new Eligibility()
                 .typeCode(eligibility)
-                .blind(new Blind().registeredAtLaId(journey.getLocalAuthority().getShortCode()));
+                .blind(new Blind());
         break;
       case ARMS:
         eligibilityObject =
@@ -192,7 +192,7 @@ public class DeclarationSubmitController implements StepController {
                 .childUnder3(
                     new ChildUnder3()
                         .bulkyMedicalEquipmentTypeCode(
-                            BulkyMedicalEquipmentTypeCodeField.OXYADMIN));
+                            BulkyMedicalEquipmentTypeCodeField.NONE));
         break;
       case CHILDVEHIC:
         eligibilityObject = new Eligibility().typeCode(eligibility);
