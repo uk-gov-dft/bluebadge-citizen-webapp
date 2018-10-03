@@ -85,10 +85,12 @@ public class WhereCanYouWalkControllerTest {
             .timeToDestination("10 minutes")
             .build();
 
+    journey.setWhereCanYouWalkForm(formRequest);
+
     mockMvc
         .perform(
             get("/where-can-you-walk")
-                .flashAttr("formRequest", formRequest)
+                //.flashAttr("formRequest", formRequest)
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("where-can-you-walk"))
