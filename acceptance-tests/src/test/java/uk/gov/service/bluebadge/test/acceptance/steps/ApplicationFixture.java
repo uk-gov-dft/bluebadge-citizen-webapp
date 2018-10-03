@@ -10,6 +10,7 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_MONT
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_YEAR;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Preamble.COUNCIL_INPUT;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import java.util.Calendar;
@@ -193,8 +194,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
-  @And("^I complete the what's your walking difficulties page$")
-  public void iCompleteTheWhatSYourWalkingDifficultiesPage() throws Throwable {
+  @And("^I complete the what makes walking difficult page$")
+  public void iCompleteTheWhatMakesWalkingDifficultPage() throws Throwable {
     sitePage.findPageElementById("whatWalkingDifficulties1").click();
     pressContinue();
   }
