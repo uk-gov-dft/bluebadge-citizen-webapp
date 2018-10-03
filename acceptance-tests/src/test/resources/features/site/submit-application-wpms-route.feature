@@ -42,13 +42,8 @@ Feature: DFT Blue badge Citizen app new application - WPMS or not listed benifit
     And   I can click on "Continue"
 
     And   I complete NI number page
-
     And   I complete address page
     And   I complete contact page for "yourself"
-    Then  I should see the page titled "Describe health conditions - GOV.UK Apply for a Blue Badge"
-    And   I should see the title "Describe any health conditions that affect your mobility"
-    When  I type "Sample health condition" for "descriptionOfConditions" field by id
-    And   I can click on "Continue"
 
     Then  I should see the page titled "Declaration - GOV.UK Apply for a Blue Badge"
     And   I should see the content "I agree to this declaration"
@@ -99,13 +94,8 @@ Feature: DFT Blue badge Citizen app new application - WPMS or not listed benifit
     And   I can click on "Continue"
 
     And   I complete NI number page
-
     And   I complete address page
     And   I complete contact page for "someone else"
-    Then  I should see the page titled "Describe health conditions - GOV.UK Apply for a Blue Badge"
-    And   I should see the title "Describe any health conditions that affect their mobility"
-    When  I type "Sample health condition" for "descriptionOfConditions" field by id
-    And   I can click on "Continue"
 
     Then  I should see the page titled "Declaration - GOV.UK Apply for a Blue Badge"
     And   I should see the content "They agree to this declaration"
@@ -129,7 +119,6 @@ Feature: DFT Blue badge Citizen app new application - WPMS or not listed benifit
     And   I complete gender page for "Boy"
     And   I complete address page
     And   I complete contact page for "yourself"
-    And   I complete describe health conditions page
     And   I complete declaration page
     Then  I should see .* page titled "Application submitted" with GOV.UK suffix
 
@@ -147,6 +136,5 @@ Feature: DFT Blue badge Citizen app new application - WPMS or not listed benifit
     And   I complete NI number page
     And   I complete address page
     And   I complete contact page for "someone else"
-    And   I complete describe health conditions page
     And   I complete declaration page
     Then  I should see .* page titled "Application submitted" with GOV.UK suffix

@@ -23,6 +23,9 @@ class Ids {
     static final String NI = "nino";
     static final String NO_NI_TEXT = "You don't have a National Insurance number";
     static final String NO_NI_LINK_TEXT = "Continue without a National Insurance number.";
+    static final String FEEDBACK_URL = "https://www.smartsurvey.co.uk/s/XIYJ6/";
+    static final String GOOGLE_ANALYTICS_TAG = "UA-124760983-5";
+
   }
 
   class Person {
