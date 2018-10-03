@@ -50,6 +50,10 @@ Feature: DFT Blue badge Citizen app new application - WPMS or not listed benifit
     When  I type "Sample health condition" for "descriptionOfConditions" field by id
     And   I can click on "Continue"
 
+    And   I complete the what's your walking difficulties page
+
+    And   I complete the what's your walking difficulties page
+
     Then  I should see the page titled "Declaration - GOV.UK Apply for a Blue Badge"
     And   I should see the content "I agree to this declaration"
     And   I select option "declaration.option"
@@ -106,6 +110,8 @@ Feature: DFT Blue badge Citizen app new application - WPMS or not listed benifit
     And   I should see the title "Describe any health conditions that affect their mobility"
     When  I type "Sample health condition" for "descriptionOfConditions" field by id
     And   I can click on "Continue"
+
+    And   I complete the what's your walking difficulties page
 
     Then  I should see the page titled "Declaration - GOV.UK Apply for a Blue Badge"
     And   I should see the content "They agree to this declaration"
