@@ -3,6 +3,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import com.google.common.collect.Lists;
+import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -145,6 +146,13 @@ public class DeclarationSubmitController implements StepController {
     Eligibility eligibilityObject = null;
     switch (eligibility) {
       case WALKD:
+        List<WalkingDifficultyTypeCodeField> walkingDifficulties =
+            journey.getWhatMakesWalkingDifficultForm().getWhatWalkingDifficulties();
+        String otherDesc =
+            walkingDifficulties.contains(WalkingDifficultyTypeCodeField.SOMELSE)
+                ? journey.getWhatMakesWalkingDifficultForm().getSomethingElseDescription()
+                : null;
+
         eligibilityObject =
             new Eligibility()
                 .typeCode(EligibilityCodeField.WALKD)
@@ -153,10 +161,8 @@ public class DeclarationSubmitController implements StepController {
                     new WalkingDifficulty()
                         .walkingLengthOfTimeCode(WalkingLengthOfTimeCodeField.LESSMIN)
                         .walkingSpeedCode(WalkingSpeedCodeField.SLOW)
-                        .typeCodes(
-                            Lists.newArrayList(
-                                WalkingDifficultyTypeCodeField.PAIN,
-                                WalkingDifficultyTypeCodeField.BALANCE))
+                        .typeCodes(walkingDifficulties)
+                        .otherDescription(otherDesc)
                         .walkingAids(
                             Lists.newArrayList(
                                 new WalkingAid()
@@ -174,10 +180,7 @@ public class DeclarationSubmitController implements StepController {
         eligibilityObject = new Eligibility().typeCode(eligibility);
         break;
       case BLIND:
-        eligibilityObject =
-            new Eligibility()
-                .typeCode(eligibility)
-                .blind(new Blind());
+        eligibilityObject = new Eligibility().typeCode(eligibility).blind(new Blind());
         break;
       case ARMS:
         eligibilityObject =
@@ -191,8 +194,7 @@ public class DeclarationSubmitController implements StepController {
                 .typeCode(eligibility)
                 .childUnder3(
                     new ChildUnder3()
-                        .bulkyMedicalEquipmentTypeCode(
-                            BulkyMedicalEquipmentTypeCodeField.NONE));
+                        .bulkyMedicalEquipmentTypeCode(BulkyMedicalEquipmentTypeCodeField.NONE));
         break;
       case CHILDVEHIC:
         eligibilityObject = new Eligibility().typeCode(eligibility);
@@ -203,7 +205,6 @@ public class DeclarationSubmitController implements StepController {
         // This code is all temporary too.
         throw new IllegalStateException("Invalid eligibility:" + eligibility);
     }
-
     return Application.builder()
         .applicationTypeCode(ApplicationTypeCodeField.NEW)
         .localAuthorityCode(la)

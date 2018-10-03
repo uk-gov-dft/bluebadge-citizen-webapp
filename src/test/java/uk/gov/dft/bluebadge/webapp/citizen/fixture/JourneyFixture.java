@@ -1,6 +1,8 @@
 package uk.gov.dft.bluebadge.webapp.citizen.fixture;
 
+import com.google.common.collect.ImmutableList;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.component.CompoundDate;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
@@ -10,6 +12,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
 
 public class JourneyFixture {
 
@@ -31,7 +34,7 @@ public class JourneyFixture {
 
     DateOfBirthForm dateOfBirthForm =
         DateOfBirthForm.builder().dateOfBirth(new CompoundDate("1", "1", "1990")).build();
-    // dateOfBirthForm.setDateOfBirth(new CompoundDate());
+    //dateOfBirthForm.setDateOfBirth(new CompoundDate());
 
     EnterAddressForm enterAddressForm =
         EnterAddressForm.builder()
@@ -52,6 +55,15 @@ public class JourneyFixture {
     journey.setReceiveBenefitsForm(
         ReceiveBenefitsForm.builder().benefitType(EligibilityCodeField.WALKD).build());
     journey.setContactDetailsForm(contactDetailsForm);
+
+    WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm =
+        WhatMakesWalkingDifficultForm.builder()
+            .whatWalkingDifficulties(
+                ImmutableList.of(
+                    WalkingDifficultyTypeCodeField.PAIN, WalkingDifficultyTypeCodeField.SOMELSE))
+            .somethingElseDescription("Some description of walking")
+            .build();
+    journey.setWhatMakesWalkingDifficultForm(whatMakesWalkingDifficultForm);
 
     return journey;
   }
