@@ -21,7 +21,7 @@ public class LocalAuthorityRefData extends ReferenceData {
   }
 
   @JsonIgnore
-  public String getNation() {
+  public Nation getNation() {
     return localAuthorityMetaData.map(LocalAuthorityMetaData::getNation).orElse(null);
   }
 
@@ -29,7 +29,7 @@ public class LocalAuthorityRefData extends ReferenceData {
   public static class LocalAuthorityMetaData {
     private String issuingAuthorityShortCode;
     private String issuingAuthorityName;
-    private String nation;
+    private Nation nation;
     private String contactUrl;
   }
 }
