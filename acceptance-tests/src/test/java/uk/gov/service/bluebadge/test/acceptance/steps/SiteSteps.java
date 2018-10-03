@@ -11,8 +11,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.FEEDBACK_URL;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.GOOGLE_ANALYTICS_TAG;
 
 import cucumber.api.DataTable;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -297,4 +300,16 @@ public class SiteSteps extends AbstractSpringSteps {
 
     assertThat("I should see page titled.", sitePage.getDocumentTitle(), is(page_title));
   }
+
+  @Then("^I can see feedback link$")
+  public void iCanSeeFeedbackLink() throws Throwable {
+    assertTrue(FEEDBACK_URL.equals(sitePage.findElementWithText("feedback").getAttribute("href")));
+  }
+
+  @Then("^The google analytics tag should be available$")
+  public void theGoogleAnalyticsTagShouldBeAvailable() throws Throwable {
+    assertTrue(sitePage.getPageContent().contains(GOOGLE_ANALYTICS_TAG));
+  }
 }
+
+
