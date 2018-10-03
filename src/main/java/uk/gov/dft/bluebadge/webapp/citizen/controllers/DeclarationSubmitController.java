@@ -221,10 +221,11 @@ public class DeclarationSubmitController implements StepController {
 
     StringBuilder descriptionOfCondition = new StringBuilder();
     if (healthConditionsForm != null && healthConditionsForm.getDescriptionOfConditions() != null) {
-      descriptionOfCondition.append("descriptionOfConditions: ").append(healthConditionsForm.getDescriptionOfConditions());
+      descriptionOfCondition
+          .append("descriptionOfConditions: ")
+          .append(healthConditionsForm.getDescriptionOfConditions());
     }
     EligibilityCodeField eligibility = journey.getEligibilityCode();
-
 
     if (WALKD.equals(eligibility) && whereCanYouWalkForm != null) {
       descriptionOfCondition

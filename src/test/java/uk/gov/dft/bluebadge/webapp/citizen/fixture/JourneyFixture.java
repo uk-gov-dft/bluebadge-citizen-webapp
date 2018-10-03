@@ -1,6 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.fixture;
 
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.GenderCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.component.CompoundDate;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
@@ -8,8 +9,10 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
 
 public class JourneyFixture {
 
@@ -33,6 +36,8 @@ public class JourneyFixture {
         DateOfBirthForm.builder().dateOfBirth(new CompoundDate("1", "1", "1990")).build();
     // dateOfBirthForm.setDateOfBirth(new CompoundDate());
 
+    GenderForm genderForm = GenderForm.builder().gender(GenderCodeField.FEMALE).build();
+
     EnterAddressForm enterAddressForm =
         EnterAddressForm.builder()
             .buildingAndStreet("High Street 1")
@@ -45,12 +50,20 @@ public class JourneyFixture {
     ContactDetailsForm contactDetailsForm =
         ContactDetailsForm.builder().primaryPhoneNumber("01270646362").build();
 
+    WhereCanYouWalkForm whereCanYouWalkForm =
+        WhereCanYouWalkForm.builder()
+            .destinationToHome("London")
+            .timeToDestination("10 minutes")
+            .build();
+
     journey.setApplicantForm(applicantForm);
     journey.setHealthConditionsForm(healthConditionsForm);
     journey.setApplicantNameForm(applicantNameForm);
     journey.setDateOfBirthForm(dateOfBirthForm);
+    journey.setGenderForm(genderForm);
     journey.setReceiveBenefitsForm(
         ReceiveBenefitsForm.builder().benefitType(EligibilityCodeField.WALKD).build());
+    journey.setWhereCanYouWalkForm(whereCanYouWalkForm);
     journey.setContactDetailsForm(contactDetailsForm);
 
     return journey;

@@ -122,7 +122,8 @@ public class DeclarationSubmitControllerTest {
     assertThat(captor.getValue()).isNotNull();
     assertThat(captor.getValue().getEligibility()).isNotNull();
     assertThat(captor.getValue().getEligibility().getDescriptionOfConditions())
-        .isEqualTo("test description");
+        .isEqualTo(
+            "descriptionOfConditions: test description - Able to walk to: London - How long: 10 minutes");
   }
 
   @Test

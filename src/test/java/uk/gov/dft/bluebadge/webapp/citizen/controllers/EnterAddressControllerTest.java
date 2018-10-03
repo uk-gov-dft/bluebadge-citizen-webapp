@@ -59,7 +59,7 @@ public class EnterAddressControllerTest {
   }
 
   @Test
-  public void show_ShouldDisplayGenderTemplate() throws Exception {
+  public void show_ShouldDisplayEnterAddressTemplate() throws Exception {
     EnterAddressForm formRequest = EnterAddressForm.builder().build();
 
     mockMvc
