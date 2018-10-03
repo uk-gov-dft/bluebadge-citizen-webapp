@@ -116,7 +116,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
     sitePage.findElementWithText("Start application").click();
   }
 
-  @And("^I complete gender page for \"(Boy|Girl|Man|Woman|I identify in a different way)\"")
+  @And("^I complete gender page for \"(Boy|Girl|Man|Woman|Identify in a different way)\"")
   public void iCompleteGenderPageFor(String gender) throws Throwable {
     if (gender.equals("Boy") || gender.equals("Man"))
       sitePage.findPageElementById(GENDER_MALE).click();
