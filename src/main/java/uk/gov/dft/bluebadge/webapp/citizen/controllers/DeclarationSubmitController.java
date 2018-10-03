@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import com.google.common.collect.Lists;
@@ -173,10 +174,7 @@ public class DeclarationSubmitController implements StepController {
         eligibilityObject = new Eligibility().typeCode(eligibility);
         break;
       case BLIND:
-        eligibilityObject =
-            new Eligibility()
-                .typeCode(eligibility)
-                .blind(new Blind());
+        eligibilityObject = new Eligibility().typeCode(eligibility).blind(new Blind());
         break;
       case ARMS:
         eligibilityObject =
@@ -190,8 +188,7 @@ public class DeclarationSubmitController implements StepController {
                 .typeCode(eligibility)
                 .childUnder3(
                     new ChildUnder3()
-                        .bulkyMedicalEquipmentTypeCode(
-                            BulkyMedicalEquipmentTypeCodeField.NONE));
+                        .bulkyMedicalEquipmentTypeCode(BulkyMedicalEquipmentTypeCodeField.NONE));
         break;
       case CHILDVEHIC:
         eligibilityObject = new Eligibility().typeCode(eligibility);
@@ -224,17 +221,16 @@ public class DeclarationSubmitController implements StepController {
 
     StringBuilder descriptionOfCondition = new StringBuilder();
     if (healthConditionsForm != null && healthConditionsForm.getDescriptionOfConditions() != null) {
-      descriptionOfCondition.append(healthConditionsForm.getDescriptionOfConditions());
+      descriptionOfCondition.append("descriptionOfConditions: ").append(healthConditionsForm.getDescriptionOfConditions());
     }
-    if (whereCanYouWalkForm != null) {
+    EligibilityCodeField eligibility = journey.getEligibilityCode();
+
+
+    if (WALKD.equals(eligibility) && whereCanYouWalkForm != null) {
       descriptionOfCondition
-          .append(", Where can ")
-          .append(journey.isApplicantYourself() ? "you" : "they")
-          .append(" walk?")
+          .append(" - Able to walk to: ")
           .append(whereCanYouWalkForm.getDestinationToHome())
-          .append(", how long does it take ")
-          .append(journey.isApplicantYourself() ? "you" : "them")
-          .append("?")
+          .append(" - How long: ")
           .append(whereCanYouWalkForm.getTimeToDestination());
     }
     if (descriptionOfCondition.length() == 0) {
