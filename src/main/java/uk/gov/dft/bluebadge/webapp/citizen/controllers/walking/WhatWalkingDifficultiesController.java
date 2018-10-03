@@ -29,6 +29,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDi
 public class WhatWalkingDifficultiesController implements StepController {
 
   private static final String TEMPLATE = "walking/what-walking-difficult";
+  public static final String FORM_NAME = "formRequest";
 
   private final RouteMaster routeMaster;
 
@@ -45,14 +46,14 @@ public class WhatWalkingDifficultiesController implements StepController {
     }
 
     //On returning to form, take previously submitted values.
-    if (!model.containsAttribute("formRequest")
+    if (!model.containsAttribute(FORM_NAME)
         && null != journey.getWhatMakesWalkingDifficultForm()) {
-      model.addAttribute("formRequest", journey.getWhatMakesWalkingDifficultForm());
+      model.addAttribute(FORM_NAME, journey.getWhatMakesWalkingDifficultForm());
     }
 
     // If navigating forward from previous form, reset
-    if (!model.containsAttribute("formRequest")) {
-      model.addAttribute("formRequest", WhatMakesWalkingDifficultForm.builder().build());
+    if (!model.containsAttribute(FORM_NAME)) {
+      model.addAttribute(FORM_NAME, WhatMakesWalkingDifficultForm.builder().build());
     }
 
     // Otherwise, is redirect from post with binding errors.
@@ -63,7 +64,7 @@ public class WhatWalkingDifficultiesController implements StepController {
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute("formRequest")
+      @Valid @ModelAttribute(FORM_NAME)
           WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm,
       BindingResult bindingResult,
       RedirectAttributes attr) {
@@ -75,7 +76,7 @@ public class WhatWalkingDifficultiesController implements StepController {
 
     journey.setWhatMakesWalkingDifficultForm(whatMakesWalkingDifficultForm);
 
-    return routeMaster.redirectToOnSuccess(whatMakesWalkingDifficultForm, journey);
+    return routeMaster.redirectToOnSuccess(whatMakesWalkingDifficultForm);
   }
 
   @Override

@@ -42,7 +42,7 @@
                                 <div th:if="${iterStat.last}" class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden"
                                      th:id="${lastControl}">
 
-                                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{whatMakesWalkingDifficult.select.somethingelse.desc}, 'somethingElseDescription', null, 'text', 100)}"></div>
+                                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{whatMakesWalkingDifficult.select.somethingelse.desc}, 'somethingElseDescription', null, 'text', null)}"></div>
                                 </div>
                             </div>
                         </div>
