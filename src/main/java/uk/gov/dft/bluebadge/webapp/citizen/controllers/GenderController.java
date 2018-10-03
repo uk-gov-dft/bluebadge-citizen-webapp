@@ -89,7 +89,8 @@ public class GenderController implements StepController {
         new RadioOption(GenderCodeField.FEMALE.name(), journey.ageGroup + "radio.label.female");
     RadioOption unspecified =
         new RadioOption(
-            GenderCodeField.UNSPECIFIE.name(), journey.ageGroup + "radio.label.unspecified");
+            GenderCodeField.UNSPECIFIE.name(),
+            journey.who + journey.ageGroup + "radio.label.unspecified");
 
     List<RadioOption> options = Lists.newArrayList(male, female, unspecified);
 
