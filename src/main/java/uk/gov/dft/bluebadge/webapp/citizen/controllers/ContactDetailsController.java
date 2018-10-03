@@ -69,7 +69,7 @@ public class ContactDetailsController implements StepController {
     }
 
     journey.setContactDetailsForm(contactDetailsForm);
-    return routeMaster.redirectToOnSuccess(contactDetailsForm);
+    return routeMaster.redirectToOnSuccess(contactDetailsForm, journey);
   }
 
   @Override
