@@ -192,5 +192,4 @@ public class ApplicationFixture extends AbstractSpringSteps {
     sitePage.findElementWithText(NO_NI_LINK_TEXT).click();
     pressContinue();
   }
-
 }

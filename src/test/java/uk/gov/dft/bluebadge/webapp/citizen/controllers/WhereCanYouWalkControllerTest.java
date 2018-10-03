@@ -1,5 +1,14 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,17 +21,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 public class WhereCanYouWalkControllerTest {
 
@@ -91,7 +90,8 @@ public class WhereCanYouWalkControllerTest {
         .andExpect(view().name("where-can-you-walk"))
         .andExpect(
             model().attributeHasFieldErrorCode("formRequest", "destinationToHome", "NotBlank"))
-        .andExpect(model().attributeHasFieldErrorCode("formRequest", "timeToDestination", "NotBlank"))
+        .andExpect(
+            model().attributeHasFieldErrorCode("formRequest", "timeToDestination", "NotBlank"))
         .andExpect(model().errorCount(2));
   }
 
@@ -118,9 +118,9 @@ public class WhereCanYouWalkControllerTest {
     mockMvc
         .perform(
             post("/where-can-you-walk")
-              .param("destinationToHome", DESTINATION_TO_HOME)
-              .param("timeToDestination", TIME_TO_DESTINATION)
-              .sessionAttr("JOURNEY", journey))
+                .param("destinationToHome", DESTINATION_TO_HOME)
+                .param("timeToDestination", TIME_TO_DESTINATION)
+                .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
   }
@@ -133,10 +133,10 @@ public class WhereCanYouWalkControllerTest {
 
     mockMvc
         .perform(
-          post("/where-can-you-walk")
-            .param("destinationToHome", DESTINATION_TO_HOME_MAX)
-            .param("timeToDestination", TIME_TO_DESTINATION_MAX)
-            .sessionAttr("JOURNEY", journey))
+            post("/where-can-you-walk")
+                .param("destinationToHome", DESTINATION_TO_HOME_MAX)
+                .param("timeToDestination", TIME_TO_DESTINATION_MAX)
+                .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
   }
@@ -150,9 +150,9 @@ public class WhereCanYouWalkControllerTest {
     mockMvc
         .perform(
             post("/where-can-you-walk")
-              .param("destinationToHome", DESTINATION_TO_HOME_OVER_MAX)
-              .param("timeToDestination", TIME_TO_DESTINATION_OVER_MAX)
-              .sessionAttr("JOURNEY", journey))
+                .param("destinationToHome", DESTINATION_TO_HOME_OVER_MAX)
+                .param("timeToDestination", TIME_TO_DESTINATION_OVER_MAX)
+                .sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("where-can-you-walk"))
         .andExpect(model().attributeHasFieldErrorCode("formRequest", "destinationToHome", "Size"))
