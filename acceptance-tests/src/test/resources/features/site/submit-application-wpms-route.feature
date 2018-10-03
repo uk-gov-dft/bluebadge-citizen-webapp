@@ -52,8 +52,6 @@ Feature: DFT Blue badge Citizen app new application - WPMS or not listed benifit
 
     And   I complete the what's your walking difficulties page
 
-    And   I complete the what's your walking difficulties page
-
     Then  I should see the page titled "Declaration - GOV.UK Apply for a Blue Badge"
     And   I should see the content "I agree to this declaration"
     And   I select option "declaration.option"
@@ -136,6 +134,7 @@ Feature: DFT Blue badge Citizen app new application - WPMS or not listed benifit
     And   I complete address page
     And   I complete contact page for "yourself"
     And   I complete describe health conditions page
+    And   I complete the what's your walking difficulties page
     And   I complete declaration page
     Then  I should see .* page titled "Application submitted" with GOV.UK suffix
 
@@ -154,5 +153,6 @@ Feature: DFT Blue badge Citizen app new application - WPMS or not listed benifit
     And   I complete address page
     And   I complete contact page for "someone else"
     And   I complete describe health conditions page
+    And   I complete the what's your walking difficulties page
     And   I complete declaration page
     Then  I should see .* page titled "Application submitted" with GOV.UK suffix
