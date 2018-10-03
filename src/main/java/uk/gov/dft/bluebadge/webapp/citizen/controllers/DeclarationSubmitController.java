@@ -96,8 +96,6 @@ public class DeclarationSubmitController implements StepController {
   private Application getDummyApplication(Journey journey) {
     ApplicantNameForm applicantNameForm = journey.getApplicantNameForm();
     GenderForm genderForm = journey.getGenderForm();
-    HealthConditionsForm healthConditionsForm = journey.getHealthConditionsForm();
-    WhereCanYouWalkForm whereCanYouWalkForm = journey.getWhereCanYouWalkForm();
     YourIssuingAuthorityForm yourIssuingAuthorityForm = journey.getYourIssuingAuthorityForm();
     ContactDetailsForm contactDetailsForm = journey.getContactDetailsForm();
 
@@ -215,7 +213,6 @@ public class DeclarationSubmitController implements StepController {
   }
 
   private String getDescriptionOfCondition(Journey journey) {
-    ApplicantNameForm applicantNameForm = journey.getApplicantNameForm();
     HealthConditionsForm healthConditionsForm = journey.getHealthConditionsForm();
     WhereCanYouWalkForm whereCanYouWalkForm = journey.getWhereCanYouWalkForm();
 
