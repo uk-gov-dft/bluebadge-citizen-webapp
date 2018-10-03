@@ -16,8 +16,6 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete NI number page
     And   I complete address page
     And   I complete contact page for "yourself"
-    And   I complete describe health conditions page
-    And   I complete the what's your walking difficulties page
     And   I complete declaration page
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
 
@@ -35,8 +33,6 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete NI number page
     And   I complete address page
     And   I complete contact page for "someone else"
-    And   I complete describe health conditions page
-    And   I complete the what's your walking difficulties page
     And   I complete declaration page
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
 
@@ -96,11 +92,9 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete eligible page
     And   I complete what's your name page
     And   I complete date of birth page for "CHILD"
-    And   I complete gender page for "I identify in a different way"
+    And   I complete gender page for "Identify in a different way"
     And   I complete address page
     And   I complete contact page for "yourself"
-    And   I complete describe health conditions page
-    And   I complete the what's your walking difficulties page
     And   I complete declaration page
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
 
@@ -116,12 +110,10 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete eligible page
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
-    And   I complete gender page for "I identify in a different way"
+    And   I complete gender page for "Identify in a different way"
     And   I complete NI number page
     And   I complete address page
     And   I complete contact page for "someone else"
-    And   I complete describe health conditions page
-    And   I complete the what's your walking difficulties page
     And   I complete declaration page
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
 
@@ -138,11 +130,9 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete eligible page
     And   I complete what's your name page
     And   I complete date of birth page for "CHILD"
-    And   I complete gender page for "I identify in a different way"
+    And   I complete gender page for "Identify in a different way"
     And   I complete address page
     And   I complete contact page for "yourself"
-    And   I complete describe health conditions page
-    And   I complete the what's your walking difficulties page
     And   I complete declaration page
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
 
@@ -163,8 +153,6 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete NI number page
     And   I complete address page
     And   I complete contact page for "someone else"
-    And   I complete describe health conditions page
-    And   I complete the what's your walking difficulties page
     And   I complete declaration page
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
 
@@ -232,8 +220,6 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete NI number page
     And   I complete address page
     And   I complete contact page for "yourself"
-    And   I complete describe health conditions page
-    And   I complete the what's your walking difficulties page
     And   I complete declaration page
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
 
@@ -253,8 +239,6 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete NI number page
     And   I complete address page
     And   I complete contact page for "someone else"
-    And   I complete describe health conditions page
-    And   I complete the what's your walking difficulties page
     And   I complete declaration page
     Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
 

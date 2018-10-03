@@ -63,3 +63,6 @@ security:
       access-token-uri: ${blue-badge.auth-server.url}/oauth/token
       auto-approve-scopes: '.*'
       authorized-grant-types: client_credentials
+
+# Google Analytics Code
+GACode:  ${GACODE:UA-124760983-5}
