@@ -14,7 +14,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 @Builder
 public class HealthConditionsForm implements StepForm, Serializable {
   @NotNull
-  @Size(min = 1, max = 100)
+  @Size(min = 1, max = 10000)
   String descriptionOfConditions;
 
   @Override
