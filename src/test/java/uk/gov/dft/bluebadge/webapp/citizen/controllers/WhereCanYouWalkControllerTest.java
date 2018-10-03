@@ -1,6 +1,10 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -9,13 +13,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
@@ -52,6 +60,10 @@ public class WhereCanYouWalkControllerTest {
     journey = new Journey();
     journey.setApplicantForm(
         ApplicantForm.builder().applicantType(ApplicantType.YOURSELF.name()).build());
+
+    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
+    when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))
+        .thenReturn("redirect:/someValidationError");
   }
 
   @Test
@@ -86,13 +98,17 @@ public class WhereCanYouWalkControllerTest {
                 .param("destinationToHome", "")
                 .param("timeToDestination", "")
                 .sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
-        .andExpect(view().name("where-can-you-walk"))
-        .andExpect(
-            model().attributeHasFieldErrorCode("formRequest", "destinationToHome", "NotBlank"))
-        .andExpect(
-            model().attributeHasFieldErrorCode("formRequest", "timeToDestination", "NotBlank"))
-        .andExpect(model().errorCount(2));
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/someValidationError"));
+
+    ArgumentCaptor<BindingResult> captor = ArgumentCaptor.forClass(BindingResult.class);
+    verify(mockRouteMaster, times(1))
+        .redirectToOnBindingError(any(), any(), captor.capture(), any());
+    BindingResult bindingResult = (BindingResult) captor.getValue();
+
+    assertThat(bindingResult.getErrorCount()).isEqualTo(2);
+    assertTrue(containsError(bindingResult.getFieldErrors(), "destinationToHome", "", "NotBlank"));
+    assertTrue(containsError(bindingResult.getFieldErrors(), "timeToDestination", "", "NotBlank"));
   }
 
   @Test
@@ -153,10 +169,44 @@ public class WhereCanYouWalkControllerTest {
                 .param("destinationToHome", DESTINATION_TO_HOME_OVER_MAX)
                 .param("timeToDestination", TIME_TO_DESTINATION_OVER_MAX)
                 .sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
-        .andExpect(view().name("where-can-you-walk"))
-        .andExpect(model().attributeHasFieldErrorCode("formRequest", "destinationToHome", "Size"))
-        .andExpect(model().attributeHasFieldErrorCode("formRequest", "timeToDestination", "Size"))
-        .andExpect(model().errorCount(2));
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/someValidationError"));
+
+    ArgumentCaptor<BindingResult> captor = ArgumentCaptor.forClass(BindingResult.class);
+    verify(mockRouteMaster, times(1))
+        .redirectToOnBindingError(any(), any(), captor.capture(), any());
+    BindingResult bindingResult = (BindingResult) captor.getValue();
+
+    assertThat(bindingResult.getErrorCount()).isEqualTo(2);
+    assertTrue(
+        containsError(
+            bindingResult.getFieldErrors(),
+            "destinationToHome",
+            DESTINATION_TO_HOME_OVER_MAX,
+            "Size"));
+    assertTrue(
+        containsError(
+            bindingResult.getFieldErrors(),
+            "timeToDestination",
+            TIME_TO_DESTINATION_OVER_MAX,
+            "Size"));
+  }
+
+  private boolean containsError(
+      List<FieldError> fieldErrors, String field, String rejectedValue, String errorCode) {
+    for (FieldError fieldError : fieldErrors) {
+      if (isEqual(fieldError, field, rejectedValue, errorCode)) {
+        return true;
+      }
+      ;
+    }
+    return false;
+  }
+
+  private boolean isEqual(
+      FieldError fieldError, String field, String rejectedValue, String errorCode) {
+    return (fieldError.getField().equalsIgnoreCase(field)
+        && ((String) fieldError.getRejectedValue()).equalsIgnoreCase(rejectedValue)
+        && fieldError.getCode().equalsIgnoreCase(errorCode));
   }
 }
