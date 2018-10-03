@@ -55,7 +55,7 @@ public class Journey implements Serializable {
   public String who;
   public String ageGroup;
 
-  // afcs Journey Forms
+  // AFCS Journey Forms
   private CompensationSchemeForm compensationSchemeForm;
   private DisabilityForm disabilityForm;
   private MentalDisorderForm mentalDisorderForm;

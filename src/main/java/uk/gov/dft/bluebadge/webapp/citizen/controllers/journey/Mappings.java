@@ -24,12 +24,12 @@ public class Mappings {
   public static final String URL_NINO = "/nino";
   public static final String URL_ENTER_ADDRESS = "/enter-address";
 
-  // pip Journey Routes
+  // PIP Journey Routes
   public static final String URL_PIP_PLANNING_JOURNEY = "/planning-and-following";
   public static final String URL_PIP_MOVING_AROUND = "/moving-around";
   public static final String URL_PIP_RECEIVED_DLA = "/dla-in-the-past";
 
-  // afcs Journey Routes
+  // AFCS Journey Routes
   public static final String URL_AFCS_COMPENSATION_SCHEME = "/lump-sum";
   public static final String URL_AFCS_DISABILITY = "/permanent-and-substantial-disability";
   public static final String URL_AFCS_MENTAL_DISORDER = "/permanent-mental-disorder";
@@ -37,9 +37,11 @@ public class Mappings {
   // Main reason sub journey
   public static final String URL_MAIN_REASON = "/main-reason";
   public static final String URL_WALKING_DIFFICULTY = "/walking-difficulty";
-  public static final String URL_WHERE_CAN_YOU_WALK = "/where-can-you-walk";
   public static final String URL_NOT_ELIGIBLE = "/not-eligible";
   public static final String URL_CONTACT_COUNCIL = "/contact-council";
+
+  // Walking difficulties route
+  public static final String URL_WHERE_CAN_YOU_WALK = "/where-can-you-walk";
 
   private Mappings() {}
 
@@ -58,12 +60,12 @@ public class Mappings {
           .put(StepDefinition.ELIGIBLE, URL_ELIGIBLE)
           .put(StepDefinition.MAY_BE_ELIGIBLE, URL_MAY_BE_ELIGIBLE)
 
-          // pip Journey Mappings
+          // PIP Journey Mappings
           .put(StepDefinition.PIP_MOVING_AROUND, URL_PIP_MOVING_AROUND)
           .put(StepDefinition.PIP_DLA, URL_PIP_RECEIVED_DLA)
           .put(StepDefinition.PIP_PLANNING_JOURNEY, URL_PIP_PLANNING_JOURNEY)
 
-          // afcs Journey Mappings
+          // AFCS Journey Mappings
           .put(StepDefinition.AFCS_DISABILITY, URL_AFCS_DISABILITY)
           .put(StepDefinition.AFCS_MENTAL_DISORDER, URL_AFCS_MENTAL_DISORDER)
           .put(StepDefinition.AFCS_COMPENSATION_SCHEME, URL_AFCS_COMPENSATION_SCHEME)
