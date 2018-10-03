@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="#{${JOURNEY.who} + 'mobility.aid.list.page.title'} + ' - ' + #{common.title.suffix}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.who} + 'mobility.aid.list.body.title'}"></h1>
+
+            <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>
+
+            <form th:action="@{/list-mobility-aids}" th:object="${formRequest}" method="POST" novalidate>
+
+                <div th:class="${#fields.hasErrors('hasWalkingAid')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+                    <fieldset class="govuk-fieldset" id="hasWalkingAid">
+
+                        <span class="govuk-error-message"
+                              data-uipath="hasWalkingAid.error"
+                              th:errors="*{hasWalkingAid}"></span>
+
+                        <div class="govuk-radios" data-module="radios">
+
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="hasWalkingAidyes" name="hasWalkingAid"
+                                       type="radio" th:field="*{hasWalkingAid}"
+                                       value="true" data-aria-controls="conditional-hasWalkingAidyes">
+                                <label class="govuk-label govuk-radios__label"
+                                       for="hasWalkingAidyes"
+                                       th:text="#{'radio.option.yes'}"></label>
+                            </div>
+
+                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
+                                 id="conditional-hasWalkingAidyes">
+                                <table class="govuk-table">
+                                    <thead class="govuk-table__head" data-uipath="table.head">
+                                    <tr class="govuk-table__row">
+                                        <th class="govuk-table__header" scope="col">Type</th>
+                                        <th class="govuk-table__header" scope="col">When used</th>
+                                        <th class="govuk-table__header" scope="col"></th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody class="govuk-table__body" data-uipath="table.body">
+                                    <tr class="govuk-table__row" th:each="aid : *{mobilityAids}">
+                                        <td class="govuk-table__cell" th:text="${aid.aidTypeDescription}"></td>
+                                        <td class="govuk-table__cell" th:text="${aid.usage}"></td>
+                                        <td class="govuk-table__cell">
+                                        <a th:href="@{/list-mobility-aids/remove(uuid=${aid.id})}" th:text="#{remove.this}"></a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div th:if="${#lists.isEmpty(formRequest.mobilityAids)}">
+                                    <a data-uid="firstaddmobilityaidlink" href="/add-mobility-aid"
+                                       th:text="#{first.mobility.aid.add.link.text}"></a>
+                                </div>
+                                <div th:if="${not #lists.isEmpty(formRequest.mobilityAids)}">
+                                    <a data-uid="addmobilityaidlink" href="/add-mobility-aid"
+                                       th:text="#{mobility.aid.add.link.text}"></a>
+                                </div>
+                            </div>
+
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="hasWalkingAidno" name="hasWalkingAid"
+                                       type="radio"
+                                       value="false"
+                                       th:field="*{hasWalkingAid}">
+                                <label class="govuk-label govuk-radios__label"
+                                       for="hasWalkingAidno"
+                                       th:text="#{'radio.option.no'}"></label>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </div>
+
+                <button type="submit"
+                        class="govuk-button"
+                        data-uipath="button.continue"
+                        th:text="#{btn.label.continue}"></button>
+
+            </form>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

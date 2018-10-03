@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="#{mobility.aid.add.page.title} + ' - ' + #{common.title.suffix}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l" th:text="#{mobility.aid.add.body.title}"></h1>
+
+            <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>
+
+            <form th:action="@{/add-mobility-aid}" th:object="${formRequest}" method="POST" novalidate>
+
+                <div th:replace="~{ fragments/govuk-radios :: govuk-radios('aidType', ${aidTypeOptions}) }"></div>
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + 'mobilityaid.usage.text'}, 'usage', #{mobilityaid.usage.hint.text}, 'text', 'govuk-!-width-one-half')}"></div>
+                <div th:replace="~{ fragments/govuk-radios :: govuk-radios('howProvidedCodeField', ${howProvidedOptions}) }"></div>
+
+                <button type="submit"
+                        class="govuk-button"
+                        data-uipath="button.continue"
+                        th:text="#{mobilityaid.add.button}"></button>
+
+                <div class="govuk-inset-text">
+                    <p class="govuk-body" th:text="#{mobilityaid.footer.hint.text}"></p>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

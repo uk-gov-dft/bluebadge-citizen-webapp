@@ -16,6 +16,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
@@ -58,6 +59,7 @@ public class Journey implements Serializable {
   private DisabilityForm disabilityForm;
   private MentalDisorderForm mentalDisorderForm;
   private ContactDetailsForm contactDetailsForm;
+  private MobilityAidListForm mobilityAidListForm;
 
   public Nation getNation() {
     if (null != localAuthority) {
@@ -279,5 +281,13 @@ public class Journey implements Serializable {
 
   public void setEnterAddressForm(EnterAddressForm enterAddressForm) {
     this.enterAddressForm = enterAddressForm;
+  }
+
+  public MobilityAidListForm getMobilityAidListForm() {
+    return mobilityAidListForm;
+  }
+
+  public void setMobilityAidListForm(MobilityAidListForm mobilityAidListForm) {
+    this.mobilityAidListForm = mobilityAidListForm;
   }
 }

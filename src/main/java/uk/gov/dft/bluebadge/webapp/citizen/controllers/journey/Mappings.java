@@ -40,6 +40,9 @@ public class Mappings {
   public static final String URL_NOT_ELIGIBLE = "/not-eligible";
   public static final String URL_CONTACT_COUNCIL = "/contact-council";
 
+  public static final String URL_MOBILITY_AID_LIST = "/list-mobility-aids";
+  public static final String URL_MOBILITY_AID_ADD = "/add-mobility-aid";
+
   private Mappings() {}
 
   private static final BiMap<StepDefinition, String> stepToUrlMapping =
@@ -77,6 +80,7 @@ public class Mappings {
           .put(StepDefinition.YOUR_ISSUING_AUTHORITY, URL_YOUR_ISSUING_AUTHORITY)
           .put(StepDefinition.DECLARATIONS, URL_DECLARATIONS)
           .put(StepDefinition.SUBMITTED, URL_APPLICATION_SUBMITTED)
+          .put(StepDefinition.MOBILITY_AID_LIST, URL_MOBILITY_AID_LIST)
           .build();
 
   public static StepDefinition getStep(String url) {
