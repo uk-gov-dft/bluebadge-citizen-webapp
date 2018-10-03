@@ -67,11 +67,29 @@ public class WhereCanYouWalkControllerTest {
   }
 
   @Test
-  public void show_ShouldDisplayWhereCanYouWalkTemplate() throws Exception {
+  public void show_ShouldDisplayWhereCanYouWalkTemplateWithEmptyForm() throws Exception {
     WhereCanYouWalkForm formRequest = WhereCanYouWalkForm.builder().build();
 
     mockMvc
         .perform(get("/where-can-you-walk").sessionAttr("JOURNEY", journey))
+        .andExpect(status().isOk())
+        .andExpect(view().name("where-can-you-walk"))
+        .andExpect(model().attribute("formRequest", formRequest));
+  }
+
+  @Test
+  public void show_ShouldDisplayWhereCanYouWalkTemplateWithNonEmptyForm() throws Exception {
+    WhereCanYouWalkForm formRequest =
+        WhereCanYouWalkForm.builder()
+            .destinationToHome("destination")
+            .timeToDestination("10 minutes")
+            .build();
+
+    mockMvc
+        .perform(
+            get("/where-can-you-walk")
+                .flashAttr("formRequest", formRequest)
+                .sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("where-can-you-walk"))
         .andExpect(model().attribute("formRequest", formRequest));
