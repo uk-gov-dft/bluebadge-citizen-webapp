@@ -3,10 +3,11 @@
 <body>
 
 <div th:fragment="govuk-cookie-banner" class="govuk-cookie-banner">
+
     <div class="govuk-cookie-banner__container">
         <p class="govuk-body-s">
             <span th:remove="tag" th:text="#{cookieBanner.text}"></span>
-            <a href="" th:text="#{cookieBanner.link}"></a>
+            <a href="/cookies" th:text="#{cookieBanner.link}"></a>
         </p>
     </div>
 </div>

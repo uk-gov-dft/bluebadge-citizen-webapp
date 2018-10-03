@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th=”http://www.thymeleaf.org lang="en">
+<html class="govuk-template" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th=”http://www.thymeleaf.org lang="en">
 <head>
     <title>GOV.UK Manage Blue Badges</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -12,7 +12,7 @@
     <link rel="apple-touch-icon" sizes="167x167" th:href="@{/govuk/images/govuk-apple-touch-icon-167x167.png}">
     <link rel="apple-touch-icon" sizes="152x152" th:href="@{/govuk/images/govuk-apple-touch-icon-152x152.png}">
     <link rel="apple-touch-icon" th:href="@{/govuk/images/govuk-apple-touch-icon.png}">
-    
+
     <!--[if gt IE 8]><!-->
         <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/main.css}">
     <!--<![endif]-->
@@ -41,23 +41,25 @@
 </head>
 
 <body class="govuk-template__body">
-<script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+    <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
 
-<div th:replace="~{ fragments/govuk-cookie-banner :: govuk-cookie-banner }"></div>
+    <div th:unless="${@cookieUtils.isCookieBannerSet()}">
+        <div th:replace="~{ fragments/govuk-cookie-banner :: govuk-cookie-banner }"></div>
+    </div>
 
-<a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+    <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
 
-<header th:replace="~{ fragments/govuk-header :: govuk-header }"></header>
+    <header th:replace="~{ fragments/govuk-header :: govuk-header }"></header>
 
-<div class="govuk-width-container">
+    <div class="govuk-width-container">
+        <div th:replace="~{ fragments/govuk-header :: govuk-phase-banner }"></div>
+        <main class="govuk-main-wrapper" id="main-content" layout:fragment="content"></main>
+    </div>
 
-    <div th:replace="~{ fragments/govuk-header :: govuk-phase-banner }"></div>
+    <footer th:replace="~{ fragments/govuk-footer :: govuk-footer }"></footer>
 
-    <main class="govuk-main-wrapper" id="main-content" layout:fragment="content"></main>
-</div>
-
-<footer th:replace="~{ fragments/govuk-footer :: govuk-footer }"></footer>
-
-<script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
 </body>
 </html>
+
+
