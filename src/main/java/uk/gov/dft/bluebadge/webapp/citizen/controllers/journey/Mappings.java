@@ -42,6 +42,7 @@ public class Mappings {
 
   // Walking difficulties route
   public static final String URL_WHAT_WALKING_DIFFICULT = "/what-makes-walking-difficult";
+  public static final String URL_WHERE_CAN_YOU_WALK = "/where-can-you-walk";
 
   private Mappings() {}
 
@@ -74,6 +75,7 @@ public class Mappings {
           .put(StepDefinition.MAIN_REASON, URL_MAIN_REASON)
           .put(StepDefinition.CONTACT_COUNCIL, URL_CONTACT_COUNCIL)
           .put(StepDefinition.WALKING_DIFFICULTY, URL_WALKING_DIFFICULTY)
+          .put(StepDefinition.WHERE_CAN_YOU_WALK, URL_WHERE_CAN_YOU_WALK)
           .put(StepDefinition.NOT_ELIGIBLE, URL_NOT_ELIGIBLE)
           .put(StepDefinition.HEALTH_CONDITIONS, URL_HEALTH_CONDITIONS)
           .put(StepDefinition.WHAT_WALKING_DIFFICULTIES, URL_WHAT_WALKING_DIFFICULT)

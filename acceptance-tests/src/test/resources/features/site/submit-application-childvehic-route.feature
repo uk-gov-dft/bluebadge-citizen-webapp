@@ -7,12 +7,7 @@ Feature: DFT Blue badge Citizen app new application - CHILDVEHIC
     And   I complete select council page for "england"
     And   I complete your local authority page
     And   I complete receive benefit page for "AFRFCS"
-
-    Then  I should see the page titled "Have you received a lump sum payment within tariff levels 1 to 8 of the Armed Forces Compensation Scheme? - GOV.UK Apply for a Blue Badge"
-    And   I should see the title "Have you received a lump sum payment within tariff levels 1 to 8 of the Armed Forces Compensation Scheme?"
-    And   I select option "hasReceivedCompensation.option.no"
-    And   I can click on "Continue"
-
+    And   I complete lump sum of the AFRFCS Scheme page for "NO"
     And   I complete main reason page for "CHILDVEHIC"
     Then  I should see "You may be" eligible page
     When  I complete eligible page
@@ -32,12 +27,7 @@ Feature: DFT Blue badge Citizen app new application - CHILDVEHIC
     And   I complete select council page for "england"
     And   I complete your local authority page
     And   I complete receive benefit page for "AFRFCS"
-
-    Then  I should see the page titled "Have they received a lump sum payment within tariff levels 1 to 8 of the Armed Forces Compensation Scheme? - GOV.UK Apply for a Blue Badge"
-    And   I should see the title "Have they received a lump sum payment within tariff levels 1 to 8 of the Armed Forces Compensation Scheme?"
-    And   I select option "hasReceivedCompensation.option.no"
-    And   I can click on "Continue"
-
+    And   I complete lump sum of the AFRFCS Scheme page for "NO"
     And   I complete main reason page for "CHILDVEHIC"
     Then  I should see "They may be" eligible page
     When  I complete eligible page
@@ -49,4 +39,3 @@ Feature: DFT Blue badge Citizen app new application - CHILDVEHIC
     And   I complete describe health conditions page
     And   I complete declaration page
     Then  I should see .* page titled "Application submitted" with GOV.UK suffix
-
