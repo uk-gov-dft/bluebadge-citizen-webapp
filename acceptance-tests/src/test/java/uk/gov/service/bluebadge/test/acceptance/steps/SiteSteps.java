@@ -15,7 +15,6 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.FEEDBA
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.GOOGLE_ANALYTICS_TAG;
 
 import cucumber.api.DataTable;
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -311,5 +310,3 @@ public class SiteSteps extends AbstractSpringSteps {
     assertTrue(sitePage.getPageContent().contains(GOOGLE_ANALYTICS_TAG));
   }
 }
-
-
