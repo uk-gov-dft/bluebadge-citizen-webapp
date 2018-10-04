@@ -25,6 +25,13 @@ class Ids {
     static final String NO_NI_LINK_TEXT = "Continue without a National Insurance number.";
     static final String FEEDBACK_URL = "https://www.smartsurvey.co.uk/s/XIYJ6/";
     static final String GOOGLE_ANALYTICS_TAG = "UA-124760983-5";
+    static final String PLACE_CAN_WALK = "destinationToHome";
+    static final String TIME_TO_DESTINATION = "timeToDestination";
+    static final String RECEIVED_COMPENSATION = "hasReceivedCompensation";
+    static final String HAS_DISABILITY = "hasDisability";
+    static final String HAS_MENTAL_DISORDER = "hasMentalDisorder";
+    static final String AWARDED_HIGHER_RATE_MOBILITY = "awardedHigherRateMobility";
+
   }
 
   class Person {
