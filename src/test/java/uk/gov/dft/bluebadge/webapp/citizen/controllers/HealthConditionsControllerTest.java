@@ -66,7 +66,7 @@ public class HealthConditionsControllerTest {
   @Test
   public void submit_givenValidForm_thenShouldDisplayRedirectToSuccess() throws Exception {
 
-    when(mockRouteMaster.redirectToOnSuccess(any(HealthConditionsForm.class)))
+    when(mockRouteMaster.redirectToOnSuccess(any(HealthConditionsForm.class), any(Journey.class)))
         .thenReturn("redirect:/testSuccess");
 
     mockMvc
