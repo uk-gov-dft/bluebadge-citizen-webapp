@@ -107,7 +107,9 @@ public class WhatWalkingDifficultiesController implements StepController {
     options.add(
         new RadioOption(
             WalkingDifficultyTypeCodeField.DANGER.name(),
-            journey.who + journey.getNation().name() + ".whatMakesWalkingDifficult.select.option.dangerous"));
+            journey.who
+                + journey.getNation().name()
+                + ".whatMakesWalkingDifficult.select.option.dangerous"));
     options.add(
         new RadioOption(
             WalkingDifficultyTypeCodeField.SOMELSE.name(),
