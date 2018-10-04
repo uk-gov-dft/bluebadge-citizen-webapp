@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
@@ -78,6 +80,28 @@ public class Journey implements Serializable {
     }
 
     return null;
+  }
+
+  public String getDescriptionOfCondition() {
+    HealthConditionsForm healthConditionsForm = getHealthConditionsForm();
+    WhereCanYouWalkForm whereCanYouWalkForm = getWhereCanYouWalkForm();
+
+    StringBuilder descriptionOfCondition = new StringBuilder();
+    if (healthConditionsForm != null && healthConditionsForm.getDescriptionOfConditions() != null) {
+      descriptionOfCondition.append(healthConditionsForm.getDescriptionOfConditions());
+    }
+
+    if (WALKD.equals(getEligibilityCode()) && whereCanYouWalkForm != null) {
+      descriptionOfCondition
+          .append(" - Able to walk to: ")
+          .append(whereCanYouWalkForm.getDestinationToHome())
+          .append(" - How long: ")
+          .append(whereCanYouWalkForm.getTimeToDestination());
+    }
+    if (descriptionOfCondition.length() == 0) {
+      descriptionOfCondition.append("Dummy condition");
+    }
+    return descriptionOfCondition.toString();
   }
 
   public Boolean isApplicantYourself() {

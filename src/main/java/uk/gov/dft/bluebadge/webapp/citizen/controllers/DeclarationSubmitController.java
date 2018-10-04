@@ -42,8 +42,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
@@ -105,7 +103,7 @@ public class DeclarationSubmitController implements StepController {
         yourIssuingAuthorityForm == null
             ? "ABERD"
             : yourIssuingAuthorityForm.getLocalAuthorityShortCode();
-    String condDesc = getDescriptionOfCondition(journey);
+    String condDesc = journey.getDescriptionOfCondition();
 
     String fullName = applicantNameForm == null ? "John Doe" : applicantNameForm.getFullName();
     String birthName =
@@ -210,28 +208,5 @@ public class DeclarationSubmitController implements StepController {
   @Override
   public StepDefinition getStepDefinition() {
     return StepDefinition.DECLARATIONS;
-  }
-
-  private String getDescriptionOfCondition(Journey journey) {
-    HealthConditionsForm healthConditionsForm = journey.getHealthConditionsForm();
-    WhereCanYouWalkForm whereCanYouWalkForm = journey.getWhereCanYouWalkForm();
-
-    StringBuilder descriptionOfCondition = new StringBuilder();
-    if (healthConditionsForm != null && healthConditionsForm.getDescriptionOfConditions() != null) {
-      descriptionOfCondition.append(healthConditionsForm.getDescriptionOfConditions());
-    }
-    EligibilityCodeField eligibility = journey.getEligibilityCode();
-
-    if (WALKD.equals(eligibility) && whereCanYouWalkForm != null) {
-      descriptionOfCondition
-          .append(" - Able to walk to: ")
-          .append(whereCanYouWalkForm.getDestinationToHome())
-          .append(" - How long: ")
-          .append(whereCanYouWalkForm.getTimeToDestination());
-    }
-    if (descriptionOfCondition.length() == 0) {
-      descriptionOfCondition.append("Dummy condition");
-    }
-    return descriptionOfCondition.toString();
   }
 }
