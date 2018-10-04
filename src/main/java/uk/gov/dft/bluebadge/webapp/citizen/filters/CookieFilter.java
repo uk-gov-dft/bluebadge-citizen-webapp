@@ -33,6 +33,7 @@ public class CookieFilter implements Filter {
 
     if (!CookieUtils.isCookieBannerSet(req)) {
       Cookie newCookie = new Cookie(CookieUtils.COOKIE_BANNER_KEY, COOKIE_BANNER_VALUE);
+      newCookie.setSecure(true);
       newCookie.setMaxAge(SECONDS_IN_MONTH);
       res.addCookie(newCookie);
     }
