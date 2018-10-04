@@ -9,6 +9,8 @@ import lombok.Data;
 public class RadioOptionsGroup {
   private String titleKey;
   private String hintKey;
+  // IF true, then title will render as H1, else label
+  private boolean titleIsH1 = true;
   private List<RadioOption> options;
 
   public RadioOptionsGroup(String title) {
@@ -16,8 +18,13 @@ public class RadioOptionsGroup {
   }
 
   public RadioOptionsGroup(String title, List<RadioOption> options) {
-    this.titleKey = title;
+    this(title);
     this.options = options;
+  }
+
+  public RadioOptionsGroup(String titleKey, boolean titleIsH1, List<RadioOption> options) {
+    this(titleKey, options);
+    this.titleIsH1 = titleIsH1;
   }
 
   public RadioOptionsGroup autoPopulateBooleanOptions() {
@@ -29,10 +36,16 @@ public class RadioOptionsGroup {
 
   public static class Builder {
     private String titleKey;
+    private boolean titleIsH1 = true;
     private final List<RadioOption> options;
 
     public Builder() {
       options = new ArrayList<>();
+    }
+
+    public Builder titleIsLabel(){
+      this.titleIsH1 = false;
+      return this;
     }
 
     public Builder titleMessageKey(String titleKey) {
@@ -62,7 +75,7 @@ public class RadioOptionsGroup {
     }
 
     public RadioOptionsGroup build() {
-      return new RadioOptionsGroup(titleKey, options);
+      return new RadioOptionsGroup(titleKey, titleIsH1, options);
     }
   }
 }

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HowProvidedCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingAid;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
@@ -20,7 +19,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 
 import javax.validation.Valid;
-
 import java.util.ArrayList;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
@@ -40,16 +38,21 @@ public class MobilityAidAddController implements StepController {
 
   @GetMapping
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
-    /*
-        if (!journey.isValidState(getStepDefinition())) {
-          return routeMaster.backToCompletedPrevious();
-        }
-    */
+
+    if (!journey.isValidState(getStepDefinition())) {
+      return routeMaster.backToCompletedPrevious();
+    }
 
     // Can hit add link before previous form submitted.
-    if(null == journey.getMobilityAidListForm() || null == journey.getMobilityAidListForm().getMobilityAids()){
-      journey.setMobilityAidListForm(MobilityAidListForm.builder().hasWalkingAid(Boolean.TRUE).mobilityAids(new ArrayList<>()).build());
+    if (null == journey.getMobilityAidListForm()
+        || null == journey.getMobilityAidListForm().getMobilityAids()) {
+      journey.setMobilityAidListForm(
+          MobilityAidListForm.builder()
+              .mobilityAids(new ArrayList<>())
+              .build());
     }
+
+    journey.getMobilityAidListForm().setHasWalkingAid(true);
 
     // On returning to form, take previously submitted values.
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -60,6 +63,7 @@ public class MobilityAidAddController implements StepController {
         "aidTypeOptions",
         new RadioOptionsGroup.Builder()
             .titleMessageKey("mobilityaid.type.optiongroup.title")
+            .titleIsLabel()
             .addOption(MobilityAidAddForm.AidType.WHEELCHAIR, "mobilityaid.type.option.wheelchair")
             .addOption(MobilityAidAddForm.AidType.SCOOTER, "mobilityaid.type.option.scooter")
             .addOption(MobilityAidAddForm.AidType.WALKING_AID, "mobilityaid.type.option.walkingaid")
@@ -67,6 +71,7 @@ public class MobilityAidAddController implements StepController {
     model.addAttribute(
         "howProvidedOptions",
         new RadioOptionsGroup.Builder()
+            .titleIsLabel()
             .titleMessageKeyApplicantAware("mobilityaid.howprovided.optiongroup.title", journey)
             .addOption(HowProvidedCodeField.PRESCRIBE, "mobilityaid.howprovided.option.prescribed")
             .addOption(HowProvidedCodeField.PRIVATE, "mobilityaid.howprovided.option.private")
@@ -93,6 +98,6 @@ public class MobilityAidAddController implements StepController {
 
   @Override
   public StepDefinition getStepDefinition() {
-    return StepDefinition.MOBILITY_AID_LIST;
+    return StepDefinition.MOBILITY_AID_ADD;
   }
 }

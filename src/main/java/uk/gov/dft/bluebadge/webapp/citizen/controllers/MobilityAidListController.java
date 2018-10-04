@@ -15,7 +15,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 
 import javax.validation.Valid;
@@ -67,26 +66,26 @@ public class MobilityAidListController implements StepController {
     }
 
     // Reset if no selected
-    if (!mobilityAidListForm.getHasWalkingAid()) {
-      mobilityAidListForm.setMobilityAids(new ArrayList<>());
-      journey.setMobilityAidListForm(mobilityAidListForm);
+    // Treat as No selected if no aids
+    if (!mobilityAidListForm.getHasWalkingAid() || (mobilityAidListForm.getHasWalkingAid() && journey.getMobilityAidListForm().getMobilityAids().isEmpty())) {
+      journey.setMobilityAidListForm(MobilityAidListForm.builder().hasWalkingAid(false).mobilityAids(new ArrayList<>()).build());
+    }else{
+      journey.getMobilityAidListForm().setHasWalkingAid(mobilityAidListForm.getHasWalkingAid());
     }
-    // Don't overwrite mobility/AidList in journey else
-    // as it is not bound to inputs in ui form
+
+    // Don't overwrite mobility/AidList in journey
+    // as it is not bound to inputs in ui form and always null on submit
 
     return routeMaster.redirectToOnSuccess(mobilityAidListForm);
   }
 
-  @RequestMapping(value = Mappings.URL_MOBILITY_AID_LIST + "/remove", method = RequestMethod.GET)
+  @RequestMapping(value = "/remove", method = RequestMethod.GET)
   public String handleDelete(
       @RequestParam(name = "uuid") String uuid,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    for (MobilityAidAddForm item : journey.getMobilityAidListForm().getMobilityAids()) {
-      if (item.getId().equals(uuid)) {
-        journey.getMobilityAidListForm().getMobilityAids().remove(item);
-      }
-    }
+    journey.getMobilityAidListForm().getMobilityAids().removeIf(item -> item.getId().equals(uuid));
+
     return "redirect:" + Mappings.URL_MOBILITY_AID_LIST;
   }
 

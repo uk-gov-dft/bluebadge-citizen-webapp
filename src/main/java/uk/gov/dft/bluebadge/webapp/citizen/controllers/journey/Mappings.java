@@ -81,6 +81,7 @@ public class Mappings {
           .put(StepDefinition.DECLARATIONS, URL_DECLARATIONS)
           .put(StepDefinition.SUBMITTED, URL_APPLICATION_SUBMITTED)
           .put(StepDefinition.MOBILITY_AID_LIST, URL_MOBILITY_AID_LIST)
+          .put(StepDefinition.MOBILITY_AID_ADD, URL_MOBILITY_AID_ADD)
           .build();
 
   public static StepDefinition getStep(String url) {

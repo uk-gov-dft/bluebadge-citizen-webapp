@@ -62,10 +62,16 @@
                 th:aria-describedby="${radioGroup.getHintKey()} ? ${name} + '-hint' : null">
 
          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l"
-                 th:if="${radioGroup.getTitleKey()}">
+                 th:if="${radioGroup.getTitleKey() != null && radioGroup.titleIsH1}">
             <h1 class="govuk-fieldset__heading"
                 th:data-uipath="${name} + '.label'"
                 th:text="#{${radioGroup.getTitleKey()}}"></h1>
+         </legend>
+
+         <legend class="govuk-fieldset__legend govuk-fieldset__legend--s"
+                 th:if="${radioGroup.getTitleKey() != null && !radioGroup.titleIsH1}">
+            <div th:data-uipath="${name} + '.label'"
+                th:text="#{${radioGroup.getTitleKey()}}" th:remove="tag"></div>
          </legend>
 
          <span th:id="${name} + '-hint'"

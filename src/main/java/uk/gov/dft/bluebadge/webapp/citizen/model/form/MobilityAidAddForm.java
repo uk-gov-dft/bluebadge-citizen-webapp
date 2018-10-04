@@ -5,6 +5,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Ho
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -29,6 +30,7 @@ public class MobilityAidAddForm implements Serializable {
   }
 
   @NotNull private AidType aidType;
+  @Size(max = 100)
   @NotBlank private String usage;
   @NotNull private HowProvidedCodeField howProvidedCodeField;
   private String id;
