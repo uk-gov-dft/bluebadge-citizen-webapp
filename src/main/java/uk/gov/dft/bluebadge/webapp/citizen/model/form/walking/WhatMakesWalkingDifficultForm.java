@@ -21,7 +21,7 @@ public class WhatMakesWalkingDifficultForm implements StepForm, Serializable {
   @NotEmpty List<WalkingDifficultyTypeCodeField> whatWalkingDifficulties;
 
   @NotBlank(groups = SomethingElseGroup.class)
-  @Size(max = 100, groups = SomethingElseGroup.class)
+  @Size(max = 255, groups = SomethingElseGroup.class)
   String somethingElseDescription;
 
   @Override

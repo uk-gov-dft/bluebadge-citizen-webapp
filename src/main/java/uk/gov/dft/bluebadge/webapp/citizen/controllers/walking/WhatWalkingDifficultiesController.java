@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.walking;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import java.util.ArrayList;
@@ -29,7 +30,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDi
 public class WhatWalkingDifficultiesController implements StepController {
 
   private static final String TEMPLATE = "walking/what-walking-difficult";
-  public static final String FORM_NAME = "formRequest";
 
   private final RouteMaster routeMaster;
 
@@ -46,14 +46,14 @@ public class WhatWalkingDifficultiesController implements StepController {
     }
 
     //On returning to form, take previously submitted values.
-    if (!model.containsAttribute(FORM_NAME)
+    if (!model.containsAttribute(FORM_REQUEST)
         && null != journey.getWhatMakesWalkingDifficultForm()) {
-      model.addAttribute(FORM_NAME, journey.getWhatMakesWalkingDifficultForm());
+      model.addAttribute(FORM_REQUEST, journey.getWhatMakesWalkingDifficultForm());
     }
 
     // If navigating forward from previous form, reset
-    if (!model.containsAttribute(FORM_NAME)) {
-      model.addAttribute(FORM_NAME, WhatMakesWalkingDifficultForm.builder().build());
+    if (!model.containsAttribute(FORM_REQUEST)) {
+      model.addAttribute(FORM_REQUEST, WhatMakesWalkingDifficultForm.builder().build());
     }
 
     // Otherwise, is redirect from post with binding errors.
@@ -64,7 +64,7 @@ public class WhatWalkingDifficultiesController implements StepController {
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute(FORM_NAME)
+      @Valid @ModelAttribute(FORM_REQUEST)
           WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm,
       BindingResult bindingResult,
       RedirectAttributes attr) {
@@ -107,7 +107,7 @@ public class WhatWalkingDifficultiesController implements StepController {
     options.add(
         new RadioOption(
             WalkingDifficultyTypeCodeField.DANGER.name(),
-            journey.who + "whatMakesWalkingDifficult.select.option.dangerous"));
+            journey.who + journey.getNation().name() + ".whatMakesWalkingDifficult.select.option.dangerous"));
     options.add(
         new RadioOption(
             WalkingDifficultyTypeCodeField.SOMELSE.name(),
