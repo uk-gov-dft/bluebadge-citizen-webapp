@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import javax.validation.Valid;
@@ -16,19 +17,18 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
 
 @Controller
-@RequestMapping(Mappings.URL_HEALTH_CONDITIONS)
-public class HealthConditionsController implements StepController {
+@RequestMapping(Mappings.URL_WHERE_CAN_YOU_WALK)
+public class WhereCanYouWalkController implements StepController {
 
-  private static final String TEMPLATE_HEALTH_CONDITIONS = "health-conditions";
-  public static final String FORM_REQUEST = "formRequest";
+  private static final String TEMPLATE = "where-can-you-walk";
 
   private final RouteMaster routeMaster;
 
   @Autowired
-  public HealthConditionsController(RouteMaster routeMaster) {
+  public WhereCanYouWalkController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
@@ -39,39 +39,35 @@ public class HealthConditionsController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    //On returning to form, take previously submitted values.
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getHealthConditionsForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getHealthConditionsForm());
+    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getWhereCanYouWalkForm()) {
+      model.addAttribute(FORM_REQUEST, journey.getWhereCanYouWalkForm());
     }
 
-    // If navigating forward from previous form, reset
     if (!model.containsAttribute(FORM_REQUEST)) {
-      model.addAttribute(FORM_REQUEST, HealthConditionsForm.builder().build());
+      model.addAttribute(FORM_REQUEST, WhereCanYouWalkForm.builder().build());
     }
 
-    // Otherwise, is redirect from post with binding errors.
-
-    return TEMPLATE_HEALTH_CONDITIONS;
+    return TEMPLATE;
   }
 
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute(FORM_REQUEST) HealthConditionsForm healthConditionsForm,
+      @Valid @ModelAttribute(FORM_REQUEST) WhereCanYouWalkForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
     if (bindingResult.hasErrors()) {
-      return routeMaster.redirectToOnBindingError(this, healthConditionsForm, bindingResult, attr);
+      return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
     }
 
-    journey.setHealthConditionsForm(healthConditionsForm);
+    journey.setWhereCanYouWalkForm(formRequest);
 
-    return routeMaster.redirectToOnSuccess(healthConditionsForm, journey);
+    return routeMaster.redirectToOnSuccess(formRequest);
   }
 
   @Override
   public StepDefinition getStepDefinition() {
-    return StepDefinition.HEALTH_CONDITIONS;
+    return StepDefinition.WHERE_CAN_YOU_WALK;
   }
 }

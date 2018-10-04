@@ -66,7 +66,7 @@ public class HealthConditionsControllerTest {
   @Test
   public void submit_givenValidForm_thenShouldDisplayRedirectToSuccess() throws Exception {
 
-    when(mockRouteMaster.redirectToOnSuccess(any(HealthConditionsForm.class)))
+    when(mockRouteMaster.redirectToOnSuccess(any(HealthConditionsForm.class), any(Journey.class)))
         .thenReturn("redirect:/testSuccess");
 
     mockMvc
@@ -93,7 +93,7 @@ public class HealthConditionsControllerTest {
   @Test
   public void submit_whenTooLongDescriptionOfConditions_ThenShouldHaveValidationError()
       throws Exception {
-    String tooLong = StringUtils.leftPad("a", 10001, 'b');
+    String tooLong = StringUtils.leftPad("a", 9001, 'b');
     mockMvc
         .perform(
             post("/health-conditions")
