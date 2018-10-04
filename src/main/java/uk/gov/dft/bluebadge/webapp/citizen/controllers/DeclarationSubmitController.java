@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import com.google.common.collect.Lists;
@@ -41,7 +42,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
@@ -94,7 +94,6 @@ public class DeclarationSubmitController implements StepController {
   private Application getDummyApplication(Journey journey) {
     ApplicantNameForm applicantNameForm = journey.getApplicantNameForm();
     GenderForm genderForm = journey.getGenderForm();
-    HealthConditionsForm healthConditionsForm = journey.getHealthConditionsForm();
     YourIssuingAuthorityForm yourIssuingAuthorityForm = journey.getYourIssuingAuthorityForm();
     ContactDetailsForm contactDetailsForm = journey.getContactDetailsForm();
 
@@ -104,10 +103,7 @@ public class DeclarationSubmitController implements StepController {
         yourIssuingAuthorityForm == null
             ? "ABERD"
             : yourIssuingAuthorityForm.getLocalAuthorityShortCode();
-    String condDesc =
-        healthConditionsForm == null
-            ? "Dummy condition"
-            : healthConditionsForm.getDescriptionOfConditions();
+    String condDesc = journey.getDescriptionOfCondition();
 
     String fullName = applicantNameForm == null ? "John Doe" : applicantNameForm.getFullName();
     String birthName =
