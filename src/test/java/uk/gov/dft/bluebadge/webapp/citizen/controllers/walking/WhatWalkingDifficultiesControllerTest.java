@@ -142,6 +142,15 @@ public class WhatWalkingDifficultiesControllerTest {
   }
 
   @Test
+  public void show_shouldRedirect_whenJourneyNotSetup() throws Exception {
+    mockMvc
+        .perform(get("/what-makes-walking-difficult").sessionAttr("JOURNEY", new Journey()))
+        .andExpect(status().isOk())
+        .andExpect(view().name("backToStart"))
+    ;
+  }
+
+  @Test
   public void submit_showRedirectToNextStepInJourney() throws Exception {
     List<WalkingDifficultyTypeCodeField> whatList =
         ImmutableList.of(

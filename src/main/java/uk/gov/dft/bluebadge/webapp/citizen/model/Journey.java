@@ -130,6 +130,10 @@ public class Journey implements Serializable {
     }
 
     switch (step) {
+      case WHAT_WALKING_DIFFICULTIES:
+        if (null == getNation()) {
+          return false;
+        }
       case ELIGIBLE:
       case MAY_BE_ELIGIBLE:
         if (null == getLocalAuthority()) {

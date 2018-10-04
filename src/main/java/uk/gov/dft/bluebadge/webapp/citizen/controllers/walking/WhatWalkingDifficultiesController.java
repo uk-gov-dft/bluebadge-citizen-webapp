@@ -87,6 +87,11 @@ public class WhatWalkingDifficultiesController implements StepController {
   @ModelAttribute("walkingDifficulties")
   public RadioOptionsGroup walkingDifficulties(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+
+    if (!journey.isValidState(getStepDefinition())) {
+      return null;
+    }
+
     List options = new ArrayList();
     options.add(
         new RadioOption(
