@@ -54,11 +54,13 @@ public class ContactFormTest {
   public void submit_shouldShowHealthConditionsStep() throws Exception {
 
     Journey journey = JourneyFixture.getDefaultJourney();
-    MainReasonForm mainReasonForm =
-        MainReasonForm.builder().mainReasonOption(EligibilityCodeField.ARMS).build();
     ReceiveBenefitsForm benefitsForm = ReceiveBenefitsForm.builder().build();
     journey.setReceiveBenefitsForm(benefitsForm);
+
+    MainReasonForm mainReasonForm =
+        MainReasonForm.builder().mainReasonOption(EligibilityCodeField.ARMS).build();
     journey.setMainReasonForm(mainReasonForm);
+
     ContactDetailsForm contactForm = ContactDetailsForm.builder().build();
 
     assertTrue(contactForm.determineNextStep(journey).isPresent());
