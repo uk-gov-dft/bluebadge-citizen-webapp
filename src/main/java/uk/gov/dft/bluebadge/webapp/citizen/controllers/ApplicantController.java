@@ -35,8 +35,8 @@ public class ApplicantController implements StepController {
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getApplicantForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getApplicantForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(StepDefinition.APPLICANT_TYPE)) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(StepDefinition.APPLICANT_TYPE));
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {

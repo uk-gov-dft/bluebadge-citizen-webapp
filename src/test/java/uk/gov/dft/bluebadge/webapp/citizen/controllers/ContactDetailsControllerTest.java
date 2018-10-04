@@ -16,8 +16,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 
@@ -62,7 +65,8 @@ public class ContactDetailsControllerTest {
 
     // Set to applying for someone else
     Journey journey = JourneyFixture.getDefaultJourney();
-    journey.getApplicantForm().setApplicantType(ApplicantType.SOMEONE_ELSE.toString());
+    ApplicantForm formForStep = (ApplicantForm)journey.getFormForStep(StepDefinition.APPLICANT_TYPE);
+    formForStep.setApplicantType(ApplicantType.SOMEONE_ELSE.toString());
 
     mockMvc
         .perform(
@@ -183,6 +187,6 @@ public class ContactDetailsControllerTest {
   private void givenDefaultJourney() {
     // Set to applying for someone else
     journey = JourneyFixture.getDefaultJourney();
-    journey.getApplicantForm().setApplicantType(ApplicantType.YOURSELF.toString());
+    ((ApplicantForm) journey.getFormForStep(StepDefinition.APPLICANT_TYPE)).setApplicantType(ApplicantType.YOURSELF.toString());
   }
 }

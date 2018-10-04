@@ -2,10 +2,15 @@ package uk.gov.dft.bluebadge.webapp.citizen.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
@@ -33,8 +38,32 @@ public class Journey implements Serializable {
   public static final String JOURNEY_SESSION_KEY = "JOURNEY";
   public static final String FORM_REQUEST = "formRequest";
 
-  private ApplicantForm applicantForm;
-  private ApplicantNameForm applicantNameForm;
+  private Map<StepDefinition, StepForm> forms = new HashMap<>();
+
+  public void setFormForStep(StepDefinition definition, StepForm form) {
+    cleanUpSteps(form.getCleanUpSteps(this));
+    forms.put(definition, form);
+  }
+
+  public StepForm getFormForStep(StepDefinition step) {
+    return forms.get(step);
+  }
+
+  public void cleanUpSteps(StepDefinition... steps) {
+
+    Stream<StepDefinition> stream = Arrays.stream(steps);
+    stream.forEach(
+        stepDefinition -> {
+          StepForm f = getFormForStep(stepDefinition);
+          cleanUpSteps(f.getCleanUpSteps(this));
+          forms.remove(stepDefinition);
+        });
+  }
+
+  public boolean hasStepForm(StepDefinition stepDefinition) {
+    return getFormForStep(stepDefinition) != null;
+  }
+
   private HealthConditionsForm healthConditionsForm;
   private ReceiveBenefitsForm receiveBenefitsForm;
   private ChooseYourCouncilForm chooseYourCouncilForm;
@@ -79,8 +108,9 @@ public class Journey implements Serializable {
   }
 
   public Boolean isApplicantYourself() {
-    if (applicantForm != null) {
-      return applicantForm.getApplicantType().equals(ApplicantType.YOURSELF.toString());
+    if (hasStepForm(StepDefinition.APPLICANT_TYPE)) {
+      ApplicantForm form = (ApplicantForm) getFormForStep(StepDefinition.APPLICANT_TYPE);
+      return form.getApplicantType().equals(ApplicantType.YOURSELF.toString());
     }
     return null;
   }
@@ -96,7 +126,7 @@ public class Journey implements Serializable {
   }
 
   public boolean isValidState(StepDefinition step) {
-    if (null == getApplicantForm()) {
+    if (!hasStepForm(StepDefinition.APPLICANT_TYPE)) {
       return false;
     }
 
@@ -111,62 +141,61 @@ public class Journey implements Serializable {
     return true;
   }
 
-  public ApplicantForm getApplicantForm() {
-    return applicantForm;
-  }
-
   public void setApplicantForm(ApplicantForm applicantForm) {
-    this.applicantForm = applicantForm;
+    setFormForStep(StepDefinition.APPLICANT_TYPE, applicantForm);
     who = isApplicantYourself() ? "you." : "oth.";
   }
 
-  public ApplicantNameForm getApplicantNameForm() {
-    return applicantNameForm;
-  }
-
   public void setApplicantNameForm(ApplicantNameForm applicantNameForm) {
-    this.applicantNameForm = applicantNameForm;
+    setFormForStep(StepDefinition.NAME, applicantNameForm);
   }
 
-  public HealthConditionsForm getHealthConditionsForm() {
-    return healthConditionsForm;
+  public ApplicantNameForm getApplicantNameForm() {
+    return (ApplicantNameForm) getFormForStep(StepDefinition.NAME);
   }
 
   public void setHealthConditionsForm(HealthConditionsForm healthConditionsForm) {
-    this.healthConditionsForm = healthConditionsForm;
+    setFormForStep(StepDefinition.HEALTH_CONDITIONS, healthConditionsForm);
+  }
+
+  public HealthConditionsForm getHealthConditionsForm() {
+    return (HealthConditionsForm) getFormForStep(StepDefinition.HEALTH_CONDITIONS);
   }
 
   public void setDateOfBirthForm(DateOfBirthForm dateOfBirthForm) {
-    this.dateOfBirthForm = dateOfBirthForm;
+    setFormForStep(StepDefinition.DOB, dateOfBirthForm);
     ageGroup = isApplicantYoung() ? "young." : "adult.";
   }
 
   public DateOfBirthForm getDateOfBirthForm() {
-    return dateOfBirthForm;
+    return (DateOfBirthForm) getFormForStep(StepDefinition.DOB);
   }
 
   public ChooseYourCouncilForm getChooseYourCouncilForm() {
-    return chooseYourCouncilForm;
+    return (ChooseYourCouncilForm) getFormForStep(StepDefinition.CHOOSE_COUNCIL);
   }
 
   public void setChooseYourCouncilForm(ChooseYourCouncilForm chooseYourCouncilForm) {
-    this.chooseYourCouncilForm = chooseYourCouncilForm;
+    setFormForStep(StepDefinition.CHOOSE_COUNCIL, chooseYourCouncilForm);
   }
 
   public YourIssuingAuthorityForm getYourIssuingAuthorityForm() {
-    return yourIssuingAuthorityForm;
+    return (YourIssuingAuthorityForm) getFormForStep(StepDefinition.YOUR_ISSUING_AUTHORITY);
   }
 
   public void setYourIssuingAuthorityForm(YourIssuingAuthorityForm yourIssuingAuthorityForm) {
-    this.yourIssuingAuthorityForm = yourIssuingAuthorityForm;
+    setFormForStep(StepDefinition.YOUR_ISSUING_AUTHORITY, yourIssuingAuthorityForm);
+//    this.yourIssuingAuthorityForm = yourIssuingAuthorityForm;
   }
 
   public ReceiveBenefitsForm getReceiveBenefitsForm() {
-    return receiveBenefitsForm;
+    return (ReceiveBenefitsForm) getFormForStep(StepDefinition.RECEIVE_BENEFITS);
+//    return receiveBenefitsForm;
   }
 
   public void setReceiveBenefitsForm(ReceiveBenefitsForm receiveBenefitsForm) {
-    this.receiveBenefitsForm = receiveBenefitsForm;
+    setFormForStep(StepDefinition.RECEIVE_BENEFITS, receiveBenefitsForm);
+//    this.receiveBenefitsForm = receiveBenefitsForm;
     setMainReasonForm(null);
   }
 

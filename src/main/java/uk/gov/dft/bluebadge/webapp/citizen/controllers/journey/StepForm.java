@@ -13,4 +13,13 @@ public interface StepForm {
   default Optional<StepDefinition> determineNextStep(Journey journey) {
     return Optional.empty();
   }
+
+  /**
+   * Journey is included to allow a
+   * @param journey
+   * @return
+   */
+  default StepDefinition[] getCleanUpSteps(Journey journey) {
+    return new StepDefinition[] {};
+  }
 }
