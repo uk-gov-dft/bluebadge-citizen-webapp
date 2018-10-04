@@ -167,6 +167,7 @@ public class Journey implements Serializable {
 
   public void setReceiveBenefitsForm(ReceiveBenefitsForm receiveBenefitsForm) {
     this.receiveBenefitsForm = receiveBenefitsForm;
+    mainReasonForm = null;
   }
 
   public PipMovingAroundForm getPipMovingAroundForm() {
