@@ -285,7 +285,7 @@ public class Journey implements Serializable {
   }
 
   public WhereCanYouWalkForm getWhereCanYouWalkForm() {
-    return (WhereCanYouWalkForm) getFormForStep(StepDefinition.GENDER);
+    return (WhereCanYouWalkForm) getFormForStep(StepDefinition.WHERE_CAN_YOU_WALK);
   }
 
   public void setWhereCanYouWalkForm(WhereCanYouWalkForm whereCanYouWalkForm) {
