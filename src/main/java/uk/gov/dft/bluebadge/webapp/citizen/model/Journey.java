@@ -38,6 +38,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficul
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipDlaQuestionForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipMovingAroundForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipPlanningJourneyForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
 
 public class Journey implements Serializable {
 
@@ -110,6 +111,10 @@ public class Journey implements Serializable {
     }
 
     switch (step) {
+      case WHAT_WALKING_DIFFICULTIES:
+        if (null == getNation()) {
+          return false;
+        }
       case ELIGIBLE:
       case MAY_BE_ELIGIBLE:
         if (null == getLocalAuthority()) {
@@ -339,5 +344,14 @@ public class Journey implements Serializable {
       descriptionOfCondition.append("Dummy condition");
     }
     return descriptionOfCondition.toString();
+  }
+
+  public WhatMakesWalkingDifficultForm getWhatMakesWalkingDifficultForm() {
+    return whatMakesWalkingDifficultForm;
+  }
+
+  public void setWhatMakesWalkingDifficultForm(
+      WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm) {
+    this.whatMakesWalkingDifficultForm = whatMakesWalkingDifficultForm;
   }
 }

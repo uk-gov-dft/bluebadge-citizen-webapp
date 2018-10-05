@@ -236,6 +236,12 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
+  @And("^I complete the what makes walking difficult page$")
+  public void iCompleteTheWhatMakesWalkingDifficultPage() throws Throwable {
+    sitePage.findPageElementById("whatWalkingDifficulties1").click();
+    pressContinue();
+  }
+
   public void clearAndSendKeys(String element, String value) {
     sitePage.findPageElementById(element).clear();
     sitePage.findPageElementById(element).sendKeys(value);
