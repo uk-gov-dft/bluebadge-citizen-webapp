@@ -1,0 +1,142 @@
+package uk.gov.dft.bluebadge.webapp.citizen.controllers;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import com.google.common.collect.ImmutableList;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HowProvidedCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
+
+public class MobilityAidAddControllerTest {
+
+  private MockMvc mockMvc;
+  private MobilityAidAddController controller;
+  private Journey journey;
+
+  @Mock private RouteMaster mockRouteMaster;
+
+  @Before
+  public void setup() {
+    MockitoAnnotations.initMocks(this);
+    controller = new MobilityAidAddController(mockRouteMaster);
+    mockMvc =
+        MockMvcBuilders.standaloneSetup(controller)
+            .setViewResolvers(new StandaloneMvcTestViewResolver())
+            .build();
+
+    ApplicantForm applicantForm =
+        ApplicantForm.builder().applicantType(ApplicantType.YOURSELF.toString()).build();
+
+    journey = new Journey();
+    journey.setApplicantForm(applicantForm);
+    journey.setMobilityAidListForm(MobilityAidListForm.builder().mobilityAids(new ArrayList<>()).build());
+    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
+    // We are not testing the route master. So for convenience just forward to an error view so
+    // can test the error messages
+    when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))
+        .thenReturn("/someValidationError");
+  }
+
+  @Test
+  public void show_ShouldDisplayTemplate() throws Exception {
+    mockMvc
+        .perform(get("/list-mobility-aids").sessionAttr("JOURNEY", journey))
+        .andExpect(status().isOk())
+        .andExpect(view().name("mobility-aid-list"))
+        .andExpect(model().attributeExists("formRequest"));
+  }
+
+  @Test
+  public void show_shouldRedirect_whenJourneyNotSetup() throws Exception {
+    mockMvc
+        .perform(get("/add-mobility-aid").sessionAttr("JOURNEY", new Journey()))
+        .andExpect(status().isOk())
+        .andExpect(view().name("backToStart"));
+  }
+
+  @Test
+  public void submit_showRedirectToNextStepInJourney() throws Exception {
+
+    mockMvc
+        .perform(
+            post("/add-mobility-aid")
+                .param("customAidName", "Custom")
+                .param("aidType", "WALKING_AID")
+                .param("howProvidedCodeField", "PRESCRIBE")
+                .param("usage", "usage")
+                .contentType("application/x-www-form-urlencoded")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/list-mobility-aids"));
+  }
+
+  @Test
+  public void submit_whenBlankFormSubmitted_thenShouldRedirectToShowWithValidationErrors()
+      throws Exception {
+    MobilityAidAddForm form = new MobilityAidAddForm();
+    form.setId("1234");
+
+    when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any())).thenCallRealMethod();
+
+    mockMvc
+        .perform(
+            post("/add-mobility-aid")
+                .param("id", "1234")
+                .contentType("application/x-www-form-urlencoded")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/add-mobility-aid"))
+        .andExpect(flash().attribute("formRequest", form));
+  }
+
+  @Test
+  public void
+  submit_whenWalkingAidButNoCustom_thenShouldRedirectToShowWithValidationErrors()
+      throws Exception {
+
+    mockMvc
+        .perform(
+            post("/add-mobility-aid")
+                .param("aidType", "WALKING_AID")
+                .param("howProvidedCodeField", "PRESCRIBE")
+                .param("usage", "usage")
+                .contentType("application/x-www-form-urlencoded")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().isOk())
+        .andExpect(view().name("/someValidationError"))
+        .andExpect(
+            model()
+                .attributeHasFieldErrorCode("formRequest", "customAidName", "NotBlank.customAidName"));
+  }
+}

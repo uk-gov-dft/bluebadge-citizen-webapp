@@ -1,5 +1,10 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+
+import java.util.ArrayList;
+import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,12 +44,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
-
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 @RequestMapping(Mappings.URL_DECLARATIONS)
@@ -173,8 +172,7 @@ public class DeclarationSubmitController implements StepController {
                         .walkingSpeedCode(WalkingSpeedCodeField.SLOW)
                         .typeCodes(walkingDifficulties)
                         .otherDescription(otherDesc)
-                        .walkingAids(
-                            walkingAids));
+                        .walkingAids(walkingAids));
         break;
       case PIP:
       case DLA:

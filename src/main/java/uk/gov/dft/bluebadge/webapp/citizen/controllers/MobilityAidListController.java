@@ -89,7 +89,13 @@ public class MobilityAidListController implements StepController {
       @RequestParam(name = "uuid") String uuid,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    journey.getMobilityAidListForm().getMobilityAids().removeIf(item -> item.getId().equals(uuid));
+    if (null != journey.getMobilityAidListForm()
+        && null != journey.getMobilityAidListForm().getMobilityAids()) {
+      journey
+          .getMobilityAidListForm()
+          .getMobilityAids()
+          .removeIf(item -> item.getId().equals(uuid));
+    }
 
     return "redirect:" + Mappings.URL_MOBILITY_AID_LIST;
   }
