@@ -12,7 +12,7 @@ import org.mockito.Mockito;
 public class CookieUtilsTest {
 
   @Test
-  public void When_CookieBanner_IsSet() {
+  public void isCookieBannerSet_ShouldReturnTrue_WhenCookieBannerIsSet() {
 
     HttpServletRequest mockReq = Mockito.mock(HttpServletRequest.class);
 
@@ -27,7 +27,7 @@ public class CookieUtilsTest {
   }
 
   @Test
-  public void When_CookieBanner_IsNotSet() {
+  public void isCookieBannerSet_ShouldReturnFalse_WhenCookieBannerIsNotSet() {
 
     HttpServletRequest mockReq = Mockito.mock(HttpServletRequest.class);
 
