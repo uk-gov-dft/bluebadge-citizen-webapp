@@ -5,8 +5,12 @@ import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.m
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
+
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
@@ -45,7 +49,7 @@ public class Journey implements Serializable {
   public String ageGroup;
 
   public void setFormForStep(StepDefinition definition, StepForm form) {
-    cleanUpSteps(form.getCleanUpSteps(this));
+    cleanUpSteps(new HashSet<>(), form.getCleanUpSteps(this));
     forms.put(definition, form);
   }
 
@@ -53,7 +57,7 @@ public class Journey implements Serializable {
     return forms.get(step);
   }
 
-  public void cleanUpSteps(List<StepDefinition> steps) {
+  public void cleanUpSteps(Set<StepDefinition> alreadyCleaned, List<StepDefinition> steps) {
 
     if (null == steps) {
       return;
@@ -61,12 +65,14 @@ public class Journey implements Serializable {
 
     steps
         .stream()
+        .filter(((Predicate<StepDefinition>)alreadyCleaned::contains).negate())
         .forEach(
             stepDefinition -> {
               if (hasStepForm(stepDefinition)) {
                 StepForm f = getFormForStep(stepDefinition);
-                cleanUpSteps(f.getCleanUpSteps(this));
+                cleanUpSteps(alreadyCleaned, f.getCleanUpSteps(this));
                 forms.remove(stepDefinition);
+                alreadyCleaned.add(stepDefinition);
               }
             });
   }
