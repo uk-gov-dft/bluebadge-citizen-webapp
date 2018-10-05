@@ -146,8 +146,7 @@ public class WhatWalkingDifficultiesControllerTest {
     mockMvc
         .perform(get("/what-makes-walking-difficult").sessionAttr("JOURNEY", new Journey()))
         .andExpect(status().isOk())
-        .andExpect(view().name("backToStart"))
-    ;
+        .andExpect(view().name("backToStart"));
   }
 
   @Test
