@@ -21,7 +21,7 @@ Feature: DFT Blue badge Citizen app new application - AFCS
     And   I complete main reason page for "NONE"
     Then  I should see "They're not" eligible page
 
-    
+
   Scenario: Create a successful new application for myself - England - Yes lump sum - Yes disability
     Given I complete applicant page for "yourself"
     And   I complete select council page for "england"
@@ -135,6 +135,7 @@ Feature: DFT Blue badge Citizen app new application - AFCS
     And   I complete address page
     And   I complete contact page for "yourself"
     And   I complete describe health conditions page
+    And   I complete the what makes walking difficult page
     And   I complete where can you walk page
     And   I complete declaration page
     Then  I should see the page titled "Application submitted" with GOV.UK suffix
@@ -158,6 +159,7 @@ Feature: DFT Blue badge Citizen app new application - AFCS
     And   I complete address page
     And   I complete contact page for "someone else"
     And   I complete describe health conditions page
+    And   I complete the what makes walking difficult page
     And   I complete where can you walk page
     And   I complete declaration page
     Then  I should see the page titled "Application submitted" with GOV.UK suffix
