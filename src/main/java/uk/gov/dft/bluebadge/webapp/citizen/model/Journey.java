@@ -30,6 +30,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficul
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipDlaQuestionForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipMovingAroundForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipPlanningJourneyForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
 
 public class Journey implements Serializable {
 
@@ -62,6 +63,8 @@ public class Journey implements Serializable {
   private DisabilityForm disabilityForm;
   private MentalDisorderForm mentalDisorderForm;
   private ContactDetailsForm contactDetailsForm;
+
+  private WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm;
 
   public Nation getNation() {
     if (null != localAuthority) {
@@ -127,6 +130,10 @@ public class Journey implements Serializable {
     }
 
     switch (step) {
+      case WHAT_WALKING_DIFFICULTIES:
+        if (null == getNation()) {
+          return false;
+        }
       case ELIGIBLE:
       case MAY_BE_ELIGIBLE:
         if (null == getLocalAuthority()) {
@@ -314,5 +321,14 @@ public class Journey implements Serializable {
 
   public void setEnterAddressForm(EnterAddressForm enterAddressForm) {
     this.enterAddressForm = enterAddressForm;
+  }
+
+  public WhatMakesWalkingDifficultForm getWhatMakesWalkingDifficultForm() {
+    return whatMakesWalkingDifficultForm;
+  }
+
+  public void setWhatMakesWalkingDifficultForm(
+      WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm) {
+    this.whatMakesWalkingDifficultForm = whatMakesWalkingDifficultForm;
   }
 }

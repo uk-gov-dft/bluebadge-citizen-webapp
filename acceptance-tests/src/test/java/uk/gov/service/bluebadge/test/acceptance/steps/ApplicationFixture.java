@@ -10,7 +10,6 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_MONT
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_YEAR;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Preamble.COUNCIL_INPUT;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import java.util.Calendar;
@@ -204,11 +203,13 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
-    @And("^I complete lump sum of the AFRFCS Scheme page for \"(YES|NO)\"$")
-    public void iCompleteLumpSumToOfTheAFRFCSSchemePageFor(String option) throws Throwable {
-      sitePage.findPageElementById(Ids.EleCheck.RECEIVED_COMPENSATION + "." + option.toLowerCase()).click();
-      pressContinue();
-    }
+  @And("^I complete lump sum of the AFRFCS Scheme page for \"(YES|NO)\"$")
+  public void iCompleteLumpSumToOfTheAFRFCSSchemePageFor(String option) throws Throwable {
+    sitePage
+        .findPageElementById(Ids.EleCheck.RECEIVED_COMPENSATION + "." + option.toLowerCase())
+        .click();
+    pressContinue();
+  }
 
   @And("^I complete have permanent disability page for \"(YES|NO)\"$")
   public void iCompleteHavePermanentDisabilityDisabilityPageFor(String option) throws Throwable {
@@ -218,16 +219,28 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("^I complete has mental disorder page for \"(YES|NO)\"$")
   public void iCompleteHasMentalDisorderPageFor(String option) throws Throwable {
-    sitePage.findPageElementById(Ids.EleCheck.HAS_MENTAL_DISORDER + "." + option.toLowerCase()).click();
+    sitePage
+        .findPageElementById(Ids.EleCheck.HAS_MENTAL_DISORDER + "." + option.toLowerCase())
+        .click();
     pressContinue();
   }
 
   @And("^I complete has mobility component page for \"(YES|NO)\"$")
   public void iCompleteHasMobilityComponentPage(String option) throws Throwable {
-    if("YES".equals(option))
-      sitePage.findPageElementById(Ids.EleCheck.AWARDED_HIGHER_RATE_MOBILITY + "." + "true").click();
+    if ("YES".equals(option))
+      sitePage
+          .findPageElementById(Ids.EleCheck.AWARDED_HIGHER_RATE_MOBILITY + "." + "true")
+          .click();
     else
-      sitePage.findPageElementById(Ids.EleCheck.AWARDED_HIGHER_RATE_MOBILITY + "." + "false").click();
+      sitePage
+          .findPageElementById(Ids.EleCheck.AWARDED_HIGHER_RATE_MOBILITY + "." + "false")
+          .click();
+    pressContinue();
+  }
+
+  @And("^I complete the what makes walking difficult page$")
+  public void iCompleteTheWhatMakesWalkingDifficultPage() throws Throwable {
+    sitePage.findPageElementById("whatWalkingDifficulties1").click();
     pressContinue();
   }
 

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="#{${JOURNEY.who} + 'whatMakesWalkingDifficult.title'} + ' - ' + #{common.title.suffix}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>
+
+            <form th:action="@{/what-makes-walking-difficult}" th:object="${formRequest}" method="post" novalidate>
+
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h1 class="govuk-fieldset__heading" th:text="#{${JOURNEY.who} + 'whatMakesWalkingDifficult.title'}"></h1>
+                    </legend>
+                    <div class="govuk-form-group" th:class="${#fields.hasErrors('whatWalkingDifficulties')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+
+                        <span class="govuk-error-message"
+                              data-uipath="whatWalkingDifficulties.error"
+                              th:errors="*{whatWalkingDifficulties}"></span>
+
+                        <div id="walking-difficulties-list" class="govuk-checkboxes" data-module="checkboxes" >
+                            <div th:remove="tag" th:each="checkboxOption, iterStat: ${walkingDifficulties.options}" th:with="lastControl=${checkboxOption.shortCode} +'-conditional'">
+                                <div class="govuk-checkboxes__item">
+                                    <input class="govuk-checkboxes__input"
+                                           type="checkbox"
+                                           th:field="*{whatWalkingDifficulties}"
+                                           th:value="${checkboxOption.shortCode}"
+                                           th:attr="data-aria-controls=${lastControl}">
+                                    <label class="govuk-label govuk-checkboxes__label"
+                                           th:for="${#ids.prev('whatWalkingDifficulties')}"
+                                           th:text="#{${checkboxOption.messageKey}}"></label>
+                                </div>
+
+                                <div th:if="${iterStat.last}" class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden"
+                                     th:id="${lastControl}">
+
+                                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{whatMakesWalkingDifficult.select.somethingelse.desc}, 'somethingElseDescription', null, 'text', null)}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <button type="submit"
+                        class="govuk-button"
+                        data-uipath="button.continue"
+                        th:text="#{btn.label.continue}"></button>
+
+            </form>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

@@ -31,7 +31,6 @@ class Ids {
     static final String HAS_DISABILITY = "hasDisability";
     static final String HAS_MENTAL_DISORDER = "hasMentalDisorder";
     static final String AWARDED_HIGHER_RATE_MOBILITY = "awardedHigherRateMobility";
-
   }
 
   class Person {
