@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
@@ -16,10 +18,11 @@ public interface StepForm {
 
   /**
    * Journey is included to allow a
+   *
    * @param journey
    * @return
    */
-  default StepDefinition[] getCleanUpSteps(Journey journey) {
-    return new StepDefinition[] {};
+  default List<StepDefinition> getCleanUpSteps(Journey journey) {
+    return Collections.emptyList();
   }
 }

@@ -75,7 +75,8 @@ public class GenderControllerTest {
   @Test
   public void show_ShouldDisplayYouGenderTerm() throws Exception {
 
-    ((ApplicantForm) journey.getFormForStep(StepDefinition.APPLICANT_TYPE)).setApplicantType(ApplicantType.YOURSELF.toString());
+    ((ApplicantForm) journey.getFormForStep(StepDefinition.APPLICANT_TYPE))
+        .setApplicantType(ApplicantType.YOURSELF.toString());
 
     MvcResult mvcResult =
         mockMvc
@@ -98,7 +99,8 @@ public class GenderControllerTest {
   @Test
   public void show_ShouldDisplayTheyGenderTerm() throws Exception {
 
-    ((ApplicantForm) journey.getFormForStep(StepDefinition.APPLICANT_TYPE)).setApplicantType(ApplicantType.SOMEONE_ELSE.toString());
+    ((ApplicantForm) journey.getFormForStep(StepDefinition.APPLICANT_TYPE))
+        .setApplicantType(ApplicantType.SOMEONE_ELSE.toString());
     journey.setApplicantForm((ApplicantForm) journey.getFormForStep(StepDefinition.APPLICANT_TYPE));
 
     MvcResult mvcResult =
