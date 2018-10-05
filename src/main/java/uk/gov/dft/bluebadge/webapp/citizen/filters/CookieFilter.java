@@ -35,9 +35,9 @@ public class CookieFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
 
-        Cookie cookieBanner = WebUtils.getCookie(req, CookieUtils.COOKIE_BANNER_KEY);
+        Boolean cookieBannerExists = WebUtils.getCookie(req, CookieUtils.COOKIE_BANNER_KEY) != null;
 
-        if (cookieBanner == null) {
+        if (!cookieBannerExists) {
             Cookie newCookie = new Cookie(CookieUtils.COOKIE_BANNER_KEY, COOKIE_BANNER_VALUE);
             newCookie.setMaxAge(SECONDS_IN_MONTH);
             res.addCookie(newCookie);
