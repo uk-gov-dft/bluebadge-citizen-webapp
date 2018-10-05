@@ -92,7 +92,7 @@ public class DeclarationSubmitController implements StepController {
     return routeMaster.redirectToOnSuccess(declarationForm);
   }
 
-  private Application getDummyApplication(Journey journey) {
+  public Application getDummyApplication(Journey journey) {
     ApplicantNameForm applicantNameForm = journey.getApplicantNameForm();
     GenderForm genderForm = journey.getGenderForm();
     YourIssuingAuthorityForm yourIssuingAuthorityForm = journey.getYourIssuingAuthorityForm();
@@ -182,18 +182,21 @@ public class DeclarationSubmitController implements StepController {
         eligibilityObject =
             new Eligibility()
                 .typeCode(eligibility)
+                .descriptionOfConditions(condDesc)
                 .disabilityArms(new DisabilityArms().isAdaptedVehicle(false));
         break;
       case CHILDBULK:
         eligibilityObject =
             new Eligibility()
                 .typeCode(eligibility)
+                .descriptionOfConditions(condDesc)
                 .childUnder3(
                     new ChildUnder3()
                         .bulkyMedicalEquipmentTypeCode(BulkyMedicalEquipmentTypeCodeField.NONE));
         break;
       case CHILDVEHIC:
-        eligibilityObject = new Eligibility().typeCode(eligibility);
+        eligibilityObject =
+            new Eligibility().descriptionOfConditions(condDesc).typeCode(eligibility);
         break;
       case TERMILL:
       case NONE:
