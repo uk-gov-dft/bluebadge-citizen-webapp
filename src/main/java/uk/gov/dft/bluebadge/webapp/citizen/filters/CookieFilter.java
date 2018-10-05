@@ -37,14 +37,12 @@ public class CookieFilter implements Filter {
 
         Cookie cookieBannerExists = WebUtils.getCookie(req, CookieUtils.COOKIE_BANNER_KEY);
 
-        if (cookieBannerExists != null) {
-            chain.doFilter(request, res);
-            return;
+        if (cookieBannerExists.equals(null)) {
+            Cookie newCookie = new Cookie(CookieUtils.COOKIE_BANNER_KEY, COOKIE_BANNER_VALUE);
+            newCookie.setMaxAge(SECONDS_IN_MONTH);
+            res.addCookie(newCookie);
         }
 
-        Cookie newCookie = new Cookie(CookieUtils.COOKIE_BANNER_KEY, COOKIE_BANNER_VALUE);
-        newCookie.setMaxAge(SECONDS_IN_MONTH);
-        res.addCookie(newCookie);
         chain.doFilter(request, res);
 
     }
