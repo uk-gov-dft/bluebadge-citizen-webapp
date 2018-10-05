@@ -17,7 +17,7 @@ public interface StepForm {
   }
 
   /**
-   * Journey is included to allow a
+   * Journey is included to provide context so cleaning forms can be dynamic.
    *
    * @param journey
    * @return

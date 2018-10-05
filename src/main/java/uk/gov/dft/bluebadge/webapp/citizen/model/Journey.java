@@ -83,50 +83,7 @@ public class Journey implements Serializable {
 
   private LocalAuthorityRefData localAuthority;
 
-  public Nation getNation() {
-    if (null != localAuthority) {
-      return localAuthority.getNation();
-    }
-    return null;
-  }
 
-  public EligibilityCodeField getEligibilityCode() {
-    if (hasStepForm(StepDefinition.MAIN_REASON)) {
-      MainReasonForm mainReasonForm = (MainReasonForm) getFormForStep(StepDefinition.MAIN_REASON);
-      if (EligibilityCodeField.NONE != mainReasonForm.getMainReasonOption()) {
-        return mainReasonForm.getMainReasonOption();
-      }
-    } else if (hasStepForm(StepDefinition.RECEIVE_BENEFITS)) {
-      ReceiveBenefitsForm receiveBenefitsForm =
-          (ReceiveBenefitsForm) getFormForStep(StepDefinition.RECEIVE_BENEFITS);
-      if (EligibilityCodeField.NONE != receiveBenefitsForm.getBenefitType()) {
-        return receiveBenefitsForm.getBenefitType();
-      }
-    }
-    return null;
-  }
-
-  public String getDescriptionOfCondition() {
-    HealthConditionsForm healthConditionsForm = getHealthConditionsForm();
-    WhereCanYouWalkForm whereCanYouWalkForm = getWhereCanYouWalkForm();
-
-    StringBuilder descriptionOfCondition = new StringBuilder();
-    if (healthConditionsForm != null && healthConditionsForm.getDescriptionOfConditions() != null) {
-      descriptionOfCondition.append(healthConditionsForm.getDescriptionOfConditions());
-    }
-
-    if (WALKD.equals(getEligibilityCode()) && whereCanYouWalkForm != null) {
-      descriptionOfCondition
-          .append(" - Able to walk to: ")
-          .append(whereCanYouWalkForm.getDestinationToHome())
-          .append(" - How long: ")
-          .append(whereCanYouWalkForm.getTimeToDestination());
-    }
-    if (descriptionOfCondition.length() == 0) {
-      descriptionOfCondition.append("Dummy condition");
-    }
-    return descriptionOfCondition.toString();
-  }
 
   public Boolean isApplicantYourself() {
     if (hasStepForm(StepDefinition.APPLICANT_TYPE)) {
@@ -337,5 +294,50 @@ public class Journey implements Serializable {
 
   public void setLocalAuthority(LocalAuthorityRefData localAuthority) {
     this.localAuthority = localAuthority;
+  }
+
+  public Nation getNation() {
+    if (null != localAuthority) {
+      return localAuthority.getNation();
+    }
+    return null;
+  }
+
+  public EligibilityCodeField getEligibilityCode() {
+    if (hasStepForm(StepDefinition.MAIN_REASON)) {
+      MainReasonForm mainReasonForm = (MainReasonForm) getFormForStep(StepDefinition.MAIN_REASON);
+      if (EligibilityCodeField.NONE != mainReasonForm.getMainReasonOption()) {
+        return mainReasonForm.getMainReasonOption();
+      }
+    } else if (hasStepForm(StepDefinition.RECEIVE_BENEFITS)) {
+      ReceiveBenefitsForm receiveBenefitsForm =
+        (ReceiveBenefitsForm) getFormForStep(StepDefinition.RECEIVE_BENEFITS);
+      if (EligibilityCodeField.NONE != receiveBenefitsForm.getBenefitType()) {
+        return receiveBenefitsForm.getBenefitType();
+      }
+    }
+    return null;
+  }
+
+  public String getDescriptionOfCondition() {
+    HealthConditionsForm healthConditionsForm = getHealthConditionsForm();
+    WhereCanYouWalkForm whereCanYouWalkForm = getWhereCanYouWalkForm();
+
+    StringBuilder descriptionOfCondition = new StringBuilder();
+    if (healthConditionsForm != null && healthConditionsForm.getDescriptionOfConditions() != null) {
+      descriptionOfCondition.append(healthConditionsForm.getDescriptionOfConditions());
+    }
+
+    if (WALKD.equals(getEligibilityCode()) && whereCanYouWalkForm != null) {
+      descriptionOfCondition
+        .append(" - Able to walk to: ")
+        .append(whereCanYouWalkForm.getDestinationToHome())
+        .append(" - How long: ")
+        .append(whereCanYouWalkForm.getTimeToDestination());
+    }
+    if (descriptionOfCondition.length() == 0) {
+      descriptionOfCondition.append("Dummy condition");
+    }
+    return descriptionOfCondition.toString();
   }
 }
