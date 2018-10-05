@@ -98,7 +98,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete date of birth page for \"(CHILD|ADULT)\"")
-  public void iCompleteDateOfBirthPage(String age_category) throws Throwable {
+  public void iCompleteDateOfBirthPage(String age_category) {
     Calendar now = Calendar.getInstance();
     int dob_year = 1900;
 
@@ -112,12 +112,12 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete eligible page$")
-  public void iCompleteEligiblePage() throws Throwable {
+  public void iCompleteEligiblePage() {
     sitePage.findElementWithText("Start application").click();
   }
 
   @And("^I complete gender page for \"(Boy|Girl|Man|Woman|Identify in a different way)\"")
-  public void iCompleteGenderPageFor(String gender) throws Throwable {
+  public void iCompleteGenderPageFor(String gender) {
     if (gender.equals("Boy") || gender.equals("Man"))
       sitePage.findPageElementById(GENDER_MALE).click();
     else if (gender.equals("Girl") || gender.equals("Woman"))
@@ -128,31 +128,31 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete describe health conditions page$")
-  public void iCompleteDescribeHealthConditionsPage() throws Throwable {
+  public void iCompleteDescribeHealthConditionsPage() {
     clearAndSendKeys("descriptionOfConditions", "Sample health condition");
     pressContinue();
   }
 
   @And("^I complete declaration page$")
-  public void iCompleteDeclarationPage() throws Throwable {
+  public void iCompleteDeclarationPage() {
     sitePage.findPageElementById("agreed").click();
     pressContinue();
   }
 
   @And("^I complete planning points page for \"(12|10|8|4|0)\"")
-  public void iCompletePlanningPointsPageFor(String points) throws Throwable {
+  public void iCompletePlanningPointsPageFor(String points) {
     sitePage.findPageElementById(Ids.EleCheck.PLANNING_POINTS + "_" + points).click();
     pressContinue();
   }
 
   @And("^I complete what makes walking difficult page for \"(HELP|PAIN|DANGEROUS|NONE)\"$")
-  public void iCompleteWhatMakesWalkingDifficultPageFor(String difficulty) throws Throwable {
+  public void iCompleteWhatMakesWalkingDifficultPageFor(String difficulty) {
     sitePage.findPageElementById(Ids.EleCheck.WALKING_DIFFICULTY_LIST + "." + difficulty).click();
     pressContinue();
   }
 
   @And("^I complete dla allowance page for \"(YES|NO)\"$")
-  public void iCompleteDlaAllowancePageFor(String option) throws Throwable {
+  public void iCompleteDlaAllowancePageFor(String option) {
     if ("YES".equals(option)) sitePage.findPageElementById(HAS_RECEIVED_DLA).click();
     else sitePage.findPageElementById(NEVER_RECEIVED_DLA).click();
     pressContinue();
@@ -172,7 +172,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete address page$")
-  public void iCompleteAddressPage() throws Throwable {
+  public void iCompleteAddressPage() {
     clearAndSendKeys("buildingAndStreet", "120");
     clearAndSendKeys("optionalAddress", "London Road");
     clearAndSendKeys("townOrCity", "Manchester");
@@ -182,27 +182,27 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete NI number page$")
-  public void iCompleteNINumberPage() throws Throwable {
+  public void iCompleteNINumberPage() {
     clearAndSendKeys(Ids.EleCheck.NI, "AB123456A");
     pressContinue();
   }
 
   @And("^I complete NI number page without a NI$")
-  public void iCompleteNINumberPageWithoutNI() throws Throwable {
+  public void iCompleteNINumberPageWithoutNI() {
     sitePage.findElementWithText(Ids.EleCheck.NO_NI_TEXT).click();
     sitePage.findElementWithText(Ids.EleCheck.NO_NI_LINK_TEXT).click();
     pressContinue();
   }
 
   @And("^I complete where can you walk page$")
-  public void iCompleteWhereCanYouWalkPage() throws Throwable {
+  public void iCompleteWhereCanYouWalkPage() {
     clearAndSendKeys(PLACE_CAN_WALK, "to the Post office on the High Street");
     clearAndSendKeys(TIME_TO_DESTINATION, "10 minutes");
     pressContinue();
   }
 
   @And("^I complete lump sum of the AFRFCS Scheme page for \"(YES|NO)\"$")
-  public void iCompleteLumpSumToOfTheAFRFCSSchemePageFor(String option) throws Throwable {
+  public void iCompleteLumpSumToOfTheAFRFCSSchemePageFor(String option) {
     sitePage
         .findPageElementById(Ids.EleCheck.RECEIVED_COMPENSATION + "." + option.toLowerCase())
         .click();
@@ -210,13 +210,13 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete have permanent disability page for \"(YES|NO)\"$")
-  public void iCompleteHavePermanentDisabilityDisabilityPageFor(String option) throws Throwable {
+  public void iCompleteHavePermanentDisabilityDisabilityPageFor(String option) {
     sitePage.findPageElementById(Ids.EleCheck.HAS_DISABILITY + "." + option.toLowerCase()).click();
     pressContinue();
   }
 
   @And("^I complete has mental disorder page for \"(YES|NO)\"$")
-  public void iCompleteHasMentalDisorderPageFor(String option) throws Throwable {
+  public void iCompleteHasMentalDisorderPageFor(String option) {
     sitePage
         .findPageElementById(Ids.EleCheck.HAS_MENTAL_DISORDER + "." + option.toLowerCase())
         .click();
@@ -224,7 +224,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete has mobility component page for \"(YES|NO)\"$")
-  public void iCompleteHasMobilityComponentPage(String option) throws Throwable {
+  public void iCompleteHasMobilityComponentPage(String option) {
     if ("YES".equals(option))
       sitePage
           .findPageElementById(Ids.EleCheck.AWARDED_HIGHER_RATE_MOBILITY + "." + "true")
@@ -237,7 +237,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete the what makes walking difficult page$")
-  public void iCompleteTheWhatMakesWalkingDifficultPage() throws Throwable {
+  public void iCompleteTheWhatMakesWalkingDifficultPage() {
     sitePage.findPageElementById("whatWalkingDifficulties1").click();
     pressContinue();
   }
@@ -245,5 +245,11 @@ public class ApplicationFixture extends AbstractSpringSteps {
   public void clearAndSendKeys(String element, String value) {
     sitePage.findPageElementById(element).clear();
     sitePage.findPageElementById(element).sendKeys(value);
+  }
+  
+  @And("^I complete the mobility aids page$")
+  public void iCompleteTheMobilityAidsPage(){
+    sitePage.findPageElementById(Ids.Walkd.MOBILITY_AID_NO_OPTION).click();
+    pressContinue();
   }
 }

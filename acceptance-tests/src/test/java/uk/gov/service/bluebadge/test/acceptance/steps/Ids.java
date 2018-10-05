@@ -47,4 +47,8 @@ class Ids {
     static final String SECONDARY_CONTACT_NUMBER = "secondaryPhoneNumber";
     static final String EMAIL_ADDRESS = "emailAddress";
   }
+
+  class Walkd {
+    static final String MOBILITY_AID_NO_OPTION = "hasWalkingAidno";
+  }
 }
