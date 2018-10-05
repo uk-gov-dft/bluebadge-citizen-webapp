@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import javax.validation.Valid;
@@ -16,19 +17,18 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
 
 @Controller
-@RequestMapping(Mappings.URL_CONTACT_DETAILS)
-public class ContactDetailsController implements StepController {
+@RequestMapping(Mappings.URL_WHERE_CAN_YOU_WALK)
+public class WhereCanYouWalkController implements StepController {
 
-  private static final String TEMPLATE_APPLICANT_NAME = "contact-details";
-  public static final String FORM_REQUEST = "formRequest";
+  private static final String TEMPLATE = "where-can-you-walk";
 
   private final RouteMaster routeMaster;
 
   @Autowired
-  public ContactDetailsController(RouteMaster routeMaster) {
+  public WhereCanYouWalkController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
@@ -39,41 +39,35 @@ public class ContactDetailsController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    //On returning to form, take previously submitted values.
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getContactDetailsForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getContactDetailsForm());
+    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getWhereCanYouWalkForm()) {
+      model.addAttribute(FORM_REQUEST, journey.getWhereCanYouWalkForm());
     }
 
-    // If navigating forward from previous form, reset
     if (!model.containsAttribute(FORM_REQUEST)) {
-      model.addAttribute(FORM_REQUEST, ContactDetailsForm.builder().build());
+      model.addAttribute(FORM_REQUEST, WhereCanYouWalkForm.builder().build());
     }
 
-    return TEMPLATE_APPLICANT_NAME;
+    return TEMPLATE;
   }
 
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute(FORM_REQUEST) ContactDetailsForm contactDetailsForm,
+      @Valid @ModelAttribute(FORM_REQUEST) WhereCanYouWalkForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
-    // Validation context sensitive to journey
-    if (contactDetailsForm.isFullnameInvalid(journey)) {
-      bindingResult.rejectValue("fullName", "Invalid.contact.fullName");
-    }
-
     if (bindingResult.hasErrors()) {
-      return routeMaster.redirectToOnBindingError(this, contactDetailsForm, bindingResult, attr);
+      return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
     }
 
-    journey.setContactDetailsForm(contactDetailsForm);
-    return routeMaster.redirectToOnSuccess(contactDetailsForm, journey);
+    journey.setWhereCanYouWalkForm(formRequest);
+
+    return routeMaster.redirectToOnSuccess(formRequest);
   }
 
   @Override
   public StepDefinition getStepDefinition() {
-    return StepDefinition.CONTACT_DETAILS;
+    return StepDefinition.WHERE_CAN_YOU_WALK;
   }
 }

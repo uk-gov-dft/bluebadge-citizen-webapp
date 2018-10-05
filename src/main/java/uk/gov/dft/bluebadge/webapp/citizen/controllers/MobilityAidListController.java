@@ -65,7 +65,7 @@ public class MobilityAidListController implements StepController {
     }
 
     // Reset if no selected
-    // Treat as No selected if no aids
+    // Treat as No selected if no aids added whilst yes was selected
     if (!mobilityAidListForm.getHasWalkingAid()
         || (mobilityAidListForm.getHasWalkingAid()
             && journey.getMobilityAidListForm().getMobilityAids().isEmpty())) {

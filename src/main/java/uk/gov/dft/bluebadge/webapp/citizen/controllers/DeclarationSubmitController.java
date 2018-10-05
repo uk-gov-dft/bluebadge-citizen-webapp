@@ -1,8 +1,10 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import com.google.common.collect.Lists;
+import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,7 +43,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
@@ -94,7 +95,6 @@ public class DeclarationSubmitController implements StepController {
   private Application getDummyApplication(Journey journey) {
     ApplicantNameForm applicantNameForm = journey.getApplicantNameForm();
     GenderForm genderForm = journey.getGenderForm();
-    HealthConditionsForm healthConditionsForm = journey.getHealthConditionsForm();
     YourIssuingAuthorityForm yourIssuingAuthorityForm = journey.getYourIssuingAuthorityForm();
     ContactDetailsForm contactDetailsForm = journey.getContactDetailsForm();
 
@@ -104,10 +104,7 @@ public class DeclarationSubmitController implements StepController {
         yourIssuingAuthorityForm == null
             ? "ABERD"
             : yourIssuingAuthorityForm.getLocalAuthorityShortCode();
-    String condDesc =
-        healthConditionsForm == null
-            ? "Dummy condition"
-            : healthConditionsForm.getDescriptionOfConditions();
+    String condDesc = journey.getDescriptionOfCondition();
 
     String fullName = applicantNameForm == null ? "John Doe" : applicantNameForm.getFullName();
     String birthName =
@@ -145,6 +142,13 @@ public class DeclarationSubmitController implements StepController {
     Eligibility eligibilityObject = null;
     switch (eligibility) {
       case WALKD:
+        List<WalkingDifficultyTypeCodeField> walkingDifficulties =
+            journey.getWhatMakesWalkingDifficultForm().getWhatWalkingDifficulties();
+        String otherDesc =
+            walkingDifficulties.contains(WalkingDifficultyTypeCodeField.SOMELSE)
+                ? journey.getWhatMakesWalkingDifficultForm().getSomethingElseDescription()
+                : null;
+
         eligibilityObject =
             new Eligibility()
                 .typeCode(EligibilityCodeField.WALKD)
@@ -153,10 +157,8 @@ public class DeclarationSubmitController implements StepController {
                     new WalkingDifficulty()
                         .walkingLengthOfTimeCode(WalkingLengthOfTimeCodeField.LESSMIN)
                         .walkingSpeedCode(WalkingSpeedCodeField.SLOW)
-                        .typeCodes(
-                            Lists.newArrayList(
-                                WalkingDifficultyTypeCodeField.PAIN,
-                                WalkingDifficultyTypeCodeField.BALANCE))
+                        .typeCodes(walkingDifficulties)
+                        .otherDescription(otherDesc)
                         .walkingAids(
                             Lists.newArrayList(
                                 new WalkingAid()
@@ -199,7 +201,6 @@ public class DeclarationSubmitController implements StepController {
         // This code is all temporary too.
         throw new IllegalStateException("Invalid eligibility:" + eligibility);
     }
-
     return Application.builder()
         .applicationTypeCode(ApplicationTypeCodeField.NEW)
         .localAuthorityCode(la)

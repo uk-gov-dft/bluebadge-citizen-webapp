@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
@@ -19,6 +21,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.CompensationSchemeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.DisabilityForm;
@@ -28,6 +31,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficul
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipDlaQuestionForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipMovingAroundForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipPlanningJourneyForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
 
 public class Journey implements Serializable {
 
@@ -51,15 +55,18 @@ public class Journey implements Serializable {
   private NinoForm ninoForm;
   private MainReasonForm mainReasonForm;
   private WalkingDifficultyForm walkingDifficultyForm;
+  private WhereCanYouWalkForm whereCanYouWalkForm;
   public String who;
   public String ageGroup;
 
-  // afcs Journey Forms
+  // AFCS Journey Forms
   private CompensationSchemeForm compensationSchemeForm;
   private DisabilityForm disabilityForm;
   private MentalDisorderForm mentalDisorderForm;
   private ContactDetailsForm contactDetailsForm;
   private MobilityAidListForm mobilityAidListForm;
+
+  private WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm;
 
   public Nation getNation() {
     if (null != localAuthority) {
@@ -78,6 +85,28 @@ public class Journey implements Serializable {
     }
 
     return null;
+  }
+
+  public String getDescriptionOfCondition() {
+    HealthConditionsForm healthConditionsForm = getHealthConditionsForm();
+    WhereCanYouWalkForm whereCanYouWalkForm = getWhereCanYouWalkForm();
+
+    StringBuilder descriptionOfCondition = new StringBuilder();
+    if (healthConditionsForm != null && healthConditionsForm.getDescriptionOfConditions() != null) {
+      descriptionOfCondition.append(healthConditionsForm.getDescriptionOfConditions());
+    }
+
+    if (WALKD.equals(getEligibilityCode()) && whereCanYouWalkForm != null) {
+      descriptionOfCondition
+          .append(" - Able to walk to: ")
+          .append(whereCanYouWalkForm.getDestinationToHome())
+          .append(" - How long: ")
+          .append(whereCanYouWalkForm.getTimeToDestination());
+    }
+    if (descriptionOfCondition.length() == 0) {
+      descriptionOfCondition.append("Dummy condition");
+    }
+    return descriptionOfCondition.toString();
   }
 
   public Boolean isApplicantYourself() {
@@ -103,6 +132,10 @@ public class Journey implements Serializable {
     }
 
     switch (step) {
+      case WHAT_WALKING_DIFFICULTIES:
+        if (null == getNation()) {
+          return false;
+        }
       case ELIGIBLE:
       case MAY_BE_ELIGIBLE:
         if (null == getLocalAuthority()) {
@@ -169,6 +202,7 @@ public class Journey implements Serializable {
 
   public void setReceiveBenefitsForm(ReceiveBenefitsForm receiveBenefitsForm) {
     this.receiveBenefitsForm = receiveBenefitsForm;
+    setMainReasonForm(null);
   }
 
   public PipMovingAroundForm getPipMovingAroundForm() {
@@ -251,6 +285,14 @@ public class Journey implements Serializable {
     this.walkingDifficultyForm = walkingDifficultyForm;
   }
 
+  public WhereCanYouWalkForm getWhereCanYouWalkForm() {
+    return whereCanYouWalkForm;
+  }
+
+  public void setWhereCanYouWalkForm(WhereCanYouWalkForm whereCanYouWalkForm) {
+    this.whereCanYouWalkForm = whereCanYouWalkForm;
+  }
+
   public GenderForm getGenderForm() {
     return genderForm;
   }
@@ -281,6 +323,15 @@ public class Journey implements Serializable {
 
   public void setEnterAddressForm(EnterAddressForm enterAddressForm) {
     this.enterAddressForm = enterAddressForm;
+  }
+
+  public WhatMakesWalkingDifficultForm getWhatMakesWalkingDifficultForm() {
+    return whatMakesWalkingDifficultForm;
+  }
+
+  public void setWhatMakesWalkingDifficultForm(
+      WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm) {
+    this.whatMakesWalkingDifficultForm = whatMakesWalkingDifficultForm;
   }
 
   public MobilityAidListForm getMobilityAidListForm() {
