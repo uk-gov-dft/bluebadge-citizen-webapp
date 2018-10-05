@@ -4,10 +4,18 @@ import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.m
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
+
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
@@ -37,85 +45,58 @@ public class Journey implements Serializable {
   public static final String JOURNEY_SESSION_KEY = "JOURNEY";
   public static final String FORM_REQUEST = "formRequest";
 
-  private ApplicantForm applicantForm;
-  private ApplicantNameForm applicantNameForm;
-  private HealthConditionsForm healthConditionsForm;
-  private ReceiveBenefitsForm receiveBenefitsForm;
-  private ChooseYourCouncilForm chooseYourCouncilForm;
-  private YourIssuingAuthorityForm yourIssuingAuthorityForm;
-  private PipMovingAroundForm pipMovingAroundForm;
-  private PipDlaQuestionForm pipDlaQuestionForm;
-  private PipPlanningJourneyForm pipPlanningJourneyForm;
-  private LocalAuthorityRefData localAuthority;
-  private DateOfBirthForm dateOfBirthForm;
-  private EnterAddressForm enterAddressForm;
-  private HigherRateMobilityForm higherRateMobilityForm;
-  private GenderForm genderForm;
-  private NinoForm ninoForm;
-  private MainReasonForm mainReasonForm;
-  private WalkingDifficultyForm walkingDifficultyForm;
-  private WhereCanYouWalkForm whereCanYouWalkForm;
+  private Map<StepDefinition, StepForm> forms = new HashMap<>();
   public String who;
   public String ageGroup;
 
-  // AFCS Journey Forms
-  private CompensationSchemeForm compensationSchemeForm;
-  private DisabilityForm disabilityForm;
-  private MentalDisorderForm mentalDisorderForm;
-  private ContactDetailsForm contactDetailsForm;
-
-  private WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm;
-
-  public Nation getNation() {
-    if (null != localAuthority) {
-      return localAuthority.getNation();
-    }
-    return null;
+  public void setFormForStep(StepDefinition definition, StepForm form) {
+    cleanUpSteps(new HashSet<>(), form.getCleanUpSteps(this));
+    forms.put(definition, form);
   }
 
-  public EligibilityCodeField getEligibilityCode() {
-    if (null != mainReasonForm
-        && EligibilityCodeField.NONE != mainReasonForm.getMainReasonOption()) {
-      return mainReasonForm.getMainReasonOption();
-    } else if (null != receiveBenefitsForm
-        && EligibilityCodeField.NONE != receiveBenefitsForm.getBenefitType()) {
-      return receiveBenefitsForm.getBenefitType();
-    }
-
-    return null;
+  public StepForm getFormForStep(StepDefinition step) {
+    return forms.get(step);
   }
 
-  public String getDescriptionOfCondition() {
-    HealthConditionsForm healthConditionsForm = getHealthConditionsForm();
-    WhereCanYouWalkForm whereCanYouWalkForm = getWhereCanYouWalkForm();
+  public void cleanUpSteps(Set<StepDefinition> alreadyCleaned, List<StepDefinition> steps) {
 
-    StringBuilder descriptionOfCondition = new StringBuilder();
-    if (healthConditionsForm != null && healthConditionsForm.getDescriptionOfConditions() != null) {
-      descriptionOfCondition.append(healthConditionsForm.getDescriptionOfConditions());
+    if (null == steps) {
+      return;
     }
 
-    if (WALKD.equals(getEligibilityCode()) && whereCanYouWalkForm != null) {
-      descriptionOfCondition
-          .append(" - Able to walk to: ")
-          .append(whereCanYouWalkForm.getDestinationToHome())
-          .append(" - How long: ")
-          .append(whereCanYouWalkForm.getTimeToDestination());
-    }
-    if (descriptionOfCondition.length() == 0) {
-      descriptionOfCondition.append("Dummy condition");
-    }
-    return descriptionOfCondition.toString();
+    steps
+        .stream()
+        .filter(((Predicate<StepDefinition>)alreadyCleaned::contains).negate())
+        .forEach(
+            stepDefinition -> {
+              if (hasStepForm(stepDefinition)) {
+                StepForm f = getFormForStep(stepDefinition);
+                cleanUpSteps(alreadyCleaned, f.getCleanUpSteps(this));
+                forms.remove(stepDefinition);
+                alreadyCleaned.add(stepDefinition);
+              }
+            });
   }
+
+  public boolean hasStepForm(StepDefinition stepDefinition) {
+    return getFormForStep(stepDefinition) != null;
+  }
+
+  private LocalAuthorityRefData localAuthority;
+
+
 
   public Boolean isApplicantYourself() {
-    if (applicantForm != null) {
-      return applicantForm.getApplicantType().equals(ApplicantType.YOURSELF.toString());
+    if (hasStepForm(StepDefinition.APPLICANT_TYPE)) {
+      ApplicantForm form = (ApplicantForm) getFormForStep(StepDefinition.APPLICANT_TYPE);
+      return form.getApplicantType().equals(ApplicantType.YOURSELF.toString());
     }
     return null;
   }
 
   public Boolean isApplicantYoung() {
-    if (dateOfBirthForm != null) {
+    if (hasStepForm(StepDefinition.DOB)) {
+      DateOfBirthForm dateOfBirthForm = (DateOfBirthForm) getFormForStep(StepDefinition.DOB);
       return dateOfBirthForm
           .getDateOfBirth()
           .getLocalDate()
@@ -125,7 +106,7 @@ public class Journey implements Serializable {
   }
 
   public boolean isValidState(StepDefinition step) {
-    if (null == getApplicantForm()) {
+    if (!hasStepForm(StepDefinition.APPLICANT_TYPE)) {
       return false;
     }
 
@@ -144,89 +125,183 @@ public class Journey implements Serializable {
     return true;
   }
 
-  public ApplicantForm getApplicantForm() {
-    return applicantForm;
-  }
-
   public void setApplicantForm(ApplicantForm applicantForm) {
-    this.applicantForm = applicantForm;
+    setFormForStep(StepDefinition.APPLICANT_TYPE, applicantForm);
     who = isApplicantYourself() ? "you." : "oth.";
   }
 
-  public ApplicantNameForm getApplicantNameForm() {
-    return applicantNameForm;
-  }
-
   public void setApplicantNameForm(ApplicantNameForm applicantNameForm) {
-    this.applicantNameForm = applicantNameForm;
+    setFormForStep(StepDefinition.NAME, applicantNameForm);
   }
 
-  public HealthConditionsForm getHealthConditionsForm() {
-    return healthConditionsForm;
+  public ApplicantNameForm getApplicantNameForm() {
+    return (ApplicantNameForm) getFormForStep(StepDefinition.NAME);
   }
 
   public void setHealthConditionsForm(HealthConditionsForm healthConditionsForm) {
-    this.healthConditionsForm = healthConditionsForm;
+    setFormForStep(StepDefinition.HEALTH_CONDITIONS, healthConditionsForm);
+  }
+
+  public HealthConditionsForm getHealthConditionsForm() {
+    return (HealthConditionsForm) getFormForStep(StepDefinition.HEALTH_CONDITIONS);
   }
 
   public void setDateOfBirthForm(DateOfBirthForm dateOfBirthForm) {
-    this.dateOfBirthForm = dateOfBirthForm;
+    setFormForStep(StepDefinition.DOB, dateOfBirthForm);
     ageGroup = isApplicantYoung() ? "young." : "adult.";
   }
 
   public DateOfBirthForm getDateOfBirthForm() {
-    return dateOfBirthForm;
+    return (DateOfBirthForm) getFormForStep(StepDefinition.DOB);
   }
 
   public ChooseYourCouncilForm getChooseYourCouncilForm() {
-    return chooseYourCouncilForm;
+    return (ChooseYourCouncilForm) getFormForStep(StepDefinition.CHOOSE_COUNCIL);
   }
 
   public void setChooseYourCouncilForm(ChooseYourCouncilForm chooseYourCouncilForm) {
-    this.chooseYourCouncilForm = chooseYourCouncilForm;
+    setFormForStep(StepDefinition.CHOOSE_COUNCIL, chooseYourCouncilForm);
   }
 
   public YourIssuingAuthorityForm getYourIssuingAuthorityForm() {
-    return yourIssuingAuthorityForm;
+    return (YourIssuingAuthorityForm) getFormForStep(StepDefinition.YOUR_ISSUING_AUTHORITY);
   }
 
   public void setYourIssuingAuthorityForm(YourIssuingAuthorityForm yourIssuingAuthorityForm) {
-    this.yourIssuingAuthorityForm = yourIssuingAuthorityForm;
+    setFormForStep(StepDefinition.YOUR_ISSUING_AUTHORITY, yourIssuingAuthorityForm);
   }
 
   public ReceiveBenefitsForm getReceiveBenefitsForm() {
-    return receiveBenefitsForm;
+    return (ReceiveBenefitsForm) getFormForStep(StepDefinition.RECEIVE_BENEFITS);
   }
 
   public void setReceiveBenefitsForm(ReceiveBenefitsForm receiveBenefitsForm) {
-    this.receiveBenefitsForm = receiveBenefitsForm;
-    setMainReasonForm(null);
+    setFormForStep(StepDefinition.RECEIVE_BENEFITS, receiveBenefitsForm);
+    //    setMainReasonForm(null);
   }
 
   public PipMovingAroundForm getPipMovingAroundForm() {
-    return pipMovingAroundForm;
+    return (PipMovingAroundForm) getFormForStep(StepDefinition.PIP_MOVING_AROUND);
   }
 
   public void setPipMovingAroundForm(PipMovingAroundForm pipMovingAroundForm) {
-    this.pipMovingAroundForm = pipMovingAroundForm;
+    setFormForStep(StepDefinition.PIP_MOVING_AROUND, pipMovingAroundForm);
   }
 
   public PipDlaQuestionForm getPipDlaQuestionForm() {
-    return pipDlaQuestionForm;
+    return (PipDlaQuestionForm) getFormForStep(StepDefinition.PIP_DLA);
   }
 
   public void setPipDlaQuestionForm(PipDlaQuestionForm pipDlaQuestionForm) {
-    this.pipDlaQuestionForm = pipDlaQuestionForm;
+    setFormForStep(StepDefinition.PIP_DLA, pipDlaQuestionForm);
   }
 
   public PipPlanningJourneyForm getPipPlanningJourneyForm() {
-    return pipPlanningJourneyForm;
+    return (PipPlanningJourneyForm) getFormForStep(StepDefinition.PIP_PLANNING_JOURNEY);
   }
 
   public void setPipPlanningJourneyForm(PipPlanningJourneyForm pipPlanningJourneyForm) {
-    this.pipPlanningJourneyForm = pipPlanningJourneyForm;
+    setFormForStep(StepDefinition.PIP_PLANNING_JOURNEY, pipPlanningJourneyForm);
   }
 
+  public CompensationSchemeForm getCompensationSchemeForm() {
+    return (CompensationSchemeForm) getFormForStep(StepDefinition.AFCS_COMPENSATION_SCHEME);
+  }
+
+  public void setCompensationSchemeForm(CompensationSchemeForm compensationSchemeForm) {
+    setFormForStep(StepDefinition.AFCS_COMPENSATION_SCHEME, compensationSchemeForm);
+  }
+
+  public DisabilityForm getDisabilityForm() {
+    return (DisabilityForm) getFormForStep(StepDefinition.AFCS_DISABILITY);
+  }
+
+  public void setDisabilityForm(DisabilityForm disabilityForm) {
+    setFormForStep(StepDefinition.AFCS_DISABILITY, disabilityForm);
+  }
+
+  public MentalDisorderForm getMentalDisorderForm() {
+    return (MentalDisorderForm) getFormForStep(StepDefinition.AFCS_MENTAL_DISORDER);
+  }
+
+  public void setMentalDisorderForm(MentalDisorderForm mentalDisorderForm) {
+    setFormForStep(StepDefinition.AFCS_MENTAL_DISORDER, mentalDisorderForm);
+  }
+
+  public HigherRateMobilityForm getHigherRateMobilityForm() {
+    return (HigherRateMobilityForm) getFormForStep(StepDefinition.HIGHER_RATE_MOBILITY);
+  }
+
+  public void setHigherRateMobilityForm(HigherRateMobilityForm higherRateMobilityForm) {
+    setFormForStep(StepDefinition.HIGHER_RATE_MOBILITY, higherRateMobilityForm);
+  }
+
+  public MainReasonForm getMainReasonForm() {
+    return (MainReasonForm) getFormForStep(StepDefinition.MAIN_REASON);
+  }
+
+  public void setMainReasonForm(MainReasonForm mainReasonForm) {
+    setFormForStep(StepDefinition.MAIN_REASON, mainReasonForm);
+  }
+
+  public WalkingDifficultyForm getWalkingDifficultyForm() {
+    return (WalkingDifficultyForm) getFormForStep(StepDefinition.WALKING_DIFFICULTY);
+  }
+
+  public void setWalkingDifficultyForm(WalkingDifficultyForm walkingDifficultyForm) {
+    setFormForStep(StepDefinition.WALKING_DIFFICULTY, walkingDifficultyForm);
+  }
+
+  public WhereCanYouWalkForm getWhereCanYouWalkForm() {
+    return (WhereCanYouWalkForm) getFormForStep(StepDefinition.WHERE_CAN_YOU_WALK);
+  }
+
+  public void setWhereCanYouWalkForm(WhereCanYouWalkForm whereCanYouWalkForm) {
+    setFormForStep(StepDefinition.WHERE_CAN_YOU_WALK, whereCanYouWalkForm);
+  }
+
+  public GenderForm getGenderForm() {
+    return (GenderForm) getFormForStep(StepDefinition.GENDER);
+  }
+
+  public void setGenderForm(GenderForm genderForm) {
+    setFormForStep(StepDefinition.GENDER, genderForm);
+  }
+
+  public ContactDetailsForm getContactDetailsForm() {
+    return (ContactDetailsForm) getFormForStep(StepDefinition.CONTACT_DETAILS);
+  }
+
+  public void setContactDetailsForm(ContactDetailsForm contactDetailsForm) {
+    setFormForStep(StepDefinition.CONTACT_DETAILS, contactDetailsForm);
+  }
+
+  public NinoForm getNinoForm() {
+    return (NinoForm) getFormForStep(StepDefinition.NINO);
+  }
+
+  public void setNinoForm(NinoForm ninoForm) {
+    setFormForStep(StepDefinition.NINO, ninoForm);
+  }
+
+  public EnterAddressForm getEnterAddressForm() {
+    return (EnterAddressForm) getFormForStep(StepDefinition.ADDRESS);
+  }
+
+  public void setEnterAddressForm(EnterAddressForm enterAddressForm) {
+    setFormForStep(StepDefinition.ADDRESS, enterAddressForm);
+  }
+
+  public WhatMakesWalkingDifficultForm getWhatMakesWalkingDifficultForm() {
+    return (WhatMakesWalkingDifficultForm) getFormForStep(StepDefinition.WHAT_WALKING_DIFFICULTIES);
+  }
+
+  public void setWhatMakesWalkingDifficultForm(
+    WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm) {
+    setFormForStep(StepDefinition.WHAT_WALKING_DIFFICULTIES, whatMakesWalkingDifficultForm);
+  }
+
+  // -- META DATA BELOW --
   public LocalAuthorityRefData getLocalAuthority() {
     return localAuthority;
   }
@@ -235,100 +310,50 @@ public class Journey implements Serializable {
     this.localAuthority = localAuthority;
   }
 
-  public CompensationSchemeForm getCompensationSchemeForm() {
-    return compensationSchemeForm;
+  public Nation getNation() {
+    if (null != localAuthority) {
+      return localAuthority.getNation();
+    }
+    return null;
   }
 
-  public void setCompensationSchemeForm(CompensationSchemeForm compensationSchemeForm) {
-    this.compensationSchemeForm = compensationSchemeForm;
+  public EligibilityCodeField getEligibilityCode() {
+    if (hasStepForm(StepDefinition.MAIN_REASON)) {
+      MainReasonForm mainReasonForm = (MainReasonForm) getFormForStep(StepDefinition.MAIN_REASON);
+      if (EligibilityCodeField.NONE != mainReasonForm.getMainReasonOption()) {
+        return mainReasonForm.getMainReasonOption();
+      }
+    } else if (hasStepForm(StepDefinition.RECEIVE_BENEFITS)) {
+      ReceiveBenefitsForm receiveBenefitsForm =
+        (ReceiveBenefitsForm) getFormForStep(StepDefinition.RECEIVE_BENEFITS);
+      if (EligibilityCodeField.NONE != receiveBenefitsForm.getBenefitType()) {
+        return receiveBenefitsForm.getBenefitType();
+      }
+    }
+    return null;
   }
 
-  public DisabilityForm getDisabilityForm() {
-    return disabilityForm;
+  public String getDescriptionOfCondition() {
+    HealthConditionsForm healthConditionsForm = getHealthConditionsForm();
+    WhereCanYouWalkForm whereCanYouWalkForm = getWhereCanYouWalkForm();
+
+    StringBuilder descriptionOfCondition = new StringBuilder();
+    if (healthConditionsForm != null && healthConditionsForm.getDescriptionOfConditions() != null) {
+      descriptionOfCondition.append(healthConditionsForm.getDescriptionOfConditions());
+    }
+
+    if (WALKD.equals(getEligibilityCode()) && whereCanYouWalkForm != null) {
+      descriptionOfCondition
+        .append(" - Able to walk to: ")
+        .append(whereCanYouWalkForm.getDestinationToHome())
+        .append(" - How long: ")
+        .append(whereCanYouWalkForm.getTimeToDestination());
+    }
+    if (descriptionOfCondition.length() == 0) {
+      descriptionOfCondition.append("Dummy condition");
+    }
+    return descriptionOfCondition.toString();
   }
 
-  public void setDisabilityForm(DisabilityForm disabilityForm) {
-    this.disabilityForm = disabilityForm;
-  }
 
-  public MentalDisorderForm getMentalDisorderForm() {
-    return mentalDisorderForm;
-  }
-
-  public void setMentalDisorderForm(MentalDisorderForm mentalDisorderForm) {
-    this.mentalDisorderForm = mentalDisorderForm;
-  }
-
-  public HigherRateMobilityForm getHigherRateMobilityForm() {
-    return higherRateMobilityForm;
-  }
-
-  public void setHigherRateMobilityForm(HigherRateMobilityForm higherRateMobilityForm) {
-    this.higherRateMobilityForm = higherRateMobilityForm;
-  }
-
-  public MainReasonForm getMainReasonForm() {
-    return mainReasonForm;
-  }
-
-  public void setMainReasonForm(MainReasonForm mainReasonForm) {
-    this.mainReasonForm = mainReasonForm;
-  }
-
-  public WalkingDifficultyForm getWalkingDifficultyForm() {
-    return walkingDifficultyForm;
-  }
-
-  public void setWalkingDifficultyForm(WalkingDifficultyForm walkingDifficultyForm) {
-    this.walkingDifficultyForm = walkingDifficultyForm;
-  }
-
-  public WhereCanYouWalkForm getWhereCanYouWalkForm() {
-    return whereCanYouWalkForm;
-  }
-
-  public void setWhereCanYouWalkForm(WhereCanYouWalkForm whereCanYouWalkForm) {
-    this.whereCanYouWalkForm = whereCanYouWalkForm;
-  }
-
-  public GenderForm getGenderForm() {
-    return genderForm;
-  }
-
-  public void setGenderForm(GenderForm genderForm) {
-    this.genderForm = genderForm;
-  }
-
-  public ContactDetailsForm getContactDetailsForm() {
-    return contactDetailsForm;
-  }
-
-  public void setContactDetailsForm(ContactDetailsForm contactDetailsForm) {
-    this.contactDetailsForm = contactDetailsForm;
-  }
-
-  public NinoForm getNinoForm() {
-    return ninoForm;
-  }
-
-  public void setNinoForm(NinoForm ninoForm) {
-    this.ninoForm = ninoForm;
-  }
-
-  public EnterAddressForm getEnterAddressForm() {
-    return enterAddressForm;
-  }
-
-  public void setEnterAddressForm(EnterAddressForm enterAddressForm) {
-    this.enterAddressForm = enterAddressForm;
-  }
-
-  public WhatMakesWalkingDifficultForm getWhatMakesWalkingDifficultForm() {
-    return whatMakesWalkingDifficultForm;
-  }
-
-  public void setWhatMakesWalkingDifficultForm(
-      WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm) {
-    this.whatMakesWalkingDifficultForm = whatMakesWalkingDifficultForm;
-  }
 }

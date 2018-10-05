@@ -13,8 +13,6 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Preamble.COUNCI
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import java.util.Calendar;
-
-import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.SitePage;
 
@@ -94,7 +92,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("I complete what's your name page")
   public void iCompleteWhatsYourNamePage() {
-    clearAndSendKeys(Ids.Person.NAME,"Test Username");
+    clearAndSendKeys(Ids.Person.NAME, "Test Username");
     sitePage.findPageElementById("hasBirthName.no").click();
     pressContinue();
   }
@@ -107,9 +105,9 @@ public class ApplicationFixture extends AbstractSpringSteps {
     if (age_category.equals("CHILD")) dob_year = now.get(Calendar.YEAR) - 10;
     else dob_year = now.get(Calendar.YEAR) - 30;
 
-    clearAndSendKeys(DOB_DAY,"1");
-    clearAndSendKeys(DOB_MONTH,"1");
-    clearAndSendKeys(DOB_YEAR,Integer.toString(dob_year));
+    clearAndSendKeys(DOB_DAY, "1");
+    clearAndSendKeys(DOB_MONTH, "1");
+    clearAndSendKeys(DOB_YEAR, Integer.toString(dob_year));
     pressContinue();
   }
 
@@ -131,7 +129,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("^I complete describe health conditions page$")
   public void iCompleteDescribeHealthConditionsPage() throws Throwable {
-    clearAndSendKeys("descriptionOfConditions","Sample health condition");
+    clearAndSendKeys("descriptionOfConditions", "Sample health condition");
     pressContinue();
   }
 
@@ -163,29 +161,29 @@ public class ApplicationFixture extends AbstractSpringSteps {
   @And("I complete contact page for \"(yourself|someone else)\"")
   public void iCompleteContactPage(String myselfOrOther) {
     if ("someone else".equalsIgnoreCase(myselfOrOther)) {
-      clearAndSendKeys(FULL_NAME,"Some Contact");
+      clearAndSendKeys(FULL_NAME, "Some Contact");
     }
 
-    clearAndSendKeys(PRIMARY_CONTACT_NUMBER,"01270848484");
-    clearAndSendKeys(SECONDARY_CONTACT_NUMBER,"01270848400");
-    clearAndSendKeys(EMAIL_ADDRESS,"some@contact.com");
+    clearAndSendKeys(PRIMARY_CONTACT_NUMBER, "01270848484");
+    clearAndSendKeys(SECONDARY_CONTACT_NUMBER, "01270848400");
+    clearAndSendKeys(EMAIL_ADDRESS, "some@contact.com");
 
     pressContinue();
   }
 
   @And("^I complete address page$")
   public void iCompleteAddressPage() throws Throwable {
-    clearAndSendKeys("buildingAndStreet","120");
-    clearAndSendKeys("optionalAddress","London Road");
-    clearAndSendKeys("townOrCity","Manchester");
-    clearAndSendKeys("postcode","M4 1FS");
+    clearAndSendKeys("buildingAndStreet", "120");
+    clearAndSendKeys("optionalAddress", "London Road");
+    clearAndSendKeys("townOrCity", "Manchester");
+    clearAndSendKeys("postcode", "M4 1FS");
 
     pressContinue();
   }
 
   @And("^I complete NI number page$")
   public void iCompleteNINumberPage() throws Throwable {
-    clearAndSendKeys(Ids.EleCheck.NI,"AB123456A");
+    clearAndSendKeys(Ids.EleCheck.NI, "AB123456A");
     pressContinue();
   }
 
@@ -198,8 +196,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("^I complete where can you walk page$")
   public void iCompleteWhereCanYouWalkPage() throws Throwable {
-    clearAndSendKeys(PLACE_CAN_WALK,"to the Post office on the High Street");
-    clearAndSendKeys(TIME_TO_DESTINATION,"10 minutes");
+    clearAndSendKeys(PLACE_CAN_WALK, "to the Post office on the High Street");
+    clearAndSendKeys(TIME_TO_DESTINATION, "10 minutes");
     pressContinue();
   }
 
@@ -244,7 +242,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
-  public void clearAndSendKeys(String element, String value){
+  public void clearAndSendKeys(String element, String value) {
     sitePage.findPageElementById(element).clear();
     sitePage.findPageElementById(element).sendKeys(value);
   }
