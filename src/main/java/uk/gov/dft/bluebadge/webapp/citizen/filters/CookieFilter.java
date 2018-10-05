@@ -35,16 +35,15 @@ public class CookieFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
 
-        Cookie cookieBannerExists = WebUtils.getCookie(req, CookieUtils.COOKIE_BANNER_KEY);
+        Cookie cookieBanner = WebUtils.getCookie(req, CookieUtils.COOKIE_BANNER_KEY);
 
-        if (cookieBannerExists.equals(null)) {
+        if (cookieBanner == null) {
             Cookie newCookie = new Cookie(CookieUtils.COOKIE_BANNER_KEY, COOKIE_BANNER_VALUE);
             newCookie.setMaxAge(SECONDS_IN_MONTH);
             res.addCookie(newCookie);
         }
-
+        
         chain.doFilter(request, res);
-
     }
 
     @Override
