@@ -13,7 +13,6 @@ Feature: DFT Blue badge Citizen app new application - TERMILL
     And   I should see error summary box
     And   I select option "mainReasonOption.option.TERMILL"
     And   I can click on "Continue"
-
     Then  I should see the page titled "Contact your council" with GOV.UK suffix
 
   Scenario: Terminal Illness application for someone else
@@ -25,7 +24,6 @@ Feature: DFT Blue badge Citizen app new application - TERMILL
     And   I should see the title "What is the main reason they need a badge?"
     And   I select option "mainReasonOption.option.TERMILL"
     And   I can click on "Continue"
-
     Then  I should see the page titled "Contact their council" with GOV.UK suffix
 
   Scenario: No main reason myself
@@ -37,7 +35,6 @@ Feature: DFT Blue badge Citizen app new application - TERMILL
     And   I should see the title "What is the main reason you need a badge?"
     And   I select option "mainReasonOption.option.NONE"
     And   I can click on "Continue"
-
     Then  I should see the page titled "You're not eligible" with GOV.UK suffix
 
   Scenario: No main reason someone else
@@ -49,5 +46,4 @@ Feature: DFT Blue badge Citizen app new application - TERMILL
     And   I should see the title "What is the main reason they need a badge?"
     And   I select option "mainReasonOption.option.NONE"
     And   I can click on "Continue"
-
     Then  I should see the page titled "They're not eligible" with GOV.UK suffix

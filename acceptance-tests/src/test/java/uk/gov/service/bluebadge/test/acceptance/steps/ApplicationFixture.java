@@ -10,9 +10,12 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_MONT
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_YEAR;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Preamble.COUNCIL_INPUT;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import java.util.Calendar;
+
+import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.SitePage;
 
@@ -92,8 +95,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("I complete what's your name page")
   public void iCompleteWhatsYourNamePage() {
-    sitePage.findPageElementById(Ids.Person.NAME).sendKeys("Test Username");
-    sitePage.findPageElementById(Ids.Person.HAS_BIRTH_NAME_NO_OPTION).click();
+    clearAndSendKeys(Ids.Person.NAME,"Test Username");
+    sitePage.findPageElementById("hasBirthName.no").click();
     pressContinue();
   }
 
@@ -105,9 +108,9 @@ public class ApplicationFixture extends AbstractSpringSteps {
     if (age_category.equals("CHILD")) dob_year = now.get(Calendar.YEAR) - 10;
     else dob_year = now.get(Calendar.YEAR) - 30;
 
-    sitePage.findPageElementById(DOB_DAY).sendKeys("1");
-    sitePage.findPageElementById(DOB_MONTH).sendKeys("1");
-    sitePage.findPageElementById(DOB_YEAR).sendKeys(Integer.toString(dob_year));
+    clearAndSendKeys(DOB_DAY,"1");
+    clearAndSendKeys(DOB_MONTH,"1");
+    clearAndSendKeys(DOB_YEAR,Integer.toString(dob_year));
     pressContinue();
   }
 
@@ -129,7 +132,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("^I complete describe health conditions page$")
   public void iCompleteDescribeHealthConditionsPage() throws Throwable {
-    sitePage.findPageElementById("descriptionOfConditions").sendKeys("Sample health condition");
+    clearAndSendKeys("descriptionOfConditions","Sample health condition");
     pressContinue();
   }
 
@@ -153,7 +156,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("^I complete dla allowance page for \"(YES|NO)\"$")
   public void iCompleteDlaAllowancePageFor(String option) throws Throwable {
-    if (option.equals("YES")) sitePage.findPageElementById(HAS_RECEIVED_DLA).click();
+    if ("YES".equals(option)) sitePage.findPageElementById(HAS_RECEIVED_DLA).click();
     else sitePage.findPageElementById(NEVER_RECEIVED_DLA).click();
     pressContinue();
   }
@@ -161,35 +164,75 @@ public class ApplicationFixture extends AbstractSpringSteps {
   @And("I complete contact page for \"(yourself|someone else)\"")
   public void iCompleteContactPage(String myselfOrOther) {
     if ("someone else".equalsIgnoreCase(myselfOrOther)) {
-      sitePage.findPageElementById(FULL_NAME).sendKeys("Some Contact");
+      clearAndSendKeys(FULL_NAME,"Some Contact");
     }
 
-    sitePage.findPageElementById(PRIMARY_CONTACT_NUMBER).sendKeys("01270848484");
-    sitePage.findPageElementById(SECONDARY_CONTACT_NUMBER).sendKeys("01270848400");
-    sitePage.findPageElementById(EMAIL_ADDRESS).sendKeys("some@contact.com");
+    clearAndSendKeys(PRIMARY_CONTACT_NUMBER,"01270848484");
+    clearAndSendKeys(SECONDARY_CONTACT_NUMBER,"01270848400");
+    clearAndSendKeys(EMAIL_ADDRESS,"some@contact.com");
+
     pressContinue();
   }
 
   @And("^I complete address page$")
   public void iCompleteAddressPage() throws Throwable {
-    sitePage.findPageElementById("buildingAndStreet").sendKeys("120");
-    sitePage.findPageElementById("optionalAddress").sendKeys("London Road");
-    sitePage.findPageElementById("townOrCity").sendKeys("Manchester");
-    sitePage.findPageElementById("postcode").sendKeys("M4 1FS");
+    clearAndSendKeys("buildingAndStreet","120");
+    clearAndSendKeys("optionalAddress","London Road");
+    clearAndSendKeys("townOrCity","Manchester");
+    clearAndSendKeys("postcode","M4 1FS");
 
     pressContinue();
   }
 
   @And("^I complete NI number page$")
   public void iCompleteNINumberPage() throws Throwable {
-    sitePage.findPageElementById(NI).sendKeys("AB123456A");
+    clearAndSendKeys(Ids.EleCheck.NI,"AB123456A");
     pressContinue();
   }
 
   @And("^I complete NI number page without a NI$")
   public void iCompleteNINumberPageWithoutNI() throws Throwable {
-    sitePage.findElementWithText(NO_NI_TEXT).click();
-    sitePage.findElementWithText(NO_NI_LINK_TEXT).click();
+    sitePage.findElementWithText(Ids.EleCheck.NO_NI_TEXT).click();
+    sitePage.findElementWithText(Ids.EleCheck.NO_NI_LINK_TEXT).click();
     pressContinue();
+  }
+
+  @And("^I complete where can you walk page$")
+  public void iCompleteWhereCanYouWalkPage() throws Throwable {
+    clearAndSendKeys(PLACE_CAN_WALK,"to the Post office on the High Street");
+    clearAndSendKeys(TIME_TO_DESTINATION,"10 minutes");
+    pressContinue();
+  }
+
+    @And("^I complete lump sum of the AFRFCS Scheme page for \"(YES|NO)\"$")
+    public void iCompleteLumpSumToOfTheAFRFCSSchemePageFor(String option) throws Throwable {
+      sitePage.findPageElementById(Ids.EleCheck.RECEIVED_COMPENSATION + "." + option.toLowerCase()).click();
+      pressContinue();
+    }
+
+  @And("^I complete have permanent disability page for \"(YES|NO)\"$")
+  public void iCompleteHavePermanentDisabilityDisabilityPageFor(String option) throws Throwable {
+    sitePage.findPageElementById(Ids.EleCheck.HAS_DISABILITY + "." + option.toLowerCase()).click();
+    pressContinue();
+  }
+
+  @And("^I complete has mental disorder page for \"(YES|NO)\"$")
+  public void iCompleteHasMentalDisorderPageFor(String option) throws Throwable {
+    sitePage.findPageElementById(Ids.EleCheck.HAS_MENTAL_DISORDER + "." + option.toLowerCase()).click();
+    pressContinue();
+  }
+
+  @And("^I complete has mobility component page for \"(YES|NO)\"$")
+  public void iCompleteHasMobilityComponentPage(String option) throws Throwable {
+    if("YES".equals(option))
+      sitePage.findPageElementById(Ids.EleCheck.AWARDED_HIGHER_RATE_MOBILITY + "." + "true").click();
+    else
+      sitePage.findPageElementById(Ids.EleCheck.AWARDED_HIGHER_RATE_MOBILITY + "." + "false").click();
+    pressContinue();
+  }
+
+  public void clearAndSendKeys(String element, String value){
+    sitePage.findPageElementById(element).clear();
+    sitePage.findPageElementById(element).sendKeys(value);
   }
 }

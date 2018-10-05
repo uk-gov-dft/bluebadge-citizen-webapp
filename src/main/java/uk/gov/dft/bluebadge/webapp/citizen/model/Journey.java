@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -22,6 +24,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.CompensationSchemeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.DisabilityForm;
@@ -38,6 +41,8 @@ public class Journey implements Serializable {
   public static final String FORM_REQUEST = "formRequest";
 
   private Map<StepDefinition, StepForm> forms = new HashMap<>();
+  public String who;
+  public String ageGroup;
 
   public void setFormForStep(StepDefinition definition, StepForm form) {
     cleanUpSteps(form.getCleanUpSteps(this));
@@ -71,8 +76,6 @@ public class Journey implements Serializable {
   }
 
   private LocalAuthorityRefData localAuthority;
-  public String who;
-  public String ageGroup;
 
   public Nation getNation() {
     if (null != localAuthority) {
@@ -95,6 +98,28 @@ public class Journey implements Serializable {
       }
     }
     return null;
+  }
+
+  public String getDescriptionOfCondition() {
+    HealthConditionsForm healthConditionsForm = getHealthConditionsForm();
+    WhereCanYouWalkForm whereCanYouWalkForm = getWhereCanYouWalkForm();
+
+    StringBuilder descriptionOfCondition = new StringBuilder();
+    if (healthConditionsForm != null && healthConditionsForm.getDescriptionOfConditions() != null) {
+      descriptionOfCondition.append(healthConditionsForm.getDescriptionOfConditions());
+    }
+
+    if (WALKD.equals(getEligibilityCode()) && whereCanYouWalkForm != null) {
+      descriptionOfCondition
+          .append(" - Able to walk to: ")
+          .append(whereCanYouWalkForm.getDestinationToHome())
+          .append(" - How long: ")
+          .append(whereCanYouWalkForm.getTimeToDestination());
+    }
+    if (descriptionOfCondition.length() == 0) {
+      descriptionOfCondition.append("Dummy condition");
+    }
+    return descriptionOfCondition.toString();
   }
 
   public Boolean isApplicantYourself() {
@@ -257,6 +282,14 @@ public class Journey implements Serializable {
 
   public void setWalkingDifficultyForm(WalkingDifficultyForm walkingDifficultyForm) {
     setFormForStep(StepDefinition.WALKING_DIFFICULTY, walkingDifficultyForm);
+  }
+
+  public WhereCanYouWalkForm getWhereCanYouWalkForm() {
+    return (WhereCanYouWalkForm) getFormForStep(StepDefinition.GENDER);
+  }
+
+  public void setWhereCanYouWalkForm(WhereCanYouWalkForm whereCanYouWalkForm) {
+    setFormForStep(StepDefinition.WHERE_CAN_YOU_WALK, whereCanYouWalkForm);
   }
 
   public GenderForm getGenderForm() {
