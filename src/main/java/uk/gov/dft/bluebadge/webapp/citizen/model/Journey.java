@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
-
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
@@ -66,7 +65,7 @@ public class Journey implements Serializable {
 
     steps
         .stream()
-        .filter(((Predicate<StepDefinition>)alreadyCleaned::contains).negate())
+        .filter(((Predicate<StepDefinition>) alreadyCleaned::contains).negate())
         .forEach(
             stepDefinition -> {
               if (hasStepForm(stepDefinition)) {
@@ -83,8 +82,6 @@ public class Journey implements Serializable {
   }
 
   private LocalAuthorityRefData localAuthority;
-
-
 
   public Boolean isApplicantYourself() {
     if (hasStepForm(StepDefinition.APPLICANT_TYPE)) {
@@ -297,7 +294,7 @@ public class Journey implements Serializable {
   }
 
   public void setWhatMakesWalkingDifficultForm(
-    WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm) {
+      WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm) {
     setFormForStep(StepDefinition.WHAT_WALKING_DIFFICULTIES, whatMakesWalkingDifficultForm);
   }
 
@@ -325,7 +322,7 @@ public class Journey implements Serializable {
       }
     } else if (hasStepForm(StepDefinition.RECEIVE_BENEFITS)) {
       ReceiveBenefitsForm receiveBenefitsForm =
-        (ReceiveBenefitsForm) getFormForStep(StepDefinition.RECEIVE_BENEFITS);
+          (ReceiveBenefitsForm) getFormForStep(StepDefinition.RECEIVE_BENEFITS);
       if (EligibilityCodeField.NONE != receiveBenefitsForm.getBenefitType()) {
         return receiveBenefitsForm.getBenefitType();
       }
@@ -344,16 +341,14 @@ public class Journey implements Serializable {
 
     if (WALKD.equals(getEligibilityCode()) && whereCanYouWalkForm != null) {
       descriptionOfCondition
-        .append(" - Able to walk to: ")
-        .append(whereCanYouWalkForm.getDestinationToHome())
-        .append(" - How long: ")
-        .append(whereCanYouWalkForm.getTimeToDestination());
+          .append(" - Able to walk to: ")
+          .append(whereCanYouWalkForm.getDestinationToHome())
+          .append(" - How long: ")
+          .append(whereCanYouWalkForm.getTimeToDestination());
     }
     if (descriptionOfCondition.length() == 0) {
       descriptionOfCondition.append("Dummy condition");
     }
     return descriptionOfCondition.toString();
   }
-
-
 }
