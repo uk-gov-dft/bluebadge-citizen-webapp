@@ -1,12 +1,10 @@
 package uk.gov.dft.bluebadge.webapp.citizen.utilities;
 
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.stream.Stream;
-import javax.servlet.http.Cookie;
+
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.WebUtils;
 
 @Service
 public class CookieUtils {
@@ -20,12 +18,7 @@ public class CookieUtils {
   }
 
   public Boolean isCookieBannerSet() {
-    return isCookieBannerSet(req);
+    return WebUtils.getCookie(req, COOKIE_BANNER_KEY) != null;
   }
 
-  public static Boolean isCookieBannerSet(HttpServletRequest req) {
-    Cookie[] cookies = req.getCookies();
-    Stream<Cookie> stream = Objects.nonNull(cookies) ? Arrays.stream(cookies) : Stream.empty();
-    return stream.filter(c -> COOKIE_BANNER_KEY.equals(c.getName())).findFirst().isPresent();
-  }
 }

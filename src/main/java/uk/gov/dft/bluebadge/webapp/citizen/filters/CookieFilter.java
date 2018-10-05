@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.WebUtils;
 import uk.gov.dft.bluebadge.webapp.citizen.utilities.CookieUtils;
 
 @Component
@@ -31,9 +32,10 @@ public class CookieFilter implements Filter {
     HttpServletRequest req = (HttpServletRequest) request;
     HttpServletResponse res = (HttpServletResponse) response;
 
-    if (!CookieUtils.isCookieBannerSet(req)) {
+    Cookie cookieExists = WebUtils.getCookie(req, CookieUtils.COOKIE_BANNER_KEY);
+
+    if (cookieExists == null) {
       Cookie newCookie = new Cookie(CookieUtils.COOKIE_BANNER_KEY, COOKIE_BANNER_VALUE);
-      newCookie.setSecure(true);
       newCookie.setMaxAge(SECONDS_IN_MONTH);
       res.addCookie(newCookie);
     }
