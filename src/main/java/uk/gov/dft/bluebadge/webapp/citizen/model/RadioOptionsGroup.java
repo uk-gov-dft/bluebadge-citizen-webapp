@@ -43,7 +43,7 @@ public class RadioOptionsGroup {
       options = new ArrayList<>();
     }
 
-    public Builder titleIsLabel(){
+    public Builder titleIsLabel() {
       this.titleIsH1 = false;
       return this;
     }

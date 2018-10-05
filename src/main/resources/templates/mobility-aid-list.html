@@ -28,9 +28,9 @@
                         <div class="govuk-radios" data-module="radios">
 
                             <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="hasWalkingAidyes" name="hasWalkingAid"
+                                <input class="govuk-radios__input" id="hasWalkingAidyes"
                                        type="radio" th:field="*{hasWalkingAid}"
-                                       value="true" data-aria-controls="conditional-hasWalkingAidyes">
+                                       th:value="true" data-aria-controls="conditional-hasWalkingAidyes">
                                 <label class="govuk-label govuk-radios__label"
                                        for="hasWalkingAidyes"
                                        th:text="#{'radio.option.yes'}"></label>
@@ -41,8 +41,10 @@
                                 <table class="govuk-table">
                                     <thead class="govuk-table__head" data-uipath="table.head">
                                     <tr class="govuk-table__row">
-                                        <th class="govuk-table__header" scope="col">Type</th>
-                                        <th class="govuk-table__header" scope="col">When used</th>
+                                        <th class="govuk-table__header" scope="col"
+                                            th:text="#{mobility.aid.list.table.header.col1}"></th>
+                                        <th class="govuk-table__header" scope="col"
+                                            th:text="#{mobility.aid.list.table.header.col2}"></th>
                                         <th class="govuk-table__header" scope="col"></th>
                                     </tr>
                                     </thead>
@@ -51,27 +53,28 @@
                                     <tr class="govuk-table__row" th:each="aid : *{mobilityAids}">
                                         <td class="govuk-table__cell" th:text="${aid.aidTypeDescription}"></td>
                                         <td class="govuk-table__cell" th:text="${aid.usage}"></td>
-                                        <td class="govuk-table__cell">
-                                        <a th:href="@{/list-mobility-aids/remove(uuid=${aid.id})}" th:text="#{remove.this}"></a>
+                                        <td class="govuk-table__cell govuk-table__cell--numeric">
+                                            <a th:href="@{/list-mobility-aids/remove(uuid=${aid.id})}"
+                                               th:text="#{remove.this}"></a>
                                         </td>
                                     </tr>
                                     </tbody>
                                 </table>
 
-                                <div th:if="${#lists.isEmpty(formRequest.mobilityAids)}">
+                                <p class="govuk-body" th:if="${#lists.isEmpty(formRequest.mobilityAids)}">
                                     <a data-uid="firstaddmobilityaidlink" href="/add-mobility-aid"
                                        th:text="#{first.mobility.aid.add.link.text}"></a>
-                                </div>
-                                <div th:if="${not #lists.isEmpty(formRequest.mobilityAids)}">
+                                </p>
+                                <p class="govuk-body" th:if="${not #lists.isEmpty(formRequest.mobilityAids)}">
                                     <a data-uid="addmobilityaidlink" href="/add-mobility-aid"
                                        th:text="#{mobility.aid.add.link.text}"></a>
-                                </div>
+                                </p>
                             </div>
 
                             <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="hasWalkingAidno" name="hasWalkingAid"
+                                <input class="govuk-radios__input" id="hasWalkingAidno"
                                        type="radio"
-                                       value="false"
+                                       th:value="false"
                                        th:field="*{hasWalkingAid}">
                                 <label class="govuk-label govuk-radios__label"
                                        for="hasWalkingAidno"

@@ -1,5 +1,10 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+
+import java.util.ArrayList;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,12 +21,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
-
-import javax.validation.Valid;
-import java.util.ArrayList;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 @RequestMapping(Mappings.URL_MOBILITY_AID_LIST)
@@ -67,9 +66,15 @@ public class MobilityAidListController implements StepController {
 
     // Reset if no selected
     // Treat as No selected if no aids
-    if (!mobilityAidListForm.getHasWalkingAid() || (mobilityAidListForm.getHasWalkingAid() && journey.getMobilityAidListForm().getMobilityAids().isEmpty())) {
-      journey.setMobilityAidListForm(MobilityAidListForm.builder().hasWalkingAid(false).mobilityAids(new ArrayList<>()).build());
-    }else{
+    if (!mobilityAidListForm.getHasWalkingAid()
+        || (mobilityAidListForm.getHasWalkingAid()
+            && journey.getMobilityAidListForm().getMobilityAids().isEmpty())) {
+      journey.setMobilityAidListForm(
+          MobilityAidListForm.builder()
+              .hasWalkingAid(false)
+              .mobilityAids(new ArrayList<>())
+              .build());
+    } else {
       journey.getMobilityAidListForm().setHasWalkingAid(mobilityAidListForm.getHasWalkingAid());
     }
 

@@ -1,13 +1,12 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
+import java.io.Serializable;
+import java.util.List;
+import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
-
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.util.List;
 
 @Data
 @Builder

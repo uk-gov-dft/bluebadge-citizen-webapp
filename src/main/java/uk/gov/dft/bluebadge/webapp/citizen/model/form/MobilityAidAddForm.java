@@ -1,13 +1,12 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
-import lombok.Data;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HowProvidedCodeField;
-
+import java.io.Serializable;
+import java.util.UUID;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
-import java.util.UUID;
+import lombok.Data;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HowProvidedCodeField;
 
 @Data
 public class MobilityAidAddForm implements Serializable {
@@ -30,9 +29,16 @@ public class MobilityAidAddForm implements Serializable {
   }
 
   @NotNull private AidType aidType;
+
   @Size(max = 100)
-  @NotBlank private String usage;
+  @NotBlank
+  private String usage;
+
   @NotNull private HowProvidedCodeField howProvidedCodeField;
+
+  @Size(max = 100)
+  private String customAidName;
+
   private String id;
 
   public MobilityAidAddForm() {
@@ -41,7 +47,7 @@ public class MobilityAidAddForm implements Serializable {
 
   public String getAidTypeDescription() {
     if (null == aidType) return "";
-
+    if (aidType == AidType.WALKING_AID) return customAidName;
     return aidType.getType();
   }
 }

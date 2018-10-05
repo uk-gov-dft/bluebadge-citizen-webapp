@@ -1,5 +1,11 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+
+import java.util.ArrayList;
+import javax.validation.Valid;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,12 +23,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
-
-import javax.validation.Valid;
-import java.util.ArrayList;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 @RequestMapping(Mappings.URL_MOBILITY_AID_ADD)
@@ -47,9 +47,7 @@ public class MobilityAidAddController implements StepController {
     if (null == journey.getMobilityAidListForm()
         || null == journey.getMobilityAidListForm().getMobilityAids()) {
       journey.setMobilityAidListForm(
-          MobilityAidListForm.builder()
-              .mobilityAids(new ArrayList<>())
-              .build());
+          MobilityAidListForm.builder().mobilityAids(new ArrayList<>()).build());
     }
 
     journey.getMobilityAidListForm().setHasWalkingAid(true);
@@ -59,15 +57,6 @@ public class MobilityAidAddController implements StepController {
       model.addAttribute(FORM_REQUEST, new MobilityAidAddForm());
     }
 
-    model.addAttribute(
-        "aidTypeOptions",
-        new RadioOptionsGroup.Builder()
-            .titleMessageKey("mobilityaid.type.optiongroup.title")
-            .titleIsLabel()
-            .addOption(MobilityAidAddForm.AidType.WHEELCHAIR, "mobilityaid.type.option.wheelchair")
-            .addOption(MobilityAidAddForm.AidType.SCOOTER, "mobilityaid.type.option.scooter")
-            .addOption(MobilityAidAddForm.AidType.WALKING_AID, "mobilityaid.type.option.walkingaid")
-            .build());
     model.addAttribute(
         "howProvidedOptions",
         new RadioOptionsGroup.Builder()
@@ -86,6 +75,11 @@ public class MobilityAidAddController implements StepController {
       @Valid @ModelAttribute(FORM_REQUEST) MobilityAidAddForm mobilityAidAddForm,
       BindingResult bindingResult,
       RedirectAttributes attr) {
+
+    if (MobilityAidAddForm.AidType.WALKING_AID == mobilityAidAddForm.getAidType()
+        && StringUtils.isEmpty(mobilityAidAddForm.getCustomAidName())) {
+      bindingResult.rejectValue("customAidName", "NotBlank.customAidName");
+    }
 
     if (bindingResult.hasErrors()) {
       return routeMaster.redirectToOnBindingError(this, mobilityAidAddForm, bindingResult, attr);
