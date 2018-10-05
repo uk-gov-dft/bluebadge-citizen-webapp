@@ -1,7 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -12,31 +10,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import com.google.common.collect.ImmutableList;
-
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HowProvidedCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
 
 public class MobilityAidAddControllerTest {
 
@@ -60,7 +47,8 @@ public class MobilityAidAddControllerTest {
 
     journey = new Journey();
     journey.setApplicantForm(applicantForm);
-    journey.setMobilityAidListForm(MobilityAidListForm.builder().mobilityAids(new ArrayList<>()).build());
+    journey.setMobilityAidListForm(
+        MobilityAidListForm.builder().mobilityAids(new ArrayList<>()).build());
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
     // We are not testing the route master. So for convenience just forward to an error view so
     // can test the error messages
@@ -121,8 +109,7 @@ public class MobilityAidAddControllerTest {
   }
 
   @Test
-  public void
-  submit_whenWalkingAidButNoCustom_thenShouldRedirectToShowWithValidationErrors()
+  public void submit_whenWalkingAidButNoCustom_thenShouldRedirectToShowWithValidationErrors()
       throws Exception {
 
     mockMvc
@@ -137,6 +124,7 @@ public class MobilityAidAddControllerTest {
         .andExpect(view().name("/someValidationError"))
         .andExpect(
             model()
-                .attributeHasFieldErrorCode("formRequest", "customAidName", "NotBlank.customAidName"));
+                .attributeHasFieldErrorCode(
+                    "formRequest", "customAidName", "NotBlank.customAidName"));
   }
 }

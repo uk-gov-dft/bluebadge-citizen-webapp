@@ -1,8 +1,8 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
-import org.junit.Test;
-
 import static org.junit.Assert.*;
+
+import org.junit.Test;
 
 public class MobilityAidAddFormTest {
 
@@ -16,5 +16,4 @@ public class MobilityAidAddFormTest {
     form.setCustomAidName("Custom");
     assertEquals("Custom", form.getAidTypeDescription());
   }
-
 }
