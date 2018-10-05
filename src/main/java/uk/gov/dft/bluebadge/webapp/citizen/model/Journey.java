@@ -292,6 +292,15 @@ public class Journey implements Serializable {
     setFormForStep(StepDefinition.ADDRESS, enterAddressForm);
   }
 
+  public WhatMakesWalkingDifficultForm getWhatMakesWalkingDifficultForm() {
+    return (WhatMakesWalkingDifficultForm) getFormForStep(StepDefinition.WHAT_WALKING_DIFFICULTIES);
+  }
+
+  public void setWhatMakesWalkingDifficultForm(
+    WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm) {
+    setFormForStep(StepDefinition.WHAT_WALKING_DIFFICULTIES, whatMakesWalkingDifficultForm);
+  }
+
   // -- META DATA BELOW --
   public LocalAuthorityRefData getLocalAuthority() {
     return localAuthority;
@@ -346,12 +355,5 @@ public class Journey implements Serializable {
     return descriptionOfCondition.toString();
   }
 
-  public WhatMakesWalkingDifficultForm getWhatMakesWalkingDifficultForm() {
-    return whatMakesWalkingDifficultForm;
-  }
 
-  public void setWhatMakesWalkingDifficultForm(
-      WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm) {
-    this.whatMakesWalkingDifficultForm = whatMakesWalkingDifficultForm;
-  }
 }
