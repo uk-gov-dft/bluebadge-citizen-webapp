@@ -1,6 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.utilities;
 
-
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,5 +19,4 @@ public class CookieUtils {
   public Boolean isCookieBannerSet() {
     return WebUtils.getCookie(req, COOKIE_BANNER_KEY) != null;
   }
-
 }

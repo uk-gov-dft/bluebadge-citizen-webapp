@@ -19,7 +19,8 @@ import org.mockito.Mockito;
 public class CookieFilterTest {
 
   @Test
-  public void doFilter_ShouldSetCookieBanner_WhenCookieIsNotSet() throws ServletException, IOException {
+  public void doFilter_ShouldSetCookieBanner_WhenCookieIsNotSet()
+      throws ServletException, IOException {
 
     CookieFilter filter = new CookieFilter();
 
@@ -44,28 +45,28 @@ public class CookieFilterTest {
     assertThat(captor.getValue().getName()).isEqualTo("cookie_banner_seen");
   }
 
-    @Test
-    public void doFilter_ShouldNotSetCookieBanner_WhenCookieIsSet() throws ServletException, IOException {
+  @Test
+  public void doFilter_ShouldNotSetCookieBanner_WhenCookieIsSet()
+      throws ServletException, IOException {
 
-        CookieFilter filter = new CookieFilter();
+    CookieFilter filter = new CookieFilter();
 
-        HttpServletRequest mockReq = Mockito.mock(HttpServletRequest.class);
-        HttpServletResponse mockResp = Mockito.mock(HttpServletResponse.class);
+    HttpServletRequest mockReq = Mockito.mock(HttpServletRequest.class);
+    HttpServletResponse mockResp = Mockito.mock(HttpServletResponse.class);
 
-        FilterChain mockFilterChain = Mockito.mock(FilterChain.class);
-        FilterConfig mockFilterConfig = Mockito.mock(FilterConfig.class);
+    FilterChain mockFilterChain = Mockito.mock(FilterChain.class);
+    FilterConfig mockFilterConfig = Mockito.mock(FilterConfig.class);
 
-        // mock the getRequestURI() response
-        when(mockReq.getRequestURI()).thenReturn("/");
-        when(mockReq.getCookies()).thenReturn(new Cookie[] { new Cookie("cookie_banner_seen", "yes") });
+    // mock the getRequestURI() response
+    when(mockReq.getRequestURI()).thenReturn("/");
+    when(mockReq.getCookies()).thenReturn(new Cookie[] {new Cookie("cookie_banner_seen", "yes")});
 
-        filter.init(mockFilterConfig);
-        filter.doFilter(mockReq, mockResp, mockFilterChain);
-        filter.destroy();
+    filter.init(mockFilterConfig);
+    filter.doFilter(mockReq, mockResp, mockFilterChain);
+    filter.destroy();
 
-        verify(mockReq).getCookies();
-        ArgumentCaptor<Cookie> captor = ArgumentCaptor.forClass(Cookie.class);
-        verify(mockResp, times(0)).addCookie(captor.capture());
-    }
-  
+    verify(mockReq).getCookies();
+    ArgumentCaptor<Cookie> captor = ArgumentCaptor.forClass(Cookie.class);
+    verify(mockResp, times(0)).addCookie(captor.capture());
+  }
 }
