@@ -59,9 +59,9 @@ public class MobilityAidAddControllerTest {
   @Test
   public void show_ShouldDisplayTemplate() throws Exception {
     mockMvc
-        .perform(get("/list-mobility-aids").sessionAttr("JOURNEY", journey))
+        .perform(get("/add-mobility-aid").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
-        .andExpect(view().name("mobility-aid-list"))
+        .andExpect(view().name("mobility-aid-add"))
         .andExpect(model().attributeExists("formRequest"));
   }
 
