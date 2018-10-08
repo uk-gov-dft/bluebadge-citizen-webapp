@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="#{applyInWelshPage.title} + ' - ' + #{common.title.suffix}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l" th:text="#{applyInWelshPage.content.title}"></h1>
+
+            <p th:text="#{applyInWelshPage.content.p1}"/>
+            <p th:text="#{applyInWelshPage.content.p2}"/>
+
+            <a href="https://bluebadge.direct.gov.uk/bluebadge/why-are-you-here" class="govuk-button" data-uipath="button.continue" th:text="#{btn.label.continue}"></a>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
