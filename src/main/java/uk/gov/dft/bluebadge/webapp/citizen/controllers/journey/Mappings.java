@@ -40,6 +40,8 @@ public class Mappings {
   public static final String URL_WALKING_DIFFICULTY = "/walking-difficulty";
   public static final String URL_NOT_ELIGIBLE = "/not-eligible";
   public static final String URL_CONTACT_COUNCIL = "/contact-council";
+  public static final String URL_COOKIES = "/cookies";
+  public static final String URL_PRIVACY = "/privacy-notice";
 
   // Walking difficulties route
   public static final String URL_WHAT_WALKING_DIFFICULT = "/what-makes-walking-difficult";

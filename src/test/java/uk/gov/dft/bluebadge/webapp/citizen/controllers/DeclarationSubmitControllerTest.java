@@ -12,8 +12,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -21,10 +23,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
+
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
 public class DeclarationSubmitControllerTest {
@@ -36,7 +42,7 @@ public class DeclarationSubmitControllerTest {
   @Mock private RouteMaster mockRouteMaster;
   @Mock Journey mockJourney;
 
-  @Before
+  @BeforeEach
   public void setup() {
     MockitoAnnotations.initMocks(this);
     controller = new DeclarationSubmitController(appService, mockRouteMaster);
@@ -133,5 +139,52 @@ public class DeclarationSubmitControllerTest {
         .andExpect(status().isOk())
         .andExpect(view().name("apply-for-a-blue-badge/declaration"))
         .andExpect(model().attributeHasFieldErrorCode("formRequest", "agreed", "AssertTrue"));
+  }
+
+  @ParameterizedTest
+  @EnumSource(
+    value = EligibilityCodeField.class,
+    names = {"ARMS", "CHILDBULK", "CHILDVEHIC", "WALKD"}
+  )
+  public void dummyApplication_healthConditionsDescSet_whenParticularEligibility(
+      EligibilityCodeField eligibilityCode) {
+
+    Journey journey = JourneyFixture.getDefaultJourney();
+    MainReasonForm mainReasonForm =
+        MainReasonForm.builder().mainReasonOption(eligibilityCode).build();
+    journey.setMainReasonForm(mainReasonForm);
+    HealthConditionsForm healthConditionsForm =
+        HealthConditionsForm.builder().descriptionOfConditions("Test description ABC").build();
+    journey.setHealthConditionsForm(healthConditionsForm);
+    Application application = controller.getDummyApplication(journey);
+
+    assertThat(application).isNotNull();
+    assertThat(application.getEligibility()).isNotNull();
+    assertThat(application.getEligibility().getTypeCode()).isEqualTo(eligibilityCode);
+    assertThat(application.getEligibility().getDescriptionOfConditions())
+        .isEqualTo("Test description ABC");
+  }
+
+  @ParameterizedTest
+  @EnumSource(
+    value = EligibilityCodeField.class,
+    names = {"PIP", "DLA", "WPMS", "AFRFCS", "BLIND"}
+  )
+  public void dummyApplication_healthConditionsDescNotSet_whenParticularEligibility(
+      EligibilityCodeField eligibilityCode) {
+    Journey journey = JourneyFixture.getDefaultJourney();
+    MainReasonForm mainReasonForm =
+        MainReasonForm.builder().mainReasonOption(eligibilityCode).build();
+    journey.setMainReasonForm(mainReasonForm);
+    HealthConditionsForm healthConditionsForm =
+        HealthConditionsForm.builder().descriptionOfConditions("Test description ABC").build();
+    journey.setHealthConditionsForm(healthConditionsForm);
+
+    Application application = controller.getDummyApplication(journey);
+
+    assertThat(application).isNotNull();
+    assertThat(application.getEligibility()).isNotNull();
+    assertThat(application.getEligibility().getTypeCode()).isEqualTo(eligibilityCode);
+    assertThat(application.getEligibility().getDescriptionOfConditions()).isNull();
   }
 }

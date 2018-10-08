@@ -1,0 +1,22 @@
+$cookie-bg: #d5e8f3;
+
+.govuk-cookie-banner {
+	background-color: $cookie-bg;
+
+	p {
+		margin: 0;
+	}
+
+	&__container {
+		padding: 10px 15px;
+		
+		@include govuk-media-query($from: tablet) {
+			padding: 10px 30px;
+		}
+
+		@include govuk-media-query($from: desktop) {
+			margin: auto;
+			max-width: 960px;
+		}
+	}
+}
