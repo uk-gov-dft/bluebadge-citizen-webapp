@@ -63,11 +63,11 @@
                                 </table>
 
                                 <p class="govuk-body" th:if="${#lists.isEmpty(formRequest.mobilityAids)}">
-                                    <a data-uid="firstaddmobilityaidlink" href="/add-mobility-aid"
+                                    <a data-uipath="firstaddmobilityaidlink" href="/add-mobility-aid"
                                        th:text="#{first.mobility.aid.add.link.text}"></a>
                                 </p>
                                 <p class="govuk-body" th:if="${not #lists.isEmpty(formRequest.mobilityAids)}">
-                                    <a data-uid="addmobilityaidlink" href="/add-mobility-aid"
+                                    <a data-uipath="addmobilityaidlink" href="/add-mobility-aid"
                                        th:text="#{mobility.aid.add.link.text}"></a>
                                 </p>
                             </div>

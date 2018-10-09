@@ -2,7 +2,6 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -50,8 +49,7 @@ public class MobilityAidListControllerTest {
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
     // We are not testing the route master. So for convenience just forward to an error view so
     // can test the error messages
-    when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))
-        .thenCallRealMethod();
+    when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any())).thenCallRealMethod();
   }
 
   @Test
@@ -101,7 +99,7 @@ public class MobilityAidListControllerTest {
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
     // Then has aids reset to no.
-    assertEquals("no",journey.getMobilityAidListForm().getHasWalkingAid());
+    assertEquals("no", journey.getMobilityAidListForm().getHasWalkingAid());
   }
 
   @Test
@@ -116,7 +114,9 @@ public class MobilityAidListControllerTest {
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode("hasWalkingAid", "NotNull"));
+        .andExpect(
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "hasWalkingAid", "NotNull"));
   }
 
   @Test
