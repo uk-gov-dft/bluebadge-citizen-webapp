@@ -16,7 +16,6 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.FEEDBA
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.GOOGLE_ANALYTICS_TAG;
 
 import cucumber.api.DataTable;
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -309,7 +308,9 @@ public class SiteSteps extends AbstractSpringSteps {
 
   @And("^I can see the continue button with link to external welsh site$")
   public void iCanSeeTheContinueButtonWithLinkToExternalWelshSite() throws Throwable {
-    assertTrue(APPLY_IN_WELSH_EXTERNAL_URL.equals(sitePage.findElementWithText("Continue").getAttribute("href")));
+    assertTrue(
+        APPLY_IN_WELSH_EXTERNAL_URL.equals(
+            sitePage.findElementWithText("Continue").getAttribute("href")));
   }
 
   @Then("^The google analytics tag should be available$")
