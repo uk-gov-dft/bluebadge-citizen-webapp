@@ -17,12 +17,7 @@ class Ids {
     static final String NEVER_RECEIVED_DLA = "receivedDlaOption.NEVER_RECEIVED_DLA";
     static final String MOVING_POINTS = "movingAroundPoints.MOVING_POINTS";
     static final String PLANNING_POINTS = "planningJourneyOption.PLANNING_POINTS";
-    static final String GENDER_MALE = "gender.MALE";
-    static final String GENDER_FEMALE = "gender.FEMALE";
-    static final String GENDER_UNSPECIFIED = "gender.UNSPECIFIE";
-    static final String NI = "nino";
-    static final String NO_NI_TEXT = "You don't have a National Insurance number";
-    static final String NO_NI_LINK_TEXT = "Continue without a National Insurance number.";
+
     static final String FEEDBACK_URL = "https://www.smartsurvey.co.uk/s/XIYJ6/";
     static final String GOOGLE_ANALYTICS_TAG = "UA-124760983-5";
     static final String PLACE_CAN_WALK = "destinationToHome";
@@ -39,6 +34,12 @@ class Ids {
     static final String DOB_DAY = "dateOfBirth.day";
     static final String DOB_MONTH = "dateOfBirth.month";
     static final String DOB_YEAR = "dateOfBirth.year";
+    static final String GENDER_MALE = "gender.MALE";
+    static final String GENDER_FEMALE = "gender.FEMALE";
+    static final String GENDER_UNSPECIFIED = "gender.UNSPECIFIE";
+    static final String NI = "nino";
+    static final String NO_NI_TEXT = "You don't have a National Insurance number";
+    static final String NO_NI_LINK_TEXT = "Continue without a National Insurance number.";
   }
 
   class Contact {
@@ -49,6 +50,11 @@ class Ids {
   }
 
   class Walkd {
-    static final String MOBILITY_AID_NO_OPTION = "hasWalkingAidno";
+    static final String MOBILITY_AID_OPTION = "hasWalkingAid";
+    static final String FIRST_MOBILITY_AID_LINK = "addmobilityaidlink";
+    static final String AID_TYPE_WHEELCHAIR = "aidTypeWHEELCHAIR";
+    static final String PROVIDED_CODE_PRESCRIBE = "howProvidedCodeField.PRESCRIBE";
+    static final String USAGE = "usage";
+    static final String ADD_MOBILITY_BUTTON = "button.continue";
   }
 }
