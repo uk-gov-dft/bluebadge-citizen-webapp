@@ -15,7 +15,7 @@ public class MobilityAidListForm implements Serializable, StepForm {
   List<MobilityAidAddForm> mobilityAids;
 
   @NotNull(message = "{NotNull.hasWalkingAid}")
-  private Boolean hasWalkingAid;
+  private String hasWalkingAid;
 
   @Override
   public StepDefinition getAssociatedStep() {

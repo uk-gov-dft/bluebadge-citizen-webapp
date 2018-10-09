@@ -143,7 +143,7 @@ public class DeclarationSubmitController implements StepController {
       case WALKD:
         List<WalkingAid> walkingAids = null;
         if (null != journey.getMobilityAidListForm()
-            && journey.getMobilityAidListForm().getHasWalkingAid()) {
+            && "yes".equals(journey.getMobilityAidListForm().getHasWalkingAid())) {
           walkingAids = new ArrayList<>();
           for (MobilityAidAddForm mobilityAidAddForm :
               journey.getMobilityAidListForm().getMobilityAids()) {

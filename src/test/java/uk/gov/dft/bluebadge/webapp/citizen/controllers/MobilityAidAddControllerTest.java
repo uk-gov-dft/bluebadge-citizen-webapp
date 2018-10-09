@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode;
 
 import java.util.ArrayList;
 import org.junit.Before;
@@ -50,10 +51,7 @@ public class MobilityAidAddControllerTest {
     journey.setMobilityAidListForm(
         MobilityAidListForm.builder().mobilityAids(new ArrayList<>()).build());
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
-    // We are not testing the route master. So for convenience just forward to an error view so
-    // can test the error messages
-    when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))
-        .thenReturn("/someValidationError");
+    when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any())).thenCallRealMethod();
   }
 
   @Test
@@ -95,8 +93,6 @@ public class MobilityAidAddControllerTest {
     MobilityAidAddForm form = new MobilityAidAddForm();
     form.setId("1234");
 
-    when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any())).thenCallRealMethod();
-
     mockMvc
         .perform(
             post("/add-mobility-aid")
@@ -117,14 +113,11 @@ public class MobilityAidAddControllerTest {
             post("/add-mobility-aid")
                 .param("aidType", "WALKING_AID")
                 .param("howProvidedCodeField", "PRESCRIBE")
-                .param("usage", "usage")
+                .param("usage", "")
+                .param("customAidName", "")
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
-        .andExpect(view().name("/someValidationError"))
-        .andExpect(
-            model()
-                .attributeHasFieldErrorCode(
-                    "formRequest", "customAidName", "NotBlank.customAidName"));
+        .andExpect(status().is3xxRedirection())
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("customAidName", "NotBlank"));
   }
 }

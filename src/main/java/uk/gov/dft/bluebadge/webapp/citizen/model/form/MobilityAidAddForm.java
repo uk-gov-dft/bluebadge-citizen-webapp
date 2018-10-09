@@ -36,7 +36,6 @@ public class MobilityAidAddForm implements Serializable {
 
   @NotNull private HowProvidedCodeField howProvidedCodeField;
 
-  @Size(max = 100)
   private String customAidName;
 
   private String id;

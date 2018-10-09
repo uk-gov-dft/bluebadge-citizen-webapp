@@ -1,10 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-
-import java.util.ArrayList;
-import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +18,12 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
+
+import javax.validation.Valid;
+import java.util.ArrayList;
+
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 @RequestMapping(Mappings.URL_MOBILITY_AID_ADD)
@@ -50,7 +51,7 @@ public class MobilityAidAddController implements StepController {
           MobilityAidListForm.builder().mobilityAids(new ArrayList<>()).build());
     }
 
-    journey.getMobilityAidListForm().setHasWalkingAid(true);
+    journey.getMobilityAidListForm().setHasWalkingAid("yes");
 
     // On returning to form, take previously submitted values.
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -76,9 +77,12 @@ public class MobilityAidAddController implements StepController {
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
-    if (MobilityAidAddForm.AidType.WALKING_AID == mobilityAidAddForm.getAidType()
-        && StringUtils.isEmpty(mobilityAidAddForm.getCustomAidName())) {
-      bindingResult.rejectValue("customAidName", "NotBlank.customAidName");
+    if (MobilityAidAddForm.AidType.WALKING_AID == mobilityAidAddForm.getAidType()) {
+      if (StringUtils.isEmpty(mobilityAidAddForm.getCustomAidName())) {
+        bindingResult.rejectValue("customAidName", "NotBlank");
+      }else if(StringUtils.length(mobilityAidAddForm.getCustomAidName()) > 100){
+        bindingResult.rejectValue("customAidName", "Size");
+      }
     }
 
     if (bindingResult.hasErrors()) {

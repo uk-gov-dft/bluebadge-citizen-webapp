@@ -12,14 +12,16 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.who} + 'mobility.aid.list.body.title'}"></h1>
-
             <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>
 
             <form th:action="@{/list-mobility-aids}" th:object="${formRequest}" method="POST" novalidate>
 
                 <div th:class="${#fields.hasErrors('hasWalkingAid')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
                     <fieldset class="govuk-fieldset" id="hasWalkingAid">
+
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                            <h1 class="govuk-fieldset__heading" th:text="#{${JOURNEY.who} + 'mobility.aid.list.body.title'}"></h1>
+                        </legend>
 
                         <span class="govuk-error-message"
                               data-uipath="hasWalkingAid.error"
@@ -30,7 +32,7 @@
                             <div class="govuk-radios__item">
                                 <input class="govuk-radios__input" id="hasWalkingAidyes"
                                        type="radio" th:field="*{hasWalkingAid}"
-                                       th:value="true" data-aria-controls="conditional-hasWalkingAidyes">
+                                       value="yes" data-aria-controls="conditional-hasWalkingAidyes" autocomplete="off">
                                 <label class="govuk-label govuk-radios__label"
                                        for="hasWalkingAidyes"
                                        th:text="#{'radio.option.yes'}"></label>
@@ -44,8 +46,7 @@
                                         <th class="govuk-table__header" scope="col"
                                             th:text="#{mobility.aid.list.table.header.col1}"></th>
                                         <th class="govuk-table__header" scope="col"
-                                            th:text="#{mobility.aid.list.table.header.col2}"></th>
-                                        <th class="govuk-table__header" scope="col"></th>
+                                            th:text="#{mobility.aid.list.table.header.col2}" colspan="2"></th>
                                     </tr>
                                     </thead>
 
@@ -74,8 +75,8 @@
                             <div class="govuk-radios__item">
                                 <input class="govuk-radios__input" id="hasWalkingAidno"
                                        type="radio"
-                                       th:value="false"
-                                       th:field="*{hasWalkingAid}">
+                                       value="no"
+                                       th:field="*{hasWalkingAid}" autocomplete="off">
                                 <label class="govuk-label govuk-radios__label"
                                        for="hasWalkingAidno"
                                        th:text="#{'radio.option.no'}"></label>
