@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -26,7 +27,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 
 public class MobilityAidListControllerTest {
   private MockMvc mockMvc;
-  private MobilityAidListController controller;
   private Journey journey;
 
   @Mock private RouteMaster mockRouteMaster;
@@ -34,7 +34,7 @@ public class MobilityAidListControllerTest {
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new MobilityAidListController(mockRouteMaster);
+    MobilityAidListController controller = new MobilityAidListController(mockRouteMaster);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -51,7 +51,7 @@ public class MobilityAidListControllerTest {
     // We are not testing the route master. So for convenience just forward to an error view so
     // can test the error messages
     when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))
-        .thenReturn("/someValidationError");
+        .thenCallRealMethod();
   }
 
   @Test
@@ -78,11 +78,45 @@ public class MobilityAidListControllerTest {
     mockMvc
         .perform(
             post("/list-mobility-aids")
-                .param("hasWalkingAid", "false")
+                .param("hasWalkingAid", "no")
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
+  }
+
+  @Test
+  public void submit_setHasAidsToNoIfEmpty() throws Exception {
+    when(mockRouteMaster.redirectToOnSuccess(any(MobilityAidListForm.class)))
+        .thenReturn("redirect:/testSuccess");
+
+    journey.getMobilityAidListForm().setHasWalkingAid("yes");
+    journey.getMobilityAidListForm().setMobilityAids(new ArrayList<>());
+    mockMvc
+        .perform(
+            post("/list-mobility-aids")
+                .param("hasWalkingAid", "yes")
+                .contentType("application/x-www-form-urlencoded")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/testSuccess"));
+    // Then has aids reset to no.
+    assertEquals("no",journey.getMobilityAidListForm().getHasWalkingAid());
+  }
+
+  @Test
+  public void submit_bindingError() throws Exception {
+    when(mockRouteMaster.redirectToOnSuccess(any(MobilityAidListForm.class)))
+        .thenReturn("redirect:/testSuccess");
+
+    mockMvc
+        .perform(
+            post("/list-mobility-aids")
+                //.param("hasWalkingAid", "")
+                .contentType("application/x-www-form-urlencoded")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().isFound())
+        .andExpect(ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode("hasWalkingAid", "NotNull"));
   }
 
   @Test
