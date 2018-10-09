@@ -1,6 +1,20 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.walking;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 import com.google.common.collect.ImmutableList;
+import java.util.List;
+import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -18,21 +32,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 public class WhatWalkingDifficultiesControllerTest {
 
@@ -126,28 +125,27 @@ public class WhatWalkingDifficultiesControllerTest {
   }
 
   @Test
-  public void show_givenNationWales_walkingDifficultiesShouldBeNationSpecific()
-    throws Exception {
+  public void show_givenNationWales_walkingDifficultiesShouldBeNationSpecific() throws Exception {
     LocalAuthorityRefData testLA = new LocalAuthorityRefData();
     LocalAuthorityRefData.LocalAuthorityMetaData metaData =
-      new LocalAuthorityRefData.LocalAuthorityMetaData();
+        new LocalAuthorityRefData.LocalAuthorityMetaData();
     metaData.setNation(Nation.WLS);
     testLA.setLocalAuthorityMetaData(Optional.of(metaData));
 
     journey.setLocalAuthority(testLA);
 
     MvcResult mvcResult =
-      mockMvc
-        .perform(get("/what-makes-walking-difficult").sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
-        .andExpect(model().attributeExists("walkingDifficulties"))
-        .andReturn();
+        mockMvc
+            .perform(get("/what-makes-walking-difficult").sessionAttr("JOURNEY", journey))
+            .andExpect(status().isOk())
+            .andExpect(model().attributeExists("walkingDifficulties"))
+            .andReturn();
 
     RadioOptionsGroup options =
-      (RadioOptionsGroup) mvcResult.getModelAndView().getModel().get("walkingDifficulties");
+        (RadioOptionsGroup) mvcResult.getModelAndView().getModel().get("walkingDifficulties");
     assertThat(options.getOptions())
-      .extracting("shortCode", "messageKey")
-      .contains(tuple("STRUGGLE", "you.whatMakesWalkingDifficult.select.option.struggle"));
+        .extracting("shortCode", "messageKey")
+        .contains(tuple("STRUGGLE", "you.whatMakesWalkingDifficult.select.option.struggle"));
   }
 
   @Test
