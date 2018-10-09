@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 public class Mappings {
   public static final String URL_ROOT = "/";
+  public static final String URL_APPLY_IN_WELSH = "/apply-in-welsh";
   public static final String URL_APPLICANT_TYPE = "/applicant";
   public static final String URL_APPLICANT_NAME = "/name";
   public static final String URL_RECEIVE_BENEFITS = "/benefits";
@@ -39,6 +40,8 @@ public class Mappings {
   public static final String URL_WALKING_DIFFICULTY = "/walking-difficulty";
   public static final String URL_NOT_ELIGIBLE = "/not-eligible";
   public static final String URL_CONTACT_COUNCIL = "/contact-council";
+  public static final String URL_COOKIES = "/cookies";
+  public static final String URL_PRIVACY = "/privacy-notice";
 
   public static final String URL_MOBILITY_AID_LIST = "/list-mobility-aids";
   public static final String URL_MOBILITY_AID_ADD = "/add-mobility-aid";

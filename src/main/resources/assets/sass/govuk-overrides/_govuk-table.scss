@@ -1,0 +1,11 @@
+.govuk-table__header {
+	@include govuk-media-query($from: tablet) {
+		&--width-30 {
+			width: 30%;
+		}
+	}
+
+	&--width-16 {
+		width: 16%;
+	}
+}

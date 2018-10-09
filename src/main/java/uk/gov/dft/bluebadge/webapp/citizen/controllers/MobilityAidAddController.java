@@ -1,5 +1,10 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+
+import java.util.ArrayList;
+import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,12 +23,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
-
-import javax.validation.Valid;
-import java.util.ArrayList;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 @RequestMapping(Mappings.URL_MOBILITY_AID_ADD)
@@ -80,7 +79,7 @@ public class MobilityAidAddController implements StepController {
     if (MobilityAidAddForm.AidType.WALKING_AID == mobilityAidAddForm.getAidType()) {
       if (StringUtils.isEmpty(mobilityAidAddForm.getCustomAidName())) {
         bindingResult.rejectValue("customAidName", "NotBlank");
-      }else if(StringUtils.length(mobilityAidAddForm.getCustomAidName()) > 100){
+      } else if (StringUtils.length(mobilityAidAddForm.getCustomAidName()) > 100) {
         bindingResult.rejectValue("customAidName", "Size");
       }
     }

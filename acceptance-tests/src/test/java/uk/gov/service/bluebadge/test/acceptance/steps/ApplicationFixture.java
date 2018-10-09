@@ -4,12 +4,23 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.EMAIL_A
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.FULL_NAME;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.PRIMARY_CONTACT_NUMBER;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.SECONDARY_CONTACT_NUMBER;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.*;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.*;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.HAS_RECEIVED_DLA;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.MAIN_REASON_LIST;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.NEVER_RECEIVED_DLA;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.PLACE_CAN_WALK;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.TIME_TO_DESTINATION;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_DAY;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_MONTH;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_YEAR;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_FEMALE;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_MALE;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_UNSPECIFIED;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Preamble.COUNCIL_INPUT;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.*;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.ADD_MOBILITY_BUTTON;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.AID_TYPE_WHEELCHAIR;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.PROVIDED_CODE_PRESCRIBE;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.USAGE;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import java.util.Calendar;
@@ -251,15 +262,14 @@ public class ApplicationFixture extends AbstractSpringSteps {
   public void iCompleteTheMobilityAidsPage(String option) {
     sitePage.findPageElementById(Ids.Walkd.MOBILITY_AID_OPTION + option.toLowerCase()).click();
 
-    if("YES".equals(option)){
-      //Needs to update this to use id or data-uipath
+    if ("YES".equals(option)) {
+      // Needs to update this to use id or data-uipath
       sitePage.findElementAddMobilityAid().click();
       sitePage.findPageElementById(AID_TYPE_WHEELCHAIR).click();
-      clearAndSendKeys( USAGE,"All the time");
+      clearAndSendKeys(USAGE, "All the time");
       sitePage.findPageElementById(PROVIDED_CODE_PRESCRIBE).click();
       sitePage.findElementWithUiPath(ADD_MOBILITY_BUTTON).click();
     }
     pressContinue();
   }
-
 }

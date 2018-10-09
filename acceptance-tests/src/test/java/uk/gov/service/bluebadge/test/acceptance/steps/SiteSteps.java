@@ -11,6 +11,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.APPLY_IN_WELSH_EXTERNAL_URL;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.FEEDBACK_URL;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.GOOGLE_ANALYTICS_TAG;
 
@@ -303,6 +304,13 @@ public class SiteSteps extends AbstractSpringSteps {
   @Then("^I can see feedback link$")
   public void iCanSeeFeedbackLink() throws Throwable {
     assertTrue(FEEDBACK_URL.equals(sitePage.findElementWithText("feedback").getAttribute("href")));
+  }
+
+  @And("^I can see the continue button with link to external welsh site$")
+  public void iCanSeeTheContinueButtonWithLinkToExternalWelshSite() throws Throwable {
+    assertTrue(
+        APPLY_IN_WELSH_EXTERNAL_URL.equals(
+            sitePage.findElementWithText("Continue").getAttribute("href")));
   }
 
   @Then("^The google analytics tag should be available$")
