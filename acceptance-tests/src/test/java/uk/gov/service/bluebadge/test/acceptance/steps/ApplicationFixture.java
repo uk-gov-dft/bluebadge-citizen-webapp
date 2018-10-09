@@ -252,12 +252,6 @@ public class ApplicationFixture extends AbstractSpringSteps {
     sitePage.findPageElementById(Ids.Walkd.MOBILITY_AID_OPTION + option.toLowerCase()).click();
 
     if("YES".equals(option)){
-      try {
-        Thread.sleep(1 * 1000L);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-
       //Needs to update this to use id or data-uipath
       sitePage.findElementAddMobilityAid().click();
       sitePage.findPageElementById(AID_TYPE_WHEELCHAIR).click();
