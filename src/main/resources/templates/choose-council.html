@@ -22,9 +22,9 @@
                 <span th:remove="tag"
                       th:text="#{${JOURNEY.who} + 'chooseCouncilPage.content.p2.phrase1'}"></span>
 
-                <a data-ga-track
-                   data-ga-track-category="Outbound link"
-                   data-ga-track-action="direct govuk click"
+                <a data-ga-track-link
+                   data-ga-track-link-category="Outbound link"
+                   data-ga-track-link-action="direct govuk click"
                    href="https://bluebadge.direct.gov.uk/bluebadge/why-are-you-here"
                    th:text="#{${JOURNEY.who} + 'chooseCouncilPage.content.p2.phrase2'}"></a>
 
@@ -52,9 +52,9 @@
                 </div>
 
                 <p class="govuk-body">
-                   <a data-ga-track
-                      data-ga-track-category="Outbound link"
-                      data-ga-track-action="don't know my council"
+                   <a data-ga-track-link
+                      data-ga-track-link-category="Outbound link"
+                      data-ga-track-link-action="don't know my council"
                       target="_blank" href="https://www.gov.uk/blue-badge-scheme-information-council"
                       th:text="#{${JOURNEY.who} + 'chooseCouncilPage.link.dontKnowCouncil'}"></a>
                 </p>

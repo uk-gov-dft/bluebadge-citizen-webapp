@@ -1,32 +1,47 @@
 const EVENT_DETAULTS = {
-	action: 'click',
-	category: 'Internal link',
+	link_action: 'click',
+	link_category: 'Internal link',
+	page_action: 'view',
+	page_category: 'page',
 };
 
-const createGTagEvent = (link, href) => {
-	const label = link.getAttribute('data-ga-track-label');
-	const action = link.getAttribute('data-ga-track-action') || EVENT_DETAULTS.action;
-	const category = link.getAttribute('data-ga-track-category') || EVENT_DETAULTS.category;
-
+const GAEvent = (action, category, label) => {
 	window.gtag('event', action, {
 		event_category: category,
-		event_label: label || href,
+		event_label: label,
 	});
 };
 
-const applyClickEvent = (els) => {
-	for (let i = 0; i < els.length; i++) {
-		const el = els[i];
+const initLinkTracking = (elements) => {
+	for (let i = 0; i < elements.length; i++) {
+		const el = elements[i];
 		el.addEventListener('click', (event) => {
-			createGTagEvent(el, event.target.href);
+			const label = el.getAttribute('data-ga-track-link') || event.target.href;
+			const action = el.getAttribute('data-ga-track-link-action') || EVENT_DETAULTS.link_action;
+			const category = el.getAttribute('data-ga-track-link-category') || EVENT_DETAULTS.link_category;
+			GAEvent(action, category, label);
 		});
 	}
 };
 
+const initPageTracking = (page) => {
+	const label = page.getAttribute('data-ga-track-page') || document.title;
+	const action = page.getAttribute('data-a-track-page-action') || EVENT_DETAULTS.page_action;
+	const category = page.getAttribute('data-ga-track-page-category') || EVENT_DETAULTS.page_category;
+	GAEvent(action, category, label);
+};
+
 export default {
 	init: () => {
-		const links = document.querySelectorAll('[data-ga-track]');
+		const links = document.querySelectorAll('[data-ga-track-link]');
+		const htmlEl = document.querySelectorAll('[data-ga-track-page]');
 
-		if (links && window.gtag) applyClickEvent(links);
+		if (links.length > 0 && window.gtag) {
+			initLinkTracking(links);
+		}
+
+		if (htmlEl.length > 0 && window.gtag) {
+			initPageTracking(htmlEl[0]);
+		}
 	},
 };
