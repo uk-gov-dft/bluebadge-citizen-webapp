@@ -47,8 +47,11 @@ public class MobilityAidListController implements StepController {
 
     // If navigating forward from previous form, reset
     if (!model.containsAttribute(FORM_REQUEST)) {
-      model.addAttribute(
-          FORM_REQUEST, MobilityAidListForm.builder().mobilityAids(new ArrayList<>()).build());
+      // Create object in journey with empty list.
+      // Want to not get any null pointers accessing list.
+      journey.setMobilityAidListForm(
+          MobilityAidListForm.builder().mobilityAids(new ArrayList<>()).build());
+      model.addAttribute(FORM_REQUEST, journey.getMobilityAidListForm());
     }
     return TEMPLATE;
   }

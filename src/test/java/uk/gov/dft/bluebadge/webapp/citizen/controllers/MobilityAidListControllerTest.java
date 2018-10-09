@@ -1,5 +1,16 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -11,28 +22,14 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
-
-import java.util.ArrayList;
-
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 public class MobilityAidListControllerTest {
   private MockMvc mockMvc;
   private MobilityAidListController controller;
   private Journey journey;
 
-  @Mock
-  private RouteMaster mockRouteMaster;
+  @Mock private RouteMaster mockRouteMaster;
 
   @Before
   public void setup() {
@@ -48,7 +45,8 @@ public class MobilityAidListControllerTest {
 
     journey = new Journey();
     journey.setApplicantForm(applicantForm);
-    journey.setMobilityAidListForm(MobilityAidListForm.builder().mobilityAids(new ArrayList<>()).build());
+    journey.setMobilityAidListForm(
+        MobilityAidListForm.builder().mobilityAids(new ArrayList<>()).build());
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
     // We are not testing the route master. So for convenience just forward to an error view so
     // can test the error messages
@@ -90,8 +88,10 @@ public class MobilityAidListControllerTest {
   @Test
   public void remove() throws Exception {
     mockMvc
-        .perform(get("/list-mobility-aids/remove").sessionAttr("JOURNEY", new Journey()).param("uuid","1234"))
-
+        .perform(
+            get("/list-mobility-aids/remove")
+                .sessionAttr("JOURNEY", new Journey())
+                .param("uuid", "1234"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/list-mobility-aids"));
   }

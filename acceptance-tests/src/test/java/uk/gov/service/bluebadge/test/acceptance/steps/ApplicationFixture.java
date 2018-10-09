@@ -128,7 +128,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete describe health conditions page$")
-  public void iCompleteDescribeHealthConditionsPage() {
+  public void iCompleteDescribeHealthConditionsPage() throws Throwable {
     clearAndSendKeys("descriptionOfConditions", "Sample health condition");
     pressContinue();
   }
@@ -172,7 +172,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete address page$")
-  public void iCompleteAddressPage() {
+  public void iCompleteAddressPage() throws Throwable {
     clearAndSendKeys("buildingAndStreet", "120");
     clearAndSendKeys("optionalAddress", "London Road");
     clearAndSendKeys("townOrCity", "Manchester");
@@ -182,7 +182,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete NI number page$")
-  public void iCompleteNINumberPage() {
+  public void iCompleteNINumberPage() throws Throwable {
     clearAndSendKeys(Ids.Person.NI, "AB123456A");
     pressContinue();
   }
@@ -195,7 +195,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete where can you walk page$")
-  public void iCompleteWhereCanYouWalkPage() {
+  public void iCompleteWhereCanYouWalkPage() throws Throwable {
     clearAndSendKeys(PLACE_CAN_WALK, "to the Post office on the High Street");
     clearAndSendKeys(TIME_TO_DESTINATION, "10 minutes");
     pressContinue();
@@ -246,9 +246,9 @@ public class ApplicationFixture extends AbstractSpringSteps {
     sitePage.findPageElementById(element).clear();
     sitePage.findPageElementById(element).sendKeys(value);
   }
-  
+
   @And("^I complete the mobility aids page for \"(YES|NO)\"$")
-  public void iCompleteTheMobilityAidsPage(String option){
+  public void iCompleteTheMobilityAidsPage(String option) {
     sitePage.findPageElementById(Ids.Walkd.MOBILITY_AID_OPTION + option.toLowerCase()).click();
 
     if("YES".equals(option)){
@@ -265,7 +265,6 @@ public class ApplicationFixture extends AbstractSpringSteps {
       sitePage.findPageElementById(PROVIDED_CODE_PRESCRIBE).click();
       sitePage.findElementWithUiPath(ADD_MOBILITY_BUTTON).click();
     }
-
     pressContinue();
   }
 
