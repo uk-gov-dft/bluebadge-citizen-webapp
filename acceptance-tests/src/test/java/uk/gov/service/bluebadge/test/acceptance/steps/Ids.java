@@ -58,6 +58,7 @@ class Ids {
 
   class Walkd {
     static final String MOBILITY_AID_OPTION = "hasWalkingAid";
+    static final String HAS_TREATMENT_OPTION = "hasTreatment";
     static final String FIRST_MOBILITY_AID_LINK = "addmobilityaidlink";
     static final String AID_TYPE_WHEELCHAIR = "aidTypeWHEELCHAIR";
     static final String PROVIDED_CODE_PRESCRIBE = "howProvidedCodeField.PRESCRIBE";
