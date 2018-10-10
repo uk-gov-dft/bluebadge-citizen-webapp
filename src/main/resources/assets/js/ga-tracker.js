@@ -31,17 +31,15 @@ const initPageTracking = (page) => {
 	GAEvent(action, category, label);
 };
 
-export default {
-	init: () => {
-		const links = document.querySelectorAll('[data-ga-track-link]');
-		const htmlEl = document.querySelectorAll('[data-ga-track-page]');
+export default () => {
+	const links = document.querySelectorAll('[data-ga-track-link]');
+	const htmlEl = document.querySelectorAll('[data-ga-track-page]');
 
-		if (links.length > 0 && window.gtag) {
-			initLinkTracking(links);
-		}
+	if (links.length > 0 && window.gtag) {
+		initLinkTracking(links);
+	}
 
-		if (htmlEl.length > 0 && window.gtag) {
-			initPageTracking(htmlEl[0]);
-		}
-	},
+	if (htmlEl.length > 0 && window.gtag) {
+		initPageTracking(htmlEl[0]);
+	}
 };

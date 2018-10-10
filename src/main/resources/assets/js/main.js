@@ -3,5 +3,6 @@ import AutoComplete from './autocomplete';
 import GAClickTracker from './ga-tracker';
 
 All.initAll();
-GAClickTracker.init();
-AutoComplete.init('councilShortCode');
+
+GAClickTracker();
+AutoComplete(document.getElementById('councilShortCode'));
