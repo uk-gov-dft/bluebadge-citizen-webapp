@@ -38,21 +38,21 @@
                 <div class="govuk-date-input__item">
                     <div class="govuk-form-group">
                         <label class="govuk-label govuk-date-input__label" th:data-uipath="${date} + '.day.label'" th:attr="for=${day}">Day</label>
-                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" type="number" th:data-uipath="${date} + '.day.field'" th:field="*{__${day}__}">
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" type="number" th:data-uipath="${date} + '.day.field'" th:field="*{__${day}__}" autocomplete="off">
                     </div>
                 </div>
 
                 <div class="govuk-date-input__item" th:if="${month}">
                     <div class="govuk-form-group">
                         <label class="govuk-label govuk-date-input__label" th:data-uipath="${date} + '.month.label'" th:attr="for=${month}">Month</label>
-                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" type="number" th:data-uipath="${date} + '.month.field'"  th:field="*{__${month}__}">
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" type="number" th:data-uipath="${date} + '.month.field'"  th:field="*{__${month}__}" autocomplete="off">
                     </div>
                 </div>
 
                 <div class="govuk-date-input__item" th:if="${year}">
                     <div class="govuk-form-group">
                         <label class="govuk-label govuk-date-input__label" th:data-uipath="${date} + '.year.label'" th:attr="for=${year}">Year</label>
-                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" type="number" th:data-uipath="${date} + '.year.field'" th:field="*{__${year}__}">
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" type="number" th:data-uipath="${date} + '.year.field'" th:field="*{__${year}__}" autocomplete="off">
                     </div>
                 </div>
 

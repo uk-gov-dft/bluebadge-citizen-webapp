@@ -42,6 +42,12 @@ class Ids {
     static final String DOB_DAY = "dateOfBirth.day";
     static final String DOB_MONTH = "dateOfBirth.month";
     static final String DOB_YEAR = "dateOfBirth.year";
+    static final String GENDER_MALE = "gender.MALE";
+    static final String GENDER_FEMALE = "gender.FEMALE";
+    static final String GENDER_UNSPECIFIED = "gender.UNSPECIFIE";
+    static final String NI = "nino";
+    static final String NO_NI_TEXT = "You don't have a National Insurance number";
+    static final String NO_NI_LINK_TEXT = "Continue without a National Insurance number.";
   }
 
   class Contact {
@@ -49,5 +55,14 @@ class Ids {
     static final String PRIMARY_CONTACT_NUMBER = "primaryPhoneNumber";
     static final String SECONDARY_CONTACT_NUMBER = "secondaryPhoneNumber";
     static final String EMAIL_ADDRESS = "emailAddress";
+  }
+
+  class Walkd {
+    static final String MOBILITY_AID_OPTION = "hasWalkingAid";
+    static final String FIRST_MOBILITY_AID_LINK = "addmobilityaidlink";
+    static final String AID_TYPE_WHEELCHAIR = "aidTypeWHEELCHAIR";
+    static final String PROVIDED_CODE_PRESCRIBE = "howProvidedCodeField.PRESCRIBE";
+    static final String USAGE = "usage";
+    static final String ADD_MOBILITY_BUTTON = "button.continue";
   }
 }

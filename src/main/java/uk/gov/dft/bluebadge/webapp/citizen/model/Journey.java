@@ -25,6 +25,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
@@ -296,6 +297,14 @@ public class Journey implements Serializable {
   public void setWhatMakesWalkingDifficultForm(
       WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm) {
     setFormForStep(StepDefinition.WHAT_WALKING_DIFFICULTIES, whatMakesWalkingDifficultForm);
+  }
+
+  public MobilityAidListForm getMobilityAidListForm() {
+    return (MobilityAidListForm) getFormForStep(StepDefinition.MOBILITY_AID_LIST);
+  }
+
+  public void setMobilityAidListForm(MobilityAidListForm mobilityAidListForm) {
+    setFormForStep(StepDefinition.MOBILITY_AID_LIST, mobilityAidListForm);
   }
 
   // -- META DATA BELOW --
