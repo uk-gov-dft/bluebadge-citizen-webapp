@@ -49,7 +49,7 @@ Feature: DFT Blue badge Citizen app new application - DLA
     And   I complete contact page for "yourself"
     And   I complete describe health conditions page
     And   I complete the what makes walking difficult page
-    And   I complete the mobility aids page
+    And   I complete the mobility aids page for "NO"
     And   I complete where can you walk page
     And   I complete declaration page
     Then  I should see .* page titled "Application submitted" with GOV.UK suffix
@@ -88,7 +88,7 @@ Feature: DFT Blue badge Citizen app new application - DLA
     And   I complete contact page for "someone else"
     And   I complete describe health conditions page
     And   I complete the what makes walking difficult page
-    And   I complete the mobility aids page
+    And   I complete the mobility aids page for "NO"
     And   I complete where can you walk page
     And   I complete declaration page
     Then  I should see .* page titled "Application submitted" with GOV.UK suffix
