@@ -32,10 +32,12 @@
                                     <input class="govuk-checkboxes__input"
                                            type="checkbox"
                                            th:field="*{whatWalkingDifficulties}"
+                                           th:id="'whatWalkingDifficulties' + ${checkboxOption.shortCode}"
+                                           th:name="whatWalkingDifficulties"
                                            th:value="${checkboxOption.shortCode}"
                                            th:attr="data-aria-controls=${lastControl}">
                                     <label class="govuk-label govuk-checkboxes__label"
-                                           th:for="${#ids.prev('whatWalkingDifficulties')}"
+                                           th:for="'whatWalkingDifficulties' + ${checkboxOption.shortCode}"
                                            th:text="#{${checkboxOption.messageKey}}"></label>
                                 </div>
 

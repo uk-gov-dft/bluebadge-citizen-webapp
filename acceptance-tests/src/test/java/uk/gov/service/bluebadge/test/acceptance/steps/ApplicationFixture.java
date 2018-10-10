@@ -145,7 +145,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
-  @And("^I complete what makes walking difficult page for \"(HELP|PAIN|DANGEROUS|NONE)\"$")
+  @And("^I complete what makes walking difficult page for \"(HELP|PLAN|PAIN|DANGEROUS|NONE)\"$")
   public void iCompleteWhatMakesWalkingDifficultPageFor(String difficulty) throws Throwable {
     sitePage.findPageElementById(Ids.EleCheck.WALKING_DIFFICULTY_LIST + "." + difficulty).click();
     pressContinue();
@@ -238,7 +238,14 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("^I complete the what makes walking difficult page$")
   public void iCompleteTheWhatMakesWalkingDifficultPage() throws Throwable {
-    sitePage.findPageElementById("whatWalkingDifficulties1").click();
+    sitePage.findPageElementById("whatWalkingDifficultiesPAIN").click();
+    pressContinue();
+  }
+
+  @And(
+      "^I complete the what makes walking difficult page for \"(PAIN|BREATH|BALANCE|LONGTIME|DANGER|STRUGGLE|SOMELSE)\"$")
+  public void iCompleteTheWhatMakesWalkingDifficultPageFor(String difficulty) throws Throwable {
+    sitePage.findPageElementById(Ids.EleCheck.WHAT_WALKING_DIFFICULTY_LIST + difficulty).click();
     pressContinue();
   }
 
