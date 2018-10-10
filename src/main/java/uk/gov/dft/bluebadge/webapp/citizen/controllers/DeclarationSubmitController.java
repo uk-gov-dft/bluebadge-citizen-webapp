@@ -28,6 +28,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Ge
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Party;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.PartyTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Person;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Treatment;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingAid;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficulty;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
@@ -42,6 +43,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
@@ -154,6 +156,17 @@ public class DeclarationSubmitController implements StepController {
                     .description(mobilityAidAddForm.getAidTypeDescription()));
           }
         }
+        List<Treatment> treatments = null;
+        if (null != journey.getTreatmentListForm()
+            && "yes".equals(journey.getTreatmentListForm().getHasTreatment())) {
+          treatments = new ArrayList<>();
+          for (TreatmentAddForm treatmentAddForm : journey.getTreatmentListForm().getTreatments()) {
+            treatments.add(
+                new Treatment()
+                    .time(treatmentAddForm.getTreatmentWhen())
+                    .description(treatmentAddForm.getTreatmentDescription()));
+          }
+        }
 
         List<WalkingDifficultyTypeCodeField> walkingDifficulties =
             journey.getWhatMakesWalkingDifficultForm().getWhatWalkingDifficulties();
@@ -172,7 +185,8 @@ public class DeclarationSubmitController implements StepController {
                         .walkingSpeedCode(WalkingSpeedCodeField.SLOW)
                         .typeCodes(walkingDifficulties)
                         .otherDescription(otherDesc)
-                        .walkingAids(walkingAids));
+                        .walkingAids(walkingAids)
+                        .treatments(treatments));
         break;
       case PIP:
       case DLA:
