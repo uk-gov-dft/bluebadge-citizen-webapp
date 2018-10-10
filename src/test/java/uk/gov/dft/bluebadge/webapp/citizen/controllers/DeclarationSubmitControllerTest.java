@@ -1,18 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -25,13 +12,34 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HowProvidedCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 
 public class DeclarationSubmitControllerTest {
 
@@ -143,9 +151,8 @@ public class DeclarationSubmitControllerTest {
 
   @ParameterizedTest
   @EnumSource(
-    value = EligibilityCodeField.class,
-    names = {"ARMS", "CHILDBULK", "CHILDVEHIC", "WALKD"}
-  )
+      value = EligibilityCodeField.class,
+      names = {"ARMS", "CHILDBULK", "CHILDVEHIC", "WALKD"})
   public void dummyApplication_healthConditionsDescSet_whenParticularEligibility(
       EligibilityCodeField eligibilityCode) {
 
@@ -156,6 +163,29 @@ public class DeclarationSubmitControllerTest {
     HealthConditionsForm healthConditionsForm =
         HealthConditionsForm.builder().descriptionOfConditions("Test description ABC").build();
     journey.setHealthConditionsForm(healthConditionsForm);
+    if (WALKD == eligibilityCode) {
+      MobilityAidAddForm aid = new MobilityAidAddForm();
+      aid.setHowProvidedCodeField(HowProvidedCodeField.PRESCRIBE);
+      aid.setAidType(MobilityAidAddForm.AidType.WHEELCHAIR);
+      aid.setUsage("usage");
+      List<MobilityAidAddForm> aids = new ArrayList<>();
+      aids.add(aid);
+      journey.setMobilityAidListForm(
+          MobilityAidListForm.builder()
+              .hasWalkingAid("yes")
+              .mobilityAids(aids)
+              .build());
+      TreatmentAddForm treatment = new TreatmentAddForm();
+      treatment.setTreatmentDescription("treatment description");
+      treatment.setTreatmentWhen("Treatment when");
+      List<TreatmentAddForm> treatments = new ArrayList<>();
+      treatments.add(treatment);
+      journey.setTreatmentListForm(
+          TreatmentListForm.builder()
+              .hasTreatment("yes")
+              .treatments(treatments)
+              .build());
+    }
     Application application = controller.getDummyApplication(journey);
 
     assertThat(application).isNotNull();
@@ -164,6 +194,8 @@ public class DeclarationSubmitControllerTest {
     if (WALKD == eligibilityCode) {
       assertThat(application.getEligibility().getDescriptionOfConditions())
           .isEqualTo("Test description ABC - Able to walk to: London - How long: 10 minutes");
+      assertThat(application.getEligibility().getWalkingDifficulty().getWalkingAids().size()).isEqualTo(1);
+      assertThat(application.getEligibility().getWalkingDifficulty().getTreatments().size()).isEqualTo(1);
     } else {
       assertThat(application.getEligibility().getDescriptionOfConditions())
           .isEqualTo("Test description ABC");
@@ -172,9 +204,8 @@ public class DeclarationSubmitControllerTest {
 
   @ParameterizedTest
   @EnumSource(
-    value = EligibilityCodeField.class,
-    names = {"PIP", "DLA", "WPMS", "AFRFCS", "BLIND"}
-  )
+      value = EligibilityCodeField.class,
+      names = {"PIP", "DLA", "WPMS", "AFRFCS", "BLIND"})
   public void dummyApplication_healthConditionsDescNotSet_whenParticularEligibility(
       EligibilityCodeField eligibilityCode) {
     Journey journey = JourneyFixture.getDefaultJourney();
