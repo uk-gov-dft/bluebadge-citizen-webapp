@@ -45,7 +45,7 @@ public abstract class ControllerTestFixture<T> {
                         hasProperty("code", equalTo(error))))));
   }
 
-  Journey getDefaultJourney() {
+  private Journey getDefaultJourney() {
     Journey journey = new Journey();
     ApplicantForm applicantForm =
         ApplicantForm.builder().applicantType(ApplicantType.YOURSELF.toString()).build();
@@ -62,15 +62,15 @@ public abstract class ControllerTestFixture<T> {
 
   abstract String getUrl();
 
-  public void show_ShouldDisplayTemplate() throws Exception {
+  protected void show_ShouldDisplayTemplate() throws Exception {
     mockMvc
         .perform(get(getUrl()).sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name(getTemplateName()))
-        .andExpect(model().attributeExists("formRequest"));
+        .andExpect(model().attributeExists(Journey.FORM_REQUEST));
   }
 
-  public void show_shouldRedirect_whenJourneyNotSetup() throws Exception {
+  protected void show_shouldRedirect_whenJourneyNotSetup() throws Exception {
     mockMvc
         .perform(get(getUrl()).sessionAttr("JOURNEY", new Journey()))
         .andExpect(status().isOk())

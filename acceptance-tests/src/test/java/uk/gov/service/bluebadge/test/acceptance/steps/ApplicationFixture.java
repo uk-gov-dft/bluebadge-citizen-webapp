@@ -277,14 +277,6 @@ public class ApplicationFixture extends AbstractSpringSteps {
   public void iCompleteTheTreatmentsPage(String option) {
     sitePage.findPageElementById(Ids.Walkd.HAS_TREATMENT_OPTION + option.toLowerCase()).click();
 
-    if ("YES".equals(option)) {
-      // Needs to update this to use id or data-uipath
-      sitePage.findElementAddMobilityAid().click();
-      sitePage.findPageElementById(AID_TYPE_WHEELCHAIR).click();
-      clearAndSendKeys(USAGE, "All the time");
-      sitePage.findPageElementById(PROVIDED_CODE_PRESCRIBE).click();
-      sitePage.findElementWithUiPath(ADD_MOBILITY_BUTTON).click();
-    }
     pressContinue();
   }
 }

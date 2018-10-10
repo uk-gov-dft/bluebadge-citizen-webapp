@@ -25,7 +25,6 @@ public class TreatmentListControllerTest extends ControllerTestFixture<Treatment
   public void setup() {
     MockitoAnnotations.initMocks(this);
     super.setup(new TreatmentListController(mockRouteMaster));
-    journey = getDefaultJourney();
     journey.setTreatmentListForm(TreatmentListForm.builder().treatments(new ArrayList<>()).build());
     applyRoutmasterDefaultMocks(mockRouteMaster);
   }
