@@ -55,23 +55,23 @@
                                     </thead>
 
                                     <tbody class="govuk-table__body" data-uipath="table.body">
-                                    <tr class="govuk-table__row" th:each="treatment : *{treatments}">
+                                    <tr class="govuk-table__row" th:each="treatment, iStat : *{treatments}">
                                         <td class="govuk-table__cell" th:text="${treatment.treatmentDescription}"></td>
                                         <td class="govuk-table__cell" th:text="${treatment.treatmentWhen}"></td>
                                         <td class="govuk-table__cell govuk-table__cell--numeric">
                                             <a th:href="@{/list-treatments/remove(uuid=${treatment.id})}"
-                                               th:text="#{remove.this}"></a>
+                                               th:text="#{remove.this}" th:id="'treatment.remove.link.' + ${iStat.count}"></a>
                                         </td>
                                     </tr>
                                     </tbody>
                                 </table>
 
                                 <p class="govuk-body" th:if="${#lists.isEmpty(formRequest.treatments)}">
-                                    <a data-uipath="firstaddtreatmentlink" href="/add-treatment"
+                                    <a id="firstaddtreatmentlink" href="/add-treatment"
                                        th:text="#{first.treatment.add.link.text}"> Add first treatment link</a>
                                 </p>
                                 <p class="govuk-body" th:if="${not #lists.isEmpty(formRequest.treatments)}">
-                                    <a data-uipath="addtreatmentlink" href="/add-treatment"
+                                    <a id="addtreatmentlink" href="/add-treatment"
                                        th:text="#{treatment.add.link.text}"> Add another treatment link</a>
                                 </p>
                             </div>
