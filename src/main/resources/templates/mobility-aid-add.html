@@ -4,7 +4,7 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/master.html}">
 <head>
-    <title th:text="#{mobility.aid.add.page.title} + ' - ' + #{common.title.suffix}"></title>
+    <title th:text="(${errorSummary}? #{common.title.error} : '')  + #{mobility.aid.add.page.title}"></title>
 </head>
 <body>
 
@@ -13,8 +13,6 @@
         <div class="govuk-grid-column-two-thirds">
 
             <h1 class="govuk-heading-l" th:text="#{mobility.aid.add.body.title}"></h1>
-
-            <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>
 
             <form th:action="@{/add-mobility-aid}" th:object="${formRequest}" method="POST" novalidate>
                 <div th:class="${#fields.hasErrors('aidType')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
