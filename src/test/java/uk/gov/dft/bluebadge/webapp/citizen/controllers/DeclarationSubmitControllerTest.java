@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -160,8 +161,13 @@ public class DeclarationSubmitControllerTest {
     assertThat(application).isNotNull();
     assertThat(application.getEligibility()).isNotNull();
     assertThat(application.getEligibility().getTypeCode()).isEqualTo(eligibilityCode);
-    assertThat(application.getEligibility().getDescriptionOfConditions())
-        .isEqualTo("Test description ABC");
+    if (WALKD == eligibilityCode) {
+      assertThat(application.getEligibility().getDescriptionOfConditions())
+          .isEqualTo("Test description ABC - Able to walk to: London - How long: 10 minutes");
+    } else {
+      assertThat(application.getEligibility().getDescriptionOfConditions())
+          .isEqualTo("Test description ABC");
+    }
   }
 
   @ParameterizedTest

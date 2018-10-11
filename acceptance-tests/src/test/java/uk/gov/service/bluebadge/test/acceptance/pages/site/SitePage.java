@@ -58,6 +58,11 @@ public class SitePage {
     return helper.findOptionalElement(By.xpath("//*[@data-uipath='" + uiPath + "']"));
   }
 
+  //Needs to delete this
+  public WebElement findElementAddMobilityAid() {
+    return helper.findElement(By.xpath("//*[@id=\"conditional-hasWalkingAidyes\"]/p/a"));
+  }
+
   public void selectLocalCouncil(String textToSelect) {
     selectFromAutoCompleteList("councilShortCode", textToSelect);
   }

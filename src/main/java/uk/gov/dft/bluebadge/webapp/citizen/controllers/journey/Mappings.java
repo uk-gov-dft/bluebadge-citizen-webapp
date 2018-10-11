@@ -43,6 +43,9 @@ public class Mappings {
   public static final String URL_COOKIES = "/cookies";
   public static final String URL_PRIVACY = "/privacy-notice";
 
+  public static final String URL_MOBILITY_AID_LIST = "/list-mobility-aids";
+  public static final String URL_MOBILITY_AID_ADD = "/add-mobility-aid";
+
   // Walking difficulties route
   public static final String URL_WHAT_WALKING_DIFFICULT = "/what-makes-walking-difficult";
   public static final String URL_WHERE_CAN_YOU_WALK = "/where-can-you-walk";
@@ -86,6 +89,8 @@ public class Mappings {
           .put(StepDefinition.YOUR_ISSUING_AUTHORITY, URL_YOUR_ISSUING_AUTHORITY)
           .put(StepDefinition.DECLARATIONS, URL_DECLARATIONS)
           .put(StepDefinition.SUBMITTED, URL_APPLICATION_SUBMITTED)
+          .put(StepDefinition.MOBILITY_AID_LIST, URL_MOBILITY_AID_LIST)
+          .put(StepDefinition.MOBILITY_AID_ADD, URL_MOBILITY_AID_ADD)
           .build();
 
   public static StepDefinition getStep(String url) {

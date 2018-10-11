@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="#{mobility.aid.add.page.title} + ' - ' + #{common.title.suffix}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l" th:text="#{mobility.aid.add.body.title}"></h1>
+
+            <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>
+
+            <form th:action="@{/add-mobility-aid}" th:object="${formRequest}" method="POST" novalidate>
+                <div th:class="${#fields.hasErrors('aidType')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+                    <fieldset class="govuk-fieldset" id="aidType">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                            <div th:data-uipath="mobilityaid.type.optiongroup.label"
+                                 th:text="#{mobilityaid.type.optiongroup.title}" th:remove="tag"></div>
+                        </legend>
+
+                        <span class="govuk-error-message"
+                              data-uipath="aidType.error"
+                              th:errors="*{aidType}"></span>
+
+                        <div class="govuk-radios" data-module="radios">
+
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="aidTypeWHEELCHAIR"
+                                       type="radio" th:field="*{aidType}"
+                                       th:value="WHEELCHAIR">
+                                <label class="govuk-label govuk-radios__label"
+                                       for="aidTypeWHEELCHAIR"
+                                       th:text="#{mobilityaid.type.option.wheelchair}"></label>
+                            </div>
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="aidTypeSCOOTER"
+                                       type="radio"
+                                       th:value="SCOOTER"
+                                       th:field="*{aidType}">
+                                <label class="govuk-label govuk-radios__label"
+                                       for="aidTypeSCOOTER"
+                                       th:text="#{mobilityaid.type.option.scooter}"></label>
+                            </div>
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="aidTypeWALKING_AID"
+                                       type="radio"
+                                       th:value="WALKING_AID"
+                                       th:field="*{aidType}" data-aria-controls="conditional-aidTypeWALKING_AID">
+                                <label class="govuk-label govuk-radios__label"
+                                       for="aidTypeWALKING_AID"
+                                       th:text="#{mobilityaid.type.option.walkingaid}"></label>
+                            </div>
+
+                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
+                                 id="conditional-aidTypeWALKING_AID">
+                                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{mobilityaid.type.custom.text}, 'customAidName', '' , 'text', 'govuk-!-width-one-half')}"></div>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </div>
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + 'mobilityaid.usage.text'}, 'usage', #{mobilityaid.usage.hint.text}, 'text', 'govuk-!-width-one-half')}"></div>
+                <div th:replace="~{ fragments/govuk-radios :: govuk-radios('howProvidedCodeField', ${howProvidedOptions}) }"></div>
+
+                <button type="submit"
+                        class="govuk-button"
+                        data-uipath="button.continue"
+                        th:text="#{mobilityaid.add.button}"></button>
+
+                <div class="govuk-inset-text">
+                    <p class="govuk-body" th:text="#{mobilityaid.footer.hint.text}"></p>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

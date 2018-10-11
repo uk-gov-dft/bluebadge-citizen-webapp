@@ -1,9 +1,8 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
-import com.google.common.collect.Lists;
+import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Di
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Eligibility;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.GenderCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HowProvidedCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Party;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.PartyTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Person;
@@ -43,6 +41,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
@@ -142,6 +141,20 @@ public class DeclarationSubmitController implements StepController {
     Eligibility eligibilityObject = null;
     switch (eligibility) {
       case WALKD:
+        List<WalkingAid> walkingAids = null;
+        if (null != journey.getMobilityAidListForm()
+            && "yes".equals(journey.getMobilityAidListForm().getHasWalkingAid())) {
+          walkingAids = new ArrayList<>();
+          for (MobilityAidAddForm mobilityAidAddForm :
+              journey.getMobilityAidListForm().getMobilityAids()) {
+            walkingAids.add(
+                new WalkingAid()
+                    .usage(mobilityAidAddForm.getUsage())
+                    .howProvidedCode(mobilityAidAddForm.getHowProvidedCodeField())
+                    .description(mobilityAidAddForm.getAidTypeDescription()));
+          }
+        }
+
         List<WalkingDifficultyTypeCodeField> walkingDifficulties =
             journey.getWhatMakesWalkingDifficultForm().getWhatWalkingDifficulties();
         String otherDesc =
@@ -159,12 +172,7 @@ public class DeclarationSubmitController implements StepController {
                         .walkingSpeedCode(WalkingSpeedCodeField.SLOW)
                         .typeCodes(walkingDifficulties)
                         .otherDescription(otherDesc)
-                        .walkingAids(
-                            Lists.newArrayList(
-                                new WalkingAid()
-                                    .description("walk aid description")
-                                    .usage("walk aid usage")
-                                    .howProvidedCode(HowProvidedCodeField.PRESCRIBE))));
+                        .walkingAids(walkingAids));
         break;
       case PIP:
       case DLA:
