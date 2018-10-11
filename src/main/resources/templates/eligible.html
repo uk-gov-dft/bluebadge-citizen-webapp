@@ -21,7 +21,7 @@
             <li th:text="#{eligiblePage.provide.contact.text}">contact details (phone number and email address)</li>
         </ul>
 
-        <a th:href="@{eligible/start}" role="button" class="govuk-button"
+        <a id="start" th:href="@{eligible/start}" role="button" class="govuk-button"
            th:text="#{eligiblePage.startApplication.link.title}"></a>
 
         <p class="govuk-body" th:text="#{${JOURNEY.who} + 'eligiblePage.council.timeframe.text'}">Your council can take
