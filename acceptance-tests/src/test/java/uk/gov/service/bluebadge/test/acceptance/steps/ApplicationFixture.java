@@ -17,9 +17,9 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_M
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_UNSPECIFIED;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Preamble.COUNCIL_INPUT;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_ADD_CONFIRM_BUTTON;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_TYPE_WHEELCHAIR;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_ADD_PROVIDED_CODE_PRESCRIBE;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_ADD_USAGE;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_TYPE_WHEELCHAIR;
 
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -258,7 +258,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
     sitePage.findPageElementById(element).sendKeys(value);
   }
 
-  private void clickButtonById(String id){
+  private void clickButtonById(String id) {
     sitePage.findPageElementById(id).click();
   }
 
@@ -279,9 +279,11 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("^I complete the treatments page for \"(YES|NO)\"$")
   public void iCompleteTheTreatmentsPage(String option) {
-    sitePage.findPageElementById(Ids.Walkd.TREATMENT_HAS_TREATMENT_OPTION + option.toLowerCase()).click();
+    sitePage
+        .findPageElementById(Ids.Walkd.TREATMENT_HAS_TREATMENT_OPTION + option.toLowerCase())
+        .click();
 
-    if("YES".equals(option)){
+    if ("YES".equals(option)) {
       clickButtonById(Ids.Walkd.TREATMENT_ADD_FIRST_LINK);
       clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_DESCRIPTION, "Treatment description");
       clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_WHEN, "Treatment when");
