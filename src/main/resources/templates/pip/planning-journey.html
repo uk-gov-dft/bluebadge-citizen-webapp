@@ -4,15 +4,13 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/master.html}">
 <head>
-    <title th:text="#{${JOURNEY.who} + 'pipPlanningAndFollowingPage.title'} + ' - ' + #{common.title.suffix}"></title>
+    <title th:text="(${errorSummary}? #{common.title.error} : '') + #{${JOURNEY.who} + 'pipPlanningAndFollowingPage.title'}"></title>
 </head>
 <body>
 
 <main layout:fragment="content">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-
-            <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"/>
 
             <form th:action="@{/planning-and-following}" th:object="${formRequest}" method="post" novalidate>
 
