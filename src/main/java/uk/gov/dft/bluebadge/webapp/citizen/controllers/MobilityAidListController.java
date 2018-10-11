@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings.URL_REMOVE_PART;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
@@ -86,7 +87,7 @@ public class MobilityAidListController implements StepController {
     return routeMaster.redirectToOnSuccess(mobilityAidListForm);
   }
 
-  @GetMapping(value = "/remove")
+  @GetMapping(value = URL_REMOVE_PART)
   public String handleDelete(
       @RequestParam(name = "uuid") String uuid,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {

@@ -6,6 +6,9 @@ import lombok.Getter;
 
 @Getter
 public class Mappings {
+
+  public static final String URL_REMOVE_PART = "/remove";
+
   public static final String URL_ROOT = "/";
   public static final String URL_APPLY_IN_WELSH = "/apply-in-welsh";
   public static final String URL_APPLICANT_TYPE = "/applicant";

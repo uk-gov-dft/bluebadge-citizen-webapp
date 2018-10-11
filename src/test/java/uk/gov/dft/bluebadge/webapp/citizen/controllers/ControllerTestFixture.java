@@ -31,6 +31,10 @@ public abstract class ControllerTestFixture<T> {
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
+    journey = new Journey();
+    ApplicantForm applicantForm =
+        ApplicantForm.builder().applicantType(ApplicantType.YOURSELF.toString()).build();
+    journey.setApplicantForm(applicantForm);
   }
 
   static ResultMatcher formRequestFlashAttributeHasFieldErrorCode(String fieldName, String error) {
@@ -43,14 +47,6 @@ public abstract class ControllerTestFixture<T> {
                     allOf(
                         hasProperty("field", equalTo(fieldName)),
                         hasProperty("code", equalTo(error))))));
-  }
-
-  private Journey getDefaultJourney() {
-    Journey journey = new Journey();
-    ApplicantForm applicantForm =
-        ApplicantForm.builder().applicantType(ApplicantType.YOURSELF.toString()).build();
-    journey.setApplicantForm(applicantForm);
-    return journey;
   }
 
   void applyRoutmasterDefaultMocks(RouteMaster mockRouteMaster) {
