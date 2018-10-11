@@ -16,10 +16,10 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_F
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_MALE;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_UNSPECIFIED;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Preamble.COUNCIL_INPUT;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.ADD_MOBILITY_BUTTON;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.AID_TYPE_WHEELCHAIR;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.PROVIDED_CODE_PRESCRIBE;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.USAGE;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_ADD_CONFIRM_BUTTON;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_ADD_PROVIDED_CODE_PRESCRIBE;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_ADD_USAGE;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_TYPE_WHEELCHAIR;
 
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -253,9 +253,13 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
-  public void clearAndSendKeys(String element, String value) {
+  private void clearAndSendKeys(String element, String value) {
     sitePage.findPageElementById(element).clear();
     sitePage.findPageElementById(element).sendKeys(value);
+  }
+
+  private void clickButtonById(String id) {
+    sitePage.findPageElementById(id).click();
   }
 
   @And("^I complete the mobility aids page for \"(YES|NO)\"$")
@@ -265,10 +269,30 @@ public class ApplicationFixture extends AbstractSpringSteps {
     if ("YES".equals(option)) {
       // Needs to update this to use id or data-uipath
       sitePage.findElementAddMobilityAid().click();
-      sitePage.findPageElementById(AID_TYPE_WHEELCHAIR).click();
-      clearAndSendKeys(USAGE, "All the time");
-      sitePage.findPageElementById(PROVIDED_CODE_PRESCRIBE).click();
-      sitePage.findElementWithUiPath(ADD_MOBILITY_BUTTON).click();
+      sitePage.findPageElementById(MOBILITY_AID_TYPE_WHEELCHAIR).click();
+      clearAndSendKeys(MOBILITY_AID_ADD_USAGE, "All the time");
+      sitePage.findPageElementById(MOBILITY_AID_ADD_PROVIDED_CODE_PRESCRIBE).click();
+      sitePage.findElementWithUiPath(MOBILITY_AID_ADD_CONFIRM_BUTTON).click();
+    }
+    pressContinue();
+  }
+
+  @And("^I complete the treatments page for \"(YES|NO)\"$")
+  public void iCompleteTheTreatmentsPage(String option) {
+    sitePage
+        .findPageElementById(Ids.Walkd.TREATMENT_HAS_TREATMENT_OPTION + option.toLowerCase())
+        .click();
+
+    if ("YES".equals(option)) {
+      clickButtonById(Ids.Walkd.TREATMENT_ADD_FIRST_LINK);
+      clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_DESCRIPTION, "Treatment description");
+      clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_WHEN, "Treatment when");
+      clickButtonById(Ids.Walkd.TREATMENT_ADD_CONFIRM_BUTTON);
+      clickButtonById(Ids.Walkd.TREATMENT_REMOVE_LINK_PREFIX + "1");
+      clickButtonById(Ids.Walkd.TREATMENT_ADD_FIRST_LINK);
+      clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_DESCRIPTION, "Treatment description");
+      clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_WHEN, "Treatment when");
+      clickButtonById(Ids.Walkd.TREATMENT_ADD_CONFIRM_BUTTON);
     }
     pressContinue();
   }
