@@ -25,12 +25,14 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingLengthOfTimeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WalkingTimeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
 public class DeclarationSubmitControllerTest {
@@ -191,5 +193,23 @@ public class DeclarationSubmitControllerTest {
     assertThat(application.getEligibility()).isNotNull();
     assertThat(application.getEligibility().getTypeCode()).isEqualTo(eligibilityCode);
     assertThat(application.getEligibility().getDescriptionOfConditions()).isNull();
+  }
+
+  @Test
+  public void dummyApplication_givenWalkingEligibility_thenWalkingTimeSet() {
+    Journey journey = JourneyFixture.getDefaultJourney();
+    MainReasonForm mainReasonForm = MainReasonForm.builder().mainReasonOption(WALKD).build();
+    journey.setMainReasonForm(mainReasonForm);
+    WalkingTimeForm walkingTimeForm =
+        WalkingTimeForm.builder().walkingTime(WalkingLengthOfTimeCodeField.MORETEN).build();
+    journey.setWalkingTimeForm(walkingTimeForm);
+    Application application = controller.getDummyApplication(journey);
+
+    assertThat(application).isNotNull();
+    assertThat(application.getEligibility()).isNotNull();
+    assertThat(application.getEligibility().getTypeCode()).isEqualTo(WALKD);
+    assertThat(application.getEligibility().getWalkingDifficulty()).isNotNull();
+    assertThat(application.getEligibility().getWalkingDifficulty().getWalkingLengthOfTimeCode())
+        .isEqualTo(WalkingLengthOfTimeCodeField.MORETEN);
   }
 }
