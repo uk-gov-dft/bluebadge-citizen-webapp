@@ -15,6 +15,8 @@ import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.m
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.common.collect.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -150,9 +152,8 @@ public class DeclarationSubmitControllerTest {
 
   @ParameterizedTest
   @EnumSource(
-    value = EligibilityCodeField.class,
-    names = {"ARMS", "CHILDBULK", "CHILDVEHIC", "WALKD"}
-  )
+      value = EligibilityCodeField.class,
+      names = {"ARMS", "CHILDBULK", "CHILDVEHIC", "WALKD"})
   public void dummyApplication_healthConditionsDescSet_whenParticularEligibility(
       EligibilityCodeField eligibilityCode) {
 
@@ -164,21 +165,28 @@ public class DeclarationSubmitControllerTest {
         HealthConditionsForm.builder().descriptionOfConditions("Test description ABC").build();
     journey.setHealthConditionsForm(healthConditionsForm);
     if (WALKD == eligibilityCode) {
-      MobilityAidAddForm aid = new MobilityAidAddForm();
-      aid.setHowProvidedCodeField(HowProvidedCodeField.PRESCRIBE);
-      aid.setAidType(MobilityAidAddForm.AidType.WHEELCHAIR);
-      aid.setUsage("usage");
-      List<MobilityAidAddForm> aids = new ArrayList<>();
-      aids.add(aid);
+      MobilityAidAddForm aid =
+          MobilityAidAddForm.builder()
+              .howProvidedCodeField(HowProvidedCodeField.PRESCRIBE)
+              .aidType(MobilityAidAddForm.AidType.WHEELCHAIR)
+              .usage("Usage")
+              .build();
       journey.setMobilityAidListForm(
-          MobilityAidListForm.builder().hasWalkingAid("yes").mobilityAids(aids).build());
-      TreatmentAddForm treatment = new TreatmentAddForm();
-      treatment.setTreatmentDescription("treatment description");
-      treatment.setTreatmentWhen("Treatment when");
-      List<TreatmentAddForm> treatments = new ArrayList<>();
-      treatments.add(treatment);
+          MobilityAidListForm.builder()
+              .hasWalkingAid("yes")
+              .mobilityAids(Lists.newArrayList(aid))
+              .build());
+
+      TreatmentAddForm treatment =
+          TreatmentAddForm.builder()
+              .treatmentDescription("treatment description")
+              .treatmentWhen("Treatment when")
+              .build();
       journey.setTreatmentListForm(
-          TreatmentListForm.builder().hasTreatment("yes").treatments(treatments).build());
+          TreatmentListForm.builder()
+              .hasTreatment("yes")
+              .treatments(Lists.newArrayList(treatment))
+              .build());
     }
     Application application = controller.getDummyApplication(journey);
 
@@ -200,9 +208,8 @@ public class DeclarationSubmitControllerTest {
 
   @ParameterizedTest
   @EnumSource(
-    value = EligibilityCodeField.class,
-    names = {"PIP", "DLA", "WPMS", "AFRFCS", "BLIND"}
-  )
+      value = EligibilityCodeField.class,
+      names = {"PIP", "DLA", "WPMS", "AFRFCS", "BLIND"})
   public void dummyApplication_healthConditionsDescNotSet_whenParticularEligibility(
       EligibilityCodeField eligibilityCode) {
     Journey journey = JourneyFixture.getDefaultJourney();

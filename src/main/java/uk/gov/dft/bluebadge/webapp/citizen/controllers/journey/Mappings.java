@@ -50,6 +50,8 @@ public class Mappings {
   public static final String URL_MOBILITY_AID_ADD = "/add-mobility-aid";
   public static final String URL_TREATMENT_LIST = "/list-treatments";
   public static final String URL_TREATMENT_ADD = "/add-treatment";
+  public static final String URL_HEALTHCARE_PROFESSIONALS_LIST = "/list-healthcare-professionals";
+  public static final String URL_HEALTHCARE_PROFESSIONALS_ADD = "/add-healthcare-professional";
 
   // Walking difficulties route
   public static final String URL_WHAT_WALKING_DIFFICULT = "/what-makes-walking-difficult";
@@ -98,6 +100,8 @@ public class Mappings {
           .put(StepDefinition.MOBILITY_AID_ADD, URL_MOBILITY_AID_ADD)
           .put(StepDefinition.TREATMENT_LIST, URL_TREATMENT_LIST)
           .put(StepDefinition.TREATMENT_ADD, URL_TREATMENT_ADD)
+          .put(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST, URL_HEALTHCARE_PROFESSIONALS_LIST)
+          .put(StepDefinition.HEALTHCARE_PROFESSIONALS_ADD, URL_HEALTHCARE_PROFESSIONALS_ADD)
           .build();
 
   public static StepDefinition getStep(String url) {

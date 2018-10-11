@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="#{healthcare.professional.add.page.title} + ' - ' + #{common.title.suffix}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l" th:text="#{healthcare.professional.add.body.title}"></h1>
+
+            <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>
+
+            <form th:action="@{/add-healthcare-professional}" th:object="${formRequest}" method="POST" novalidate>
+
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + 'healthcare.professional.add.name.text'}, 'healthcareProfessionalName', null, 'text', 'govuk-!-width-one-half')}"></div>
+
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + 'healthcare.professional.add.location.text'}, 'healthcareProfessionaLocation', #{healthcare.professional.add.when.hint}, 'text', 'govuk-!-width-one-half')}"></div>
+
+                <button type="submit"
+                        class="govuk-button"
+                        data-uipath="button.continue"
+                        id="button.add.healthcare.professional"
+                        th:text="#{healthcare.professional.add.button}"></button>
+
+                <div class="govuk-inset-text">
+                    <p class="govuk-body" th:text="#{healthcare.professional.footer.hint.text}"></p>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

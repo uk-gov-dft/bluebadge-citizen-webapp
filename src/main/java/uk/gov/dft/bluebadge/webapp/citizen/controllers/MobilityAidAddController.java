@@ -54,7 +54,7 @@ public class MobilityAidAddController implements StepController {
 
     // On returning to form, take previously submitted values.
     if (!model.containsAttribute(FORM_REQUEST)) {
-      model.addAttribute(FORM_REQUEST, new MobilityAidAddForm());
+      model.addAttribute(FORM_REQUEST, MobilityAidAddForm.builder().build());
     }
 
     model.addAttribute(

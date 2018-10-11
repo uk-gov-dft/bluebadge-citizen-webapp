@@ -90,8 +90,6 @@ public class MobilityAidAddControllerTest {
   @Test
   public void submit_whenBlankFormSubmitted_thenShouldRedirectToShowWithValidationErrors()
       throws Exception {
-    MobilityAidAddForm form = new MobilityAidAddForm();
-    form.setId("1234");
 
     mockMvc
         .perform(
@@ -101,7 +99,7 @@ public class MobilityAidAddControllerTest {
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/add-mobility-aid"))
-        .andExpect(flash().attribute("formRequest", form));
+        .andExpect(flash().attribute("formRequest", MobilityAidAddForm.builder().id("1234").build()));
   }
 
   @Test

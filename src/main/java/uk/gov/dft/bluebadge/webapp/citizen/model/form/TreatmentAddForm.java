@@ -4,8 +4,11 @@ import java.io.Serializable;
 import java.util.UUID;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import lombok.Builder;
 import lombok.Data;
 
+@Builder
 @Data
 public class TreatmentAddForm implements Serializable {
 
@@ -17,9 +20,7 @@ public class TreatmentAddForm implements Serializable {
   @NotBlank
   private String treatmentWhen;
 
-  private String id;
+  @Builder.Default
+  private String id = UUID.randomUUID().toString();
 
-  public TreatmentAddForm() {
-    id = UUID.randomUUID().toString();
-  }
 }

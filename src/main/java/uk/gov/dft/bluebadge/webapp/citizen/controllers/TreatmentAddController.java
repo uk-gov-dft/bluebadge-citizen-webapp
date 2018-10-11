@@ -51,7 +51,7 @@ public class TreatmentAddController implements StepController {
 
     // On returning to form, take previously submitted values.
     if (!model.containsAttribute(FORM_REQUEST)) {
-      model.addAttribute(FORM_REQUEST, new TreatmentAddForm());
+      model.addAttribute(FORM_REQUEST, TreatmentAddForm.builder().build());
     }
 
     return TEMPLATE;

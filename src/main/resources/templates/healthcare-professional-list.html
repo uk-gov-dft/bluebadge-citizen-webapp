@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="#{${JOURNEY.who} + 'healthcare.professional.list.page.title'} + ' - ' + #{common.title.suffix}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>
+
+            <form th:action="@{/list-healthcare-professionals}" th:object="${formRequest}" method="POST" novalidate>
+
+                <div th:class="${#fields.hasErrors('hasHealthcareProfessional')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+                    <fieldset class="govuk-fieldset" id="hasHealthcareProfessional">
+
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                            <h1 class="govuk-fieldset__heading"
+                                th:text="#{${JOURNEY.who} + 'healthcare.professional.list.body.title'}"></h1>
+                        </legend>
+
+                        <span class="govuk-error-message"
+                              data-uipath="hasHealthcare.professional.error"
+                              th:errors="*{hasHealthcareProfessional}"></span>
+
+                        <span class="govuk-hint"
+                              th:text="#{${JOURNEY.who} + 'healthcare.professional.list.body.hint'}"
+                              th:data-uipath="healthcare.professional.list.body.hint">Healthcare pros hint.</span>
+
+                        <div class="govuk-radios" data-module="radios">
+
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="hasHealthcareProfessionalyes"
+                                       type="radio" th:field="*{hasHealthcareProfessional}"
+                                       value="yes" data-aria-controls="conditional-hasHealthcareProfessionalyes"
+                                       autocomplete="off">
+                                <label class="govuk-label govuk-radios__label"
+                                       for="hasHealthcareProfessionalyes"
+                                       th:text="#{'radio.option.yes'}"></label>
+                            </div>
+
+                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
+                                 id="conditional-hasHealthcareProfessionalyes">
+                                <table class="govuk-table">
+                                    <thead class="govuk-table__head" data-uipath="table.head">
+                                    <tr class="govuk-table__row">
+                                        <th class="govuk-table__header" scope="col"
+                                            th:text="#{healthcare.professional.list.table.header.col1}"></th>
+                                        <th class="govuk-table__header" scope="col"
+                                            th:text="#{healthcare.professional.list.table.header.col2}"
+                                            colspan="2"></th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody class="govuk-table__body" data-uipath="table.body">
+                                    <tr class="govuk-table__row"
+                                        th:each="professional, iStat : *{healthcareProfessionals}">
+                                        <td class="govuk-table__cell"
+                                            th:text="${professional.healthcareProfessionalName}"></td>
+                                        <td class="govuk-table__cell"
+                                            th:text="${professional.healthcareProfessionalLocation}"></td>
+                                        <td class="govuk-table__cell govuk-table__cell--numeric">
+                                            <a th:href="@{/list-healthcare-professionals/remove(uuid=${professional.id})}"
+                                               th:text="#{remove.this}"
+                                               th:id="'healthcare.professional.remove.link.' + ${iStat.count}"></a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <p class="govuk-body" th:if="${#lists.isEmpty(formRequest.healthcareProfessionals)}">
+                                    <a id="firstaddhealthcareprofessionallink" href="/add-healthcare-professional"
+                                       th:text="#{first.healthcare.professional.add.link.text}"> Add first link</a>
+                                </p>
+                                <p class="govuk-body"
+                                   th:if="${not #lists.isEmpty(formRequest.healthcareProfessionals)}">
+                                    <a id="addhealthcareprofessionallink" href="/add-healthcare-professional"
+                                       th:text="#{healthcare.professional.add.link.text}"> Add another link</a>
+                                </p>
+                            </div>
+
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="hasHealthcareProfessionalno"
+                                       type="radio"
+                                       value="no"
+                                       th:field="*{hasHealthcareProfessional}" autocomplete="off">
+                                <label class="govuk-label govuk-radios__label"
+                                       for="hasHealthcareProfessionalno"
+                                       th:text="#{'radio.option.no'}"></label>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </div>
+
+                <button type="submit"
+                        class="govuk-button"
+                        data-uipath="button.continue"
+                        th:text="#{btn.label.continue}"></button>
+
+            </form>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
