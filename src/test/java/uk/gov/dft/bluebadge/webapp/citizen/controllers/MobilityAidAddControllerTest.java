@@ -99,7 +99,8 @@ public class MobilityAidAddControllerTest {
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/add-mobility-aid"))
-        .andExpect(flash().attribute("formRequest", MobilityAidAddForm.builder().id("1234").build()));
+        .andExpect(
+            flash().attribute("formRequest", MobilityAidAddForm.builder().id("1234").build()));
   }
 
   @Test

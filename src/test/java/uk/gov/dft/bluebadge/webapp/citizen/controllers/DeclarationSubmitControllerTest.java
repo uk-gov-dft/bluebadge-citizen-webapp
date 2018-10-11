@@ -13,9 +13,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -152,8 +149,9 @@ public class DeclarationSubmitControllerTest {
 
   @ParameterizedTest
   @EnumSource(
-      value = EligibilityCodeField.class,
-      names = {"ARMS", "CHILDBULK", "CHILDVEHIC", "WALKD"})
+    value = EligibilityCodeField.class,
+    names = {"ARMS", "CHILDBULK", "CHILDVEHIC", "WALKD"}
+  )
   public void dummyApplication_healthConditionsDescSet_whenParticularEligibility(
       EligibilityCodeField eligibilityCode) {
 
@@ -208,8 +206,9 @@ public class DeclarationSubmitControllerTest {
 
   @ParameterizedTest
   @EnumSource(
-      value = EligibilityCodeField.class,
-      names = {"PIP", "DLA", "WPMS", "AFRFCS", "BLIND"})
+    value = EligibilityCodeField.class,
+    names = {"PIP", "DLA", "WPMS", "AFRFCS", "BLIND"}
+  )
   public void dummyApplication_healthConditionsDescNotSet_whenParticularEligibility(
       EligibilityCodeField eligibilityCode) {
     Journey journey = JourneyFixture.getDefaultJourney();
