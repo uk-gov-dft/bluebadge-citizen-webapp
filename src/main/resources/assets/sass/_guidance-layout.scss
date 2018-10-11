@@ -15,12 +15,17 @@
 		color: govuk-colour("blue");
 		background-color: govuk-colour("white");
 
+		&:focus {
+			color: govuk-colour("blue");
+			background-color: govuk-colour("white");
+		}
+
 		&:hover {
 			color: govuk-colour("blue");
 		}
 	}
 
 	a {
-		color: govuk-colour("white");	
+		color: govuk-colour("white");
 	}
 }
