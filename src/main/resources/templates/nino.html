@@ -27,7 +27,9 @@
 
                     <div class="govuk-details__text">
                         <span th:text="#{${JOURNEY.who + 'ninoPage.noNino.text'}}" th:remove="tag"></span>
-                        <a data-uid="skipNiLink" href="/enter-address" th:text="#{ninoPage.noNino.link}"></a>
+                        <a data-ga-track-link="Don't know my NINO"
+                           data-ga-track-link-action="alternative click"
+                           data-uid="skipNiLink" href="/enter-address" th:text="#{ninoPage.noNino.link}"></a>
                     </div>
                 </details>
 
