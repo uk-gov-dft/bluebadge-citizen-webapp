@@ -6,6 +6,9 @@ import lombok.Getter;
 
 @Getter
 public class Mappings {
+
+  public static final String URL_REMOVE_PART = "/remove";
+
   public static final String URL_ROOT = "/";
   public static final String URL_APPLY_IN_WELSH = "/apply-in-welsh";
   public static final String URL_APPLICANT_TYPE = "/applicant";
@@ -45,6 +48,8 @@ public class Mappings {
 
   public static final String URL_MOBILITY_AID_LIST = "/list-mobility-aids";
   public static final String URL_MOBILITY_AID_ADD = "/add-mobility-aid";
+  public static final String URL_TREATMENT_LIST = "/list-treatments";
+  public static final String URL_TREATMENT_ADD = "/add-treatment";
 
   // Walking difficulties route
   public static final String URL_WHAT_WALKING_DIFFICULT = "/what-makes-walking-difficult";
@@ -93,6 +98,8 @@ public class Mappings {
           .put(StepDefinition.SUBMITTED, URL_APPLICATION_SUBMITTED)
           .put(StepDefinition.MOBILITY_AID_LIST, URL_MOBILITY_AID_LIST)
           .put(StepDefinition.MOBILITY_AID_ADD, URL_MOBILITY_AID_ADD)
+          .put(StepDefinition.TREATMENT_LIST, URL_TREATMENT_LIST)
+          .put(StepDefinition.TREATMENT_ADD, URL_TREATMENT_ADD)
           .build();
 
   public static StepDefinition getStep(String url) {
