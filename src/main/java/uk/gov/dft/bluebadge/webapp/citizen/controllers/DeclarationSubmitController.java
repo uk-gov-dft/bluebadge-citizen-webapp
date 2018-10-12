@@ -176,6 +176,10 @@ public class DeclarationSubmitController implements StepController {
                 : null;
 
         WalkingLengthOfTimeCodeField walkingTime = journey.getWalkingTimeForm().getWalkingTime();
+        WalkingSpeedCodeField walkingSpeed =
+            walkingTime == WalkingLengthOfTimeCodeField.CANTWALK
+                ? null
+                : WalkingSpeedCodeField.SLOW;
         eligibilityObject =
             new Eligibility()
                 .typeCode(EligibilityCodeField.WALKD)
@@ -183,7 +187,7 @@ public class DeclarationSubmitController implements StepController {
                 .walkingDifficulty(
                     new WalkingDifficulty()
                         .walkingLengthOfTimeCode(walkingTime)
-                        .walkingSpeedCode(WalkingSpeedCodeField.SLOW)
+                        .walkingSpeedCode(walkingSpeed)
                         .typeCodes(walkingDifficulties)
                         .otherDescription(otherDesc)
                         .walkingAids(walkingAids)

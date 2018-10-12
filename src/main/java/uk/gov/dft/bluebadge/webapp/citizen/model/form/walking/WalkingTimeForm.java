@@ -1,7 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form.walking;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingLengthOfTimeCodeField.CANTWALK;
-import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.DECLARATIONS;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.TREATMENT_LIST;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.WHERE_CAN_YOU_WALK;
 
 import java.io.Serializable;
@@ -26,7 +26,7 @@ public class WalkingTimeForm implements StepForm, Serializable {
   @Override
   public Optional<StepDefinition> determineNextStep() {
     if (CANTWALK == walkingTime) {
-      return Optional.of(DECLARATIONS);
+      return Optional.of(TREATMENT_LIST);
     }
 
     return Optional.of(WHERE_CAN_YOU_WALK);

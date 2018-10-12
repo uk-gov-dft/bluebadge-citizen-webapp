@@ -239,5 +239,26 @@ public class DeclarationSubmitControllerTest {
     assertThat(application.getEligibility().getWalkingDifficulty()).isNotNull();
     assertThat(application.getEligibility().getWalkingDifficulty().getWalkingLengthOfTimeCode())
         .isEqualTo(WalkingLengthOfTimeCodeField.MORETEN);
+    assertThat(application.getEligibility().getWalkingDifficulty().getWalkingSpeedCode())
+        .isNotNull();
+  }
+
+  @Test
+  public void dummyApplication_givenCantWalking_thenWalkingSpeedNotSet() {
+    Journey journey = JourneyFixture.getDefaultJourney();
+    MainReasonForm mainReasonForm = MainReasonForm.builder().mainReasonOption(WALKD).build();
+    journey.setMainReasonForm(mainReasonForm);
+    WalkingTimeForm walkingTimeForm =
+        WalkingTimeForm.builder().walkingTime(WalkingLengthOfTimeCodeField.CANTWALK).build();
+    journey.setWalkingTimeForm(walkingTimeForm);
+    Application application = controller.getDummyApplication(journey);
+
+    assertThat(application).isNotNull();
+    assertThat(application.getEligibility()).isNotNull();
+    assertThat(application.getEligibility().getTypeCode()).isEqualTo(WALKD);
+    assertThat(application.getEligibility().getWalkingDifficulty()).isNotNull();
+    assertThat(application.getEligibility().getWalkingDifficulty().getWalkingLengthOfTimeCode())
+        .isEqualTo(WalkingLengthOfTimeCodeField.CANTWALK);
+    assertThat(application.getEligibility().getWalkingDifficulty().getWalkingSpeedCode()).isNull();
   }
 }

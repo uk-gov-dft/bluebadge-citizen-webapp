@@ -6,6 +6,7 @@ import java.util.EnumSet;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingLengthOfTimeCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 
 class WalkingTimeFormTest {
@@ -21,7 +22,7 @@ class WalkingTimeFormTest {
     WalkingTimeForm walkingTimeForm =
         WalkingTimeForm.builder().walkingTime(WalkingLengthOfTimeCodeField.CANTWALK).build();
     Optional<StepDefinition> actual = walkingTimeForm.determineNextStep();
-    assertThat(actual.get()).isEqualTo(StepDefinition.DECLARATIONS);
+    assertThat(actual.get()).isEqualTo(StepDefinition.TREATMENT_LIST);
   }
 
   @Test
@@ -35,6 +36,24 @@ class WalkingTimeFormTest {
           WalkingTimeForm.builder().walkingTime(walkingTimeType).build();
       Optional<StepDefinition> actual = walkingTimeForm.determineNextStep();
       assertThat(actual.get()).isEqualTo(StepDefinition.WHERE_CAN_YOU_WALK);
+    }
+  }
+
+  @Test
+  public void routeMaster_validSteps() {
+    RouteMaster routeMaster = new RouteMaster();
+
+    WalkingTimeForm walkingTimeForm =
+        WalkingTimeForm.builder().walkingTime(WalkingLengthOfTimeCodeField.CANTWALK).build();
+    routeMaster.redirectToOnSuccess(walkingTimeForm);
+
+    EnumSet<WalkingLengthOfTimeCodeField> otherTypes =
+        EnumSet.complementOf(EnumSet.of(WalkingLengthOfTimeCodeField.CANTWALK));
+    assertThat(otherTypes).isNotEmpty();
+
+    for (WalkingLengthOfTimeCodeField walkingTimeType : otherTypes) {
+      walkingTimeForm = WalkingTimeForm.builder().walkingTime(walkingTimeType).build();
+      routeMaster.redirectToOnSuccess(walkingTimeForm);
     }
   }
 }
