@@ -207,9 +207,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("^I complete the walking time page with option \"(CANTWALK|LESSMIN|FEWMIN|MORETEN)\"$")
   public void iCompleteTheWalkingTimePage(String option) throws Throwable {
-    sitePage
-        .findPageElementById(Ids.Walkd.WALKING_TIME+ "." + option)
-        .click();
+    sitePage.findPageElementById(Ids.Walkd.WALKING_TIME + "." + option).click();
     pressContinue();
   }
 
