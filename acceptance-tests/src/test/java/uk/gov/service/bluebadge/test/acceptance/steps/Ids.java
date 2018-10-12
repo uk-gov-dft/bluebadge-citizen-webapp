@@ -62,6 +62,7 @@ class Ids {
     static final String AID_TYPE_WHEELCHAIR = "aidTypeWHEELCHAIR";
     static final String PROVIDED_CODE_PRESCRIBE = "howProvidedCodeField.PRESCRIBE";
     static final String USAGE = "usage";
+    static final String WALKING_TIME = "walkingTime";
     static final String ADD_MOBILITY_BUTTON = "button.continue";
   }
 }

@@ -1,6 +1,6 @@
 @SubmitApplicationWALKDRoute
-Feature: DFT Blue badge Citizen app new application - TERMILL
-  As a citizen user I want to be able to get information on council details via TERMILL route
+Feature: DFT Blue badge Citizen app new application - Walking Route
+  As a citizen user I want to be able to get information on council details via Walking route
 
   Scenario: Walking application for yourself and need help selected full application
     Given I complete applicant page for "yourself"
@@ -21,6 +21,7 @@ Feature: DFT Blue badge Citizen app new application - TERMILL
     And   I complete describe health conditions page
     And   I complete the what makes walking difficult page
     And   I complete the mobility aids page for "NO"
+    And   I complete the walking time page with option "LESSMIN"
     And   I complete where can you walk page
     And   I complete declaration page
     Then  I should see .* page titled "Application submitted" with GOV.UK suffix
@@ -44,6 +45,7 @@ Feature: DFT Blue badge Citizen app new application - TERMILL
     And   I complete describe health conditions page
     And   I complete the what makes walking difficult page
     And   I complete the mobility aids page for "YES"
+    And   I complete the walking time page with option "LESSMIN"
     And   I complete where can you walk page
     And   I complete declaration page
     Then  I should see .* page titled "Application submitted" with GOV.UK suffix
