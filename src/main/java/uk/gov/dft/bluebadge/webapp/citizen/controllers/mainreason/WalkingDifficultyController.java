@@ -59,7 +59,8 @@ public class WalkingDifficultyController implements StepController {
             .titleMessageKeyApplicantAware("walkingDifficultyPage.content.title", journey)
             .addOptionApplicantAware(HELP, "options.walkingDifficultyPage.help", journey)
             .addOptionApplicantAware(PAIN, "options.walkingDifficultyPage.pain", journey)
-            .addOptionApplicantAware(DANGEROUS, "options.walkingDifficultyPage.dangerous", journey)
+            .addOptionApplicantAndNationAware(
+                DANGEROUS, "options.walkingDifficultyPage.dangerous", journey)
             .addOptionApplicantAware(NONE, "options.walkingDifficultyPage.none", journey)
             .build());
 
