@@ -11,6 +11,9 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDBULK;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDVEHIC;
+
 @Data
 @Builder
 public class HealthConditionsForm implements StepForm, Serializable {
@@ -27,6 +30,9 @@ public class HealthConditionsForm implements StepForm, Serializable {
   public Optional<StepDefinition> determineNextStep(Journey journey) {
     if (EligibilityCodeField.WALKD.equals(journey.getEligibilityCode())) {
       return Optional.of(StepDefinition.WHAT_WALKING_DIFFICULTIES);
+    }
+    if (journey.getEligibilityCode() == CHILDBULK || journey.getEligibilityCode() == CHILDVEHIC){
+      return Optional.of(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST);
     }
     return Optional.of(StepDefinition.DECLARATIONS);
   }

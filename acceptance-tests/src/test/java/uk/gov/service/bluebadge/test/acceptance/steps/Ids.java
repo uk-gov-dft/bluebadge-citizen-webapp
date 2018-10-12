@@ -73,4 +73,14 @@ class Ids {
     static final String MOBILITY_AID_ADD_USAGE = "usage";
     static final String MOBILITY_AID_ADD_CONFIRM_BUTTON = "button.continue";
   }
+
+  class Eligibility {
+    static final String HEALTHCARE_PRO_ADD_CONFIRM_BUTTON = "button.add.healthcare.professional";
+    static final String HEALTHCARE_PRO_HAS_OPTION = "hasHealthcareProfessional";
+    // Id of link will be prefix + counter.  Counter starts at 1.
+    static final String HEALTHCARE_PRO_REMOVE_LINK_PREFIX = "healthcare.professional.remove.link.";
+    static final String HEALTHCARE_PRO_ADD_FIRST_LINK = "firstaddhealthcareprofessional";
+    static final String HEALTHCARE_PRO_ADD_TREATMENT_DESCRIPTION = "healthcareProfessionalName";
+    static final String HEALTHCARE_PRO_ADD_TREATMENT_WHEN = "healthcareProfessionalLocation";
+  }
 }
