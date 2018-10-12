@@ -69,6 +69,11 @@ public class RadioOptionsGroup {
       return addOption(value, journey.who + messageKey);
     }
 
+    public Builder addOptionApplicantAndNationAware(
+        Enum<?> value, String messageKey, Journey journey) {
+      return addOption(value, journey.who + journey.getNation() + "." + messageKey);
+    }
+
     public Builder addOption(String value, String messageKey) {
       options.add(new RadioOption(value, messageKey));
       return this;

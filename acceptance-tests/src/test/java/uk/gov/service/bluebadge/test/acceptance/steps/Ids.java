@@ -58,11 +58,20 @@ class Ids {
   }
 
   class Walkd {
+    static final String TREATMENT_ADD_CONFIRM_BUTTON = "button.add.treatment";
+    static final String TREATMENT_HAS_TREATMENT_OPTION = "hasTreatment";
+    // Id of link will be prefix + counter.  Counter starts at 1.
+    static final String TREATMENT_REMOVE_LINK_PREFIX = "treatment.remove.link.";
+    static final String TREATMENT_ADD_FIRST_LINK = "firstaddtreatmentlink";
+    static final String TREATMENT_ADD_TREATMENT_DESCRIPTION = "treatmentDescription";
+    static final String TREATMENT_ADD_TREATMENT_WHEN = "treatmentWhen";
     static final String MOBILITY_AID_OPTION = "hasWalkingAid";
-    static final String FIRST_MOBILITY_AID_LINK = "addmobilityaidlink";
-    static final String AID_TYPE_WHEELCHAIR = "aidTypeWHEELCHAIR";
-    static final String PROVIDED_CODE_PRESCRIBE = "howProvidedCodeField.PRESCRIBE";
-    static final String USAGE = "usage";
-    static final String ADD_MOBILITY_BUTTON = "button.continue";
+    // Id of link will be prefix + counter.  Counter starts at 1.
+    static final String MOBILITY_AID_REMOVE_LINK_PREFIX = "mobility.aid.remove.link.";
+    static final String MOBILITY_AID_ADD_FIRST_LINK = "addmobilityaidlink";
+    static final String MOBILITY_AID_TYPE_WHEELCHAIR = "aidTypeWHEELCHAIR";
+    static final String MOBILITY_AID_ADD_PROVIDED_CODE_PRESCRIBE = "howProvidedCodeField.PRESCRIBE";
+    static final String MOBILITY_AID_ADD_USAGE = "usage";
+    static final String MOBILITY_AID_ADD_CONFIRM_BUTTON = "button.continue";
   }
 }

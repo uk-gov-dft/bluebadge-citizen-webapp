@@ -24,7 +24,9 @@ public class CookieFilter implements Filter {
   public static final int SECONDS_IN_MONTH = 2592000;
 
   @Override
-  public void init(FilterConfig filterConfig) {}
+  public void init(FilterConfig filterConfig) {
+    // No-op
+  }
 
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -45,5 +47,7 @@ public class CookieFilter implements Filter {
   }
 
   @Override
-  public void destroy() {}
+  public void destroy() {
+    // No-op
+  }
 }
