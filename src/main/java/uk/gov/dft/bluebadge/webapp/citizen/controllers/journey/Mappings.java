@@ -6,6 +6,9 @@ import lombok.Getter;
 
 @Getter
 public class Mappings {
+
+  public static final String URL_REMOVE_PART = "/remove";
+
   public static final String URL_ROOT = "/";
   public static final String URL_APPLY_IN_WELSH = "/apply-in-welsh";
   public static final String URL_APPLICANT_TYPE = "/applicant";
@@ -45,6 +48,8 @@ public class Mappings {
 
   public static final String URL_MOBILITY_AID_LIST = "/list-mobility-aids";
   public static final String URL_MOBILITY_AID_ADD = "/add-mobility-aid";
+  public static final String URL_TREATMENT_LIST = "/list-treatments";
+  public static final String URL_TREATMENT_ADD = "/add-treatment";
 
   public static final String URL_MEDICATION_LIST = "/list-medication";
   public static final String URL_MEDICATION_REMOVE = "/list-medication/remove";
@@ -82,22 +87,25 @@ public class Mappings {
       .put(StepDefinition.AFCS_MENTAL_DISORDER, URL_AFCS_MENTAL_DISORDER)
       .put(StepDefinition.AFCS_COMPENSATION_SCHEME, URL_AFCS_COMPENSATION_SCHEME)
 
-      // Main reason mappings
-      .put(StepDefinition.MAIN_REASON, URL_MAIN_REASON)
-      .put(StepDefinition.CONTACT_COUNCIL, URL_CONTACT_COUNCIL)
-      .put(StepDefinition.WALKING_DIFFICULTY, URL_WALKING_DIFFICULTY)
-      .put(StepDefinition.WHERE_CAN_YOU_WALK, URL_WHERE_CAN_YOU_WALK)
-      .put(StepDefinition.NOT_ELIGIBLE, URL_NOT_ELIGIBLE)
-      .put(StepDefinition.HEALTH_CONDITIONS, URL_HEALTH_CONDITIONS)
-      .put(StepDefinition.WHAT_WALKING_DIFFICULTIES, URL_WHAT_WALKING_DIFFICULT)
-      .put(StepDefinition.CHOOSE_COUNCIL, URL_CHOOSE_YOUR_COUNCIL)
-      .put(StepDefinition.YOUR_ISSUING_AUTHORITY, URL_YOUR_ISSUING_AUTHORITY)
-      .put(StepDefinition.DECLARATIONS, URL_DECLARATIONS)
-      .put(StepDefinition.SUBMITTED, URL_APPLICATION_SUBMITTED)
-      .put(StepDefinition.MOBILITY_AID_LIST, URL_MOBILITY_AID_LIST)
-      .put(StepDefinition.MEDICATION_LIST, URL_MEDICATION_LIST)
-      .put(StepDefinition.MEDICATION_ADD, URL_MEDICATION_ADD)
-      .build();
+          // Main reason mappings
+          .put(StepDefinition.MAIN_REASON, URL_MAIN_REASON)
+          .put(StepDefinition.CONTACT_COUNCIL, URL_CONTACT_COUNCIL)
+          .put(StepDefinition.WALKING_DIFFICULTY, URL_WALKING_DIFFICULTY)
+          .put(StepDefinition.WHERE_CAN_YOU_WALK, URL_WHERE_CAN_YOU_WALK)
+          .put(StepDefinition.NOT_ELIGIBLE, URL_NOT_ELIGIBLE)
+          .put(StepDefinition.HEALTH_CONDITIONS, URL_HEALTH_CONDITIONS)
+          .put(StepDefinition.WHAT_WALKING_DIFFICULTIES, URL_WHAT_WALKING_DIFFICULT)
+          .put(StepDefinition.CHOOSE_COUNCIL, URL_CHOOSE_YOUR_COUNCIL)
+          .put(StepDefinition.YOUR_ISSUING_AUTHORITY, URL_YOUR_ISSUING_AUTHORITY)
+          .put(StepDefinition.DECLARATIONS, URL_DECLARATIONS)
+          .put(StepDefinition.SUBMITTED, URL_APPLICATION_SUBMITTED)
+          .put(StepDefinition.MOBILITY_AID_LIST, URL_MOBILITY_AID_LIST)
+          .put(StepDefinition.MOBILITY_AID_ADD, URL_MOBILITY_AID_ADD)
+          .put(StepDefinition.TREATMENT_LIST, URL_TREATMENT_LIST)
+          .put(StepDefinition.TREATMENT_ADD, URL_TREATMENT_ADD)
+          .put(StepDefinition.MEDICATION_LIST, URL_MEDICATION_LIST)
+          .put(StepDefinition.MEDICATION_ADD, URL_MEDICATION_ADD)
+          .build();
 
   public static StepDefinition getStep(String url) {
     return stepToUrlMapping.inverse().get(url);

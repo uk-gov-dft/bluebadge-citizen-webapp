@@ -28,6 +28,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.CompensationSchemeForm;
@@ -316,6 +317,14 @@ public class Journey implements Serializable {
     setFormForStep(StepDefinition.MEDICATION_LIST, medicationListForm);
   }
 
+
+  public TreatmentListForm getTreatmentListForm() {
+    return (TreatmentListForm) getFormForStep(StepDefinition.TREATMENT_LIST);
+  }
+
+  public void setTreatmentListForm(TreatmentListForm treatmentListForm) {
+    setFormForStep(StepDefinition.TREATMENT_LIST, treatmentListForm);
+  }
 
   // -- META DATA BELOW --
   public LocalAuthorityRefData getLocalAuthority() {
