@@ -6,6 +6,7 @@
     
     "rules":{
         "indent": [0, "tab"],
-        "no-tabs": 0
+        "no-tabs": 0,
+        "no-plusplus": 0
     }
 }
