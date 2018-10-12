@@ -55,7 +55,7 @@ public class DisabilityControllerTest {
   @Test
   public void show_ShouldDisplayDisabilityTemplate_WithRadioOptions() throws Exception {
     RadioOptionsGroup options =
-        new RadioOptionsGroup("you.afcs.disabilityPage.title").autoPopulateBooleanOptions();
+        new RadioOptionsGroup("you.afcs.disabilityPage.title").withYesNoOptions();
 
     DisabilityForm form = DisabilityForm.builder().build();
 

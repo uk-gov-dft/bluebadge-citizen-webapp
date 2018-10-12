@@ -27,7 +27,7 @@ public class RadioOptionsGroup {
     this.titleIsH1 = titleIsH1;
   }
 
-  public RadioOptionsGroup autoPopulateBooleanOptions() {
+  public RadioOptionsGroup withYesNoOptions() {
     RadioOption yes = new RadioOption("yes", "radio.option.yes");
     RadioOption no = new RadioOption("no", "radio.option.no");
     options = Lists.newArrayList(yes, no);

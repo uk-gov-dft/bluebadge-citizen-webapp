@@ -47,7 +47,7 @@ public class CompensationSchemeControllerTest {
   @Test
   public void show_ShouldDisplayCompensationScheme_WithRadioOptions() throws Exception {
     RadioOptionsGroup options =
-        new RadioOptionsGroup("you.afcs.compensationSchemePage.title").autoPopulateBooleanOptions();
+        new RadioOptionsGroup("you.afcs.compensationSchemePage.title").withYesNoOptions();
 
     CompensationSchemeForm form = CompensationSchemeForm.builder().build();
 

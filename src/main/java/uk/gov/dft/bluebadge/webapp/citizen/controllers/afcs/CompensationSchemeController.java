@@ -51,7 +51,7 @@ public class CompensationSchemeController implements StepController {
 
     RadioOptionsGroup radioOptions =
         new RadioOptionsGroup(journey.who + "afcs.compensationSchemePage.title")
-            .autoPopulateBooleanOptions();
+            .withYesNoOptions();
 
     model.addAttribute("radioOptions", radioOptions);
 
