@@ -64,6 +64,8 @@ public class TreatmentAddControllerTest extends ControllerTestFixture<TreatmentA
   public void submit_whenBlankFormSubmitted_thenShouldRedirectToShowWithValidationErrors()
       throws Exception {
 
+    TreatmentAddForm form = new TreatmentAddForm();
+    form.setId("1234");
     mockMvc
         .perform(
             post(getUrl())
@@ -72,7 +74,7 @@ public class TreatmentAddControllerTest extends ControllerTestFixture<TreatmentA
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/add-treatment"))
-        .andExpect(flash().attribute("formRequest", TreatmentAddForm.builder().id("1234").build()))
+        .andExpect(flash().attribute("formRequest", form))
         .andExpect(formRequestFlashAttributeHasFieldErrorCode("treatmentDescription", "NotBlank"))
         .andExpect(formRequestFlashAttributeHasFieldErrorCode("treatmentWhen", "NotBlank"));
   }

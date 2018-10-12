@@ -8,7 +8,7 @@ public class MobilityAidAddFormTest {
 
   @Test
   public void getDescriptionTest() {
-    MobilityAidAddForm form = MobilityAidAddForm.builder().build();
+    MobilityAidAddForm form = new MobilityAidAddForm();
     assertEquals("", form.getAidTypeDescription());
     form.setAidType(MobilityAidAddForm.AidType.WHEELCHAIR);
     assertEquals(MobilityAidAddForm.AidType.WHEELCHAIR.getType(), form.getAidTypeDescription());

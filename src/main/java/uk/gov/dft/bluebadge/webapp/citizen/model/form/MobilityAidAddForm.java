@@ -1,15 +1,14 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
-import java.io.Serializable;
-import java.util.UUID;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import lombok.Builder;
 import lombok.Data;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HowProvidedCodeField;
 
-@Builder
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.UUID;
+
 @Data
 public class MobilityAidAddForm implements Serializable {
 
@@ -41,7 +40,7 @@ public class MobilityAidAddForm implements Serializable {
   // Validation done in controller, not bean as is conditional (and was easier).
   private String customAidName;
 
-  @Builder.Default private String id = UUID.randomUUID().toString();
+  private String id = UUID.randomUUID().toString();
 
   public String getAidTypeDescription() {
     if (null == aidType) return "";

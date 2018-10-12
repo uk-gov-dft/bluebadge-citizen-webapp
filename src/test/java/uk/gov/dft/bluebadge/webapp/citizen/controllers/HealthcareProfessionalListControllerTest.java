@@ -1,15 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -18,6 +9,16 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalListForm;
+
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class HealthcareProfessionalListControllerTest
     extends ControllerTestFixture<HealthcareProfessionalListController> {
@@ -74,15 +75,16 @@ public class HealthcareProfessionalListControllerTest
     when(mockRouteMaster.redirectToOnSuccess(any(HealthcareProfessionalListForm.class)))
         .thenReturn("redirect:/testSuccess");
 
+    HealthcareProfessionalAddForm form = new HealthcareProfessionalAddForm();
+    form.setHealthcareProfessionalLocation("Island");
+    form.setHealthcareProfessionalName("Dr No");
+
     journey.getHealthcareProfessionalListForm().setHasHealthcareProfessional("yes");
     journey
         .getHealthcareProfessionalListForm()
         .setHealthcareProfessionals(
             Lists.newArrayList(
-                HealthcareProfessionalAddForm.builder()
-                    .healthcareProfessionalName("Dr No")
-                    .healthcareProfessionalLocation("Island")
-                    .build()));
+                form));
 
     mockMvc
         .perform(

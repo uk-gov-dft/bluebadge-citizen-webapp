@@ -1,6 +1,10 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.HEALTHCARE_PROFESSIONALS_ADD;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.HOME;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.MOBILITY_AID_ADD;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.TREATMENT_ADD;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -21,6 +25,6 @@ public class StepDefinitionTest {
             .filter(s -> !allNextSteps.contains(s))
             .collect(Collectors.toSet());
 
-    assertThat(unreachable).containsOnly(StepDefinition.HOME, StepDefinition.MOBILITY_AID_ADD);
+    assertThat(unreachable).containsOnly(HOME, MOBILITY_AID_ADD, TREATMENT_ADD, HEALTHCARE_PROFESSIONALS_ADD);
   }
 }

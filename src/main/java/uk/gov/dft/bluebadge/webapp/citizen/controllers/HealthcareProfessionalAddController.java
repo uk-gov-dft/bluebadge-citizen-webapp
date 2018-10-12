@@ -53,7 +53,7 @@ public class HealthcareProfessionalAddController implements StepController {
 
     // On returning to form (binding errors), take previously submitted values.
     if (!model.containsAttribute(FORM_REQUEST)) {
-      model.addAttribute(FORM_REQUEST, HealthcareProfessionalAddForm.builder().build());
+      model.addAttribute(FORM_REQUEST, new HealthcareProfessionalAddForm());
     }
 
     return TEMPLATE;

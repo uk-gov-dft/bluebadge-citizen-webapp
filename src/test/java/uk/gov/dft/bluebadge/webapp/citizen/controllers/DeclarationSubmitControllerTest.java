@@ -11,9 +11,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDBULK;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDVEHIC;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 
 import com.google.common.collect.Lists;
+import java.util.EnumSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,12 +29,15 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HealthcareProfessional;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HowProvidedCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalAddForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
@@ -163,27 +169,34 @@ public class DeclarationSubmitControllerTest {
         HealthConditionsForm.builder().descriptionOfConditions("Test description ABC").build();
     journey.setHealthConditionsForm(healthConditionsForm);
     if (WALKD == eligibilityCode) {
-      MobilityAidAddForm aid =
-          MobilityAidAddForm.builder()
-              .howProvidedCodeField(HowProvidedCodeField.PRESCRIBE)
-              .aidType(MobilityAidAddForm.AidType.WHEELCHAIR)
-              .usage("Usage")
-              .build();
+      MobilityAidAddForm aid = new MobilityAidAddForm();
+      aid.setUsage("Usage");
+      aid.setAidType(MobilityAidAddForm.AidType.WHEELCHAIR);
+      aid.setHowProvidedCodeField(HowProvidedCodeField.PRESCRIBE);
       journey.setMobilityAidListForm(
           MobilityAidListForm.builder()
               .hasWalkingAid("yes")
               .mobilityAids(Lists.newArrayList(aid))
               .build());
 
-      TreatmentAddForm treatment =
-          TreatmentAddForm.builder()
-              .treatmentDescription("treatment description")
-              .treatmentWhen("Treatment when")
-              .build();
+      TreatmentAddForm treatment = new TreatmentAddForm();
+      treatment.setTreatmentWhen("Treatment when");
+      treatment.setTreatmentDescription("Treatment description");
       journey.setTreatmentListForm(
           TreatmentListForm.builder()
               .hasTreatment("yes")
               .treatments(Lists.newArrayList(treatment))
+              .build());
+    }
+    if (EnumSet.of(WALKD, CHILDBULK, CHILDVEHIC).contains(eligibilityCode)) {
+      HealthcareProfessionalAddForm healthcareProfessional = new HealthcareProfessionalAddForm();
+      healthcareProfessional.setHealthcareProfessionalName("name");
+      healthcareProfessional.setHealthcareProfessionalLocation("location");
+
+      journey.setHealthcareProfessionalListForm(
+          HealthcareProfessionalListForm.builder()
+              .hasHealthcareProfessional("yes")
+              .healthcareProfessionals(Lists.newArrayList(healthcareProfessional))
               .build());
     }
     Application application = controller.getDummyApplication(journey);
@@ -201,6 +214,13 @@ public class DeclarationSubmitControllerTest {
     } else {
       assertThat(application.getEligibility().getDescriptionOfConditions())
           .isEqualTo("Test description ABC");
+    }
+    if (EnumSet.of(WALKD, CHILDBULK, CHILDVEHIC).contains(eligibilityCode)) {
+      HealthcareProfessional hp = new HealthcareProfessional().location("location").name("name");
+      assertThat(application.getEligibility().getHealthcareProfessionals().size()).isEqualTo(1);
+      assertThat(application.getEligibility().getHealthcareProfessionals()).contains(hp);
+    } else {
+      assertThat(application.getEligibility().getHealthcareProfessionals()).isNull();
     }
   }
 
@@ -225,5 +245,6 @@ public class DeclarationSubmitControllerTest {
     assertThat(application.getEligibility()).isNotNull();
     assertThat(application.getEligibility().getTypeCode()).isEqualTo(eligibilityCode);
     assertThat(application.getEligibility().getDescriptionOfConditions()).isNull();
+    assertThat(application.getEligibility().getHealthcareProfessionals()).isNull();
   }
 }

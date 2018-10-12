@@ -18,6 +18,7 @@ Feature: DFT Blue badge Citizen app new application - CHILDVEHIC
     And   I complete address page
     And   I complete contact page for "yourself"
     And   I complete describe health conditions page
+    And   I complete the healthcare professionals page for "YES"
     And   I complete declaration page
     Then  I should see .* page titled "Application submitted" with GOV.UK suffix
 
@@ -37,6 +38,7 @@ Feature: DFT Blue badge Citizen app new application - CHILDVEHIC
     And   I complete address page
     And   I complete contact page for "someone else"
     And   I complete describe health conditions page
+    And   I complete the healthcare professionals page for "YES"
     And   I complete declaration page
     Then  I should see .* page titled "Application submitted" with GOV.UK suffix
 

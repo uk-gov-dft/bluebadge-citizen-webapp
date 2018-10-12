@@ -68,7 +68,8 @@ public class HealthcareProfessionalAddControllerTest
   public void submit_whenBlankFormSubmitted_thenShouldRedirectToShowWithValidationErrors()
       throws Exception {
 
-    HealthcareProfessionalAddForm form = HealthcareProfessionalAddForm.builder().id("1234").build();
+    HealthcareProfessionalAddForm form = new HealthcareProfessionalAddForm();
+    form.setId("1234");
 
     mockMvc
         .perform(

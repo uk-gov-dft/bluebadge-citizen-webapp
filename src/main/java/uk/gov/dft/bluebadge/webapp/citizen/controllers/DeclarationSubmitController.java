@@ -25,6 +25,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Di
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Eligibility;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.GenderCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HealthcareProfessional;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Party;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.PartyTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Person;
@@ -42,6 +43,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
@@ -140,6 +142,19 @@ public class DeclarationSubmitController implements StepController {
                     .emailAddress(contactDetailsForm.getEmailAddress()))
             .person(person);
 
+    List<HealthcareProfessional> healthcareProfessionals = null;
+    if (null != journey.getHealthcareProfessionalListForm()
+        && null != journey.getHealthcareProfessionalListForm().getHealthcareProfessionals()) {
+      healthcareProfessionals = new ArrayList<>();
+      for (HealthcareProfessionalAddForm item :
+          journey.getHealthcareProfessionalListForm().getHealthcareProfessionals()) {
+        healthcareProfessionals.add(
+            new HealthcareProfessional()
+                .name(item.getHealthcareProfessionalName())
+                .location(item.getHealthcareProfessionalLocation()));
+      }
+    }
+
     Eligibility eligibilityObject = null;
     switch (eligibility) {
       case WALKD:
@@ -186,7 +201,8 @@ public class DeclarationSubmitController implements StepController {
                         .typeCodes(walkingDifficulties)
                         .otherDescription(otherDesc)
                         .walkingAids(walkingAids)
-                        .treatments(treatments));
+                        .treatments(treatments))
+                .healthcareProfessionals(healthcareProfessionals);
         break;
       case PIP:
       case DLA:
@@ -214,11 +230,15 @@ public class DeclarationSubmitController implements StepController {
                 .descriptionOfConditions(condDesc)
                 .childUnder3(
                     new ChildUnder3()
-                        .bulkyMedicalEquipmentTypeCode(BulkyMedicalEquipmentTypeCodeField.NONE));
+                        .bulkyMedicalEquipmentTypeCode(BulkyMedicalEquipmentTypeCodeField.NONE))
+                .healthcareProfessionals(healthcareProfessionals);
         break;
       case CHILDVEHIC:
         eligibilityObject =
-            new Eligibility().descriptionOfConditions(condDesc).typeCode(eligibility);
+            new Eligibility()
+                .descriptionOfConditions(condDesc)
+                .typeCode(eligibility)
+                .healthcareProfessionals(healthcareProfessionals);
         break;
       case TERMILL:
       case NONE:

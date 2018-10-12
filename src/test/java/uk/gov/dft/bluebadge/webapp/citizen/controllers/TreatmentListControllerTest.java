@@ -70,12 +70,16 @@ public class TreatmentListControllerTest extends ControllerTestFixture<Treatment
     when(mockRouteMaster.redirectToOnSuccess(any(TreatmentListForm.class)))
         .thenReturn("redirect:/testSuccess");
 
+    TreatmentAddForm form = new TreatmentAddForm();
+    form.setTreatmentDescription("A");
+    form.setTreatmentWhen("F");
+
     journey.getTreatmentListForm().setHasTreatment("yes");
     journey
         .getTreatmentListForm()
         .setTreatments(
             Lists.newArrayList(
-                TreatmentAddForm.builder().treatmentWhen("F").treatmentDescription("A").build()));
+                form));
 
     mockMvc
         .perform(
