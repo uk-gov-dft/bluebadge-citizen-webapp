@@ -89,7 +89,7 @@ public class WalkingTimeController implements StepController {
       return null;
     }
 
-    List options = new ArrayList();
+    List<RadioOption> options = new ArrayList<>();
     options.add(
         new RadioOption(
             WalkingLengthOfTimeCodeField.CANTWALK.name(),
