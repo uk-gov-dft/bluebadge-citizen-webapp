@@ -1,10 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-
-import java.util.ArrayList;
-import java.util.List;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +20,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Di
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Eligibility;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.GenderCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Medication;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Party;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.PartyTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Person;
@@ -45,7 +41,14 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
+
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 @RequestMapping(Mappings.URL_DECLARATIONS)
@@ -58,7 +61,7 @@ public class DeclarationSubmitController implements StepController {
 
   @Autowired
   public DeclarationSubmitController(
-      ApplicationManagementService appService, RouteMaster routeMaster) {
+    ApplicationManagementService appService, RouteMaster routeMaster) {
     this.appService = appService;
     this.routeMaster = routeMaster;
   }
@@ -79,10 +82,10 @@ public class DeclarationSubmitController implements StepController {
 
   @PostMapping
   public String submitDeclaration(
-      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute("formRequest") DeclarationForm declarationForm,
-      BindingResult bindingResult,
-      RedirectAttributes attr) {
+    @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
+    @Valid @ModelAttribute("formRequest") DeclarationForm declarationForm,
+    BindingResult bindingResult,
+    RedirectAttributes attr) {
 
     if (bindingResult.hasErrors()) {
       return routeMaster.redirectToOnBindingError(this, declarationForm, bindingResult, attr);
@@ -102,97 +105,55 @@ public class DeclarationSubmitController implements StepController {
     EligibilityCodeField eligibility = journey.getEligibilityCode();
 
     String la =
-        yourIssuingAuthorityForm == null
-            ? "ABERD"
-            : yourIssuingAuthorityForm.getLocalAuthorityShortCode();
+      yourIssuingAuthorityForm == null
+        ? "ABERD"
+        : yourIssuingAuthorityForm.getLocalAuthorityShortCode();
     String condDesc = journey.getDescriptionOfCondition();
 
     String fullName = applicantNameForm == null ? "John Doe" : applicantNameForm.getFullName();
     String birthName =
-        applicantNameForm == null ? "John Doe Birth" : applicantNameForm.getBirthName();
+      applicantNameForm == null ? "John Doe Birth" : applicantNameForm.getBirthName();
 
     GenderCodeField gender =
-        null != genderForm ? journey.getGenderForm().getGender() : GenderCodeField.FEMALE;
+      null != genderForm ? journey.getGenderForm().getGender() : GenderCodeField.FEMALE;
 
     String nino =
-        journey.getNinoForm() == null ? "NS123456C" : journey.getNinoForm().getNino().toUpperCase();
+      journey.getNinoForm() == null ? "NS123456C" : journey.getNinoForm().getNino().toUpperCase();
 
     Person person =
-        new Person()
-            .badgeHolderName(fullName)
-            .nameAtBirth(birthName)
-            .dob(journey.getDateOfBirthForm().getDateOfBirth().getLocalDate())
-            .genderCode(gender)
-            .nino(nino);
+      new Person()
+        .badgeHolderName(fullName)
+        .nameAtBirth(birthName)
+        .dob(journey.getDateOfBirthForm().getDateOfBirth().getLocalDate())
+        .genderCode(gender)
+        .nino(nino);
 
     Party party =
-        new Party()
-            .typeCode(PartyTypeCodeField.PERSON)
-            .contact(
-                new Contact()
-                    .buildingStreet(journey.getEnterAddressForm().getBuildingAndStreet())
-                    .line2(journey.getEnterAddressForm().getOptionalAddress())
-                    .townCity(journey.getEnterAddressForm().getTownOrCity())
-                    .postCode(journey.getEnterAddressForm().getPostcode())
-                    .fullName(contactDetailsForm.getFullName())
-                    .primaryPhoneNumber(contactDetailsForm.getPrimaryPhoneNumber())
-                    .secondaryPhoneNumber(contactDetailsForm.getSecondaryPhoneNumber())
-                    .emailAddress(contactDetailsForm.getEmailAddress()))
-            .person(person);
+      new Party()
+        .typeCode(PartyTypeCodeField.PERSON)
+        .contact(
+          new Contact()
+            .buildingStreet(journey.getEnterAddressForm().getBuildingAndStreet())
+            .line2(journey.getEnterAddressForm().getOptionalAddress())
+            .townCity(journey.getEnterAddressForm().getTownOrCity())
+            .postCode(journey.getEnterAddressForm().getPostcode())
+            .fullName(contactDetailsForm.getFullName())
+            .primaryPhoneNumber(contactDetailsForm.getPrimaryPhoneNumber())
+            .secondaryPhoneNumber(contactDetailsForm.getSecondaryPhoneNumber())
+            .emailAddress(contactDetailsForm.getEmailAddress()))
+        .person(person);
 
     Eligibility eligibilityObject = null;
     switch (eligibility) {
       case WALKD:
-        List<WalkingAid> walkingAids = null;
-        if (null != journey.getMobilityAidListForm()
-            && "yes".equals(journey.getMobilityAidListForm().getHasWalkingAid())) {
-          walkingAids = new ArrayList<>();
-          for (MobilityAidAddForm mobilityAidAddForm :
-              journey.getMobilityAidListForm().getMobilityAids()) {
-            walkingAids.add(
-                new WalkingAid()
-                    .usage(mobilityAidAddForm.getUsage())
-                    .howProvidedCode(mobilityAidAddForm.getHowProvidedCodeField())
-                    .description(mobilityAidAddForm.getAidTypeDescription()));
-          }
-        }
-        List<Treatment> treatments = null;
-        if (null != journey.getTreatmentListForm()
-            && "yes".equals(journey.getTreatmentListForm().getHasTreatment())) {
-          treatments = new ArrayList<>();
-          for (TreatmentAddForm treatmentAddForm : journey.getTreatmentListForm().getTreatments()) {
-            treatments.add(
-                new Treatment()
-                    .time(treatmentAddForm.getTreatmentWhen())
-                    .description(treatmentAddForm.getTreatmentDescription()));
-          }
-        }
+        eligibilityObject = buildWalkingEligibility(journey);
 
-        List<WalkingDifficultyTypeCodeField> walkingDifficulties =
-            journey.getWhatMakesWalkingDifficultForm().getWhatWalkingDifficulties();
-        String otherDesc =
-            walkingDifficulties.contains(WalkingDifficultyTypeCodeField.SOMELSE)
-                ? journey.getWhatMakesWalkingDifficultForm().getSomethingElseDescription()
-                : null;
-
-        eligibilityObject =
-            new Eligibility()
-                .typeCode(EligibilityCodeField.WALKD)
-                .descriptionOfConditions(condDesc)
-                .walkingDifficulty(
-                    new WalkingDifficulty()
-                        .walkingLengthOfTimeCode(WalkingLengthOfTimeCodeField.LESSMIN)
-                        .walkingSpeedCode(WalkingSpeedCodeField.SLOW)
-                        .typeCodes(walkingDifficulties)
-                        .otherDescription(otherDesc)
-                        .walkingAids(walkingAids)
-                        .treatments(treatments));
         break;
       case PIP:
       case DLA:
       case WPMS:
         eligibilityObject =
-            new Eligibility().typeCode(eligibility).benefit(new Benefit().isIndefinite(true));
+          new Eligibility().typeCode(eligibility).benefit(new Benefit().isIndefinite(true));
         break;
       case AFRFCS:
         eligibilityObject = new Eligibility().typeCode(eligibility);
@@ -202,23 +163,23 @@ public class DeclarationSubmitController implements StepController {
         break;
       case ARMS:
         eligibilityObject =
-            new Eligibility()
-                .typeCode(eligibility)
-                .descriptionOfConditions(condDesc)
-                .disabilityArms(new DisabilityArms().isAdaptedVehicle(false));
+          new Eligibility()
+            .typeCode(eligibility)
+            .descriptionOfConditions(condDesc)
+            .disabilityArms(new DisabilityArms().isAdaptedVehicle(false));
         break;
       case CHILDBULK:
         eligibilityObject =
-            new Eligibility()
-                .typeCode(eligibility)
-                .descriptionOfConditions(condDesc)
-                .childUnder3(
-                    new ChildUnder3()
-                        .bulkyMedicalEquipmentTypeCode(BulkyMedicalEquipmentTypeCodeField.NONE));
+          new Eligibility()
+            .typeCode(eligibility)
+            .descriptionOfConditions(condDesc)
+            .childUnder3(
+              new ChildUnder3()
+                .bulkyMedicalEquipmentTypeCode(BulkyMedicalEquipmentTypeCodeField.NONE));
         break;
       case CHILDVEHIC:
         eligibilityObject =
-            new Eligibility().descriptionOfConditions(condDesc).typeCode(eligibility);
+          new Eligibility().descriptionOfConditions(condDesc).typeCode(eligibility);
         break;
       case TERMILL:
       case NONE:
@@ -227,12 +188,76 @@ public class DeclarationSubmitController implements StepController {
         throw new IllegalStateException("Invalid eligibility:" + eligibility);
     }
     return Application.builder()
-        .applicationTypeCode(ApplicationTypeCodeField.NEW)
-        .localAuthorityCode(la)
-        .paymentTaken(false)
-        .party(party)
-        .eligibility(eligibilityObject)
-        .build();
+      .applicationTypeCode(ApplicationTypeCodeField.NEW)
+      .localAuthorityCode(la)
+      .paymentTaken(false)
+      .party(party)
+      .eligibility(eligibilityObject)
+      .build();
+  }
+
+  private Eligibility buildWalkingEligibility(Journey journey) {
+    Eligibility eligibilityObject;
+    List<WalkingAid> walkingAids = null;
+    if (null != journey.getMobilityAidListForm()
+      && "yes".equals(journey.getMobilityAidListForm().getHasWalkingAid())) {
+      walkingAids = new ArrayList<>();
+      for (MobilityAidAddForm mobilityAidAddForm :
+        journey.getMobilityAidListForm().getMobilityAids()) {
+        walkingAids.add(
+          new WalkingAid()
+            .usage(mobilityAidAddForm.getUsage())
+            .howProvidedCode(mobilityAidAddForm.getHowProvidedCodeField())
+            .description(mobilityAidAddForm.getAidTypeDescription()));
+      }
+    }
+    List<Treatment> treatments = null;
+    if (null != journey.getTreatmentListForm()
+      && "yes".equals(journey.getTreatmentListForm().getHasTreatment())) {
+      treatments = new ArrayList<>();
+      for (TreatmentAddForm treatmentAddForm : journey.getTreatmentListForm().getTreatments()) {
+        treatments.add(
+          new Treatment()
+            .time(treatmentAddForm.getTreatmentWhen())
+            .description(treatmentAddForm.getTreatmentDescription()));
+      }
+    }
+    List<Medication> medications = null;
+    if (null != journey.getMedicationListForm()
+      && "yes".equals(journey.getMedicationListForm().getHasMedication())) {
+      medications = new ArrayList<>();
+      for (MedicationAddForm medicationAddForm : journey.getMedicationListForm().getMedications()) {
+        medications.add(
+          new Medication()
+            .name(medicationAddForm.getName())
+            .quantity(medicationAddForm.getDosage())
+            .isPrescribed(Boolean.TRUE)
+            .frequency(medicationAddForm.getFrequency()));
+      }
+    }
+
+    List<WalkingDifficultyTypeCodeField> walkingDifficulties =
+      journey.getWhatMakesWalkingDifficultForm().getWhatWalkingDifficulties();
+    String otherDesc =
+      walkingDifficulties.contains(WalkingDifficultyTypeCodeField.SOMELSE)
+        ? journey.getWhatMakesWalkingDifficultForm().getSomethingElseDescription()
+        : null;
+
+    eligibilityObject =
+      new Eligibility()
+        .typeCode(EligibilityCodeField.WALKD)
+        .descriptionOfConditions(journey.getDescriptionOfCondition())
+        .walkingDifficulty(
+          new WalkingDifficulty()
+            .walkingLengthOfTimeCode(WalkingLengthOfTimeCodeField.LESSMIN)
+            .walkingSpeedCode(WalkingSpeedCodeField.SLOW)
+            .typeCodes(walkingDifficulties)
+            .otherDescription(otherDesc)
+            .walkingAids(walkingAids)
+            .treatments(treatments)
+            .medications(medications));
+
+    return eligibilityObject;
   }
 
   @Override

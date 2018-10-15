@@ -11,15 +11,20 @@ import lombok.Data;
 public class MedicationAddForm implements Serializable {
 
   @Size(max = 100)
-  @NotBlank
+  @NotBlank(message = "{NotBlank.medication.name}")
   private String name;
 
   // yes - no value with radio buttons..
-  @NotNull private String prescribed;
+  @NotNull(message = "{NotNull.medication.prescribed}")
+  private String prescribed;
 
   @Size(max = 100)
-  @NotBlank
+  @NotBlank(message = "{NotBlank.medication.dosage}")
   private String dosage;
+
+  @Size(max = 100)
+  @NotBlank(message = "{NotBlank.medication.frequency}")
+  private String frequency;
 
   private String id;
 

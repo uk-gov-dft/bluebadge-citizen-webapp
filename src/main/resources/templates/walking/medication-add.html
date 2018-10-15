@@ -4,7 +4,7 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/master.html}">
 <head>
-    <title th:text="#{medication.add.page.title} + ' - ' + #{common.title.suffix}"></title>
+    <title th:text="(${errorSummary}? #{common.title.error} : '')  + #{${JOURNEY.who} + 'medication.add.page.title'}"></title>
 </head>
 <body>
 
@@ -14,8 +14,6 @@
 
             <h1 class="govuk-heading-l" th:text="#{medication.add.body.title}"></h1>
 
-            <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>
-
             <form th:action="@{/add-medication}" th:object="${formRequest}" method="POST" novalidate>
 
                 <div th:replace="~{ fragments/govuk-input :: govuk-input(#{medication.name}, 'name', null, 'text', 'govuk-!-width-one-half')}"></div>
@@ -23,6 +21,8 @@
                 <div th:replace="~{ fragments/govuk-radios :: govuk-radios('prescribed', ${yesNoRadioOptions}) }"></div>
 
                 <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + 'medication.dosage'}, 'dosage', #{medication.dosage.hint.text}, 'text', 'govuk-!-width-one-half')}"></div>
+
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + 'medication.frequency'}, 'frequency', #{medication.frequency.hint.text}, 'text', 'govuk-!-width-one-half')}"></div>
 
                 <button type="submit"
                         class="govuk-button"

@@ -81,5 +81,6 @@ class Ids {
     static final String MEDICATION_PRESCRIBED_OPTION = "prescribed";
     static final String MEDICATION_DOSAGE_TEXT = "dosage";
     static final String MEDICATION_ADD_CONFIRM_BUTTON = "button.add.medication";
+    static final String MEDICATION_FREQUENCY_TEXT = "frequency";
   }
 }
