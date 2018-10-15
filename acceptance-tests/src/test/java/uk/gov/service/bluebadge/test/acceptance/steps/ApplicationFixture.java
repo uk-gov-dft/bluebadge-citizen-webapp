@@ -319,7 +319,9 @@ public class ApplicationFixture extends AbstractSpringSteps {
   private void addMedication(String option) {
     clickButtonById(Ids.Walkd.MEDICATION_ADD_FIRST_LINK);
     clearAndSendKeys(Ids.Walkd.MEDICATION_ADD_MEDICATION_DESCRIPTION, "Paracetamol");
-    sitePage.findPageElementById(Ids.Walkd.MEDICATION_PRESCRIBED_OPTION + "." + option.toLowerCase()).click();
+    sitePage
+        .findPageElementById(Ids.Walkd.MEDICATION_PRESCRIBED_OPTION + "." + option.toLowerCase())
+        .click();
     clearAndSendKeys(Ids.Walkd.MEDICATION_DOSAGE_TEXT, "50mg");
     clearAndSendKeys(Ids.Walkd.MEDICATION_FREQUENCY_TEXT, "Every night");
     clickButtonById(Ids.Walkd.MEDICATION_ADD_CONFIRM_BUTTON);
