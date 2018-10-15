@@ -1,32 +1,25 @@
 package uk.gov.service.bluebadge.test.acceptance.steps;
 
-import static java.util.stream.Collectors.toList;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.APPLY_IN_WELSH_EXTERNAL_URL;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.FEEDBACK_URL;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.GOOGLE_ANALYTICS_TAG;
-
 import cucumber.api.DataTable;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import java.util.List;
 import org.hamcrest.Matcher;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.SitePage;
+
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.startsWith;
+import static org.junit.Assert.*;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.*;
 
 public class SiteSteps extends AbstractSpringSteps {
 
@@ -317,4 +310,20 @@ public class SiteSteps extends AbstractSpringSteps {
   public void theGoogleAnalyticsTagShouldBeAvailable() throws Throwable {
     assertTrue(sitePage.getPageContent().contains(GOOGLE_ANALYTICS_TAG));
   }
+
+
+    @And("^I should see the \"(yourself|someone else)\" option button is selected in the Who are you applying for? page$")
+    public void iShouldSeeTheOptionButtonIsSelectedInTheWhoAreYouApplyingForPage(String selfOrOther) throws Throwable {
+
+        if (selfOrOther.equalsIgnoreCase("yourself")) {
+
+            assertTrue(sitePage.findPageElementById("applicantType.YOURSELF").isSelected());
+
+        } else if  (selfOrOther.equalsIgnoreCase("someone else") ){
+
+            assertTrue(sitePage.findPageElementById("applicantType.SOMEONE_ELSE").isSelected());
+
+        }
+
+    }
 }
