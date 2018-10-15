@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="#{${JOURNEY.who} + 'existingBadge.title'} + ' - ' + #{common.title.suffix}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"/>
+
+            <form th:action="@{/existing-badge}" method="post" th:object="${formRequest}" novalidate>
+                <div th:class="${#fields.hasErrors('hasExistingBadge')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+                    <fieldset class="govuk-fieldset">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                            <h1 class="govuk-fieldset__heading" th:text="#{${JOURNEY.who} + existingBadge.title}"></h1>
+                        </legend>
+
+                        <span class="govuk-error-message"
+                              data-uipath="hasExistingBadge.error"
+                              id="hasExistingBadge-hint"
+                              th:if="${#fields.hasErrors('hasExistingBadge')}"
+                              th:errors="*{hasExistingBadge}" />
+
+                        <div class="govuk-radios govuk-radios--conditional" data-module="radios" id="hasExistingBadge">
+
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input"
+                                       id="how-contacted-conditional-1"
+                                       name="hasBadge"
+                                       type="radio"
+                                       value="yes"
+                                       th:field="*{hasExistingBadge}"
+                                       data-aria-controls="conditional-how-contacted-conditional-1">
+
+                                <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-1" th:text="#{radio.option.yes}"></label>
+                            </div>
+                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
+                                 id="conditional-how-contacted-conditional-1">
+                                <div class="govuk-form-group">
+                                    <label class="govuk-label" for="contact-by-email" th:text="#{existingBadge.field.badgeNum.label}"></label>
+
+                                    <span class="govuk-hint" th:text="#{existingBadge.field.badgeNum.label.eg}"></span>
+
+                                    <input class="govuk-input govuk-!-width-two-thirds" id="contact-by-email" name="contact-by-email" type="email">
+                                </div>
+                                <br/><p class="govuk-body"><a href="" th:text="#{existingBadge.dontKnow.link}"></a></p>
+                            </div>
+
+
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input"
+                                       id="how-contacted-conditional-3"
+                                       name="hasBadge"
+                                       type="radio"
+                                       value="no"
+                                       th:field="*{hasExistingBadge}"
+                                       data-aria-controls="conditional-how-contacted-conditional-3">
+
+                                <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-3" th:text="#{radio.option.no}"></label>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </div>
+
+                <button type="submit"
+                        class="govuk-button"
+                        data-uipath="button.continue"
+                        th:text="#{btn.label.continue}"></button>
+            </form>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

@@ -27,6 +27,7 @@ public class Mappings {
   public static final String URL_GENDER = "/gender";
   public static final String URL_NINO = "/nino";
   public static final String URL_ENTER_ADDRESS = "/enter-address";
+  public static final String URL_EXISTING_BADGE = "/existing-badge";
 
   // PIP Journey Routes
   public static final String URL_PIP_PLANNING_JOURNEY = "/planning-and-following";
@@ -88,6 +89,7 @@ public class Mappings {
           .put(StepDefinition.WALKING_DIFFICULTY, URL_WALKING_DIFFICULTY)
           .put(StepDefinition.WHERE_CAN_YOU_WALK, URL_WHERE_CAN_YOU_WALK)
           .put(StepDefinition.NOT_ELIGIBLE, URL_NOT_ELIGIBLE)
+          .put(StepDefinition.EXISTING_BADGE, URL_EXISTING_BADGE)
           .put(StepDefinition.HEALTH_CONDITIONS, URL_HEALTH_CONDITIONS)
           .put(StepDefinition.WHAT_WALKING_DIFFICULTIES, URL_WHAT_WALKING_DIFFICULT)
           .put(StepDefinition.CHOOSE_COUNCIL, URL_CHOOSE_YOUR_COUNCIL)
