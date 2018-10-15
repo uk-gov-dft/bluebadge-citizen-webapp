@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html class="govuk-template" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th=”http://www.thymeleaf.org lang="en">
 <head>
-    <title>GOV.UK Manage Blue Badges</title>
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE" th:text="#{common.title.suffix}"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#0b0c0c" />
@@ -55,7 +55,17 @@
 
     <div class="govuk-width-container">
         <div th:replace="~{ fragments/govuk-header :: govuk-phase-banner }"></div>
-        <main class="govuk-main-wrapper" id="main-content" layout:fragment="content"></main>
+        <div class="govuk-main-wrapper" id="main-content">
+
+        <div class="govuk-grid-row" th:if="${errorSummary}">
+            <div class="govuk-grid-column-two-thirds">
+                <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>
+            </div>
+        </div>
+
+            <main layout:fragment="content"></main>
+
+        </div>
     </div>
 
     <footer th:replace="~{ fragments/govuk-footer :: govuk-footer }"></footer>
