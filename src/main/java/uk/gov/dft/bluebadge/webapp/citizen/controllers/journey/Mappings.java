@@ -59,33 +59,32 @@ public class Mappings {
   public static final String URL_WHAT_WALKING_DIFFICULT = "/what-makes-walking-difficult";
   public static final String URL_WHERE_CAN_YOU_WALK = "/where-can-you-walk";
 
-  private Mappings() {
-  }
+  private Mappings() {}
 
   private static final BiMap<StepDefinition, String> stepToUrlMapping =
-    ImmutableBiMap.<StepDefinition, String>builder()
-      .put(StepDefinition.HOME, URL_ROOT)
-      .put(StepDefinition.APPLICANT_TYPE, URL_APPLICANT_TYPE)
-      .put(StepDefinition.DOB, URL_DOB)
-      .put(StepDefinition.CONTACT_DETAILS, URL_CONTACT_DETAILS)
-      .put(StepDefinition.GENDER, URL_GENDER)
-      .put(StepDefinition.NINO, URL_NINO)
-      .put(StepDefinition.ADDRESS, URL_ENTER_ADDRESS)
-      .put(StepDefinition.NAME, URL_APPLICANT_NAME)
-      .put(StepDefinition.RECEIVE_BENEFITS, URL_RECEIVE_BENEFITS)
-      .put(StepDefinition.HIGHER_RATE_MOBILITY, URL_HIGHER_RATE_MOBILITY)
-      .put(StepDefinition.ELIGIBLE, URL_ELIGIBLE)
-      .put(StepDefinition.MAY_BE_ELIGIBLE, URL_MAY_BE_ELIGIBLE)
+      ImmutableBiMap.<StepDefinition, String>builder()
+          .put(StepDefinition.HOME, URL_ROOT)
+          .put(StepDefinition.APPLICANT_TYPE, URL_APPLICANT_TYPE)
+          .put(StepDefinition.DOB, URL_DOB)
+          .put(StepDefinition.CONTACT_DETAILS, URL_CONTACT_DETAILS)
+          .put(StepDefinition.GENDER, URL_GENDER)
+          .put(StepDefinition.NINO, URL_NINO)
+          .put(StepDefinition.ADDRESS, URL_ENTER_ADDRESS)
+          .put(StepDefinition.NAME, URL_APPLICANT_NAME)
+          .put(StepDefinition.RECEIVE_BENEFITS, URL_RECEIVE_BENEFITS)
+          .put(StepDefinition.HIGHER_RATE_MOBILITY, URL_HIGHER_RATE_MOBILITY)
+          .put(StepDefinition.ELIGIBLE, URL_ELIGIBLE)
+          .put(StepDefinition.MAY_BE_ELIGIBLE, URL_MAY_BE_ELIGIBLE)
 
-      // PIP Journey Mappings
-      .put(StepDefinition.PIP_MOVING_AROUND, URL_PIP_MOVING_AROUND)
-      .put(StepDefinition.PIP_DLA, URL_PIP_RECEIVED_DLA)
-      .put(StepDefinition.PIP_PLANNING_JOURNEY, URL_PIP_PLANNING_JOURNEY)
+          // PIP Journey Mappings
+          .put(StepDefinition.PIP_MOVING_AROUND, URL_PIP_MOVING_AROUND)
+          .put(StepDefinition.PIP_DLA, URL_PIP_RECEIVED_DLA)
+          .put(StepDefinition.PIP_PLANNING_JOURNEY, URL_PIP_PLANNING_JOURNEY)
 
-      // AFCS Journey Mappings
-      .put(StepDefinition.AFCS_DISABILITY, URL_AFCS_DISABILITY)
-      .put(StepDefinition.AFCS_MENTAL_DISORDER, URL_AFCS_MENTAL_DISORDER)
-      .put(StepDefinition.AFCS_COMPENSATION_SCHEME, URL_AFCS_COMPENSATION_SCHEME)
+          // AFCS Journey Mappings
+          .put(StepDefinition.AFCS_DISABILITY, URL_AFCS_DISABILITY)
+          .put(StepDefinition.AFCS_MENTAL_DISORDER, URL_AFCS_MENTAL_DISORDER)
+          .put(StepDefinition.AFCS_COMPENSATION_SCHEME, URL_AFCS_COMPENSATION_SCHEME)
 
           // Main reason mappings
           .put(StepDefinition.MAIN_REASON, URL_MAIN_REASON)

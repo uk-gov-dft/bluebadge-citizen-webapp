@@ -1,16 +1,17 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey;
 
-import lombok.Getter;
-
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 @Getter
 public enum StepDefinition {
   SUBMITTED(),
   DECLARATIONS(SUBMITTED),
-  TREATMENT_LIST(DECLARATIONS),
+  MEDICATION_LIST(DECLARATIONS),
+  MEDICATION_ADD(MEDICATION_LIST),
+  TREATMENT_LIST(MEDICATION_LIST),
   TREATMENT_ADD(TREATMENT_LIST),
   WHERE_CAN_YOU_WALK(TREATMENT_LIST),
   MOBILITY_AID_LIST(WHERE_CAN_YOU_WALK),
@@ -46,12 +47,11 @@ public enum StepDefinition {
   AFCS_COMPENSATION_SCHEME(MAIN_REASON, AFCS_DISABILITY, AFCS_MENTAL_DISORDER),
 
   RECEIVE_BENEFITS(
-    ELIGIBLE, MAIN_REASON, PIP_MOVING_AROUND, AFCS_COMPENSATION_SCHEME, HIGHER_RATE_MOBILITY),
+      ELIGIBLE, MAIN_REASON, PIP_MOVING_AROUND, AFCS_COMPENSATION_SCHEME, HIGHER_RATE_MOBILITY),
   YOUR_ISSUING_AUTHORITY(RECEIVE_BENEFITS),
   CHOOSE_COUNCIL(YOUR_ISSUING_AUTHORITY),
-  MEDICATION_LIST(CHOOSE_COUNCIL),
-  MEDICATION_ADD(MEDICATION_LIST),
-  APPLICANT_TYPE(MEDICATION_LIST),
+
+  APPLICANT_TYPE(CHOOSE_COUNCIL),
   HOME(APPLICANT_TYPE);
 
   private Set<StepDefinition> next;
@@ -63,7 +63,7 @@ public enum StepDefinition {
   public StepDefinition getDefaultNext() {
     if (next.size() != 1) {
       throw new IllegalStateException(
-        "Failed to determine single next step for current step:" + this + ". Got:" + next);
+          "Failed to determine single next step for current step:" + this + ". Got:" + next);
     }
     return next.iterator().next();
   }

@@ -1,13 +1,11 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form.walking;
 
-import lombok.Data;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HowProvidedCodeField;
-
+import java.io.Serializable;
+import java.util.UUID;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
-import java.util.UUID;
+import lombok.Data;
 
 @Data
 public class MedicationAddForm implements Serializable {
@@ -17,8 +15,7 @@ public class MedicationAddForm implements Serializable {
   private String name;
 
   // yes - no value with radio buttons..
-  @NotNull
-  private String prescribed;
+  @NotNull private String prescribed;
 
   @Size(max = 100)
   @NotBlank
@@ -29,5 +26,4 @@ public class MedicationAddForm implements Serializable {
   public MedicationAddForm() {
     id = UUID.randomUUID().toString();
   }
-
 }

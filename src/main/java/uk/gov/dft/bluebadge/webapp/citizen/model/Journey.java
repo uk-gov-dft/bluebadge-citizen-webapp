@@ -317,7 +317,6 @@ public class Journey implements Serializable {
     setFormForStep(StepDefinition.MEDICATION_LIST, medicationListForm);
   }
 
-
   public TreatmentListForm getTreatmentListForm() {
     return (TreatmentListForm) getFormForStep(StepDefinition.TREATMENT_LIST);
   }

@@ -24,6 +24,7 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import java.util.Calendar;
+import org.openqa.selenium.By;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.SitePage;
 
@@ -295,5 +296,31 @@ public class ApplicationFixture extends AbstractSpringSteps {
       clickButtonById(Ids.Walkd.TREATMENT_ADD_CONFIRM_BUTTON);
     }
     pressContinue();
+  }
+
+  @And("^I complete the medications page for \"(YES|NO)\"$")
+  public void iCompleteTheMedicationsPage(String option) {
+
+    sitePage
+        .findPageElementById(Ids.Walkd.MEDICATION_HAS_MEDICATION_OPTION + option.toLowerCase())
+        .click();
+
+    if ("YES".equals(option)) {
+      addMedication(option);
+
+      // find the first medication in the list and click
+      sitePage.getHelper().findElement(By.xpath("//table[@id='medication-list']//a")).click();
+
+      addMedication(option);
+    }
+    pressContinue();
+  }
+
+  private void addMedication(String option) {
+    clickButtonById(Ids.Walkd.MEDICATION_ADD_FIRST_LINK);
+    clearAndSendKeys(Ids.Walkd.MEDICATION_ADD_MEDICATION_DESCRIPTION, "Paracetamol");
+    sitePage.findPageElementById(Ids.Walkd.MEDICATION_PRESCRIBED_OPTION + "." + option.toLowerCase()).click();
+    clearAndSendKeys(Ids.Walkd.MEDICATION_DOSAGE_TEXT, "Sometimes");
+    clickButtonById(Ids.Walkd.MEDICATION_ADD_CONFIRM_BUTTON);
   }
 }

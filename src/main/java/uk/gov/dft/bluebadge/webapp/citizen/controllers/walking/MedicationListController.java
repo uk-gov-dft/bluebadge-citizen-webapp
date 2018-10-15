@@ -1,5 +1,10 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.walking;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+
+import java.util.ArrayList;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,12 +21,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm;
-
-import javax.validation.Valid;
-import java.util.ArrayList;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 @RequestMapping(Mappings.URL_MEDICATION_LIST)
@@ -70,14 +69,11 @@ public class MedicationListController implements StepController {
 
     // Reset if no selected
     // Treat as No selected if no aids added whilst yes was selected
-    if (journey.getMedicationListForm().getMedications() == null ||
-      journey.getMedicationListForm().getMedications().isEmpty() ||
-      "no".equals(journey.getMedicationListForm().getHasMedication())) {
+    if (journey.getMedicationListForm().getMedications() == null
+        || journey.getMedicationListForm().getMedications().isEmpty()
+        || "no".equals(journey.getMedicationListForm().getHasMedication())) {
       journey.setMedicationListForm(
-          MedicationListForm.builder()
-              .hasMedication("no")
-              .medications(new ArrayList<>())
-              .build());
+          MedicationListForm.builder().hasMedication("no").medications(new ArrayList<>()).build());
     } else {
       journey.getMedicationListForm().setHasMedication(medicationListForm.getHasMedication());
     }
@@ -95,10 +91,7 @@ public class MedicationListController implements StepController {
 
     if (null != journey.getMedicationListForm()
         && null != journey.getMedicationListForm().getMedications()) {
-      journey
-          .getMedicationListForm()
-          .getMedications()
-          .removeIf(item -> item.getId().equals(uuid));
+      journey.getMedicationListForm().getMedications().removeIf(item -> item.getId().equals(uuid));
     }
 
     return "redirect:" + Mappings.URL_MEDICATION_LIST;
