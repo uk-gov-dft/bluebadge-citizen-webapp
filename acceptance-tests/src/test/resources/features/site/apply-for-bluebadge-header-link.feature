@@ -14,7 +14,9 @@ Feature: The 'Apply for a Blue Badge' link in the citizen app header should
     And   I complete moving around points page for "12"
     Then  I should see "You're" eligible page
     When  I click on "Apply for a Blue Badge" link
-    Then I should see .* page titled "Who are you applying for? - GOV.UK Apply for a Blue Badge"
+    Then I should see .* page titled "Who are you applying for?" with GOV.UK suffix
+    And I should see the "yourself" option button is selected in the Who are you applying for page
+
 
   Scenario: Verify I see Applicant page when I click on Apply for a Blue Badge header link when I am in address page
     Given I complete applicant page for "yourself"
@@ -30,4 +32,5 @@ Feature: The 'Apply for a Blue Badge' link in the citizen app header should
     And   I complete NI number page
     Then I should see .* page titled "Enter your address - GOV.UK Apply for a Blue Badge"
     When  I click on "Apply for a Blue Badge" link
-    Then I should see .* page titled "Who are you applying for? - GOV.UK Apply for a Blue Badge"
+    Then I should see .* page titled "Who are you applying for?" with GOV.UK suffix
+    And I should see the "yourself" option button is selected in the Who are you applying for page
