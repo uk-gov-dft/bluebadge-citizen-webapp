@@ -205,6 +205,12 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
+  @And("^I complete the walking time page with option \"(CANTWALK|LESSMIN|FEWMIN|MORETEN)\"$")
+  public void iCompleteTheWalkingTimePage(String option) throws Throwable {
+    sitePage.findPageElementById(Ids.Walkd.WALKING_TIME + "." + option).click();
+    pressContinue();
+  }
+
   @And("^I complete where can you walk page$")
   public void iCompleteWhereCanYouWalkPage() throws Throwable {
     clearAndSendKeys(PLACE_CAN_WALK, "to the Post office on the High Street");

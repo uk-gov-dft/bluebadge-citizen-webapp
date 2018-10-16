@@ -39,6 +39,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficul
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipDlaQuestionForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipMovingAroundForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipPlanningJourneyForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WalkingTimeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
 
 public class Journey implements Serializable {
@@ -298,6 +299,14 @@ public class Journey implements Serializable {
   public void setWhatMakesWalkingDifficultForm(
       WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm) {
     setFormForStep(StepDefinition.WHAT_WALKING_DIFFICULTIES, whatMakesWalkingDifficultForm);
+  }
+
+  public WalkingTimeForm getWalkingTimeForm() {
+    return (WalkingTimeForm) getFormForStep(StepDefinition.WALKING_TIME);
+  }
+
+  public void setWalkingTimeForm(WalkingTimeForm walkingTimeForm) {
+    setFormForStep(StepDefinition.WALKING_TIME, walkingTimeForm);
   }
 
   public MobilityAidListForm getMobilityAidListForm() {
