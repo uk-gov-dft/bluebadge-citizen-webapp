@@ -57,7 +57,6 @@ class Ids {
   }
 
   class Walkd {
-
     static final String TREATMENT_ADD_CONFIRM_BUTTON = "button.add.treatment";
     static final String TREATMENT_HAS_TREATMENT_OPTION = "hasTreatment";
     // Id of link will be prefix + counter.  Counter starts at 1.
@@ -73,6 +72,8 @@ class Ids {
     static final String MOBILITY_AID_ADD_PROVIDED_CODE_PRESCRIBE = "howProvidedCodeField.PRESCRIBE";
     static final String MOBILITY_AID_ADD_USAGE = "usage";
     static final String MOBILITY_AID_ADD_CONFIRM_BUTTON = "button.continue";
+
+    static final String WALKING_TIME = "walkingTime";
 
     // Medication stuff
     static final String MEDICATION_ADD_FIRST_LINK = "firstaddmedicationlink";
