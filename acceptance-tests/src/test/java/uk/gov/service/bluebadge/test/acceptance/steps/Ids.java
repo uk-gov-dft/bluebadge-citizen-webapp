@@ -72,5 +72,7 @@ class Ids {
     static final String MOBILITY_AID_ADD_PROVIDED_CODE_PRESCRIBE = "howProvidedCodeField.PRESCRIBE";
     static final String MOBILITY_AID_ADD_USAGE = "usage";
     static final String MOBILITY_AID_ADD_CONFIRM_BUTTON = "button.continue";
+
+    static final String WALKING_TIME = "walkingTime";
   }
 }

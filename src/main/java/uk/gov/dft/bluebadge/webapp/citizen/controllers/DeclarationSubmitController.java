@@ -175,14 +175,19 @@ public class DeclarationSubmitController implements StepController {
                 ? journey.getWhatMakesWalkingDifficultForm().getSomethingElseDescription()
                 : null;
 
+        WalkingLengthOfTimeCodeField walkingTime = journey.getWalkingTimeForm().getWalkingTime();
+        WalkingSpeedCodeField walkingSpeed =
+            walkingTime == WalkingLengthOfTimeCodeField.CANTWALK
+                ? null
+                : WalkingSpeedCodeField.SLOW;
         eligibilityObject =
             new Eligibility()
                 .typeCode(EligibilityCodeField.WALKD)
                 .descriptionOfConditions(condDesc)
                 .walkingDifficulty(
                     new WalkingDifficulty()
-                        .walkingLengthOfTimeCode(WalkingLengthOfTimeCodeField.LESSMIN)
-                        .walkingSpeedCode(WalkingSpeedCodeField.SLOW)
+                        .walkingLengthOfTimeCode(walkingTime)
+                        .walkingSpeedCode(walkingSpeed)
                         .typeCodes(walkingDifficulties)
                         .otherDescription(otherDesc)
                         .walkingAids(walkingAids)
