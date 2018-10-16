@@ -21,6 +21,7 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_ADD_USAGE;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_TYPE_WHEELCHAIR;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import java.util.Calendar;
@@ -156,7 +157,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
-  @And("^I complete what makes walking difficult page for \"(HELP|PAIN|DANGEROUS|NONE)\"$")
+  @And("^I complete what makes walking difficult page for \"(HELP|PLAN|PAIN|DANGEROUS|NONE)\"$")
   public void iCompleteWhatMakesWalkingDifficultPageFor(String difficulty) {
     sitePage.findPageElementById(Ids.EleCheck.WALKING_DIFFICULTY_LIST + "." + difficulty).click();
     pressContinue();
@@ -254,8 +255,15 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete the what makes walking difficult page$")
-  public void iCompleteTheWhatMakesWalkingDifficultPage() {
-    sitePage.findPageElementById("whatWalkingDifficulties1").click();
+  public void iCompleteTheWhatMakesWalkingDifficultPage() throws Throwable {
+    sitePage.findPageElementById("whatWalkingDifficultiesPAIN").click();
+    pressContinue();
+  }
+
+  @And(
+      "^I complete the what makes walking difficult page for \"(PAIN|BREATH|BALANCE|LONGTIME|DANGER|STRUGGLE|SOMELSE)\"$")
+  public void iCompleteTheWhatMakesWalkingDifficultPageFor(String difficulty) throws Throwable {
+    sitePage.findPageElementById(Ids.EleCheck.WHAT_WALKING_DIFFICULTY_LIST + difficulty).click();
     pressContinue();
   }
 

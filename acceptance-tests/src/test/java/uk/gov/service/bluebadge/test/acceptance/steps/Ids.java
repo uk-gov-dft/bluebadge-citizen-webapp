@@ -13,6 +13,7 @@ class Ids {
     static final String BENEFIT_RECEIVED_LIST = "benefitType";
     static final String MAIN_REASON_LIST = "mainReasonOption";
     static final String WALKING_DIFFICULTY_LIST = "walkingDifficulty";
+    static final String WHAT_WALKING_DIFFICULTY_LIST = "whatWalkingDifficulties";
     static final String HAS_RECEIVED_DLA = "receivedDlaOption.HAS_RECEIVED_DLA";
     static final String NEVER_RECEIVED_DLA = "receivedDlaOption.NEVER_RECEIVED_DLA";
     static final String MOVING_POINTS = "movingAroundPoints.MOVING_POINTS";
