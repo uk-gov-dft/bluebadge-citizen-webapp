@@ -230,16 +230,14 @@ public class DeclarationSubmitController implements StepController {
             new Medication()
                 .name(medicationAddForm.getName())
                 .quantity(medicationAddForm.getDosage())
-                .isPrescribed(Boolean.TRUE)
+                .isPrescribed(medicationAddForm.getPrescribedValue())
                 .frequency(medicationAddForm.getFrequency()));
       }
     }
 
     WalkingLengthOfTimeCodeField walkingTime = journey.getWalkingTimeForm().getWalkingTime();
     WalkingSpeedCodeField walkingSpeed =
-        walkingTime == WalkingLengthOfTimeCodeField.CANTWALK
-            ? null
-            : WalkingSpeedCodeField.SLOW;
+        walkingTime == WalkingLengthOfTimeCodeField.CANTWALK ? null : WalkingSpeedCodeField.SLOW;
 
     List<WalkingDifficultyTypeCodeField> walkingDifficulties =
         journey.getWhatMakesWalkingDifficultForm().getWhatWalkingDifficulties();
@@ -254,7 +252,7 @@ public class DeclarationSubmitController implements StepController {
             .descriptionOfConditions(journey.getDescriptionOfCondition())
             .walkingDifficulty(
                 new WalkingDifficulty()
-                    .walkingLengthOfTimeCode(WalkingLengthOfTimeCodeField.LESSMIN)
+                    .walkingLengthOfTimeCode(walkingTime)
                     .walkingSpeedCode(walkingSpeed)
                     .typeCodes(walkingDifficulties)
                     .otherDescription(otherDesc)

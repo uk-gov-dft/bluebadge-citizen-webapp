@@ -79,6 +79,12 @@ public class RadioOptionsGroup {
       return this;
     }
 
+    public Builder withYesNoOptions() {
+      options.add(new RadioOption("yes", "radio.option.yes"));
+      options.add(new RadioOption("no", "radio.option.no"));
+      return this;
+    }
+
     public RadioOptionsGroup build() {
       return new RadioOptionsGroup(titleKey, titleIsH1, options);
     }

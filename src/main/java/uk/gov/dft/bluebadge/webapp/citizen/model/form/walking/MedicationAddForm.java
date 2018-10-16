@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class MedicationAddForm implements Serializable {
 
-  @Size(max = 100)
+  @Size(max = 100, message = "{Size.medication.name}")
   @NotBlank(message = "{NotBlank.medication.name}")
   private String name;
 
@@ -18,11 +18,11 @@ public class MedicationAddForm implements Serializable {
   @NotNull(message = "{NotNull.medication.prescribed}")
   private String prescribed;
 
-  @Size(max = 100)
+  @Size(max = 100, message = "{Size.medication.dosage}")
   @NotBlank(message = "{NotBlank.medication.dosage}")
   private String dosage;
 
-  @Size(max = 100)
+  @Size(max = 100, message = "{Size.medication.frequency}")
   @NotBlank(message = "{NotBlank.medication.frequency}")
   private String frequency;
 
@@ -30,5 +30,11 @@ public class MedicationAddForm implements Serializable {
 
   public MedicationAddForm() {
     id = UUID.randomUUID().toString();
+  }
+
+  public Boolean getPrescribedValue(){
+    if("yes".equals(prescribed)) return true;
+    if("no".equals(prescribed)) return false;
+    return null;
   }
 }
