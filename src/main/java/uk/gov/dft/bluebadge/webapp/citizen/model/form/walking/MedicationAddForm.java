@@ -32,9 +32,9 @@ public class MedicationAddForm implements Serializable {
     id = UUID.randomUUID().toString();
   }
 
-  public Boolean getPrescribedValue(){
-    if("yes".equals(prescribed)) return true;
-    if("no".equals(prescribed)) return false;
+  public Boolean getPrescribedValue() {
+    if ("yes".equals(prescribed)) return true;
+    if ("no".equals(prescribed)) return false;
     return null;
   }
 }

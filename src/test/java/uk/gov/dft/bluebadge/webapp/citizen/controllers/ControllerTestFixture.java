@@ -37,7 +37,8 @@ public abstract class ControllerTestFixture<T> {
     journey.setApplicantForm(applicantForm);
   }
 
-  protected static ResultMatcher formRequestFlashAttributeHasFieldErrorCode(String fieldName, String error) {
+  protected static ResultMatcher formRequestFlashAttributeHasFieldErrorCode(
+      String fieldName, String error) {
     return flash()
         .attribute(
             "org.springframework.validation.BindingResult.formRequest",

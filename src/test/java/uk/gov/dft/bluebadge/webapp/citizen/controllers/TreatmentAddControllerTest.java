@@ -27,12 +27,12 @@ public class TreatmentAddControllerTest extends ControllerTestFixture<TreatmentA
   }
 
   @Override
-  String getTemplateName() {
+  protected String getTemplateName() {
     return "treatment-add";
   }
 
   @Override
-  String getUrl() {
+  protected String getUrl() {
     return "/add-treatment";
   }
 
