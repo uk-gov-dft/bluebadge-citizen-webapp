@@ -24,12 +24,3 @@ Feature: DFT Blue badge Citizen app new application - WPMS or not listed benifit
     And   I complete your local authority page
     And   I complete receive benefit page for "WPMS"
     Then  I should see "They are" eligible page
-    When  I complete eligible page
-    And   I complete what's your name page
-    And   I complete date of birth page for "ADULT"
-    And   I complete gender page for "Man"
-    And   I complete NI number page
-    And   I complete address page
-    And   I complete contact page for "someone else"
-    And   I complete declaration page
-    Then  I should see page titled "Application submitted" with GOV.UK suffix
