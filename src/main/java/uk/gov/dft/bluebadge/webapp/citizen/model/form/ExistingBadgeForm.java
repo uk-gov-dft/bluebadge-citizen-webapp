@@ -14,7 +14,7 @@ public class ExistingBadgeForm implements StepForm, Serializable {
   @NotNull(message = "{hasExistingBadge.NotNull}")
   private Boolean hasExistingBadge;
 
-  private String ExistingBadgeNumber;
+  private String badgeNumber;
 
   @Override
   public StepDefinition getAssociatedStep() {

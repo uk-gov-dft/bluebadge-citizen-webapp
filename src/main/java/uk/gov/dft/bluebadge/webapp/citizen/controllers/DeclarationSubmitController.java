@@ -41,6 +41,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ExistingBadgeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
@@ -226,7 +227,15 @@ public class DeclarationSubmitController implements StepController {
         // This code is all temporary too.
         throw new IllegalStateException("Invalid eligibility:" + eligibility);
     }
-    return Application.builder()
+
+    Application.ApplicationBuilder application = Application.builder();
+
+    ExistingBadgeForm existingBadgeForm = journey.getExistingBadgeForm();
+    if (existingBadgeForm != null && !existingBadgeForm.getBadgeNumber().isEmpty()) {
+      application.existingBadgeNumber(existingBadgeForm.getBadgeNumber());
+    }
+
+    return application
         .applicationTypeCode(ApplicationTypeCodeField.NEW)
         .localAuthorityCode(la)
         .paymentTaken(false)

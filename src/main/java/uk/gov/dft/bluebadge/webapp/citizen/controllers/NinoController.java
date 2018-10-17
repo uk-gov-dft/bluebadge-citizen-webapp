@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
@@ -19,11 +20,11 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
 
 @Controller
-@RequestMapping(Mappings.URL_NINO)
 public class NinoController implements StepController {
 
   public static final String TEMPLATE = "nino";
   public static final String FORM_REQUEST = "formRequest";
+  public static final String NINO_BYPASS_URL = "/nino-bypass";
 
   private final RouteMaster routeMaster;
 
@@ -32,7 +33,7 @@ public class NinoController implements StepController {
     this.routeMaster = routeMaster;
   }
 
-  @GetMapping
+  @GetMapping(Mappings.URL_NINO)
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
     if (!journey.isValidState(getStepDefinition())) {
@@ -50,7 +51,14 @@ public class NinoController implements StepController {
     return TEMPLATE;
   }
 
-  @PostMapping
+  @GetMapping(NINO_BYPASS_URL)
+  public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+    NinoForm formRequest = NinoForm.builder().build();
+    journey.setNinoForm(formRequest);
+    return routeMaster.redirectToOnSuccess(formRequest);
+  }
+
+  @PostMapping(Mappings.URL_NINO)
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute(FORM_REQUEST) NinoForm ninoForm,

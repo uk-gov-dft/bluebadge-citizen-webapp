@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
@@ -20,10 +21,10 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ExistingBadgeForm;
 
 @Controller
-@RequestMapping(Mappings.URL_EXISTING_BADGE)
 public class ExistingBadgeController implements StepController {
 
   private static final String TEMPLATE = "existing-badge";
+  public static final String EXISTING_BADGE_BYPASS_URL = "/existing-badge-bypass";
 
   private final RouteMaster routeMaster;
 
@@ -32,7 +33,7 @@ public class ExistingBadgeController implements StepController {
     this.routeMaster = routeMaster;
   }
 
-  @GetMapping
+  @GetMapping(Mappings.URL_EXISTING_BADGE)
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
     if (!journey.isValidState(getStepDefinition())) {
@@ -50,12 +51,32 @@ public class ExistingBadgeController implements StepController {
     return TEMPLATE;
   }
 
-  @PostMapping
+  @GetMapping(EXISTING_BADGE_BYPASS_URL)
+  public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+    ExistingBadgeForm formRequest = ExistingBadgeForm.builder().hasExistingBadge(false).build();
+    journey.setExistingBadgeForm(formRequest);
+    return routeMaster.redirectToOnSuccess(formRequest);
+  }
+
+  @PostMapping(Mappings.URL_EXISTING_BADGE)
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute(FORM_REQUEST) ExistingBadgeForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
+
+    if (formRequest.getHasExistingBadge() != null && formRequest.getHasExistingBadge()) {
+
+      String badgeNum = formRequest.getBadgeNumber().replaceAll("\\s+", "");
+
+      if (badgeNum.isEmpty() || badgeNum.length() < 6) {
+        bindingResult.rejectValue("badgeNumber", "badgeNumber.NotBlank");
+      }
+
+      if (badgeNum.length() > 6) {
+        formRequest.setBadgeNumber(badgeNum.substring(0, 6));
+      }
+    }
 
     if (bindingResult.hasErrors()) {
       return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
