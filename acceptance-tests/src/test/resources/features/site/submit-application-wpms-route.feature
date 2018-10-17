@@ -15,7 +15,7 @@ Feature: DFT Blue badge Citizen app new application - WPMS or not listed benifit
     And   I complete address page
     And   I complete contact page for "yourself"
     And   I complete declaration page
-    Then  I should see .* page titled "Application submitted" with GOV.UK suffix
+    Then  I should see page titled "Application submitted" with GOV.UK suffix
 
 
   Scenario: Create a successful new application for someone else - WPMS route
@@ -32,4 +32,4 @@ Feature: DFT Blue badge Citizen app new application - WPMS or not listed benifit
     And   I complete address page
     And   I complete contact page for "someone else"
     And   I complete declaration page
-    Then  I should see .* page titled "Application submitted" with GOV.UK suffix
+    Then  I should see page titled "Application submitted" with GOV.UK suffix

@@ -17,7 +17,7 @@ Feature: DFT Blue badge Citizen app new application - BLIND
     And   I complete address page
     And   I complete contact page for "yourself"
     And   I complete declaration page
-    Then  I should see .* page titled "Application submitted" with GOV.UK suffix
+    Then  I should see page titled "Application submitted" with GOV.UK suffix
 
 
   Scenario: Blind application for someone else
@@ -36,6 +36,6 @@ Feature: DFT Blue badge Citizen app new application - BLIND
     And   I complete address page
     And   I complete contact page for "someone else"
     And   I complete declaration page
-    Then  I should see .* page titled "Application submitted" with GOV.UK suffix
+    Then  I should see page titled "Application submitted" with GOV.UK suffix
 
 

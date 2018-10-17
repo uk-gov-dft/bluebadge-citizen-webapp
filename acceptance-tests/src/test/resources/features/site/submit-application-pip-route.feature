@@ -17,7 +17,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete address page
     And   I complete contact page for "yourself"
     And   I complete declaration page
-    Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
+    Then  I should see page titled "Application submitted" with GOV.UK suffix
 
   Scenario: Create a successful new application for someone else - England - 8 or more points
     Given I complete applicant page for "someone else"
@@ -34,7 +34,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete address page
     And   I complete contact page for "someone else"
     And   I complete declaration page
-    Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
+    Then  I should see page titled "Application submitted" with GOV.UK suffix
 
 
   Scenario: Create a successful new application for myself - England - less than 8 points
@@ -74,7 +74,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete address page
     And   I complete contact page for "yourself"
     And   I complete declaration page
-    Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
+    Then  I should see page titled "Application submitted" with GOV.UK suffix
 
 
   Scenario: Create a successful new application for someone else - Scotland - less than 8 points (moving) - 12 points (planning)
@@ -93,7 +93,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete address page
     And   I complete contact page for "someone else"
     And   I complete declaration page
-    Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
+    Then  I should see page titled "Application submitted" with GOV.UK suffix
 
 
   Scenario: Create a successful new application for myself - Scotland - less than 8 points (moving) - less than 12 points (planning) - DLA Yes
@@ -112,7 +112,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete address page
     And   I complete contact page for "yourself"
     And   I complete declaration page
-    Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
+    Then  I should see page titled "Application submitted" with GOV.UK suffix
 
 
   Scenario: Create a successful new application for someone else - Scotland - less than 8 points (moving) - less 12 points (planning)b - DLA Yes - (with validation messages)
@@ -132,7 +132,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete address page
     And   I complete contact page for "someone else"
     And   I complete declaration page
-    Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
+    Then  I should see page titled "Application submitted" with GOV.UK suffix
 
     
   Scenario: Create a successful new application for myself - Scotland - less than 8 points (moving) - less than 12 points (planning) - DLA No
@@ -175,7 +175,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete address page
     And   I complete contact page for "yourself"
     And   I complete declaration page
-    Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
+    Then  I should see page titled "Application submitted" with GOV.UK suffix
 
 
   Scenario: Create a successful new application for someone else - Wales - less than 8 points (moving) - 12 points (planning)
@@ -194,7 +194,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete address page
     And   I complete contact page for "someone else"
     And   I complete declaration page
-    Then  I should see the page titled "Application submitted - GOV.UK Apply for a Blue Badge"
+    Then  I should see page titled "Application submitted" with GOV.UK suffix
 
 
   Scenario: Create a successful new application for myself - Wales - less than 8 points (moving) - less than 12 points (planning)

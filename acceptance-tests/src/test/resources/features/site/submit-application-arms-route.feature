@@ -39,7 +39,7 @@ Feature: DFT Blue badge Citizen app new application - ARMS
     And   I complete contact page for "someone else"
     And   I complete describe health conditions page
     And   I complete declaration page
-    Then  I should see .* page titled "Application submitted" with GOV.UK suffix
+    Then  I should see page titled "Application submitted" with GOV.UK suffix
 
 
 
