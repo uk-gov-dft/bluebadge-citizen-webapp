@@ -75,5 +75,14 @@ class Ids {
     static final String MOBILITY_AID_ADD_CONFIRM_BUTTON = "button.continue";
 
     static final String WALKING_TIME = "walkingTime";
+
+    // Medication stuff
+    static final String MEDICATION_ADD_FIRST_LINK = "firstaddmedicationlink";
+    static final String MEDICATION_HAS_MEDICATION_OPTION = "hasMedication";
+    static final String MEDICATION_ADD_MEDICATION_DESCRIPTION = "name";
+    static final String MEDICATION_PRESCRIBED_OPTION = "prescribed";
+    static final String MEDICATION_DOSAGE_TEXT = "dosage";
+    static final String MEDICATION_ADD_CONFIRM_BUTTON = "button.add.medication";
+    static final String MEDICATION_FREQUENCY_TEXT = "frequency";
   }
 }

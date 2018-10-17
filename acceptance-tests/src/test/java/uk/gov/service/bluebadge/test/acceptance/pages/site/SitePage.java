@@ -110,4 +110,8 @@ public class SitePage {
   public String getH1Tag() {
     return getWebDriver().findElement(By.tagName("h1")).getText();
   }
+
+  public PageHelper getHelper() {
+    return helper;
+  }
 }

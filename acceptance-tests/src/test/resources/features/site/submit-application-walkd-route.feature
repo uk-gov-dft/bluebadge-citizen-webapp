@@ -24,8 +24,9 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete the walking time page with option "LESSMIN"
     And   I complete where can you walk page
     And   I complete the treatments page for "YES"
+    And   I complete the medications page for "YES"
     And   I complete declaration page
-    Then  I should see .* page titled "Application submitted" with GOV.UK suffix
+    Then  I should see page titled "Application submitted" with GOV.UK suffix
 
   Scenario: Walking application for yourself, where the applicant can't walk - full application
     Given I complete applicant page for "yourself"
@@ -48,8 +49,9 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete the mobility aids page for "NO"
     And   I complete the walking time page with option "CANTWALK"
     And   I complete the treatments page for "YES"
+    And   I complete the medications page for "YES"
     And   I complete declaration page
-    Then  I should see .* page titled "Application submitted" with GOV.UK suffix
+    Then  I should see page titled "Application submitted" with GOV.UK suffix
 
 
   Scenario: Walking application for someone else need help selected full application, and council in England
@@ -73,8 +75,9 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete the walking time page with option "LESSMIN"
     And   I complete where can you walk page
     And   I complete the treatments page for "YES"
+    And   I complete the medications page for "YES"
     And   I complete declaration page
-    Then  I should see .* page titled "Application submitted" with GOV.UK suffix
+    Then  I should see page titled "Application submitted" with GOV.UK suffix
 
   Scenario: Walking application for yourself, need help selected full application, and council in Scotland
     Given I complete applicant page for "yourself"
@@ -97,8 +100,9 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete the mobility aids page for "YES"
     And   I complete the walking time page with option "CANTWALK"
     And   I complete the treatments page for "YES"
+    And   I complete the medications page for "YES"
     And   I complete declaration page
-    Then  I should see .* page titled "Application submitted" with GOV.UK suffix
+    Then  I should see page titled "Application submitted" with GOV.UK suffix
 
   Scenario: Walking application for yourself, need help selected full application, and council in Wales
     Given I complete applicant page for "yourself"
@@ -123,8 +127,9 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete the walking time page with option "LESSMIN"
     And   I complete where can you walk page
     And   I complete the treatments page for "NO"
+    And   I complete the medications page for "YES"
     And   I complete declaration page
-    Then  I should see .* page titled "Application submitted" with GOV.UK suffix
+    Then  I should see page titled "Application submitted" with GOV.UK suffix
 
   Scenario: Walking application for yourself and painful selected check screen flow
     Given I complete application up to the Main Reason page for "yourself"
