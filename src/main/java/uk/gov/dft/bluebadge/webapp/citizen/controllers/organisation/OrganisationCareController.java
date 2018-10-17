@@ -3,6 +3,8 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers.organisation;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
+import java.util.List;
+
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,66 +15,88 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.google.common.collect.Lists;
+
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.StepController;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
+import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.organisation.OrganisationCareForm;
 
 @Controller
 @RequestMapping(Mappings.URL_ORGANISATION_CARE)
 public class OrganisationCareController implements StepController {
 
-  public static final String TEMPLATE = "organisation-care";
+	public static final String TEMPLATE = "organisation-care";
 
-  private final RouteMaster routeMaster;
+	private final RouteMaster routeMaster;
 
-  @Autowired
-  public OrganisationCareController(RouteMaster routeMaster) {
-    this.routeMaster = routeMaster;
-  }
+	@Autowired
+	public OrganisationCareController(RouteMaster routeMaster) {
+		this.routeMaster = routeMaster;
+	}
 
-  @Override
-  public StepDefinition getStepDefinition() {
-    return StepDefinition.ORGANISATION_CARE;
-  }
+	@Override
+	public StepDefinition getStepDefinition() {
+		return StepDefinition.ORGANISATION_CARE;
+	}
 
-  @GetMapping
-  public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+	@GetMapping
+	public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!journey.isValidState(getStepDefinition())) {
-      return routeMaster.backToCompletedPrevious();
-    }
+		if (!journey.isValidState(getStepDefinition())) {
+			return routeMaster.backToCompletedPrevious();
+		}
 
-    if (!model.containsAttribute(FORM_REQUEST)) {
-      attachForm(model, journey);
-    }
+		if (!model.containsAttribute(FORM_REQUEST)) {
+			attachForm(model, journey);
+		}
 
-    return TEMPLATE;
-  }
+		setupModel(model, journey);
 
-  @PostMapping
-  public String submit(
-      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute(FORM_REQUEST) OrganisationCareForm formRequest,
-      BindingResult bindingResult,
-      RedirectAttributes attr) {
+		return TEMPLATE;
+	}
 
-    if (bindingResult.hasErrors()) {
-      return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
-    }
+	@PostMapping
+	public String submit(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
+			@Valid @ModelAttribute(FORM_REQUEST) OrganisationCareForm formRequest, BindingResult bindingResult,
+			RedirectAttributes attr) {
 
-    journey.setOrganisationCareForm(formRequest);
+		if (bindingResult.hasErrors()) {
+			return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
+		}
 
-    return routeMaster.redirectToOnSuccess(formRequest);
-  }
+		journey.setOrganisationCareForm(formRequest);
 
-  private void attachForm(Model model, Journey journey) {
-    if (null != journey.getOrganisationCareForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getOrganisationCareForm());
-    } else {
-      model.addAttribute(FORM_REQUEST, OrganisationCareForm.builder().build());
-    }
-  }
+		return routeMaster.redirectToOnSuccess(formRequest);
+	}
+
+	private RadioOptionsGroup getOptions(Journey journey) {
+		RadioOption yes = new RadioOption("true", "radio.label.yes");
+		RadioOption no = new RadioOption("false", "radio.label.no");
+
+		List<RadioOption> options = Lists.newArrayList(yes, no);
+
+		RadioOptionsGroup group = new RadioOptionsGroup("organisationCare.page.title", options);
+		group.setHintKey("organisationCare.page.explanation");
+		
+		return group;
+	}
+
+	private void attachForm(Model model, Journey journey) {
+		if (null != journey.getOrganisationCareForm()) {
+			model.addAttribute(FORM_REQUEST, journey.getOrganisationCareForm());
+		} else {
+			model.addAttribute(FORM_REQUEST, OrganisationCareForm.builder().build());
+		}
+	}
+
+	private void setupModel(Model model, Journey journey) {
+		model.addAttribute("options", getOptions(journey));
+	}
 }

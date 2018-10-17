@@ -4,7 +4,7 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/master.html}">
 <head>
-    <title th:text="#{organisationCare.page.title} + ' - ' + #{common.title.suffix}"></title>
+    <title th:text="(${errorSummary}? #{common.title.error} : '')  + #{organisationCare.page.title}"></title>
 </head>
 <body>
 
