@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
@@ -19,14 +20,16 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.CompensationSchemeForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.DisabilityForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.MentalDisorderForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.AFCS.CompensationSchemeForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.AFCS.DisabilityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.AFCS.MentalDisorderForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipDlaQuestionForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipMovingAroundForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PIP.PipPlanningJourneyForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficultyForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipDlaQuestionForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipMovingAroundForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipPlanningJourneyForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.organisation.OrganisationCareForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.organisation.OrganisationTransportForm;
 
 public class Journey implements Serializable {
 
@@ -58,6 +61,10 @@ public class Journey implements Serializable {
   private DisabilityForm disabilityForm;
   private MentalDisorderForm mentalDisorderForm;
   private ContactDetailsForm contactDetailsForm;
+  
+  // organisation forms
+  private OrganisationCareForm organisationCareForm;
+  private OrganisationTransportForm organisationTransportForm;
 
   public Nation getNation() {
     if (null != localAuthority) {
@@ -277,7 +284,25 @@ public class Journey implements Serializable {
     return enterAddressForm;
   }
 
-  public void setEnterAddressForm(EnterAddressForm enterAddressForm) {
-    this.enterAddressForm = enterAddressForm;
-  }
+	public void setEnterAddressForm(EnterAddressForm enterAddressForm) {
+		this.enterAddressForm = enterAddressForm;
+	}
+
+	public OrganisationCareForm getOrganisationCareForm() {
+		return organisationCareForm;
+	}
+
+	public void setOrganisationCareForm(OrganisationCareForm organisationCareForm) {
+		this.organisationCareForm = organisationCareForm;
+	}
+
+	public OrganisationTransportForm getOrganisationTransportForm() {
+		return organisationTransportForm;
+	}
+
+	public void setOrganisationTransportForm(OrganisationTransportForm organisationTransportForm) {
+		this.organisationTransportForm = organisationTransportForm;
+	}  
+  
+	
 }

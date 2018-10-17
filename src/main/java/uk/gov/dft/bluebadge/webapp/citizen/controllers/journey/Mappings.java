@@ -23,6 +23,13 @@ public class Mappings {
   public static final String URL_GENDER = "/gender";
   public static final String URL_NINO = "/nino";
   public static final String URL_ENTER_ADDRESS = "/enter-address";
+  
+  // organisation Journey routes
+  public static final String URL_ORGANISATION_CARE = "/organisation-care";
+  public static final String URL_ORGANISATION_TRANSPORT = "/organisation-transport";
+  public static final String URL_ORGANISATION_MAY_BE_ELIGIBLE = "/organisation-may-be-eligible";
+  public static final String URL_ORGANISATION_NOT_ELIGIBLE = "/organisation-not-eligible";
+  
 
   // pip Journey Routes
   public static final String URL_PIP_PLANNING_JOURNEY = "/planning-and-following";

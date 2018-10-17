@@ -54,7 +54,10 @@ public class ApplicantController implements StepController {
         new RadioOption(ApplicantType.YOURSELF.toString(), "options.applicantType.yourself");
     RadioOption someone =
         new RadioOption(ApplicantType.SOMEONE_ELSE.toString(), "options.applicantType.someone");
-    return new RadioOptionsGroup("applicantPage.title", Lists.newArrayList(yourself, someone));
+    RadioOption organisation =
+            new RadioOption(ApplicantType.ORGANISATION.toString(), "options.applicantType.organisation");
+    
+    return new RadioOptionsGroup("applicantPage.title", Lists.newArrayList(yourself, someone, organisation));
   }
 
   @PostMapping
