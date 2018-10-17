@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="(${errorSummary}? #{common.title.error} : '')  + #{${JOURNEY.who} + 'treatment.list.page.title'}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <form th:action="@{/list-treatments}" th:object="${formRequest}" method="POST" novalidate>
+
+                <div th:class="${#fields.hasErrors('hasTreatment')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+                    <fieldset class="govuk-fieldset" id="hasTreatment">
+
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                            <h1 class="govuk-fieldset__heading" th:text="#{${JOURNEY.who} + 'treatment.list.body.title'}"></h1>
+                        </legend>
+
+                        <span class="govuk-error-message"
+                              data-uipath="hasTreatment.error"
+                              th:errors="*{hasTreatment}"></span>
+
+                        <span class="govuk-hint"
+                              th:text="#{${JOURNEY.who} + 'treatment.list.body.hint'}"
+                              th:data-uipath="treatment.list.body.hint">Have had treatments hint.</span>
+
+                        <div class="govuk-radios" data-module="radios">
+
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="hasTreatmentyes"
+                                       type="radio" th:field="*{hasTreatment}"
+                                       value="yes" data-aria-controls="conditional-hasTreatmentyes" autocomplete="off">
+                                <label class="govuk-label govuk-radios__label"
+                                       for="hasTreatmentyes"
+                                       th:text="#{'radio.option.yes'}"></label>
+                            </div>
+
+                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
+                                 id="conditional-hasTreatmentyes">
+                                <table class="govuk-table">
+                                    <thead class="govuk-table__head" data-uipath="table.head">
+                                    <tr class="govuk-table__row">
+                                        <th class="govuk-table__header" scope="col"
+                                            th:text="#{treatment.list.table.header.col1}"></th>
+                                        <th class="govuk-table__header" scope="col"
+                                            th:text="#{treatment.list.table.header.col2}" colspan="2"></th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody class="govuk-table__body" data-uipath="table.body">
+                                    <tr class="govuk-table__row" th:each="treatment, iStat : *{treatments}">
+                                        <td class="govuk-table__cell" th:text="${treatment.treatmentDescription}"></td>
+                                        <td class="govuk-table__cell" th:text="${treatment.treatmentWhen}"></td>
+                                        <td class="govuk-table__cell govuk-table__cell--numeric">
+                                            <a th:href="@{/list-treatments/remove(uuid=${treatment.id})}"
+                                               th:text="#{remove.this}" th:id="'treatment.remove.link.' + ${iStat.count}"></a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <p class="govuk-body" th:if="${#lists.isEmpty(formRequest.treatments)}">
+                                    <a id="firstaddtreatmentlink" href="/add-treatment"
+                                       th:text="#{first.treatment.add.link.text}"> Add first treatment link</a>
+                                </p>
+                                <p class="govuk-body" th:if="${not #lists.isEmpty(formRequest.treatments)}">
+                                    <a id="addtreatmentlink" href="/add-treatment"
+                                       th:text="#{treatment.add.link.text}"> Add another treatment link</a>
+                                </p>
+                            </div>
+
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="hasTreatmentno"
+                                       type="radio"
+                                       value="no"
+                                       th:field="*{hasTreatment}" autocomplete="off">
+                                <label class="govuk-label govuk-radios__label"
+                                       for="hasTreatmentno"
+                                       th:text="#{'radio.option.no'}"></label>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </div>
+
+                <button type="submit"
+                        class="govuk-button"
+                        data-uipath="button.continue"
+                        th:text="#{btn.label.continue}"></button>
+
+            </form>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

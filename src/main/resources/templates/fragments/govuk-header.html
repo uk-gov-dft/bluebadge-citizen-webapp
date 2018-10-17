@@ -6,13 +6,13 @@
         <div class="govuk-header__container govuk-width-container">
             <div th:replace="~{ :: govuk-logo }"></div>
             <div class="govuk-header__content">
-                <a href="#" class="govuk-header__link govuk-header__link--service-name" th:text="#{service.name}"></a>
+                <a th:href="@{/}" class="govuk-header__link govuk-header__link--service-name" th:text="#{service.name}"></a>
             </div>
         </div>
     </header>
 
     <div class="govuk-header__logo" th:fragment="govuk-logo">
-        <a href="/" class="govuk-header__link govuk-header__link--homepage">
+        <a th:href="@{/}" class="govuk-header__link govuk-header__link--homepage">
             <span class="govuk-header__logotype">
                 <svg th:replace="~{ :: govuk-crown-svg }"></svg>
                 <span class="govuk-header__logotype-text">GOV.UK</span>
@@ -30,7 +30,7 @@
             <strong class="govuk-tag govuk-phase-banner__content__tag" th:text="#{phaseBanner.title}"></strong>
             <span class="govuk-phase-banner__text">
                 <span th:text="#{phaseBanner.text.phraseOne}" th:remove="tag"></span>
-                <a class="govuk-link" th:text="#{phaseBanner.link}" data-uipath="feedback.link" target="_blank" href="https://www.smartsurvey.co.uk/s/XIYJ6/">feedback</a>
+                <a class="govuk-link" th:text="#{phaseBanner.link}" data-uipath="feedback.link" target="_blank" href="https://www.smartsurvey.co.uk/s/WJLXY/">feedback</a>
                 <span th:text="#{phaseBanner.text.phraseTwo}" th:remove="tag"></span>
             </span>
         </p>

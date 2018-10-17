@@ -1,5 +1,8 @@
 import All from 'govuk-frontend/all';
 import AutoComplete from './autocomplete';
+import GAClickTracker from './ga-tracker';
 
 All.initAll();
-AutoComplete.init('councilShortCode');
+
+GAClickTracker();
+AutoComplete(document.getElementById('councilShortCode'));

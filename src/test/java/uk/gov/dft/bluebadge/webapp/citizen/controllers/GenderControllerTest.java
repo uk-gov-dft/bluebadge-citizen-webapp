@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
@@ -74,7 +75,8 @@ public class GenderControllerTest {
   @Test
   public void show_ShouldDisplayYouGenderTerm() throws Exception {
 
-    journey.getApplicantForm().setApplicantType(ApplicantType.YOURSELF.toString());
+    ((ApplicantForm) journey.getFormForStep(StepDefinition.APPLICANT_TYPE))
+        .setApplicantType(ApplicantType.YOURSELF.toString());
 
     MvcResult mvcResult =
         mockMvc
@@ -97,8 +99,9 @@ public class GenderControllerTest {
   @Test
   public void show_ShouldDisplayTheyGenderTerm() throws Exception {
 
-    journey.getApplicantForm().setApplicantType(ApplicantType.SOMEONE_ELSE.toString());
-    journey.setApplicantForm(journey.getApplicantForm());
+    ((ApplicantForm) journey.getFormForStep(StepDefinition.APPLICANT_TYPE))
+        .setApplicantType(ApplicantType.SOMEONE_ELSE.toString());
+    journey.setApplicantForm((ApplicantForm) journey.getFormForStep(StepDefinition.APPLICANT_TYPE));
 
     MvcResult mvcResult =
         mockMvc

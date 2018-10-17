@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="(${errorSummary}? #{common.title.error} : '')  + #{treatment.add.page.title}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l" th:text="#{treatment.add.body.title}"></h1>
+
+            <form th:action="@{/add-treatment}" th:object="${formRequest}" method="POST" novalidate>
+
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{treatment.add.description.text}, 'treatmentDescription', null, 'text', 'govuk-!-width-one-half')}"></div>
+
+                <details class="govuk-details" role="group">
+                    <summary class="govuk-details__summary" role="button"
+                             aria-controls="details-content-0c2358aa-a947-44a8-929c-acaa4d341ab9" aria-expanded="false">
+                        <span class="govuk-details__summary-text" th:text="#{treatments.what.counts}" data-uipath="what.counts.link"></span>
+                    </summary>
+                    <div class="govuk-details__text" id="details-content-0c2358aa-a947-44a8-929c-acaa4d341ab9"
+                         aria-hidden="true" th:text="#{${JOURNEY.who} + 'treatment.what.counts.text'}" data-uipath="what.counts.expanded.text"></div>
+
+                </details>
+
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + 'treatment.add.when.text'}, 'treatmentWhen', #{treatment.add.when.hint}, 'text', 'govuk-!-width-one-half')}"></div>
+
+                <button type="submit"
+                        class="govuk-button"
+                        data-uipath="button.continue"
+                        id="button.add.treatment"
+                        th:text="#{treatment.add.button}"></button>
+
+                <div class="govuk-inset-text">
+                    <p class="govuk-body" th:text="#{treatment.footer.hint.text}"></p>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

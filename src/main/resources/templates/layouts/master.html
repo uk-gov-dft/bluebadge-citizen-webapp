@@ -1,10 +1,12 @@
 <!DOCTYPE HTML>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th=”http://www.thymeleaf.org lang="en">
+<html class="govuk-template" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th=”http://www.thymeleaf.org lang="en">
 <head>
-    <title>GOV.UK Manage Blue Badges</title>
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE" th:text="#{common.title.suffix}"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#0b0c0c" />
+    <meta name="robots" content="noindex, nofollow">
+
 
     <link rel="shortcut icon" th:href="@{/govuk/images/favicon.ico}" type="image/x-icon" />
     <link rel="mask-icon" th:href="@{/govuk/images/govuk-mask-icon.svg}" color="#0b0c0c">
@@ -12,13 +14,13 @@
     <link rel="apple-touch-icon" sizes="167x167" th:href="@{/govuk/images/govuk-apple-touch-icon-167x167.png}">
     <link rel="apple-touch-icon" sizes="152x152" th:href="@{/govuk/images/govuk-apple-touch-icon-152x152.png}">
     <link rel="apple-touch-icon" th:href="@{/govuk/images/govuk-apple-touch-icon.png}">
-    
+
     <!--[if gt IE 8]><!-->
-        <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/main.css}">
+        <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/dft-frontend.css}">
     <!--<![endif]-->
 
     <!--[if IE 8]>
-        <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/main-ie8.css}">
+        <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/dft-frontend-ie8.css}">
     <![endif]-->
 
     <!--[if lt IE 9]>
@@ -41,21 +43,35 @@
 </head>
 
 <body class="govuk-template__body">
-<script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+    <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
 
-<a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+    <div th:unless="${@cookieUtils.isCookieBannerSet()}">
+        <div th:replace="~{ fragments/govuk-cookie-banner :: govuk-cookie-banner }"></div>
+    </div>
 
-<header th:replace="~{ fragments/govuk-header :: govuk-header }"></header>
+    <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
 
-<div class="govuk-width-container">
+    <header th:replace="~{ fragments/govuk-header :: govuk-header }"></header>
 
-    <div th:replace="~{ fragments/govuk-header :: govuk-phase-banner }"></div>
+    <div class="govuk-width-container">
+        <div th:replace="~{ fragments/govuk-header :: govuk-phase-banner }"></div>
+        <div class="govuk-main-wrapper" id="main-content">
 
-    <main class="govuk-main-wrapper" id="main-content" layout:fragment="content"></main>
-</div>
+        <div class="govuk-grid-row" th:if="${errorSummary}">
+            <div class="govuk-grid-column-two-thirds">
+                <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>
+            </div>
+        </div>
 
-<footer th:replace="~{ fragments/govuk-footer :: govuk-footer }"></footer>
+            <main layout:fragment="content"></main>
 
-<script th:src="@{/js/main.js}"></script>
+        </div>
+    </div>
+
+    <footer th:replace="~{ fragments/govuk-footer :: govuk-footer }"></footer>
+
+    <script th:src="@{/js/dft-frontend.js}"></script>
 </body>
 </html>
+
+

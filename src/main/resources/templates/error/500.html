@@ -4,7 +4,7 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/master.html}">
 <head>
-    <title th:text="#{error500Page.title} + ' - ' + #{common.title.suffix}"></title>
+    <title th:text="#{error500Page.title}"></title>
 </head>
 <body>
 
@@ -20,14 +20,14 @@
         <hr class="dft-hr"/>
 
         <h2 class="govuk-heading-m">Development Mode</h2>
-        <p class="govuk-body" th:text="'Message: ' + ${exception.message}"></p>
+        <p class="govuk-body" th:if="${exception}" th:text="'Message: ' + ${exception.message}"></p>
 
         <div th:if="${commonResponse}">
             <h3 class="govuk-heading-s">Common Response</h3>
             <pre class="govuk-pre" th:text="${commonResponse}"/>
         </div>
 
-        <div th:if="${exception.stackTrace}">
+        <div th:if="${exception}">
             <h3 class="govuk-heading-s">Stack trace</h3>
             <pre class="govuk-pre" th:each="st : ${exception.stackTrace}" th:text="${st}"/>
         </div>

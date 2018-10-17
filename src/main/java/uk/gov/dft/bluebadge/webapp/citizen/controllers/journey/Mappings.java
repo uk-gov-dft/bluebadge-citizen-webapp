@@ -6,7 +6,11 @@ import lombok.Getter;
 
 @Getter
 public class Mappings {
+
+  public static final String URL_REMOVE_PART = "/remove";
+
   public static final String URL_ROOT = "/";
+  public static final String URL_APPLY_IN_WELSH = "/apply-in-welsh";
   public static final String URL_APPLICANT_TYPE = "/applicant";
   public static final String URL_APPLICANT_NAME = "/name";
   public static final String URL_RECEIVE_BENEFITS = "/benefits";
@@ -23,20 +27,19 @@ public class Mappings {
   public static final String URL_GENDER = "/gender";
   public static final String URL_NINO = "/nino";
   public static final String URL_ENTER_ADDRESS = "/enter-address";
-  
+
   // organisation Journey routes
   public static final String URL_ORGANISATION_CARE = "/organisation-care";
   public static final String URL_ORGANISATION_TRANSPORT = "/organisation-transport";
   public static final String URL_ORGANISATION_MAY_BE_ELIGIBLE = "/organisation-may-be-eligible";
   public static final String URL_ORGANISATION_NOT_ELIGIBLE = "/organisation-not-eligible";
-  
 
-  // pip Journey Routes
+  // PIP Journey Routes
   public static final String URL_PIP_PLANNING_JOURNEY = "/planning-and-following";
   public static final String URL_PIP_MOVING_AROUND = "/moving-around";
   public static final String URL_PIP_RECEIVED_DLA = "/dla-in-the-past";
 
-  // afcs Journey Routes
+  // AFCS Journey Routes
   public static final String URL_AFCS_COMPENSATION_SCHEME = "/lump-sum";
   public static final String URL_AFCS_DISABILITY = "/permanent-and-substantial-disability";
   public static final String URL_AFCS_MENTAL_DISORDER = "/permanent-mental-disorder";
@@ -46,6 +49,18 @@ public class Mappings {
   public static final String URL_WALKING_DIFFICULTY = "/walking-difficulty";
   public static final String URL_NOT_ELIGIBLE = "/not-eligible";
   public static final String URL_CONTACT_COUNCIL = "/contact-council";
+  public static final String URL_COOKIES = "/cookies";
+  public static final String URL_PRIVACY = "/privacy-notice";
+
+  public static final String URL_MOBILITY_AID_LIST = "/list-mobility-aids";
+  public static final String URL_MOBILITY_AID_ADD = "/add-mobility-aid";
+  public static final String URL_TREATMENT_LIST = "/list-treatments";
+  public static final String URL_TREATMENT_ADD = "/add-treatment";
+
+  // Walking difficulties route
+  public static final String URL_WHAT_WALKING_DIFFICULT = "/what-makes-walking-difficult";
+  public static final String URL_WHERE_CAN_YOU_WALK = "/where-can-you-walk";
+  public static final String URL_WALKING_TIME = "/walking-time";
 
   private Mappings() {}
 
@@ -64,12 +79,12 @@ public class Mappings {
           .put(StepDefinition.ELIGIBLE, URL_ELIGIBLE)
           .put(StepDefinition.MAY_BE_ELIGIBLE, URL_MAY_BE_ELIGIBLE)
 
-          // pip Journey Mappings
+          // PIP Journey Mappings
           .put(StepDefinition.PIP_MOVING_AROUND, URL_PIP_MOVING_AROUND)
           .put(StepDefinition.PIP_DLA, URL_PIP_RECEIVED_DLA)
           .put(StepDefinition.PIP_PLANNING_JOURNEY, URL_PIP_PLANNING_JOURNEY)
 
-          // afcs Journey Mappings
+          // AFCS Journey Mappings
           .put(StepDefinition.AFCS_DISABILITY, URL_AFCS_DISABILITY)
           .put(StepDefinition.AFCS_MENTAL_DISORDER, URL_AFCS_MENTAL_DISORDER)
           .put(StepDefinition.AFCS_COMPENSATION_SCHEME, URL_AFCS_COMPENSATION_SCHEME)
@@ -78,12 +93,19 @@ public class Mappings {
           .put(StepDefinition.MAIN_REASON, URL_MAIN_REASON)
           .put(StepDefinition.CONTACT_COUNCIL, URL_CONTACT_COUNCIL)
           .put(StepDefinition.WALKING_DIFFICULTY, URL_WALKING_DIFFICULTY)
+          .put(StepDefinition.WHERE_CAN_YOU_WALK, URL_WHERE_CAN_YOU_WALK)
+          .put(StepDefinition.WALKING_TIME, URL_WALKING_TIME)
           .put(StepDefinition.NOT_ELIGIBLE, URL_NOT_ELIGIBLE)
           .put(StepDefinition.HEALTH_CONDITIONS, URL_HEALTH_CONDITIONS)
+          .put(StepDefinition.WHAT_WALKING_DIFFICULTIES, URL_WHAT_WALKING_DIFFICULT)
           .put(StepDefinition.CHOOSE_COUNCIL, URL_CHOOSE_YOUR_COUNCIL)
           .put(StepDefinition.YOUR_ISSUING_AUTHORITY, URL_YOUR_ISSUING_AUTHORITY)
           .put(StepDefinition.DECLARATIONS, URL_DECLARATIONS)
           .put(StepDefinition.SUBMITTED, URL_APPLICATION_SUBMITTED)
+          .put(StepDefinition.MOBILITY_AID_LIST, URL_MOBILITY_AID_LIST)
+          .put(StepDefinition.MOBILITY_AID_ADD, URL_MOBILITY_AID_ADD)
+          .put(StepDefinition.TREATMENT_LIST, URL_TREATMENT_LIST)
+          .put(StepDefinition.TREATMENT_ADD, URL_TREATMENT_ADD)
           .build();
 
   public static StepDefinition getStep(String url) {

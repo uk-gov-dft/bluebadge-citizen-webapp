@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/master.html}">
 <head>
-    <title th:utext="#{${JOURNEY.who} + 'contactCouncilPage.title'} + ' - ' + #{common.title.suffix}"></title>
+    <title th:text="#{${JOURNEY.who} + 'contactCouncilPage.title'}"></title>
 </head>
 <body>
 
@@ -16,25 +16,15 @@
         </h1>
 
         <p class="govuk-body">
-            <span th:remove="tag" th:text="#{${JOURNEY.who} + 'contactCouncilPage.you.should.contact.prefix.text'}">You should contact...</span>
-            <span th:remove="tag" th:text="${localAuthority.description}"></span>
+            <span th:remove="tag"
+                  th:text="#{${JOURNEY.who} + 'contactCouncilPage.you.should.contact.prefix.text'}">You should contact...:</span>
+            <a th:href="${localAuthority.contactUrl}" th:text="' ' + #{contactCouncilPage.council.contact.intext} + ' ' + ${localAuthority.description}"></a>
             <span th:remove="tag" th:text="#{${JOURNEY.who} + 'contactCouncilPage.you.should.contact.suffix.text'}">and tell them...</span>
+
         </p>
 
         <p class="govuk-body"
-           th:text="#{${JOURNEY.who} + 'contactCouncilPage.council.help.text'}">Your council will offer....</p>
-
-        <p class="govuk-body">
-            <span th:remove="tag" th:text="#{contactCouncilPage.council.contact.pretext}"></span>
-            <span th:remove="tag" th:text="${localAuthority.description} + ':'"></span>
-        </p>
-
-        <p class="govuk-body" th:if="${localAuthority.contactUrl}">
-                <span th:remove="tag"
-                      th:text="#{eligiblePage.website.pretext}">Website:</span>
-
-            <a th:href="${localAuthority.contactUrl}" th:text="${localAuthority.contactUrl}">www.leeds city council.gov.uk</a>
-        </p>
+           th:text="#{contactCouncilPage.council.help.text}">Your council will offer....</p>
     </section>
 </main>
 

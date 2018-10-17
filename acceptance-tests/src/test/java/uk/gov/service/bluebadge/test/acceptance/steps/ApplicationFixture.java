@@ -4,11 +4,22 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.EMAIL_A
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.FULL_NAME;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.PRIMARY_CONTACT_NUMBER;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.SECONDARY_CONTACT_NUMBER;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.*;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.HAS_RECEIVED_DLA;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.MAIN_REASON_LIST;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.NEVER_RECEIVED_DLA;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.PLACE_CAN_WALK;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.TIME_TO_DESTINATION;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_DAY;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_MONTH;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_YEAR;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_FEMALE;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_MALE;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_UNSPECIFIED;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Preamble.COUNCIL_INPUT;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_ADD_CONFIRM_BUTTON;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_ADD_PROVIDED_CODE_PRESCRIBE;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_ADD_USAGE;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_TYPE_WHEELCHAIR;
 
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -92,32 +103,32 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("I complete what's your name page")
   public void iCompleteWhatsYourNamePage() {
-    sitePage.findPageElementById(Ids.Person.NAME).sendKeys("Test Username");
-    sitePage.findPageElementById(Ids.Person.HAS_BIRTH_NAME_NO_OPTION).click();
+    clearAndSendKeys(Ids.Person.NAME, "Test Username");
+    sitePage.findPageElementById("hasBirthName.no").click();
     pressContinue();
   }
 
   @And("^I complete date of birth page for \"(CHILD|ADULT)\"")
-  public void iCompleteDateOfBirthPage(String age_category) throws Throwable {
+  public void iCompleteDateOfBirthPage(String age_category) {
     Calendar now = Calendar.getInstance();
     int dob_year = 1900;
 
     if (age_category.equals("CHILD")) dob_year = now.get(Calendar.YEAR) - 10;
     else dob_year = now.get(Calendar.YEAR) - 30;
 
-    sitePage.findPageElementById(DOB_DAY).sendKeys("1");
-    sitePage.findPageElementById(DOB_MONTH).sendKeys("1");
-    sitePage.findPageElementById(DOB_YEAR).sendKeys(Integer.toString(dob_year));
+    clearAndSendKeys(DOB_DAY, "1");
+    clearAndSendKeys(DOB_MONTH, "1");
+    clearAndSendKeys(DOB_YEAR, Integer.toString(dob_year));
     pressContinue();
   }
 
   @And("^I complete eligible page$")
-  public void iCompleteEligiblePage() throws Throwable {
+  public void iCompleteEligiblePage() {
     sitePage.findElementWithText("Start application").click();
   }
 
   @And("^I complete gender page for \"(Boy|Girl|Man|Woman|Identify in a different way)\"")
-  public void iCompleteGenderPageFor(String gender) throws Throwable {
+  public void iCompleteGenderPageFor(String gender) {
     if (gender.equals("Boy") || gender.equals("Man"))
       sitePage.findPageElementById(GENDER_MALE).click();
     else if (gender.equals("Girl") || gender.equals("Woman"))
@@ -129,31 +140,31 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("^I complete describe health conditions page$")
   public void iCompleteDescribeHealthConditionsPage() throws Throwable {
-    sitePage.findPageElementById("descriptionOfConditions").sendKeys("Sample health condition");
+    clearAndSendKeys("descriptionOfConditions", "Sample health condition");
     pressContinue();
   }
 
   @And("^I complete declaration page$")
-  public void iCompleteDeclarationPage() throws Throwable {
+  public void iCompleteDeclarationPage() {
     sitePage.findPageElementById("agreed").click();
     pressContinue();
   }
 
   @And("^I complete planning points page for \"(12|10|8|4|0)\"")
-  public void iCompletePlanningPointsPageFor(String points) throws Throwable {
+  public void iCompletePlanningPointsPageFor(String points) {
     sitePage.findPageElementById(Ids.EleCheck.PLANNING_POINTS + "_" + points).click();
     pressContinue();
   }
 
-  @And("^I complete what makes walking difficult page for \"(HELP|PAIN|DANGEROUS|NONE)\"$")
-  public void iCompleteWhatMakesWalkingDifficultPageFor(String difficulty) throws Throwable {
+  @And("^I complete what makes walking difficult page for \"(HELP|PLAN|PAIN|DANGEROUS|NONE)\"$")
+  public void iCompleteWhatMakesWalkingDifficultPageFor(String difficulty) {
     sitePage.findPageElementById(Ids.EleCheck.WALKING_DIFFICULTY_LIST + "." + difficulty).click();
     pressContinue();
   }
 
   @And("^I complete dla allowance page for \"(YES|NO)\"$")
-  public void iCompleteDlaAllowancePageFor(String option) throws Throwable {
-    if (option.equals("YES")) sitePage.findPageElementById(HAS_RECEIVED_DLA).click();
+  public void iCompleteDlaAllowancePageFor(String option) {
+    if ("YES".equals(option)) sitePage.findPageElementById(HAS_RECEIVED_DLA).click();
     else sitePage.findPageElementById(NEVER_RECEIVED_DLA).click();
     pressContinue();
   }
@@ -161,35 +172,141 @@ public class ApplicationFixture extends AbstractSpringSteps {
   @And("I complete contact page for \"(yourself|someone else)\"")
   public void iCompleteContactPage(String myselfOrOther) {
     if ("someone else".equalsIgnoreCase(myselfOrOther)) {
-      sitePage.findPageElementById(FULL_NAME).sendKeys("Some Contact");
+      clearAndSendKeys(FULL_NAME, "Some Contact");
     }
 
-    sitePage.findPageElementById(PRIMARY_CONTACT_NUMBER).sendKeys("01270848484");
-    sitePage.findPageElementById(SECONDARY_CONTACT_NUMBER).sendKeys("01270848400");
-    sitePage.findPageElementById(EMAIL_ADDRESS).sendKeys("some@contact.com");
+    clearAndSendKeys(PRIMARY_CONTACT_NUMBER, "01270848484");
+    clearAndSendKeys(SECONDARY_CONTACT_NUMBER, "01270848400");
+    clearAndSendKeys(EMAIL_ADDRESS, "some@contact.com");
+
     pressContinue();
   }
 
   @And("^I complete address page$")
   public void iCompleteAddressPage() throws Throwable {
-    sitePage.findPageElementById("buildingAndStreet").sendKeys("120");
-    sitePage.findPageElementById("optionalAddress").sendKeys("London Road");
-    sitePage.findPageElementById("townOrCity").sendKeys("Manchester");
-    sitePage.findPageElementById("postcode").sendKeys("M4 1FS");
+    clearAndSendKeys("buildingAndStreet", "120");
+    clearAndSendKeys("optionalAddress", "London Road");
+    clearAndSendKeys("townOrCity", "Manchester");
+    clearAndSendKeys("postcode", "M4 1FS");
 
     pressContinue();
   }
 
   @And("^I complete NI number page$")
   public void iCompleteNINumberPage() throws Throwable {
-    sitePage.findPageElementById(NI).sendKeys("AB123456A");
+    clearAndSendKeys(Ids.Person.NI, "AB123456A");
     pressContinue();
   }
 
   @And("^I complete NI number page without a NI$")
-  public void iCompleteNINumberPageWithoutNI() throws Throwable {
-    sitePage.findElementWithText(NO_NI_TEXT).click();
-    sitePage.findElementWithText(NO_NI_LINK_TEXT).click();
+  public void iCompleteNINumberPageWithoutNI() {
+    sitePage.findElementWithText(Ids.Person.NO_NI_TEXT).click();
+    sitePage.findElementWithText(Ids.Person.NO_NI_LINK_TEXT).click();
+    pressContinue();
+  }
+
+  @And("^I complete the walking time page with option \"(CANTWALK|LESSMIN|FEWMIN|MORETEN)\"$")
+  public void iCompleteTheWalkingTimePage(String option) throws Throwable {
+    sitePage.findPageElementById(Ids.Walkd.WALKING_TIME + "." + option).click();
+    pressContinue();
+  }
+
+  @And("^I complete where can you walk page$")
+  public void iCompleteWhereCanYouWalkPage() throws Throwable {
+    clearAndSendKeys(PLACE_CAN_WALK, "to the Post office on the High Street");
+    clearAndSendKeys(TIME_TO_DESTINATION, "10 minutes");
+    pressContinue();
+  }
+
+  @And("^I complete lump sum of the AFRFCS Scheme page for \"(YES|NO)\"$")
+  public void iCompleteLumpSumToOfTheAFRFCSSchemePageFor(String option) {
+    sitePage
+        .findPageElementById(Ids.EleCheck.RECEIVED_COMPENSATION + "." + option.toLowerCase())
+        .click();
+    pressContinue();
+  }
+
+  @And("^I complete have permanent disability page for \"(YES|NO)\"$")
+  public void iCompleteHavePermanentDisabilityDisabilityPageFor(String option) {
+    sitePage.findPageElementById(Ids.EleCheck.HAS_DISABILITY + "." + option.toLowerCase()).click();
+    pressContinue();
+  }
+
+  @And("^I complete has mental disorder page for \"(YES|NO)\"$")
+  public void iCompleteHasMentalDisorderPageFor(String option) {
+    sitePage
+        .findPageElementById(Ids.EleCheck.HAS_MENTAL_DISORDER + "." + option.toLowerCase())
+        .click();
+    pressContinue();
+  }
+
+  @And("^I complete has mobility component page for \"(YES|NO)\"$")
+  public void iCompleteHasMobilityComponentPage(String option) {
+    if ("YES".equals(option))
+      sitePage
+          .findPageElementById(Ids.EleCheck.AWARDED_HIGHER_RATE_MOBILITY + "." + "true")
+          .click();
+    else
+      sitePage
+          .findPageElementById(Ids.EleCheck.AWARDED_HIGHER_RATE_MOBILITY + "." + "false")
+          .click();
+    pressContinue();
+  }
+
+  @And("^I complete the what makes walking difficult page$")
+  public void iCompleteTheWhatMakesWalkingDifficultPage() throws Throwable {
+    sitePage.findPageElementById("whatWalkingDifficultiesPAIN").click();
+    pressContinue();
+  }
+
+  @And(
+      "^I complete the what makes walking difficult page for \"(PAIN|BREATH|BALANCE|LONGTIME|DANGER|STRUGGLE|SOMELSE)\"$")
+  public void iCompleteTheWhatMakesWalkingDifficultPageFor(String difficulty) throws Throwable {
+    sitePage.findPageElementById(Ids.EleCheck.WHAT_WALKING_DIFFICULTY_LIST + difficulty).click();
+    pressContinue();
+  }
+
+  private void clearAndSendKeys(String element, String value) {
+    sitePage.findPageElementById(element).clear();
+    sitePage.findPageElementById(element).sendKeys(value);
+  }
+
+  private void clickButtonById(String id) {
+    sitePage.findPageElementById(id).click();
+  }
+
+  @And("^I complete the mobility aids page for \"(YES|NO)\"$")
+  public void iCompleteTheMobilityAidsPage(String option) {
+    sitePage.findPageElementById(Ids.Walkd.MOBILITY_AID_OPTION + option.toLowerCase()).click();
+
+    if ("YES".equals(option)) {
+      // Needs to update this to use id or data-uipath
+      sitePage.findElementAddMobilityAid().click();
+      sitePage.findPageElementById(MOBILITY_AID_TYPE_WHEELCHAIR).click();
+      clearAndSendKeys(MOBILITY_AID_ADD_USAGE, "All the time");
+      sitePage.findPageElementById(MOBILITY_AID_ADD_PROVIDED_CODE_PRESCRIBE).click();
+      sitePage.findElementWithUiPath(MOBILITY_AID_ADD_CONFIRM_BUTTON).click();
+    }
+    pressContinue();
+  }
+
+  @And("^I complete the treatments page for \"(YES|NO)\"$")
+  public void iCompleteTheTreatmentsPage(String option) {
+    sitePage
+        .findPageElementById(Ids.Walkd.TREATMENT_HAS_TREATMENT_OPTION + option.toLowerCase())
+        .click();
+
+    if ("YES".equals(option)) {
+      clickButtonById(Ids.Walkd.TREATMENT_ADD_FIRST_LINK);
+      clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_DESCRIPTION, "Treatment description");
+      clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_WHEN, "Treatment when");
+      clickButtonById(Ids.Walkd.TREATMENT_ADD_CONFIRM_BUTTON);
+      clickButtonById(Ids.Walkd.TREATMENT_REMOVE_LINK_PREFIX + "1");
+      clickButtonById(Ids.Walkd.TREATMENT_ADD_FIRST_LINK);
+      clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_DESCRIPTION, "Treatment description");
+      clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_WHEN, "Treatment when");
+      clickButtonById(Ids.Walkd.TREATMENT_ADD_CONFIRM_BUTTON);
+    }
     pressContinue();
   }
 }

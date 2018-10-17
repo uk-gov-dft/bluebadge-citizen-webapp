@@ -35,8 +35,9 @@ public class ApplicantController implements StepController {
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getApplicantForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getApplicantForm());
+    if (!model.containsAttribute(FORM_REQUEST)
+        && journey.hasStepForm(StepDefinition.APPLICANT_TYPE)) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(StepDefinition.APPLICANT_TYPE));
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -55,9 +56,11 @@ public class ApplicantController implements StepController {
     RadioOption someone =
         new RadioOption(ApplicantType.SOMEONE_ELSE.toString(), "options.applicantType.someone");
     RadioOption organisation =
-            new RadioOption(ApplicantType.ORGANISATION.toString(), "options.applicantType.organisation");
-    
-    return new RadioOptionsGroup("applicantPage.title", Lists.newArrayList(yourself, someone, organisation));
+        new RadioOption(
+            ApplicantType.ORGANISATION.toString(), "options.applicantType.organisation");
+
+    return new RadioOptionsGroup(
+        "applicantPage.title", Lists.newArrayList(yourself, someone, organisation));
   }
 
   @PostMapping

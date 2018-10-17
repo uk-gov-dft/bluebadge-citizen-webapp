@@ -6,6 +6,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingD
 import static uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficultyForm.WalkingDifficulty.HELP;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficultyForm.WalkingDifficulty.NONE;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficultyForm.WalkingDifficulty.PAIN;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficultyForm.WalkingDifficulty.PLAN;
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.StepController;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
@@ -53,15 +55,7 @@ public class WalkingDifficultyController implements StepController {
       model.addAttribute(FORM_REQUEST, WalkingDifficultyForm.builder().build());
     }
 
-    model.addAttribute(
-        "formOptions",
-        new RadioOptionsGroup.Builder()
-            .titleMessageKeyApplicantAware("walkingDifficultyPage.content.title", journey)
-            .addOptionApplicantAware(HELP, "options.walkingDifficultyPage.help", journey)
-            .addOptionApplicantAware(PAIN, "options.walkingDifficultyPage.pain", journey)
-            .addOptionApplicantAware(DANGEROUS, "options.walkingDifficultyPage.dangerous", journey)
-            .addOptionApplicantAware(NONE, "options.walkingDifficultyPage.none", journey)
-            .build());
+    model.addAttribute("formOptions", getOptions(journey));
 
     return TEMPLATE;
   }
@@ -85,5 +79,23 @@ public class WalkingDifficultyController implements StepController {
   @Override
   public StepDefinition getStepDefinition() {
     return StepDefinition.WALKING_DIFFICULTY;
+  }
+
+  private RadioOptionsGroup getOptions(Journey journey) {
+    RadioOptionsGroup.Builder optionsBuilder =
+        new RadioOptionsGroup.Builder()
+            .titleMessageKeyApplicantAware("walkingDifficultyPage.content.title", journey)
+            .addOptionApplicantAware(HELP, "options.walkingDifficultyPage.help", journey);
+
+    if (journey.getNation().equals(Nation.SCO) || journey.getNation().equals(Nation.WLS)) {
+      optionsBuilder.addOptionApplicantAware(PLAN, "options.walkingDifficultyPage.plan", journey);
+    }
+
+    optionsBuilder
+        .addOptionApplicantAware(PAIN, "options.walkingDifficultyPage.pain", journey)
+        .addOptionApplicantAndNationAware(
+            DANGEROUS, "options.walkingDifficultyPage.dangerous", journey)
+        .addOptionApplicantAware(NONE, "options.walkingDifficultyPage.none", journey);
+    return optionsBuilder.build();
   }
 }

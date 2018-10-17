@@ -18,3 +18,6 @@ management:
 
 server:
   port: ${bb_port:-8080}
+  
+# Google Analytics Code
+GACode:  ${GACODE:UA-124760983-5}

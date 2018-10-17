@@ -56,6 +56,8 @@ gradle :outputComputedVersion
 
 echo "Using env.sh configuration as default."
 . dev-env-develop/env.sh
+chmod 444 dev-env-develop/scripts/db/*.sql
+
 if ! [[ "$BRANCH_NAME" =~ ^develop.*|^release.* ]]; then
     echo "On branch '${BRANCH_NAME}'. So also using env-feature.sh configuration."
    . env-feature.sh

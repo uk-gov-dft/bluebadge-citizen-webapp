@@ -21,6 +21,6 @@ public class StepDefinitionTest {
             .filter(s -> !allNextSteps.contains(s))
             .collect(Collectors.toSet());
 
-    assertThat(unreachable).containsOnly(StepDefinition.HOME);
+    assertThat(unreachable).containsOnly(StepDefinition.HOME, StepDefinition.MOBILITY_AID_ADD);
   }
 }

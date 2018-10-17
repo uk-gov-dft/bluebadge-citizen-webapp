@@ -2,7 +2,8 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
-import com.google.common.collect.Lists;
+import java.util.ArrayList;
+import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,10 +25,10 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Di
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Eligibility;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.GenderCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HowProvidedCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Party;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.PartyTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Person;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Treatment;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingAid;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficulty;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
@@ -41,7 +42,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
@@ -91,10 +93,9 @@ public class DeclarationSubmitController implements StepController {
     return routeMaster.redirectToOnSuccess(declarationForm);
   }
 
-  private Application getDummyApplication(Journey journey) {
+  public Application getDummyApplication(Journey journey) {
     ApplicantNameForm applicantNameForm = journey.getApplicantNameForm();
     GenderForm genderForm = journey.getGenderForm();
-    HealthConditionsForm healthConditionsForm = journey.getHealthConditionsForm();
     YourIssuingAuthorityForm yourIssuingAuthorityForm = journey.getYourIssuingAuthorityForm();
     ContactDetailsForm contactDetailsForm = journey.getContactDetailsForm();
 
@@ -104,10 +105,7 @@ public class DeclarationSubmitController implements StepController {
         yourIssuingAuthorityForm == null
             ? "ABERD"
             : yourIssuingAuthorityForm.getLocalAuthorityShortCode();
-    String condDesc =
-        healthConditionsForm == null
-            ? "Dummy condition"
-            : healthConditionsForm.getDescriptionOfConditions();
+    String condDesc = journey.getDescriptionOfCondition();
 
     String fullName = applicantNameForm == null ? "John Doe" : applicantNameForm.getFullName();
     String birthName =
@@ -145,24 +143,55 @@ public class DeclarationSubmitController implements StepController {
     Eligibility eligibilityObject = null;
     switch (eligibility) {
       case WALKD:
+        List<WalkingAid> walkingAids = null;
+        if (null != journey.getMobilityAidListForm()
+            && "yes".equals(journey.getMobilityAidListForm().getHasWalkingAid())) {
+          walkingAids = new ArrayList<>();
+          for (MobilityAidAddForm mobilityAidAddForm :
+              journey.getMobilityAidListForm().getMobilityAids()) {
+            walkingAids.add(
+                new WalkingAid()
+                    .usage(mobilityAidAddForm.getUsage())
+                    .howProvidedCode(mobilityAidAddForm.getHowProvidedCodeField())
+                    .description(mobilityAidAddForm.getAidTypeDescription()));
+          }
+        }
+        List<Treatment> treatments = null;
+        if (null != journey.getTreatmentListForm()
+            && "yes".equals(journey.getTreatmentListForm().getHasTreatment())) {
+          treatments = new ArrayList<>();
+          for (TreatmentAddForm treatmentAddForm : journey.getTreatmentListForm().getTreatments()) {
+            treatments.add(
+                new Treatment()
+                    .time(treatmentAddForm.getTreatmentWhen())
+                    .description(treatmentAddForm.getTreatmentDescription()));
+          }
+        }
+
+        List<WalkingDifficultyTypeCodeField> walkingDifficulties =
+            journey.getWhatMakesWalkingDifficultForm().getWhatWalkingDifficulties();
+        String otherDesc =
+            walkingDifficulties.contains(WalkingDifficultyTypeCodeField.SOMELSE)
+                ? journey.getWhatMakesWalkingDifficultForm().getSomethingElseDescription()
+                : null;
+
+        WalkingLengthOfTimeCodeField walkingTime = journey.getWalkingTimeForm().getWalkingTime();
+        WalkingSpeedCodeField walkingSpeed =
+            walkingTime == WalkingLengthOfTimeCodeField.CANTWALK
+                ? null
+                : WalkingSpeedCodeField.SLOW;
         eligibilityObject =
             new Eligibility()
                 .typeCode(EligibilityCodeField.WALKD)
                 .descriptionOfConditions(condDesc)
                 .walkingDifficulty(
                     new WalkingDifficulty()
-                        .walkingLengthOfTimeCode(WalkingLengthOfTimeCodeField.LESSMIN)
-                        .walkingSpeedCode(WalkingSpeedCodeField.SLOW)
-                        .typeCodes(
-                            Lists.newArrayList(
-                                WalkingDifficultyTypeCodeField.PAIN,
-                                WalkingDifficultyTypeCodeField.BALANCE))
-                        .walkingAids(
-                            Lists.newArrayList(
-                                new WalkingAid()
-                                    .description("walk aid description")
-                                    .usage("walk aid usage")
-                                    .howProvidedCode(HowProvidedCodeField.PRESCRIBE))));
+                        .walkingLengthOfTimeCode(walkingTime)
+                        .walkingSpeedCode(walkingSpeed)
+                        .typeCodes(walkingDifficulties)
+                        .otherDescription(otherDesc)
+                        .walkingAids(walkingAids)
+                        .treatments(treatments));
         break;
       case PIP:
       case DLA:
@@ -180,18 +209,21 @@ public class DeclarationSubmitController implements StepController {
         eligibilityObject =
             new Eligibility()
                 .typeCode(eligibility)
+                .descriptionOfConditions(condDesc)
                 .disabilityArms(new DisabilityArms().isAdaptedVehicle(false));
         break;
       case CHILDBULK:
         eligibilityObject =
             new Eligibility()
                 .typeCode(eligibility)
+                .descriptionOfConditions(condDesc)
                 .childUnder3(
                     new ChildUnder3()
                         .bulkyMedicalEquipmentTypeCode(BulkyMedicalEquipmentTypeCodeField.NONE));
         break;
       case CHILDVEHIC:
-        eligibilityObject = new Eligibility().typeCode(eligibility);
+        eligibilityObject =
+            new Eligibility().descriptionOfConditions(condDesc).typeCode(eligibility);
         break;
       case TERMILL:
       case NONE:
@@ -199,7 +231,6 @@ public class DeclarationSubmitController implements StepController {
         // This code is all temporary too.
         throw new IllegalStateException("Invalid eligibility:" + eligibility);
     }
-
     return Application.builder()
         .applicationTypeCode(ApplicationTypeCodeField.NEW)
         .localAuthorityCode(la)

@@ -1,18 +1,11 @@
 package uk.gov.service.bluebadge.test.acceptance.steps;
 
 import static java.util.stream.Collectors.toList;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.FEEDBACK_URL;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.GOOGLE_ANALYTICS_TAG;
+import static org.junit.Assert.*;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.*;
 
 import cucumber.api.DataTable;
 import cucumber.api.java.en.And;
@@ -305,8 +298,30 @@ public class SiteSteps extends AbstractSpringSteps {
     assertTrue(FEEDBACK_URL.equals(sitePage.findElementWithText("feedback").getAttribute("href")));
   }
 
+  @And("^I can see the continue button with link to external welsh site$")
+  public void iCanSeeTheContinueButtonWithLinkToExternalWelshSite() throws Throwable {
+    assertTrue(
+        APPLY_IN_WELSH_EXTERNAL_URL.equals(
+            sitePage.findElementWithText("Continue").getAttribute("href")));
+  }
+
   @Then("^The google analytics tag should be available$")
   public void theGoogleAnalyticsTagShouldBeAvailable() throws Throwable {
     assertTrue(sitePage.getPageContent().contains(GOOGLE_ANALYTICS_TAG));
+  }
+
+  @And(
+      "^I should see the \"(yourself|someone else)\" option button is selected in the Who are you applying for? page$")
+  public void iShouldSeeTheOptionButtonIsSelectedInTheWhoAreYouApplyingForPage(String selfOrOther)
+      throws Throwable {
+
+    if (selfOrOther.equalsIgnoreCase("yourself")) {
+
+      assertTrue(sitePage.findPageElementById("applicantType.YOURSELF").isSelected());
+
+    } else if (selfOrOther.equalsIgnoreCase("someone else")) {
+
+      assertTrue(sitePage.findPageElementById("applicantType.SOMEONE_ELSE").isSelected());
+    }
   }
 }
