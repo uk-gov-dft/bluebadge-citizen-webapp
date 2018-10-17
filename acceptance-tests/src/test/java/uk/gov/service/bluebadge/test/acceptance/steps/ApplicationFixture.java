@@ -340,4 +340,5 @@ public class ApplicationFixture extends AbstractSpringSteps {
     clearAndSendKeys(Ids.Walkd.MEDICATION_FREQUENCY_TEXT, "Every night");
     clickButtonById(Ids.Walkd.MEDICATION_ADD_CONFIRM_BUTTON);
   }
+
 }

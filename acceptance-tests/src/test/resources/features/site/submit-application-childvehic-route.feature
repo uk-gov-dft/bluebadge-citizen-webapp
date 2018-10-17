@@ -19,7 +19,7 @@ Feature: DFT Blue badge Citizen app new application - CHILDVEHIC
     And   I complete contact page for "yourself"
     And   I complete describe health conditions page
     And   I complete declaration page
-    Then  I should see .* page titled "Application submitted" with GOV.UK suffix
+    Then  I should see page titled "Application submitted" with GOV.UK suffix
 
 
   Scenario: Child vehicle application for someone else
@@ -38,7 +38,7 @@ Feature: DFT Blue badge Citizen app new application - CHILDVEHIC
     And   I complete contact page for "someone else"
     And   I complete describe health conditions page
     And   I complete declaration page
-    Then  I should see .* page titled "Application submitted" with GOV.UK suffix
+    Then  I should see page titled "Application submitted" with GOV.UK suffix
 
 
   Scenario: Child vehicle application for yourself - change route to PIP
@@ -59,7 +59,7 @@ Feature: DFT Blue badge Citizen app new application - CHILDVEHIC
     And   I complete describe health conditions page
 
     # Change the route to PIP
-    And I complete applicant page for "yourself"
+    And   I complete applicant page for "yourself"
     And   I complete select council page for "england"
     And   I complete your local authority page
     And   I complete receive benefit page for "PIP"
@@ -73,4 +73,4 @@ Feature: DFT Blue badge Citizen app new application - CHILDVEHIC
     And   I complete address page
     And   I complete contact page for "yourself"
     And   I complete declaration page
-    Then  I should see .* page titled "Application submitted" with GOV.UK suffix
+    Then  I should see page titled "Application submitted" with GOV.UK suffix
