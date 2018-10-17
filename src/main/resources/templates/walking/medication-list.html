@@ -26,6 +26,8 @@
                               th:errors="*{hasMedication}"></span>
 
                         <div class="govuk-radios" data-module="radios">
+                            <span th:id="'hasMedication-hint'" th:data-uipath="'hasMedication.hint'"
+                                  class="govuk-hint" th:text="#{${JOURNEY.who} + 'medication.list.hint'}">list any med hint</span>
 
                             <div class="govuk-radios__item">
                                 <input class="govuk-radios__input" id="hasMedicationyes"
@@ -43,7 +45,7 @@
                                     <tr class="govuk-table__row">
                                         <th class="govuk-table__header" scope="col" th:text="#{medication.list.table.header.col1}"></th>
                                         <th class="govuk-table__header" scope="col" th:text="#{medication.list.table.header.col2}"></th>
-                                        <th class="govuk-table__header" scope="col" th:text="#{medication.list.table.header.col3}"></th>
+                                        <th class="govuk-table__header" scope="col" th:text="#{medication.list.table.header.col3}" colspan="2"></th>
                                     </tr>
                                     </thead>
 
