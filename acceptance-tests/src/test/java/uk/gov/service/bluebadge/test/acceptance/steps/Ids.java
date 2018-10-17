@@ -7,6 +7,8 @@ class Ids {
     static final String APPLICANT_TYPE_SOMELSE_OPTION =
         APPLICANT_TYPE_OPTION_LIST + ".SOMEONE_ELSE";
     static final String COUNCIL_INPUT = "councilShortCode";
+    static final String EXISTING_BADGE_OPTION = "hasExistingBadge";
+    static final String BADGE_NUMBER = "badgeNumber";
   }
 
   class EleCheck {

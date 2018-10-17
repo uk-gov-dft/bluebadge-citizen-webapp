@@ -110,13 +110,13 @@ public class ExistingBadgeControllerTest {
   @Test
   public void onByPassLink_ShouldRedirectToSuccess() throws Exception {
     when(mockRouteMaster.redirectToOnSuccess(any(ExistingBadgeForm.class)))
-            .thenReturn("redirect:/testSuccess");
+        .thenReturn("redirect:/testSuccess");
 
     ExistingBadgeForm form = ExistingBadgeForm.builder().build();
 
     mockMvc
-            .perform(get("/existing-badge-bypass").sessionAttr("JOURNEY", journey))
-            .andExpect(status().isFound())
-            .andExpect(redirectedUrl("/testSuccess"));
+        .perform(get("/existing-badge-bypass").sessionAttr("JOURNEY", journey))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/testSuccess"));
   }
 }

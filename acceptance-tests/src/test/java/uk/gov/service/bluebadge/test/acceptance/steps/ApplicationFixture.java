@@ -296,4 +296,16 @@ public class ApplicationFixture extends AbstractSpringSteps {
     }
     pressContinue();
   }
+
+
+  @And("^I complete the already have a blue badge page for \"(Yes|No)\"$")
+  public void iCompleteTheAlreadyHaveABlueBadgePageFor(String opt) throws Throwable {
+    sitePage.findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + opt).click();
+
+    if("Yes".equals(opt)) {
+      sitePage.findPageElementById(Ids.Preamble.BADGE_NUMBER).sendKeys("AB12CD");
+    }
+
+    pressContinue();
+  }
 }

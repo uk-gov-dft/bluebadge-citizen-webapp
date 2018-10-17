@@ -17,7 +17,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ExistingBadgeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
 
 public class NinoControllerTest {
@@ -101,13 +100,13 @@ public class NinoControllerTest {
   @Test
   public void onByPassLink_ShouldRedirectToSuccess() throws Exception {
     when(mockRouteMaster.redirectToOnSuccess(any(NinoForm.class)))
-            .thenReturn("redirect:/testSuccess");
+        .thenReturn("redirect:/testSuccess");
 
     NinoForm form = NinoForm.builder().build();
 
     mockMvc
-            .perform(get("/nino-bypass").sessionAttr("JOURNEY", journey))
-            .andExpect(status().isFound())
-            .andExpect(redirectedUrl("/testSuccess"));
+        .perform(get("/nino-bypass").sessionAttr("JOURNEY", journey))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/testSuccess"));
   }
 }
