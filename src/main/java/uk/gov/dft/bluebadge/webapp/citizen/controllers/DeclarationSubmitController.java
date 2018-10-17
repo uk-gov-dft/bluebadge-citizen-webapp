@@ -93,34 +93,24 @@ public class DeclarationSubmitController implements StepController {
 
   public Application getDummyApplication(Journey journey) {
     ApplicantNameForm applicantNameForm = journey.getApplicantNameForm();
-    GenderForm genderForm = journey.getGenderForm();
     YourIssuingAuthorityForm yourIssuingAuthorityForm = journey.getYourIssuingAuthorityForm();
     ContactDetailsForm contactDetailsForm = journey.getContactDetailsForm();
 
     EligibilityCodeField eligibility = journey.getEligibilityCode();
 
-    String la =
-        yourIssuingAuthorityForm == null
-            ? "ABERD"
-            : yourIssuingAuthorityForm.getLocalAuthorityShortCode();
     String condDesc = journey.getDescriptionOfCondition();
 
-    String fullName = applicantNameForm == null ? "John Doe" : applicantNameForm.getFullName();
-    String birthName =
-        applicantNameForm == null ? "John Doe Birth" : applicantNameForm.getBirthName();
-
-    GenderCodeField gender =
-        null != genderForm ? journey.getGenderForm().getGender() : GenderCodeField.FEMALE;
-
-    String nino =
-        journey.getNinoForm() == null ? "NS123456C" : journey.getNinoForm().getNino().toUpperCase();
+    String nino = null;
+    if(null != journey.getNinoForm() && null != journey.getNinoForm().getNino()){
+      nino = journey.getNinoForm().getNino().toUpperCase();
+    }
 
     Person person =
         new Person()
-            .badgeHolderName(fullName)
-            .nameAtBirth(birthName)
+            .badgeHolderName(applicantNameForm.getFullName())
+            .nameAtBirth(applicantNameForm.getBirthName())
             .dob(journey.getDateOfBirthForm().getDateOfBirth().getLocalDate())
-            .genderCode(gender)
+            .genderCode(journey.getGenderForm().getGender())
             .nino(nino);
 
     Party party =
@@ -214,7 +204,7 @@ public class DeclarationSubmitController implements StepController {
     }
     return Application.builder()
         .applicationTypeCode(ApplicationTypeCodeField.NEW)
-        .localAuthorityCode(la)
+        .localAuthorityCode(yourIssuingAuthorityForm.getLocalAuthorityShortCode())
         .paymentTaken(false)
         .party(party)
         .eligibility(eligibilityObject)

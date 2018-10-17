@@ -15,12 +15,15 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
 
 public class JourneyFixture {
 
   public static Journey getDefaultJourney() {
     Journey journey = new Journey();
+
+    YourIssuingAuthorityForm yourIssuingAuthorityForm = YourIssuingAuthorityForm.builder().localAuthorityShortCode("ABERD").build();
 
     HealthConditionsForm healthConditionsForm =
         HealthConditionsForm.builder().descriptionOfConditions("test description").build();
@@ -60,6 +63,7 @@ public class JourneyFixture {
             .build();
 
     journey.setApplicantForm(applicantForm);
+    journey.setYourIssuingAuthorityForm(yourIssuingAuthorityForm);
     journey.setHealthConditionsForm(healthConditionsForm);
     journey.setApplicantNameForm(applicantNameForm);
     journey.setDateOfBirthForm(dateOfBirthForm);
