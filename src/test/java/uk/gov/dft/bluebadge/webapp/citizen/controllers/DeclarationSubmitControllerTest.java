@@ -25,11 +25,19 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.GenderCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.component.CompoundDate;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
@@ -191,5 +199,36 @@ public class DeclarationSubmitControllerTest {
     assertThat(application.getEligibility()).isNotNull();
     assertThat(application.getEligibility().getTypeCode()).isEqualTo(eligibilityCode);
     assertThat(application.getEligibility().getDescriptionOfConditions()).isNull();
+  }
+
+  @Test
+  void dummyApplication_defaultValues() {
+    Journey journey = JourneyFixture.getDefaultJourney();
+
+    journey.getApplicantNameForm().setFullName(null);
+    journey.getGenderForm().setGender(null);
+    journey.getYourIssuingAuthorityForm().setLocalAuthorityShortCode(null);
+
+    // Check nulls come through
+    Application application = controller.getDummyApplication(journey);
+    assertThat(application.getParty().getPerson().getBadgeHolderName()).isNull();
+    assertThat(application.getParty().getPerson().getGenderCode()).isNull();
+    assertThat(application.getParty().getPerson().getNino()).isNull();
+    assertThat(application.getLocalAuthorityCode()).isNull();
+
+    // And forms there, but no value
+    journey.setNinoForm(NinoForm.builder().build());
+    application = controller.getDummyApplication(journey);
+    assertThat(application.getParty().getPerson().getNino()).isNull();
+    assertThat(application.getParty().getPerson().getBadgeHolderName()).isNull();
+
+    // Check not nulls still work
+    journey = JourneyFixture.getDefaultJourney();
+    journey.setNinoForm(NinoForm.builder().nino("NS333333A").build());
+    application = controller.getDummyApplication(journey);
+    assertThat(application.getParty().getPerson().getBadgeHolderName()).isEqualTo("John Doe");
+    assertThat(application.getParty().getPerson().getGenderCode()).isEqualTo(GenderCodeField.FEMALE);
+    assertThat(application.getParty().getPerson().getNino()).isEqualTo("NS333333A");
+    assertThat(application.getLocalAuthorityCode()).isEqualTo("ABERD");
   }
 }
