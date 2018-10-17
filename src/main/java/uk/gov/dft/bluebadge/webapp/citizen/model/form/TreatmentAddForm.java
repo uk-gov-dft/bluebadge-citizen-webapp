@@ -1,12 +1,10 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
-import lombok.Builder;
-import lombok.Data;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.UUID;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import lombok.Data;
 
 @Data
 public class TreatmentAddForm implements Serializable {
@@ -20,5 +18,4 @@ public class TreatmentAddForm implements Serializable {
   private String treatmentWhen;
 
   private String id = UUID.randomUUID().toString();
-  
 }

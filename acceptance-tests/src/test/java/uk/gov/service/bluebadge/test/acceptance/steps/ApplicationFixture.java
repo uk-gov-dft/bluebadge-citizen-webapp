@@ -24,6 +24,7 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import java.util.Calendar;
+import org.openqa.selenium.By;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.SitePage;
 
@@ -156,7 +157,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
-  @And("^I complete what makes walking difficult page for \"(HELP|PAIN|DANGEROUS|NONE)\"$")
+  @And("^I complete what makes walking difficult page for \"(HELP|PLAN|PAIN|DANGEROUS|NONE)\"$")
   public void iCompleteWhatMakesWalkingDifficultPageFor(String difficulty) {
     sitePage.findPageElementById(Ids.EleCheck.WALKING_DIFFICULTY_LIST + "." + difficulty).click();
     pressContinue();
@@ -205,6 +206,12 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
+  @And("^I complete the walking time page with option \"(CANTWALK|LESSMIN|FEWMIN|MORETEN)\"$")
+  public void iCompleteTheWalkingTimePage(String option) throws Throwable {
+    sitePage.findPageElementById(Ids.Walkd.WALKING_TIME + "." + option).click();
+    pressContinue();
+  }
+
   @And("^I complete where can you walk page$")
   public void iCompleteWhereCanYouWalkPage() throws Throwable {
     clearAndSendKeys(PLACE_CAN_WALK, "to the Post office on the High Street");
@@ -248,8 +255,15 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete the what makes walking difficult page$")
-  public void iCompleteTheWhatMakesWalkingDifficultPage() {
-    sitePage.findPageElementById("whatWalkingDifficulties1").click();
+  public void iCompleteTheWhatMakesWalkingDifficultPage() throws Throwable {
+    sitePage.findPageElementById("whatWalkingDifficultiesPAIN").click();
+    pressContinue();
+  }
+
+  @And(
+      "^I complete the what makes walking difficult page for \"(PAIN|BREATH|BALANCE|LONGTIME|DANGER|STRUGGLE|SOMELSE)\"$")
+  public void iCompleteTheWhatMakesWalkingDifficultPageFor(String difficulty) throws Throwable {
+    sitePage.findPageElementById(Ids.EleCheck.WHAT_WALKING_DIFFICULTY_LIST + difficulty).click();
     pressContinue();
   }
 
@@ -296,6 +310,35 @@ public class ApplicationFixture extends AbstractSpringSteps {
       clickButtonById(Ids.Walkd.TREATMENT_ADD_CONFIRM_BUTTON);
     }
     pressContinue();
+  }
+
+  @And("^I complete the medications page for \"(YES|NO)\"$")
+  public void iCompleteTheMedicationsPage(String option) {
+
+    sitePage
+        .findPageElementById(Ids.Walkd.MEDICATION_HAS_MEDICATION_OPTION + option.toLowerCase())
+        .click();
+
+    if ("YES".equals(option)) {
+      addMedication(option);
+
+      // find the first medication in the list and click
+      sitePage.getHelper().findElement(By.xpath("//table[@id='medication-list']//a")).click();
+
+      addMedication(option);
+    }
+    pressContinue();
+  }
+
+  private void addMedication(String option) {
+    clickButtonById(Ids.Walkd.MEDICATION_ADD_FIRST_LINK);
+    clearAndSendKeys(Ids.Walkd.MEDICATION_ADD_MEDICATION_DESCRIPTION, "Paracetamol");
+    sitePage
+        .findPageElementById(Ids.Walkd.MEDICATION_PRESCRIBED_OPTION + "." + option.toLowerCase())
+        .click();
+    clearAndSendKeys(Ids.Walkd.MEDICATION_DOSAGE_TEXT, "50mg");
+    clearAndSendKeys(Ids.Walkd.MEDICATION_FREQUENCY_TEXT, "Every night");
+    clickButtonById(Ids.Walkd.MEDICATION_ADD_CONFIRM_BUTTON);
   }
 
   @And("^I complete the healthcare professionals page for \"(YES|NO)\"$")

@@ -5,6 +5,7 @@ public enum WalkingDifficultyTypeCodeField {
   PAIN,
   BREATH,
   BALANCE,
+  LONGTIME,
   DANGER,
   STRUGGLE,
   SOMELSE

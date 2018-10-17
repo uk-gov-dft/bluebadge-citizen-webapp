@@ -26,6 +26,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.El
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.GenderCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HealthcareProfessional;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Medication;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Party;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.PartyTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Person;
@@ -47,6 +48,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalAddF
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
 @Controller
@@ -158,51 +160,8 @@ public class DeclarationSubmitController implements StepController {
     Eligibility eligibilityObject = null;
     switch (eligibility) {
       case WALKD:
-        List<WalkingAid> walkingAids = null;
-        if (null != journey.getMobilityAidListForm()
-            && "yes".equals(journey.getMobilityAidListForm().getHasWalkingAid())) {
-          walkingAids = new ArrayList<>();
-          for (MobilityAidAddForm mobilityAidAddForm :
-              journey.getMobilityAidListForm().getMobilityAids()) {
-            walkingAids.add(
-                new WalkingAid()
-                    .usage(mobilityAidAddForm.getUsage())
-                    .howProvidedCode(mobilityAidAddForm.getHowProvidedCodeField())
-                    .description(mobilityAidAddForm.getAidTypeDescription()));
-          }
-        }
-        List<Treatment> treatments = null;
-        if (null != journey.getTreatmentListForm()
-            && "yes".equals(journey.getTreatmentListForm().getHasTreatment())) {
-          treatments = new ArrayList<>();
-          for (TreatmentAddForm treatmentAddForm : journey.getTreatmentListForm().getTreatments()) {
-            treatments.add(
-                new Treatment()
-                    .time(treatmentAddForm.getTreatmentWhen())
-                    .description(treatmentAddForm.getTreatmentDescription()));
-          }
-        }
+        eligibilityObject = buildWalkingEligibility(journey, healthcareProfessionals);
 
-        List<WalkingDifficultyTypeCodeField> walkingDifficulties =
-            journey.getWhatMakesWalkingDifficultForm().getWhatWalkingDifficulties();
-        String otherDesc =
-            walkingDifficulties.contains(WalkingDifficultyTypeCodeField.SOMELSE)
-                ? journey.getWhatMakesWalkingDifficultForm().getSomethingElseDescription()
-                : null;
-
-        eligibilityObject =
-            new Eligibility()
-                .typeCode(EligibilityCodeField.WALKD)
-                .descriptionOfConditions(condDesc)
-                .walkingDifficulty(
-                    new WalkingDifficulty()
-                        .walkingLengthOfTimeCode(WalkingLengthOfTimeCodeField.LESSMIN)
-                        .walkingSpeedCode(WalkingSpeedCodeField.SLOW)
-                        .typeCodes(walkingDifficulties)
-                        .otherDescription(otherDesc)
-                        .walkingAids(walkingAids)
-                        .treatments(treatments))
-                .healthcareProfessionals(healthcareProfessionals);
         break;
       case PIP:
       case DLA:
@@ -253,6 +212,76 @@ public class DeclarationSubmitController implements StepController {
         .party(party)
         .eligibility(eligibilityObject)
         .build();
+  }
+
+  private Eligibility buildWalkingEligibility(
+      Journey journey, List<HealthcareProfessional> healthcareProfessionals) {
+    Eligibility eligibilityObject;
+    List<WalkingAid> walkingAids = null;
+    if (null != journey.getMobilityAidListForm()
+        && "yes".equals(journey.getMobilityAidListForm().getHasWalkingAid())) {
+      walkingAids = new ArrayList<>();
+      for (MobilityAidAddForm mobilityAidAddForm :
+          journey.getMobilityAidListForm().getMobilityAids()) {
+        walkingAids.add(
+            new WalkingAid()
+                .usage(mobilityAidAddForm.getUsage())
+                .howProvidedCode(mobilityAidAddForm.getHowProvidedCodeField())
+                .description(mobilityAidAddForm.getAidTypeDescription()));
+      }
+    }
+    List<Treatment> treatments = null;
+    if (null != journey.getTreatmentListForm()
+        && "yes".equals(journey.getTreatmentListForm().getHasTreatment())) {
+      treatments = new ArrayList<>();
+      for (TreatmentAddForm treatmentAddForm : journey.getTreatmentListForm().getTreatments()) {
+        treatments.add(
+            new Treatment()
+                .time(treatmentAddForm.getTreatmentWhen())
+                .description(treatmentAddForm.getTreatmentDescription()));
+      }
+    }
+    List<Medication> medications = null;
+    if (null != journey.getMedicationListForm()
+        && "yes".equals(journey.getMedicationListForm().getHasMedication())) {
+      medications = new ArrayList<>();
+      for (MedicationAddForm medicationAddForm : journey.getMedicationListForm().getMedications()) {
+        medications.add(
+            new Medication()
+                .name(medicationAddForm.getName())
+                .quantity(medicationAddForm.getDosage())
+                .isPrescribed(medicationAddForm.getPrescribedValue())
+                .frequency(medicationAddForm.getFrequency()));
+      }
+    }
+
+    WalkingLengthOfTimeCodeField walkingTime = journey.getWalkingTimeForm().getWalkingTime();
+    WalkingSpeedCodeField walkingSpeed =
+        walkingTime == WalkingLengthOfTimeCodeField.CANTWALK ? null : WalkingSpeedCodeField.SLOW;
+
+    List<WalkingDifficultyTypeCodeField> walkingDifficulties =
+        journey.getWhatMakesWalkingDifficultForm().getWhatWalkingDifficulties();
+    String otherDesc =
+        walkingDifficulties.contains(WalkingDifficultyTypeCodeField.SOMELSE)
+            ? journey.getWhatMakesWalkingDifficultForm().getSomethingElseDescription()
+            : null;
+
+    eligibilityObject =
+        new Eligibility()
+            .typeCode(EligibilityCodeField.WALKD)
+            .descriptionOfConditions(journey.getDescriptionOfCondition())
+            .walkingDifficulty(
+                new WalkingDifficulty()
+                    .walkingLengthOfTimeCode(walkingTime)
+                    .walkingSpeedCode(walkingSpeed)
+                    .typeCodes(walkingDifficulties)
+                    .otherDescription(otherDesc)
+                    .walkingAids(walkingAids)
+                    .treatments(treatments)
+                    .medications(medications))
+            .healthcareProfessionals(healthcareProfessionals);
+
+    return eligibilityObject;
   }
 
   @Override

@@ -94,7 +94,8 @@ public class WhatWalkingDifficultiesControllerTest {
         (RadioOptionsGroup) mvcResult.getModelAndView().getModel().get("walkingDifficulties");
     assertThat(options.getOptions())
         .extracting("shortCode", "messageKey")
-        .contains(tuple("DANGER", "you.ENG.whatMakesWalkingDifficult.select.option.dangerous"));
+        .contains(tuple("DANGER", "you.ENG.whatMakesWalkingDifficult.select.option.dangerous"))
+        .doesNotContain(tuple("STRUGGLE", "you.whatMakesWalkingDifficult.select.option.struggle"));
   }
 
   @Test
@@ -119,7 +120,32 @@ public class WhatWalkingDifficultiesControllerTest {
         (RadioOptionsGroup) mvcResult.getModelAndView().getModel().get("walkingDifficulties");
     assertThat(options.getOptions())
         .extracting("shortCode", "messageKey")
-        .contains(tuple("DANGER", "you.SCO.whatMakesWalkingDifficult.select.option.dangerous"));
+        .contains(tuple("DANGER", "you.SCO.whatMakesWalkingDifficult.select.option.dangerous"))
+        .contains(tuple("STRUGGLE", "you.whatMakesWalkingDifficult.select.option.struggle"));
+  }
+
+  @Test
+  public void show_givenNationWales_walkingDifficultiesShouldBeNationSpecific() throws Exception {
+    LocalAuthorityRefData testLA = new LocalAuthorityRefData();
+    LocalAuthorityRefData.LocalAuthorityMetaData metaData =
+        new LocalAuthorityRefData.LocalAuthorityMetaData();
+    metaData.setNation(Nation.WLS);
+    testLA.setLocalAuthorityMetaData(Optional.of(metaData));
+
+    journey.setLocalAuthority(testLA);
+
+    MvcResult mvcResult =
+        mockMvc
+            .perform(get("/what-makes-walking-difficult").sessionAttr("JOURNEY", journey))
+            .andExpect(status().isOk())
+            .andExpect(model().attributeExists("walkingDifficulties"))
+            .andReturn();
+
+    RadioOptionsGroup options =
+        (RadioOptionsGroup) mvcResult.getModelAndView().getModel().get("walkingDifficulties");
+    assertThat(options.getOptions())
+        .extracting("shortCode", "messageKey")
+        .contains(tuple("STRUGGLE", "you.whatMakesWalkingDifficult.select.option.struggle"));
   }
 
   @Test
@@ -186,7 +212,7 @@ public class WhatWalkingDifficultiesControllerTest {
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/what-makes-walking-difficult"))
+        .andExpect(redirectedUrl("/what-makes-walking-difficult#error"))
         .andExpect(flash().attribute("formRequest", form));
   }
 

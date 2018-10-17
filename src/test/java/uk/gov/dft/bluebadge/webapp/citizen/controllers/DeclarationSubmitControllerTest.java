@@ -31,6 +31,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Ap
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HealthcareProfessional;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HowProvidedCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingLengthOfTimeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
@@ -43,6 +44,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WalkingTimeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
 public class DeclarationSubmitControllerTest {
@@ -246,5 +248,44 @@ public class DeclarationSubmitControllerTest {
     assertThat(application.getEligibility().getTypeCode()).isEqualTo(eligibilityCode);
     assertThat(application.getEligibility().getDescriptionOfConditions()).isNull();
     assertThat(application.getEligibility().getHealthcareProfessionals()).isNull();
+  }
+
+  @Test
+  public void dummyApplication_givenWalkingEligibility_thenWalkingTimeSet() {
+    Journey journey = JourneyFixture.getDefaultJourney();
+    MainReasonForm mainReasonForm = MainReasonForm.builder().mainReasonOption(WALKD).build();
+    journey.setMainReasonForm(mainReasonForm);
+    WalkingTimeForm walkingTimeForm =
+        WalkingTimeForm.builder().walkingTime(WalkingLengthOfTimeCodeField.MORETEN).build();
+    journey.setWalkingTimeForm(walkingTimeForm);
+    Application application = controller.getDummyApplication(journey);
+
+    assertThat(application).isNotNull();
+    assertThat(application.getEligibility()).isNotNull();
+    assertThat(application.getEligibility().getTypeCode()).isEqualTo(WALKD);
+    assertThat(application.getEligibility().getWalkingDifficulty()).isNotNull();
+    assertThat(application.getEligibility().getWalkingDifficulty().getWalkingLengthOfTimeCode())
+        .isEqualTo(WalkingLengthOfTimeCodeField.MORETEN);
+    assertThat(application.getEligibility().getWalkingDifficulty().getWalkingSpeedCode())
+        .isNotNull();
+  }
+
+  @Test
+  public void dummyApplication_givenCantWalking_thenWalkingSpeedNotSet() {
+    Journey journey = JourneyFixture.getDefaultJourney();
+    MainReasonForm mainReasonForm = MainReasonForm.builder().mainReasonOption(WALKD).build();
+    journey.setMainReasonForm(mainReasonForm);
+    WalkingTimeForm walkingTimeForm =
+        WalkingTimeForm.builder().walkingTime(WalkingLengthOfTimeCodeField.CANTWALK).build();
+    journey.setWalkingTimeForm(walkingTimeForm);
+    Application application = controller.getDummyApplication(journey);
+
+    assertThat(application).isNotNull();
+    assertThat(application.getEligibility()).isNotNull();
+    assertThat(application.getEligibility().getTypeCode()).isEqualTo(WALKD);
+    assertThat(application.getEligibility().getWalkingDifficulty()).isNotNull();
+    assertThat(application.getEligibility().getWalkingDifficulty().getWalkingLengthOfTimeCode())
+        .isEqualTo(WalkingLengthOfTimeCodeField.CANTWALK);
+    assertThat(application.getEligibility().getWalkingDifficulty().getWalkingSpeedCode()).isNull();
   }
 }

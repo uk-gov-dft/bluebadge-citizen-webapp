@@ -32,12 +32,12 @@ public class TreatmentListControllerTest extends ControllerTestFixture<Treatment
   }
 
   @Override
-  String getTemplateName() {
+  protected String getTemplateName() {
     return "treatment-list";
   }
 
   @Override
-  String getUrl() {
+  protected String getUrl() {
     return "/list-treatments";
   }
 
@@ -75,11 +75,7 @@ public class TreatmentListControllerTest extends ControllerTestFixture<Treatment
     form.setTreatmentWhen("F");
 
     journey.getTreatmentListForm().setHasTreatment("yes");
-    journey
-        .getTreatmentListForm()
-        .setTreatments(
-            Lists.newArrayList(
-                form));
+    journey.getTreatmentListForm().setTreatments(Lists.newArrayList(form));
 
     mockMvc
         .perform(

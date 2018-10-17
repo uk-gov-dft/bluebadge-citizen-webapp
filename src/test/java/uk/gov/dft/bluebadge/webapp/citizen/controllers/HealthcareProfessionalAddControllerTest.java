@@ -31,12 +31,12 @@ public class HealthcareProfessionalAddControllerTest
   }
 
   @Override
-  String getTemplateName() {
+  protected String getTemplateName() {
     return "healthcare-professional-add";
   }
 
   @Override
-  String getUrl() {
+  protected String getUrl() {
     return "/add-healthcare-professional";
   }
 
@@ -78,7 +78,7 @@ public class HealthcareProfessionalAddControllerTest
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/add-healthcare-professional"))
+        .andExpect(redirectedUrl("/add-healthcare-professional#error"))
         .andExpect(flash().attribute("formRequest", form))
         .andExpect(
             formRequestFlashAttributeHasFieldErrorCode("healthcareProfessionalName", "NotBlank"))

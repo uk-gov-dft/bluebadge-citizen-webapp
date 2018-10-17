@@ -27,12 +27,12 @@ public class TreatmentAddControllerTest extends ControllerTestFixture<TreatmentA
   }
 
   @Override
-  String getTemplateName() {
+  protected String getTemplateName() {
     return "treatment-add";
   }
 
   @Override
-  String getUrl() {
+  protected String getUrl() {
     return "/add-treatment";
   }
 
@@ -73,7 +73,7 @@ public class TreatmentAddControllerTest extends ControllerTestFixture<TreatmentA
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/add-treatment"))
+        .andExpect(redirectedUrl("/add-treatment#error"))
         .andExpect(flash().attribute("formRequest", form))
         .andExpect(formRequestFlashAttributeHasFieldErrorCode("treatmentDescription", "NotBlank"))
         .andExpect(formRequestFlashAttributeHasFieldErrorCode("treatmentWhen", "NotBlank"));

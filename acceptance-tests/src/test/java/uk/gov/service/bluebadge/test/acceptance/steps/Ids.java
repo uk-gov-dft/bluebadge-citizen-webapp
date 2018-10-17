@@ -13,6 +13,7 @@ class Ids {
     static final String BENEFIT_RECEIVED_LIST = "benefitType";
     static final String MAIN_REASON_LIST = "mainReasonOption";
     static final String WALKING_DIFFICULTY_LIST = "walkingDifficulty";
+    static final String WHAT_WALKING_DIFFICULTY_LIST = "whatWalkingDifficulties";
     static final String HAS_RECEIVED_DLA = "receivedDlaOption.HAS_RECEIVED_DLA";
     static final String NEVER_RECEIVED_DLA = "receivedDlaOption.NEVER_RECEIVED_DLA";
     static final String MOVING_POINTS = "movingAroundPoints.MOVING_POINTS";
@@ -72,6 +73,17 @@ class Ids {
     static final String MOBILITY_AID_ADD_PROVIDED_CODE_PRESCRIBE = "howProvidedCodeField.PRESCRIBE";
     static final String MOBILITY_AID_ADD_USAGE = "usage";
     static final String MOBILITY_AID_ADD_CONFIRM_BUTTON = "button.continue";
+
+    static final String WALKING_TIME = "walkingTime";
+
+    // Medication stuff
+    static final String MEDICATION_ADD_FIRST_LINK = "firstaddmedicationlink";
+    static final String MEDICATION_HAS_MEDICATION_OPTION = "hasMedication";
+    static final String MEDICATION_ADD_MEDICATION_DESCRIPTION = "name";
+    static final String MEDICATION_PRESCRIBED_OPTION = "prescribed";
+    static final String MEDICATION_DOSAGE_TEXT = "dosage";
+    static final String MEDICATION_ADD_CONFIRM_BUTTON = "button.add.medication";
+    static final String MEDICATION_FREQUENCY_TEXT = "frequency";
   }
 
   class Eligibility {

@@ -4,15 +4,13 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/master.html}">
 <head>
-    <title th:text="#{${JOURNEY.who} + 'whereCanYouWalkPage.title'} + ' - ' + #{common.title.suffix}"></title>
+    <title th:text="(${errorSummary}? #{common.title.error} : '')  + #{${JOURNEY.who} + 'whereCanYouWalkPage.title'}"></title>
 </head>
 <body>
 
 <main layout:fragment="content">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-
-            <div th:replace="~{ fragments/errors :: govuk-error-summary(${errorSummary}) }"></div>
 
             <form th:action="@{/where-can-you-walk}" th:object="${formRequest}" method="POST" novalidate>
                 <fieldset class="govuk-fieldset">

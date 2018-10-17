@@ -20,7 +20,7 @@ Feature: DFT Blue badge Citizen app new application - CHILDBULK
     And   I complete describe health conditions page
     And   I complete the healthcare professionals page for "YES"
     And   I complete declaration page
-    Then  I should see .* page titled "Application submitted" with GOV.UK suffix
+    Then  I should see page titled "Application submitted" with GOV.UK suffix
 
 
   Scenario: Child bulk application for someone else
@@ -40,5 +40,5 @@ Feature: DFT Blue badge Citizen app new application - CHILDBULK
     And   I complete describe health conditions page
     And   I complete the healthcare professionals page for "YES"
     And   I complete declaration page
-    Then  I should see .* page titled "Application submitted" with GOV.UK suffix
+    Then  I should see page titled "Application submitted" with GOV.UK suffix
 

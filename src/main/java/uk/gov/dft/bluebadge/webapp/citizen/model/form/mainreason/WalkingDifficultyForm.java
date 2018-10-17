@@ -13,6 +13,7 @@ public class WalkingDifficultyForm implements StepForm {
 
   public enum WalkingDifficulty {
     HELP,
+    PLAN,
     PAIN,
     DANGEROUS,
     NONE
