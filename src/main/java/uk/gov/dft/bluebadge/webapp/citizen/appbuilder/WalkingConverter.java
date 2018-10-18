@@ -20,6 +20,8 @@ import java.util.List;
 
 class WalkingConverter {
 
+  private WalkingConverter() {}
+
   static WalkingDifficulty convert(Journey journey) {
 
     WalkingTimeForm walkingTimeForm = journey.getFormForStep(StepDefinition.WALKING_TIME);
@@ -62,12 +64,13 @@ class WalkingConverter {
       mobilityAidListForm
           .getMobilityAids()
           .forEach(
-              i -> walkingAids.add(
-                  WalkingAid.builder()
-                      .usage(i.getUsage())
-                      .howProvidedCode(i.getHowProvidedCodeField())
-                      .description(i.getAidTypeDescription())
-                      .build()));
+              i ->
+                  walkingAids.add(
+                      WalkingAid.builder()
+                          .usage(i.getUsage())
+                          .howProvidedCode(i.getHowProvidedCodeField())
+                          .description(i.getAidTypeDescription())
+                          .build()));
       return walkingAids;
     }
     return null;
@@ -80,11 +83,12 @@ class WalkingConverter {
       treatmentListForm
           .getTreatments()
           .forEach(
-              i -> treatments.add(
-                  Treatment.builder()
-                      .time(i.getTreatmentWhen())
-                      .description(i.getTreatmentDescription())
-                      .build()));
+              i ->
+                  treatments.add(
+                      Treatment.builder()
+                          .time(i.getTreatmentWhen())
+                          .description(i.getTreatmentDescription())
+                          .build()));
       return treatments;
     }
     return null;
@@ -97,13 +101,14 @@ class WalkingConverter {
       medicationListForm
           .getMedications()
           .forEach(
-              i -> medications.add(
-                  Medication.builder()
-                      .name(i.getName())
-                      .quantity(i.getDosage())
-                      .isPrescribed(i.getPrescribedValue())
-                      .frequency(i.getFrequency())
-                      .build()));
+              i ->
+                  medications.add(
+                      Medication.builder()
+                          .name(i.getName())
+                          .quantity(i.getDosage())
+                          .isPrescribed(i.getPrescribedValue())
+                          .frequency(i.getFrequency())
+                          .build()));
       return medications;
     }
     return null;

@@ -6,13 +6,14 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
 
-public class ContactConverter {
+class ContactConverter {
 
-  // TODO make package scoped
-  public static Contact convert(Journey journey){
+  private ContactConverter() {}
+
+  static Contact convert(Journey journey) {
     EnterAddressForm enterAddressForm = journey.getFormForStep(StepDefinition.ADDRESS);
     ContactDetailsForm contactDetailsForm = journey.getFormForStep(StepDefinition.CONTACT_DETAILS);
-    
+
     return Contact.builder()
         .buildingStreet(enterAddressForm.getBuildingAndStreet())
         .line2(enterAddressForm.getOptionalAddress())

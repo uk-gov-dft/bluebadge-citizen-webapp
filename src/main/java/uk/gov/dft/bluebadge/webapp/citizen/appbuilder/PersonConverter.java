@@ -12,9 +12,11 @@ import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefini
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.NAME;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.NINO;
 
-public class PersonConverter {
+class PersonConverter {
 
-  public static Person convert(Journey journey) {
+  private PersonConverter() {}
+
+  static Person convert(Journey journey) {
     ApplicantNameForm applicantNameForm = journey.getFormForStep(NAME);
     GenderForm genderForm = journey.getFormForStep(GENDER);
     NinoForm ninoForm = journey.getFormForStep(NINO);

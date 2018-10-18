@@ -11,6 +11,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 class EligibilityConverter {
 
+  private EligibilityConverter() {}
+
   static Eligibility convert(Journey journey) {
 
     Eligibility eligibility = null;

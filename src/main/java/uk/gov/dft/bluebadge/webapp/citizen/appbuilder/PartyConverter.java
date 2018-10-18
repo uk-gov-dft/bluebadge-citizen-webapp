@@ -4,9 +4,11 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Pa
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.PartyTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
-public class PartyConverter {
+class PartyConverter {
 
-  public static Party convert(Journey journey) {
+  private PartyConverter() {}
+
+  static Party convert(Journey journey) {
     return Party.builder()
         .typeCode(PartyTypeCodeField.PERSON)
         .contact(ContactConverter.convert(journey))
