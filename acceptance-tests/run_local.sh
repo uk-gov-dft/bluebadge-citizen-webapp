@@ -1,2 +1,2 @@
 #!/bin/bash
-gradle acceptanceTests -Dheadless=false -DbaseUrl=https://qa.does.not.exist -Dcucumber.options="--tags @SubmitApplicationAFCSRoute"
+gradle acceptanceTests -Dheadless=false -DbaseUrl=https://qa.does.not.exist
