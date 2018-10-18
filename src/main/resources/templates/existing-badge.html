@@ -43,7 +43,7 @@
                                 <div th:replace="~{ fragments/govuk-input :: govuk-input(#{existingBadge.field.badgeNum.label}, 'badgeNumber', #{existingBadge.field.badgeNum.label.eg}, 'text', 'govuk-!-width-two-thirds')}"></div>
                                 <br/>
                                 <p class="govuk-body">
-                                    <a id="bypass_link" th:href="@{/existing-badge-bypass}" th:text="#{existingBadge.dontKnow.link}"></a>
+                                    <a id="bypass_link" th:href="@{/existing-badge-bypass}" th:text="#{${JOURNEY.who} + existingBadge.dontKnow.link}"></a>
                                 </p>
                             </div>
 
