@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "accessible-autocomplete": "^1.6.1",
+    "babel-core": "^6.26.3",
     "govuk-frontend": "1.1.1"
   },
   "devDependencies": {

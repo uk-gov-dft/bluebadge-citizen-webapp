@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.StepController;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
@@ -45,7 +46,7 @@ public class WhatWalkingDifficultiesController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    //On returning to form, take previously submitted values.
+    // On returning to form, take previously submitted values.
     if (!model.containsAttribute(FORM_REQUEST)
         && null != journey.getWhatMakesWalkingDifficultForm()) {
       model.addAttribute(FORM_REQUEST, journey.getWhatMakesWalkingDifficultForm());
@@ -107,7 +108,7 @@ public class WhatWalkingDifficultiesController implements StepController {
             "whatMakesWalkingDifficult.select.option.balance"));
     options.add(
         new RadioOption(
-            WalkingDifficultyTypeCodeField.STRUGGLE.name(),
+            WalkingDifficultyTypeCodeField.LONGTIME.name(),
             journey.who + "whatMakesWalkingDifficult.select.option.longtime"));
     options.add(
         new RadioOption(
@@ -115,6 +116,12 @@ public class WhatWalkingDifficultiesController implements StepController {
             journey.who
                 + journey.getNation().name()
                 + ".whatMakesWalkingDifficult.select.option.dangerous"));
+    if (Nation.SCO.equals(journey.getNation()) || Nation.WLS.equals(journey.getNation())) {
+      options.add(
+          new RadioOption(
+              WalkingDifficultyTypeCodeField.STRUGGLE.name(),
+              journey.who + "whatMakesWalkingDifficult.select.option.struggle"));
+    }
     options.add(
         new RadioOption(
             WalkingDifficultyTypeCodeField.SOMELSE.name(),

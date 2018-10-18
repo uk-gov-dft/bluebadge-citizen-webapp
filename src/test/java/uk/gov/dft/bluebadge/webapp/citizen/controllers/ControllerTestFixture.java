@@ -37,7 +37,8 @@ public abstract class ControllerTestFixture<T> {
     journey.setApplicantForm(applicantForm);
   }
 
-  static ResultMatcher formRequestFlashAttributeHasFieldErrorCode(String fieldName, String error) {
+  protected static ResultMatcher formRequestFlashAttributeHasFieldErrorCode(
+      String fieldName, String error) {
     return flash()
         .attribute(
             "org.springframework.validation.BindingResult.formRequest",
@@ -49,14 +50,14 @@ public abstract class ControllerTestFixture<T> {
                         hasProperty("code", equalTo(error))))));
   }
 
-  void applyRoutmasterDefaultMocks(RouteMaster mockRouteMaster) {
+  protected void applyRoutmasterDefaultMocks(RouteMaster mockRouteMaster) {
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
     when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any())).thenCallRealMethod();
   }
 
-  abstract String getTemplateName();
+  protected abstract String getTemplateName();
 
-  abstract String getUrl();
+  protected abstract String getUrl();
 
   protected void show_ShouldDisplayTemplate() throws Exception {
     mockMvc

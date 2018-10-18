@@ -52,9 +52,14 @@ public class Mappings {
   public static final String URL_TREATMENT_LIST = "/list-treatments";
   public static final String URL_TREATMENT_ADD = "/add-treatment";
 
+  public static final String URL_MEDICATION_LIST = "/list-medication";
+  public static final String URL_MEDICATION_REMOVE = "/list-medication/remove";
+  public static final String URL_MEDICATION_ADD = "/add-medication";
+
   // Walking difficulties route
   public static final String URL_WHAT_WALKING_DIFFICULT = "/what-makes-walking-difficult";
   public static final String URL_WHERE_CAN_YOU_WALK = "/where-can-you-walk";
+  public static final String URL_WALKING_TIME = "/walking-time";
 
   private Mappings() {}
 
@@ -88,6 +93,7 @@ public class Mappings {
           .put(StepDefinition.CONTACT_COUNCIL, URL_CONTACT_COUNCIL)
           .put(StepDefinition.WALKING_DIFFICULTY, URL_WALKING_DIFFICULTY)
           .put(StepDefinition.WHERE_CAN_YOU_WALK, URL_WHERE_CAN_YOU_WALK)
+          .put(StepDefinition.WALKING_TIME, URL_WALKING_TIME)
           .put(StepDefinition.NOT_ELIGIBLE, URL_NOT_ELIGIBLE)
           .put(StepDefinition.EXISTING_BADGE, URL_EXISTING_BADGE)
           .put(StepDefinition.HEALTH_CONDITIONS, URL_HEALTH_CONDITIONS)
@@ -100,6 +106,8 @@ public class Mappings {
           .put(StepDefinition.MOBILITY_AID_ADD, URL_MOBILITY_AID_ADD)
           .put(StepDefinition.TREATMENT_LIST, URL_TREATMENT_LIST)
           .put(StepDefinition.TREATMENT_ADD, URL_TREATMENT_ADD)
+          .put(StepDefinition.MEDICATION_LIST, URL_MEDICATION_LIST)
+          .put(StepDefinition.MEDICATION_ADD, URL_MEDICATION_ADD)
           .build();
 
   public static StepDefinition getStep(String url) {
