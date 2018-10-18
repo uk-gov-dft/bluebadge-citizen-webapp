@@ -52,13 +52,14 @@ public class Journey implements Serializable {
   public String who;
   public String ageGroup;
 
-  public void setFormForStep(StepDefinition definition, StepForm form) {
+  public void setFormForStep(StepForm form) {
     cleanUpSteps(new HashSet<>(), form.getCleanUpSteps(this));
-    forms.put(definition, form);
+    forms.put(form.getAssociatedStep(), form);
   }
 
-  public StepForm getFormForStep(StepDefinition step) {
-    return forms.get(step);
+  @SuppressWarnings("unchecked")
+  public <T> T getFormForStep(StepDefinition step) {
+    return (T)forms.get(step);
   }
 
   public void cleanUpSteps(Set<StepDefinition> alreadyCleaned, List<StepDefinition> steps) {
@@ -89,7 +90,7 @@ public class Journey implements Serializable {
 
   public Boolean isApplicantYourself() {
     if (hasStepForm(StepDefinition.APPLICANT_TYPE)) {
-      ApplicantForm form = (ApplicantForm) getFormForStep(StepDefinition.APPLICANT_TYPE);
+      ApplicantForm form = getFormForStep(StepDefinition.APPLICANT_TYPE);
       return form.getApplicantType().equals(ApplicantType.YOURSELF.toString());
     }
     return null;
@@ -97,7 +98,7 @@ public class Journey implements Serializable {
 
   public Boolean isApplicantYoung() {
     if (hasStepForm(StepDefinition.DOB)) {
-      DateOfBirthForm dateOfBirthForm = (DateOfBirthForm) getFormForStep(StepDefinition.DOB);
+      DateOfBirthForm dateOfBirthForm = getFormForStep(StepDefinition.DOB);
       return dateOfBirthForm
           .getDateOfBirth()
           .getLocalDate()
@@ -127,28 +128,28 @@ public class Journey implements Serializable {
   }
 
   public void setApplicantForm(ApplicantForm applicantForm) {
-    setFormForStep(StepDefinition.APPLICANT_TYPE, applicantForm);
+    setFormForStep(applicantForm);
     who = isApplicantYourself() ? "you." : "oth.";
   }
 
   public void setApplicantNameForm(ApplicantNameForm applicantNameForm) {
-    setFormForStep(StepDefinition.NAME, applicantNameForm);
+    setFormForStep(applicantNameForm);
   }
 
   public ApplicantNameForm getApplicantNameForm() {
-    return (ApplicantNameForm) getFormForStep(StepDefinition.NAME);
+    return getFormForStep(StepDefinition.NAME);
   }
 
   public void setHealthConditionsForm(HealthConditionsForm healthConditionsForm) {
-    setFormForStep(StepDefinition.HEALTH_CONDITIONS, healthConditionsForm);
+    setFormForStep(healthConditionsForm);
   }
 
   public HealthConditionsForm getHealthConditionsForm() {
-    return (HealthConditionsForm) getFormForStep(StepDefinition.HEALTH_CONDITIONS);
+    return getFormForStep(StepDefinition.HEALTH_CONDITIONS);
   }
 
   public void setDateOfBirthForm(DateOfBirthForm dateOfBirthForm) {
-    setFormForStep(StepDefinition.DOB, dateOfBirthForm);
+    setFormForStep(dateOfBirthForm);
     ageGroup = isApplicantYoung() ? "young." : "adult.";
   }
 
@@ -157,181 +158,180 @@ public class Journey implements Serializable {
   }
 
   public ChooseYourCouncilForm getChooseYourCouncilForm() {
-    return (ChooseYourCouncilForm) getFormForStep(StepDefinition.CHOOSE_COUNCIL);
+    return getFormForStep(StepDefinition.CHOOSE_COUNCIL);
   }
 
   public void setChooseYourCouncilForm(ChooseYourCouncilForm chooseYourCouncilForm) {
-    setFormForStep(StepDefinition.CHOOSE_COUNCIL, chooseYourCouncilForm);
+    setFormForStep(chooseYourCouncilForm);
   }
 
   public YourIssuingAuthorityForm getYourIssuingAuthorityForm() {
-    return (YourIssuingAuthorityForm) getFormForStep(StepDefinition.YOUR_ISSUING_AUTHORITY);
+    return getFormForStep(StepDefinition.YOUR_ISSUING_AUTHORITY);
   }
 
   public void setYourIssuingAuthorityForm(YourIssuingAuthorityForm yourIssuingAuthorityForm) {
-    setFormForStep(StepDefinition.YOUR_ISSUING_AUTHORITY, yourIssuingAuthorityForm);
+    setFormForStep(yourIssuingAuthorityForm);
   }
 
   public ReceiveBenefitsForm getReceiveBenefitsForm() {
-    return (ReceiveBenefitsForm) getFormForStep(StepDefinition.RECEIVE_BENEFITS);
+    return getFormForStep(StepDefinition.RECEIVE_BENEFITS);
   }
 
   public void setReceiveBenefitsForm(ReceiveBenefitsForm receiveBenefitsForm) {
-    setFormForStep(StepDefinition.RECEIVE_BENEFITS, receiveBenefitsForm);
-    //    setMainReasonForm(null);
+    setFormForStep(receiveBenefitsForm);
   }
 
   public PipMovingAroundForm getPipMovingAroundForm() {
-    return (PipMovingAroundForm) getFormForStep(StepDefinition.PIP_MOVING_AROUND);
+    return getFormForStep(StepDefinition.PIP_MOVING_AROUND);
   }
 
   public void setPipMovingAroundForm(PipMovingAroundForm pipMovingAroundForm) {
-    setFormForStep(StepDefinition.PIP_MOVING_AROUND, pipMovingAroundForm);
+    setFormForStep(pipMovingAroundForm);
   }
 
   public PipDlaQuestionForm getPipDlaQuestionForm() {
-    return (PipDlaQuestionForm) getFormForStep(StepDefinition.PIP_DLA);
+    return getFormForStep(StepDefinition.PIP_DLA);
   }
 
   public void setPipDlaQuestionForm(PipDlaQuestionForm pipDlaQuestionForm) {
-    setFormForStep(StepDefinition.PIP_DLA, pipDlaQuestionForm);
+    setFormForStep(pipDlaQuestionForm);
   }
 
   public PipPlanningJourneyForm getPipPlanningJourneyForm() {
-    return (PipPlanningJourneyForm) getFormForStep(StepDefinition.PIP_PLANNING_JOURNEY);
+    return getFormForStep(StepDefinition.PIP_PLANNING_JOURNEY);
   }
 
   public void setPipPlanningJourneyForm(PipPlanningJourneyForm pipPlanningJourneyForm) {
-    setFormForStep(StepDefinition.PIP_PLANNING_JOURNEY, pipPlanningJourneyForm);
+    setFormForStep(pipPlanningJourneyForm);
   }
 
   public CompensationSchemeForm getCompensationSchemeForm() {
-    return (CompensationSchemeForm) getFormForStep(StepDefinition.AFCS_COMPENSATION_SCHEME);
+    return getFormForStep(StepDefinition.AFCS_COMPENSATION_SCHEME);
   }
 
   public void setCompensationSchemeForm(CompensationSchemeForm compensationSchemeForm) {
-    setFormForStep(StepDefinition.AFCS_COMPENSATION_SCHEME, compensationSchemeForm);
+    setFormForStep(compensationSchemeForm);
   }
 
   public DisabilityForm getDisabilityForm() {
-    return (DisabilityForm) getFormForStep(StepDefinition.AFCS_DISABILITY);
+    return getFormForStep(StepDefinition.AFCS_DISABILITY);
   }
 
   public void setDisabilityForm(DisabilityForm disabilityForm) {
-    setFormForStep(StepDefinition.AFCS_DISABILITY, disabilityForm);
+    setFormForStep(disabilityForm);
   }
 
   public MentalDisorderForm getMentalDisorderForm() {
-    return (MentalDisorderForm) getFormForStep(StepDefinition.AFCS_MENTAL_DISORDER);
+    return getFormForStep(StepDefinition.AFCS_MENTAL_DISORDER);
   }
 
   public void setMentalDisorderForm(MentalDisorderForm mentalDisorderForm) {
-    setFormForStep(StepDefinition.AFCS_MENTAL_DISORDER, mentalDisorderForm);
+    setFormForStep(mentalDisorderForm);
   }
 
   public HigherRateMobilityForm getHigherRateMobilityForm() {
-    return (HigherRateMobilityForm) getFormForStep(StepDefinition.HIGHER_RATE_MOBILITY);
+    return getFormForStep(StepDefinition.HIGHER_RATE_MOBILITY);
   }
 
   public void setHigherRateMobilityForm(HigherRateMobilityForm higherRateMobilityForm) {
-    setFormForStep(StepDefinition.HIGHER_RATE_MOBILITY, higherRateMobilityForm);
+    setFormForStep(higherRateMobilityForm);
   }
 
   public MainReasonForm getMainReasonForm() {
-    return (MainReasonForm) getFormForStep(StepDefinition.MAIN_REASON);
+    return getFormForStep(StepDefinition.MAIN_REASON);
   }
 
   public void setMainReasonForm(MainReasonForm mainReasonForm) {
-    setFormForStep(StepDefinition.MAIN_REASON, mainReasonForm);
+    setFormForStep(mainReasonForm);
   }
 
   public WalkingDifficultyForm getWalkingDifficultyForm() {
-    return (WalkingDifficultyForm) getFormForStep(StepDefinition.WALKING_DIFFICULTY);
+    return getFormForStep(StepDefinition.WALKING_DIFFICULTY);
   }
 
   public void setWalkingDifficultyForm(WalkingDifficultyForm walkingDifficultyForm) {
-    setFormForStep(StepDefinition.WALKING_DIFFICULTY, walkingDifficultyForm);
+    setFormForStep(walkingDifficultyForm);
   }
 
   public WhereCanYouWalkForm getWhereCanYouWalkForm() {
-    return (WhereCanYouWalkForm) getFormForStep(StepDefinition.WHERE_CAN_YOU_WALK);
+    return getFormForStep(StepDefinition.WHERE_CAN_YOU_WALK);
   }
 
   public void setWhereCanYouWalkForm(WhereCanYouWalkForm whereCanYouWalkForm) {
-    setFormForStep(StepDefinition.WHERE_CAN_YOU_WALK, whereCanYouWalkForm);
+    setFormForStep(whereCanYouWalkForm);
   }
 
   public GenderForm getGenderForm() {
-    return (GenderForm) getFormForStep(StepDefinition.GENDER);
+    return getFormForStep(StepDefinition.GENDER);
   }
 
   public void setGenderForm(GenderForm genderForm) {
-    setFormForStep(StepDefinition.GENDER, genderForm);
+    setFormForStep(genderForm);
   }
 
   public ContactDetailsForm getContactDetailsForm() {
-    return (ContactDetailsForm) getFormForStep(StepDefinition.CONTACT_DETAILS);
+    return getFormForStep(StepDefinition.CONTACT_DETAILS);
   }
 
   public void setContactDetailsForm(ContactDetailsForm contactDetailsForm) {
-    setFormForStep(StepDefinition.CONTACT_DETAILS, contactDetailsForm);
+    setFormForStep(contactDetailsForm);
   }
 
   public NinoForm getNinoForm() {
-    return (NinoForm) getFormForStep(StepDefinition.NINO);
+    return getFormForStep(StepDefinition.NINO);
   }
 
   public void setNinoForm(NinoForm ninoForm) {
-    setFormForStep(StepDefinition.NINO, ninoForm);
+    setFormForStep(ninoForm);
   }
 
   public EnterAddressForm getEnterAddressForm() {
-    return (EnterAddressForm) getFormForStep(StepDefinition.ADDRESS);
+    return getFormForStep(StepDefinition.ADDRESS);
   }
 
   public void setEnterAddressForm(EnterAddressForm enterAddressForm) {
-    setFormForStep(StepDefinition.ADDRESS, enterAddressForm);
+    setFormForStep(enterAddressForm);
   }
 
   public WhatMakesWalkingDifficultForm getWhatMakesWalkingDifficultForm() {
-    return (WhatMakesWalkingDifficultForm) getFormForStep(StepDefinition.WHAT_WALKING_DIFFICULTIES);
+    return getFormForStep(StepDefinition.WHAT_WALKING_DIFFICULTIES);
   }
 
   public void setWhatMakesWalkingDifficultForm(
       WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm) {
-    setFormForStep(StepDefinition.WHAT_WALKING_DIFFICULTIES, whatMakesWalkingDifficultForm);
+    setFormForStep(whatMakesWalkingDifficultForm);
   }
 
   public WalkingTimeForm getWalkingTimeForm() {
-    return (WalkingTimeForm) getFormForStep(StepDefinition.WALKING_TIME);
+    return getFormForStep(StepDefinition.WALKING_TIME);
   }
 
   public void setWalkingTimeForm(WalkingTimeForm walkingTimeForm) {
-    setFormForStep(StepDefinition.WALKING_TIME, walkingTimeForm);
+    setFormForStep(walkingTimeForm);
   }
 
   public MobilityAidListForm getMobilityAidListForm() {
-    return (MobilityAidListForm) getFormForStep(StepDefinition.MOBILITY_AID_LIST);
+    return getFormForStep(StepDefinition.MOBILITY_AID_LIST);
   }
 
   public void setMobilityAidListForm(MobilityAidListForm mobilityAidListForm) {
-    setFormForStep(StepDefinition.MOBILITY_AID_LIST, mobilityAidListForm);
+    setFormForStep(mobilityAidListForm);
   }
 
   public MedicationListForm getMedicationListForm() {
-    return (MedicationListForm) getFormForStep(StepDefinition.MEDICATION_LIST);
+    return getFormForStep(StepDefinition.MEDICATION_LIST);
   }
 
   public void setMedicationListForm(MedicationListForm medicationListForm) {
-    setFormForStep(StepDefinition.MEDICATION_LIST, medicationListForm);
+    setFormForStep(medicationListForm);
   }
 
   public TreatmentListForm getTreatmentListForm() {
-    return (TreatmentListForm) getFormForStep(StepDefinition.TREATMENT_LIST);
+    return getFormForStep(StepDefinition.TREATMENT_LIST);
   }
 
   public void setTreatmentListForm(TreatmentListForm treatmentListForm) {
-    setFormForStep(StepDefinition.TREATMENT_LIST, treatmentListForm);
+    setFormForStep(treatmentListForm);
   }
 
   // -- META DATA BELOW --
@@ -352,13 +352,13 @@ public class Journey implements Serializable {
 
   public EligibilityCodeField getEligibilityCode() {
     if (hasStepForm(StepDefinition.MAIN_REASON)) {
-      MainReasonForm mainReasonForm = (MainReasonForm) getFormForStep(StepDefinition.MAIN_REASON);
+      MainReasonForm mainReasonForm = getFormForStep(StepDefinition.MAIN_REASON);
       if (EligibilityCodeField.NONE != mainReasonForm.getMainReasonOption()) {
         return mainReasonForm.getMainReasonOption();
       }
     } else if (hasStepForm(StepDefinition.RECEIVE_BENEFITS)) {
       ReceiveBenefitsForm receiveBenefitsForm =
-          (ReceiveBenefitsForm) getFormForStep(StepDefinition.RECEIVE_BENEFITS);
+          getFormForStep(StepDefinition.RECEIVE_BENEFITS);
       if (EligibilityCodeField.NONE != receiveBenefitsForm.getBenefitType()) {
         return receiveBenefitsForm.getBenefitType();
       }
@@ -367,8 +367,8 @@ public class Journey implements Serializable {
   }
 
   public String getDescriptionOfCondition() {
-    HealthConditionsForm healthConditionsForm = getHealthConditionsForm();
-    WhereCanYouWalkForm whereCanYouWalkForm = getWhereCanYouWalkForm();
+    HealthConditionsForm healthConditionsForm = getFormForStep(StepDefinition.HEALTH_CONDITIONS);
+    WhereCanYouWalkForm whereCanYouWalkForm = getFormForStep(StepDefinition.WHERE_CAN_YOU_WALK);
 
     StringBuilder descriptionOfCondition = new StringBuilder();
     if (healthConditionsForm != null && healthConditionsForm.getDescriptionOfConditions() != null) {
