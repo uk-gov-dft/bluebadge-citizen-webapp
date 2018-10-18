@@ -342,11 +342,11 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
 
 
-  @And("^I complete the already have a blue badge page for \"(Yes|No)\"$")
+  @And("^I complete the already have a blue badge page for \"(YES|NO)\"$")
   public void iCompleteTheAlreadyHaveABlueBadgePageFor(String opt) throws Throwable {
-    sitePage.findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + opt).click();
+    sitePage.findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION +"_"+ opt.toLowerCase()).click();
 
-    if("Yes".equals(opt)) {
+    if("YES".equals(opt)) {
       sitePage.findPageElementById(Ids.Preamble.BADGE_NUMBER).sendKeys("AB12CD");
     }
 
