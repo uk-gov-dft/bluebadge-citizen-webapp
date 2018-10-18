@@ -52,7 +52,7 @@ public class ExistingBadgeController implements StepController {
 
   @GetMapping(EXISTING_BADGE_BYPASS_URL)
   public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
-    ExistingBadgeForm formRequest = ExistingBadgeForm.builder().hasExistingBadge(false).build();
+    ExistingBadgeForm formRequest = ExistingBadgeForm.builder().hasExistingBadge(true).build();
     journey.setExistingBadgeForm(formRequest);
     return routeMaster.redirectToOnSuccess(formRequest);
   }

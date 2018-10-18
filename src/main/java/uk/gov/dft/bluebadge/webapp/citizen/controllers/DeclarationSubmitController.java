@@ -191,7 +191,7 @@ public class DeclarationSubmitController implements StepController {
     Application.ApplicationBuilder application = Application.builder();
 
     ExistingBadgeForm existingBadgeForm = journey.getExistingBadgeForm();
-    if (existingBadgeForm != null && !existingBadgeForm.getBadgeNumber().isEmpty()) {
+    if (existingBadgeForm != null && existingBadgeForm.getBadgeNumber() != null) {
       application.existingBadgeNumber(existingBadgeForm.getBadgeNumber());
     }
 
