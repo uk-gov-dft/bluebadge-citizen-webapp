@@ -340,18 +340,17 @@ public class ApplicationFixture extends AbstractSpringSteps {
     clickButtonById(Ids.Walkd.MEDICATION_ADD_CONFIRM_BUTTON);
   }
 
-
-
   @And("^I complete the already have a blue badge page for \"(YES|NO|YES BUT DON'T KNOW)\"$")
   public void iCompleteTheAlreadyHaveABlueBadgePageFor(String opt) throws Throwable {
-    if("YES BUT DON'T KNOW".equals(opt)) {
+    if ("YES BUT DON'T KNOW".equals(opt)) {
       sitePage.findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + "_yes").click();
-      sitePage.findPageElementById(Ids.Preamble.BADGE_NUMBER_BYPASS_LINK ).click();
-    }
-    else {
-      sitePage.findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + "_" + opt.toLowerCase() ).click();
+      sitePage.findPageElementById(Ids.Preamble.BADGE_NUMBER_BYPASS_LINK).click();
+    } else {
+      sitePage
+          .findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + "_" + opt.toLowerCase())
+          .click();
 
-      if("YES".equals(opt)) {
+      if ("YES".equals(opt)) {
         sitePage.findPageElementById(Ids.Preamble.BADGE_NUMBER).sendKeys("AB12CD");
       }
 

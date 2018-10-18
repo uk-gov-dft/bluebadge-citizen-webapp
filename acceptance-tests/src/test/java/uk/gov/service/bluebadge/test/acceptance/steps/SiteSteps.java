@@ -309,14 +309,13 @@ public class SiteSteps extends AbstractSpringSteps {
   }
 
   @Then("^The google analytics tag should be available$")
-  public void theGoogleAnalyticsTagShouldBeAvailable()  {
+  public void theGoogleAnalyticsTagShouldBeAvailable() {
     assertTrue(sitePage.getPageContent().contains(GOOGLE_ANALYTICS_TAG));
   }
 
   @And(
       "^I should see the \"(yourself|someone else)\" option button is selected in the Who are you applying for? page$")
-  public void iShouldSeeTheOptionButtonIsSelectedInTheWhoAreYouApplyingForPage(String selfOrOther)
-  {
+  public void iShouldSeeTheOptionButtonIsSelectedInTheWhoAreYouApplyingForPage(String selfOrOther) {
 
     if (selfOrOther.equalsIgnoreCase("yourself")) {
 
@@ -330,17 +329,17 @@ public class SiteSteps extends AbstractSpringSteps {
 
   @And("^I complete the already have a blue badge page \"(YES|NO|YES BUT DON'T KNOW)\"$")
   public void iCompleteTheAlreadyHaveABlueBadgePage(String opt) {
-    if("YES BUT DON't KNOW".equals(opt)) {
+    if ("YES BUT DON't KNOW".equals(opt)) {
       sitePage.findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + "_yes").click();
-      sitePage.findPageElementById(Ids.Preamble.BADGE_NUMBER_BYPASS_LINK ).click();
-    }
-    else {
-      sitePage.findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + "_" + opt.toLowerCase() ).click();
+      sitePage.findPageElementById(Ids.Preamble.BADGE_NUMBER_BYPASS_LINK).click();
+    } else {
+      sitePage
+          .findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + "_" + opt.toLowerCase())
+          .click();
 
-      if("YES".equals(opt)) {
+      if ("YES".equals(opt)) {
         sitePage.findPageElementById(Ids.Preamble.BADGE_NUMBER).sendKeys("AB12CD");
       }
-
     }
   }
 }
