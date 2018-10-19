@@ -49,8 +49,8 @@ class Ids {
     static final String GENDER_FEMALE = "gender.FEMALE";
     static final String GENDER_UNSPECIFIED = "gender.UNSPECIFIE";
     static final String NI = "nino";
-    static final String NO_NI_TEXT = "You don't have a National Insurance number";
-    static final String NO_NI_LINK_TEXT = "Continue without a National Insurance number.";
+    static final String NO_NI_LINK = "noNino";
+    static final String SKIP_WITHOUT_NI = "skipNiLink";
   }
 
   class Contact {

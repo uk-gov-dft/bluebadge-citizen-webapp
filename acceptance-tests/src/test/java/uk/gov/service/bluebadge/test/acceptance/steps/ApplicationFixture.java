@@ -201,8 +201,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("^I complete NI number page without a NI$")
   public void iCompleteNINumberPageWithoutNI() {
-    sitePage.findElementWithText(Ids.Person.NO_NI_TEXT).click();
-    sitePage.findElementWithText(Ids.Person.NO_NI_LINK_TEXT).click();
+    sitePage.findPageElementById(Ids.Person.NO_NI_LINK).click();
+    sitePage.findPageElementById(Ids.Person.SKIP_WITHOUT_NI).click();
     pressContinue();
   }
 
