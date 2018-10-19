@@ -1,5 +1,11 @@
 package uk.gov.dft.bluebadge.webapp.citizen.filters;
 
+import static org.junit.Assert.assertEquals;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -25,13 +31,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class EsapiFilterTest {
@@ -39,8 +38,7 @@ public class EsapiFilterTest {
   public static final String NASTY_STRING = "<script>console.log('fred');</script>";
   public static final String GOOD_STRING = "nothing bad in here";
 
-  @LocalServerPort
-  private int port;
+  @LocalServerPort private int port;
 
   CloseableHttpClient client;
   CookieStore cookieStore;
@@ -67,10 +65,10 @@ public class EsapiFilterTest {
     String moreContentAsString = postData(NASTY_STRING, client, httpContext);
     assertEquals("", moreContentAsString);
     client.close();
-
   }
 
-  private String postData(String dataContent, CloseableHttpClient client, HttpContext httpContext) throws IOException {
+  private String postData(String dataContent, CloseableHttpClient client, HttpContext httpContext)
+      throws IOException {
     HttpPost httpPost = new HttpPost("http://localhost:" + port + "/test-bounce");
     httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded");
     List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -96,6 +94,5 @@ public class EsapiFilterTest {
       http.csrf().disable();
       http.csrf().requireCsrfProtectionMatcher(request -> false);
     }
-
   }
 }
