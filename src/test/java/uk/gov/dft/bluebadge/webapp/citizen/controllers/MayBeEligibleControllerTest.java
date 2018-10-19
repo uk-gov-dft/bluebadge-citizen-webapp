@@ -63,7 +63,11 @@ public class MayBeEligibleControllerTest {
   @SneakyThrows
   public void whenIssuingFormNotSet_thenRedirectBackToStart() {
     mockMvc
-        .perform(get("/may-be-eligible").sessionAttr("JOURNEY", journey))
+        .perform(
+            get("/may-be-eligible")
+                .sessionAttr(
+                    "JOURNEY",
+                    JourneyFixture.getDefaultJourneyToStep(StepDefinition.APPLICANT_TYPE)))
         .andExpect(status().isOk())
         .andExpect(view().name("backToStart"));
   }

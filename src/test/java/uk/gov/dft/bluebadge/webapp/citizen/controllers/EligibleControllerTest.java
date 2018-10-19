@@ -1,12 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
 import lombok.SneakyThrows;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -23,10 +16,16 @@ import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 public class EligibleControllerTest {
 
   private MockMvc mockMvc;
-  private EligibleController controller;
 
   @Mock private RouteMaster mockRouteMaster;
   private Journey journey;
@@ -34,7 +33,7 @@ public class EligibleControllerTest {
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new EligibleController(mockRouteMaster);
+    EligibleController controller = new EligibleController(mockRouteMaster);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -64,7 +63,11 @@ public class EligibleControllerTest {
   @SneakyThrows
   public void whenIssuingFormNotSet_thenRedirectBackToStart() {
     mockMvc
-        .perform(get("/eligible").sessionAttr("JOURNEY", journey))
+        .perform(
+            get("/eligible")
+                .sessionAttr(
+                    "JOURNEY",
+                    JourneyFixture.getDefaultJourneyToStep(StepDefinition.APPLICANT_TYPE)))
         .andExpect(status().isOk())
         .andExpect(view().name("backToStart"));
   }

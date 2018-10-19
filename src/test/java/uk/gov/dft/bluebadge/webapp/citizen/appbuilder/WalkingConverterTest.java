@@ -13,6 +13,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Wa
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingLengthOfTimeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingSpeedCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
@@ -33,7 +34,7 @@ public class WalkingConverterTest {
   @Before
   public void setUp() {
     MockitoAnnotations.initMocks(this);
-    ConverterJourneyFixture.configureMockJourney(journey);
+    JourneyFixture.configureMockJourney(journey);
   }
 
   @Test
@@ -96,7 +97,7 @@ public class WalkingConverterTest {
   @Test
   public void getWalkingAids_withOne() {
     List<WalkingAid> result =
-        WalkingConverter.getWalkingAids(ConverterJourneyFixture.mobilityAidListForm);
+        WalkingConverter.getWalkingAids(JourneyFixture.mobilityAidListForm);
     assertThat(result.get(0).getDescription())
         .isEqualTo(MobilityAidAddForm.AidType.SCOOTER.getType());
     assertThat(result.get(0).getUsage()).isEqualTo("Usage");
@@ -106,7 +107,7 @@ public class WalkingConverterTest {
   @Test
   public void getTreatments_withOne() {
     List<Treatment> result =
-        WalkingConverter.getTreatments(ConverterJourneyFixture.treatmentListForm);
+        WalkingConverter.getTreatments(JourneyFixture.treatmentListForm);
     assertThat(result.get(0).getDescription()).isEqualTo("Desc");
     assertThat(result.get(0).getTime()).isEqualTo("When");
   }
@@ -114,7 +115,7 @@ public class WalkingConverterTest {
   @Test
   public void getMedications_withOne() {
     List<Medication> result =
-        WalkingConverter.getMedications(ConverterJourneyFixture.medicationListForm);
+        WalkingConverter.getMedications(JourneyFixture.medicationListForm);
     assertThat(result.get(0).getFrequency()).isEqualTo("Frequency");
     assertThat(result.get(0).getIsPrescribed()).isEqualTo(Boolean.TRUE);
     assertThat(result.get(0).getName()).isEqualTo("name");

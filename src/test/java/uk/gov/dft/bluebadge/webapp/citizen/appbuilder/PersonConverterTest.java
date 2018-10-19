@@ -4,15 +4,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.GenderCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Person;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.component.CompoundDate;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -24,18 +19,17 @@ public class PersonConverterTest {
   @Before
   public void setUp() {
     MockitoAnnotations.initMocks(this);
-    ConverterJourneyFixture.configureMockJourney(journey);
+    JourneyFixture.configureMockJourney(journey);
   }
-
 
   @Test
   public void convert() {
     Person result = PersonConverter.convert(journey);
-    assertThat(result.getBadgeHolderName()).isEqualTo("Full");
-    assertThat(result.getNameAtBirth()).isEqualTo("Birth");
-    assertThat(result.getGenderCode()).isEqualTo(GenderCodeField.FEMALE);
-    assertThat(result.getDob()).isEqualTo("1970-05-29");
-    assertThat(result.getNino()).isEqualTo("NS123456D");
+    assertThat(result.getBadgeHolderName()).isEqualTo(JourneyFixture.Values.FULL_NAME);
+    assertThat(result.getNameAtBirth()).isEqualTo(JourneyFixture.Values.BIRTH_NAME);
+    assertThat(result.getGenderCode()).isEqualTo(JourneyFixture.Values.GENDER);
+    assertThat(result.getDob()).isEqualTo(JourneyFixture.Values.DOB_AS_EQUAL_TO_STRING);
+    assertThat(result.getNino()).isEqualTo(JourneyFixture.Values.NINO);
 
     // Try with null nino.
     when(journey.getFormForStep(StepDefinition.NINO)).thenReturn(null);

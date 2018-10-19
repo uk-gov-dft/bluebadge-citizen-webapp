@@ -5,17 +5,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.EnumSet;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.JourneyFixture;
 
-public class PipPlanningJourneyFormTest extends JourneyFixture {
+@SuppressWarnings("OptionalGetWithoutIsPresent")
+public class PipPlanningJourneyFormTest  {
 
-  EnumSet<PipPlanningJourneyForm.PipPlanningJourneyOption> twelveOrMore =
+  private EnumSet<PipPlanningJourneyForm.PipPlanningJourneyOption> twelveOrMore =
       EnumSet.of(PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_12);
 
   @Test
   public void determineNextStep_when12OrMorePoints_thenIsEligible() {
-    Journey journey = new JourneyBuilder().setEnglishLocalAuthority().build();
+    Journey journey = new JourneyFixture.JourneyBuilder().setEnglishLocalAuthority().build();
     twelveOrMore.forEach(
         e -> {
           PipPlanningJourneyForm form =
@@ -27,7 +28,7 @@ public class PipPlanningJourneyFormTest extends JourneyFixture {
 
   @Test
   public void determineNextStep_whenLessThan12PointsWales_thenMainReason() {
-    Journey journey = new JourneyBuilder().setWelshLocalAuthority().build();
+    Journey journey = new JourneyFixture.JourneyBuilder().setWelshLocalAuthority().build();
     EnumSet.complementOf(twelveOrMore)
         .forEach(
             e -> {
@@ -41,7 +42,7 @@ public class PipPlanningJourneyFormTest extends JourneyFixture {
 
   @Test
   public void determineNextStep_whenLessThan12PointsScotland_thenPipDla() {
-    Journey journey = new JourneyBuilder().setScottishLocalAuthority().build();
+    Journey journey = new JourneyFixture.JourneyBuilder().setScottishLocalAuthority().build();
     EnumSet.complementOf(twelveOrMore)
         .forEach(
             e -> {

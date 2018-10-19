@@ -1,13 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -23,12 +15,19 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 public class ContactDetailsControllerTest {
 
-  public static final String URL_CONTACT_DETAILS = "/contact-details";
-  public static final String VIEW_CONTACT_DETAILS = "contact-details";
+  private static final String URL_CONTACT_DETAILS = "/contact-details";
+  private static final String VIEW_CONTACT_DETAILS = "contact-details";
   private MockMvc mockMvc;
-  private ContactDetailsController controller;
   private Journey journey;
 
   @Mock private RouteMaster mockRouteMaster;
@@ -36,7 +35,7 @@ public class ContactDetailsControllerTest {
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new ContactDetailsController(mockRouteMaster);
+    ContactDetailsController controller = new ContactDetailsController(mockRouteMaster);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -65,7 +64,7 @@ public class ContactDetailsControllerTest {
     // Set to applying for someone else
     Journey journey = JourneyFixture.getDefaultJourney();
     ApplicantForm formForStep =
-        (ApplicantForm) journey.getFormForStep(StepDefinition.APPLICANT_TYPE);
+        journey.getFormForStep(StepDefinition.APPLICANT_TYPE);
     formForStep.setApplicantType(ApplicantType.SOMEONE_ELSE.toString());
 
     mockMvc
