@@ -1,5 +1,10 @@
 package uk.gov.dft.bluebadge.webapp.citizen.filters;
 
+import java.io.IOException;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.owasp.esapi.filters.SecurityWrapperRequest;
 import org.owasp.esapi.filters.SecurityWrapperResponse;
@@ -7,19 +12,15 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
 @Component
 @Order(500)
 @Slf4j
 public class EsapiFilter extends OncePerRequestFilter {
 
   /**
-   * Wraps the request/response using a secure implementation that sanitises the headers/cookies/parameters etc..
+   * Wraps the request/response using a secure implementation that sanitises the
+   * headers/cookies/parameters etc..
+   *
    * @param request
    * @param response
    * @param filterChain
@@ -27,23 +28,25 @@ public class EsapiFilter extends OncePerRequestFilter {
    * @throws IOException
    */
   @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+  protected void doFilterInternal(
+      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      throws ServletException, IOException {
 
     if (isAsyncDispatch(request)) {
       filterChain.doFilter(request, response);
     } else {
       doFilterWrapped(wrapRequest(request), wrapResponse(response), filterChain);
     }
-
   }
 
-  protected void doFilterWrapped(SecurityWrapperRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-      try {
-        filterChain.doFilter(request, response);
-      }
-      catch (Exception e) {
-        log.error("Unable to complete filter chain:", e);
-      }
+  protected void doFilterWrapped(
+      SecurityWrapperRequest request, HttpServletResponse response, FilterChain filterChain)
+      throws ServletException, IOException {
+    try {
+      filterChain.doFilter(request, response);
+    } catch (Exception e) {
+      log.error("Unable to complete filter chain:", e);
+    }
   }
 
   private SecurityWrapperRequest wrapRequest(HttpServletRequest request) {
@@ -61,5 +64,4 @@ public class EsapiFilter extends OncePerRequestFilter {
       return new SecurityWrapperResponse(response);
     }
   }
-
 }

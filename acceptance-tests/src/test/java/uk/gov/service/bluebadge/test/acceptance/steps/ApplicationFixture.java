@@ -37,9 +37,6 @@ public class ApplicationFixture extends AbstractSpringSteps {
     this.sitePage = sitePage;
   }
 
-  private void pressContinue() {
-    sitePage.findElementWithText("Continue").click();
-  }
 
   @Given("I complete applicant page for \"(yourself|someone else)\"")
   public void iCompleteApplicantPage(String myselfOrOther) {
@@ -267,15 +264,6 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
-  private void clearAndSendKeys(String element, String value) {
-    sitePage.findPageElementById(element).clear();
-    sitePage.findPageElementById(element).sendKeys(value);
-  }
-
-  private void clickButtonById(String id) {
-    sitePage.findPageElementById(id).click();
-  }
-
   @And("^I complete the mobility aids page for \"(YES|NO)\"$")
   public void iCompleteTheMobilityAidsPage(String option) {
     sitePage.findPageElementById(Ids.Walkd.MOBILITY_AID_OPTION + option.toLowerCase()).click();
@@ -357,4 +345,18 @@ public class ApplicationFixture extends AbstractSpringSteps {
       pressContinue();
     }
   }
+
+  private void clearAndSendKeys(String element, String value) {
+    sitePage.findPageElementById(element).clear();
+    sitePage.findPageElementById(element).sendKeys(value);
+  }
+
+  private void clickButtonById(String id) {
+    sitePage.findPageElementById(id).click();
+  }
+
+  private void pressContinue() {
+    sitePage.findElementWithText("Continue").click();
+  }
+
 }
