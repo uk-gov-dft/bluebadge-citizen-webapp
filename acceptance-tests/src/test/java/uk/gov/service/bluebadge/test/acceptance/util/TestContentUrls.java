@@ -8,7 +8,8 @@ public class TestContentUrls {
   public static final String URL = System.getProperty("baseUrl");
   private final Map<String, String> urlLookup = new HashMap<>();
 
-  public TestContentUrls() {
+  public
+  TestContentUrls() {
     setup();
   }
 
@@ -32,6 +33,7 @@ public class TestContentUrls {
     add("applicant", "/");
     add("describe health conditions", "/health-conditions");
     add("declaration", "/apply-for-a-blue-badge/declaration");
+    add("home", "/");
   }
 
   private void add(String pageName, String url) {
