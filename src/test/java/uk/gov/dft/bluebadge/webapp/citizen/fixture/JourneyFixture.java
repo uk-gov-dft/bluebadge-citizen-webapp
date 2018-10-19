@@ -64,12 +64,15 @@ public class JourneyFixture {
     String ADDRESS_LINE_1 = "High Street 1";
     String ADDRESS_LINE_2 = "District";
     String TOWN_OR_CITY = "London";
+    String CONTACT_NAME = "Contact Name";
     String POSTCODE = "BR4 9NA";
     String PRIMARY_PHONE_NO = "01270646362";
     String WHERE_WALK_DESTINATION = "London";
     String WHERE_WALK_TIME = "10 minutes";
     String WHAT_WALKING_SOME_ELSE_DESC = "Some description of walking";
     String DOB_AS_EQUAL_TO_STRING = "1990-01-01";
+    String SECONDARY_PHONE_NO = "07970123456";
+    String EMAIL_ADDRESS = "a@b.c";
   }
 
   public static TreatmentListForm treatmentListForm;
@@ -113,7 +116,12 @@ public class JourneyFixture {
           .postcode(Values.POSTCODE)
           .build();
   private static ContactDetailsForm contactDetailsForm =
-      ContactDetailsForm.builder().primaryPhoneNumber(Values.PRIMARY_PHONE_NO).build();
+      ContactDetailsForm.builder()
+          .primaryPhoneNumber(Values.PRIMARY_PHONE_NO)
+          .emailAddress(Values.EMAIL_ADDRESS)
+          .secondaryPhoneNumber(Values.SECONDARY_PHONE_NO)
+          .fullName(Values.CONTACT_NAME)
+          .build();
   private static NinoForm ninoForm = NinoForm.builder().nino(Values.NINO).build();
   private static LocalAuthorityRefData localAuthorityRefData;
 
@@ -196,6 +204,8 @@ public class JourneyFixture {
     when(mockJourney.getFormForStep(StepDefinition.WALKING_TIME)).thenReturn(walkingTimeForm);
     when(mockJourney.getFormForStep(StepDefinition.WHAT_WALKING_DIFFICULTIES))
         .thenReturn(whatMakesWalkingDifficultForm);
+    when(mockJourney.getFormForStep(StepDefinition.CONTACT_DETAILS)).thenReturn(contactDetailsForm);
+    when(mockJourney.getFormForStep(StepDefinition.ADDRESS)).thenReturn(enterAddressForm);
   }
 
   public static class JourneyBuilder {
