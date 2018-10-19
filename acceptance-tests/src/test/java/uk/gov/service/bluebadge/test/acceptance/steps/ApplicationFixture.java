@@ -201,8 +201,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("^I complete NI number page without a NI$")
   public void iCompleteNINumberPageWithoutNI() {
-    sitePage.findElementWithText(Ids.Person.NO_NI_TEXT).click();
-    sitePage.findElementWithText(Ids.Person.NO_NI_LINK_TEXT).click();
+    sitePage.findPageElementById(Ids.Person.NO_NI_LINK).click();
+    sitePage.findPageElementById(Ids.Person.SKIP_WITHOUT_NI).click();
     pressContinue();
   }
 
@@ -339,6 +339,24 @@ public class ApplicationFixture extends AbstractSpringSteps {
     clearAndSendKeys(Ids.Walkd.MEDICATION_DOSAGE_TEXT, "50mg");
     clearAndSendKeys(Ids.Walkd.MEDICATION_FREQUENCY_TEXT, "Every night");
     clickButtonById(Ids.Walkd.MEDICATION_ADD_CONFIRM_BUTTON);
+  }
+
+  @And("^I complete the already have a blue badge page for \"(YES|NO|YES BUT DON'T KNOW)\"$")
+  public void iCompleteTheAlreadyHaveABlueBadgePageFor(String opt) throws Throwable {
+    if ("YES BUT DON'T KNOW".equals(opt)) {
+      sitePage.findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + "_yes").click();
+      sitePage.findPageElementById(Ids.Preamble.BADGE_NUMBER_BYPASS_LINK).click();
+    } else {
+      sitePage
+          .findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + "_" + opt.toLowerCase())
+          .click();
+
+      if ("YES".equals(opt)) {
+        sitePage.findPageElementById(Ids.Preamble.BADGE_NUMBER).sendKeys("AB12CD");
+      }
+
+      pressContinue();
+    }
   }
 
   @And("^I complete the healthcare professionals page for \"(YES|NO)\"$")

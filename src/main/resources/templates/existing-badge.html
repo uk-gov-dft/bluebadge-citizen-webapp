@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="(${errorSummary}? #{common.title.error} : '')  + #{${JOURNEY.who} + 'existingBadge.title'}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <form th:action="@{/existing-badge}" method="post" th:object="${formRequest}" novalidate>
+                <div th:class="${#fields.hasErrors('hasExistingBadge')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+                    <fieldset class="govuk-fieldset">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                            <h1 class="govuk-fieldset__heading" th:text="#{${JOURNEY.who} + existingBadge.title}"></h1>
+                        </legend>
+
+                        <span class="govuk-error-message"
+                              data-uipath="hasExistingBadge.error"
+                              id="hasExistingBadge-hint"
+                              th:if="${#fields.hasErrors('hasExistingBadge')}"
+                              th:errors="*{hasExistingBadge}" />
+
+                        <div class="govuk-radios govuk-radios--conditional" data-module="radios" id="hasExistingBadge">
+
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input"
+                                       id="hasExistingBadge_yes"
+                                       name="hasExistingBadge"
+                                       type="radio"
+                                       value="yes"
+                                       th:field="*{hasExistingBadge}"
+                                       data-aria-controls="conditional-hasExistingBadge_yes">
+
+                                <label class="govuk-label govuk-radios__label" for="hasExistingBadge_yes" th:text="#{radio.option.yes}"></label>
+                            </div>
+
+                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-hasExistingBadge_yes">
+                                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{existingBadge.field.badgeNum.label}, 'badgeNumber', #{existingBadge.field.badgeNum.label.eg}, 'text', 'govuk-!-width-two-thirds')}"></div>
+                                <br/>
+                                <p class="govuk-body">
+                                    <a id="bypass_link" th:href="@{/existing-badge-bypass}" th:text="#{${JOURNEY.who} + existingBadge.dontKnow.link}"></a>
+                                </p>
+                            </div>
+
+
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input"
+                                       id="hasExistingBadge_no"
+                                       name="hasExistingBadge"
+                                       type="radio"
+                                       value="no"
+                                       th:field="*{hasExistingBadge}"
+                                       data-aria-controls="conditional-hasExistingBadge_no">
+
+                                <label class="govuk-label govuk-radios__label" for="hasExistingBadge_no" th:text="#{radio.option.no}"></label>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </div>
+
+                <button type="submit"
+                        class="govuk-button"
+                        data-uipath="button.continue"
+                        th:text="#{btn.label.continue}"></button>
+            </form>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

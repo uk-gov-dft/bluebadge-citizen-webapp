@@ -6,6 +6,7 @@ Feature: DFT Blue badge Citizen app new application - CHILDVEHIC
     Given I complete applicant page for "yourself"
     And   I complete select council page for "england"
     And   I complete your local authority page
+    And   I complete the already have a blue badge page for "YES"
     And   I complete receive benefit page for "AFRFCS"
     And   I complete lump sum of the AFRFCS Scheme page for "NO"
     And   I complete main reason page for "CHILDVEHIC"
@@ -27,6 +28,7 @@ Feature: DFT Blue badge Citizen app new application - CHILDVEHIC
     Given I complete applicant page for "someone else"
     And   I complete select council page for "england"
     And   I complete your local authority page
+    And   I complete the already have a blue badge page for "NO"
     And   I complete receive benefit page for "AFRFCS"
     And   I complete lump sum of the AFRFCS Scheme page for "NO"
     And   I complete main reason page for "CHILDVEHIC"
@@ -37,6 +39,7 @@ Feature: DFT Blue badge Citizen app new application - CHILDVEHIC
     Given I complete applicant page for "yourself"
     And   I complete select council page for "england"
     And   I complete your local authority page
+    And   I complete the already have a blue badge page for "YES"
     And   I complete receive benefit page for "AFRFCS"
     And   I complete lump sum of the AFRFCS Scheme page for "NO"
     And   I complete main reason page for "CHILDVEHIC"
@@ -46,6 +49,7 @@ Feature: DFT Blue badge Citizen app new application - CHILDVEHIC
     And   I complete applicant page for "yourself"
     And   I complete select council page for "england"
     And   I complete your local authority page
+    And   I complete the already have a blue badge page for "NO"
     And   I complete receive benefit page for "PIP"
     And   I complete moving around points page for "12"
     Then  I should see "You're" eligible page

@@ -6,6 +6,7 @@ Feature: DFT Blue badge Citizen app new application - ARMS
     Given I complete applicant page for "yourself"
     And   I complete select council page for "england"
     And   I complete your local authority page
+    And   I complete the already have a blue badge page for "YES"
     And   I complete receive benefit page for "AFRFCS"
     And   I complete lump sum of the AFRFCS Scheme page for "NO"
     And   I complete main reason page for "ARMS"
@@ -14,7 +15,7 @@ Feature: DFT Blue badge Citizen app new application - ARMS
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Woman"
-    And   I complete NI number page
+    And   I complete NI number page without a NI
     And   I complete address page
     And   I complete contact page for "yourself"
     And   I complete describe health conditions page
@@ -26,6 +27,7 @@ Feature: DFT Blue badge Citizen app new application - ARMS
     Given I complete applicant page for "someone else"
     And   I complete select council page for "england"
     And   I complete your local authority page
+    And   I complete the already have a blue badge page for "NO"
     And   I complete receive benefit page for "AFRFCS"
     And   I complete lump sum of the AFRFCS Scheme page for "NO"
     And   I complete main reason page for "ARMS"

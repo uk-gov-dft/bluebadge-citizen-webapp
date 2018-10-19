@@ -24,7 +24,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Co
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.DisabilityArms;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Eligibility;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.GenderCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HealthcareProfessional;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Medication;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Party;
@@ -43,7 +42,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ExistingBadgeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
@@ -99,34 +98,24 @@ public class DeclarationSubmitController implements StepController {
 
   public Application getDummyApplication(Journey journey) {
     ApplicantNameForm applicantNameForm = journey.getApplicantNameForm();
-    GenderForm genderForm = journey.getGenderForm();
     YourIssuingAuthorityForm yourIssuingAuthorityForm = journey.getYourIssuingAuthorityForm();
     ContactDetailsForm contactDetailsForm = journey.getContactDetailsForm();
 
     EligibilityCodeField eligibility = journey.getEligibilityCode();
 
-    String la =
-        yourIssuingAuthorityForm == null
-            ? "ABERD"
-            : yourIssuingAuthorityForm.getLocalAuthorityShortCode();
     String condDesc = journey.getDescriptionOfCondition();
 
-    String fullName = applicantNameForm == null ? "John Doe" : applicantNameForm.getFullName();
-    String birthName =
-        applicantNameForm == null ? "John Doe Birth" : applicantNameForm.getBirthName();
-
-    GenderCodeField gender =
-        null != genderForm ? journey.getGenderForm().getGender() : GenderCodeField.FEMALE;
-
-    String nino =
-        journey.getNinoForm() == null ? "NS123456C" : journey.getNinoForm().getNino().toUpperCase();
+    String nino = null;
+    if (null != journey.getNinoForm() && null != journey.getNinoForm().getNino()) {
+      nino = journey.getNinoForm().getNino().toUpperCase();
+    }
 
     Person person =
         new Person()
-            .badgeHolderName(fullName)
-            .nameAtBirth(birthName)
+            .badgeHolderName(applicantNameForm.getFullName())
+            .nameAtBirth(applicantNameForm.getBirthName())
             .dob(journey.getDateOfBirthForm().getDateOfBirth().getLocalDate())
-            .genderCode(gender)
+            .genderCode(journey.getGenderForm().getGender())
             .nino(nino);
 
     Party party =
@@ -205,9 +194,17 @@ public class DeclarationSubmitController implements StepController {
         // This code is all temporary too.
         throw new IllegalStateException("Invalid eligibility:" + eligibility);
     }
-    return Application.builder()
+
+    Application.ApplicationBuilder application = Application.builder();
+
+    ExistingBadgeForm existingBadgeForm = journey.getExistingBadgeForm();
+    if (existingBadgeForm != null && existingBadgeForm.getBadgeNumber() != null) {
+      application.existingBadgeNumber(existingBadgeForm.getBadgeNumber());
+    }
+
+    return application
         .applicationTypeCode(ApplicationTypeCodeField.NEW)
-        .localAuthorityCode(la)
+        .localAuthorityCode(yourIssuingAuthorityForm.getLocalAuthorityShortCode())
         .paymentTaken(false)
         .party(party)
         .eligibility(eligibilityObject)
