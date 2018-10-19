@@ -6,7 +6,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefini
 
 import java.io.Serializable;
 import java.util.Optional;
-import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
@@ -16,7 +16,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 @Builder
 public class OrganisationTransportForm implements StepForm, Serializable {
 
-  @AssertTrue(message = "{organisationTransport.page.validation.select}")
+  @NotNull(message = "{organisationTransport.page.validation.select}")
   private Boolean doesTransport;
 
   public StepDefinition getAssociatedStep() {

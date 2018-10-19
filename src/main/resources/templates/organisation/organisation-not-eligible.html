@@ -13,13 +13,12 @@
         <h1 class="govuk-heading-l"
             th:text="#{'organisationNotEligible.page.title'}"></h1>
 
-        <p class="govuk-body" th:text="#{organisationNotEligible.page.paragraph1'}"></p>
+        <p class="govuk-body" th:text="#{organisationNotEligible.page.paragraph1}"></p>
 
-       <p class="govuk-body" th:text="#{organisationNotEligible.page.paragraph2'}"></p>
-
-        <p class="govuk-body">
-            <a th:href="${localAuthority.contactUrl}" th:text="#{organisationNotEligible.page.paragraph2.link(${localAuthority.description})}"></a>
-        </p>
+  		<p class="govuk-body">
+		    <span th:text="#{organisationNotEligible.page.paragraph2}" th:remove="tag"></span>
+		    <a href="${localAuthority.contactUrl}" th:text="#{organisationNotEligible.page.paragraph2.link(${localAuthority.description})}"></a>
+		</p>
     </section>
 
 </main>

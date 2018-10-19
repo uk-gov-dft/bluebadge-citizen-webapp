@@ -96,6 +96,14 @@ public class Journey implements Serializable {
     return null;
   }
 
+  public Boolean isApplicantOrganisation() {
+    if (hasStepForm(StepDefinition.APPLICANT_TYPE)) {
+      ApplicantForm form = (ApplicantForm) getFormForStep(StepDefinition.APPLICANT_TYPE);
+      return form.getApplicantType().equals(ApplicantType.ORGANISATION.toString());
+    }
+    return null;
+  }
+
   public Boolean isApplicantYoung() {
     if (hasStepForm(StepDefinition.DOB)) {
       DateOfBirthForm dateOfBirthForm = (DateOfBirthForm) getFormForStep(StepDefinition.DOB);
@@ -179,7 +187,7 @@ public class Journey implements Serializable {
 
   public void setReceiveBenefitsForm(ReceiveBenefitsForm receiveBenefitsForm) {
     setFormForStep(StepDefinition.RECEIVE_BENEFITS, receiveBenefitsForm);
-    //    setMainReasonForm(null);
+    // setMainReasonForm(null);
   }
 
   public PipMovingAroundForm getPipMovingAroundForm() {

@@ -106,6 +106,12 @@ public class Mappings {
           .put(StepDefinition.MOBILITY_AID_ADD, URL_MOBILITY_AID_ADD)
           .put(StepDefinition.TREATMENT_LIST, URL_TREATMENT_LIST)
           .put(StepDefinition.TREATMENT_ADD, URL_TREATMENT_ADD)
+
+          //organisation mappings
+          .put(StepDefinition.ORGANISATION_CARE, URL_ORGANISATION_CARE)
+          .put(StepDefinition.ORGANISATION_TRANSPORT, URL_ORGANISATION_TRANSPORT)
+          .put(StepDefinition.ORGANISATION_MAY_BE_ELIGIBLE, URL_ORGANISATION_MAY_BE_ELIGIBLE)
+          .put(StepDefinition.ORGANISATION_NOT_ELIGIBLE, URL_ORGANISATION_NOT_ELIGIBLE)
           .build();
 
   public static StepDefinition getStep(String url) {
