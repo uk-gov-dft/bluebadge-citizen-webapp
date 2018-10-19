@@ -6,6 +6,7 @@ Feature: DFT Blue badge Citizen app new application - WPMS or not listed benifit
     Given I complete applicant page for "yourself"
     And   I complete select council page for "england"
     And   I complete your local authority page
+    And   I complete the already have a blue badge page for "YES"
     And   I complete receive benefit page for "WPMS"
     Then  I should see "You're" eligible page
     When  I complete eligible page
@@ -22,5 +23,6 @@ Feature: DFT Blue badge Citizen app new application - WPMS or not listed benifit
     Given I complete applicant page for "someone else"
     And   I complete select council page for "england"
     And   I complete your local authority page
+    And   I complete the already have a blue badge page for "NO"
     And   I complete receive benefit page for "WPMS"
     Then  I should see "They are" eligible page

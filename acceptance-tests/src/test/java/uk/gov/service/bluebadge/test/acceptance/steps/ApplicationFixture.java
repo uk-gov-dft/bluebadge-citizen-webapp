@@ -21,7 +21,6 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_ADD_USAGE;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_TYPE_WHEELCHAIR;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import java.util.Calendar;
@@ -202,8 +201,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("^I complete NI number page without a NI$")
   public void iCompleteNINumberPageWithoutNI() {
-    sitePage.findElementWithText(Ids.Person.NO_NI_TEXT).click();
-    sitePage.findElementWithText(Ids.Person.NO_NI_LINK_TEXT).click();
+    sitePage.findPageElementById(Ids.Person.NO_NI_LINK).click();
+    sitePage.findPageElementById(Ids.Person.SKIP_WITHOUT_NI).click();
     pressContinue();
   }
 
@@ -341,4 +340,21 @@ public class ApplicationFixture extends AbstractSpringSteps {
     clickButtonById(Ids.Walkd.MEDICATION_ADD_CONFIRM_BUTTON);
   }
 
+  @And("^I complete the already have a blue badge page for \"(YES|NO|YES BUT DON'T KNOW)\"$")
+  public void iCompleteTheAlreadyHaveABlueBadgePageFor(String opt) throws Throwable {
+    if ("YES BUT DON'T KNOW".equals(opt)) {
+      sitePage.findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + "_yes").click();
+      sitePage.findPageElementById(Ids.Preamble.BADGE_NUMBER_BYPASS_LINK).click();
+    } else {
+      sitePage
+          .findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + "_" + opt.toLowerCase())
+          .click();
+
+      if ("YES".equals(opt)) {
+        sitePage.findPageElementById(Ids.Preamble.BADGE_NUMBER).sendKeys("AB12CD");
+      }
+
+      pressContinue();
+    }
+  }
 }

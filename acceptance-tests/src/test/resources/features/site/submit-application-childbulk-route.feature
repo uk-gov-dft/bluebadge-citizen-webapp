@@ -6,6 +6,7 @@ Feature: DFT Blue badge Citizen app new application - CHILDBULK
     Given I complete applicant page for "yourself"
     And   I complete select council page for "england"
     And   I complete your local authority page
+    And   I complete the already have a blue badge page for "NO"
     And   I complete receive benefit page for "AFRFCS"
     And   I complete lump sum of the AFRFCS Scheme page for "NO"
     And   I complete main reason page for "CHILDBULK"
@@ -26,6 +27,7 @@ Feature: DFT Blue badge Citizen app new application - CHILDBULK
     Given I complete applicant page for "someone else"
     And   I complete select council page for "england"
     And   I complete your local authority page
+    And   I complete the already have a blue badge page for "YES"
     And   I complete receive benefit page for "AFRFCS"
     And   I complete lump sum of the AFRFCS Scheme page for "NO"
     And   I complete main reason page for "CHILDBULK"
