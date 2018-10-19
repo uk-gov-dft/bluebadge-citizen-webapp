@@ -100,7 +100,7 @@ public class MobilityAidAddControllerTest {
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/add-mobility-aid"))
+        .andExpect(redirectedUrl("/add-mobility-aid#error"))
         .andExpect(flash().attribute("formRequest", form));
   }
 

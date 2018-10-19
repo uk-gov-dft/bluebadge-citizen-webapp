@@ -53,7 +53,7 @@ public class MentalDisorderControllerTest {
   @Test
   public void show_ShouldDisplayDisabilityTemplate_WithRadioOptions() throws Exception {
     RadioOptionsGroup options =
-        new RadioOptionsGroup("you.afcs.mentalDisorderPage.title").autoPopulateBooleanOptions();
+        new RadioOptionsGroup("you.afcs.mentalDisorderPage.title").withYesNoOptions();
 
     MentalDisorderForm form = MentalDisorderForm.builder().hasMentalDisorder(true).build();
 

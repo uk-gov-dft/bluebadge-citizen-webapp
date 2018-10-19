@@ -1,4 +1,4 @@
-package uk.gov.dft.bluebadge.webapp.citizen.controllers;
+package uk.gov.dft.bluebadge.webapp.citizen.controllers.walking;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -14,31 +14,33 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationAddForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm;
 
-public class TreatmentListControllerTest extends ControllerTestFixture<TreatmentListController> {
+public class MedicationListControllerTest extends ControllerTestFixture<MedicationListController> {
 
   @Mock private RouteMaster mockRouteMaster;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    super.setup(new TreatmentListController(mockRouteMaster));
-    journey.setTreatmentListForm(TreatmentListForm.builder().treatments(new ArrayList<>()).build());
+    super.setup(new MedicationListController(mockRouteMaster));
+    journey.setMedicationListForm(
+        MedicationListForm.builder().medications(new ArrayList<>()).build());
     applyRoutmasterDefaultMocks(mockRouteMaster);
   }
 
   @Override
   protected String getTemplateName() {
-    return "treatment-list";
+    return "walking/medication-list";
   }
 
   @Override
   protected String getUrl() {
-    return "/list-treatments";
+    return "/list-medication";
   }
 
   @Test
@@ -53,12 +55,12 @@ public class TreatmentListControllerTest extends ControllerTestFixture<Treatment
 
   @Test
   public void submit_showRedirectToNextStepInJourney() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(TreatmentListForm.class)))
+    when(mockRouteMaster.redirectToOnSuccess(any(MedicationListForm.class)))
         .thenReturn("redirect:/testSuccess");
     mockMvc
         .perform(
             post(getUrl())
-                .param("hasTreatment", "no")
+                .param("hasMedication", "no")
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
@@ -66,53 +68,56 @@ public class TreatmentListControllerTest extends ControllerTestFixture<Treatment
   }
 
   @Test
-  public void submit_showRedirectToNextStepInJourney_withTreatments() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(TreatmentListForm.class)))
+  public void submit_showRedirectToNextStepInJourney_withMedications() throws Exception {
+    when(mockRouteMaster.redirectToOnSuccess(any(MedicationListForm.class)))
         .thenReturn("redirect:/testSuccess");
 
-    List<TreatmentAddForm> treatments = new ArrayList<>();
-    TreatmentAddForm treatment = new TreatmentAddForm();
-    treatment.setTreatmentWhen("F");
-    treatment.setTreatmentDescription("A");
-    treatments.add(treatment);
-    journey.getTreatmentListForm().setHasTreatment("yes");
-    journey.getTreatmentListForm().setTreatments(treatments);
+    List<MedicationAddForm> medications = new ArrayList<>();
+    MedicationAddForm medication = new MedicationAddForm();
+    medication.setDosage("Dosage");
+    medication.setFrequency("Frequency");
+    medication.setName("Name");
+    medication.setPrescribed("yes");
+    medications.add(medication);
+
+    journey.getMedicationListForm().setHasMedication("yes");
+    journey.getMedicationListForm().setMedications(medications);
 
     mockMvc
         .perform(
             post(getUrl())
-                .param("hasTreatment", "yes")
+                .param("hasMedication", "yes")
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
 
-    assertEquals("yes", journey.getTreatmentListForm().getHasTreatment());
-    assertEquals(1, journey.getTreatmentListForm().getTreatments().size());
+    assertEquals("yes", journey.getMedicationListForm().getHasMedication());
+    assertEquals(1, journey.getMedicationListForm().getMedications().size());
   }
 
   @Test
-  public void submit_setHasTreatmentsToNoIfEmpty() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(TreatmentListForm.class)))
+  public void submit_setHasMedicationsToNoIfEmpty() throws Exception {
+    when(mockRouteMaster.redirectToOnSuccess(any(MedicationListForm.class)))
         .thenReturn("redirect:/testSuccess");
 
-    journey.getTreatmentListForm().setHasTreatment("yes");
-    journey.getTreatmentListForm().setTreatments(new ArrayList<>());
+    journey.getMedicationListForm().setHasMedication("yes");
+    journey.getMedicationListForm().setMedications(new ArrayList<>());
     mockMvc
         .perform(
             post(getUrl())
-                .param("hasTreatment", "yes")
+                .param("hasMedication", "yes")
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
     // Then has reset to no.
-    assertEquals("no", journey.getTreatmentListForm().getHasTreatment());
+    assertEquals("no", journey.getMedicationListForm().getHasMedication());
   }
 
   @Test
   public void submit_bindingError() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(TreatmentListForm.class)))
+    when(mockRouteMaster.redirectToOnSuccess(any(MedicationListForm.class)))
         .thenReturn("redirect:/testSuccess");
 
     mockMvc
@@ -123,7 +128,7 @@ public class TreatmentListControllerTest extends ControllerTestFixture<Treatment
         .andExpect(status().isFound())
         .andExpect(
             ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
-                "hasTreatment", "NotNull"));
+                "hasMedication", "NotNull"));
   }
 
   @Test

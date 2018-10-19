@@ -21,10 +21,10 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_ADD_USAGE;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_TYPE_WHEELCHAIR;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import java.util.Calendar;
+import org.openqa.selenium.By;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.SitePage;
 
@@ -201,8 +201,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("^I complete NI number page without a NI$")
   public void iCompleteNINumberPageWithoutNI() {
-    sitePage.findElementWithText(Ids.Person.NO_NI_TEXT).click();
-    sitePage.findElementWithText(Ids.Person.NO_NI_LINK_TEXT).click();
+    sitePage.findPageElementById(Ids.Person.NO_NI_LINK).click();
+    sitePage.findPageElementById(Ids.Person.SKIP_WITHOUT_NI).click();
     pressContinue();
   }
 
@@ -309,5 +309,52 @@ public class ApplicationFixture extends AbstractSpringSteps {
       clickButtonById(Ids.Walkd.TREATMENT_ADD_CONFIRM_BUTTON);
     }
     pressContinue();
+  }
+
+  @And("^I complete the medications page for \"(YES|NO)\"$")
+  public void iCompleteTheMedicationsPage(String option) {
+
+    sitePage
+        .findPageElementById(Ids.Walkd.MEDICATION_HAS_MEDICATION_OPTION + option.toLowerCase())
+        .click();
+
+    if ("YES".equals(option)) {
+      addMedication(option);
+
+      // find the first medication in the list and click
+      sitePage.getHelper().findElement(By.xpath("//table[@id='medication-list']//a")).click();
+
+      addMedication(option);
+    }
+    pressContinue();
+  }
+
+  private void addMedication(String option) {
+    clickButtonById(Ids.Walkd.MEDICATION_ADD_FIRST_LINK);
+    clearAndSendKeys(Ids.Walkd.MEDICATION_ADD_MEDICATION_DESCRIPTION, "Paracetamol");
+    sitePage
+        .findPageElementById(Ids.Walkd.MEDICATION_PRESCRIBED_OPTION + "." + option.toLowerCase())
+        .click();
+    clearAndSendKeys(Ids.Walkd.MEDICATION_DOSAGE_TEXT, "50mg");
+    clearAndSendKeys(Ids.Walkd.MEDICATION_FREQUENCY_TEXT, "Every night");
+    clickButtonById(Ids.Walkd.MEDICATION_ADD_CONFIRM_BUTTON);
+  }
+
+  @And("^I complete the already have a blue badge page for \"(YES|NO|YES BUT DON'T KNOW)\"$")
+  public void iCompleteTheAlreadyHaveABlueBadgePageFor(String opt) throws Throwable {
+    if ("YES BUT DON'T KNOW".equals(opt)) {
+      sitePage.findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + "_yes").click();
+      sitePage.findPageElementById(Ids.Preamble.BADGE_NUMBER_BYPASS_LINK).click();
+    } else {
+      sitePage
+          .findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + "_" + opt.toLowerCase())
+          .click();
+
+      if ("YES".equals(opt)) {
+        sitePage.findPageElementById(Ids.Preamble.BADGE_NUMBER).sendKeys("AB12CD");
+      }
+
+      pressContinue();
+    }
   }
 }

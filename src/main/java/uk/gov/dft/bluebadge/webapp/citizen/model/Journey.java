@@ -22,6 +22,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ExistingBadgeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
@@ -39,6 +40,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficul
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipDlaQuestionForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipMovingAroundForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipPlanningJourneyForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WalkingTimeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
 
@@ -317,12 +319,28 @@ public class Journey implements Serializable {
     setFormForStep(StepDefinition.MOBILITY_AID_LIST, mobilityAidListForm);
   }
 
+  public MedicationListForm getMedicationListForm() {
+    return (MedicationListForm) getFormForStep(StepDefinition.MEDICATION_LIST);
+  }
+
+  public void setMedicationListForm(MedicationListForm medicationListForm) {
+    setFormForStep(StepDefinition.MEDICATION_LIST, medicationListForm);
+  }
+
   public TreatmentListForm getTreatmentListForm() {
     return (TreatmentListForm) getFormForStep(StepDefinition.TREATMENT_LIST);
   }
 
   public void setTreatmentListForm(TreatmentListForm treatmentListForm) {
     setFormForStep(StepDefinition.TREATMENT_LIST, treatmentListForm);
+  }
+
+  public ExistingBadgeForm getExistingBadgeForm() {
+    return (ExistingBadgeForm) getFormForStep(StepDefinition.EXISTING_BADGE);
+  }
+
+  public void setExistingBadgeForm(ExistingBadgeForm existingBadgeForm) {
+    setFormForStep(StepDefinition.EXISTING_BADGE, existingBadgeForm);
   }
 
   // -- META DATA BELOW --
