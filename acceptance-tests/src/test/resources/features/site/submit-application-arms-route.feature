@@ -15,7 +15,7 @@ Feature: DFT Blue badge Citizen app new application - ARMS
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Woman"
-    And   I complete NI number page
+    And   I complete NI number page without a NI
     And   I complete address page
     And   I complete contact page for "yourself"
     And   I complete describe health conditions page
