@@ -13,13 +13,10 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Wa
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingLengthOfTimeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingSpeedCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WalkingTimeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
@@ -28,74 +25,19 @@ import java.util.EnumSet;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 public class WalkingConverterTest {
 
   @Mock Journey journey;
-  private TreatmentListForm treatmentListForm;
-  private MedicationListForm medicationListForm;
-  private MobilityAidListForm mobilityAidListForm;
-  private WalkingTimeForm walkingTimeForm;
-  private WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm;
 
   @Before
   public void setUp() {
     MockitoAnnotations.initMocks(this);
-
-    TreatmentAddForm treatmentAddForm = new TreatmentAddForm();
-    treatmentAddForm.setTreatmentDescription("Desc");
-    treatmentAddForm.setTreatmentWhen("When");
-
-    treatmentListForm =
-        TreatmentListForm.builder()
-            .hasTreatment("yes")
-            .treatments(Lists.newArrayList(treatmentAddForm))
-            .build();
-
-    MedicationAddForm medicationAddForm = new MedicationAddForm();
-    medicationAddForm.setId("1234");
-    medicationAddForm.setPrescribed("yes");
-    medicationAddForm.setName("name");
-    medicationAddForm.setFrequency("Frequency");
-    medicationAddForm.setDosage("Dosage");
-
-    medicationListForm =
-        MedicationListForm.builder()
-            .hasMedication("yes")
-            .medications(Lists.newArrayList(medicationAddForm))
-            .build();
-
-    MobilityAidAddForm mobilityAidAddForm = new MobilityAidAddForm();
-    mobilityAidAddForm.setHowProvidedCodeField(HowProvidedCodeField.PRESCRIBE);
-    mobilityAidAddForm.setAidType(MobilityAidAddForm.AidType.SCOOTER);
-    mobilityAidAddForm.setUsage("Usage");
-
-    mobilityAidListForm =
-        MobilityAidListForm.builder()
-            .hasWalkingAid("yes")
-            .mobilityAids(Lists.newArrayList(mobilityAidAddForm))
-            .build();
-
-    walkingTimeForm =
-        WalkingTimeForm.builder().walkingTime(WalkingLengthOfTimeCodeField.LESSMIN).build();
-
-    whatMakesWalkingDifficultForm =
-        WhatMakesWalkingDifficultForm.builder()
-            .whatWalkingDifficulties(
-                Lists.newArrayList(
-                    WalkingDifficultyTypeCodeField.PAIN, WalkingDifficultyTypeCodeField.BALANCE))
-            .build();
+    ConverterJourneyFixture.configureMockJourney(journey);
   }
 
   @Test
   public void convert() {
-    when(journey.getFormForStep(StepDefinition.TREATMENT_LIST)).thenReturn(treatmentListForm);
-    when(journey.getFormForStep(StepDefinition.MEDICATION_LIST)).thenReturn(medicationListForm);
-    when(journey.getFormForStep(StepDefinition.MOBILITY_AID_LIST)).thenReturn(mobilityAidListForm);
-    when(journey.getFormForStep(StepDefinition.WALKING_TIME)).thenReturn(walkingTimeForm);
-    when(journey.getFormForStep(StepDefinition.WHAT_WALKING_DIFFICULTIES))
-        .thenReturn(whatMakesWalkingDifficultForm);
 
     WalkingDifficulty result = WalkingConverter.convert(journey);
     // Detail covered in other tests.
@@ -153,7 +95,8 @@ public class WalkingConverterTest {
 
   @Test
   public void getWalkingAids_withOne() {
-    List<WalkingAid> result = WalkingConverter.getWalkingAids(mobilityAidListForm);
+    List<WalkingAid> result =
+        WalkingConverter.getWalkingAids(ConverterJourneyFixture.mobilityAidListForm);
     assertThat(result.get(0).getDescription())
         .isEqualTo(MobilityAidAddForm.AidType.SCOOTER.getType());
     assertThat(result.get(0).getUsage()).isEqualTo("Usage");
@@ -162,14 +105,16 @@ public class WalkingConverterTest {
 
   @Test
   public void getTreatments_withOne() {
-    List<Treatment> result = WalkingConverter.getTreatments(treatmentListForm);
+    List<Treatment> result =
+        WalkingConverter.getTreatments(ConverterJourneyFixture.treatmentListForm);
     assertThat(result.get(0).getDescription()).isEqualTo("Desc");
     assertThat(result.get(0).getTime()).isEqualTo("When");
   }
 
   @Test
   public void getMedications_withOne() {
-    List<Medication> result = WalkingConverter.getMedications(medicationListForm);
+    List<Medication> result =
+        WalkingConverter.getMedications(ConverterJourneyFixture.medicationListForm);
     assertThat(result.get(0).getFrequency()).isEqualTo("Frequency");
     assertThat(result.get(0).getIsPrescribed()).isEqualTo(Boolean.TRUE);
     assertThat(result.get(0).getName()).isEqualTo("name");

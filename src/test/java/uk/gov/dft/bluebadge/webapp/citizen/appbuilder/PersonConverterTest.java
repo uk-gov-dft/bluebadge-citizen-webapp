@@ -24,26 +24,12 @@ public class PersonConverterTest {
   @Before
   public void setUp() {
     MockitoAnnotations.initMocks(this);
+    ConverterJourneyFixture.configureMockJourney(journey);
   }
+
 
   @Test
   public void convert() {
-    ApplicantNameForm applicantNameForm =
-        ApplicantNameForm.builder()
-            .birthName("Birth")
-            .fullName("Full")
-            .hasBirthName(Boolean.TRUE)
-            .build();
-    GenderForm genderForm = GenderForm.builder().gender(GenderCodeField.FEMALE).build();
-    NinoForm ninoForm = NinoForm.builder().nino("NS123456D").build();
-    DateOfBirthForm birthForm =
-        DateOfBirthForm.builder().dateOfBirth(new CompoundDate("29", "5", "1970")).build();
-
-    when(journey.getFormForStep(StepDefinition.NAME)).thenReturn(applicantNameForm);
-    when(journey.getFormForStep(StepDefinition.GENDER)).thenReturn(genderForm);
-    when(journey.getFormForStep(StepDefinition.NINO)).thenReturn(ninoForm);
-    when(journey.getFormForStep(StepDefinition.DOB)).thenReturn(birthForm);
-
     Person result = PersonConverter.convert(journey);
     assertThat(result.getBadgeHolderName()).isEqualTo("Full");
     assertThat(result.getNameAtBirth()).isEqualTo("Birth");

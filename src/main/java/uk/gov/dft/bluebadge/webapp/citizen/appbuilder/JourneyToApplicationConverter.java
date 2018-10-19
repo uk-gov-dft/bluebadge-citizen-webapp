@@ -6,6 +6,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 public class JourneyToApplicationConverter {
 
+  private JourneyToApplicationConverter() {}
+
   public static Application convert(Journey journey) {
     return Application.builder()
         .applicationTypeCode(ApplicationTypeCodeField.NEW)
