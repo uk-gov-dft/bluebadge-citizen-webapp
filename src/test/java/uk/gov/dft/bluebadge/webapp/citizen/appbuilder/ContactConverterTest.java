@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.appbuilder;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -8,13 +10,9 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Co
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-
 public class ContactConverterTest {
 
-  @Mock
-  Journey journey;
+  @Mock Journey journey;
 
   @Before
   public void setUp() {
@@ -31,7 +29,8 @@ public class ContactConverterTest {
     assertThat(contact.getTownCity()).isEqualTo(JourneyFixture.Values.TOWN_OR_CITY);
     assertThat(contact.getFullName()).isEqualTo(JourneyFixture.Values.CONTACT_NAME);
     assertThat(contact.getPrimaryPhoneNumber()).isEqualTo(JourneyFixture.Values.PRIMARY_PHONE_NO);
-    assertThat(contact.getSecondaryPhoneNumber()).isEqualTo(JourneyFixture.Values.SECONDARY_PHONE_NO);
+    assertThat(contact.getSecondaryPhoneNumber())
+        .isEqualTo(JourneyFixture.Values.SECONDARY_PHONE_NO);
     assertThat(contact.getEmailAddress()).isEqualTo(JourneyFixture.Values.EMAIL_ADDRESS);
   }
 }

@@ -1,9 +1,8 @@
 package uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model;
 
+import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Data;
-
-import java.time.LocalDate;
 
 @Data
 @Builder

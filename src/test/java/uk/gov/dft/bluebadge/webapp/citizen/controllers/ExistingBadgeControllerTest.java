@@ -17,12 +17,12 @@ import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ExistingBadgeForm;
 
-public class NinoControllerTest {
+public class ExistingBadgeControllerTest {
 
   private MockMvc mockMvc;
-  private NinoController controller;
+  private ExistingBadgeController controller;
   @Mock private RouteMaster mockRouteMaster;
 
   private Journey journey;
@@ -32,7 +32,7 @@ public class NinoControllerTest {
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new NinoController(mockRouteMaster);
+    controller = new ExistingBadgeController(mockRouteMaster);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -46,66 +46,76 @@ public class NinoControllerTest {
   }
 
   @Test
-  public void show_ShouldDisplayNinoTemplate() throws Exception {
+  public void show_ShouldDisplayTemplate() throws Exception {
 
-    NinoForm form = NinoForm.builder().build();
+    ExistingBadgeForm form = ExistingBadgeForm.builder().build();
 
     mockMvc
-        .perform(get("/nino").sessionAttr("JOURNEY", journey))
+        .perform(get("/existing-badge").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
-        .andExpect(view().name("nino"))
+        .andExpect(view().name("existing-badge"))
         .andExpect(model().attribute("formRequest", form));
   }
 
   @Test
-  public void submit_GivenAValidForm_thenShouldDisplayRedirectToSuccess() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(NinoForm.class)))
+  public void submit_GivenFormValueIs_No_thenShouldDisplayRedirectToSuccess() throws Exception {
+    when(mockRouteMaster.redirectToOnSuccess(any(ExistingBadgeForm.class)))
         .thenReturn("redirect:/testSuccess");
 
     mockMvc
-        .perform(post("/nino").param("nino", NINO))
+        .perform(post("/existing-badge").param("hasExistingBadge", "no"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
   }
 
   @Test
-  public void submit_whenNoNinoIsProvided_ThenShouldDisplayValidationError() throws Exception {
-
+  public void submit_GivenFormValueIs_Yes_WithoutBadgeNumber_thenShouldDisplayError()
+      throws Exception {
     mockMvc
-        .perform(post("/nino").sessionAttr("JOURNEY", new Journey()).param("nino", ""))
+        .perform(
+            post("/existing-badge")
+                .sessionAttr("JOURNEY", new Journey())
+                .param("hasBadgeNumber", "yes"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/someValidationError"));
   }
 
   @Test
-  public void submit_whenInvalidNinoIsProvided_ThenShouldDisplayValidationError() throws Exception {
-
+  public void
+      submit_GivenFormValueIs_Yes_WithBadgeNumberlessThan6Characters_thenShouldDisplayError()
+          throws Exception {
     mockMvc
-        .perform(post("/nino").sessionAttr("JOURNEY", new Journey()).param("nino", INVALID_NINO))
+        .perform(
+            post("/existing-badge")
+                .sessionAttr("JOURNEY", new Journey())
+                .param("hasBadgeNumber", "yes")
+                .param("badgeNumber", "AB12"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/someValidationError"));
   }
 
   @Test
-  public void show_givenNoSession_ShouldRedirectBackToStart() throws Exception {
-
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
+  public void submit_GivenFormValueIs_Yes_WithoutBadgeNumberEntered_thenShouldRedirectToSuccess()
+      throws Exception {
+    when(mockRouteMaster.redirectToOnSuccess(any(ExistingBadgeForm.class)))
+        .thenReturn("redirect:/testSuccess");
 
     mockMvc
-        .perform(get("/nino"))
+        .perform(
+            post("/existing-badge").param("hasExistingBadge", "no").param("badgeNumber", "AB12CD"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/backToStart"));
+        .andExpect(redirectedUrl("/testSuccess"));
   }
 
   @Test
   public void onByPassLink_ShouldRedirectToSuccess() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(NinoForm.class)))
+    when(mockRouteMaster.redirectToOnSuccess(any(ExistingBadgeForm.class)))
         .thenReturn("redirect:/testSuccess");
 
-    NinoForm form = NinoForm.builder().build();
+    ExistingBadgeForm form = ExistingBadgeForm.builder().build();
 
     mockMvc
-        .perform(get("/nino-bypass").sessionAttr("JOURNEY", journey))
+        .perform(get("/existing-badge-bypass").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
   }

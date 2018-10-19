@@ -22,6 +22,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ExistingBadgeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
@@ -59,7 +60,7 @@ public class Journey implements Serializable {
 
   @SuppressWarnings("unchecked")
   public <T> T getFormForStep(StepDefinition step) {
-    return (T)forms.get(step);
+    return (T) forms.get(step);
   }
 
   public void cleanUpSteps(Set<StepDefinition> alreadyCleaned, List<StepDefinition> steps) {
@@ -334,6 +335,14 @@ public class Journey implements Serializable {
     setFormForStep(treatmentListForm);
   }
 
+  public ExistingBadgeForm getExistingBadgeForm() {
+    return (ExistingBadgeForm) getFormForStep(StepDefinition.EXISTING_BADGE);
+  }
+
+  public void setExistingBadgeForm(ExistingBadgeForm existingBadgeForm) {
+    setFormForStep(existingBadgeForm);
+  }
+
   // -- META DATA BELOW --
   public LocalAuthorityRefData getLocalAuthority() {
     return localAuthority;
@@ -357,8 +366,7 @@ public class Journey implements Serializable {
         return mainReasonForm.getMainReasonOption();
       }
     } else if (hasStepForm(StepDefinition.RECEIVE_BENEFITS)) {
-      ReceiveBenefitsForm receiveBenefitsForm =
-          getFormForStep(StepDefinition.RECEIVE_BENEFITS);
+      ReceiveBenefitsForm receiveBenefitsForm = getFormForStep(StepDefinition.RECEIVE_BENEFITS);
       if (EligibilityCodeField.NONE != receiveBenefitsForm.getBenefitType()) {
         return receiveBenefitsForm.getBenefitType();
       }

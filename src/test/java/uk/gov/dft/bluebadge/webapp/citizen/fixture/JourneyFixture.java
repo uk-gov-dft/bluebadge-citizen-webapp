@@ -1,6 +1,10 @@
 package uk.gov.dft.bluebadge.webapp.citizen.fixture;
 
+import static org.mockito.Mockito.when;
+
 import com.google.common.collect.Lists;
+import java.util.List;
+import java.util.Optional;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.GenderCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HowProvidedCodeField;
@@ -31,11 +35,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WalkingTimeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.mockito.Mockito.when;
 
 public class JourneyFixture {
 

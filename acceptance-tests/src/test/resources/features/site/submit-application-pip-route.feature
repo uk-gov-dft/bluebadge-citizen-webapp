@@ -6,6 +6,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     Given I complete applicant page for "yourself"
     And   I complete select council page for "england"
     And   I complete your local authority page
+    And   I complete the already have a blue badge page for "YES"
     And   I complete receive benefit page for "PIP"
     And   I complete moving around points page for "12"
     Then  I should see "You're" eligible page
@@ -23,6 +24,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     Given I complete applicant page for "someone else"
     And   I complete select council page for "england"
     And   I complete your local authority page
+    And   I complete the already have a blue badge page for "NO"
     And   I complete receive benefit page for "PIP"
     And   I complete moving around points page for "12"
     Then  I should see "They are" eligible page
@@ -32,6 +34,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     Given I complete applicant page for "yourself"
     And   I complete select council page for "england"
     And   I complete your local authority page
+    And   I complete the already have a blue badge page for "YES BUT DON'T KNOW"
     And   I complete receive benefit page for "PIP"
     And   I complete moving around points page for "4"
     And   I complete main reason page for "WALKD"
@@ -43,6 +46,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     Given I complete applicant page for "someone else"
     And   I complete select council page for "england"
     And   I complete your local authority page
+    And   I complete the already have a blue badge page for "YES BUT DON'T KNOW"
     And   I complete receive benefit page for "PIP"
     And   I complete moving around points page for "4"
     And   I complete main reason page for "WALKD"
@@ -54,6 +58,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     Given I complete applicant page for "yourself"
     And   I complete select council page for "scotland"
     And   I complete your local authority page
+    And   I complete the already have a blue badge page for "YES"
     And   I complete receive benefit page for "PIP"
     And   I complete moving around points page for "4"
     And   I complete planning points page for "12"
@@ -64,6 +69,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     Given I complete applicant page for "someone else"
     And   I complete select council page for "scotland"
     And   I complete your local authority page
+    And   I complete the already have a blue badge page for "YES"
     And   I complete receive benefit page for "PIP"
     And   I complete moving around points page for "4"
     And   I complete planning points page for "12"
@@ -74,6 +80,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     Given I complete applicant page for "yourself"
     And   I complete select council page for "scotland"
     And   I complete your local authority page
+    And   I complete the already have a blue badge page for "YES"
     And   I complete receive benefit page for "PIP"
     And   I complete moving around points page for "4"
     And   I complete planning points page for "8"
@@ -85,6 +92,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     Given I complete applicant page for "someone else"
     And   I complete select council page for "scotland"
     And   I complete your local authority page
+    And   I complete the already have a blue badge page for "YES"
     And   I complete receive benefit page for "PIP"
     And   I complete moving around points page for "4"
     And   I complete planning points page for "8"
@@ -96,6 +104,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     Given I complete applicant page for "yourself"
     And   I complete select council page for "scotland"
     And   I complete your local authority page
+    And   I complete the already have a blue badge page for "YES"
     And   I complete receive benefit page for "PIP"
     And   I complete moving around points page for "4"
     And   I complete planning points page for "8"
@@ -108,6 +117,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     Given I complete applicant page for "someone else"
     And   I complete select council page for "scotland"
     And   I complete your local authority page
+    And   I complete the already have a blue badge page for "YES"
     And   I complete receive benefit page for "PIP"
     And   I complete moving around points page for "4"
     And   I complete planning points page for "8"
@@ -120,6 +130,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     Given I complete applicant page for "yourself"
     And   I complete select council page for "wales"
     And   I complete your local authority page
+    And   I complete the already have a blue badge page for "YES"
     And   I complete receive benefit page for "PIP"
     And   I complete moving around points page for "4"
     And   I complete planning points page for "12"
@@ -130,6 +141,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     Given I complete applicant page for "someone else"
     And   I complete select council page for "wales"
     And   I complete your local authority page
+    And   I complete the already have a blue badge page for "YES"
     And   I complete receive benefit page for "PIP"
     And   I complete moving around points page for "4"
     And   I complete planning points page for "12"
@@ -140,6 +152,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     Given I complete applicant page for "yourself"
     And   I complete select council page for "wales"
     And   I complete your local authority page
+    And   I complete the already have a blue badge page for "YES"
     And   I complete receive benefit page for "PIP"
     And   I complete moving around points page for "4"
     And   I complete planning points page for "8"
@@ -151,6 +164,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     Given I complete applicant page for "someone else"
     And   I complete select council page for "wales"
     And   I complete your local authority page
+    And   I complete the already have a blue badge page for "YES"
     And   I complete receive benefit page for "PIP"
     And   I complete moving around points page for "4"
     And   I complete planning points page for "8"

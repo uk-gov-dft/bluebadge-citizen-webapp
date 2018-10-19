@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 public class HealthcareProfessional {
 
-  private String name = null;
-  private String location = null;
+  private String name;
+  private String location;
 }

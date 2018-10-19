@@ -1,10 +1,8 @@
 package uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model;
 
+import java.time.OffsetDateTime;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.validation.annotation.Validated;
-
-import java.time.OffsetDateTime;
 
 @Builder
 @Data

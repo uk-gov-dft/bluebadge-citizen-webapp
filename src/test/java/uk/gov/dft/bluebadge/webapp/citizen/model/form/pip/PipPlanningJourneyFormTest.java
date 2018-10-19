@@ -9,7 +9,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 @SuppressWarnings("OptionalGetWithoutIsPresent")
-public class PipPlanningJourneyFormTest  {
+public class PipPlanningJourneyFormTest {
 
   private EnumSet<PipPlanningJourneyForm.PipPlanningJourneyOption> twelveOrMore =
       EnumSet.of(PipPlanningJourneyForm.PipPlanningJourneyOption.PLANNING_POINTS_12);
