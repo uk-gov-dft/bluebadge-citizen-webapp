@@ -3,17 +3,12 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers.organisation;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
-import com.google.common.collect.Lists;
-import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomBooleanEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +18,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.organisation.OrganisationCareForm;
 
@@ -77,23 +71,6 @@ public class OrganisationCareController implements StepController {
     return routeMaster.redirectToOnSuccess(formRequest);
   }
 
-  @InitBinder
-  public void dataBinding(WebDataBinder binder) {
-    binder.registerCustomEditor(Boolean.class, new CustomBooleanEditor("true", "false", true));
-  }
-
-  private RadioOptionsGroup getOptions(Journey journey) {
-    RadioOption yes = new RadioOption("true", "radio.label.yes");
-    RadioOption no = new RadioOption("false", "radio.label.no");
-
-    List<RadioOption> options = Lists.newArrayList(yes, no);
-
-    RadioOptionsGroup group = new RadioOptionsGroup("organisationCare.page.title", options);
-    group.setHintKey("organisationCare.page.explanation");
-
-    return group;
-  }
-
   private void attachForm(Model model, Journey journey) {
     if (null != journey.getOrganisationCareForm()) {
       model.addAttribute(FORM_REQUEST, journey.getOrganisationCareForm());
@@ -103,6 +80,10 @@ public class OrganisationCareController implements StepController {
   }
 
   private void setupModel(Model model, Journey journey) {
-    model.addAttribute("options", getOptions(journey));
+    RadioOptionsGroup group =
+        new RadioOptionsGroup("organisationCare.page.title").autoPopulateBooleanOptions();
+    group.setHintKey("organisationCare.page.title.hint");
+
+    model.addAttribute("options", group);
   }
 }
