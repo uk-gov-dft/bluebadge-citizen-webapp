@@ -29,7 +29,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 public class MobilityAidAddControllerTest {
 
   private MockMvc mockMvc;
-  private MobilityAidAddController controller;
   private Journey journey;
 
   @Mock private RouteMaster mockRouteMaster;
@@ -37,7 +36,7 @@ public class MobilityAidAddControllerTest {
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new MobilityAidAddController(mockRouteMaster);
+    MobilityAidAddController controller = new MobilityAidAddController(mockRouteMaster);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -90,9 +89,9 @@ public class MobilityAidAddControllerTest {
   @Test
   public void submit_whenBlankFormSubmitted_thenShouldRedirectToShowWithValidationErrors()
       throws Exception {
+
     MobilityAidAddForm form = new MobilityAidAddForm();
     form.setId("1234");
-
     mockMvc
         .perform(
             post("/add-mobility-aid")
