@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HowProvidedCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Medication;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Treatment;
@@ -33,7 +34,7 @@ public class WalkingConverterTest {
   @Before
   public void setUp() {
     MockitoAnnotations.initMocks(this);
-    JourneyFixture.configureMockJourney(journey);
+    JourneyFixture.configureMockJourney(journey, EligibilityCodeField.WALKD);
   }
 
   @Test
@@ -95,7 +96,7 @@ public class WalkingConverterTest {
 
   @Test
   public void getWalkingAids_withOne() {
-    List<WalkingAid> result = WalkingConverter.getWalkingAids(JourneyFixture.mobilityAidListForm);
+    List<WalkingAid> result = WalkingConverter.getWalkingAids(JourneyFixture.getMobilityAidListForm());
     assertThat(result.get(0).getDescription())
         .isEqualTo(MobilityAidAddForm.AidType.SCOOTER.getType());
     assertThat(result.get(0).getUsage()).isEqualTo("Usage");
@@ -104,14 +105,14 @@ public class WalkingConverterTest {
 
   @Test
   public void getTreatments_withOne() {
-    List<Treatment> result = WalkingConverter.getTreatments(JourneyFixture.treatmentListForm);
+    List<Treatment> result = WalkingConverter.getTreatments(JourneyFixture.getTreatmentListForm());
     assertThat(result.get(0).getDescription()).isEqualTo("Desc");
     assertThat(result.get(0).getTime()).isEqualTo("When");
   }
 
   @Test
   public void getMedications_withOne() {
-    List<Medication> result = WalkingConverter.getMedications(JourneyFixture.medicationListForm);
+    List<Medication> result = WalkingConverter.getMedications(JourneyFixture.getMedicationListForm());
     assertThat(result.get(0).getFrequency()).isEqualTo("Frequency");
     assertThat(result.get(0).getIsPrescribed()).isEqualTo(Boolean.TRUE);
     assertThat(result.get(0).getName()).isEqualTo("name");

@@ -25,7 +25,9 @@ public class JourneyToApplicationConverter {
 
   static String getExistingBadgeNumber(ExistingBadgeForm existingBadgeForm) {
 
-    if (existingBadgeForm != null && existingBadgeForm.getBadgeNumber() != null) {
+    if (existingBadgeForm != null
+        && existingBadgeForm.getHasExistingBadge() != null
+        && existingBadgeForm.getHasExistingBadge()) {
       return existingBadgeForm.getBadgeNumber();
     }
     return null;

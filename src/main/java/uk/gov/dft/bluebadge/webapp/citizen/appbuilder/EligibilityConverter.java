@@ -7,7 +7,18 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Ch
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.DisabilityArms;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Eligibility;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HealthcareProfessional;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalListForm;
+
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDBULK;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDVEHIC;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 
 class EligibilityConverter {
 
@@ -22,6 +33,7 @@ class EligibilityConverter {
         eligibility =
             Eligibility.builder()
                 .typeCode(eligibilityType)
+                .descriptionOfConditions(journey.getDescriptionOfCondition())
                 .walkingDifficulty(WalkingConverter.convert(journey))
                 .build();
 
@@ -74,6 +86,28 @@ class EligibilityConverter {
         // This code is all temporary too.
         throw new IllegalStateException("Invalid eligibility:" + eligibilityType);
     }
+
+    // Healthcare Professionals
+    if (EnumSet.of(CHILDBULK, CHILDVEHIC, WALKD).contains(eligibilityType)) {
+      eligibility.setHealthcareProfessionals(getHealthcareProfessionals(journey));
+    }
     return eligibility;
+  }
+
+  static List<HealthcareProfessional> getHealthcareProfessionals(Journey journey) {
+
+    HealthcareProfessionalListForm listForm =
+        journey.getFormForStep(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST);
+    List<HealthcareProfessional> healthcareProfessionals = new ArrayList<>();
+    listForm
+        .getHealthcareProfessionals()
+        .forEach(
+            i ->
+                healthcareProfessionals.add(
+                    HealthcareProfessional.builder()
+                        .location(i.getHealthcareProfessionalLocation())
+                        .name(i.getHealthcareProfessionalName())
+                        .build()));
+    return healthcareProfessionals;
   }
 }

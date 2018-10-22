@@ -39,7 +39,7 @@ public class ExistingBadgeController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getEnterAddressForm()) {
+    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getExistingBadgeForm()) {
       model.addAttribute(FORM_REQUEST, journey.getExistingBadgeForm());
     }
 

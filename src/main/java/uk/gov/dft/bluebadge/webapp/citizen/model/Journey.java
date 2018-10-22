@@ -1,15 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
-
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Predicate;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
@@ -44,6 +34,19 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipPlanningJourneyForm
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WalkingTimeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
+
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
+
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 
 public class Journey implements Serializable {
 
@@ -109,11 +112,59 @@ public class Journey implements Serializable {
     return null;
   }
 
+  Map<StepDefinition, List<StepDefinition>> prerequisiteSteps;
+
+  private List<StepDefinition> getPrerequisiteStep(StepDefinition currentStep) {
+    if (null == prerequisiteSteps) {
+      populatePrerequisiteSteps();
+    }
+    return prerequisiteSteps.get(currentStep);
+  }
+
+  /**
+   * Create a list of possible prerequisite steps. This will be used to assume that any step being
+   * visited has at least One of the prerequisites completed. Most steps have One possible previous
+   * step, so this is fine for validating the journey. Any custom journey validation is done outside
+   * of this method.
+   */
+  private void populatePrerequisiteSteps() {
+    prerequisiteSteps = new HashMap<>();
+    // Parse twice rather than try and be clever.
+    // 1st pass fill in steps and an empty map.
+    // 2nd pass add prerequisite steps to map.
+    Arrays.stream(StepDefinition.values())
+        .forEach(i -> prerequisiteSteps.put(i, new ArrayList<>()));
+
+    for (StepDefinition previousStep : StepDefinition.values()) {
+      for (StepDefinition step : previousStep.getNext()) {
+        prerequisiteSteps.get(step).add(previousStep);
+      }
+    }
+  }
+
   public boolean isValidState(StepDefinition step) {
-    if (!hasStepForm(StepDefinition.APPLICANT_TYPE)) {
+    List<StepDefinition> possiblePreviousSteps = getPrerequisiteStep(step);
+
+    boolean previousStepCompleted = false;
+
+    // Home page will have no prerequisite page
+    if(!possiblePreviousSteps.isEmpty()){
+      // With list of prerequisites, ensure at least 1 has been completed.
+      for(StepDefinition previousStep :possiblePreviousSteps){
+        if(hasStepForm(previousStep)){
+          previousStepCompleted = true;
+          break;
+        }
+      }
+    }else{
+      previousStepCompleted = true;
+    }
+
+    if(!previousStepCompleted){
       return false;
     }
 
+    // Custom step validation
     switch (step) {
       case WHAT_WALKING_DIFFICULTIES:
         if (null == getNation()) {
