@@ -88,4 +88,14 @@ class Ids {
     static final String MEDICATION_ADD_CONFIRM_BUTTON = "button.add.medication";
     static final String MEDICATION_FREQUENCY_TEXT = "frequency";
   }
+
+  class Eligibility {
+    static final String HEALTHCARE_PRO_ADD_CONFIRM_BUTTON = "button.add.healthcare.professional";
+    static final String HEALTHCARE_PRO_HAS_OPTION = "hasHealthcareProfessional";
+    // Id of link will be prefix + counter.  Counter starts at 1.
+    static final String HEALTHCARE_PRO_REMOVE_LINK_PREFIX = "healthcare.professional.remove.link.";
+    static final String HEALTHCARE_PRO_ADD_FIRST_LINK = "firstaddhealthcareprofessionallink";
+    static final String HEALTHCARE_PRO_ADD_DESCRIPTION = "healthcareProfessionalName";
+    static final String HEALTHCARE_PRO_ADD_LOCATION = "healthcareProfessionalLocation";
+  }
 }
