@@ -81,7 +81,7 @@ public class OrganisationCareController implements StepController {
 
   private void setupModel(Model model, Journey journey) {
     RadioOptionsGroup group =
-        new RadioOptionsGroup("organisationCare.page.title").autoPopulateBooleanOptions();
+        new RadioOptionsGroup("organisationCare.page.title").withYesNoOptions();
     group.setHintKey("organisationCare.page.title.hint");
 
     model.addAttribute("options", group);

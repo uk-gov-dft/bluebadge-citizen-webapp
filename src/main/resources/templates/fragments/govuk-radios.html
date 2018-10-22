@@ -74,10 +74,10 @@
                 th:text="#{${radioGroup.getTitleKey()}}" th:remove="tag"></div>
          </legend>
 
-         <span class="govuk-hint" th:if="${radioGroup.getHintKey()}">
-            <div th:id="${name} + '-hint'" 
+         <span class="govuk-hint" th:if="${radioGroup.getHintKey()}" 
+         		 th:id="${name} + '-hint'" 
             		 th:data-uipath="${name} + '.hint'"
-          		 th:text="#{${radioGroup.getHintKey()}}" th:remove="tag"></div>
+          		 th:text="#{${radioGroup.getHintKey()}}">
          </span>
 
          <span class="govuk-error-message"

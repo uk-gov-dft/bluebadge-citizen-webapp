@@ -212,7 +212,7 @@ public class WhatWalkingDifficultiesControllerTest {
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/what-makes-walking-difficult"))
+        .andExpect(redirectedUrl("/what-makes-walking-difficult#error"))
         .andExpect(flash().attribute("formRequest", form));
   }
 

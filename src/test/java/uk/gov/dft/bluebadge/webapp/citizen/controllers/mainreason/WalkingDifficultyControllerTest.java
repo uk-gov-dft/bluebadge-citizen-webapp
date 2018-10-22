@@ -68,7 +68,8 @@ public class WalkingDifficultyControllerTest {
             .titleMessageKeyApplicantAware("walkingDifficultyPage.content.title", journey)
             .addOptionApplicantAware(HELP, "options.walkingDifficultyPage.help", journey)
             .addOptionApplicantAware(PAIN, "options.walkingDifficultyPage.pain", journey)
-            .addOptionApplicantAware(DANGEROUS, "options.walkingDifficultyPage.dangerous", journey)
+            .addOptionApplicantAndNationAware(
+                DANGEROUS, "options.walkingDifficultyPage.dangerous", journey)
             .addOptionApplicantAware(NONE, "options.walkingDifficultyPage.none", journey)
             .build();
 
@@ -93,7 +94,8 @@ public class WalkingDifficultyControllerTest {
             .addOptionApplicantAware(HELP, "options.walkingDifficultyPage.help", journey)
             .addOptionApplicantAware(PLAN, "options.walkingDifficultyPage.plan", journey)
             .addOptionApplicantAware(PAIN, "options.walkingDifficultyPage.pain", journey)
-            .addOptionApplicantAware(DANGEROUS, "options.walkingDifficultyPage.dangerous", journey)
+            .addOptionApplicantAndNationAware(
+                DANGEROUS, "options.walkingDifficultyPage.dangerous", journey)
             .addOptionApplicantAware(NONE, "options.walkingDifficultyPage.none", journey)
             .build();
 

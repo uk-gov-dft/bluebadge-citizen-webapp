@@ -1,4 +1,4 @@
-package uk.gov.dft.bluebadge.webapp.citizen.controllers;
+package uk.gov.dft.bluebadge.webapp.citizen.controllers.walking;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
@@ -10,30 +10,32 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationAddForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm;
 
-public class TreatmentAddControllerTest extends ControllerTestFixture<TreatmentAddController> {
+public class MedicationAddControllerTest extends ControllerTestFixture<MedicationAddController> {
 
   @Mock private RouteMaster mockRouteMaster;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    super.setup(new TreatmentAddController(mockRouteMaster));
-    journey.setTreatmentListForm(TreatmentListForm.builder().treatments(new ArrayList<>()).build());
+    super.setup(new MedicationAddController(mockRouteMaster));
+    journey.setMedicationListForm(
+        MedicationListForm.builder().medications(new ArrayList<>()).build());
     applyRoutmasterDefaultMocks(mockRouteMaster);
   }
 
   @Override
   protected String getTemplateName() {
-    return "treatment-add";
+    return "walking/medication-add";
   }
 
   @Override
   protected String getUrl() {
-    return "/add-treatment";
+    return "/add-medication";
   }
 
   @Test
@@ -52,18 +54,20 @@ public class TreatmentAddControllerTest extends ControllerTestFixture<TreatmentA
     mockMvc
         .perform(
             post(getUrl())
-                .param("treatmentDescription", "A description")
-                .param("treatmentWhen", "when")
+                .param("name", "A name")
+                .param("prescribed", "yes")
+                .param("dosage", "Dosage")
+                .param("frequency", "Frequency")
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/list-treatments"));
+        .andExpect(redirectedUrl("/list-medication"));
   }
 
   @Test
   public void submit_whenBlankFormSubmitted_thenShouldRedirectToShowWithValidationErrors()
       throws Exception {
-    TreatmentAddForm form = new TreatmentAddForm();
+    MedicationAddForm form = new MedicationAddForm();
     form.setId("1234");
 
     mockMvc
@@ -73,9 +77,11 @@ public class TreatmentAddControllerTest extends ControllerTestFixture<TreatmentA
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/add-treatment#error"))
+        .andExpect(redirectedUrl("/add-medication#error"))
         .andExpect(flash().attribute("formRequest", form))
-        .andExpect(formRequestFlashAttributeHasFieldErrorCode("treatmentDescription", "NotBlank"))
-        .andExpect(formRequestFlashAttributeHasFieldErrorCode("treatmentWhen", "NotBlank"));
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("name", "NotBlank"))
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("prescribed", "NotNull"))
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("dosage", "NotBlank"))
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("frequency", "NotBlank"));
   }
 }

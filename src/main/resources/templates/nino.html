@@ -20,14 +20,14 @@
 
                 <details class="govuk-details">
                     <summary class="govuk-details__summary">
-                        <span class="govuk-details__summary-text" th:text="#{${JOURNEY.who + 'ninoPage.noNino.title'}}"></span>
+                        <span class="govuk-details__summary-text" id="noNino" th:text="#{${JOURNEY.who + 'ninoPage.noNino.title'}}"></span>
                     </summary>
 
                     <div class="govuk-details__text">
                         <span th:text="#{${JOURNEY.who + 'ninoPage.noNino.text'}}" th:remove="tag"></span>
                         <a data-ga-track-link="Don't know my NINO"
                            data-ga-track-link-action="alternative click"
-                           data-uid="skipNiLink" href="/enter-address" th:text="#{ninoPage.noNino.link}"></a>
+                           id="skipNiLink" href="/nino-bypass" th:text="#{ninoPage.noNino.link}"></a>
                     </div>
                 </details>
 

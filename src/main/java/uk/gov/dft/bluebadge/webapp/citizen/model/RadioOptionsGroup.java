@@ -27,7 +27,7 @@ public class RadioOptionsGroup {
     this.titleIsH1 = titleIsH1;
   }
 
-  public RadioOptionsGroup autoPopulateBooleanOptions() {
+  public RadioOptionsGroup withYesNoOptions() {
     RadioOption yes = new RadioOption("yes", "radio.option.yes");
     RadioOption no = new RadioOption("no", "radio.option.no");
     options = Lists.newArrayList(yes, no);
@@ -76,6 +76,12 @@ public class RadioOptionsGroup {
 
     public Builder addOption(String value, String messageKey) {
       options.add(new RadioOption(value, messageKey));
+      return this;
+    }
+
+    public Builder withYesNoOptions() {
+      options.add(new RadioOption("yes", "radio.option.yes"));
+      options.add(new RadioOption("no", "radio.option.no"));
       return this;
     }
 

@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import javax.validation.Valid;
@@ -16,65 +17,77 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ExistingBadgeForm;
 
 @Controller
-public class NinoController implements StepController {
+public class ExistingBadgeController implements StepController {
 
-  public static final String TEMPLATE = "nino";
-  public static final String FORM_REQUEST = "formRequest";
-  public static final String NINO_BYPASS_URL = "/nino-bypass";
+  private static final String TEMPLATE = "existing-badge";
+  public static final String EXISTING_BADGE_BYPASS_URL = "/existing-badge-bypass";
 
   private final RouteMaster routeMaster;
 
   @Autowired
-  public NinoController(RouteMaster routeMaster) {
+  public ExistingBadgeController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
-  @GetMapping(Mappings.URL_NINO)
+  @GetMapping(Mappings.URL_EXISTING_BADGE)
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
     if (!journey.isValidState(getStepDefinition())) {
       return routeMaster.backToCompletedPrevious();
     }
 
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getNinoForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getNinoForm());
+    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getEnterAddressForm()) {
+      model.addAttribute(FORM_REQUEST, journey.getExistingBadgeForm());
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
-      model.addAttribute(FORM_REQUEST, NinoForm.builder().build());
+      model.addAttribute(FORM_REQUEST, ExistingBadgeForm.builder().build());
     }
 
     return TEMPLATE;
   }
 
-  @GetMapping(NINO_BYPASS_URL)
+  @GetMapping(EXISTING_BADGE_BYPASS_URL)
   public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
-    NinoForm formRequest = NinoForm.builder().build();
-    journey.setNinoForm(formRequest);
+    ExistingBadgeForm formRequest = ExistingBadgeForm.builder().hasExistingBadge(true).build();
+    journey.setExistingBadgeForm(formRequest);
     return routeMaster.redirectToOnSuccess(formRequest);
   }
 
-  @PostMapping(Mappings.URL_NINO)
+  @PostMapping(Mappings.URL_EXISTING_BADGE)
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute(FORM_REQUEST) NinoForm ninoForm,
+      @Valid @ModelAttribute(FORM_REQUEST) ExistingBadgeForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
-    if (bindingResult.hasErrors()) {
-      return routeMaster.redirectToOnBindingError(this, ninoForm, bindingResult, attr);
+    if (formRequest.getHasExistingBadge() != null && formRequest.getHasExistingBadge()) {
+
+      String badgeNum = formRequest.getBadgeNumber().replaceAll("\\s+", "");
+
+      if (badgeNum.isEmpty() || badgeNum.length() < 6) {
+        bindingResult.rejectValue("badgeNumber", "badgeNumber.NotBlank");
+      }
+
+      if (badgeNum.length() > 6) {
+        formRequest.setBadgeNumber(badgeNum.substring(0, 6));
+      }
     }
 
-    journey.setNinoForm(ninoForm);
+    if (bindingResult.hasErrors()) {
+      return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
+    }
 
-    return routeMaster.redirectToOnSuccess(ninoForm);
+    journey.setExistingBadgeForm(formRequest);
+
+    return routeMaster.redirectToOnSuccess(formRequest);
   }
 
   @Override
   public StepDefinition getStepDefinition() {
-    return StepDefinition.NINO;
+    return StepDefinition.EXISTING_BADGE;
   }
 }

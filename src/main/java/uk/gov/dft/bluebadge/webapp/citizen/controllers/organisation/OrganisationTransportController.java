@@ -81,7 +81,6 @@ public class OrganisationTransportController implements StepController {
 
   private void setupModel(Model model, Journey journey) {
     model.addAttribute(
-        "options",
-        new RadioOptionsGroup("organisationTransport.page.title").autoPopulateBooleanOptions());
+        "options", new RadioOptionsGroup("organisationTransport.page.title").withYesNoOptions());
   }
 }

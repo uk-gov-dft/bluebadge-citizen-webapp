@@ -135,7 +135,7 @@ public class WalkingTimeControllerTest {
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/walking-time"))
+        .andExpect(redirectedUrl("/walking-time#error"))
         .andExpect(flash().attribute("formRequest", form));
   }
 

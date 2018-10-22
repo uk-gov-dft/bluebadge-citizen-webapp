@@ -63,6 +63,9 @@ public class SiteSteps extends AbstractSpringSteps {
     whenIClickOn("Continue");
     // Your Authority page
     whenIClickOn("Continue");
+    // Existing Badge page
+    iCompleteTheAlreadyHaveABlueBadgePage("YES");
+    whenIClickOn("Continue");
     // Receive Benefit page
     iSelectAnOption("benefitType.NONE");
     whenIClickOn("Continue");
@@ -275,7 +278,7 @@ public class SiteSteps extends AbstractSpringSteps {
   @When(
       "^I type day as \"([^\"]*)\" month as \"([^\"]*)\" and year as \"([^\"]*)\" for applicant's date of birth$")
   public void iTypeDayAsMonthAsAndYearAsForApplicantSDateOfBirth(
-      String day, String month, String year) throws Throwable {
+      String day, String month, String year) {
     sitePage.findElementWithUiPath("dateOfBirth.day.field").sendKeys(day);
     sitePage.findElementWithUiPath("dateOfBirth.month.field").sendKeys(month);
     sitePage.findElementWithUiPath("dateOfBirth.year.field").sendKeys(year);
@@ -283,7 +286,7 @@ public class SiteSteps extends AbstractSpringSteps {
 
   @Then(
       "^I should see \"(You're|They are|You may be|They may be|You're not|They're not)\" eligible page$")
-  public void iShouldSeeEligiblePage(String who) throws Throwable {
+  public void iShouldSeeEligiblePage(String who) {
     String page_title = who + " eligible for a Blue Badge - GOV.UK Apply for a Blue Badge";
 
     if (who.equals("You're not") || who.equals("They're not")) {
@@ -294,26 +297,25 @@ public class SiteSteps extends AbstractSpringSteps {
   }
 
   @Then("^I can see feedback link$")
-  public void iCanSeeFeedbackLink() throws Throwable {
+  public void iCanSeeFeedbackLink() {
     assertTrue(FEEDBACK_URL.equals(sitePage.findElementWithText("feedback").getAttribute("href")));
   }
 
   @And("^I can see the continue button with link to external welsh site$")
-  public void iCanSeeTheContinueButtonWithLinkToExternalWelshSite() throws Throwable {
+  public void iCanSeeTheContinueButtonWithLinkToExternalWelshSite() {
     assertTrue(
         APPLY_IN_WELSH_EXTERNAL_URL.equals(
             sitePage.findElementWithText("Continue").getAttribute("href")));
   }
 
   @Then("^The google analytics tag should be available$")
-  public void theGoogleAnalyticsTagShouldBeAvailable() throws Throwable {
+  public void theGoogleAnalyticsTagShouldBeAvailable() {
     assertTrue(sitePage.getPageContent().contains(GOOGLE_ANALYTICS_TAG));
   }
 
   @And(
       "^I should see the \"(yourself|someone else)\" option button is selected in the Who are you applying for? page$")
-  public void iShouldSeeTheOptionButtonIsSelectedInTheWhoAreYouApplyingForPage(String selfOrOther)
-      throws Throwable {
+  public void iShouldSeeTheOptionButtonIsSelectedInTheWhoAreYouApplyingForPage(String selfOrOther) {
 
     if (selfOrOther.equalsIgnoreCase("yourself")) {
 
@@ -322,6 +324,22 @@ public class SiteSteps extends AbstractSpringSteps {
     } else if (selfOrOther.equalsIgnoreCase("someone else")) {
 
       assertTrue(sitePage.findPageElementById("applicantType.SOMEONE_ELSE").isSelected());
+    }
+  }
+
+  @And("^I complete the already have a blue badge page \"(YES|NO|YES BUT DON'T KNOW)\"$")
+  public void iCompleteTheAlreadyHaveABlueBadgePage(String opt) {
+    if ("YES BUT DON't KNOW".equals(opt)) {
+      sitePage.findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + "_yes").click();
+      sitePage.findPageElementById(Ids.Preamble.BADGE_NUMBER_BYPASS_LINK).click();
+    } else {
+      sitePage
+          .findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + "_" + opt.toLowerCase())
+          .click();
+
+      if ("YES".equals(opt)) {
+        sitePage.findPageElementById(Ids.Preamble.BADGE_NUMBER).sendKeys("AB12CD");
+      }
     }
   }
 }

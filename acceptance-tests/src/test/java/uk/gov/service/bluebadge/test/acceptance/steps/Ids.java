@@ -9,6 +9,9 @@ class Ids {
     static final String APPLICANT_ORGANISATION_OPTION =
         APPLICANT_TYPE_OPTION_LIST + ".ORGANISATION";
     static final String COUNCIL_INPUT = "councilShortCode";
+    static final String EXISTING_BADGE_OPTION = "hasExistingBadge";
+    static final String BADGE_NUMBER = "badgeNumber";
+    static final String BADGE_NUMBER_BYPASS_LINK = "bypass_link";
   }
 
   class EleCheck {
@@ -50,8 +53,8 @@ class Ids {
     static final String GENDER_FEMALE = "gender.FEMALE";
     static final String GENDER_UNSPECIFIED = "gender.UNSPECIFIE";
     static final String NI = "nino";
-    static final String NO_NI_TEXT = "You don't have a National Insurance number";
-    static final String NO_NI_LINK_TEXT = "Continue without a National Insurance number.";
+    static final String NO_NI_LINK = "noNino";
+    static final String SKIP_WITHOUT_NI = "skipNiLink";
   }
 
   class Contact {
@@ -79,5 +82,14 @@ class Ids {
     static final String MOBILITY_AID_ADD_CONFIRM_BUTTON = "button.continue";
 
     static final String WALKING_TIME = "walkingTime";
+
+    // Medication stuff
+    static final String MEDICATION_ADD_FIRST_LINK = "firstaddmedicationlink";
+    static final String MEDICATION_HAS_MEDICATION_OPTION = "hasMedication";
+    static final String MEDICATION_ADD_MEDICATION_DESCRIPTION = "name";
+    static final String MEDICATION_PRESCRIBED_OPTION = "prescribed";
+    static final String MEDICATION_DOSAGE_TEXT = "dosage";
+    static final String MEDICATION_ADD_CONFIRM_BUTTON = "button.add.medication";
+    static final String MEDICATION_FREQUENCY_TEXT = "frequency";
   }
 }

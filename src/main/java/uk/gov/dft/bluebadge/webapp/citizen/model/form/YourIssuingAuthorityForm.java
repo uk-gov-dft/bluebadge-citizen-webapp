@@ -25,6 +25,6 @@ public class YourIssuingAuthorityForm implements StepForm, Serializable {
       return Optional.of(StepDefinition.ORGANISATION_CARE);
     }
 
-    return Optional.of(StepDefinition.RECEIVE_BENEFITS);
+    return Optional.of(StepDefinition.EXISTING_BADGE);
   }
 }
