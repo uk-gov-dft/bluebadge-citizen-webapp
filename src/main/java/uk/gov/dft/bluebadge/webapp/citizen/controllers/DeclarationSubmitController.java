@@ -24,7 +24,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Co
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.DisabilityArms;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Eligibility;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.GenderCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Medication;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Party;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.PartyTypeCodeField;
@@ -43,7 +42,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ExistingBadgeForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
@@ -106,7 +104,7 @@ public class DeclarationSubmitController implements StepController {
     String condDesc = journey.getDescriptionOfCondition();
 
     String nino = null;
-    if(null != journey.getNinoForm() && null != journey.getNinoForm().getNino()){
+    if (null != journey.getNinoForm() && null != journey.getNinoForm().getNino()) {
       nino = journey.getNinoForm().getNino().toUpperCase();
     }
 

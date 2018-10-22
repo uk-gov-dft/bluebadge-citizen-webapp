@@ -37,7 +37,6 @@ public class ApplicationFixture extends AbstractSpringSteps {
     this.sitePage = sitePage;
   }
 
-
   @Given("I complete applicant page for \"(yourself|someone else)\"")
   public void iCompleteApplicantPage(String myselfOrOther) {
     sitePage.openByPageName("applicant");
@@ -358,5 +357,4 @@ public class ApplicationFixture extends AbstractSpringSteps {
   private void pressContinue() {
     sitePage.findElementWithText("Continue").click();
   }
-
 }
