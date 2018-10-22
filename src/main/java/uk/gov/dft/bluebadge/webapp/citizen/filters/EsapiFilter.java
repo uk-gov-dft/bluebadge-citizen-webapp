@@ -57,11 +57,4 @@ public class EsapiFilter extends OncePerRequestFilter {
     }
   }
 
-  private SecurityWrapperResponse wrapResponse(HttpServletResponse response) {
-    if (response instanceof SecurityWrapperRequest) {
-      return (SecurityWrapperResponse) response;
-    } else {
-      return new SecurityWrapperResponse(response);
-    }
-  }
 }
