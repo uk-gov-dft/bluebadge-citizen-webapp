@@ -1,5 +1,8 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDBULK;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDVEHIC;
+
 import java.io.Serializable;
 import java.util.Optional;
 import javax.validation.constraints.NotNull;
@@ -27,6 +30,9 @@ public class HealthConditionsForm implements StepForm, Serializable {
   public Optional<StepDefinition> determineNextStep(Journey journey) {
     if (EligibilityCodeField.WALKD.equals(journey.getEligibilityCode())) {
       return Optional.of(StepDefinition.WHAT_WALKING_DIFFICULTIES);
+    }
+    if (journey.getEligibilityCode() == CHILDBULK || journey.getEligibilityCode() == CHILDVEHIC) {
+      return Optional.of(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST);
     }
     return Optional.of(StepDefinition.DECLARATIONS);
   }

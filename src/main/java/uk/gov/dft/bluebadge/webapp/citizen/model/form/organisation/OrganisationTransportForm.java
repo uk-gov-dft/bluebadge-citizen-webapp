@@ -25,11 +25,12 @@ public class OrganisationTransportForm implements StepForm, Serializable {
 
   @Override
   public Optional<StepDefinition> determineNextStep() {
-	if (null == doesTransport) {
-		throw new IllegalStateException("You must select if organisation does transport or not blue badge customers");
-	}
-    
-	return doesTransport
+    if (null == doesTransport) {
+      throw new IllegalStateException(
+          "You must select if organisation does transport or not blue badge customers");
+    }
+
+    return doesTransport
         ? Optional.of(ORGANISATION_MAY_BE_ELIGIBLE)
         : Optional.of(ORGANISATION_NOT_ELIGIBLE);
   }

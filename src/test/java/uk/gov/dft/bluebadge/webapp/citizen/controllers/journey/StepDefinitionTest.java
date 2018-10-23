@@ -25,6 +25,12 @@ public class StepDefinitionTest {
             .filter(s -> !allNextSteps.contains(s))
             .collect(Collectors.toSet());
 
-    assertThat(unreachable).containsOnly(HOME, MOBILITY_AID_ADD, TREATMENT_ADD, MEDICATION_ADD);
+    assertThat(unreachable)
+        .containsOnly(
+            HOME,
+            MOBILITY_AID_ADD,
+            TREATMENT_ADD,
+            MEDICATION_ADD,
+            StepDefinition.HEALTHCARE_PROFESSIONALS_ADD);
   }
 }

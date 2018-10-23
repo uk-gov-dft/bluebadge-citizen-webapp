@@ -375,4 +375,24 @@ public class ApplicationFixture extends AbstractSpringSteps {
     else sitePage.findPageElementById(Ids.EleCheck.ORGANISATION_TRANSPORTS + "." + "false").click();
     pressContinue();
   }
+
+  @And("^I complete the healthcare professionals page for \"(YES|NO)\"$")
+  public void iCompleteTheHealthcareProfessionalsPage(String option) {
+    sitePage
+        .findPageElementById(Ids.Eligibility.HEALTHCARE_PRO_HAS_OPTION + option.toLowerCase())
+        .click();
+
+    if ("YES".equals(option)) {
+      clickButtonById(Ids.Eligibility.HEALTHCARE_PRO_ADD_FIRST_LINK);
+      clearAndSendKeys(Ids.Eligibility.HEALTHCARE_PRO_ADD_DESCRIPTION, "Pro description");
+      clearAndSendKeys(Ids.Eligibility.HEALTHCARE_PRO_ADD_LOCATION, "Pro Location");
+      clickButtonById(Ids.Eligibility.HEALTHCARE_PRO_ADD_CONFIRM_BUTTON);
+      clickButtonById(Ids.Eligibility.HEALTHCARE_PRO_REMOVE_LINK_PREFIX + "1");
+      clickButtonById(Ids.Eligibility.HEALTHCARE_PRO_ADD_FIRST_LINK);
+      clearAndSendKeys(Ids.Eligibility.HEALTHCARE_PRO_ADD_DESCRIPTION, "Pro description");
+      clearAndSendKeys(Ids.Eligibility.HEALTHCARE_PRO_ADD_LOCATION, "Pro Location");
+      clickButtonById(Ids.Eligibility.HEALTHCARE_PRO_ADD_CONFIRM_BUTTON);
+    }
+    pressContinue();
+  }
 }

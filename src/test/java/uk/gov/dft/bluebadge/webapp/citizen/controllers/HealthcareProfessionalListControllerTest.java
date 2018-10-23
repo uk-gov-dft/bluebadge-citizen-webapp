@@ -16,29 +16,33 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalAddForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalListForm;
 
-public class TreatmentListControllerTest extends ControllerTestFixture<TreatmentListController> {
+public class HealthcareProfessionalListControllerTest
+    extends ControllerTestFixture<HealthcareProfessionalListController> {
 
   @Mock private RouteMaster mockRouteMaster;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    super.setup(new TreatmentListController(mockRouteMaster));
-    journey.setTreatmentListForm(TreatmentListForm.builder().treatments(new ArrayList<>()).build());
+    super.setup(new HealthcareProfessionalListController(mockRouteMaster));
+    journey.setHealthcareProfessionalListForm(
+        HealthcareProfessionalListForm.builder()
+            .healthcareProfessionals(new ArrayList<>())
+            .build());
     applyRoutmasterDefaultMocks(mockRouteMaster);
   }
 
   @Override
   protected String getTemplateName() {
-    return "treatment-list";
+    return "healthcare-professional-list";
   }
 
   @Override
   protected String getUrl() {
-    return "/list-treatments";
+    return "/list-healthcare-professionals";
   }
 
   @Test
@@ -53,12 +57,12 @@ public class TreatmentListControllerTest extends ControllerTestFixture<Treatment
 
   @Test
   public void submit_showRedirectToNextStepInJourney() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(TreatmentListForm.class)))
+    when(mockRouteMaster.redirectToOnSuccess(any(HealthcareProfessionalListForm.class)))
         .thenReturn("redirect:/testSuccess");
     mockMvc
         .perform(
             post(getUrl())
-                .param("hasTreatment", "no")
+                .param("hasHealthcareProfessional", "no")
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
@@ -67,51 +71,54 @@ public class TreatmentListControllerTest extends ControllerTestFixture<Treatment
 
   @Test
   public void submit_showRedirectToNextStepInJourney_withTreatments() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(TreatmentListForm.class)))
+    when(mockRouteMaster.redirectToOnSuccess(any(HealthcareProfessionalListForm.class)))
         .thenReturn("redirect:/testSuccess");
 
-    TreatmentAddForm form = new TreatmentAddForm();
-    form.setTreatmentDescription("A");
-    form.setTreatmentWhen("F");
+    HealthcareProfessionalAddForm form = new HealthcareProfessionalAddForm();
+    form.setHealthcareProfessionalLocation("Island");
+    form.setHealthcareProfessionalName("Dr No");
 
-    journey.getTreatmentListForm().setHasTreatment("yes");
-    journey.getTreatmentListForm().setTreatments(Lists.newArrayList(form));
+    journey.getHealthcareProfessionalListForm().setHasHealthcareProfessional("yes");
+    journey
+        .getHealthcareProfessionalListForm()
+        .setHealthcareProfessionals(Lists.newArrayList(form));
 
     mockMvc
         .perform(
             post(getUrl())
-                .param("hasTreatment", "yes")
+                .param("hasHealthcareProfessional", "yes")
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
 
-    assertEquals("yes", journey.getTreatmentListForm().getHasTreatment());
-    assertEquals(1, journey.getTreatmentListForm().getTreatments().size());
+    assertEquals("yes", journey.getHealthcareProfessionalListForm().getHasHealthcareProfessional());
+    assertEquals(
+        1, journey.getHealthcareProfessionalListForm().getHealthcareProfessionals().size());
   }
 
   @Test
-  public void submit_setHasTreatmentsToNoIfEmpty() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(TreatmentListForm.class)))
+  public void submit_setHasProfessionalsToNoIfEmpty() throws Exception {
+    when(mockRouteMaster.redirectToOnSuccess(any(HealthcareProfessionalListForm.class)))
         .thenReturn("redirect:/testSuccess");
 
-    journey.getTreatmentListForm().setHasTreatment("yes");
-    journey.getTreatmentListForm().setTreatments(new ArrayList<>());
+    journey.getHealthcareProfessionalListForm().setHasHealthcareProfessional("yes");
+    journey.getHealthcareProfessionalListForm().setHealthcareProfessionals(new ArrayList<>());
     mockMvc
         .perform(
             post(getUrl())
-                .param("hasTreatment", "yes")
+                .param("hasHealthcareProfessional", "yes")
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
     // Then has reset to no.
-    assertEquals("no", journey.getTreatmentListForm().getHasTreatment());
+    assertEquals("no", journey.getHealthcareProfessionalListForm().getHasHealthcareProfessional());
   }
 
   @Test
   public void submit_bindingError() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(TreatmentListForm.class)))
+    when(mockRouteMaster.redirectToOnSuccess(any(HealthcareProfessionalListForm.class)))
         .thenReturn("redirect:/testSuccess");
 
     mockMvc
@@ -122,7 +129,7 @@ public class TreatmentListControllerTest extends ControllerTestFixture<Treatment
         .andExpect(status().isFound())
         .andExpect(
             ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
-                "hasTreatment", "NotNull"));
+                "hasHealthcareProfessional", "NotNull"));
   }
 
   @Test

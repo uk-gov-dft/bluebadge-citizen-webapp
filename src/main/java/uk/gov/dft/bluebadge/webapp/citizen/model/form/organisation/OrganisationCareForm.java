@@ -26,9 +26,10 @@ public class OrganisationCareForm implements StepForm, Serializable {
 
   @Override
   public Optional<StepDefinition> determineNextStep() {
-	if (null == doesCare) {
-		throw new IllegalStateException("You must select if organisation does care or not for blue badge customers");
-	}
+    if (null == doesCare) {
+      throw new IllegalStateException(
+          "You must select if organisation does care or not for blue badge customers");
+    }
     return doesCare ? Optional.of(ORGANISATION_TRANSPORT) : Optional.of(ORGANISATION_NOT_ELIGIBLE);
   }
 }

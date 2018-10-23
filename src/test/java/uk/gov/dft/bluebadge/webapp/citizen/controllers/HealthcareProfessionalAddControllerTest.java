@@ -11,29 +11,33 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalAddForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalListForm;
 
-public class TreatmentAddControllerTest extends ControllerTestFixture<TreatmentAddController> {
+public class HealthcareProfessionalAddControllerTest
+    extends ControllerTestFixture<HealthcareProfessionalAddController> {
 
   @Mock private RouteMaster mockRouteMaster;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    super.setup(new TreatmentAddController(mockRouteMaster));
-    journey.setTreatmentListForm(TreatmentListForm.builder().treatments(new ArrayList<>()).build());
+    super.setup(new HealthcareProfessionalAddController(mockRouteMaster));
+    journey.setHealthcareProfessionalListForm(
+        HealthcareProfessionalListForm.builder()
+            .healthcareProfessionals(new ArrayList<>())
+            .build());
     applyRoutmasterDefaultMocks(mockRouteMaster);
   }
 
   @Override
   protected String getTemplateName() {
-    return "treatment-add";
+    return "healthcare-professional-add";
   }
 
   @Override
   protected String getUrl() {
-    return "/add-treatment";
+    return "/add-healthcare-professional";
   }
 
   @Test
@@ -52,20 +56,21 @@ public class TreatmentAddControllerTest extends ControllerTestFixture<TreatmentA
     mockMvc
         .perform(
             post(getUrl())
-                .param("treatmentDescription", "A description")
-                .param("treatmentWhen", "when")
+                .param("healthcareProfessionalName", "Dr No")
+                .param("healthcareProfessionalLocation", "Spooky Island")
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/list-treatments"));
+        .andExpect(redirectedUrl("/list-healthcare-professionals"));
   }
 
   @Test
   public void submit_whenBlankFormSubmitted_thenShouldRedirectToShowWithValidationErrors()
       throws Exception {
 
-    TreatmentAddForm form = new TreatmentAddForm();
+    HealthcareProfessionalAddForm form = new HealthcareProfessionalAddForm();
     form.setId("1234");
+
     mockMvc
         .perform(
             post(getUrl())
@@ -73,9 +78,12 @@ public class TreatmentAddControllerTest extends ControllerTestFixture<TreatmentA
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/add-treatment#error"))
+        .andExpect(redirectedUrl("/add-healthcare-professional#error"))
         .andExpect(flash().attribute("formRequest", form))
-        .andExpect(formRequestFlashAttributeHasFieldErrorCode("treatmentDescription", "NotBlank"))
-        .andExpect(formRequestFlashAttributeHasFieldErrorCode("treatmentWhen", "NotBlank"));
+        .andExpect(
+            formRequestFlashAttributeHasFieldErrorCode("healthcareProfessionalName", "NotBlank"))
+        .andExpect(
+            formRequestFlashAttributeHasFieldErrorCode(
+                "healthcareProfessionalLocation", "NotBlank"));
   }
 }
