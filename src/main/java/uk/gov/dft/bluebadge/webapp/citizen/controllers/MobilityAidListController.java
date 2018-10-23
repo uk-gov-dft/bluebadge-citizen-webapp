@@ -1,11 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings.URL_REMOVE_PART;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-
-import java.util.ArrayList;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +15,13 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
+
+import javax.validation.Valid;
+import java.util.ArrayList;
+
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings.URL_REMOVE_PART;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 @RequestMapping(Mappings.URL_MOBILITY_AID_LIST)
@@ -41,8 +42,8 @@ public class MobilityAidListController implements StepController {
     }
 
     // On returning to form, take previously submitted values.
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getMobilityAidListForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getMobilityAidListForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     // If navigating forward from previous form, reset
@@ -51,7 +52,7 @@ public class MobilityAidListController implements StepController {
       // Want to not get any null pointers accessing list.
       journey.setMobilityAidListForm(
           MobilityAidListForm.builder().mobilityAids(new ArrayList<>()).build());
-      model.addAttribute(FORM_REQUEST, journey.getMobilityAidListForm());
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
     return TEMPLATE;
   }

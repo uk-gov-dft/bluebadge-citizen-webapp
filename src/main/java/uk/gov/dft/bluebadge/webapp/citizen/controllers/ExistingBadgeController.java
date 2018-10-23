@@ -39,8 +39,8 @@ public class ExistingBadgeController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getExistingBadgeForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getExistingBadgeForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -81,7 +81,7 @@ public class ExistingBadgeController implements StepController {
       return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
     }
 
-    journey.setExistingBadgeForm(formRequest);
+    journey.setFormForStep(formRequest);
 
     return routeMaster.redirectToOnSuccess(formRequest);
   }

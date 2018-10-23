@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType.YOURSELF;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficultyForm.WalkingDifficulty.DANGEROUS;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficultyForm.WalkingDifficulty.HELP;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficultyForm.WalkingDifficulty.NONE;
@@ -23,14 +22,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficultyForm;
 
 public class WalkingDifficultyControllerTest {
@@ -54,7 +51,9 @@ public class WalkingDifficultyControllerTest {
 
   @Test
   public void show_ShouldDisplayWalkingDifficultyTemplate_WithEngNation() throws Exception {
-    Journey journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.WALKING_DIFFICULTY, EligibilityCodeField.WALKD, Nation.ENG);
+    Journey journey =
+        JourneyFixture.getDefaultJourneyToStep(
+            StepDefinition.WALKING_DIFFICULTY, EligibilityCodeField.WALKD, Nation.ENG);
 
     RadioOptionsGroup options =
         new RadioOptionsGroup.Builder()
@@ -77,7 +76,9 @@ public class WalkingDifficultyControllerTest {
   @Test
   public void show_ShouldDisplayWalkingDifficultyTemplate_WithScoNation() throws Exception {
 
-    Journey journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.WALKING_DIFFICULTY, EligibilityCodeField.WALKD, Nation.SCO);
+    Journey journey =
+        JourneyFixture.getDefaultJourneyToStep(
+            StepDefinition.WALKING_DIFFICULTY, EligibilityCodeField.WALKD, Nation.SCO);
 
     RadioOptionsGroup options =
         new RadioOptionsGroup.Builder()
@@ -112,7 +113,9 @@ public class WalkingDifficultyControllerTest {
   @Test
   public void submit_givenValidForm_thenShouldDisplayRedirectToSuccess() throws Exception {
 
-    Journey journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.WALKING_DIFFICULTY, EligibilityCodeField.WALKD, Nation.ENG);
+    Journey journey =
+        JourneyFixture.getDefaultJourneyToStep(
+            StepDefinition.WALKING_DIFFICULTY, EligibilityCodeField.WALKD, Nation.ENG);
 
     when(mockRouteMaster.redirectToOnSuccess(any(WalkingDifficultyForm.class)))
         .thenReturn("redirect:/testSuccess");
@@ -129,7 +132,9 @@ public class WalkingDifficultyControllerTest {
   @Test
   public void submit_whenMissingWalkingDifficultyAnswer_ThenShouldHaveValidationError()
       throws Exception {
-    Journey journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.WALKING_DIFFICULTY, EligibilityCodeField.WALKD, Nation.ENG);
+    Journey journey =
+        JourneyFixture.getDefaultJourneyToStep(
+            StepDefinition.WALKING_DIFFICULTY, EligibilityCodeField.WALKD, Nation.ENG);
     mockMvc
         .perform(post("/walking-difficulty").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())

@@ -62,7 +62,7 @@ public class DeclarationSubmitController implements StepController {
     }
 
     appService.create(JourneyToApplicationConverter.convert(journey));
-
+    journey.setFormForStep(declarationForm);
     return routeMaster.redirectToOnSuccess(declarationForm);
   }
 

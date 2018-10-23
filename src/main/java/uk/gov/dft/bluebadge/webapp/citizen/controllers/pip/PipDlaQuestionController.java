@@ -46,8 +46,8 @@ public class PipDlaQuestionController implements StepController {
     }
 
     // On returning to form, take previously submitted values.
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getPipDlaQuestionForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getPipDlaQuestionForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     // If navigating forward from previous form, reset
@@ -83,7 +83,7 @@ public class PipDlaQuestionController implements StepController {
       return routeMaster.redirectToOnBindingError(this, pipDlaQuestionForm, bindingResult, attr);
     }
 
-    journey.setPipDlaQuestionForm(pipDlaQuestionForm);
+    journey.setFormForStep(pipDlaQuestionForm);
     return routeMaster.redirectToOnSuccess(pipDlaQuestionForm);
   }
 

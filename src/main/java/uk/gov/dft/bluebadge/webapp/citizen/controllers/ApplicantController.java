@@ -69,8 +69,7 @@ public class ApplicantController implements StepController {
       return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
     }
 
-    journey.setApplicantForm(formRequest);
-
+    journey.setFormForStep(formRequest);
     return routeMaster.redirectToOnSuccess(formRequest);
   }
 

@@ -44,8 +44,8 @@ public class GenderController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getGenderForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getGenderForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -68,7 +68,7 @@ public class GenderController implements StepController {
       return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
     }
 
-    journey.setGenderForm(formRequest);
+    journey.setFormForStep(formRequest);
 
     return routeMaster.redirectToOnSuccess(formRequest, journey);
   }

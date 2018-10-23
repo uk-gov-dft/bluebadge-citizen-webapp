@@ -15,7 +15,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
@@ -24,7 +23,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WalkingTimeForm;
@@ -49,7 +47,9 @@ public class WalkingTimeControllerTest {
     ApplicantForm applicantForm =
         ApplicantForm.builder().applicantType(ApplicantType.YOURSELF.toString()).build();
 
-    journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.WALKING_TIME, EligibilityCodeField.WALKD);
+    journey =
+        JourneyFixture.getDefaultJourneyToStep(
+            StepDefinition.WALKING_TIME, EligibilityCodeField.WALKD);
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
     // We are not testing the route master. So for convenience just forward to an error view so
     // can test the error messages
@@ -70,11 +70,11 @@ public class WalkingTimeControllerTest {
 
   @Test
   public void show_walkingTimeOptionsShouldBeSet() throws Exception {
-        mockMvc
-            .perform(get("/walking-time").sessionAttr("JOURNEY", journey))
-            .andExpect(status().isOk())
-            .andExpect(model().attributeExists("walkingTimeOptions"))
-            .andReturn();
+    mockMvc
+        .perform(get("/walking-time").sessionAttr("JOURNEY", journey))
+        .andExpect(status().isOk())
+        .andExpect(model().attributeExists("walkingTimeOptions"))
+        .andReturn();
   }
 
   @Test

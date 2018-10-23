@@ -34,8 +34,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
 
 public class WhatWalkingDifficultiesControllerTest {
@@ -48,13 +46,16 @@ public class WhatWalkingDifficultiesControllerTest {
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    WhatWalkingDifficultiesController controller = new WhatWalkingDifficultiesController(mockRouteMaster);
+    WhatWalkingDifficultiesController controller =
+        new WhatWalkingDifficultiesController(mockRouteMaster);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
 
-    journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.WHAT_WALKING_DIFFICULTIES, EligibilityCodeField.WALKD, ENG);
+    journey =
+        JourneyFixture.getDefaultJourneyToStep(
+            StepDefinition.WHAT_WALKING_DIFFICULTIES, EligibilityCodeField.WALKD, ENG);
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
 
     when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))
@@ -68,7 +69,8 @@ public class WhatWalkingDifficultiesControllerTest {
         .perform(get("/what-makes-walking-difficult").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("walking/what-walking-difficult"))
-        .andExpect(model().attribute("formRequest", JourneyFixture.getWhatMakesWalkingDifficultForm()))
+        .andExpect(
+            model().attribute("formRequest", JourneyFixture.getWhatMakesWalkingDifficultForm()))
         .andExpect(model().attributeExists("walkingDifficulties"));
   }
 
@@ -117,7 +119,9 @@ public class WhatWalkingDifficultiesControllerTest {
 
   @Test
   public void show_givenNationWales_walkingDifficultiesShouldBeNationSpecific() throws Exception {
-    Journey wales = JourneyFixture.getDefaultJourneyToStep(StepDefinition.WHAT_WALKING_DIFFICULTIES, EligibilityCodeField.WALKD, WLS);
+    Journey wales =
+        JourneyFixture.getDefaultJourneyToStep(
+            StepDefinition.WHAT_WALKING_DIFFICULTIES, EligibilityCodeField.WALKD, WLS);
 
     MvcResult mvcResult =
         mockMvc

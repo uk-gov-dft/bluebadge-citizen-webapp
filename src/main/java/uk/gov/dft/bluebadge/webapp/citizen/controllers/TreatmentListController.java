@@ -41,8 +41,8 @@ public class TreatmentListController implements StepController {
     }
 
     // On returning to form, take previously submitted values.
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getTreatmentListForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getTreatmentListForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     // If navigating forward from previous form, reset
@@ -51,7 +51,7 @@ public class TreatmentListController implements StepController {
       // Want to not get any null pointers accessing list.
       journey.setTreatmentListForm(
           TreatmentListForm.builder().treatments(new ArrayList<>()).build());
-      model.addAttribute(FORM_REQUEST, journey.getTreatmentListForm());
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
     return TEMPLATE;
   }

@@ -46,7 +46,7 @@ public class MobilityAidAddController implements StepController {
     // Can hit add link before previous form submitted.
     if (null == journey.getMobilityAidListForm()
         || null == journey.getMobilityAidListForm().getMobilityAids()) {
-      journey.setMobilityAidListForm(
+      journey.setFormForStep(
           MobilityAidListForm.builder().mobilityAids(new ArrayList<>()).build());
     }
 

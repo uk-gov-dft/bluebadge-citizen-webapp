@@ -21,6 +21,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataGroupEnum
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataService;
@@ -32,7 +34,7 @@ public class ChooseYourCouncilControllerTest {
 
   @Mock ReferenceDataService mockReferenceDataService;
 
-  @Mock Journey mockJourney;
+  Journey journey;
 
   @Mock private RouteMaster mockRouteMaster;
 
@@ -44,17 +46,18 @@ public class ChooseYourCouncilControllerTest {
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
+    journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.CHOOSE_COUNCIL);
   }
 
   @Test
   public void show_whenFirstvisit() throws Exception {
-    when(mockJourney.isValidState(any())).thenReturn(true);
     when(mockReferenceDataService.retrieveReferenceDataList(RefDataGroupEnum.COUNCIL))
         .thenReturn(Lists.newArrayList(new ReferenceData()));
     ChooseYourCouncilForm formRequest = ChooseYourCouncilForm.builder().build();
 
+    Journey shortJourney = JourneyFixture.getDefaultJourneyToStep(StepDefinition.APPLICANT_TYPE);
     mockMvc
-        .perform(get(Mappings.URL_CHOOSE_YOUR_COUNCIL).sessionAttr("JOURNEY", mockJourney))
+        .perform(get(Mappings.URL_CHOOSE_YOUR_COUNCIL).sessionAttr("JOURNEY", shortJourney))
         .andExpect(status().isOk())
         .andExpect(view().name("choose-council"))
         .andExpect(model().attribute("formRequest", formRequest))
@@ -63,18 +66,15 @@ public class ChooseYourCouncilControllerTest {
 
   @Test
   public void show_whenRevisit() throws Exception {
-    when(mockJourney.isValidState(any())).thenReturn(true);
-    ChooseYourCouncilForm formRequest =
-        ChooseYourCouncilForm.builder().councilShortCode("ABC").build();
-    when(mockJourney.getChooseYourCouncilForm()).thenReturn(formRequest);
+
     when(mockReferenceDataService.retrieveReferenceDataList(RefDataGroupEnum.COUNCIL))
         .thenReturn(Lists.newArrayList(new ReferenceData()));
 
     mockMvc
-        .perform(get(Mappings.URL_CHOOSE_YOUR_COUNCIL).sessionAttr("JOURNEY", mockJourney))
+        .perform(get(Mappings.URL_CHOOSE_YOUR_COUNCIL).sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("choose-council"))
-        .andExpect(model().attribute("formRequest", formRequest))
+        .andExpect(model().attribute("formRequest", JourneyFixture.getChooseYourCouncilForm()))
         .andExpect(model().attributeExists("councils"));
   }
 

@@ -46,8 +46,8 @@ public class WalkingTimeController implements StepController {
     }
 
     //On returning to form, take previously submitted values.
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getWalkingTimeForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getWalkingTimeForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     // If navigating forward from previous form, reset
@@ -71,7 +71,7 @@ public class WalkingTimeController implements StepController {
       return routeMaster.redirectToOnBindingError(this, walkingTimeForm, bindingResult, attr);
     }
 
-    journey.setWalkingTimeForm(walkingTimeForm);
+    journey.setFormForStep(walkingTimeForm);
 
     return routeMaster.redirectToOnSuccess(walkingTimeForm);
   }

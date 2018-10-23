@@ -39,8 +39,8 @@ public class NinoController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getNinoForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getNinoForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -68,7 +68,7 @@ public class NinoController implements StepController {
       return routeMaster.redirectToOnBindingError(this, ninoForm, bindingResult, attr);
     }
 
-    journey.setNinoForm(ninoForm);
+    journey.setFormForStep(ninoForm);
 
     return routeMaster.redirectToOnSuccess(ninoForm);
   }

@@ -42,7 +42,7 @@ public class DisabilityControllerTest {
 
     journey = new Journey();
 
-    journey.setApplicantForm(ApplicantForm.builder().applicantType(YOURSELF.name()).build());
+    journey.setFormForStep(ApplicantForm.builder().applicantType(YOURSELF.name()).build());
 
     journey.setCompensationSchemeForm(
         CompensationSchemeForm.builder().hasReceivedCompensation(true).build());

@@ -48,8 +48,8 @@ public class WhatWalkingDifficultiesController implements StepController {
 
     // On returning to form, take previously submitted values.
     if (!model.containsAttribute(FORM_REQUEST)
-        && null != journey.getWhatMakesWalkingDifficultForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getWhatMakesWalkingDifficultForm());
+        && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     // If navigating forward from previous form, reset
@@ -75,7 +75,7 @@ public class WhatWalkingDifficultiesController implements StepController {
           this, whatMakesWalkingDifficultForm, bindingResult, attr);
     }
 
-    journey.setWhatMakesWalkingDifficultForm(whatMakesWalkingDifficultForm);
+    journey.setFormForStep(whatMakesWalkingDifficultForm);
 
     return routeMaster.redirectToOnSuccess(whatMakesWalkingDifficultForm);
   }

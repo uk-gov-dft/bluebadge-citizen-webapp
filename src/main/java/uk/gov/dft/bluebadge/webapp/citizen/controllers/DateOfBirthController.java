@@ -40,8 +40,8 @@ public class DateOfBirthController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getDateOfBirthForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getDateOfBirthForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -63,7 +63,7 @@ public class DateOfBirthController implements StepController {
       return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
     }
 
-    journey.setDateOfBirthForm(formRequest);
+    journey.setFormForStep(formRequest);
 
     return routeMaster.redirectToOnSuccess(formRequest);
   }

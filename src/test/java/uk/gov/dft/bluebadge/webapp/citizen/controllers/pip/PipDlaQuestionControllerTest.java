@@ -40,8 +40,7 @@ public class PipDlaQuestionControllerTest {
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
     journey =
-        JourneyFixture.getDefaultJourneyToStep(
-            StepDefinition.PIP_DLA, EligibilityCodeField.PIP);
+        JourneyFixture.getDefaultJourneyToStep(StepDefinition.PIP_DLA, EligibilityCodeField.PIP);
 
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
     when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))

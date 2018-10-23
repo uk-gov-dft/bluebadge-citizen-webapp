@@ -40,8 +40,8 @@ public class HealthConditionsController implements StepController {
     }
 
     //On returning to form, take previously submitted values.
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getHealthConditionsForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getHealthConditionsForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     // If navigating forward from previous form, reset
@@ -65,7 +65,7 @@ public class HealthConditionsController implements StepController {
       return routeMaster.redirectToOnBindingError(this, healthConditionsForm, bindingResult, attr);
     }
 
-    journey.setHealthConditionsForm(healthConditionsForm);
+    journey.setFormForStep(healthConditionsForm);
 
     return routeMaster.redirectToOnSuccess(healthConditionsForm, journey);
   }

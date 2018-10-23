@@ -49,8 +49,8 @@ public class PipPlanningJourneyController implements StepController {
     }
 
     // On returning to form, take previously submitted values.
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getPipPlanningJourneyForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getPipPlanningJourneyForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     // If navigating forward from previous form, reset
@@ -86,7 +86,7 @@ public class PipPlanningJourneyController implements StepController {
           this, pipPlanningJourneyForm, bindingResult, attr);
     }
 
-    journey.setPipPlanningJourneyForm(pipPlanningJourneyForm);
+    journey.setFormForStep(pipPlanningJourneyForm);
 
     return routeMaster.redirectToOnSuccess(pipPlanningJourneyForm, journey);
   }

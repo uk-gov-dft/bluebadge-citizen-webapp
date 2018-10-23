@@ -44,8 +44,8 @@ public class ReceiveBenefitsController implements StepController {
     }
 
     //On returning to form, take previously submitted values.
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getReceiveBenefitsForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getReceiveBenefitsForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     // If navigating forward from previous form, reset
@@ -82,7 +82,7 @@ public class ReceiveBenefitsController implements StepController {
       return routeMaster.redirectToOnBindingError(this, receiveBenefitsForm, bindingResult, attr);
     }
 
-    journey.setReceiveBenefitsForm(receiveBenefitsForm);
+    journey.setFormForStep(receiveBenefitsForm);
     return routeMaster.redirectToOnSuccess(receiveBenefitsForm);
   }
 

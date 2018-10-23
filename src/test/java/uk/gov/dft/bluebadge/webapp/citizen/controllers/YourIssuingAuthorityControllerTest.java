@@ -19,6 +19,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
@@ -39,7 +40,7 @@ public class YourIssuingAuthorityControllerTest {
   public void setup() {
     MockitoAnnotations.initMocks(this);
     controller = new YourIssuingAuthorityController(mockRouteMaster, mockReferenceDataService);
-    when(mockJourney.getChooseYourCouncilForm())
+    when(mockJourney.getFormForStep(StepDefinition.CHOOSE_COUNCIL))
         .thenReturn(ChooseYourCouncilForm.builder().councilShortCode("TTT").build());
     when(mockReferenceDataService.lookupLocalAuthorityFromCouncilCode("TTT")).thenReturn(laRefData);
     laRefData.setShortCode("HHH");

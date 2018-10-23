@@ -1,5 +1,14 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.mainreason;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,15 +23,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 public class MainReasonControllerTest {
 
@@ -39,7 +39,9 @@ public class MainReasonControllerTest {
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
-    journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.MAIN_REASON, EligibilityCodeField.CHILDBULK);
+    journey =
+        JourneyFixture.getDefaultJourneyToStep(
+            StepDefinition.MAIN_REASON, EligibilityCodeField.CHILDBULK);
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
     when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))
         .thenReturn("redirect:/someValidationError");

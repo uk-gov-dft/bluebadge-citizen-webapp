@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType.YOURSELF;
 
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -23,7 +22,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 
 public class ReceiveBenefitsControllerTest {
@@ -41,7 +39,9 @@ public class ReceiveBenefitsControllerTest {
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
-    journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.RECEIVE_BENEFITS, EligibilityCodeField.WALKD);
+    journey =
+        JourneyFixture.getDefaultJourneyToStep(
+            StepDefinition.RECEIVE_BENEFITS, EligibilityCodeField.WALKD);
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
     when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))
         .thenReturn("redirect:/someValidationError");

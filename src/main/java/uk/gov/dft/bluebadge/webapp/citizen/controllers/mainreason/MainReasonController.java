@@ -48,8 +48,8 @@ public class MainReasonController implements StepController {
     }
 
     // On returning to form, take previously submitted values.
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getMainReasonForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getMainReasonForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     // If navigating forward from previous form, reset
@@ -94,7 +94,7 @@ public class MainReasonController implements StepController {
       return routeMaster.redirectToOnBindingError(this, mainReasonForm, bindingResult, attr);
     }
 
-    journey.setMainReasonForm(mainReasonForm);
+    journey.setFormForStep(mainReasonForm);
 
     return routeMaster.redirectToOnSuccess(mainReasonForm);
   }

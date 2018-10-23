@@ -45,7 +45,7 @@ public abstract class ControllerTestFixture<T> {
     journey = JourneyFixture.getDefaultJourneyToStep(getStep(), getEligibilityType());
     ApplicantForm applicantForm =
         ApplicantForm.builder().applicantType(ApplicantType.YOURSELF.toString()).build();
-    journey.setApplicantForm(applicantForm);
+    journey.setFormForStep(applicantForm);
   }
 
   protected static ResultMatcher formRequestFlashAttributeHasFieldErrorCode(

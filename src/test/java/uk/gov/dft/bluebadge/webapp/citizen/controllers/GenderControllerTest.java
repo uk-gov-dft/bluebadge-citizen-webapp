@@ -49,7 +49,7 @@ public class GenderControllerTest {
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
     journey = new Journey();
-    journey.setApplicantForm(
+    journey.setFormForStep(
         ApplicantForm.builder().applicantType(ApplicantType.YOURSELF.name()).build());
 
     CompoundDate date = new CompoundDate();
@@ -57,7 +57,7 @@ public class GenderControllerTest {
     date.setMonth("12");
     date.setYear("1988");
 
-    journey.setDateOfBirthForm(DateOfBirthForm.builder().dateOfBirth(date).build());
+    journey.setFormForStep(DateOfBirthForm.builder().dateOfBirth(date).build());
   }
 
   @Test
@@ -101,7 +101,7 @@ public class GenderControllerTest {
 
     ((ApplicantForm) journey.getFormForStep(StepDefinition.APPLICANT_TYPE))
         .setApplicantType(ApplicantType.SOMEONE_ELSE.toString());
-    journey.setApplicantForm((ApplicantForm) journey.getFormForStep(StepDefinition.APPLICANT_TYPE));
+    journey.setFormForStep(journey.getFormForStep(StepDefinition.APPLICANT_TYPE));
 
     MvcResult mvcResult =
         mockMvc

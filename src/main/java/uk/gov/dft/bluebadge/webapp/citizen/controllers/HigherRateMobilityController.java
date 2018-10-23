@@ -46,8 +46,8 @@ public class HigherRateMobilityController implements StepController {
     }
 
     // On returning to form, take previously submitted values.
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getHigherRateMobilityForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getHigherRateMobilityForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     // If navigating forward from previous form, reset
@@ -70,7 +70,7 @@ public class HigherRateMobilityController implements StepController {
       return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
     }
 
-    journey.setHigherRateMobilityForm(formRequest);
+    journey.setFormForStep(formRequest);
     return routeMaster.redirectToOnSuccess(formRequest);
   }
 

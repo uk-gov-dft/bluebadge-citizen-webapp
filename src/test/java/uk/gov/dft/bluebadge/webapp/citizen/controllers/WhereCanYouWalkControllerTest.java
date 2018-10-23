@@ -58,7 +58,9 @@ public class WhereCanYouWalkControllerTest {
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
-    journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.WALKING_TIME, EligibilityCodeField.WALKD);
+    journey =
+        JourneyFixture.getDefaultJourneyToStep(
+            StepDefinition.WALKING_TIME, EligibilityCodeField.WALKD);
 
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
     when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))

@@ -41,8 +41,8 @@ public class DisabilityController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getDisabilityForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getDisabilityForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -68,7 +68,7 @@ public class DisabilityController implements StepController {
       return routeMaster.redirectToOnBindingError(this, disabilityForm, bindingResult, attr);
     }
 
-    journey.setDisabilityForm(disabilityForm);
+    journey.setFormForStep(disabilityForm);
     return routeMaster.redirectToOnSuccess(disabilityForm);
   }
 

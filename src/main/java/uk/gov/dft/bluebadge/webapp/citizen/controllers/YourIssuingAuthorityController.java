@@ -44,7 +44,7 @@ public class YourIssuingAuthorityController implements StepController {
 
     if (!model.containsAttribute("formRequest")) {
       // Lookup local authority from council and populate model.
-      ChooseYourCouncilForm councilForm = journey.getChooseYourCouncilForm();
+      ChooseYourCouncilForm councilForm = journey.getFormForStep(StepDefinition.CHOOSE_COUNCIL);
       if (null == councilForm) {
         log.error("Got to issuing authority GET, without local council step being completed.");
       } else {
@@ -77,7 +77,7 @@ public class YourIssuingAuthorityController implements StepController {
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @ModelAttribute("formRequest") YourIssuingAuthorityForm yourIssuingAuthorityForm) {
 
-    journey.setYourIssuingAuthorityForm(yourIssuingAuthorityForm);
+    journey.setFormForStep(yourIssuingAuthorityForm);
     journey.setLocalAuthority(
         referenceDataService.retrieveLocalAuthority(
             yourIssuingAuthorityForm.getLocalAuthorityShortCode()));

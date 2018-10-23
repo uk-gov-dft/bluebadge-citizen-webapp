@@ -56,7 +56,7 @@ public class EnterAddressControllerTest {
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
     journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.NINO);
-    journey.setApplicantForm(
+    journey.setFormForStep(
         ApplicantForm.builder().applicantType(ApplicantType.YOURSELF.name()).build());
   }
 

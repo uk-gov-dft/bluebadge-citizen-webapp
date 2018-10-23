@@ -54,7 +54,9 @@ public class MayBeEligibleControllerTest {
         .andExpect(status().isOk())
         .andExpect(view().name("may-be-eligible"))
         .andExpect(model().attribute("formRequest", Matchers.nullValue()))
-        .andExpect(model().attribute("localAuthority", JourneyFixture.getLocalAuthorityRefData(Nation.SCO)));
+        .andExpect(
+            model()
+                .attribute("localAuthority", JourneyFixture.getLocalAuthorityRefData(Nation.SCO)));
   }
 
   @Test
