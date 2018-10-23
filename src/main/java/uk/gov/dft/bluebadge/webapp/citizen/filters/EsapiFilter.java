@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.owasp.esapi.filters.SecurityWrapperRequest;
-import org.owasp.esapi.filters.SecurityWrapperResponse;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -56,5 +55,4 @@ public class EsapiFilter extends OncePerRequestFilter {
       return new SecurityWrapperRequest(request);
     }
   }
-
 }
