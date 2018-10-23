@@ -19,7 +19,8 @@
 
  		<p class="govuk-body">
 		    <span th:text="#{organisationMayBeEligible.page.paragraph3}" th:remove="tag"></span>
-		    <a th:href="${localAuthority.contactUrl}" th:text="#{organisationMayBeEligible.page.paragraph3.link(${localAuthority.description})}"></a>
+		    <a data-ga-track-link data-ga-track-link-category="Outbound link"
+		    	   th:href="${localAuthority.contactUrl}" th:text="#{organisationMayBeEligible.page.paragraph3.link(${localAuthority.description})}"></a>
 		</p>
       </section>
 
