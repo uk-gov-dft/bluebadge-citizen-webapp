@@ -94,7 +94,8 @@ public class Journey implements Serializable {
   public Boolean isApplicantYourself() {
     if (hasStepForm(StepDefinition.APPLICANT_TYPE)) {
       ApplicantForm form = (ApplicantForm) getFormForStep(StepDefinition.APPLICANT_TYPE);
-      return form.getApplicantType().equals(ApplicantType.YOURSELF.toString());
+      return form.getApplicantType().equals(ApplicantType.YOURSELF.toString())
+          || form.getApplicantType().equals(ApplicantType.ORGANISATION.toString());
     }
     return null;
   }

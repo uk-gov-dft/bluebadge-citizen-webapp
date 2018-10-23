@@ -17,7 +17,7 @@
 
   		<p class="govuk-body">
 		    <span th:text="#{organisationNotEligible.page.paragraph2}" th:remove="tag"></span>
-		    <a href="${localAuthority.contactUrl}" th:text="#{organisationNotEligible.page.paragraph2.link(${localAuthority.description})}"></a>
+		    <a th:href="${localAuthority.contactUrl}" th:text="#{organisationNotEligible.page.paragraph2.link(${localAuthority.description})}"></a>
 		</p>
     </section>
 
