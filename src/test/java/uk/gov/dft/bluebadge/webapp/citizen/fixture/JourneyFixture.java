@@ -25,7 +25,8 @@ public class JourneyFixture {
   public static Journey getDefaultJourney() {
     Journey journey = new Journey();
 
-    YourIssuingAuthorityForm yourIssuingAuthorityForm = YourIssuingAuthorityForm.builder().localAuthorityShortCode("ABERD").build();
+    YourIssuingAuthorityForm yourIssuingAuthorityForm =
+        YourIssuingAuthorityForm.builder().localAuthorityShortCode("ABERD").build();
 
     HealthConditionsForm healthConditionsForm =
         HealthConditionsForm.builder().descriptionOfConditions("test description").build();

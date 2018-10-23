@@ -11,10 +11,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDBULK;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDVEHIC;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.common.collect.Lists;
+import java.util.EnumSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -28,6 +30,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.GenderCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HealthcareProfessional;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HowProvidedCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingLengthOfTimeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
@@ -35,6 +38,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalAddForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
@@ -169,20 +174,34 @@ public class DeclarationSubmitControllerTest {
     journey.setHealthConditionsForm(healthConditionsForm);
     if (WALKD == eligibilityCode) {
       MobilityAidAddForm aid = new MobilityAidAddForm();
-      aid.setHowProvidedCodeField(HowProvidedCodeField.PRESCRIBE);
+      aid.setUsage("Usage");
       aid.setAidType(MobilityAidAddForm.AidType.WHEELCHAIR);
-      aid.setUsage("usage");
-      List<MobilityAidAddForm> aids = new ArrayList<>();
-      aids.add(aid);
+      aid.setHowProvidedCodeField(HowProvidedCodeField.PRESCRIBE);
       journey.setMobilityAidListForm(
-          MobilityAidListForm.builder().hasWalkingAid("yes").mobilityAids(aids).build());
+          MobilityAidListForm.builder()
+              .hasWalkingAid("yes")
+              .mobilityAids(Lists.newArrayList(aid))
+              .build());
+
       TreatmentAddForm treatment = new TreatmentAddForm();
-      treatment.setTreatmentDescription("treatment description");
       treatment.setTreatmentWhen("Treatment when");
-      List<TreatmentAddForm> treatments = new ArrayList<>();
-      treatments.add(treatment);
+      treatment.setTreatmentDescription("Treatment description");
       journey.setTreatmentListForm(
-          TreatmentListForm.builder().hasTreatment("yes").treatments(treatments).build());
+          TreatmentListForm.builder()
+              .hasTreatment("yes")
+              .treatments(Lists.newArrayList(treatment))
+              .build());
+    }
+    if (EnumSet.of(WALKD, CHILDBULK, CHILDVEHIC).contains(eligibilityCode)) {
+      HealthcareProfessionalAddForm healthcareProfessional = new HealthcareProfessionalAddForm();
+      healthcareProfessional.setHealthcareProfessionalName("name");
+      healthcareProfessional.setHealthcareProfessionalLocation("location");
+
+      journey.setHealthcareProfessionalListForm(
+          HealthcareProfessionalListForm.builder()
+              .hasHealthcareProfessional("yes")
+              .healthcareProfessionals(Lists.newArrayList(healthcareProfessional))
+              .build());
     }
     Application application = controller.getDummyApplication(journey);
 
@@ -199,6 +218,13 @@ public class DeclarationSubmitControllerTest {
     } else {
       assertThat(application.getEligibility().getDescriptionOfConditions())
           .isEqualTo("Test description ABC");
+    }
+    if (EnumSet.of(WALKD, CHILDBULK, CHILDVEHIC).contains(eligibilityCode)) {
+      HealthcareProfessional hp = new HealthcareProfessional().location("location").name("name");
+      assertThat(application.getEligibility().getHealthcareProfessionals().size()).isEqualTo(1);
+      assertThat(application.getEligibility().getHealthcareProfessionals()).contains(hp);
+    } else {
+      assertThat(application.getEligibility().getHealthcareProfessionals()).isNull();
     }
   }
 
@@ -223,6 +249,7 @@ public class DeclarationSubmitControllerTest {
     assertThat(application.getEligibility()).isNotNull();
     assertThat(application.getEligibility().getTypeCode()).isEqualTo(eligibilityCode);
     assertThat(application.getEligibility().getDescriptionOfConditions()).isNull();
+    assertThat(application.getEligibility().getHealthcareProfessionals()).isNull();
   }
 
   @Test
@@ -290,7 +317,8 @@ public class DeclarationSubmitControllerTest {
     journey.setNinoForm(NinoForm.builder().nino("NS333333A").build());
     application = controller.getDummyApplication(journey);
     assertThat(application.getParty().getPerson().getBadgeHolderName()).isEqualTo("John Doe");
-    assertThat(application.getParty().getPerson().getGenderCode()).isEqualTo(GenderCodeField.FEMALE);
+    assertThat(application.getParty().getPerson().getGenderCode())
+        .isEqualTo(GenderCodeField.FEMALE);
     assertThat(application.getParty().getPerson().getNino()).isEqualTo("NS333333A");
     assertThat(application.getLocalAuthorityCode()).isEqualTo("ABERD");
   }

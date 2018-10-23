@@ -14,23 +14,6 @@
 
             <h1 class="govuk-heading-l" th:text="#{${JOURNEY.who} + 'healthConditionsPage.body.title'}"></h1>
 
-            <div th:remove="tag" th:if="${JOURNEY.getEligibilityCode().name() == 'WALKD'}">
-                <div th:if="${JOURNEY.who == 'you.'}">
-                    <p class="govuk-body">Provide details of:</p>
-                    <ul class="govuk-list govuk-list--bullet">
-                        <li>the names of the conditions which affect your walking</li>
-                        <li>any healthcare professionals involved in the treatment of your conditions</li>
-                    </ul>
-                </div>
-                <div th:if="${JOURNEY.who == 'oth.'}">
-                    <p class="govuk-body">Provide details of:</p>
-                    <ul class="govuk-list govuk-list--bullet">
-                        <li>the names of the conditions which affect their walking</li>
-                        <li>any healthcare professionals involved in the treatment of their conditions</li>
-                    </ul>
-                </div>
-            </div>
-
             <form th:action="@{/health-conditions}" th:object="${formRequest}" method="post" novalidate>
 
                 <div th:class="${#fields.hasErrors('descriptionOfConditions')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">

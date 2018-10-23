@@ -7,15 +7,15 @@ import javax.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class TreatmentAddForm implements Serializable {
+public class HealthcareProfessionalAddForm implements Serializable {
 
   @Size(max = 100)
   @NotBlank
-  private String treatmentDescription;
+  private String healthcareProfessionalName;
 
   @Size(max = 100)
   @NotBlank
-  private String treatmentWhen;
+  private String healthcareProfessionalLocation;
 
   private String id = UUID.randomUUID().toString();
 }

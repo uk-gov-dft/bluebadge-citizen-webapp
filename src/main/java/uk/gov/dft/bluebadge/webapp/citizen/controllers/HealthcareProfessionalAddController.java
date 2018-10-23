@@ -18,18 +18,18 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalAddForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalListForm;
 
 @Controller
-@RequestMapping(Mappings.URL_TREATMENT_ADD)
-public class TreatmentAddController implements StepController {
+@RequestMapping(Mappings.URL_HEALTHCARE_PROFESSIONALS_ADD)
+public class HealthcareProfessionalAddController implements StepController {
 
   private RouteMaster routeMaster;
-  private static final String TEMPLATE = "treatment-add";
+  private static final String TEMPLATE = "healthcare-professional-add";
 
   @Autowired
-  TreatmentAddController(RouteMaster routeMaster) {
+  public HealthcareProfessionalAddController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
@@ -41,17 +41,19 @@ public class TreatmentAddController implements StepController {
     }
 
     // Can hit add link before previous form submitted.
-    if (null == journey.getTreatmentListForm()
-        || null == journey.getTreatmentListForm().getTreatments()) {
-      journey.setTreatmentListForm(
-          TreatmentListForm.builder().treatments(new ArrayList<>()).build());
+    if (null == journey.getHealthcareProfessionalListForm()
+        || null == journey.getHealthcareProfessionalListForm().getHealthcareProfessionals()) {
+      journey.setHealthcareProfessionalListForm(
+          HealthcareProfessionalListForm.builder()
+              .healthcareProfessionals(new ArrayList<>())
+              .build());
     }
 
-    journey.getTreatmentListForm().setHasTreatment("yes");
+    journey.getHealthcareProfessionalListForm().setHasHealthcareProfessional("yes");
 
-    // On returning to form, take previously submitted values.
+    // On returning to form (binding errors), take previously submitted values.
     if (!model.containsAttribute(FORM_REQUEST)) {
-      model.addAttribute(FORM_REQUEST, new TreatmentAddForm());
+      model.addAttribute(FORM_REQUEST, new HealthcareProfessionalAddForm());
     }
 
     return TEMPLATE;
@@ -60,21 +62,26 @@ public class TreatmentAddController implements StepController {
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute(FORM_REQUEST) TreatmentAddForm treatmentAddForm,
+      @Valid @ModelAttribute(FORM_REQUEST)
+          HealthcareProfessionalAddForm healthcareProfessionalAddForm,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
     if (bindingResult.hasErrors()) {
-      return routeMaster.redirectToOnBindingError(this, treatmentAddForm, bindingResult, attr);
+      return routeMaster.redirectToOnBindingError(
+          this, healthcareProfessionalAddForm, bindingResult, attr);
     }
 
-    journey.getTreatmentListForm().getTreatments().add(treatmentAddForm);
+    journey
+        .getHealthcareProfessionalListForm()
+        .getHealthcareProfessionals()
+        .add(healthcareProfessionalAddForm);
 
-    return "redirect:" + Mappings.URL_TREATMENT_LIST;
+    return "redirect:" + Mappings.URL_HEALTHCARE_PROFESSIONALS_LIST;
   }
 
   @Override
   public StepDefinition getStepDefinition() {
-    return StepDefinition.TREATMENT_ADD;
+    return StepDefinition.HEALTHCARE_PROFESSIONALS_ADD;
   }
 }

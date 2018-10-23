@@ -12,6 +12,7 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.7.3"
+        classpath 'org.owasp:dependency-check-gradle:3.3.1'
     }
 }
 
@@ -31,6 +32,7 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
+apply plugin: 'org.owasp.dependencycheck'
 
 def getTheVersion() {
     def version = rootProject.file('VERSION').text.trim()

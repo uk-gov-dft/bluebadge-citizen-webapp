@@ -24,6 +24,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Co
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.DisabilityArms;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Eligibility;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HealthcareProfessional;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Medication;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Party;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.PartyTypeCodeField;
@@ -42,6 +43,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ExistingBadgeForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
@@ -131,10 +133,23 @@ public class DeclarationSubmitController implements StepController {
                     .emailAddress(contactDetailsForm.getEmailAddress()))
             .person(person);
 
+    List<HealthcareProfessional> healthcareProfessionals = null;
+    if (null != journey.getHealthcareProfessionalListForm()
+        && null != journey.getHealthcareProfessionalListForm().getHealthcareProfessionals()) {
+      healthcareProfessionals = new ArrayList<>();
+      for (HealthcareProfessionalAddForm item :
+          journey.getHealthcareProfessionalListForm().getHealthcareProfessionals()) {
+        healthcareProfessionals.add(
+            new HealthcareProfessional()
+                .name(item.getHealthcareProfessionalName())
+                .location(item.getHealthcareProfessionalLocation()));
+      }
+    }
+
     Eligibility eligibilityObject = null;
     switch (eligibility) {
       case WALKD:
-        eligibilityObject = buildWalkingEligibility(journey);
+        eligibilityObject = buildWalkingEligibility(journey, healthcareProfessionals);
 
         break;
       case PIP:
@@ -163,11 +178,15 @@ public class DeclarationSubmitController implements StepController {
                 .descriptionOfConditions(condDesc)
                 .childUnder3(
                     new ChildUnder3()
-                        .bulkyMedicalEquipmentTypeCode(BulkyMedicalEquipmentTypeCodeField.NONE));
+                        .bulkyMedicalEquipmentTypeCode(BulkyMedicalEquipmentTypeCodeField.NONE))
+                .healthcareProfessionals(healthcareProfessionals);
         break;
       case CHILDVEHIC:
         eligibilityObject =
-            new Eligibility().descriptionOfConditions(condDesc).typeCode(eligibility);
+            new Eligibility()
+                .descriptionOfConditions(condDesc)
+                .typeCode(eligibility)
+                .healthcareProfessionals(healthcareProfessionals);
         break;
       case TERMILL:
       case NONE:
@@ -192,7 +211,8 @@ public class DeclarationSubmitController implements StepController {
         .build();
   }
 
-  private Eligibility buildWalkingEligibility(Journey journey) {
+  private Eligibility buildWalkingEligibility(
+      Journey journey, List<HealthcareProfessional> healthcareProfessionals) {
     Eligibility eligibilityObject;
     List<WalkingAid> walkingAids = null;
     if (null != journey.getMobilityAidListForm()
@@ -255,7 +275,8 @@ public class DeclarationSubmitController implements StepController {
                     .otherDescription(otherDesc)
                     .walkingAids(walkingAids)
                     .treatments(treatments)
-                    .medications(medications));
+                    .medications(medications))
+            .healthcareProfessionals(healthcareProfessionals);
 
     return eligibilityObject;
   }
