@@ -12,6 +12,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.MayBeEligibleForm;
 
 @Controller
 @RequestMapping(Mappings.URL_MAY_BE_ELIGIBLE)
@@ -40,7 +41,7 @@ public class MayBeEligibleController implements StepController {
 
   @GetMapping("/start")
   public String startApplication(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
-    return routeMaster.redirectToOnSuccess(StepDefinition.MAY_BE_ELIGIBLE);
+    return routeMaster.redirectToOnSuccess(new MayBeEligibleForm());
   }
 
   @Override

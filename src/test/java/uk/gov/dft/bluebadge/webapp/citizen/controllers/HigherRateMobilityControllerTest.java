@@ -1,11 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,16 +8,27 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
+
+import javax.swing.JFileChooser;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 public class HigherRateMobilityControllerTest {
 
   private MockMvc mockMvc;
-  private HigherRateMobilityController controller;
 
   @Mock private RouteMaster mockRouteMaster;
   private Journey journey;
@@ -31,25 +36,24 @@ public class HigherRateMobilityControllerTest {
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new HigherRateMobilityController(mockRouteMaster);
+    HigherRateMobilityController controller = new HigherRateMobilityController(mockRouteMaster);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
-    journey = new Journey();
-    journey.setApplicantForm(
-        ApplicantForm.builder().applicantType(ApplicantType.YOURSELF.name()).build());
+    journey =
+        JourneyFixture.getDefaultJourneyToStep(
+            StepDefinition.HIGHER_RATE_MOBILITY, EligibilityCodeField.DLA);
   }
 
   @Test
   public void show_ShouldDisplayHigherRateMobilityTemplate() throws Exception {
-    HigherRateMobilityForm formRequest = HigherRateMobilityForm.builder().build();
 
     mockMvc
         .perform(get("/higher-rate-mobility").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("higher-rate-mobility"))
-        .andExpect(model().attribute("formRequest", formRequest))
+        .andExpect(model().attribute("formRequest", JourneyFixture.getHightRateMobilityForm()))
         .andExpect(model().attribute("options", Matchers.notNullValue()));
   }
 

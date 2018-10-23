@@ -20,6 +20,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
@@ -27,7 +29,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 public class ReceiveBenefitsControllerTest {
 
   private MockMvc mockMvc;
-  private ReceiveBenefitsController controller;
 
   @Mock private RouteMaster mockRouteMaster;
   private Journey journey;
@@ -35,13 +36,12 @@ public class ReceiveBenefitsControllerTest {
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new ReceiveBenefitsController(mockRouteMaster);
+    ReceiveBenefitsController controller = new ReceiveBenefitsController(mockRouteMaster);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
-    journey = new Journey();
-    journey.setApplicantForm(ApplicantForm.builder().applicantType(YOURSELF.name()).build());
+    journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.RECEIVE_BENEFITS, EligibilityCodeField.WALKD);
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
     when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))
         .thenReturn("redirect:/someValidationError");
@@ -49,14 +49,13 @@ public class ReceiveBenefitsControllerTest {
 
   @Test
   public void show_ShouldDisplayBenefitsTemplate() throws Exception {
-
-    ReceiveBenefitsForm formRequest = ReceiveBenefitsForm.builder().build();
+    ReceiveBenefitsForm form = journey.getFormForStep(StepDefinition.RECEIVE_BENEFITS);
 
     mockMvc
         .perform(get("/benefits").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("receive-benefits"))
-        .andExpect(model().attribute("formRequest", formRequest))
+        .andExpect(model().attribute("formRequest", form))
         .andExpect(model().attribute("benefitOptions", Matchers.notNullValue()));
   }
 

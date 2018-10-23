@@ -11,6 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation.ENG;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation.WLS;
 
 import com.google.common.collect.ImmutableList;
 import java.util.List;
@@ -23,10 +25,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
@@ -36,7 +41,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDi
 public class WhatWalkingDifficultiesControllerTest {
 
   private MockMvc mockMvc;
-  private WhatWalkingDifficultiesController controller;
   private Journey journey;
 
   @Mock private RouteMaster mockRouteMaster;
@@ -44,26 +48,15 @@ public class WhatWalkingDifficultiesControllerTest {
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new WhatWalkingDifficultiesController(mockRouteMaster);
+    WhatWalkingDifficultiesController controller = new WhatWalkingDifficultiesController(mockRouteMaster);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
 
-    ApplicantForm applicantForm =
-        ApplicantForm.builder().applicantType(ApplicantType.YOURSELF.toString()).build();
-    LocalAuthorityRefData testLA = new LocalAuthorityRefData();
-    LocalAuthorityRefData.LocalAuthorityMetaData metaData =
-        new LocalAuthorityRefData.LocalAuthorityMetaData();
-    metaData.setNation(Nation.ENG);
-    testLA.setLocalAuthorityMetaData(Optional.of(metaData));
-
-    journey = new Journey();
-    journey.setApplicantForm(applicantForm);
-    journey.setLocalAuthority(testLA);
+    journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.WHAT_WALKING_DIFFICULTIES, EligibilityCodeField.WALKD, ENG);
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
-    // We are not testing the route master. So for convenience just forward to an error view so
-    // can test the error messages
+
     when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))
         .thenReturn("/someValidationError");
   }
@@ -71,13 +64,11 @@ public class WhatWalkingDifficultiesControllerTest {
   @Test
   public void show_ShouldDisplayTemplate() throws Exception {
 
-    WhatMakesWalkingDifficultForm form = WhatMakesWalkingDifficultForm.builder().build();
-
     mockMvc
         .perform(get("/what-makes-walking-difficult").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("walking/what-walking-difficult"))
-        .andExpect(model().attribute("formRequest", form))
+        .andExpect(model().attribute("formRequest", JourneyFixture.getWhatMakesWalkingDifficultForm()))
         .andExpect(model().attributeExists("walkingDifficulties"));
   }
 
@@ -94,8 +85,8 @@ public class WhatWalkingDifficultiesControllerTest {
         (RadioOptionsGroup) mvcResult.getModelAndView().getModel().get("walkingDifficulties");
     assertThat(options.getOptions())
         .extracting("shortCode", "messageKey")
-        .contains(tuple("DANGER", "you.ENG.whatMakesWalkingDifficult.select.option.dangerous"))
-        .doesNotContain(tuple("STRUGGLE", "you.whatMakesWalkingDifficult.select.option.struggle"));
+        .contains(tuple("DANGER", "oth.ENG.whatMakesWalkingDifficult.select.option.dangerous"))
+        .doesNotContain(tuple("STRUGGLE", "oth.whatMakesWalkingDifficult.select.option.struggle"));
   }
 
   @Test
@@ -120,23 +111,17 @@ public class WhatWalkingDifficultiesControllerTest {
         (RadioOptionsGroup) mvcResult.getModelAndView().getModel().get("walkingDifficulties");
     assertThat(options.getOptions())
         .extracting("shortCode", "messageKey")
-        .contains(tuple("DANGER", "you.SCO.whatMakesWalkingDifficult.select.option.dangerous"))
-        .contains(tuple("STRUGGLE", "you.whatMakesWalkingDifficult.select.option.struggle"));
+        .contains(tuple("DANGER", "oth.SCO.whatMakesWalkingDifficult.select.option.dangerous"))
+        .contains(tuple("STRUGGLE", "oth.whatMakesWalkingDifficult.select.option.struggle"));
   }
 
   @Test
   public void show_givenNationWales_walkingDifficultiesShouldBeNationSpecific() throws Exception {
-    LocalAuthorityRefData testLA = new LocalAuthorityRefData();
-    LocalAuthorityRefData.LocalAuthorityMetaData metaData =
-        new LocalAuthorityRefData.LocalAuthorityMetaData();
-    metaData.setNation(Nation.WLS);
-    testLA.setLocalAuthorityMetaData(Optional.of(metaData));
-
-    journey.setLocalAuthority(testLA);
+    Journey wales = JourneyFixture.getDefaultJourneyToStep(StepDefinition.WHAT_WALKING_DIFFICULTIES, EligibilityCodeField.WALKD, WLS);
 
     MvcResult mvcResult =
         mockMvc
-            .perform(get("/what-makes-walking-difficult").sessionAttr("JOURNEY", journey))
+            .perform(get("/what-makes-walking-difficult").sessionAttr("JOURNEY", wales))
             .andExpect(status().isOk())
             .andExpect(model().attributeExists("walkingDifficulties"))
             .andReturn();
@@ -145,7 +130,7 @@ public class WhatWalkingDifficultiesControllerTest {
         (RadioOptionsGroup) mvcResult.getModelAndView().getModel().get("walkingDifficulties");
     assertThat(options.getOptions())
         .extracting("shortCode", "messageKey")
-        .contains(tuple("STRUGGLE", "you.whatMakesWalkingDifficult.select.option.struggle"));
+        .contains(tuple("STRUGGLE", "oth.whatMakesWalkingDifficult.select.option.struggle"));
   }
 
   @Test

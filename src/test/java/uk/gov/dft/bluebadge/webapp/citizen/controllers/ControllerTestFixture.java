@@ -16,7 +16,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
@@ -26,12 +29,20 @@ public abstract class ControllerTestFixture<T> {
   protected MockMvc mockMvc;
   protected Journey journey;
 
+  protected abstract String getTemplateName();
+
+  protected abstract String getUrl();
+
+  protected abstract StepDefinition getStep();
+
+  protected abstract EligibilityCodeField getEligibilityType();
+
   protected void setup(T controller) {
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
-    journey = new Journey();
+    journey = JourneyFixture.getDefaultJourneyToStep(getStep(), getEligibilityType());
     ApplicantForm applicantForm =
         ApplicantForm.builder().applicantType(ApplicantType.YOURSELF.toString()).build();
     journey.setApplicantForm(applicantForm);
@@ -54,10 +65,6 @@ public abstract class ControllerTestFixture<T> {
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
     when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any())).thenCallRealMethod();
   }
-
-  protected abstract String getTemplateName();
-
-  protected abstract String getUrl();
 
   protected void show_ShouldDisplayTemplate() throws Exception {
     mockMvc

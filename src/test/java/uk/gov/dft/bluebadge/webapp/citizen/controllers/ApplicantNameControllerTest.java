@@ -3,58 +3,41 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.FormObjectToParamMapper;
-import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
-import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
-import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
-public class ApplicantNameControllerTest {
+public class ApplicantNameControllerTest extends ControllerTestFixture<ApplicantNameController> {
 
-  private MockMvc mockMvc;
-  private ApplicantNameController controller;
-  private Journey journey;
-
-  @Mock ApplicationManagementService appService;
   @Mock private RouteMaster mockRouteMaster;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new ApplicantNameController(mockRouteMaster);
-    mockMvc =
-        MockMvcBuilders.standaloneSetup(controller)
-            .setViewResolvers(new StandaloneMvcTestViewResolver())
-            .build();
-
-    ApplicantForm applicantForm =
-        ApplicantForm.builder().applicantType(ApplicantType.YOURSELF.toString()).build();
-
-    journey = new Journey();
-    journey.setApplicantForm(applicantForm);
+    super.setup(new ApplicantNameController(mockRouteMaster));
+    applyRoutmasterDefaultMocks(mockRouteMaster);
   }
 
   @Test
   public void showApplicantName_ShouldDisplayTemplate() throws Exception {
+    super.show_ShouldDisplayTemplate();
+  }
 
-    ApplicantNameForm applicantNameForm = ApplicantNameForm.builder().build();
-
-    mockMvc
-        .perform(get("/name").sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
-        .andExpect(view().name("applicant-name"))
-        .andExpect(model().attribute("formRequest", applicantNameForm));
+  @Test
+  public void shouldRedirectWhenJourneyNotSetup() throws Exception {
+    super.show_shouldRedirect_whenJourneyNotSetup();
   }
 
   @Test
@@ -63,7 +46,7 @@ public class ApplicantNameControllerTest {
     ApplicantNameForm sessionApplicantNameForm =
         ApplicantNameForm.builder().fullName("John").hasBirthName(true).birthName("Doe").build();
 
-    journey.setApplicantNameForm(sessionApplicantNameForm);
+    journey.setFormForStep(sessionApplicantNameForm);
     mockMvc
         .perform(get("/name").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
@@ -100,10 +83,10 @@ public class ApplicantNameControllerTest {
                 .params(FormObjectToParamMapper.convert(applicantNameForm))
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
-        .andExpect(model().attribute("formRequest", applicantNameForm))
-        .andExpect(model().attributeHasFieldErrorCode("formRequest", "fullName", "NotBlank"))
-        .andExpect(model().attributeHasFieldErrorCode("formRequest", "hasBirthName", "NotNull"));
+        .andExpect(status().is3xxRedirection())
+        .andExpect(flash().attribute("formRequest", applicantNameForm))
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("fullName", "NotBlank"))
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("hasBirthName", "NotNull"));
   }
 
   @Test
@@ -117,11 +100,29 @@ public class ApplicantNameControllerTest {
                 .params(FormObjectToParamMapper.convert(applicantNameForm))
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
-        .andExpect(model().attribute("formRequest", applicantNameForm))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(flash().attribute("formRequest", applicantNameForm))
         .andExpect(
-            model()
-                .attributeHasFieldErrorCode(
-                    "formRequest", "birthName", "field.birthName.NotBlank"));
+            formRequestFlashAttributeHasFieldErrorCode("birthName", "field.birthName.NotBlank"));
+  }
+
+  @Override
+  protected String getTemplateName() {
+    return "applicant-name";
+  }
+
+  @Override
+  protected String getUrl() {
+    return "/name";
+  }
+
+  @Override
+  protected StepDefinition getStep() {
+    return StepDefinition.NAME;
+  }
+
+  @Override
+  protected EligibilityCodeField getEligibilityType() {
+    return EligibilityCodeField.PIP;
   }
 }

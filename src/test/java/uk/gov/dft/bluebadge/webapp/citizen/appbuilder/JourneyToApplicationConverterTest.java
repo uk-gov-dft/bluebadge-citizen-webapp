@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.appbuilder;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -9,8 +11,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.El
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ExistingBadgeForm;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class JourneyToApplicationConverterTest {
 

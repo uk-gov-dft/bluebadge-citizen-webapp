@@ -96,7 +96,8 @@ public class WalkingConverterTest {
 
   @Test
   public void getWalkingAids_withOne() {
-    List<WalkingAid> result = WalkingConverter.getWalkingAids(JourneyFixture.getMobilityAidListForm());
+    List<WalkingAid> result =
+        WalkingConverter.getWalkingAids(JourneyFixture.getMobilityAidListForm());
     assertThat(result.get(0).getDescription())
         .isEqualTo(MobilityAidAddForm.AidType.SCOOTER.getType());
     assertThat(result.get(0).getUsage()).isEqualTo("Usage");
@@ -112,7 +113,8 @@ public class WalkingConverterTest {
 
   @Test
   public void getMedications_withOne() {
-    List<Medication> result = WalkingConverter.getMedications(JourneyFixture.getMedicationListForm());
+    List<Medication> result =
+        WalkingConverter.getMedications(JourneyFixture.getMedicationListForm());
     assertThat(result.get(0).getFrequency()).isEqualTo("Frequency");
     assertThat(result.get(0).getIsPrescribed()).isEqualTo(Boolean.TRUE);
     assertThat(result.get(0).getName()).isEqualTo("name");

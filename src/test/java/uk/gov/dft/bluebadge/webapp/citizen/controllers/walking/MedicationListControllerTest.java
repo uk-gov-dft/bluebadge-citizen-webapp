@@ -14,8 +14,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm;
@@ -41,6 +43,16 @@ public class MedicationListControllerTest extends ControllerTestFixture<Medicati
   @Override
   protected String getUrl() {
     return "/list-medication";
+  }
+
+  @Override
+  protected StepDefinition getStep() {
+    return StepDefinition.MEDICATION_LIST;
+  }
+
+  @Override
+  protected EligibilityCodeField getEligibilityType() {
+    return EligibilityCodeField.WALKD;
   }
 
   @Test

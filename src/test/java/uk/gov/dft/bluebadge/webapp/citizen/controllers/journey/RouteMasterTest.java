@@ -19,17 +19,6 @@ public class RouteMasterTest {
   }
 
   @Test
-  public void redirectOnSuccess_singleNextStep() {
-    assertThat(routeMaster.redirectToOnSuccess(StepDefinition.HOME))
-        .isEqualTo("redirect:" + Mappings.URL_APPLICANT_TYPE);
-  }
-
-  @Test(expected = IllegalStateException.class)
-  public void redirectOnSuccess_whenMultiple_thenException() {
-    routeMaster.redirectToOnSuccess(StepDefinition.RECEIVE_BENEFITS);
-  }
-
-  @Test
   public void redirectOnSuccessWithForm_singleNextStep() {
     StepForm testForm = () -> HOME;
 

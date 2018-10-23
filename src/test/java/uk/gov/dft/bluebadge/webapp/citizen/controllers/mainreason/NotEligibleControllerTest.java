@@ -1,14 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.mainreason;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType.YOURSELF;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -16,31 +7,36 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 public class NotEligibleControllerTest {
   private MockMvc mockMvc;
-  private NotEligibleController controller;
 
   @Mock private RouteMaster mockRouteMaster;
   private Journey journey;
-  private LocalAuthorityRefData la = new LocalAuthorityRefData();
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new NotEligibleController(mockRouteMaster);
+    NotEligibleController controller = new NotEligibleController(mockRouteMaster);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
-    journey = new Journey();
-    journey.setApplicantForm(ApplicantForm.builder().applicantType(YOURSELF.name()).build());
-    journey.setLocalAuthority(la);
+    journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.MAIN_REASON, EligibilityCodeField.NONE);
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
     when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))
         .thenReturn("redirect:/someValidationError");
@@ -49,13 +45,11 @@ public class NotEligibleControllerTest {
   @Test
   public void show_ShouldDisplayNotEligibleTemplate() throws Exception {
 
-    MainReasonForm formRequest = MainReasonForm.builder().build();
-
     mockMvc
         .perform(get("/not-eligible").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("mainreason/not-eligible"))
-        .andExpect(model().attribute("localAuthority", la));
+        .andExpect(model().attribute("localAuthority", JourneyFixture.getLocalAuthorityRefData(Nation.SCO)));
   }
 
   @Test

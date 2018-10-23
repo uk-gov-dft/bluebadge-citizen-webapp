@@ -17,14 +17,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 
 public class DateOfBirthControllerTest {
 
-  public static final String URL_DATE_OF_BIRTH = "/date-of-birth";
-  public static final String VIEW_DATE_OF_BIRTH = "date-of-birth";
+  private static final String URL_DATE_OF_BIRTH = "/date-of-birth";
+  private static final String VIEW_DATE_OF_BIRTH = "date-of-birth";
   private MockMvc mockMvc;
   private DateOfBirthController controller;
 
@@ -45,7 +46,7 @@ public class DateOfBirthControllerTest {
   public void show_ShouldDateOfBirthTemplate() throws Exception {
 
     // A pre-set up journey
-    Journey journey = JourneyFixture.getDefaultJourney();
+    Journey journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.DOB);
 
     mockMvc
         .perform(get(URL_DATE_OF_BIRTH).sessionAttr("JOURNEY", journey))

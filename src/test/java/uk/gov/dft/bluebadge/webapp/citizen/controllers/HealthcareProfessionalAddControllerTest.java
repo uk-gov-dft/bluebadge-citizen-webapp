@@ -10,7 +10,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalListForm;
 
@@ -38,6 +40,16 @@ public class HealthcareProfessionalAddControllerTest
   @Override
   protected String getUrl() {
     return "/add-healthcare-professional";
+  }
+
+  @Override
+  protected StepDefinition getStep() {
+    return StepDefinition.HEALTHCARE_PROFESSIONALS_ADD;
+  }
+
+  @Override
+  protected EligibilityCodeField getEligibilityType() {
+    return EligibilityCodeField.WALKD;
   }
 
   @Test

@@ -14,7 +14,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalListForm;
@@ -43,6 +45,16 @@ public class HealthcareProfessionalListControllerTest
   @Override
   protected String getUrl() {
     return "/list-healthcare-professionals";
+  }
+
+  @Override
+  protected StepDefinition getStep() {
+    return StepDefinition.HEALTHCARE_PROFESSIONAL_LIST;
+  }
+
+  @Override
+  protected EligibilityCodeField getEligibilityType() {
+    return EligibilityCodeField.WALKD;
   }
 
   @Test

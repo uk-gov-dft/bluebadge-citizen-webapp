@@ -1,12 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.afcs;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType.YOURSELF;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -14,11 +7,22 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.MentalDisorderForm;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 public class MentalDisorderControllerTest {
 
@@ -39,11 +43,9 @@ public class MentalDisorderControllerTest {
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
 
-    journey = new Journey();
-
-    journey.setApplicantForm(ApplicantForm.builder().applicantType(YOURSELF.name()).build());
-
-    journey.setMentalDisorderForm(MentalDisorderForm.builder().hasMentalDisorder(true).build());
+    journey =
+        JourneyFixture.getDefaultJourneyToStep(
+            StepDefinition.AFCS_MENTAL_DISORDER, EligibilityCodeField.AFRFCS);
 
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
     when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))
@@ -53,15 +55,13 @@ public class MentalDisorderControllerTest {
   @Test
   public void show_ShouldDisplayDisabilityTemplate_WithRadioOptions() throws Exception {
     RadioOptionsGroup options =
-        new RadioOptionsGroup("you.afcs.mentalDisorderPage.title").withYesNoOptions();
-
-    MentalDisorderForm form = MentalDisorderForm.builder().hasMentalDisorder(true).build();
+        new RadioOptionsGroup("oth.afcs.mentalDisorderPage.title").withYesNoOptions();
 
     mockMvc
         .perform(get("/permanent-mental-disorder").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("afcs/mental-disorder"))
-        .andExpect(model().attribute("formRequest", form))
+        .andExpect(model().attribute("formRequest", JourneyFixture.getMentalDisorderForm()))
         .andExpect(model().attribute("radioOptions", options));
   }
 

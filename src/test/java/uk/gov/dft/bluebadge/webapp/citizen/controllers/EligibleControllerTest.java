@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -16,6 +17,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
@@ -38,7 +40,9 @@ public class EligibleControllerTest {
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
-    journey = JourneyFixture.getDefaultJourney();
+    journey =
+        JourneyFixture.getDefaultJourneyToStep(
+            StepDefinition.MAIN_REASON, EligibilityCodeField.BLIND);
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
   }
 
@@ -76,8 +80,7 @@ public class EligibleControllerTest {
   @SneakyThrows
   public void startApplication_ShouldRedirectToNextPage() {
 
-    when(mockRouteMaster.redirectToOnSuccess(StepDefinition.ELIGIBLE))
-        .thenReturn("redirect:/theNextPage");
+    when(mockRouteMaster.redirectToOnSuccess(any())).thenReturn("redirect:/theNextPage");
 
     mockMvc
         .perform(get("/eligible/start"))

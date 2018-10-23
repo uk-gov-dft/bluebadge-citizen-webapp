@@ -1,6 +1,22 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
+
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -9,20 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import java.util.ArrayList;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
-import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 
 public class MobilityAidListControllerTest {
   private MockMvc mockMvc;
@@ -39,13 +41,9 @@ public class MobilityAidListControllerTest {
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
 
-    ApplicantForm applicantForm =
-        ApplicantForm.builder().applicantType(ApplicantType.YOURSELF.toString()).build();
-
-    journey = new Journey();
-    journey.setApplicantForm(applicantForm);
-    journey.setMobilityAidListForm(
-        MobilityAidListForm.builder().mobilityAids(new ArrayList<>()).build());
+    journey =
+        JourneyFixture.getDefaultJourneyToStep(
+            StepDefinition.MOBILITY_AID_LIST, EligibilityCodeField.WALKD);
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
     // We are not testing the route master. So for convenience just forward to an error view so
     // can test the error messages
@@ -110,7 +108,7 @@ public class MobilityAidListControllerTest {
     mockMvc
         .perform(
             post("/list-mobility-aids")
-                //.param("hasWalkingAid", "")
+                // .param("hasWalkingAid", "")
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())

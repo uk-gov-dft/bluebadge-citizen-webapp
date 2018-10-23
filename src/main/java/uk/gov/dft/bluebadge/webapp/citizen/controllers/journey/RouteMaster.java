@@ -39,11 +39,6 @@ public class RouteMaster {
     return REDIRECT + Mappings.getUrl(nextStep);
   }
 
-  public String redirectToOnSuccess(StepDefinition currentStep) {
-    StepDefinition nextStep = currentStep.getDefaultNext();
-    return REDIRECT + Mappings.getUrl(nextStep);
-  }
-
   public String startingPoint() {
     return REDIRECT + Mappings.getUrl(StepDefinition.HOME.getDefaultNext());
   }

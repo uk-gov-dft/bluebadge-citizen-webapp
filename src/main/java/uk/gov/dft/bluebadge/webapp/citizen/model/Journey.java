@@ -1,5 +1,19 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
+
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Predicate;
+import lombok.extern.slf4j.Slf4j;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
@@ -35,19 +49,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WalkingTimeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Predicate;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
-
+@Slf4j
 public class Journey implements Serializable {
 
   public static final String JOURNEY_SESSION_KEY = "JOURNEY";
@@ -145,39 +147,72 @@ public class Journey implements Serializable {
   public boolean isValidState(StepDefinition step) {
     List<StepDefinition> possiblePreviousSteps = getPrerequisiteStep(step);
 
-    boolean previousStepCompleted = false;
-
-    // Home page will have no prerequisite page
-    if(!possiblePreviousSteps.isEmpty()){
-      // With list of prerequisites, ensure at least 1 has been completed.
-      for(StepDefinition previousStep :possiblePreviousSteps){
-        if(hasStepForm(previousStep)){
-          previousStepCompleted = true;
-          break;
-        }
-      }
-    }else{
-      previousStepCompleted = true;
-    }
-
-    if(!previousStepCompleted){
-      return false;
-    }
-
     // Custom step validation
     switch (step) {
-      case WHAT_WALKING_DIFFICULTIES:
-        if (null == getNation()) {
-          return false;
-        }
-      case ELIGIBLE:
-      case MAY_BE_ELIGIBLE:
-        if (null == getLocalAuthority()) {
-          return false;
-        }
+        // The add pages don't link together in the step definition
+        // in the same way as would have created loop with the list
+        // pages.  Check the list pages prerequisites
+      case MOBILITY_AID_ADD:
+        return isValidState(StepDefinition.MOBILITY_AID_LIST);
+      case TREATMENT_ADD:
+        return isValidState(StepDefinition.TREATMENT_LIST);
+      case HEALTHCARE_PROFESSIONALS_ADD:
+        return isValidState(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST);
+      case MEDICATION_ADD:
+        return isValidState(StepDefinition.MEDICATION_LIST);
     }
 
-    return true;
+    // No previous step possible.  Must be home page.
+    if (possiblePreviousSteps.isEmpty()) {
+      return true;
+    }
+
+    // If can only have come from one place.
+    if (possiblePreviousSteps.size() == 1) {
+      return hasStepForm(possiblePreviousSteps.get(0));
+    }
+
+    // More than one place can have come from
+    // Replay the journey to find previous step
+    StepForm form = getFormForStep(StepDefinition.APPLICANT_TYPE);
+    if (null == form) return false;
+
+    StepDefinition previousLoopStep = null;
+    StepDefinition currentLoopStep = form.getAssociatedStep();
+    while (currentLoopStep != step) {
+
+      StepDefinition nextStep;
+      if (currentLoopStep.getNext().size() == 1) {
+        nextStep = currentLoopStep.getDefaultNext();
+      } else {
+        // Is there a break in the journey (should not happen if all steps are validating properly)
+        if (!hasStepForm(currentLoopStep)) {
+          log.error("Expected step form missing: {}", currentLoopStep);
+          return false;
+        }
+
+        StepForm currentLoopForm = getFormForStep(currentLoopStep);
+        Optional<StepDefinition> possibleNextStep = currentLoopForm.determineNextStep();
+        if (!possibleNextStep.isPresent()) {
+          possibleNextStep = currentLoopForm.determineNextStep(this);
+        }
+        if (!possibleNextStep.isPresent()) {
+          log.error(
+              "Could not determine next step in journey."
+                  + "Attempting to check isValidState for {}. Got to {} in journey.",
+              step,
+              currentLoopStep);
+          return false;
+        } else {
+          nextStep = possibleNextStep.get();
+        }
+      }
+      previousLoopStep = currentLoopStep;
+      currentLoopStep = nextStep;
+    }
+
+    // previousLoopStep is the form that led to the one we are checking
+    return hasStepForm(previousLoopStep);
   }
 
   public void setApplicantForm(ApplicantForm applicantForm) {

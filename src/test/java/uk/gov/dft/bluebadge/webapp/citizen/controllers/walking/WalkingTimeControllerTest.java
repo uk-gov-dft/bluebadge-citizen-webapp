@@ -18,8 +18,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingLengthOfTimeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
@@ -46,8 +49,7 @@ public class WalkingTimeControllerTest {
     ApplicantForm applicantForm =
         ApplicantForm.builder().applicantType(ApplicantType.YOURSELF.toString()).build();
 
-    journey = new Journey();
-    journey.setApplicantForm(applicantForm);
+    journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.WALKING_TIME, EligibilityCodeField.WALKD);
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
     // We are not testing the route master. So for convenience just forward to an error view so
     // can test the error messages
@@ -58,30 +60,21 @@ public class WalkingTimeControllerTest {
   @Test
   public void show_ShouldDisplayTemplate() throws Exception {
 
-    WalkingTimeForm form = WalkingTimeForm.builder().build();
-
     mockMvc
         .perform(get("/walking-time").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("walking/walking-time"))
-        .andExpect(model().attribute("formRequest", form))
+        .andExpect(model().attribute("formRequest", JourneyFixture.getWalkingTimeForm()))
         .andExpect(model().attributeExists("walkingTimeOptions"));
   }
 
   @Test
   public void show_walkingTimeOptionsShouldBeSet() throws Exception {
-    MvcResult mvcResult =
         mockMvc
             .perform(get("/walking-time").sessionAttr("JOURNEY", journey))
             .andExpect(status().isOk())
             .andExpect(model().attributeExists("walkingTimeOptions"))
             .andReturn();
-
-    RadioOptionsGroup options =
-        (RadioOptionsGroup) mvcResult.getModelAndView().getModel().get("walkingTimeOptions");
-    //    assertThat(options.getOptions())
-    //        .extracting("shortCode").containsOnly()
-    //        .contains(tuple("DANGER", "you.SCO.whatMakesWalkingDifficult.select.option.dangerous"));
   }
 
   @Test

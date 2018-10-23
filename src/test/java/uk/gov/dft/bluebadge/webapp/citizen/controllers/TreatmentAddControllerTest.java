@@ -10,7 +10,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
 
@@ -34,6 +36,16 @@ public class TreatmentAddControllerTest extends ControllerTestFixture<TreatmentA
   @Override
   protected String getUrl() {
     return "/add-treatment";
+  }
+
+  @Override
+  protected StepDefinition getStep() {
+    return StepDefinition.TREATMENT_ADD;
+  }
+
+  @Override
+  protected EligibilityCodeField getEligibilityType() {
+    return EligibilityCodeField.WALKD;
   }
 
   @Test
