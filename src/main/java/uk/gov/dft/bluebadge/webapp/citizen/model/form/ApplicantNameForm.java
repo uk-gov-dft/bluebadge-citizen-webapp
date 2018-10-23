@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 
@@ -23,7 +24,9 @@ public class ApplicantNameForm implements StepForm, Serializable {
   private String birthName;
 
   public Boolean isBirthNameValid() {
-    return (hasBirthName == null || !hasBirthName.equals(true) || !birthName.isEmpty());
+    return (hasBirthName == null
+        || !Boolean.TRUE.equals(hasBirthName)
+        || StringUtils.isNotBlank(birthName));
   }
 
   @Override
