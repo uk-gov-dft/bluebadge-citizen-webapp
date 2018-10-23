@@ -63,7 +63,7 @@
 
                     </fieldset>
                 </div>
-                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + 'mobilityaid.usage.text'}, 'usage', #{mobilityaid.usage.hint.text}, 'text', 'govuk-!-width-one-half')}"></div>
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + 'mobilityaid.usage.text'}, 'usage', #{mobilityaid.usage.hint.text}, 'text', 'govuk-!-width-two-thirds')}"></div>
                 <div th:replace="~{ fragments/govuk-radios :: govuk-radios('howProvidedCodeField', ${howProvidedOptions}) }"></div>
 
                 <button type="submit"
