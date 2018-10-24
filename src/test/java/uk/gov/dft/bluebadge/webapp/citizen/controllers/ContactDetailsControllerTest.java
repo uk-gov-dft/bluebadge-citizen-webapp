@@ -21,6 +21,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 
 public class ContactDetailsControllerTest {
@@ -55,7 +56,7 @@ public class ContactDetailsControllerTest {
         .perform(get(URL_CONTACT_DETAILS).sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("contact-details"))
-        .andExpect(model().attribute("formRequest", journey.getContactDetailsForm()));
+        .andExpect(model().attribute("formRequest", (ContactDetailsForm)journey.getFormForStep(StepDefinition.CONTACT_DETAILS)));
   }
 
   @Test

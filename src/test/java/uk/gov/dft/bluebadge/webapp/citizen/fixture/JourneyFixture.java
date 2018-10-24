@@ -494,7 +494,8 @@ public class JourneyFixture {
       date.setDay(day);
       date.setMonth(month);
       date.setYear(year);
-      journey.getDateOfBirthForm().setDateOfBirth(date);
+      DateOfBirthForm form = journey.getFormForStep(StepDefinition.DOB);
+      form.setDateOfBirth(date);
       return this;
     }
 

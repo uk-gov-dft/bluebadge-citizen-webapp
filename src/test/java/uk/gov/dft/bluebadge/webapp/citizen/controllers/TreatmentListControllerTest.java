@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.TREATMENT_LIST;
 
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class TreatmentListControllerTest extends ControllerTestFixture<Treatment
   public void setup() {
     MockitoAnnotations.initMocks(this);
     super.setup(new TreatmentListController(mockRouteMaster));
-    journey.setTreatmentListForm(TreatmentListForm.builder().treatments(new ArrayList<>()).build());
+    journey.setFormForStep(TreatmentListForm.builder().treatments(new ArrayList<>()).build());
     applyRoutmasterDefaultMocks(mockRouteMaster);
   }
 
@@ -45,7 +46,7 @@ public class TreatmentListControllerTest extends ControllerTestFixture<Treatment
 
   @Override
   protected StepDefinition getStep() {
-    return StepDefinition.TREATMENT_LIST;
+    return TREATMENT_LIST;
   }
 
   @Override
@@ -86,8 +87,9 @@ public class TreatmentListControllerTest extends ControllerTestFixture<Treatment
     form.setTreatmentDescription("A");
     form.setTreatmentWhen("F");
 
-    journey.getTreatmentListForm().setHasTreatment("yes");
-    journey.getTreatmentListForm().setTreatments(Lists.newArrayList(form));
+    TreatmentListForm journeyForm = journey.getFormForStep(TREATMENT_LIST);
+    journeyForm.setHasTreatment("yes");
+    journeyForm.setTreatments(Lists.newArrayList(form));
 
     mockMvc
         .perform(
@@ -98,8 +100,10 @@ public class TreatmentListControllerTest extends ControllerTestFixture<Treatment
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
 
-    assertEquals("yes", journey.getTreatmentListForm().getHasTreatment());
-    assertEquals(1, journey.getTreatmentListForm().getTreatments().size());
+    // Get again - will be different instance in journey now
+    journeyForm = journey.getFormForStep(TREATMENT_LIST);
+    assertEquals("yes", journeyForm.getHasTreatment());
+    assertEquals(1, journeyForm.getTreatments().size());
   }
 
   @Test
@@ -107,8 +111,9 @@ public class TreatmentListControllerTest extends ControllerTestFixture<Treatment
     when(mockRouteMaster.redirectToOnSuccess(any(TreatmentListForm.class)))
         .thenReturn("redirect:/testSuccess");
 
-    journey.getTreatmentListForm().setHasTreatment("yes");
-    journey.getTreatmentListForm().setTreatments(new ArrayList<>());
+    TreatmentListForm journeyForm = journey.getFormForStep(TREATMENT_LIST);
+    journeyForm.setHasTreatment("yes");
+    journeyForm.setTreatments(new ArrayList<>());
     mockMvc
         .perform(
             post(getUrl())
@@ -117,8 +122,9 @@ public class TreatmentListControllerTest extends ControllerTestFixture<Treatment
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
+
     // Then has reset to no.
-    assertEquals("no", journey.getTreatmentListForm().getHasTreatment());
+    assertEquals("no", ((TreatmentListForm)journey.getFormForStep(TREATMENT_LIST)).getHasTreatment());
   }
 
   @Test

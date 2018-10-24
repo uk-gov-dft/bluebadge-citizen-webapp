@@ -25,7 +25,7 @@ public class HealthcareProfessionalAddControllerTest
   public void setup() {
     MockitoAnnotations.initMocks(this);
     super.setup(new HealthcareProfessionalAddController(mockRouteMaster));
-    journey.setHealthcareProfessionalListForm(
+    journey.setFormForStep(
         HealthcareProfessionalListForm.builder()
             .healthcareProfessionals(new ArrayList<>())
             .build());

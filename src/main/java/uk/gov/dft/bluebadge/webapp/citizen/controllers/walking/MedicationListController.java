@@ -1,10 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.walking;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-
-import java.util.ArrayList;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +16,13 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm;
+
+import javax.validation.Valid;
+import java.util.ArrayList;
+
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.MEDICATION_LIST;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 @RequestMapping(Mappings.URL_MEDICATION_LIST)
@@ -49,9 +51,8 @@ public class MedicationListController implements StepController {
     if (!model.containsAttribute(FORM_REQUEST)) {
       // Create object in journey with empty list.
       // Want to not get any null pointers accessing list.
-      journey.setMedicationListForm(
-          MedicationListForm.builder().medications(new ArrayList<>()).build());
-      model.addAttribute(FORM_REQUEST, journey.getMedicationListForm());
+      journey.setFormForStep(MedicationListForm.builder().medications(new ArrayList<>()).build());
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(MEDICATION_LIST));
     }
     return TEMPLATE;
   }
@@ -67,15 +68,16 @@ public class MedicationListController implements StepController {
       return routeMaster.redirectToOnBindingError(this, medicationListForm, bindingResult, attr);
     }
 
+    MedicationListForm journeyForm = journey.getFormForStep(MEDICATION_LIST);
     // Reset if no selected
     // Treat as No selected if no aids added whilst yes was selected
-    if (journey.getMedicationListForm().getMedications() == null
-        || journey.getMedicationListForm().getMedications().isEmpty()
-        || "no".equals(journey.getMedicationListForm().getHasMedication())) {
-      journey.setMedicationListForm(
+    if (journeyForm.getMedications() == null
+        || journeyForm.getMedications().isEmpty()
+        || "no".equals(journeyForm.getHasMedication())) {
+      journey.setFormForStep(
           MedicationListForm.builder().hasMedication("no").medications(new ArrayList<>()).build());
     } else {
-      journey.getMedicationListForm().setHasMedication(medicationListForm.getHasMedication());
+      journeyForm.setHasMedication(medicationListForm.getHasMedication());
     }
 
     // Don't overwrite medications in journey
@@ -89,9 +91,12 @@ public class MedicationListController implements StepController {
       @RequestParam(name = "uuid") String uuid,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (null != journey.getMedicationListForm()
-        && null != journey.getMedicationListForm().getMedications()) {
-      journey.getMedicationListForm().getMedications().removeIf(item -> item.getId().equals(uuid));
+    if (journey.hasStepForm(MEDICATION_LIST)
+        && null
+            != ((MedicationListForm) journey.getFormForStep(MEDICATION_LIST)).getMedications()) {
+      ((MedicationListForm) journey.getFormForStep(MEDICATION_LIST))
+          .getMedications()
+          .removeIf(item -> item.getId().equals(uuid));
     }
 
     return "redirect:" + Mappings.URL_MEDICATION_LIST;
@@ -99,6 +104,6 @@ public class MedicationListController implements StepController {
 
   @Override
   public StepDefinition getStepDefinition() {
-    return StepDefinition.MEDICATION_LIST;
+    return MEDICATION_LIST;
   }
 }

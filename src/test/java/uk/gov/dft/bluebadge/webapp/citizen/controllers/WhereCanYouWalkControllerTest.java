@@ -86,7 +86,7 @@ public class WhereCanYouWalkControllerTest {
             .timeToDestination("10 minutes")
             .build();
 
-    journey.setWhereCanYouWalkForm(formRequest);
+    journey.setFormForStep(formRequest);
 
     mockMvc
         .perform(

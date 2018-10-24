@@ -20,6 +20,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings.URL_REMOVE_PART;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.MOBILITY_AID_LIST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
@@ -50,7 +51,7 @@ public class MobilityAidListController implements StepController {
     if (!model.containsAttribute(FORM_REQUEST)) {
       // Create object in journey with empty list.
       // Want to not get any null pointers accessing list.
-      journey.setMobilityAidListForm(
+      journey.setFormForStep(
           MobilityAidListForm.builder().mobilityAids(new ArrayList<>()).build());
       model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
@@ -68,18 +69,19 @@ public class MobilityAidListController implements StepController {
       return routeMaster.redirectToOnBindingError(this, mobilityAidListForm, bindingResult, attr);
     }
 
+    MobilityAidListForm journeyListForm = journey.getFormForStep(MOBILITY_AID_LIST);
     // Reset if no selected
     // Treat as No selected if no aids added whilst yes was selected
     if ("no".equals(mobilityAidListForm.getHasWalkingAid())
         || ("yes".equals(mobilityAidListForm.getHasWalkingAid())
-            && journey.getMobilityAidListForm().getMobilityAids().isEmpty())) {
-      journey.setMobilityAidListForm(
+            && journeyListForm.getMobilityAids().isEmpty())) {
+      journey.setFormForStep(
           MobilityAidListForm.builder()
               .hasWalkingAid("no")
               .mobilityAids(new ArrayList<>())
               .build());
     } else {
-      journey.getMobilityAidListForm().setHasWalkingAid(mobilityAidListForm.getHasWalkingAid());
+      journeyListForm.setHasWalkingAid(mobilityAidListForm.getHasWalkingAid());
     }
 
     // Don't overwrite mobility/AidList in journey
@@ -93,10 +95,11 @@ public class MobilityAidListController implements StepController {
       @RequestParam(name = "uuid") String uuid,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (null != journey.getMobilityAidListForm()
-        && null != journey.getMobilityAidListForm().getMobilityAids()) {
-      journey
-          .getMobilityAidListForm()
+    if (journey.hasStepForm(MOBILITY_AID_LIST)
+        && null
+            != ((MobilityAidListForm) journey.getFormForStep(MOBILITY_AID_LIST))
+                .getMobilityAids()) {
+      ((MobilityAidListForm) journey.getFormForStep(MOBILITY_AID_LIST))
           .getMobilityAids()
           .removeIf(item -> item.getId().equals(uuid));
     }
@@ -106,6 +109,6 @@ public class MobilityAidListController implements StepController {
 
   @Override
   public StepDefinition getStepDefinition() {
-    return StepDefinition.MOBILITY_AID_LIST;
+    return MOBILITY_AID_LIST;
   }
 }

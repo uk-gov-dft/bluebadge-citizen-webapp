@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.MEDICATION_LIST;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class MedicationListControllerTest extends ControllerTestFixture<Medicati
   public void setup() {
     MockitoAnnotations.initMocks(this);
     super.setup(new MedicationListController(mockRouteMaster));
-    journey.setMedicationListForm(
+    journey.setFormForStep(
         MedicationListForm.builder().medications(new ArrayList<>()).build());
     applyRoutmasterDefaultMocks(mockRouteMaster);
   }
@@ -47,7 +48,7 @@ public class MedicationListControllerTest extends ControllerTestFixture<Medicati
 
   @Override
   protected StepDefinition getStep() {
-    return StepDefinition.MEDICATION_LIST;
+    return MEDICATION_LIST;
   }
 
   @Override
@@ -92,8 +93,9 @@ public class MedicationListControllerTest extends ControllerTestFixture<Medicati
     medication.setPrescribed("yes");
     medications.add(medication);
 
-    journey.getMedicationListForm().setHasMedication("yes");
-    journey.getMedicationListForm().setMedications(medications);
+    MedicationListForm journeyForm = journey.getFormForStep(MEDICATION_LIST);
+    journeyForm.setHasMedication("yes");
+    journeyForm.setMedications(medications);
 
     mockMvc
         .perform(
@@ -104,8 +106,10 @@ public class MedicationListControllerTest extends ControllerTestFixture<Medicati
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
 
-    assertEquals("yes", journey.getMedicationListForm().getHasMedication());
-    assertEquals(1, journey.getMedicationListForm().getMedications().size());
+    // Get again - will be different object in journey after controller round trip
+    journeyForm = journey.getFormForStep(MEDICATION_LIST);
+    assertEquals("yes", journeyForm.getHasMedication());
+    assertEquals(1, journeyForm.getMedications().size());
   }
 
   @Test
@@ -113,8 +117,9 @@ public class MedicationListControllerTest extends ControllerTestFixture<Medicati
     when(mockRouteMaster.redirectToOnSuccess(any(MedicationListForm.class)))
         .thenReturn("redirect:/testSuccess");
 
-    journey.getMedicationListForm().setHasMedication("yes");
-    journey.getMedicationListForm().setMedications(new ArrayList<>());
+    MedicationListForm journeyForm = journey.getFormForStep(MEDICATION_LIST);
+    journeyForm.setHasMedication("yes");
+    journeyForm.setMedications(new ArrayList<>());
     mockMvc
         .perform(
             post(getUrl())
@@ -123,8 +128,9 @@ public class MedicationListControllerTest extends ControllerTestFixture<Medicati
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
-    // Then has reset to no.
-    assertEquals("no", journey.getMedicationListForm().getHasMedication());
+    // Then has reset to no. Reget form - will be different object in journey.
+    journeyForm = journey.getFormForStep(MEDICATION_LIST);
+    assertEquals("no", journeyForm.getHasMedication());
   }
 
   @Test

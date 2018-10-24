@@ -1,10 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.walking;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-
-import java.util.ArrayList;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +17,13 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm;
+
+import javax.validation.Valid;
+import java.util.ArrayList;
+
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.MEDICATION_LIST;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 @RequestMapping(Mappings.URL_MEDICATION_ADD)
@@ -43,13 +45,13 @@ public class MedicationAddController implements StepController {
     }
 
     // Can hit add link before previous form submitted.
-    if (null == journey.getMedicationListForm()
-        || null == journey.getMedicationListForm().getMedications()) {
-      journey.setMedicationListForm(
-          MedicationListForm.builder().medications(new ArrayList<>()).build());
+    if (!journey.hasStepForm(MEDICATION_LIST)
+        || null
+            == ((MedicationListForm) journey.getFormForStep(MEDICATION_LIST)).getMedications()) {
+      journey.setFormForStep(MedicationListForm.builder().medications(new ArrayList<>()).build());
     }
 
-    journey.getMedicationListForm().setHasMedication("yes");
+    ((MedicationListForm) journey.getFormForStep(MEDICATION_LIST)).setHasMedication("yes");
 
     // On returning to form, take previously submitted values.
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -78,7 +80,9 @@ public class MedicationAddController implements StepController {
       return routeMaster.redirectToOnBindingError(this, medicationAddForm, bindingResult, attr);
     }
 
-    journey.getMedicationListForm().getMedications().add(medicationAddForm);
+    ((MedicationListForm) journey.getFormForStep(MEDICATION_LIST))
+        .getMedications()
+        .add(medicationAddForm);
 
     return "redirect:" + Mappings.URL_MEDICATION_LIST;
   }

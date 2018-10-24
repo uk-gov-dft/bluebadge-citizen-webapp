@@ -52,7 +52,7 @@ public class DateOfBirthControllerTest {
         .perform(get(URL_DATE_OF_BIRTH).sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("date-of-birth"))
-        .andExpect(model().attribute("formRequest", journey.getDateOfBirthForm()));
+        .andExpect(model().attribute("formRequest", (DateOfBirthForm)journey.getFormForStep(StepDefinition.DOB)));
   }
 
   @Test
@@ -130,7 +130,7 @@ public class DateOfBirthControllerTest {
   public void submit_givenFutureDate_ThenShouldHaveValidationError() throws Exception {
 
     Journey journey = JourneyFixture.getDefaultJourney();
-    when(mockRouteMaster.redirectToOnSuccess(journey.getDateOfBirthForm()))
+    when(mockRouteMaster.redirectToOnSuccess(journey.getFormForStep(StepDefinition.DOB)))
         .thenReturn("redirect:/testSuccess");
 
     mockMvc
@@ -150,7 +150,7 @@ public class DateOfBirthControllerTest {
   public void submit_givenInvalidDate_ThenShouldHaveValidationError() throws Exception {
 
     Journey journey = JourneyFixture.getDefaultJourney();
-    when(mockRouteMaster.redirectToOnSuccess(journey.getDateOfBirthForm()))
+    when(mockRouteMaster.redirectToOnSuccess(journey.getFormForStep(StepDefinition.DOB)))
         .thenReturn("redirect:/testSuccess");
 
     mockMvc

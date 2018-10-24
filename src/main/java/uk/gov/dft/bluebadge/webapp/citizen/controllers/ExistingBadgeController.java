@@ -23,12 +23,12 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ExistingBadgeForm;
 public class ExistingBadgeController implements StepController {
 
   private static final String TEMPLATE = "existing-badge";
-  public static final String EXISTING_BADGE_BYPASS_URL = "/existing-badge-bypass";
+  private static final String EXISTING_BADGE_BYPASS_URL = "/existing-badge-bypass";
 
   private final RouteMaster routeMaster;
 
   @Autowired
-  public ExistingBadgeController(RouteMaster routeMaster) {
+  ExistingBadgeController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
@@ -53,7 +53,7 @@ public class ExistingBadgeController implements StepController {
   @GetMapping(EXISTING_BADGE_BYPASS_URL)
   public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     ExistingBadgeForm formRequest = ExistingBadgeForm.builder().hasExistingBadge(true).build();
-    journey.setExistingBadgeForm(formRequest);
+    journey.setFormForStep(formRequest);
     return routeMaster.redirectToOnSuccess(formRequest);
   }
 

@@ -1,11 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings.URL_REMOVE_PART;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-
-import java.util.ArrayList;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +15,14 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
+
+import javax.validation.Valid;
+import java.util.ArrayList;
+
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings.URL_REMOVE_PART;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.TREATMENT_LIST;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 @RequestMapping(Mappings.URL_TREATMENT_LIST)
@@ -49,8 +51,7 @@ public class TreatmentListController implements StepController {
     if (!model.containsAttribute(FORM_REQUEST)) {
       // Create object in journey with empty list.
       // Want to not get any null pointers accessing list.
-      journey.setTreatmentListForm(
-          TreatmentListForm.builder().treatments(new ArrayList<>()).build());
+      journey.setFormForStep(TreatmentListForm.builder().treatments(new ArrayList<>()).build());
       model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
     return TEMPLATE;
@@ -67,15 +68,16 @@ public class TreatmentListController implements StepController {
       return routeMaster.redirectToOnBindingError(this, treatmentListForm, bindingResult, attr);
     }
 
+    TreatmentListForm journeyForm = journey.getFormForStep(TREATMENT_LIST);
     // Reset if no selected
     // Treat as No selected if no aids added whilst yes was selected
     if ("no".equals(treatmentListForm.getHasTreatment())
         || ("yes".equals(treatmentListForm.getHasTreatment())
-            && journey.getTreatmentListForm().getTreatments().isEmpty())) {
-      journey.setTreatmentListForm(
+            && journeyForm.getTreatments().isEmpty())) {
+      journey.setFormForStep(
           TreatmentListForm.builder().hasTreatment("no").treatments(new ArrayList<>()).build());
     } else {
-      journey.getTreatmentListForm().setHasTreatment(treatmentListForm.getHasTreatment());
+      journeyForm.setHasTreatment(treatmentListForm.getHasTreatment());
     }
 
     // Don't overwrite treatmentList in journey
@@ -89,9 +91,11 @@ public class TreatmentListController implements StepController {
       @RequestParam(name = "uuid") String uuid,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (null != journey.getTreatmentListForm()
-        && null != journey.getTreatmentListForm().getTreatments()) {
-      journey.getTreatmentListForm().getTreatments().removeIf(item -> item.getId().equals(uuid));
+    if (journey.hasStepForm(TREATMENT_LIST)
+        && null != ((TreatmentListForm) journey.getFormForStep(TREATMENT_LIST)).getTreatments()) {
+      ((TreatmentListForm) journey.getFormForStep(TREATMENT_LIST))
+          .getTreatments()
+          .removeIf(item -> item.getId().equals(uuid));
     }
 
     return "redirect:" + Mappings.URL_TREATMENT_LIST;
@@ -99,6 +103,6 @@ public class TreatmentListController implements StepController {
 
   @Override
   public StepDefinition getStepDefinition() {
-    return StepDefinition.TREATMENT_LIST;
+    return TREATMENT_LIST;
   }
 }

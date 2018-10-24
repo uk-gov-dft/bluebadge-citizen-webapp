@@ -20,6 +20,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings.URL_REMOVE_PART;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.HEALTHCARE_PROFESSIONAL_LIST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
@@ -42,8 +43,7 @@ public class HealthcareProfessionalListController implements StepController {
     }
 
     // On returning to form, take previously submitted values.
-    if (!model.containsAttribute(FORM_REQUEST)
-        && journey.hasStepForm(getStepDefinition())) {
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
       model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
@@ -73,24 +73,21 @@ public class HealthcareProfessionalListController implements StepController {
           this, healthcareProfessionalListForm, bindingResult, attr);
     }
 
+    HealthcareProfessionalListForm journeyForm =
+        journey.getFormForStep(HEALTHCARE_PROFESSIONAL_LIST);
     // Reset if no selected
     // Treat as No selected if no aids added whilst yes was selected
     if ("no".equals(healthcareProfessionalListForm.getHasHealthcareProfessional())
         || ("yes".equals(healthcareProfessionalListForm.getHasHealthcareProfessional())
-            && journey
-                .getHealthcareProfessionalListForm()
-                .getHealthcareProfessionals()
-                .isEmpty())) {
-      journey.setHealthcareProfessionalListForm(
+            && journeyForm.getHealthcareProfessionals().isEmpty())) {
+      journey.setFormForStep(
           HealthcareProfessionalListForm.builder()
               .hasHealthcareProfessional("no")
               .healthcareProfessionals(new ArrayList<>())
               .build());
     } else {
-      journey
-          .getHealthcareProfessionalListForm()
-          .setHasHealthcareProfessional(
-              healthcareProfessionalListForm.getHasHealthcareProfessional());
+      journeyForm.setHasHealthcareProfessional(
+          healthcareProfessionalListForm.getHasHealthcareProfessional());
     }
 
     // Don't overwrite healthcareProfessionals in journey
@@ -103,10 +100,12 @@ public class HealthcareProfessionalListController implements StepController {
       @RequestParam(name = "uuid") String uuid,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (null != journey.getHealthcareProfessionalListForm()
-        && null != journey.getHealthcareProfessionalListForm().getHealthcareProfessionals()) {
-      journey
-          .getHealthcareProfessionalListForm()
+    if (journey.hasStepForm(HEALTHCARE_PROFESSIONAL_LIST)
+        && null
+            != ((HealthcareProfessionalListForm)
+                    journey.getFormForStep(HEALTHCARE_PROFESSIONAL_LIST))
+                .getHealthcareProfessionals()) {
+      ((HealthcareProfessionalListForm) journey.getFormForStep(HEALTHCARE_PROFESSIONAL_LIST))
           .getHealthcareProfessionals()
           .removeIf(item -> item.getId().equals(uuid));
     }
@@ -116,6 +115,6 @@ public class HealthcareProfessionalListController implements StepController {
 
   @Override
   public StepDefinition getStepDefinition() {
-    return StepDefinition.HEALTHCARE_PROFESSIONAL_LIST;
+    return HEALTHCARE_PROFESSIONAL_LIST;
   }
 }

@@ -148,7 +148,7 @@ public class WhatWalkingDifficultiesControllerTest {
             .somethingElseDescription("test test")
             .build();
 
-    journey.setWhatMakesWalkingDifficultForm(form);
+    journey.setFormForStep(form);
     mockMvc
         .perform(get("/what-makes-walking-difficult").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())

@@ -7,17 +7,12 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ExistingBadgeForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalListForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
@@ -25,13 +20,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.CompensationSchemeForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.DisabilityForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.MentalDisorderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficultyForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipDlaQuestionForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipMovingAroundForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipPlanningJourneyForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WalkingTimeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
@@ -63,6 +52,7 @@ public class Journey implements Serializable {
   public void setFormForStep(StepForm form) {
     cleanUpSteps(new HashSet<>(), form.getCleanUpSteps(this));
     forms.put(form.getAssociatedStep(), form);
+
     if(form.getAssociatedStep() == StepDefinition.APPLICANT_TYPE){
       who = isApplicantYourself() ? "you." : "oth.";
     }else if(form.getAssociatedStep() == StepDefinition.DOB){
@@ -75,7 +65,7 @@ public class Journey implements Serializable {
     return (T) forms.get(step);
   }
 
-  public void cleanUpSteps(Set<StepDefinition> alreadyCleaned, List<StepDefinition> steps) {
+  private void cleanUpSteps(Set<StepDefinition> alreadyCleaned, List<StepDefinition> steps) {
 
     if (null == steps) {
       return;
@@ -219,89 +209,6 @@ public class Journey implements Serializable {
 
     // previousLoopStep is the form that led to the one we are checking
     return hasStepForm(previousLoopStep);
-  }
-
-
-  public DateOfBirthForm getDateOfBirthForm() {
-    return (DateOfBirthForm) getFormForStep(StepDefinition.DOB);
-  }
-
-  public ChooseYourCouncilForm getChooseYourCouncilForm() {
-    return getFormForStep(StepDefinition.CHOOSE_COUNCIL);
-  }
-
-  public void setYourIssuingAuthorityForm(YourIssuingAuthorityForm yourIssuingAuthorityForm) {
-    setFormForStep(yourIssuingAuthorityForm);
-  }
-
-  public void setReceiveBenefitsForm(ReceiveBenefitsForm receiveBenefitsForm) {
-    setFormForStep(receiveBenefitsForm);
-  }
-
-  public void setCompensationSchemeForm(CompensationSchemeForm compensationSchemeForm) {
-    setFormForStep(compensationSchemeForm);
-  }
-
-  public void setMainReasonForm(MainReasonForm mainReasonForm) {
-    setFormForStep(mainReasonForm);
-  }
-
-  public void setWhereCanYouWalkForm(WhereCanYouWalkForm whereCanYouWalkForm) {
-    setFormForStep(whereCanYouWalkForm);
-  }
-
-  public ContactDetailsForm getContactDetailsForm() {
-    return getFormForStep(StepDefinition.CONTACT_DETAILS);
-  }
-  public void setNinoForm(NinoForm ninoForm) {
-    setFormForStep(ninoForm);
-  }
-
-  public void setWhatMakesWalkingDifficultForm(
-      WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm) {
-    setFormForStep(whatMakesWalkingDifficultForm);
-  }
-
-  public void setWalkingTimeForm(WalkingTimeForm walkingTimeForm) {
-    setFormForStep(walkingTimeForm);
-  }
-
-  public MobilityAidListForm getMobilityAidListForm() {
-    return getFormForStep(StepDefinition.MOBILITY_AID_LIST);
-  }
-
-  public void setMobilityAidListForm(MobilityAidListForm mobilityAidListForm) {
-    setFormForStep(mobilityAidListForm);
-  }
-
-  public MedicationListForm getMedicationListForm() {
-    return getFormForStep(StepDefinition.MEDICATION_LIST);
-  }
-
-  public void setMedicationListForm(MedicationListForm medicationListForm) {
-    setFormForStep(medicationListForm);
-  }
-
-  public TreatmentListForm getTreatmentListForm() {
-    return getFormForStep(StepDefinition.TREATMENT_LIST);
-  }
-
-  public void setTreatmentListForm(TreatmentListForm treatmentListForm) {
-    setFormForStep(treatmentListForm);
-  }
-
-  public HealthcareProfessionalListForm getHealthcareProfessionalListForm() {
-    return (HealthcareProfessionalListForm)
-        getFormForStep(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST);
-  }
-
-  public void setHealthcareProfessionalListForm(
-      HealthcareProfessionalListForm healthcareProfessionalListForm) {
-    setFormForStep(healthcareProfessionalListForm);
-  }
-
-  public void setExistingBadgeForm(ExistingBadgeForm existingBadgeForm) {
-    setFormForStep(existingBadgeForm);
   }
 
   // -- META DATA BELOW --

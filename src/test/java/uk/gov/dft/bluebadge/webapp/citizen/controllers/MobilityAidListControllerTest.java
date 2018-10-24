@@ -85,8 +85,9 @@ public class MobilityAidListControllerTest {
     when(mockRouteMaster.redirectToOnSuccess(any(MobilityAidListForm.class)))
         .thenReturn("redirect:/testSuccess");
 
-    journey.getMobilityAidListForm().setHasWalkingAid("yes");
-    journey.getMobilityAidListForm().setMobilityAids(new ArrayList<>());
+    MobilityAidListForm journeyListForm = journey.getFormForStep(StepDefinition.MOBILITY_AID_LIST);
+    journeyListForm.setHasWalkingAid("yes");
+    journeyListForm.setMobilityAids(new ArrayList<>());
     mockMvc
         .perform(
             post("/list-mobility-aids")
@@ -95,8 +96,9 @@ public class MobilityAidListControllerTest {
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/testSuccess"));
-    // Then has aids reset to no.
-    assertEquals("no", journey.getMobilityAidListForm().getHasWalkingAid());
+    // Then has aids reset to no. (need to get back out of journey as new object.)
+    journeyListForm = journey.getFormForStep(StepDefinition.MOBILITY_AID_LIST);
+    assertEquals("no", journeyListForm.getHasWalkingAid());
   }
 
   @Test

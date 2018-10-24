@@ -82,7 +82,7 @@ public class WalkingTimeControllerTest {
     WalkingTimeForm form =
         WalkingTimeForm.builder().walkingTime(WalkingLengthOfTimeCodeField.LESSMIN).build();
 
-    journey.setWalkingTimeForm(form);
+    journey.setFormForStep(form);
     mockMvc
         .perform(get("/walking-time").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())

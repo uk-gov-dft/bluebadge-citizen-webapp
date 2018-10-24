@@ -51,7 +51,7 @@ public class EligibleControllerTest {
   public void show_ShouldDisplayEligibleTemplate() {
     YourIssuingAuthorityForm yourIssuingAuthorityForm =
         YourIssuingAuthorityForm.builder().localAuthorityShortCode("bob").build();
-    journey.setYourIssuingAuthorityForm(yourIssuingAuthorityForm);
+    journey.setFormForStep(yourIssuingAuthorityForm);
     LocalAuthorityRefData localAuthorityRefData = new LocalAuthorityRefData();
     journey.setLocalAuthority(localAuthorityRefData);
 
