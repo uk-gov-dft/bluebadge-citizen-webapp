@@ -38,6 +38,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.DisabilityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.MentalDisorderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficultyForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.organisation.OrganisationCareForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.organisation.OrganisationTransportForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipDlaQuestionForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipMovingAroundForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipPlanningJourneyForm;
@@ -92,7 +94,16 @@ public class Journey implements Serializable {
   public Boolean isApplicantYourself() {
     if (hasStepForm(StepDefinition.APPLICANT_TYPE)) {
       ApplicantForm form = (ApplicantForm) getFormForStep(StepDefinition.APPLICANT_TYPE);
-      return form.getApplicantType().equals(ApplicantType.YOURSELF.toString());
+      return form.getApplicantType().equals(ApplicantType.YOURSELF.toString())
+          || form.getApplicantType().equals(ApplicantType.ORGANISATION.toString());
+    }
+    return null;
+  }
+
+  public Boolean isApplicantOrganisation() {
+    if (hasStepForm(StepDefinition.APPLICANT_TYPE)) {
+      ApplicantForm form = (ApplicantForm) getFormForStep(StepDefinition.APPLICANT_TYPE);
+      return form.getApplicantType().equals(ApplicantType.ORGANISATION.toString());
     }
     return null;
   }
@@ -180,7 +191,7 @@ public class Journey implements Serializable {
 
   public void setReceiveBenefitsForm(ReceiveBenefitsForm receiveBenefitsForm) {
     setFormForStep(StepDefinition.RECEIVE_BENEFITS, receiveBenefitsForm);
-    //    setMainReasonForm(null);
+    // setMainReasonForm(null);
   }
 
   public PipMovingAroundForm getPipMovingAroundForm() {
@@ -334,6 +345,22 @@ public class Journey implements Serializable {
 
   public void setTreatmentListForm(TreatmentListForm treatmentListForm) {
     setFormForStep(StepDefinition.TREATMENT_LIST, treatmentListForm);
+  }
+
+  public OrganisationCareForm getOrganisationCareForm() {
+    return (OrganisationCareForm) getFormForStep(StepDefinition.ORGANISATION_CARE);
+  }
+
+  public void setOrganisationCareForm(OrganisationCareForm organisationCareForm) {
+    setFormForStep(StepDefinition.ORGANISATION_CARE, organisationCareForm);
+  }
+
+  public OrganisationTransportForm getOrganisationTransportForm() {
+    return (OrganisationTransportForm) getFormForStep(StepDefinition.ORGANISATION_TRANSPORT);
+  }
+
+  public void setOrganisationTransportForm(OrganisationTransportForm organisationTransportForm) {
+    setFormForStep(StepDefinition.ORGANISATION_TRANSPORT, organisationTransportForm);
   }
 
   public HealthcareProfessionalListForm getHealthcareProfessionalListForm() {
