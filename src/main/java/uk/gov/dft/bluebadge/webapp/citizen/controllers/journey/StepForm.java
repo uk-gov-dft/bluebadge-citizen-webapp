@@ -8,8 +8,6 @@ import java.util.Set;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 public interface StepForm {
-  // Used by clean up steps to remove eligibility specific forms.
-  StepDefinition LAST_PERSONAL_DETAILS_STEP = StepDefinition.CONTACT_DETAILS;
 
   StepDefinition getAssociatedStep();
 
@@ -24,8 +22,8 @@ public interface StepForm {
   /**
    * Journey is included to provide context so cleaning forms can be dynamic.
    *
-   * @param journey
-   * @return
+   * @param journey journey.
+   * @return Set of steps to clean.
    */
   default Set<StepDefinition> getCleanUpSteps(Journey journey) {
     return Collections.emptySet();
