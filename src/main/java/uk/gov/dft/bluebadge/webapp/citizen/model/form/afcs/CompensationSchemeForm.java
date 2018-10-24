@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs;
 
 import java.io.Serializable;
 import java.util.Optional;
+import java.util.Set;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
@@ -37,5 +38,10 @@ public class CompensationSchemeForm implements Serializable, StepForm {
     }
 
     return Optional.of(StepDefinition.MAIN_REASON);
+  }
+
+  @Override
+  public Set<StepDefinition> getCleanUpSteps(Journey journey) {
+    return getAssociatedStep().getNext();
   }
 }

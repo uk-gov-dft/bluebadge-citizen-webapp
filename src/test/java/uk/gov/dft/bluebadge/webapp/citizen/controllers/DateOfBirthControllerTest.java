@@ -27,14 +27,13 @@ public class DateOfBirthControllerTest {
   private static final String URL_DATE_OF_BIRTH = "/date-of-birth";
   private static final String VIEW_DATE_OF_BIRTH = "date-of-birth";
   private MockMvc mockMvc;
-  private DateOfBirthController controller;
 
   @Mock private RouteMaster mockRouteMaster;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new DateOfBirthController(mockRouteMaster);
+    DateOfBirthController controller = new DateOfBirthController(mockRouteMaster);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -45,7 +44,6 @@ public class DateOfBirthControllerTest {
   @Test
   public void show_ShouldDateOfBirthTemplate() throws Exception {
 
-    // A pre-set up journey
     Journey journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.DOB);
 
     mockMvc
@@ -72,7 +70,7 @@ public class DateOfBirthControllerTest {
   @Test
   public void submit_givenValidForm_thenShouldDisplayRedirectToSuccess() throws Exception {
 
-    Journey journey = JourneyFixture.getDefaultJourney();
+    Journey journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.DOB);
     when(mockRouteMaster.redirectToOnSuccess(any(DateOfBirthForm.class)))
         .thenReturn("redirect:/testSuccess");
 

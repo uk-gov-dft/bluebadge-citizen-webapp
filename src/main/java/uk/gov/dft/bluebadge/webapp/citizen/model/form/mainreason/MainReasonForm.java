@@ -1,6 +1,8 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
@@ -8,6 +10,7 @@ import lombok.EqualsAndHashCode;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 @Data
 @Builder
@@ -39,4 +42,15 @@ public class MainReasonForm implements StepForm {
   }
 
   @NotNull private EligibilityCodeField mainReasonOption;
+
+  @Override
+  public Set<StepDefinition> getCleanUpSteps(Journey journey) {
+
+    // Clean all eligibility based steps - leave personal details.
+    Set<StepDefinition> steps = new HashSet<>();
+    steps.addAll(getAssociatedStep().getNext());
+    steps.addAll(LAST_PERSONAL_DETAILS_STEP.getNext());
+
+    return steps;
+  }
 }

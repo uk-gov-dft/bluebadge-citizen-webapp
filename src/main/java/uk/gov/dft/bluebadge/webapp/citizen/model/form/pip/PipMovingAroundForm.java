@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.model.form.pip;
 
 import java.io.Serializable;
 import java.util.Optional;
+import java.util.Set;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
@@ -55,4 +56,9 @@ public class PipMovingAroundForm implements Serializable, StepForm {
   }
 
   @NotNull private PipMovingAroundOption movingAroundPoints;
+
+  @Override
+  public Set<StepDefinition> getCleanUpSteps(Journey journey) {
+    return getAssociatedStep().getNext();
+  }
 }

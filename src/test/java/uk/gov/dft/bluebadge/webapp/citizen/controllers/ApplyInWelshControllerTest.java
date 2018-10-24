@@ -29,8 +29,8 @@ public class ApplyInWelshControllerTest {
   @Test
   public void show_ShouldDisplayApplyInWelshTemplate() throws Exception {
     mockMvc
-        .perform(get("/apply-in-welsh"))
+        .perform(get("/apply-in-inWales"))
         .andExpect(status().isOk())
-        .andExpect(view().name("apply-in-welsh"));
+        .andExpect(view().name("apply-in-inWales"));
   }
 }

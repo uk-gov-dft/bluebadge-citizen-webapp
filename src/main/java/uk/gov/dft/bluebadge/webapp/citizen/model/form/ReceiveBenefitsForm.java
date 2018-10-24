@@ -2,8 +2,11 @@ package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +15,9 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.El
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.MAIN_REASON;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.PIP_MOVING_AROUND;
 
 @Data
 @Builder
@@ -35,14 +41,20 @@ public class ReceiveBenefitsForm implements StepForm, Serializable {
       case AFRFCS:
         return Optional.of(StepDefinition.AFCS_COMPENSATION_SCHEME);
       case PIP:
-        return Optional.of(StepDefinition.PIP_MOVING_AROUND);
+        return Optional.of(PIP_MOVING_AROUND);
       default:
-        return Optional.of(StepDefinition.MAIN_REASON);
+        return Optional.of(MAIN_REASON);
     }
   }
 
   @Override
-  public List<StepDefinition> getCleanUpSteps(Journey journey) {
-    return Arrays.asList(StepDefinition.MAIN_REASON);
+  public Set<StepDefinition> getCleanUpSteps(Journey journey) {
+
+    // Clean all eligibility based steps - leave personal details.
+    Set<StepDefinition> steps = new HashSet<>();
+    steps.addAll(getAssociatedStep().getNext());
+    steps.addAll(LAST_PERSONAL_DETAILS_STEP.getNext());
+
+    return steps;
   }
 }

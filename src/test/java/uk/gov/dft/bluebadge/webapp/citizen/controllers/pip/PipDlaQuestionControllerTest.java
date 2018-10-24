@@ -26,7 +26,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipDlaQuestionForm;
 
 public class PipDlaQuestionControllerTest {
   private MockMvc mockMvc;
-  private PipDlaQuestionController controller;
 
   @Mock private RouteMaster mockRouteMaster;
   private Journey journey;
@@ -34,7 +33,7 @@ public class PipDlaQuestionControllerTest {
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new PipDlaQuestionController(mockRouteMaster);
+    PipDlaQuestionController controller = new PipDlaQuestionController(mockRouteMaster);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())

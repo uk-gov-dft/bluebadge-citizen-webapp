@@ -5,12 +5,14 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipDlaQuestionF
 
 import java.io.Serializable;
 import java.util.Optional;
+import java.util.Set;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 @Data
 @Builder
@@ -38,4 +40,9 @@ public class PipDlaQuestionForm implements Serializable, StepForm {
   }
 
   @NotNull private PipDlaQuestionForm.PipReceivedDlaOption receivedDlaOption;
+
+  @Override
+  public Set<StepDefinition> getCleanUpSteps(Journey journey) {
+    return getAssociatedStep().getNext();
+  }
 }

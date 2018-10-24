@@ -57,7 +57,7 @@ public class Journey implements Serializable {
     return (T) forms.get(step);
   }
 
-  private void cleanUpSteps(Set<StepDefinition> alreadyCleaned, List<StepDefinition> steps) {
+  private void cleanUpSteps(Set<StepDefinition> alreadyCleaned, Set<StepDefinition> steps) {
 
     if (null == steps) {
       return;
@@ -156,9 +156,9 @@ public class Journey implements Serializable {
     }
 
     // If can only have come from one place.
-    if (possiblePreviousSteps.size() == 1) {
-      return hasStepForm(possiblePreviousSteps.get(0));
-    }
+    //if (possiblePreviousSteps.size() == 1) {
+    //  return hasStepForm(possiblePreviousSteps.get(0));
+    //}
 
     // More than one place can have come from
     // Replay the journey to find previous step
@@ -169,10 +169,16 @@ public class Journey implements Serializable {
     StepDefinition currentLoopStep = form.getAssociatedStep();
     while (currentLoopStep != step) {
 
+      // If a step in the journey is missing then invalid to be on step being checked
+      if(!hasStepForm(currentLoopStep)) return false;
+
       StepDefinition nextStep;
       if (currentLoopStep.getNext().size() == 1) {
         nextStep = currentLoopStep.getDefaultNext();
-      } else {
+      }else if(currentLoopStep.getNext().size() == 0){
+        // Got to end of journey and did not hit step being validated.
+        return false;
+      } else{
         // Is there a break in the journey (should not happen if all steps are validating properly)
         if (!hasStepForm(currentLoopStep)) {
           log.error("Expected step form missing: {}", currentLoopStep);

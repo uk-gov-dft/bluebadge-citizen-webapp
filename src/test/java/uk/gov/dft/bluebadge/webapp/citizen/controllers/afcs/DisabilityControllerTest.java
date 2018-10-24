@@ -5,6 +5,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.AFRFCS;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.AFCS_DISABILITY;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType.YOURSELF;
 
 import org.junit.Before;
@@ -14,7 +16,10 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
@@ -40,11 +45,7 @@ public class DisabilityControllerTest {
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
 
-    journey = new Journey();
-
-    journey.setFormForStep(ApplicantForm.builder().applicantType(YOURSELF.name()).build());
-
-    journey.setFormForStep(CompensationSchemeForm.builder().hasReceivedCompensation(true).build());
+    journey = JourneyFixture.getDefaultJourneyToStep(AFCS_DISABILITY, AFRFCS);
 
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
     when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))
@@ -54,9 +55,9 @@ public class DisabilityControllerTest {
   @Test
   public void show_ShouldDisplayDisabilityTemplate_WithRadioOptions() throws Exception {
     RadioOptionsGroup options =
-        new RadioOptionsGroup("you.afcs.disabilityPage.title").withYesNoOptions();
+        new RadioOptionsGroup("oth.afcs.disabilityPage.title").withYesNoOptions();
 
-    DisabilityForm form = DisabilityForm.builder().build();
+    DisabilityForm form = DisabilityForm.builder().hasDisability(Boolean.TRUE).build();
 
     mockMvc
         .perform(get("/permanent-and-substantial-disability").sessionAttr("JOURNEY", journey))
