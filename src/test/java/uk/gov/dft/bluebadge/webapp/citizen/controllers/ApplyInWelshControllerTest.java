@@ -14,12 +14,11 @@ import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 public class ApplyInWelshControllerTest {
 
   private MockMvc mockMvc;
-  private ApplyInWelshController controller;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new ApplyInWelshController();
+    ApplyInWelshController controller = new ApplyInWelshController();
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -29,8 +28,8 @@ public class ApplyInWelshControllerTest {
   @Test
   public void show_ShouldDisplayApplyInWelshTemplate() throws Exception {
     mockMvc
-        .perform(get("/apply-in-inWales"))
+        .perform(get("/apply-in-welsh"))
         .andExpect(status().isOk())
-        .andExpect(view().name("apply-in-inWales"));
+        .andExpect(view().name("apply-in-welsh"));
   }
 }

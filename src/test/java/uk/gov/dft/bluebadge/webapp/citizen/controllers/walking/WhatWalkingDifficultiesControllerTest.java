@@ -1,5 +1,29 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.walking;
 
+import com.google.common.collect.ImmutableList;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.ArgumentMatchers.any;
@@ -11,30 +35,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation.ENG;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation.WLS;
-
-import com.google.common.collect.ImmutableList;
-import java.util.List;
-import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
-import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
-import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
 
 public class WhatWalkingDifficultiesControllerTest {
 
@@ -55,7 +57,7 @@ public class WhatWalkingDifficultiesControllerTest {
 
     journey =
         JourneyFixture.getDefaultJourneyToStep(
-            StepDefinition.WHAT_WALKING_DIFFICULTIES, EligibilityCodeField.WALKD, ENG);
+            StepDefinition.WHAT_WALKING_DIFFICULTIES, WALKD, ENG);
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
 
     when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))
@@ -84,7 +86,10 @@ public class WhatWalkingDifficultiesControllerTest {
             .andReturn();
 
     RadioOptionsGroup options =
-        (RadioOptionsGroup) mvcResult.getModelAndView().getModel().get("walkingDifficulties");
+        (RadioOptionsGroup)
+            Objects.requireNonNull(mvcResult.getModelAndView())
+                .getModel()
+                .get("walkingDifficulties");
     assertThat(options.getOptions())
         .extracting("shortCode", "messageKey")
         .contains(tuple("DANGER", "oth.ENG.whatMakesWalkingDifficult.select.option.dangerous"))
@@ -110,7 +115,10 @@ public class WhatWalkingDifficultiesControllerTest {
             .andReturn();
 
     RadioOptionsGroup options =
-        (RadioOptionsGroup) mvcResult.getModelAndView().getModel().get("walkingDifficulties");
+        (RadioOptionsGroup)
+            Objects.requireNonNull(mvcResult.getModelAndView())
+                .getModel()
+                .get("walkingDifficulties");
     assertThat(options.getOptions())
         .extracting("shortCode", "messageKey")
         .contains(tuple("DANGER", "oth.SCO.whatMakesWalkingDifficult.select.option.dangerous"))
@@ -120,8 +128,11 @@ public class WhatWalkingDifficultiesControllerTest {
   @Test
   public void show_givenNationWales_walkingDifficultiesShouldBeNationSpecific() throws Exception {
     Journey wales =
-        JourneyFixture.getDefaultJourneyToStep(
-            StepDefinition.WHAT_WALKING_DIFFICULTIES, EligibilityCodeField.WALKD, WLS);
+        new JourneyBuilder()
+            .inWales()
+            .toStep(StepDefinition.WHAT_WALKING_DIFFICULTIES)
+            .withEligibility(WALKD)
+            .build();
 
     MvcResult mvcResult =
         mockMvc
@@ -131,7 +142,10 @@ public class WhatWalkingDifficultiesControllerTest {
             .andReturn();
 
     RadioOptionsGroup options =
-        (RadioOptionsGroup) mvcResult.getModelAndView().getModel().get("walkingDifficulties");
+        (RadioOptionsGroup)
+            Objects.requireNonNull(mvcResult.getModelAndView())
+                .getModel()
+                .get("walkingDifficulties");
     assertThat(options.getOptions())
         .extracting("shortCode", "messageKey")
         .contains(tuple("STRUGGLE", "oth.whatMakesWalkingDifficult.select.option.struggle"));
@@ -207,7 +221,6 @@ public class WhatWalkingDifficultiesControllerTest {
 
   @Test
   public void submit_whenBlankFormSubmitted_thenShouldHaveNotEmptyErrorMessage() throws Exception {
-    WhatMakesWalkingDifficultForm form = WhatMakesWalkingDifficultForm.builder().build();
 
     mockMvc
         .perform(
@@ -225,11 +238,6 @@ public class WhatWalkingDifficultiesControllerTest {
   public void
       submit_whenSomethingElseSelectedAndNoDescription_thenShouldRedirectToShowWithValidationErrors()
           throws Exception {
-    List<WalkingDifficultyTypeCodeField> whatList =
-        ImmutableList.of(
-            WalkingDifficultyTypeCodeField.PAIN, WalkingDifficultyTypeCodeField.SOMELSE);
-    WhatMakesWalkingDifficultForm form =
-        WhatMakesWalkingDifficultForm.builder().whatWalkingDifficulties(whatList).build();
 
     mockMvc
         .perform(
