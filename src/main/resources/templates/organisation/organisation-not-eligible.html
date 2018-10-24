@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="#{'organisationNotEligible.page.title'}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+
+    <section class="guidance-layout">
+        <h1 class="govuk-heading-l"
+            th:text="#{'organisationNotEligible.page.title'}"></h1>
+
+        <p class="govuk-body" th:text="#{organisationNotEligible.page.paragraph1}"></p>
+
+  		<p class="govuk-body">
+		    <span th:text="#{organisationNotEligible.page.paragraph2}" th:remove="tag"></span>
+		    <a data-ga-track-link data-ga-track-link-category="Outbound link"
+		    	   th:href="${localAuthority.contactUrl}" th:text="#{organisationNotEligible.page.paragraph2.link(${localAuthority.description})}"></a>
+		</p>
+    </section>
+
+</main>
+
+</body>
+</html>

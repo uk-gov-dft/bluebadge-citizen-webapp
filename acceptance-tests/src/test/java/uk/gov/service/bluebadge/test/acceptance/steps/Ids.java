@@ -6,6 +6,8 @@ class Ids {
     static final String APPLICANT_TYPE_YOURSELF_OPTION = APPLICANT_TYPE_OPTION_LIST + ".YOURSELF";
     static final String APPLICANT_TYPE_SOMELSE_OPTION =
         APPLICANT_TYPE_OPTION_LIST + ".SOMEONE_ELSE";
+    static final String APPLICANT_ORGANISATION_OPTION =
+        APPLICANT_TYPE_OPTION_LIST + ".ORGANISATION";
     static final String COUNCIL_INPUT = "councilShortCode";
     static final String EXISTING_BADGE_OPTION = "hasExistingBadge";
     static final String BADGE_NUMBER = "badgeNumber";
@@ -37,6 +39,8 @@ class Ids {
     static final String HAS_DISABILITY = "hasDisability";
     static final String HAS_MENTAL_DISORDER = "hasMentalDisorder";
     static final String AWARDED_HIGHER_RATE_MOBILITY = "awardedHigherRateMobility";
+    static final String ORGANISATION_CARES = "doesCare";
+    static final String ORGANISATION_TRANSPORTS = "doesTransport";
   }
 
   class Person {
