@@ -46,7 +46,7 @@ public class XssRequestWrapper extends HttpServletRequestWrapper {
     String[] values = super.getParameterValues(parameter);
 
     if (values == null) {
-      return null;
+      return new String[] {};
     }
 
     int count = values.length;
