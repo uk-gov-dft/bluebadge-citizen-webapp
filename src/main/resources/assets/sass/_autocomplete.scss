@@ -18,6 +18,7 @@
 }
 
 .autocomplete__input {
+	@include govuk-font(19);
 	background-color: transparent;
 	position: relative;
 }
@@ -134,6 +135,15 @@
 	padding: 4px;
 }
 
+.govuk-form-group {
+	&.govuk-form-group--error {
+		.autocomplete__input {
+			border-color: $govuk-error-colour;
+			border-width: 4px;
+		}
+	}
+}
+
 @media (min-width: 641px) {
 	.autocomplete__hint,
 	.autocomplete__input,
@@ -142,3 +152,4 @@
 		line-height: 1.31579;
 	}
 }
+
