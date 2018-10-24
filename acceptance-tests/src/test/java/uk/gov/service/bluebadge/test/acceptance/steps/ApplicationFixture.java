@@ -363,16 +363,16 @@ public class ApplicationFixture extends AbstractSpringSteps {
   @And("^I complete does organisation care for \"(YES|NO)\"$")
   public void iCompleteOrganisationCaresPage(String option) {
     if ("YES".equals(option))
-      sitePage.findPageElementById(Ids.EleCheck.ORGANISATION_CARES + "." + "true").click();
-    else sitePage.findPageElementById(Ids.EleCheck.ORGANISATION_CARES + "." + "false").click();
+      sitePage.findPageElementById(Ids.EleCheck.ORGANISATION_CARES + "." + "yes").click();
+    else sitePage.findPageElementById(Ids.EleCheck.ORGANISATION_CARES + "." + "no").click();
     pressContinue();
   }
 
   @And("^I complete does organisation transport for \"(YES|NO)\"$")
   public void iCompleteOrganisationTransportsPage(String option) {
     if ("YES".equals(option))
-      sitePage.findPageElementById(Ids.EleCheck.ORGANISATION_TRANSPORTS + "." + "true").click();
-    else sitePage.findPageElementById(Ids.EleCheck.ORGANISATION_TRANSPORTS + "." + "false").click();
+      sitePage.findPageElementById(Ids.EleCheck.ORGANISATION_TRANSPORTS + "." + "yes").click();
+    else sitePage.findPageElementById(Ids.EleCheck.ORGANISATION_TRANSPORTS + "." + "no").click();
     pressContinue();
   }
 
