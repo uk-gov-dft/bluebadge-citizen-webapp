@@ -20,11 +20,25 @@ node {
         try {
             sh 'echo $(whoami)'
             sh 'bash -c "source /etc/profile && (npm list gulp@3.9.1 -g || npm install -g gulp@3.9.1) && npm install && npm run prod"'
-            sh './gradlew clean build bootJar artifactoryPublish artifactoryDeploy'
+            sh './gradlew --no-daemon --profile --configure-on-demand clean build bootJar artifactoryPublish artifactoryDeploy'
+            sh 'mv build/reports/profile/profile-*.html build/reports/profile/index.html'
         }
         finally {
             junit '**/TEST*.xml'
         }
+    }
+
+    stage ('OWASP Dependency Check') {
+        sh './gradlew dependencyCheckUpdate dependencyCheckAggregate'
+
+        publishHTML (target: [
+         allowMissing: false,
+         alwaysLinkToLastBuild: false,
+         keepAll: true,
+         reportDir: 'build/reports',
+         reportFiles: 'dependency-check-report.html',
+         reportName: "OWASP Dependency Check"
+        ])
     }
 
     stage('SonarQube analysis') {
