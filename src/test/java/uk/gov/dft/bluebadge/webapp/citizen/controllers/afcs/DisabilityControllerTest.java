@@ -44,8 +44,7 @@ public class DisabilityControllerTest {
 
     journey.setFormForStep(ApplicantForm.builder().applicantType(YOURSELF.name()).build());
 
-    journey.setFormForStep(
-        CompensationSchemeForm.builder().hasReceivedCompensation(true).build());
+    journey.setFormForStep(CompensationSchemeForm.builder().hasReceivedCompensation(true).build());
 
     when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
     when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))

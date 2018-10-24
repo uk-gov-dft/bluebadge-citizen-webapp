@@ -25,8 +25,7 @@ public class MedicationAddControllerTest extends ControllerTestFixture<Medicatio
   public void setup() {
     MockitoAnnotations.initMocks(this);
     super.setup(new MedicationAddController(mockRouteMaster));
-    journey.setFormForStep(
-        MedicationListForm.builder().medications(new ArrayList<>()).build());
+    journey.setFormForStep(MedicationListForm.builder().medications(new ArrayList<>()).build());
     applyRoutmasterDefaultMocks(mockRouteMaster);
   }
 

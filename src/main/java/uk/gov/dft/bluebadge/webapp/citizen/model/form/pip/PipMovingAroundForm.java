@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
@@ -14,6 +15,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 @Data
 @Builder
 @Slf4j
+@EqualsAndHashCode
 public class PipMovingAroundForm implements Serializable, StepForm {
   public enum PipMovingAroundOption {
     MOVING_POINTS_12,

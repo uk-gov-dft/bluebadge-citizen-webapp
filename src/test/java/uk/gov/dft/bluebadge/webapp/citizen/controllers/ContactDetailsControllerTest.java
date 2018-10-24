@@ -56,7 +56,11 @@ public class ContactDetailsControllerTest {
         .perform(get(URL_CONTACT_DETAILS).sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("contact-details"))
-        .andExpect(model().attribute("formRequest", (ContactDetailsForm)journey.getFormForStep(StepDefinition.CONTACT_DETAILS)));
+        .andExpect(
+            model()
+                .attribute(
+                    "formRequest",
+                    (ContactDetailsForm) journey.getFormForStep(StepDefinition.CONTACT_DETAILS)));
   }
 
   @Test

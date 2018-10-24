@@ -5,11 +5,13 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 
 @Data
 @Builder
+@EqualsAndHashCode
 public class WhereCanYouWalkForm implements StepForm, Serializable {
 
   @NotBlank

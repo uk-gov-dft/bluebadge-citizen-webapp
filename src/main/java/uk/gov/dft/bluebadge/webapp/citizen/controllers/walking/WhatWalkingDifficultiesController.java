@@ -47,8 +47,7 @@ public class WhatWalkingDifficultiesController implements StepController {
     }
 
     // On returning to form, take previously submitted values.
-    if (!model.containsAttribute(FORM_REQUEST)
-        && journey.hasStepForm(getStepDefinition())) {
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
       model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 

@@ -124,7 +124,8 @@ public class TreatmentListControllerTest extends ControllerTestFixture<Treatment
         .andExpect(redirectedUrl("/testSuccess"));
 
     // Then has reset to no.
-    assertEquals("no", ((TreatmentListForm)journey.getFormForStep(TREATMENT_LIST)).getHasTreatment());
+    assertEquals(
+        "no", ((TreatmentListForm) journey.getFormForStep(TREATMENT_LIST)).getHasTreatment());
   }
 
   @Test

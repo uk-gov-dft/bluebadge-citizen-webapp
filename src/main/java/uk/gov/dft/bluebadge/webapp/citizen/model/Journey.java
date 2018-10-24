@@ -1,29 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
-import lombok.extern.slf4j.Slf4j;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ExistingBadgeForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalListForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.CompensationSchemeForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WalkingTimeForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -36,8 +13,19 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
+import lombok.extern.slf4j.Slf4j;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
 
 @Slf4j
 public class Journey implements Serializable {
@@ -50,12 +38,16 @@ public class Journey implements Serializable {
   public String ageGroup;
 
   public void setFormForStep(StepForm form) {
-    cleanUpSteps(new HashSet<>(), form.getCleanUpSteps(this));
+    // If changing values in a form may need to invalidate later forms in the journey
+    if (hasStepForm(form.getAssociatedStep())
+        && !form.equals(getFormForStep(form.getAssociatedStep()))) {
+      cleanUpSteps(new HashSet<>(), form.getCleanUpSteps(this));
+    }
     forms.put(form.getAssociatedStep(), form);
 
-    if(form.getAssociatedStep() == StepDefinition.APPLICANT_TYPE){
+    if (form.getAssociatedStep() == StepDefinition.APPLICANT_TYPE) {
       who = isApplicantYourself() ? "you." : "oth.";
-    }else if(form.getAssociatedStep() == StepDefinition.DOB){
+    } else if (form.getAssociatedStep() == StepDefinition.DOB) {
       ageGroup = isApplicantYoung() ? "young." : "adult.";
     }
   }

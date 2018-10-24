@@ -1,5 +1,11 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.TREATMENT_LIST;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+
+import java.util.ArrayList;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,13 +21,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
-
-import javax.validation.Valid;
-import java.util.ArrayList;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.TREATMENT_LIST;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 @RequestMapping(Mappings.URL_TREATMENT_ADD)
@@ -69,7 +68,9 @@ public class TreatmentAddController implements StepController {
       return routeMaster.redirectToOnBindingError(this, treatmentAddForm, bindingResult, attr);
     }
 
-    ((TreatmentListForm)journey.getFormForStep(TREATMENT_LIST)).getTreatments().add(treatmentAddForm);
+    ((TreatmentListForm) journey.getFormForStep(TREATMENT_LIST))
+        .getTreatments()
+        .add(treatmentAddForm);
 
     return "redirect:" + Mappings.URL_TREATMENT_LIST;
   }

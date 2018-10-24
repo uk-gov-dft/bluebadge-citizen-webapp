@@ -6,11 +6,13 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 
 @Data
 @Builder
+@EqualsAndHashCode
 public class ApplicantNameForm implements StepForm, Serializable {
   @NotBlank(message = "{field.fullName.NotBlank}")
   @Size(max = 100)

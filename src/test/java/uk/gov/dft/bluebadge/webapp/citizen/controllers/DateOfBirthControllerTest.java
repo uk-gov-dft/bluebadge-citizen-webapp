@@ -52,7 +52,10 @@ public class DateOfBirthControllerTest {
         .perform(get(URL_DATE_OF_BIRTH).sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("date-of-birth"))
-        .andExpect(model().attribute("formRequest", (DateOfBirthForm)journey.getFormForStep(StepDefinition.DOB)));
+        .andExpect(
+            model()
+                .attribute(
+                    "formRequest", (DateOfBirthForm) journey.getFormForStep(StepDefinition.DOB)));
   }
 
   @Test

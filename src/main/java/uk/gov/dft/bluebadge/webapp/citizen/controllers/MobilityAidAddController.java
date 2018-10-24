@@ -46,12 +46,13 @@ public class MobilityAidAddController implements StepController {
 
     // Can hit add link before previous form submitted.
     if (!journey.hasStepForm(MOBILITY_AID_LIST)
-        || null == ((MobilityAidListForm)journey.getFormForStep(MOBILITY_AID_LIST)).getMobilityAids()) {
-      journey.setFormForStep(
-          MobilityAidListForm.builder().mobilityAids(new ArrayList<>()).build());
+        || null
+            == ((MobilityAidListForm) journey.getFormForStep(MOBILITY_AID_LIST))
+                .getMobilityAids()) {
+      journey.setFormForStep(MobilityAidListForm.builder().mobilityAids(new ArrayList<>()).build());
     }
 
-    ((MobilityAidListForm)journey.getFormForStep(MOBILITY_AID_LIST)).setHasWalkingAid("yes");
+    ((MobilityAidListForm) journey.getFormForStep(MOBILITY_AID_LIST)).setHasWalkingAid("yes");
 
     // On returning to form, take previously submitted values.
     if (!model.containsAttribute(FORM_REQUEST)) {

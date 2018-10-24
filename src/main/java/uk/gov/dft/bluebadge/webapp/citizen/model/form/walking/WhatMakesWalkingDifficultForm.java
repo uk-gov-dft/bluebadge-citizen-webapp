@@ -8,6 +8,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.group.GroupSequenceProvider;
 import org.hibernate.validator.spi.group.DefaultGroupSequenceProvider;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
@@ -16,6 +17,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 
 @Data
 @Builder
+@EqualsAndHashCode
 @GroupSequenceProvider(WhatMakesWalkingDifficultForm.GroupProvider.class)
 public class WhatMakesWalkingDifficultForm implements StepForm, Serializable {
   @NotEmpty List<WalkingDifficultyTypeCodeField> whatWalkingDifficulties;

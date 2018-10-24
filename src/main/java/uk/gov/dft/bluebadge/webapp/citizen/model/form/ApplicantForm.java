@@ -4,11 +4,13 @@ import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 
 @Data
 @Builder
+@EqualsAndHashCode
 public class ApplicantForm implements StepForm, Serializable {
 
   @NotNull(message = "{applicantType.NotNull}")

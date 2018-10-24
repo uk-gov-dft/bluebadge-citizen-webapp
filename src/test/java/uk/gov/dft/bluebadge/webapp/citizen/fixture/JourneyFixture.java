@@ -2,7 +2,6 @@ package uk.gov.dft.bluebadge.webapp.citizen.fixture;
 
 import static org.mockito.Mockito.when;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.AFRFCS;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.ARMS;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.BLIND;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDBULK;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDVEHIC;
@@ -285,7 +284,7 @@ public class JourneyFixture {
     journey.setFormForStep(getApplicantForm());
     if (StepDefinition.APPLICANT_TYPE == step) return journey;
     journey.setFormForStep(getChooseYourCouncilForm());
-    if(StepDefinition.CHOOSE_COUNCIL == step) return journey;
+    if (StepDefinition.CHOOSE_COUNCIL == step) return journey;
     journey.setFormForStep(getYourIssuingAuthorityForm());
     journey.setLocalAuthority(getLocalAuthorityRefData(nation));
     if (StepDefinition.YOUR_ISSUING_AUTHORITY == step) return journey;
