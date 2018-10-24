@@ -35,7 +35,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class EsapiFilterTest {
 
-  public static final String NASTY_STRING = "<script>console.log('fred');</script>";
+  public static final String NASTY_STRING = "<script>console.log('fred');</script>But this is ok";
   public static final String GOOD_STRING = "nothing bad in here";
 
   @LocalServerPort private int port;
@@ -63,7 +63,7 @@ public class EsapiFilterTest {
   public void shouldCleanPostValue() throws IOException {
 
     String moreContentAsString = postData(NASTY_STRING, client, httpContext);
-    assertEquals("", moreContentAsString);
+    assertEquals("But this is ok", moreContentAsString);
     client.close();
   }
 

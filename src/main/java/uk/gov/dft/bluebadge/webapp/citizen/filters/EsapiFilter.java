@@ -6,7 +6,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.owasp.esapi.filters.SecurityWrapperRequest;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -39,8 +38,7 @@ public class EsapiFilter extends OncePerRequestFilter {
   }
 
   protected void doFilterWrapped(
-      SecurityWrapperRequest request, HttpServletResponse response, FilterChain filterChain)
-      throws ServletException, IOException {
+      XssRequestWrapper request, HttpServletResponse response, FilterChain filterChain) {
     try {
       filterChain.doFilter(request, response);
     } catch (Exception e) {
@@ -48,11 +46,11 @@ public class EsapiFilter extends OncePerRequestFilter {
     }
   }
 
-  private SecurityWrapperRequest wrapRequest(HttpServletRequest request) {
-    if (request instanceof SecurityWrapperRequest) {
-      return (SecurityWrapperRequest) request;
+  private XssRequestWrapper wrapRequest(HttpServletRequest request) {
+    if (request instanceof XssRequestWrapper) {
+      return (XssRequestWrapper) request;
     } else {
-      return new SecurityWrapperRequest(request);
+      return new XssRequestWrapper(request);
     }
   }
 }
