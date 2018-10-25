@@ -49,7 +49,7 @@ public class MainReasonForm implements StepForm {
     // Clean all eligibility based steps - leave personal details.
     Set<StepDefinition> steps = new HashSet<>();
     steps.addAll(getAssociatedStep().getNext());
-    steps.addAll(StepDefinition.CONTACT_DETAILS.getNext());
+    steps.addAll(StepDefinition.getLastPersonalDetailsStep().getNext());
 
     return steps;
   }

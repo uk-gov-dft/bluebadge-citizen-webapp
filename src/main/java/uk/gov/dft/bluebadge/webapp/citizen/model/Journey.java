@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
@@ -102,38 +103,7 @@ public class Journey implements Serializable {
     return null;
   }
 
-  private Map<StepDefinition, List<StepDefinition>> prerequisiteSteps;
-
-  private List<StepDefinition> getPrerequisiteStep(StepDefinition currentStep) {
-    if (null == prerequisiteSteps) {
-      populatePrerequisiteSteps();
-    }
-    return prerequisiteSteps.get(currentStep);
-  }
-
-  /**
-   * Create a list of possible prerequisite steps. This will be used to assume that any step being
-   * visited has at least One of the prerequisites completed. Most steps have One possible previous
-   * step, so this is fine for validating the journey. Any custom journey validation is done outside
-   * of this method.
-   */
-  private void populatePrerequisiteSteps() {
-    prerequisiteSteps = new HashMap<>();
-    // Parse twice rather than try and be clever.
-    // 1st pass fill in steps and an empty map.
-    // 2nd pass add prerequisite steps to map.
-    Arrays.stream(StepDefinition.values())
-        .forEach(i -> prerequisiteSteps.put(i, new ArrayList<>()));
-
-    for (StepDefinition previousStep : StepDefinition.values()) {
-      for (StepDefinition step : previousStep.getNext()) {
-        prerequisiteSteps.get(step).add(previousStep);
-      }
-    }
-  }
-
   public boolean isValidState(StepDefinition step) {
-    List<StepDefinition> possiblePreviousSteps = getPrerequisiteStep(step);
 
     // Custom step validation
     switch (step) {
@@ -150,63 +120,47 @@ public class Journey implements Serializable {
         return isValidState(StepDefinition.MEDICATION_LIST);
     }
 
-    // No previous step possible.  Must be home page.
-    if (possiblePreviousSteps.isEmpty()) {
+    // First step always valid.
+    if(StepDefinition.getFirstStep() == step){
       return true;
     }
 
-    // If can only have come from one place.
-    //if (possiblePreviousSteps.size() == 1) {
-    //  return hasStepForm(possiblePreviousSteps.get(0));
-    //}
-
-    // More than one place can have come from
-    // Replay the journey to find previous step
+    // Replay the journey to find any gaps up to step
     StepForm form = getFormForStep(StepDefinition.APPLICANT_TYPE);
     if (null == form) return false;
 
-    StepDefinition previousLoopStep = null;
     StepDefinition currentLoopStep = form.getAssociatedStep();
-    while (currentLoopStep != step) {
+    int stepsWalked = 0;
+    // Walk the journey up to step being checked.
+    while (true) {
 
-      // If a step in the journey is missing then invalid to be on step being checked
+      if(currentLoopStep == step){
+        // Got to step being validated in journey, so it is valid.
+        return true;
+      }
+
+      // Should not need next...but don't want an infinite loop.
+      if(stepsWalked++ > StepDefinition.values().length){
+        log.error("IsValidState journey walk got into infinite loop. Step being checked {}. Forms in Journey {}", step, forms.keySet());
+        throw new IllegalStateException();
+      }
+      // Break in the journey, expected only if a guard question has been changed
+      // and an attempt to navigate past it happened.
       if(!hasStepForm(currentLoopStep)) return false;
 
       StepDefinition nextStep;
-      if (currentLoopStep.getNext().size() == 1) {
-        nextStep = currentLoopStep.getDefaultNext();
-      }else if(currentLoopStep.getNext().size() == 0){
+      if(currentLoopStep.getNext().size() == 0){
         // Got to end of journey and did not hit step being validated.
+        // So the url requested is for a step invalid in this journey.
         return false;
       } else{
-        // Is there a break in the journey (should not happen if all steps are validating properly)
-        if (!hasStepForm(currentLoopStep)) {
-          log.error("Expected step form missing: {}", currentLoopStep);
-          return false;
-        }
-
+        // Get next step.
         StepForm currentLoopForm = getFormForStep(currentLoopStep);
-        Optional<StepDefinition> possibleNextStep = currentLoopForm.determineNextStep();
-        if (!possibleNextStep.isPresent()) {
-          possibleNextStep = currentLoopForm.determineNextStep(this);
-        }
-        if (!possibleNextStep.isPresent()) {
-          log.error(
-              "Could not determine next step in journey."
-                  + "Attempting to check isValidState for {}. Got to {} in journey.",
-              step,
-              currentLoopStep);
-          return false;
-        } else {
-          nextStep = possibleNextStep.get();
-        }
+        nextStep = RouteMaster.getNextStep(currentLoopForm, this);
       }
-      previousLoopStep = currentLoopStep;
+
       currentLoopStep = nextStep;
     }
-
-    // previousLoopStep is the form that led to the one we are checking
-    return hasStepForm(previousLoopStep);
   }
 
   // -- META DATA BELOW --
