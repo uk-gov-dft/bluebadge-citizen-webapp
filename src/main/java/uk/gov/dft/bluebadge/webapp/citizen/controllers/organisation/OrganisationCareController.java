@@ -1,10 +1,10 @@
-package uk.gov.dft.bluebadge.webapp.citizen.controllers;
+package uk.gov.dft.bluebadge.webapp.citizen.controllers.organisation;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
-import com.google.common.collect.Lists;
 import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,60 +13,52 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.StepController;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.organisation.OrganisationCareForm;
 
 @Controller
-@RequestMapping(Mappings.URL_APPLICANT_TYPE)
-public class ApplicantController implements StepController {
-  private static final String TEMPLATE_APPLICANT = "applicant";
+@RequestMapping(Mappings.URL_ORGANISATION_CARE)
+public class OrganisationCareController implements StepController {
+
+  public static final String TEMPLATE = "organisation/organisation-care";
+
   private final RouteMaster routeMaster;
 
-  public ApplicantController(RouteMaster routeMaster) {
+  @Autowired
+  public OrganisationCareController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
+  }
+
+  @Override
+  public StepDefinition getStepDefinition() {
+    return StepDefinition.ORGANISATION_CARE;
   }
 
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!model.containsAttribute(FORM_REQUEST)
-        && journey.hasStepForm(StepDefinition.APPLICANT_TYPE)) {
-      model.addAttribute(FORM_REQUEST, journey.getFormForStep(StepDefinition.APPLICANT_TYPE));
+    if (!journey.isValidState(getStepDefinition())) {
+      return routeMaster.backToCompletedPrevious();
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
-      model.addAttribute(FORM_REQUEST, ApplicantForm.builder().build());
+      attachForm(model, journey);
     }
 
-    RadioOptionsGroup applicantOptions = getApplicantOptions();
-    model.addAttribute("applicantOptions", applicantOptions);
+    setupModel(model);
 
-    return TEMPLATE_APPLICANT;
-  }
-
-  RadioOptionsGroup getApplicantOptions() {
-    RadioOption yourself =
-        new RadioOption(ApplicantType.YOURSELF.toString(), "options.applicantType.yourself");
-    RadioOption someone =
-        new RadioOption(ApplicantType.SOMEONE_ELSE.toString(), "options.applicantType.someone");
-    RadioOption organisation =
-        new RadioOption(
-            ApplicantType.ORGANISATION.toString(), "options.applicantType.organisation");
-
-    return new RadioOptionsGroup(
-        "applicantPage.title", Lists.newArrayList(yourself, someone, organisation));
+    return TEMPLATE;
   }
 
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute(FORM_REQUEST) ApplicantForm formRequest,
+      @Valid @ModelAttribute(FORM_REQUEST) OrganisationCareForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
@@ -75,11 +67,23 @@ public class ApplicantController implements StepController {
     }
 
     journey.setFormForStep(formRequest);
+
     return routeMaster.redirectToOnSuccess(formRequest);
   }
 
-  @Override
-  public StepDefinition getStepDefinition() {
-    return StepDefinition.APPLICANT_TYPE;
+  private void attachForm(Model model, Journey journey) {
+    if (journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
+    } else {
+      model.addAttribute(FORM_REQUEST, OrganisationCareForm.builder().build());
+    }
+  }
+
+  private void setupModel(Model model) {
+    RadioOptionsGroup group =
+        new RadioOptionsGroup("organisationCare.page.title").withYesNoOptions();
+    group.setHintKey("organisationCare.page.title.hint");
+
+    model.addAttribute("options", group);
   }
 }

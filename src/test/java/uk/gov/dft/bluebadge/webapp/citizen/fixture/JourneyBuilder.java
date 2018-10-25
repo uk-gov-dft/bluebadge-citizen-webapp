@@ -10,7 +10,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation.SCO;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation.WLS;
-import static uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture.getDefaultJourneyToStep;
+import static uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture.getDefaultJourneyToStepWithOptions;
 
 public class JourneyBuilder {
   private Nation nation;
@@ -18,6 +18,7 @@ public class JourneyBuilder {
   private StepDefinition step;
   private CompoundDate dob;
   private ApplicantType applicantType;
+  private Boolean orgDoesCare;
 
   public JourneyBuilder() {
     // Set defaults
@@ -26,6 +27,7 @@ public class JourneyBuilder {
     step = StepDefinition.DECLARATIONS;
     dob = JourneyFixture.Values.DOB_ADULT;
     applicantType = JourneyFixture.Values.APPLICANT_TYPE;
+    orgDoesCare = Boolean.TRUE;
   }
 
   public JourneyBuilder forYou() {
@@ -35,6 +37,11 @@ public class JourneyBuilder {
 
   public JourneyBuilder forSomeOneElse() {
     applicantType = ApplicantType.SOMEONE_ELSE;
+    return this;
+  }
+
+  public JourneyBuilder forOrganisation() {
+    applicantType = ApplicantType.ORGANISATION;
     return this;
   }
 
@@ -63,17 +70,30 @@ public class JourneyBuilder {
     return this;
   }
 
-  public JourneyBuilder toStep(StepDefinition step){
+  public JourneyBuilder toStep(StepDefinition step) {
     this.step = step;
     return this;
   }
 
-  public JourneyBuilder withEligibility(EligibilityCodeField eligibility){
+  public JourneyBuilder withEligibility(EligibilityCodeField eligibility) {
     this.eligibility = eligibility;
     return this;
   }
 
+  public JourneyBuilder orgDoesCare(Boolean orgDoesCare) {
+    this.orgDoesCare = orgDoesCare;
+    return this;
+  }
+
   public Journey build() {
-    return getDefaultJourneyToStep(step, eligibility, nation, dob, applicantType);
+    return getDefaultJourneyToStepWithOptions(
+        JourneyBuildOptions.builder()
+            .step(step)
+            .eligibility(eligibility)
+            .nation(nation)
+            .dob(dob)
+            .applicantType(applicantType)
+            .orgDoesCare(orgDoesCare)
+            .build());
   }
 }

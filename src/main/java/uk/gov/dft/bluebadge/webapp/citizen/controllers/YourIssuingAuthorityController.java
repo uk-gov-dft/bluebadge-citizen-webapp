@@ -82,7 +82,7 @@ public class YourIssuingAuthorityController implements StepController {
         referenceDataService.retrieveLocalAuthority(
             yourIssuingAuthorityForm.getLocalAuthorityShortCode()));
 
-    return routeMaster.redirectToOnSuccess(yourIssuingAuthorityForm);
+    return routeMaster.redirectToOnSuccess(yourIssuingAuthorityForm, journey);
   }
 
   @Override

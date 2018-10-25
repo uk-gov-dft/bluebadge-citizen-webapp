@@ -1,18 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
-
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
@@ -27,6 +14,16 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
+
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
+
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 
 @Slf4j
 public class Journey implements Serializable {
@@ -87,7 +84,16 @@ public class Journey implements Serializable {
   public Boolean isApplicantYourself() {
     if (hasStepForm(StepDefinition.APPLICANT_TYPE)) {
       ApplicantForm form = getFormForStep(StepDefinition.APPLICANT_TYPE);
-      return form.getApplicantType().equals(ApplicantType.YOURSELF.toString());
+      return form.getApplicantType().equals(ApplicantType.YOURSELF.toString())
+          || form.getApplicantType().equals(ApplicantType.ORGANISATION.toString());
+    }
+    return null;
+  }
+
+  public Boolean isApplicantOrganisation() {
+    if (hasStepForm(StepDefinition.APPLICANT_TYPE)) {
+      ApplicantForm form = getFormForStep(StepDefinition.APPLICANT_TYPE);
+      return form.getApplicantType().equals(ApplicantType.ORGANISATION.toString());
     }
     return null;
   }
@@ -121,7 +127,7 @@ public class Journey implements Serializable {
     }
 
     // First step always valid.
-    if(StepDefinition.getFirstStep() == step){
+    if (StepDefinition.getFirstStep() == step) {
       return true;
     }
 
@@ -134,26 +140,29 @@ public class Journey implements Serializable {
     // Walk the journey up to step being checked.
     while (true) {
 
-      if(currentLoopStep == step){
+      if (currentLoopStep == step) {
         // Got to step being validated in journey, so it is valid.
         return true;
       }
 
       // Should not need next...but don't want an infinite loop.
-      if(stepsWalked++ > StepDefinition.values().length){
-        log.error("IsValidState journey walk got into infinite loop. Step being checked {}. Forms in Journey {}", step, forms.keySet());
+      if (stepsWalked++ > StepDefinition.values().length) {
+        log.error(
+            "IsValidState journey walk got into infinite loop. Step being checked {}. Forms in Journey {}",
+            step,
+            forms.keySet());
         throw new IllegalStateException();
       }
       // Break in the journey, expected only if a guard question has been changed
       // and an attempt to navigate past it happened.
-      if(!hasStepForm(currentLoopStep)) return false;
+      if (!hasStepForm(currentLoopStep)) return false;
 
       StepDefinition nextStep;
-      if(currentLoopStep.getNext().size() == 0){
+      if (currentLoopStep.getNext().size() == 0) {
         // Got to end of journey and did not hit step being validated.
         // So the url requested is for a step invalid in this journey.
         return false;
-      } else{
+      } else {
         // Get next step.
         StepForm currentLoopForm = getFormForStep(currentLoopStep);
         nextStep = RouteMaster.getNextStep(currentLoopForm, this);
