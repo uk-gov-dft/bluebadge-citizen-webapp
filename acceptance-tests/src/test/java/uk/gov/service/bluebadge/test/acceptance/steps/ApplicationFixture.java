@@ -44,13 +44,15 @@ public class ApplicationFixture extends AbstractSpringSteps {
     commonPage.findElementWithText("Continue").click();
   }
 
-  @Given("I complete applicant page for \"(yourself|someone else)\"")
+  @Given("I complete applicant page for \"(yourself|someone else|organisation)\"")
   public void iCompleteApplicantPage(String myselfOrOther) {
     commonPage.openByPageName("applicant");
     if (myselfOrOther.equalsIgnoreCase("yourself")) {
       commonPage.findPageElementById(applicantPage.APPLICANT_TYPE_YOURSELF_OPTION).click();
     } else if (myselfOrOther.equalsIgnoreCase("someone else")) {
       commonPage.findPageElementById(applicantPage.APPLICANT_TYPE_SOMELSE_OPTION).click();
+    } else if (myselfOrOther.equalsIgnoreCase("organisation")) {
+      commonPage.findPageElementById(Ids.Preamble.APPLICANT_ORGANISATION_OPTION).click();
     }
     pressContinue();
   }
@@ -306,7 +308,6 @@ public class ApplicationFixture extends AbstractSpringSteps {
       clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_WHEN, "Treatment when");
       clickButtonById(Ids.Walkd.TREATMENT_ADD_CONFIRM_BUTTON);
       clickButtonById(Ids.Walkd.TREATMENT_REMOVE_LINK_PREFIX + "1");
-
       clickButtonById(Ids.Walkd.TREATMENT_ADD_FIRST_LINK);
       clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_DESCRIPTION, "Treatment description");
       clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_WHEN, "Treatment when");
@@ -360,6 +361,22 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
       pressContinue();
     }
+  }
+
+  @And("^I complete does organisation care for \"(YES|NO)\"$")
+  public void iCompleteOrganisationCaresPage(String option) {
+    if ("YES".equals(option))
+      commonPage.findPageElementById(Ids.EleCheck.ORGANISATION_CARES + "." + "yes").click();
+    else commonPage.findPageElementById(Ids.EleCheck.ORGANISATION_CARES + "." + "no").click();
+    pressContinue();
+  }
+
+  @And("^I complete does organisation transport for \"(YES|NO)\"$")
+  public void iCompleteOrganisationTransportsPage(String option) {
+    if ("YES".equals(option))
+      commonPage.findPageElementById(Ids.EleCheck.ORGANISATION_TRANSPORTS + "." + "yes").click();
+    else commonPage.findPageElementById(Ids.EleCheck.ORGANISATION_TRANSPORTS + "." + "no").click();
+    pressContinue();
   }
 
   @And("^I complete the healthcare professionals page for \"(YES|NO)\"$")
