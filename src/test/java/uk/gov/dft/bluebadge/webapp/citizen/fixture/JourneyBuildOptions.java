@@ -10,7 +10,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 
 @Builder
 @Getter
-public class JourneyBuildOptions {
+class JourneyBuildOptions {
   private Nation nation;
   private EligibilityCodeField eligibility;
   private StepDefinition step;

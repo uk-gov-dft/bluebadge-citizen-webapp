@@ -3,6 +3,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.model.form.walking;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -14,6 +15,7 @@ import org.hibernate.validator.spi.group.DefaultGroupSequenceProvider;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 @Data
 @Builder
@@ -47,4 +49,9 @@ public class WhatMakesWalkingDifficultForm implements StepForm, Serializable {
   }
 
   interface SomethingElseGroup {}
+
+  @Override
+  public Set<StepDefinition> getCleanUpSteps(Journey journey) {
+    return getAssociatedStep().getNext();
+  }
 }

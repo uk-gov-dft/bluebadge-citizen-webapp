@@ -6,12 +6,14 @@ import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefini
 
 import java.io.Serializable;
 import java.util.Optional;
+import java.util.Set;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 @Data
 @Builder
@@ -33,5 +35,10 @@ public class OrganisationCareForm implements StepForm, Serializable {
           "You must select if organisation does care or not for blue badge customers");
     }
     return doesCare ? Optional.of(ORGANISATION_TRANSPORT) : Optional.of(ORGANISATION_NOT_ELIGIBLE);
+  }
+
+  @Override
+  public Set<StepDefinition> getCleanUpSteps(Journey journey) {
+    return getAssociatedStep().getNext();
   }
 }

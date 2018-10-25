@@ -2,12 +2,14 @@ package uk.gov.dft.bluebadge.webapp.citizen.model.form.walking;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 @Data
 @Builder
@@ -22,5 +24,10 @@ public class MedicationListForm implements Serializable, StepForm {
   @Override
   public StepDefinition getAssociatedStep() {
     return StepDefinition.MEDICATION_LIST;
+  }
+
+  @Override
+  public Set<StepDefinition> getCleanUpSteps(Journey journey) {
+    return getAssociatedStep().getNext();
   }
 }

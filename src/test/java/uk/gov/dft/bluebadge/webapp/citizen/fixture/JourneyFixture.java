@@ -312,6 +312,8 @@ public class JourneyFixture {
 
     Journey journey = new Journey();
 
+    if(StepDefinition.HOME == stepTo) return journey;
+
     // Preamble section
     journey.setFormForStep(getApplicantForm(applicantType));
     if (StepDefinition.APPLICANT_TYPE == stepTo) return journey;

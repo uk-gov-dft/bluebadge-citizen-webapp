@@ -6,6 +6,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefini
 
 import java.io.Serializable;
 import java.util.Optional;
+import java.util.Set;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,7 @@ import lombok.EqualsAndHashCode;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingLengthOfTimeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 @Data
 @Builder
@@ -32,5 +34,10 @@ public class WalkingTimeForm implements StepForm, Serializable {
     }
 
     return Optional.of(WHERE_CAN_YOU_WALK);
+  }
+
+  @Override
+  public Set<StepDefinition> getCleanUpSteps(Journey journey) {
+    return getAssociatedStep().getNext();
   }
 }

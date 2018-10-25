@@ -31,7 +31,7 @@ public class Journey implements Serializable {
   public static final String JOURNEY_SESSION_KEY = "JOURNEY";
   public static final String FORM_REQUEST = "formRequest";
 
-  private Map<StepDefinition, StepForm> forms = new HashMap<>();
+  Map<StepDefinition, StepForm> forms = new HashMap<>();
   public String who;
   public String ageGroup;
 
@@ -124,6 +124,8 @@ public class Journey implements Serializable {
         return isValidState(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST);
       case MEDICATION_ADD:
         return isValidState(StepDefinition.MEDICATION_LIST);
+      case HOME:
+        return true;
     }
 
     // First step always valid.
@@ -132,7 +134,7 @@ public class Journey implements Serializable {
     }
 
     // Replay the journey to find any gaps up to step
-    StepForm form = getFormForStep(StepDefinition.APPLICANT_TYPE);
+    StepForm form = getFormForStep(StepDefinition.getFirstStep());
     if (null == form) return false;
 
     StepDefinition currentLoopStep = form.getAssociatedStep();
