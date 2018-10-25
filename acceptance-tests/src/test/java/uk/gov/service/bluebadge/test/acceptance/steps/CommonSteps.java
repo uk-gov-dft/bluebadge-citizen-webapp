@@ -18,18 +18,18 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.springframework.beans.factory.annotation.Autowired;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.SitePage;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
 
-public class SiteSteps extends AbstractSpringSteps {
+public class CommonSteps extends AbstractSpringSteps {
 
   private static final String ATTRIBUTE_VALUE = "value";
   private static final String TAG_INPUT = "input";
 
-  private SitePage sitePage;
+  private CommonPage commonPage;
 
   @Autowired
-  public SiteSteps(SitePage sitePage) {
-    this.sitePage = sitePage;
+  public CommonSteps(CommonPage commonPage) {
+    this.commonPage = commonPage;
   }
 
   @Given(
@@ -52,9 +52,9 @@ public class SiteSteps extends AbstractSpringSteps {
     // Applicant page
     givenINavigateToPage("applicant");
     if (myselfOrOther.equalsIgnoreCase("yourself")) {
-      andICanClickOnElement("applicantType.label.YOURSELF");
+      andICanClickOnElementUiPath("applicantType.label.YOURSELF");
     } else if (myselfOrOther.equalsIgnoreCase("someone else")) {
-      andICanClickOnElement("applicantType.label.SOMEONE_ELSE");
+      andICanClickOnElementUiPath("applicantType.label.SOMEONE_ELSE");
     }
     whenIClickOn("Continue");
     // Council page
@@ -79,42 +79,42 @@ public class SiteSteps extends AbstractSpringSteps {
 
   @Given("^I navigate to (?:the )?\"([^\"]+)\" (?:.* )?page$")
   public void givenINavigateToPage(String pageName) {
-    sitePage.openByPageName(pageName);
+    commonPage.openByPageName(pageName);
   }
 
   @When("^I (?:can )?click on(?: the| link)? \"([^\"]+)\"(?: link| button)?$")
   public void whenIClickOn(String linkTitle) {
-    sitePage.findElementWithText(linkTitle).click();
+    commonPage.findElementWithText(linkTitle).click();
   }
 
   @Then("^I (?:can )?see \"([^\"]+)\" (?:link|button|image)$")
   public void thenISeeLink(String linkTitle) {
-    assertNotNull("Can see element", sitePage.findElementWithTitle(linkTitle));
+    assertNotNull("Can see element", commonPage.findElementWithTitle(linkTitle));
   }
 
   @Then("^I (?:can )?see labelled element \"([^\"]+)\" with content \"([^\"]+)\"$")
   public void thenISeeElementWithUiPathAndContent(String uiPath, String content) {
     assertNotNull(
-        "Can see element with data-uipath: " + uiPath, sitePage.findElementWithUiPath(uiPath));
-    assertThat(sitePage.findElementWithUiPath(uiPath).getText(), containsString(content));
+        "Can see element with data-uipath: " + uiPath, commonPage.findElementWithUiPath(uiPath));
+    assertThat(commonPage.findElementWithUiPath(uiPath).getText(), containsString(content));
   }
 
   @Then("^I should see (?:.* )?page titled \"([^\"]+)\"$")
   public void thenIShouldSeePageTitled(String pageTitle) {
-    assertThat("I should see page titled.", sitePage.getDocumentTitle(), is(pageTitle));
+    assertThat("I should see page titled.", commonPage.getDocumentTitle(), is(pageTitle));
   }
 
   @Then("^I should see (?:.* )?page titled \"([^\"]+)\" with GOV.UK suffix")
   public void thenIShouldSeePageTitledWithGovUkSuffix(String pageTitle) {
     assertThat(
         "I should see page titled.",
-        sitePage.getDocumentTitle(),
+        commonPage.getDocumentTitle(),
         is(pageTitle + " - GOV.UK Apply for a Blue Badge"));
   }
 
   @Then("^I should see the content \"([^\"]*)\"$")
   public void thenIShouldSeeTheContent(String content) {
-    assertThat(sitePage.getPageContent(), containsString(content));
+    assertThat(commonPage.getPageContent(), containsString(content));
   }
 
   @Then("^I should see the \"page not found\" error page$")
@@ -130,7 +130,7 @@ public class SiteSteps extends AbstractSpringSteps {
     String elementName;
     for (List<String> elementsContent : pageSections.raw()) {
       elementName = elementsContent.get(0);
-      WebElement pageElement = sitePage.findPageElement(elementName);
+      WebElement pageElement = commonPage.findPageElement(elementName);
 
       assertThat("I should find page element: " + elementName, pageElement, is(notNullValue()));
 
@@ -143,7 +143,7 @@ public class SiteSteps extends AbstractSpringSteps {
 
   @Then("^I should(?: also)? see \"([^\"]+)\" with:")
   public void thenIShouldSeeItemsOf(String pageElementName, final DataTable elementItems) {
-    WebElement pageElement = sitePage.findPageElement(pageElementName);
+    WebElement pageElement = commonPage.findPageElement(pageElementName);
 
     assertNotNull("I should find page element: " + pageElementName, pageElement);
 
@@ -161,7 +161,7 @@ public class SiteSteps extends AbstractSpringSteps {
   public void thenIShouldNotSeeHeaders(DataTable headersTable) {
     List<String> headers = headersTable.asList(String.class);
     for (String header : headers) {
-      assertNull("Header should not be displayed", sitePage.findElementWithText(header));
+      assertNull("Header should not be displayed", commonPage.findElementWithText(header));
     }
   }
 
@@ -169,7 +169,7 @@ public class SiteSteps extends AbstractSpringSteps {
   public void thenIShouldSeeHeaders(DataTable headersTable) {
     List<String> headers = headersTable.asList(String.class);
     for (String header : headers) {
-      assertNotNull("Header should be displayed: " + header, sitePage.findElementWithText(header));
+      assertNotNull("Header should be displayed: " + header, commonPage.findElementWithText(header));
     }
   }
 
@@ -205,83 +205,83 @@ public class SiteSteps extends AbstractSpringSteps {
 
   @Then("^I should not see element with title \"([^\"]*)\"$")
   public void thenIShouldNotSeeElementTitled(String title) {
-    assertNull("Element is not on page", sitePage.findElementWithTitle(title));
+    assertNull("Element is not on page", commonPage.findElementWithTitle(title));
   }
 
   @Then("^I should see the title \"([^\"]*)\"$")
-  public void iShouldSeeTheTitle(String title) {
-    assertThat("Incorrect page title", sitePage.getH1Tag(), getMatcherForText(title));
+  public void iShouldSeeTheHeading(String title) {
+    assertThat("Incorrect page title", commonPage.getH1Tag(), getMatcherForText(title));
   }
 
   @When("^I click on Start now button$")
   public void iClickOnStartNowButton() {
-    sitePage.findPageElementById("get-started");
+    commonPage.findPageElementById("get-started");
   }
 
   @And("^I select an option \"([^\"]*)\"$")
   public void iSelectAnOption(String value) {
-    sitePage.findPageElementById(value).click();
+    commonPage.findPageElementById(value).click();
   }
 
   @And("^I select an option \"([^\"]*)\" on \"([^\"]*)\"$")
   public void iSelectAnOption(String value, String selectId) {
-    Select select = new Select(sitePage.findPageElementById(selectId));
+    Select select = new Select(commonPage.findPageElementById(selectId));
     select.selectByVisibleText(value);
   }
 
   @And("^I click on Continue button$")
   public void iClickOnContinueButton() {
-    sitePage.findPageElementById("submit").click();
+    commonPage.findElementWithUiPath("button.continue").click();
   }
 
   @And("^I should see error summary box$")
   public void andIshouldSeeErrorSummaryBox() {
-    WebElement errorSummaryBox = sitePage.findElementWithUiPath("error-summary-box");
+    WebElement errorSummaryBox = commonPage.findElementWithUiPath("error-summary-box");
     assertNotNull(errorSummaryBox);
   }
 
   @And("^I should see \"([^\"]*)\" text on the page$")
   public void iShouldSeeTextOnPage(String content) {
-    assertTrue(sitePage.getPageContent().contains(content));
+    assertTrue(commonPage.getPageContent().contains(content));
   }
 
   @And("^I should not see \"([^\"]*)\" text on the page$")
   public void iShouldNotSeeTextOnPage(String content) {
-    assertFalse(sitePage.getPageContent().contains(content));
+    assertFalse(commonPage.getPageContent().contains(content));
   }
 
   @And("^I (?:can )?click on element \"([^\"]+)\"(?: link| button)?$")
-  public void andICanClickOnElement(String uiPath) {
-    sitePage.findElementWithUiPath(uiPath).click();
+  public void andICanClickOnElementUiPath(String uiPath) {
+    commonPage.findElementWithUiPath(uiPath).click();
   }
 
   @When("^I select option \"([^\"]*)\"$")
   public void iSelectOption(String arg0) {
-    sitePage.findElementWithUiPath(arg0).click();
+    commonPage.findElementWithUiPath(arg0).click();
   }
 
   @And("^I can click \"([^\"]*)\" button$")
   public void iCanClickButton(String uiPath) {
-    sitePage.findElementWithUiPath(uiPath).click();
+    commonPage.findElementWithUiPath(uiPath).click();
   }
 
   @When("^I type \"([^\"]+)\" for \"([^\"]+)\" field by id$")
   public void whenItypeTextForFieldUiPath(String text, String fieldId) {
-    sitePage.findPageElementById(fieldId).sendKeys(text);
+    commonPage.findPageElementById(fieldId).sendKeys(text);
   }
 
   @And("^I select \"([^\"]*)\" from autosuggest council list$")
   public void iSelectFromAutosuggestCouncilList(String arg0) {
-    sitePage.selectLocalCouncil(arg0);
+    commonPage.selectLocalCouncil(arg0);
   }
 
   @When(
       "^I type day as \"([^\"]*)\" month as \"([^\"]*)\" and year as \"([^\"]*)\" for applicant's date of birth$")
   public void iTypeDayAsMonthAsAndYearAsForApplicantSDateOfBirth(
       String day, String month, String year) {
-    sitePage.findElementWithUiPath("dateOfBirth.day.field").sendKeys(day);
-    sitePage.findElementWithUiPath("dateOfBirth.month.field").sendKeys(month);
-    sitePage.findElementWithUiPath("dateOfBirth.year.field").sendKeys(year);
+    commonPage.findElementWithUiPath("dateOfBirth.day.field").sendKeys(day);
+    commonPage.findElementWithUiPath("dateOfBirth.month.field").sendKeys(month);
+    commonPage.findElementWithUiPath("dateOfBirth.year.field").sendKeys(year);
   }
 
   @Then(
@@ -293,24 +293,24 @@ public class SiteSteps extends AbstractSpringSteps {
       page_title = who + " eligible - GOV.UK Apply for a Blue Badge";
     }
 
-    assertThat("I should see page titled.", sitePage.getDocumentTitle(), is(page_title));
+    assertThat("I should see page titled.", commonPage.getDocumentTitle(), is(page_title));
   }
 
   @Then("^I can see feedback link$")
   public void iCanSeeFeedbackLink() {
-    assertTrue(FEEDBACK_URL.equals(sitePage.findElementWithText("feedback").getAttribute("href")));
+    assertTrue(FEEDBACK_URL.equals(commonPage.findElementWithText("feedback").getAttribute("href")));
   }
 
   @And("^I can see the continue button with link to external welsh site$")
   public void iCanSeeTheContinueButtonWithLinkToExternalWelshSite() {
     assertTrue(
         APPLY_IN_WELSH_EXTERNAL_URL.equals(
-            sitePage.findElementWithText("Continue").getAttribute("href")));
+            commonPage.findElementWithText("Continue").getAttribute("href")));
   }
 
   @Then("^The google analytics tag should be available$")
   public void theGoogleAnalyticsTagShouldBeAvailable() {
-    assertTrue(sitePage.getPageContent().contains(GOOGLE_ANALYTICS_TAG));
+    assertTrue(commonPage.getPageContent().contains(GOOGLE_ANALYTICS_TAG));
   }
 
   @And(
@@ -319,26 +319,26 @@ public class SiteSteps extends AbstractSpringSteps {
 
     if (selfOrOther.equalsIgnoreCase("yourself")) {
 
-      assertTrue(sitePage.findPageElementById("applicantType.YOURSELF").isSelected());
+      assertTrue(commonPage.findPageElementById("applicantType.YOURSELF").isSelected());
 
     } else if (selfOrOther.equalsIgnoreCase("someone else")) {
 
-      assertTrue(sitePage.findPageElementById("applicantType.SOMEONE_ELSE").isSelected());
+      assertTrue(commonPage.findPageElementById("applicantType.SOMEONE_ELSE").isSelected());
     }
   }
 
   @And("^I complete the already have a blue badge page \"(YES|NO|YES BUT DON'T KNOW)\"$")
   public void iCompleteTheAlreadyHaveABlueBadgePage(String opt) {
     if ("YES BUT DON't KNOW".equals(opt)) {
-      sitePage.findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + "_yes").click();
-      sitePage.findPageElementById(Ids.Preamble.BADGE_NUMBER_BYPASS_LINK).click();
+      commonPage.findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + "_yes").click();
+      commonPage.findPageElementById(Ids.Preamble.BADGE_NUMBER_BYPASS_LINK).click();
     } else {
-      sitePage
+      commonPage
           .findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + "_" + opt.toLowerCase())
           .click();
 
       if ("YES".equals(opt)) {
-        sitePage.findPageElementById(Ids.Preamble.BADGE_NUMBER).sendKeys("AB12CD");
+        commonPage.findPageElementById(Ids.Preamble.BADGE_NUMBER).sendKeys("AB12CD");
       }
     }
   }
