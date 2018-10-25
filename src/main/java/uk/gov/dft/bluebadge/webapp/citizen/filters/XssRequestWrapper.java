@@ -3,8 +3,11 @@ package uk.gov.dft.bluebadge.webapp.citizen.filters;
 import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+
+import lombok.extern.slf4j.Slf4j;
 import org.owasp.esapi.ESAPI;
 
+@Slf4j
 public class XssRequestWrapper extends HttpServletRequestWrapper {
 
   private static Pattern[] patterns =
@@ -75,7 +78,14 @@ public class XssRequestWrapper extends HttpServletRequestWrapper {
     if (value != null) {
       // NOTE: It's highly recommended to use the ESAPI library and uncomment the following line to
       // avoid encoded attacks.
-      value = ESAPI.encoder().canonicalize(value);
+
+      try {
+        value = ESAPI.encoder().canonicalize(value);
+      }
+      catch (Exception e) {
+        value = "";
+        log.error("Unable to de-encode and canonicalise text input!", e);
+      }
 
       // Avoid null characters
       value = value.replaceAll("\0", "");
@@ -85,6 +95,7 @@ public class XssRequestWrapper extends HttpServletRequestWrapper {
         value = scriptPattern.matcher(value).replaceAll("");
       }
     }
+
     return value;
   }
 }

