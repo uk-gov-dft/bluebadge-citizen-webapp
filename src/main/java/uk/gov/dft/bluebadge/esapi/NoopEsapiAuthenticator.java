@@ -1,23 +1,21 @@
 package uk.gov.dft.bluebadge.esapi;
 
+import java.util.Set;
 import org.owasp.esapi.User;
 import org.owasp.esapi.errors.AuthenticationException;
 import org.owasp.esapi.errors.EncryptionException;
 import org.owasp.esapi.reference.AbstractAuthenticator;
 
-import java.util.Set;
-
-/**
- * Added mostly to keep esapi quiet when it starts up.
- */
-public class NullEsapiAuthenticator extends AbstractAuthenticator {
+/** Added mostly to keep esapi quiet when it starts up. */
+public class NoopEsapiAuthenticator extends AbstractAuthenticator {
   @Override
   public boolean verifyPassword(User user, String password) {
     return false;
   }
 
   @Override
-  public User createUser(String accountName, String password1, String password2) throws AuthenticationException {
+  public User createUser(String accountName, String password1, String password2)
+      throws AuthenticationException {
     return null;
   }
 
@@ -32,9 +30,9 @@ public class NullEsapiAuthenticator extends AbstractAuthenticator {
   }
 
   @Override
-  public void changePassword(User user, String currentPassword, String newPassword, String newPassword2) throws AuthenticationException {
-
-  }
+  public void changePassword(
+      User user, String currentPassword, String newPassword, String newPassword2)
+      throws AuthenticationException {}
 
   @Override
   public User getUser(long accountId) {
@@ -57,17 +55,12 @@ public class NullEsapiAuthenticator extends AbstractAuthenticator {
   }
 
   @Override
-  public void removeUser(String accountName) throws AuthenticationException {
-
-  }
+  public void removeUser(String accountName) throws AuthenticationException {}
 
   @Override
-  public void verifyAccountNameStrength(String accountName) throws AuthenticationException {
-
-  }
+  public void verifyAccountNameStrength(String accountName) throws AuthenticationException {}
 
   @Override
-  public void verifyPasswordStrength(String oldPassword, String newPassword, User user) throws AuthenticationException {
-
-  }
+  public void verifyPasswordStrength(String oldPassword, String newPassword, User user)
+      throws AuthenticationException {}
 }
