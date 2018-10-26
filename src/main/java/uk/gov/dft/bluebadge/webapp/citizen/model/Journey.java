@@ -327,7 +327,7 @@ public class Journey implements Serializable {
   public MobilityAidListForm getMobilityAidListForm() {
     MobilityAidListForm mobilityAidListForm =
         (MobilityAidListForm) getFormForStep(StepDefinition.MOBILITY_AID_LIST);
-    if (mobilityAidListForm != null && "yes".equals(mobilityAidListForm.getHasWalkingAid())) {
+    if (hasFormStep(StepDefinition.MOBILITY_AID_LIST) && "yes".equals(mobilityAidListForm.getHasFWalkingAid())) {
       this.walkingAid = "withWalkingAid.";
     } else {
       this.walkingAid = "withoutWalkingAid.";
