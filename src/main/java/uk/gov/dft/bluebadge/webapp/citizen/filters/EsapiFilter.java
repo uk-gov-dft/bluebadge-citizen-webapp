@@ -33,7 +33,7 @@ public class EsapiFilter extends OncePerRequestFilter {
     if (isAsyncDispatch(request)) {
       filterChain.doFilter(request, response);
     } else {
-      doFilterWrapped(wrapRequest(request), wrapResponse(response), filterChain);
+      doFilterWrapped(wrapRequest(request),response, filterChain);
     }
   }
 
