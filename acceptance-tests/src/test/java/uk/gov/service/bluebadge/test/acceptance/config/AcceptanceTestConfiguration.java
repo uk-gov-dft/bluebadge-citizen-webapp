@@ -77,7 +77,8 @@ public class AcceptanceTestConfiguration {
   }
 
   @Bean
-  public CommonPage sitePage(final WebDriverProvider webDriverProvider, final PageHelper pageHelper) {
+  public CommonPage sitePage(
+      final WebDriverProvider webDriverProvider, final PageHelper pageHelper) {
     return new CommonPage(webDriverProvider, pageHelper);
   }
 
