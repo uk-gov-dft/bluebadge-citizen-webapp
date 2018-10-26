@@ -11,7 +11,7 @@ const select = document.getElementById("councilShortCode");
 if(select) {
     AutoComplete({
         defaultValue: '',
-        autoselect: false,
+        autoselect: true,
         selectElement: document.getElementById('councilShortCode'),
         onConfirm: (query) => {
             const input = document.getElementById("councilShortCode");

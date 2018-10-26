@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.organisation;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,8 +14,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 @RequestMapping(Mappings.URL_ORGANISATION_MAY_BE_ELIGIBLE)
@@ -28,9 +28,9 @@ public class OrganisationMayBeEligibleController extends BaseStepController {
 
   @GetMapping
   public String show(
-    @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-    Model model,
-    SessionStatus sessionStatus) {
+      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
+      Model model,
+      SessionStatus sessionStatus) {
     return super.show(journey, model, sessionStatus);
   }
 

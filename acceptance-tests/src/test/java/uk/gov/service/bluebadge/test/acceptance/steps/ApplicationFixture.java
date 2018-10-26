@@ -234,7 +234,9 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("^I complete have permanent disability page for \"(YES|NO)\"$")
   public void iCompleteHavePermanentDisabilityDisabilityPageFor(String option) {
-    commonPage.findPageElementById(Ids.EleCheck.HAS_DISABILITY + "." + option.toLowerCase()).click();
+    commonPage
+        .findPageElementById(Ids.EleCheck.HAS_DISABILITY + "." + option.toLowerCase())
+        .click();
     pressContinue();
   }
 
