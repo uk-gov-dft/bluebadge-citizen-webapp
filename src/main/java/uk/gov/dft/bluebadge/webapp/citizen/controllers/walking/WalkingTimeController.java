@@ -107,7 +107,7 @@ public class WalkingTimeController implements StepController {
         new RadioOption(
             WalkingLengthOfTimeCodeField.MORETEN.name(), "walkingTime.select.option.MORETEN"));
 
-    String selectTitle = journey.who + "walkingTime.select.title";
+    String selectTitle = journey.who + journey.walkingAid + "walkingTime.select.title";
     return new RadioOptionsGroup(selectTitle, options);
   }
 }

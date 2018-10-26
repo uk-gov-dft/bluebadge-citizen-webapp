@@ -55,6 +55,7 @@ public class Journey implements Serializable {
   private Map<StepDefinition, StepForm> forms = new HashMap<>();
   public String who;
   public String ageGroup;
+  public String walkingAid;
 
   public void setFormForStep(StepDefinition definition, StepForm form) {
     cleanUpSteps(new HashSet<>(), form.getCleanUpSteps(this));
@@ -324,10 +325,22 @@ public class Journey implements Serializable {
   }
 
   public MobilityAidListForm getMobilityAidListForm() {
-    return (MobilityAidListForm) getFormForStep(StepDefinition.MOBILITY_AID_LIST);
+    MobilityAidListForm mobilityAidListForm =
+        (MobilityAidListForm) getFormForStep(StepDefinition.MOBILITY_AID_LIST);
+    if (mobilityAidListForm != null && "yes".equals(mobilityAidListForm.getHasWalkingAid())) {
+      this.walkingAid = "withWalkingAid.";
+    } else {
+      this.walkingAid = "withoutWalkingAid.";
+    }
+    return mobilityAidListForm;
   }
 
   public void setMobilityAidListForm(MobilityAidListForm mobilityAidListForm) {
+    if (mobilityAidListForm != null && "yes".equals(mobilityAidListForm.getHasWalkingAid())) {
+      this.walkingAid = "withWalkingAid.";
+    } else {
+      this.walkingAid = "withoutWalkingAid.";
+    }
     setFormForStep(StepDefinition.MOBILITY_AID_LIST, mobilityAidListForm);
   }
 
