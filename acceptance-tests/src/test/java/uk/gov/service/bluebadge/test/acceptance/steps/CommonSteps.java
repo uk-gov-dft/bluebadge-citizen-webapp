@@ -169,7 +169,8 @@ public class CommonSteps extends AbstractSpringSteps {
   public void thenIShouldSeeHeaders(DataTable headersTable) {
     List<String> headers = headersTable.asList(String.class);
     for (String header : headers) {
-      assertNotNull("Header should be displayed: " + header, commonPage.findElementWithText(header));
+      assertNotNull(
+          "Header should be displayed: " + header, commonPage.findElementWithText(header));
     }
   }
 
@@ -298,7 +299,8 @@ public class CommonSteps extends AbstractSpringSteps {
 
   @Then("^I can see feedback link$")
   public void iCanSeeFeedbackLink() {
-    assertTrue(FEEDBACK_URL.equals(commonPage.findElementWithText("feedback").getAttribute("href")));
+    assertTrue(
+        FEEDBACK_URL.equals(commonPage.findElementWithText("feedback").getAttribute("href")));
   }
 
   @And("^I can see the continue button with link to external welsh site$")
