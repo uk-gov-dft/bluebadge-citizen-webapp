@@ -20,7 +20,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceD
 public class ReferenceDataService {
 
   private Map<String, List<ReferenceData>> groupedReferenceDataList = null;
-  private Map<String, Map<String, String>> groupedReferenceDataMap = null;
   private Map<String, LocalCouncilRefData> localCouncilMap = new HashMap<>();
   private Map<String, LocalAuthorityRefData> localAuthorityMap = new HashMap<>();
 
@@ -53,18 +52,6 @@ public class ReferenceDataService {
           referenceDataList
               .stream()
               .collect(Collectors.groupingBy(ReferenceData::getGroupShortCode));
-
-      groupedReferenceDataMap = new HashMap<>();
-
-      groupedReferenceDataList.forEach(
-          (key, value) ->
-              groupedReferenceDataMap.put(
-                  key,
-                  value
-                      .stream()
-                      .collect(
-                          Collectors.toMap(
-                              ReferenceData::getShortCode, ReferenceData::getDescription))));
 
       for (ReferenceData item : referenceDataList) {
         if (item instanceof LocalCouncilRefData) {

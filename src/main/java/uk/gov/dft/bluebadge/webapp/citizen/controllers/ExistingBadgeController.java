@@ -64,9 +64,10 @@ public class ExistingBadgeController implements StepController {
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
-    if (formRequest.getHasExistingBadge() != null && formRequest.getHasExistingBadge()) {
+    if (Boolean.TRUE.equals(formRequest.getHasExistingBadge())) {
 
-      String badgeNum = formRequest.getBadgeNumber().replaceAll("\\s+", "");
+      String badgeNum =
+          formRequest.hasBadgeNumber() ? formRequest.getBadgeNumber().replaceAll("\\s+", "") : "";
 
       if (badgeNum.isEmpty() || badgeNum.length() < 6) {
         bindingResult.rejectValue("badgeNumber", "badgeNumber.NotBlank");

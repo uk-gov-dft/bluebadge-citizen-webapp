@@ -8,8 +8,7 @@ import uk.gov.service.bluebadge.test.acceptance.steps.AbstractSpringSteps;
 import uk.gov.service.bluebadge.test.acceptance.steps.ApplicationFixture;
 import uk.gov.service.bluebadge.test.acceptance.steps.CommonSteps;
 
-
-public class ApplicationSteps  extends AbstractSpringSteps {
+public class ApplicationSteps extends AbstractSpringSteps {
 
   private CommonSteps commonSteps;
   private ApplicantPage applicantPage;
@@ -26,9 +25,10 @@ public class ApplicationSteps  extends AbstractSpringSteps {
   @Given("^I navigate to applicant page and validate for \"(yourself|someone else)\"")
   public void iNavigateToApplicantPageAndValidate(String applicant) throws Exception {
 
-    if("yourself".equals(applicant.toLowerCase())) { journeyOption = applicantPage.APPLICANT_TYPE_YOURSELF_OPTION;
-    }
-    else{ journeyOption = applicantPage.APPLICANT_TYPE_SOMELSE_OPTION;
+    if ("yourself".equals(applicant.toLowerCase())) {
+      journeyOption = applicantPage.APPLICANT_TYPE_YOURSELF_OPTION;
+    } else {
+      journeyOption = applicantPage.APPLICANT_TYPE_SOMELSE_OPTION;
     }
 
     commonPage.openByPageName("applicant");
@@ -40,5 +40,4 @@ public class ApplicationSteps  extends AbstractSpringSteps {
     commonPage.findPageElementById(journeyOption).click();
     commonSteps.iClickOnContinueButton();
   }
-
 }
