@@ -7,7 +7,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.WebApplicationContext;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataDomainEnum;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataGroupEnum;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.ReferenceDataApiClient;
@@ -17,6 +20,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceD
 
 @Service
 @Slf4j
+@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class ReferenceDataService {
 
   private Map<String, List<ReferenceData>> groupedReferenceDataList = null;
