@@ -100,7 +100,7 @@ public class EsapiFilterTest {
   }
 
   @Test
-  public void shouldNotCleanUrl() throws IOException {
+  public void shouldCleanUrl() throws IOException {
 
     String moreContentAsString = postData(URL_STRING, client, httpContext);
     assertEquals("", moreContentAsString);
