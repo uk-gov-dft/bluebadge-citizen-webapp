@@ -1,2 +1,2 @@
 #!/bin/bash
-gradle acceptanceTests -Dheadless=false -DbaseUrl=https://qa.does.not.exist
+gradle acceptanceTests -Dheadless=false -DbaseUrl=http://localhost:8780

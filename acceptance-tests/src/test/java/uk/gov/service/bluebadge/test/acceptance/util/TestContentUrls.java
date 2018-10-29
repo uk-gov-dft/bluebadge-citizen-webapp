@@ -8,8 +8,7 @@ public class TestContentUrls {
   public static final String URL = System.getProperty("baseUrl");
   private final Map<String, String> urlLookup = new HashMap<>();
 
-  public
-  TestContentUrls() {
+  public TestContentUrls() {
     setup();
   }
 

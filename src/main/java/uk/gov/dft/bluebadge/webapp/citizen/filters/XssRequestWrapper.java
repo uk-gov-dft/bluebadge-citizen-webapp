@@ -3,7 +3,6 @@ package uk.gov.dft.bluebadge.webapp.citizen.filters;
 import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-
 import lombok.extern.slf4j.Slf4j;
 import org.owasp.esapi.ESAPI;
 
@@ -81,8 +80,7 @@ public class XssRequestWrapper extends HttpServletRequestWrapper {
 
       try {
         value = ESAPI.encoder().canonicalize(value);
-      }
-      catch (Exception e) {
+      } catch (Exception e) {
         value = "";
         log.error("Unable to de-encode and canonicalise text input!", e);
       }
