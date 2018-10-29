@@ -50,7 +50,7 @@ public class OrganisationCareController implements StepController {
       attachForm(model, journey);
     }
 
-    setupModel(model, journey);
+    setupModel(model);
 
     return TEMPLATE;
   }
@@ -79,7 +79,7 @@ public class OrganisationCareController implements StepController {
     }
   }
 
-  private void setupModel(Model model, Journey journey) {
+  private void setupModel(Model model) {
     RadioOptionsGroup group =
         new RadioOptionsGroup("organisationCare.page.title").withYesNoOptions();
     group.setHintKey("organisationCare.page.title.hint");
