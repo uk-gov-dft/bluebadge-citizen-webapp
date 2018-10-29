@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.http.NameValuePair;
@@ -36,12 +35,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class EsapiFilterTest {
 
-  public static final String IMG_SRC = "<img src=\"C:\\Documents and Settings\\screenshots\\Image01.png\"/>";
+  public static final String IMG_SRC =
+      "<img src=\"C:\\Documents and Settings\\screenshots\\Image01.png\"/>";
   public static final String PERCENT_ENCODED_STRING = "%2520";
   public static final String PERCENT_STRING = "25%";
   public static final String DOUBLE_BACKSLASH = "Hello\\\\ there";
   public static final String URL_STRING = "https://www.host.com:8080/evidence?x=y&%2520";
-  public static final String URL_NASTY_STRING = "http://bobssite.org?q=puppies%3Cscript%2520src%3D%22http%3A%2F%2Fmallorysevilsite.com%2Fauthstealer.js%22%3E%3C%2Fscript%3E";
+  public static final String URL_NASTY_STRING =
+      "http://bobssite.org?q=puppies%3Cscript%2520src%3D%22http%3A%2F%2Fmallorysevilsite.com%2Fauthstealer.js%22%3E%3C%2Fscript%3E";
   public static final String NASTY_STRING = "<script>console.log('fred');</script>But this is ok";
   public static final String GOOD_STRING = "nothing bad in here";
 
@@ -90,7 +91,6 @@ public class EsapiFilterTest {
     client.close();
   }
 
-
   @Test
   public void shouldCleanEncoded() throws IOException {
 
@@ -107,7 +107,6 @@ public class EsapiFilterTest {
     client.close();
   }
 
-
   @Test
   public void shouldCleanEncodedUrl() throws IOException {
 
@@ -115,7 +114,6 @@ public class EsapiFilterTest {
     assertEquals("", moreContentAsString);
     client.close();
   }
-
 
   @Test
   public void shouldCleanDoubleBackslash() throws IOException {

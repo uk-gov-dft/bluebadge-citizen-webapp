@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.esapi;
 
+import java.util.Collections;
 import java.util.Set;
 import org.owasp.esapi.User;
 import org.owasp.esapi.errors.AuthenticationException;
@@ -46,7 +47,7 @@ public class NoopEsapiAuthenticator extends AbstractAuthenticator {
 
   @Override
   public Set getUserNames() {
-    return null;
+    return Collections.EMPTY_SET;
   }
 
   @Override
