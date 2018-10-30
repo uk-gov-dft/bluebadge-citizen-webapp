@@ -29,6 +29,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalList
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveBenefitForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
@@ -379,6 +380,14 @@ public class Journey implements Serializable {
 
   public void setExistingBadgeForm(ExistingBadgeForm existingBadgeForm) {
     setFormForStep(StepDefinition.EXISTING_BADGE, existingBadgeForm);
+  }
+
+  public ProveBenefitForm getProveBenefitForm() {
+    return (ProveBenefitForm) getFormForStep(StepDefinition.PROVE_BENEFIT);
+  }
+
+  public void setProveBenefitForm(ProveBenefitForm proveBenefitForm) {
+    setFormForStep(StepDefinition.PROVE_BENEFIT, proveBenefitForm);
   }
 
   // -- META DATA BELOW --

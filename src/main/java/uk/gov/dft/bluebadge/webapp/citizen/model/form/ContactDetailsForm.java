@@ -50,9 +50,10 @@ public class ContactDetailsForm implements StepForm, Serializable {
     EligibilityCodeField benefitType = journey.getEligibilityCode();
     switch (benefitType) {
       case DLA:
+      case PIP:
+        return Optional.of(StepDefinition.PROVE_BENEFIT);
       case WPMS:
       case AFRFCS:
-      case PIP:
       case BLIND:
         return Optional.of(StepDefinition.DECLARATIONS);
       default:
