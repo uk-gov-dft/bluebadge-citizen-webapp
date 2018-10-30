@@ -34,7 +34,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Wa
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficulty;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingLengthOfTimeCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingSpeedCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
@@ -253,8 +252,6 @@ public class DeclarationSubmitController implements StepController {
     }
 
     WalkingLengthOfTimeCodeField walkingTime = journey.getWalkingTimeForm().getWalkingTime();
-    WalkingSpeedCodeField walkingSpeed =
-        walkingTime == WalkingLengthOfTimeCodeField.CANTWALK ? null : WalkingSpeedCodeField.SLOW;
 
     List<WalkingDifficultyTypeCodeField> walkingDifficulties =
         journey.getWhatMakesWalkingDifficultForm().getWhatWalkingDifficulties();
@@ -270,7 +267,7 @@ public class DeclarationSubmitController implements StepController {
             .walkingDifficulty(
                 new WalkingDifficulty()
                     .walkingLengthOfTimeCode(walkingTime)
-                    .walkingSpeedCode(walkingSpeed)
+                    // .walkingSpeedCode(null)
                     .typeCodes(walkingDifficulties)
                     .otherDescription(otherDesc)
                     .walkingAids(walkingAids)
