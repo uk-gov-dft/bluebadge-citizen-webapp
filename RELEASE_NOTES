@@ -1,0 +1,7 @@
+## citizen-webapp v0.7.0 Fri Oct 26 13:36:05 UTC 2018
+- **BBB-908** : "Citizen app - Acceptance tests - Add tests for pages and validation messages"
+- **BBB-694** : "Citizen app - Select your council - signpost organisation applications to LAs"
+- **BBB-694** : "Citizen app - Select your council - signpost organisation applications to LAs"
+- **BBB-855** : "Citizen and LA app - styling tidy up"
+- **BBK_140** : "Disable the gradle daemon on Jenkins"
+- **BBK_156** : "Add OWASP dependency checker to each of the repositories"
