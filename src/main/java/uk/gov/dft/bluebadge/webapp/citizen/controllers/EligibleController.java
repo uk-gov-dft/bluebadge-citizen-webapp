@@ -12,6 +12,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.EligibleForm;
 
 @Controller
 @RequestMapping(Mappings.URL_ELIGIBLE)
@@ -22,14 +23,14 @@ public class EligibleController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public EligibleController(RouteMaster routeMaster) {
+  EligibleController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
@@ -40,7 +41,8 @@ public class EligibleController implements StepController {
 
   @GetMapping("/start")
   public String startApplication(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
-    return routeMaster.redirectToOnSuccess(StepDefinition.ELIGIBLE);
+    journey.setFormForStep(new EligibleForm());
+    return routeMaster.redirectToOnSuccess(new EligibleForm());
   }
 
   @Override

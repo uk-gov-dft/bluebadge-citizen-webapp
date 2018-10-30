@@ -37,19 +37,19 @@ public class MainReasonController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public MainReasonController(RouteMaster routeMaster) {
+  MainReasonController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
     // On returning to form, take previously submitted values.
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getMainReasonForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getMainReasonForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     // If navigating forward from previous form, reset
@@ -94,7 +94,7 @@ public class MainReasonController implements StepController {
       return routeMaster.redirectToOnBindingError(this, mainReasonForm, bindingResult, attr);
     }
 
-    journey.setMainReasonForm(mainReasonForm);
+    journey.setFormForStep(mainReasonForm);
 
     return routeMaster.redirectToOnSuccess(mainReasonForm);
   }

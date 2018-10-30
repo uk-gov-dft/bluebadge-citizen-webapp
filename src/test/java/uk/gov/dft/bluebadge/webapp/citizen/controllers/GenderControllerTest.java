@@ -1,8 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -11,58 +9,47 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
-import uk.gov.dft.bluebadge.webapp.citizen.model.component.CompoundDate;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 
 public class GenderControllerTest {
 
   private MockMvc mockMvc;
-  private GenderController controller;
-
-  @Mock private RouteMaster mockRouteMaster;
   private Journey journey;
+
+  private static final String SUCCESS_URL = Mappings.URL_NINO;
 
   @Before
   public void setup() {
-    MockitoAnnotations.initMocks(this);
-    controller = new GenderController(mockRouteMaster);
+    GenderController controller = new GenderController(new RouteMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
-    journey = new Journey();
-    journey.setApplicantForm(
-        ApplicantForm.builder().applicantType(ApplicantType.YOURSELF.name()).build());
-
-    CompoundDate date = new CompoundDate();
-    date.setDay("03");
-    date.setMonth("12");
-    date.setYear("1988");
-
-    journey.setDateOfBirthForm(DateOfBirthForm.builder().dateOfBirth(date).build());
+    journey =
+        JourneyFixture.getDefaultJourneyToStep(StepDefinition.GENDER, EligibilityCodeField.DLA);
   }
 
   @Test
   public void show_ShouldDisplayGenderTemplate() throws Exception {
-    GenderForm formRequest = GenderForm.builder().build();
+    GenderForm formRequest = GenderForm.builder().gender(JourneyFixture.Values.GENDER).build();
 
     mockMvc
         .perform(get("/gender").sessionAttr("JOURNEY", journey))
@@ -75,16 +62,15 @@ public class GenderControllerTest {
   @Test
   public void show_ShouldDisplayYouGenderTerm() throws Exception {
 
-    ((ApplicantForm) journey.getFormForStep(StepDefinition.APPLICANT_TYPE))
-        .setApplicantType(ApplicantType.YOURSELF.toString());
+    Journey youJourney = new JourneyBuilder().forYou().toStep(StepDefinition.GENDER).build();
 
     MvcResult mvcResult =
         mockMvc
-            .perform(get("/gender").sessionAttr("JOURNEY", journey))
+            .perform(get("/gender").sessionAttr("JOURNEY", youJourney))
             .andExpect(status().isOk())
             .andExpect(view().name("gender"))
             .andReturn();
-    Map<String, Object> model = mvcResult.getModelAndView().getModel();
+    Map<String, Object> model = Objects.requireNonNull(mvcResult.getModelAndView()).getModel();
     RadioOptionsGroup radioOptionsGroup = (RadioOptionsGroup) model.get("options");
     Optional<RadioOption> foundRadioOption =
         radioOptionsGroup
@@ -99,18 +85,17 @@ public class GenderControllerTest {
   @Test
   public void show_ShouldDisplayTheyGenderTerm() throws Exception {
 
-    ((ApplicantForm) journey.getFormForStep(StepDefinition.APPLICANT_TYPE))
-        .setApplicantType(ApplicantType.SOMEONE_ELSE.toString());
-    journey.setApplicantForm((ApplicantForm) journey.getFormForStep(StepDefinition.APPLICANT_TYPE));
+    Journey someoneElseJourney =
+        new JourneyBuilder().forSomeOneElse().toStep(StepDefinition.GENDER).build();
 
     MvcResult mvcResult =
         mockMvc
-            .perform(get("/gender").sessionAttr("JOURNEY", journey))
+            .perform(get("/gender").sessionAttr("JOURNEY", someoneElseJourney))
             .andExpect(status().isOk())
             .andExpect(view().name("gender"))
             .andReturn();
 
-    Map<String, Object> model = mvcResult.getModelAndView().getModel();
+    Map<String, Object> model = Objects.requireNonNull(mvcResult.getModelAndView()).getModel();
     RadioOptionsGroup radioOptionsGroup = (RadioOptionsGroup) model.get("options");
     Optional<RadioOption> foundRadioOption =
         radioOptionsGroup
@@ -124,53 +109,47 @@ public class GenderControllerTest {
 
   @Test
   public void show_givenNoSession_ShouldRedirectBackToStart() throws Exception {
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
 
     mockMvc
         .perform(get("/gender"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/backToStart"));
+        .andExpect(redirectedUrl(Mappings.URL_ROOT));
   }
 
   @Test
   public void submit_givenMaleOption_thenShouldDisplayRedirectToSuccess() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(GenderForm.class), any(Journey.class)))
-        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(post("/gender").param("gender", "MALE").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(SUCCESS_URL));
   }
 
   @Test
   public void submit_givenFemaleOption_thenShouldDisplayRedirectToSuccess() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(GenderForm.class), any(Journey.class)))
-        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(post("/gender").param("gender", "FEMALE").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(SUCCESS_URL));
   }
 
   @Test
   public void submit_givenUnspecifiedOption_thenShouldDisplayRedirectToSuccess() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(GenderForm.class), any(Journey.class)))
-        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(post("/gender").param("gender", "UNSPECIFIE").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(SUCCESS_URL));
   }
 
   @Test
   public void submit_whenMissingGenderAnswer_ThenShouldHaveValidationError() throws Exception {
     mockMvc
         .perform(post("/gender").sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
-        .andExpect(view().name("gender"))
-        .andExpect(model().attributeHasFieldErrorCode("formRequest", "gender", "NotNull"));
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(Mappings.URL_GENDER + RouteMaster.ERROR_SUFFIX))
+        .andExpect(
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode("gender", "NotNull"));
   }
 }

@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
@@ -16,6 +17,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 @Data
 @Builder
 @Slf4j
+@EqualsAndHashCode
 public class PipPlanningJourneyForm implements Serializable, StepForm {
 
   public enum PipPlanningJourneyOption {
@@ -47,6 +49,11 @@ public class PipPlanningJourneyForm implements Serializable, StepForm {
         "PipPlanningJourneyForm: could not determine next step. LA={}",
         journey.getLocalAuthority());
     return Optional.empty();
+  }
+
+  @Override
+  public boolean preserveStep(Journey journey) {
+    return false;
   }
 
   @NotNull private PipPlanningJourneyForm.PipPlanningJourneyOption planningJourneyOption;

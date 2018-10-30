@@ -30,19 +30,19 @@ public class MentalDisorderController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public MentalDisorderController(RouteMaster routeMaster) {
+  MentalDisorderController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getMentalDisorderForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getMentalDisorderForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -69,7 +69,7 @@ public class MentalDisorderController implements StepController {
           this, permanentMentalDisorderForm, bindingResult, attr);
     }
 
-    journey.setMentalDisorderForm(permanentMentalDisorderForm);
+    journey.setFormForStep(permanentMentalDisorderForm);
     return routeMaster.redirectToOnSuccess(permanentMentalDisorderForm);
   }
 

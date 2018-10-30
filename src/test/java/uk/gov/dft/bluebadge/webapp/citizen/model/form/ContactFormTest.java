@@ -38,7 +38,7 @@ public class ContactFormTest {
     Journey journey = JourneyFixture.getDefaultJourney();
     ReceiveBenefitsForm benefitsForm =
         ReceiveBenefitsForm.builder().benefitType(EligibilityCodeField.valueOf(input)).build();
-    journey.setReceiveBenefitsForm(benefitsForm);
+    journey.setFormForStep(benefitsForm);
     ContactDetailsForm contactForm = ContactDetailsForm.builder().build();
 
     assertTrue(contactForm.determineNextStep(journey).isPresent());
@@ -52,11 +52,11 @@ public class ContactFormTest {
 
     Journey journey = JourneyFixture.getDefaultJourney();
     ReceiveBenefitsForm benefitsForm = ReceiveBenefitsForm.builder().build();
-    journey.setReceiveBenefitsForm(benefitsForm);
+    journey.setFormForStep(benefitsForm);
 
     MainReasonForm mainReasonForm =
         MainReasonForm.builder().mainReasonOption(EligibilityCodeField.ARMS).build();
-    journey.setMainReasonForm(mainReasonForm);
+    journey.setFormForStep(mainReasonForm);
 
     ContactDetailsForm contactForm = ContactDetailsForm.builder().build();
 

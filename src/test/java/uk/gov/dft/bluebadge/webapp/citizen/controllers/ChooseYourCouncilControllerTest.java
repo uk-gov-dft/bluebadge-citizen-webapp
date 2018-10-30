@@ -1,6 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -21,6 +20,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataGroupEnum
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataService;
@@ -28,33 +29,32 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataSe
 public class ChooseYourCouncilControllerTest {
 
   private MockMvc mockMvc;
-  private ChooseYourCouncilController controller;
 
   @Mock ReferenceDataService mockReferenceDataService;
 
-  @Mock Journey mockJourney;
-
-  @Mock private RouteMaster mockRouteMaster;
+  Journey journey;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new ChooseYourCouncilController(mockReferenceDataService, mockRouteMaster);
+    ChooseYourCouncilController controller =
+        new ChooseYourCouncilController(mockReferenceDataService, new RouteMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
+    journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.CHOOSE_COUNCIL);
   }
 
   @Test
   public void show_whenFirstvisit() throws Exception {
-    when(mockJourney.isValidState(any())).thenReturn(true);
     when(mockReferenceDataService.retrieveReferenceDataList(RefDataGroupEnum.COUNCIL))
         .thenReturn(Lists.newArrayList(new ReferenceData()));
     ChooseYourCouncilForm formRequest = ChooseYourCouncilForm.builder().build();
 
+    Journey shortJourney = JourneyFixture.getDefaultJourneyToStep(StepDefinition.APPLICANT_TYPE);
     mockMvc
-        .perform(get(Mappings.URL_CHOOSE_YOUR_COUNCIL).sessionAttr("JOURNEY", mockJourney))
+        .perform(get(Mappings.URL_CHOOSE_YOUR_COUNCIL).sessionAttr("JOURNEY", shortJourney))
         .andExpect(status().isOk())
         .andExpect(view().name("choose-council"))
         .andExpect(model().attribute("formRequest", formRequest))
@@ -63,43 +63,38 @@ public class ChooseYourCouncilControllerTest {
 
   @Test
   public void show_whenRevisit() throws Exception {
-    when(mockJourney.isValidState(any())).thenReturn(true);
-    ChooseYourCouncilForm formRequest =
-        ChooseYourCouncilForm.builder().councilShortCode("ABC").build();
-    when(mockJourney.getChooseYourCouncilForm()).thenReturn(formRequest);
+
     when(mockReferenceDataService.retrieveReferenceDataList(RefDataGroupEnum.COUNCIL))
         .thenReturn(Lists.newArrayList(new ReferenceData()));
 
     mockMvc
-        .perform(get(Mappings.URL_CHOOSE_YOUR_COUNCIL).sessionAttr("JOURNEY", mockJourney))
+        .perform(get(Mappings.URL_CHOOSE_YOUR_COUNCIL).sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("choose-council"))
-        .andExpect(model().attribute("formRequest", formRequest))
+        .andExpect(model().attribute("formRequest", JourneyFixture.getChooseYourCouncilForm()))
         .andExpect(model().attributeExists("councils"));
   }
 
   @Test
   public void submit_givenValidForm_thenShouldDisplayRedirectToSuccess() throws Exception {
 
-    when(mockRouteMaster.redirectToOnSuccess(any(ChooseYourCouncilForm.class)))
-        .thenReturn("redirect:/testSuccess");
-
     mockMvc
         .perform(
             post(Mappings.URL_CHOOSE_YOUR_COUNCIL)
                 .param("councilShortCode", "test test")
                 .sessionAttr("JOURNEY", new Journey()))
-        .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(Mappings.URL_YOUR_ISSUING_AUTHORITY));
   }
 
   @Test
   public void submit_whenBindingException_ThenShouldHaveValidationError() throws Exception {
     mockMvc
         .perform(post(Mappings.URL_CHOOSE_YOUR_COUNCIL).sessionAttr("JOURNEY", new Journey()))
-        .andExpect(status().isOk())
-        .andExpect(view().name("choose-council"))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(Mappings.URL_CHOOSE_YOUR_COUNCIL + RouteMaster.ERROR_SUFFIX))
         .andExpect(
-            model().attributeHasFieldErrorCode("formRequest", "councilShortCode", "NotBlank"));
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "councilShortCode", "NotBlank"));
   }
 }

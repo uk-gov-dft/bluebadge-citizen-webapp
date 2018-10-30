@@ -8,10 +8,10 @@ import org.springframework.web.bind.support.SessionStatus;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
-public abstract class BaseStepController implements StepController {
+public abstract class BaseFinalStepController implements StepController {
   protected final RouteMaster routeMaster;
 
-  public BaseStepController(RouteMaster routeMaster) {
+  public BaseFinalStepController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
@@ -19,7 +19,7 @@ public abstract class BaseStepController implements StepController {
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       Model model,
       SessionStatus sessionStatus) {
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 

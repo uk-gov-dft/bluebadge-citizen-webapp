@@ -6,8 +6,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode
 public class MedicationAddForm implements Serializable {
 
   @Size(max = 100, message = "{Size.medication.name}")
