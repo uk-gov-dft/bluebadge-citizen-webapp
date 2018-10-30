@@ -1,6 +1,13 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
-import com.google.common.collect.Sets;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDBULK;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDVEHIC;
+
+import java.io.Serializable;
+import java.util.Optional;
+import java.util.Set;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,15 +15,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.El
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.io.Serializable;
-import java.util.Optional;
-import java.util.Set;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDBULK;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDVEHIC;
 
 @Data
 @Builder
@@ -44,7 +42,6 @@ public class HealthConditionsForm implements StepForm, Serializable {
 
   @Override
   public Set<StepDefinition> getCleanUpSteps(Journey journey) {
-    Optional<StepDefinition> nextStep = determineNextStep(journey);
-    return nextStep.<Set<StepDefinition>>map(Sets::newHashSet).orElse(null);
+    return getAssociatedStep().getNext();
   }
 }

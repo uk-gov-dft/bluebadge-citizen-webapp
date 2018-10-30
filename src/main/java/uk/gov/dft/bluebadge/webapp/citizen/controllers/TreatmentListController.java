@@ -31,13 +31,13 @@ public class TreatmentListController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public TreatmentListController(RouteMaster routeMaster) {
+  TreatmentListController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 

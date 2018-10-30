@@ -1,7 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.walking;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
@@ -12,49 +10,37 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingLengthOfTimeCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WalkingTimeForm;
 
 public class WalkingTimeControllerTest {
 
   private MockMvc mockMvc;
-  private WalkingTimeController controller;
   private Journey journey;
 
-  @Mock private RouteMaster mockRouteMaster;
+  private static final String ERROR_URL = Mappings.URL_WALKING_TIME + RouteMaster.ERROR_SUFFIX;
 
   @Before
   public void setup() {
-    MockitoAnnotations.initMocks(this);
-    controller = new WalkingTimeController(mockRouteMaster);
+    WalkingTimeController controller = new WalkingTimeController(new RouteMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
 
-    ApplicantForm applicantForm =
-        ApplicantForm.builder().applicantType(ApplicantType.YOURSELF.toString()).build();
-
     journey =
         JourneyFixture.getDefaultJourneyToStep(
             StepDefinition.WALKING_TIME, EligibilityCodeField.WALKD);
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
-    // We are not testing the route master. So for convenience just forward to an error view so
-    // can test the error messages
-    when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))
-        .thenReturn("/someValidationError");
   }
 
   @Test
@@ -94,16 +80,12 @@ public class WalkingTimeControllerTest {
   public void show_shouldRedirect_whenJourneyNotSetup() throws Exception {
     mockMvc
         .perform(get("/walking-time").sessionAttr("JOURNEY", new Journey()))
-        .andExpect(status().isOk())
-        .andExpect(view().name("backToStart"));
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(Mappings.URL_ROOT));
   }
 
   @Test
   public void submit_showRedirectToNextStepInJourney() throws Exception {
-    WalkingTimeForm form =
-        WalkingTimeForm.builder().walkingTime(WalkingLengthOfTimeCodeField.LESSMIN).build();
-
-    when(mockRouteMaster.redirectToOnSuccess(form)).thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(
@@ -112,7 +94,7 @@ public class WalkingTimeControllerTest {
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(Mappings.URL_WHERE_CAN_YOU_WALK));
   }
 
   @Test
@@ -120,15 +102,13 @@ public class WalkingTimeControllerTest {
       throws Exception {
     WalkingTimeForm form = WalkingTimeForm.builder().build();
 
-    when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any())).thenCallRealMethod();
-
     mockMvc
         .perform(
             post("/walking-time")
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/walking-time#error"))
+        .andExpect(redirectedUrl(ERROR_URL))
         .andExpect(flash().attribute("formRequest", form));
   }
 
@@ -139,8 +119,10 @@ public class WalkingTimeControllerTest {
             post("/walking-time")
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
-        .andExpect(view().name("/someValidationError"))
-        .andExpect(model().attributeHasFieldErrorCode("formRequest", "walkingTime", "NotNull"));
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(ERROR_URL))
+        .andExpect(
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "walkingTime", "NotNull"));
   }
 }

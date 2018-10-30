@@ -1,7 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -11,11 +9,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
@@ -25,20 +22,16 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 public class DateOfBirthControllerTest {
 
   private static final String URL_DATE_OF_BIRTH = "/date-of-birth";
-  private static final String VIEW_DATE_OF_BIRTH = "date-of-birth";
+  private static final String ERROR_URL = URL_DATE_OF_BIRTH + RouteMaster.ERROR_SUFFIX;
   private MockMvc mockMvc;
-
-  @Mock private RouteMaster mockRouteMaster;
 
   @Before
   public void setup() {
-    MockitoAnnotations.initMocks(this);
-    DateOfBirthController controller = new DateOfBirthController(mockRouteMaster);
+    DateOfBirthController controller = new DateOfBirthController(new RouteMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
   }
 
   @Test
@@ -59,20 +52,16 @@ public class DateOfBirthControllerTest {
   @Test
   public void show_givenMissingJourney_ShouldRedirectBackToStart() throws Exception {
 
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
-
     mockMvc
         .perform(get(URL_DATE_OF_BIRTH))
-        .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/backToStart"));
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(Mappings.URL_ROOT));
   }
 
   @Test
   public void submit_givenValidForm_thenShouldDisplayRedirectToSuccess() throws Exception {
 
     Journey journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.DOB);
-    when(mockRouteMaster.redirectToOnSuccess(any(DateOfBirthForm.class)))
-        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(
@@ -82,7 +71,7 @@ public class DateOfBirthControllerTest {
                 .param("dateOfBirth.day", "2")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(Mappings.URL_GENDER));
   }
 
   @Test
@@ -93,10 +82,11 @@ public class DateOfBirthControllerTest {
                 .param("dateOfBirth.year", "1990")
                 .param("dateOfBirth.month", "1")
                 .sessionAttr("JOURNEY", new Journey()))
-        .andExpect(status().isOk())
-        .andExpect(view().name(VIEW_DATE_OF_BIRTH))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(ERROR_URL))
         .andExpect(
-            model().attributeHasFieldErrorCode("formRequest", "dateOfBirth", "ValidCompoundDate"));
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "dateOfBirth", "ValidCompoundDate"));
   }
 
   @Test
@@ -107,10 +97,11 @@ public class DateOfBirthControllerTest {
                 .param("dateOfBirth.year", "1990")
                 .param("dateOfBirth.day", "1")
                 .sessionAttr("JOURNEY", new Journey()))
-        .andExpect(status().isOk())
-        .andExpect(view().name(VIEW_DATE_OF_BIRTH))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(ERROR_URL))
         .andExpect(
-            model().attributeHasFieldErrorCode("formRequest", "dateOfBirth", "ValidCompoundDate"));
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "dateOfBirth", "ValidCompoundDate"));
   }
 
   @Test
@@ -121,18 +112,15 @@ public class DateOfBirthControllerTest {
                 .param("dateOfBirth.month", "2")
                 .param("dateOfBirth.day", "1")
                 .sessionAttr("JOURNEY", new Journey()))
-        .andExpect(status().isOk())
-        .andExpect(view().name(VIEW_DATE_OF_BIRTH))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(ERROR_URL))
         .andExpect(
-            model().attributeHasFieldErrorCode("formRequest", "dateOfBirth", "ValidCompoundDate"));
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "dateOfBirth", "ValidCompoundDate"));
   }
 
   @Test
   public void submit_givenFutureDate_ThenShouldHaveValidationError() throws Exception {
-
-    Journey journey = JourneyFixture.getDefaultJourney();
-    when(mockRouteMaster.redirectToOnSuccess(journey.getFormForStep(StepDefinition.DOB)))
-        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(
@@ -141,18 +129,15 @@ public class DateOfBirthControllerTest {
                 .param("dateOfBirth.month", "1")
                 .param("dateOfBirth.day", "2")
                 .sessionAttr("JOURNEY", new Journey()))
-        .andExpect(status().isOk())
-        .andExpect(view().name(VIEW_DATE_OF_BIRTH))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(ERROR_URL))
         .andExpect(
-            model().attributeHasFieldErrorCode("formRequest", "dateOfBirth", "PastCompoundDate"));
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "dateOfBirth", "PastCompoundDate"));
   }
 
   @Test
   public void submit_givenInvalidDate_ThenShouldHaveValidationError() throws Exception {
-
-    Journey journey = JourneyFixture.getDefaultJourney();
-    when(mockRouteMaster.redirectToOnSuccess(journey.getFormForStep(StepDefinition.DOB)))
-        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(
@@ -161,9 +146,10 @@ public class DateOfBirthControllerTest {
                 .param("dateOfBirth.month", "1")
                 .param("dateOfBirth.day", "32")
                 .sessionAttr("JOURNEY", new Journey()))
-        .andExpect(status().isOk())
-        .andExpect(view().name(VIEW_DATE_OF_BIRTH))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(ERROR_URL))
         .andExpect(
-            model().attributeHasFieldErrorCode("formRequest", "dateOfBirth", "ValidCompoundDate"));
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "dateOfBirth", "ValidCompoundDate"));
   }
 }

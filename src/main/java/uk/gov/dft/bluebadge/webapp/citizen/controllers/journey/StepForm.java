@@ -1,10 +1,8 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 public interface StepForm {

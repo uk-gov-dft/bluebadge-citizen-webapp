@@ -24,7 +24,7 @@ public class OrganisationMayBeEligibleController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public OrganisationMayBeEligibleController(RouteMaster routeMaster) {
+  OrganisationMayBeEligibleController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
@@ -34,7 +34,7 @@ public class OrganisationMayBeEligibleController implements StepController {
       Model model,
       SessionStatus sessionStatus) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 

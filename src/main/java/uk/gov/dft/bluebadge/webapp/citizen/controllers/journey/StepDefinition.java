@@ -1,6 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey;
 
-import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -78,11 +77,11 @@ public enum StepDefinition {
     return next.iterator().next();
   }
 
-  public static StepDefinition getFirstStep(){
+  public static StepDefinition getFirstStep() {
     return StepDefinition.APPLICANT_TYPE;
   }
 
-  public static StepDefinition getLastPersonalDetailsStep(){
+  public static StepDefinition getLastPersonalDetailsStep() {
     return CONTACT_DETAILS;
   }
 }

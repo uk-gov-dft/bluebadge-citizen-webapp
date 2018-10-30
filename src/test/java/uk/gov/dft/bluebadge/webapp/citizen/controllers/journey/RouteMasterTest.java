@@ -9,9 +9,13 @@ import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefini
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 
 public class RouteMasterTest {
-  RouteMaster routeMaster;
+  private RouteMaster routeMaster;
 
   @Before
   public void setup() {
@@ -68,5 +72,29 @@ public class RouteMasterTest {
         };
 
     routeMaster.redirectToOnSuccess(testForm);
+  }
+
+  @Test
+  public void isValidState_general() {
+    // A valid journey
+    Journey journey =
+        new JourneyBuilder()
+            .toStep(StepDefinition.DECLARATIONS)
+            .withEligibility(EligibilityCodeField.WALKD)
+            .build();
+    assertThat(routeMaster.isValidState(StepDefinition.DECLARATIONS, journey)).isTrue();
+
+    // Remove a step
+    journey.setFormForStep(
+        ReceiveBenefitsForm.builder().benefitType(EligibilityCodeField.AFRFCS).build());
+    assertThat(routeMaster.isValidState(StepDefinition.DECLARATIONS, journey)).isFalse();
+  }
+
+  @Test
+  public void isValidState_firstStep() {
+    // These steps are always valid;
+    Journey journey = new JourneyBuilder().toStep(StepDefinition.HOME).build();
+    assertThat(routeMaster.isValidState(StepDefinition.HOME, journey)).isTrue();
+    assertThat(routeMaster.isValidState(StepDefinition.APPLICANT_TYPE, journey)).isTrue();
   }
 }

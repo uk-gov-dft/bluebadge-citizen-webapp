@@ -22,8 +22,10 @@ class PersonConverter {
     NinoForm ninoForm = journey.getFormForStep(NINO);
     DateOfBirthForm birthForm = journey.getFormForStep(DOB);
 
-    String nino = null == ninoForm ? null : ninoForm.getNino();
-
+    String nino = null;
+    if (null != ninoForm && !journey.isApplicantYoung()) {
+      nino = ninoForm.getNino();
+    }
     return Person.builder()
         .badgeHolderName(applicantNameForm.getFullName())
         .nameAtBirth(applicantNameForm.getBirthName())

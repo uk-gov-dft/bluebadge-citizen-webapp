@@ -31,13 +31,13 @@ public class MedicationListController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public MedicationListController(RouteMaster routeMaster) {
+  MedicationListController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
@@ -90,10 +90,11 @@ public class MedicationListController implements StepController {
       @RequestParam(name = "uuid") String uuid,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (journey.hasStepForm(MEDICATION_LIST)
+    if (journey.hasStepForm(getStepDefinition())
         && null
-            != ((MedicationListForm) journey.getFormForStep(MEDICATION_LIST)).getMedications()) {
-      ((MedicationListForm) journey.getFormForStep(MEDICATION_LIST))
+            != ((MedicationListForm) journey.getFormForStep(getStepDefinition()))
+                .getMedications()) {
+      ((MedicationListForm) journey.getFormForStep(getStepDefinition()))
           .getMedications()
           .removeIf(item -> item.getId().equals(uuid));
     }

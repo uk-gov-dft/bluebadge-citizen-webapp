@@ -1,7 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.mainreason;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -12,12 +10,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
@@ -28,13 +25,11 @@ public class MainReasonControllerTest {
 
   private MockMvc mockMvc;
 
-  @Mock private RouteMaster mockRouteMaster;
   private Journey journey;
 
   @Before
   public void setup() {
-    MockitoAnnotations.initMocks(this);
-    MainReasonController controller = new MainReasonController(mockRouteMaster);
+    MainReasonController controller = new MainReasonController(new RouteMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -42,9 +37,6 @@ public class MainReasonControllerTest {
     journey =
         JourneyFixture.getDefaultJourneyToStep(
             StepDefinition.MAIN_REASON, EligibilityCodeField.CHILDBULK);
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
-    when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))
-        .thenReturn("redirect:/someValidationError");
   }
 
   @Test
@@ -62,25 +54,20 @@ public class MainReasonControllerTest {
   @Test
   public void show_givenNoSession_ShouldRedirectBackToStart() throws Exception {
 
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
-
     mockMvc
         .perform(get("/main-reason"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/backToStart"));
+        .andExpect(redirectedUrl(Mappings.URL_ROOT));
   }
 
   @Test
   public void submit_givenValidForm_thenShouldDisplayRedirectToSuccess() throws Exception {
 
-    when(mockRouteMaster.redirectToOnSuccess(any(MainReasonForm.class)))
-        .thenReturn("redirect:/testSuccess");
-
     mockMvc
         .perform(
             post("/main-reason").param("mainReasonOption", "WALKD").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(Mappings.URL_WALKING_DIFFICULTY));
   }
 
   @Test
@@ -88,6 +75,6 @@ public class MainReasonControllerTest {
     mockMvc
         .perform(post("/main-reason").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/someValidationError"));
+        .andExpect(redirectedUrl(Mappings.URL_MAIN_REASON + RouteMaster.ERROR_SUFFIX));
   }
 }

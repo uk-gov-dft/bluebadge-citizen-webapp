@@ -35,14 +35,14 @@ public class WhatWalkingDifficultiesController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public WhatWalkingDifficultiesController(RouteMaster routeMaster) {
+  WhatWalkingDifficultiesController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
@@ -88,7 +88,7 @@ public class WhatWalkingDifficultiesController implements StepController {
   public RadioOptionsGroup walkingDifficulties(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return null;
     }
 

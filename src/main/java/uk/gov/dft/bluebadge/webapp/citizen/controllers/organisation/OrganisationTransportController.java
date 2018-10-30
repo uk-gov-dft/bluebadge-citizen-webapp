@@ -30,7 +30,7 @@ public class OrganisationTransportController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public OrganisationTransportController(RouteMaster routeMaster) {
+  OrganisationTransportController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
@@ -42,7 +42,7 @@ public class OrganisationTransportController implements StepController {
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 

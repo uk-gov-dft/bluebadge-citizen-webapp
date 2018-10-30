@@ -1,15 +1,12 @@
 package uk.gov.dft.bluebadge.webapp.citizen.appbuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 
 import com.google.common.collect.Lists;
 import java.util.EnumSet;
 import java.util.List;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HowProvidedCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Medication;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Treatment;
@@ -18,8 +15,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Wa
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingLengthOfTimeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingSpeedCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
-import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
@@ -29,18 +26,11 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDi
 
 public class WalkingConverterTest {
 
-  @Mock Journey journey;
-
-  @Before
-  public void setUp() {
-    MockitoAnnotations.initMocks(this);
-    JourneyFixture.configureMockJourney(journey, EligibilityCodeField.WALKD);
-  }
-
   @Test
   public void convert() {
 
-    WalkingDifficulty result = WalkingConverter.convert(journey);
+    WalkingDifficulty result =
+        WalkingConverter.convert(new JourneyBuilder().withEligibility(WALKD).build());
     // Detail covered in other tests.
     assertThat(result.getTypeCodes().size()).isEqualTo(2);
     assertThat(result.getWalkingLengthOfTimeCode()).isEqualTo(WalkingLengthOfTimeCodeField.LESSMIN);

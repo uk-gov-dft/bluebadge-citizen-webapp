@@ -9,53 +9,47 @@ import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.m
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 
 import java.util.EnumSet;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Eligibility;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
-import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 public class EligibilityConverterTest {
-
-  @Mock Journey journey;
-
-  @Before
-  public void setUp() {
-    MockitoAnnotations.initMocks(this);
-  }
 
   @Test
   public void convert_walkd() {
 
-    JourneyFixture.configureMockJourney(journey, WALKD);
-    Eligibility eligibility = EligibilityConverter.convert(journey);
+    Eligibility eligibility =
+        EligibilityConverter.convert(
+            JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS, WALKD));
     assertThat(eligibility.getWalkingDifficulty()).isNotNull();
 
     EnumSet<EligibilityCodeField> notWalking =
         EnumSet.complementOf(EnumSet.of(WALKD, TERMILL, NONE));
     notWalking.forEach(
         i -> {
-          JourneyFixture.configureMockJourney(journey, i);
-          Eligibility eli = EligibilityConverter.convert(journey);
+          Eligibility eli =
+              EligibilityConverter.convert(
+                  JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS, i));
           assertThat(eli.getWalkingDifficulty()).isNull();
         });
   }
 
   @Test
   public void convert_childbulk() {
-    JourneyFixture.configureMockJourney(journey, CHILDBULK);
-    Eligibility eligibility = EligibilityConverter.convert(journey);
+
+    Eligibility eligibility =
+        EligibilityConverter.convert(new JourneyBuilder().withEligibility(CHILDBULK).build());
     assertThat(eligibility.getChildUnder3()).isNotNull();
 
     EnumSet<EligibilityCodeField> notchild =
         EnumSet.complementOf(EnumSet.of(CHILDBULK, TERMILL, NONE));
     notchild.forEach(
         i -> {
-          JourneyFixture.configureMockJourney(journey, i);
-          Eligibility eli = EligibilityConverter.convert(journey);
+          Eligibility eli =
+              EligibilityConverter.convert(new JourneyBuilder().withEligibility(i).build());
           assertThat(eli.getChildUnder3()).isNull();
         });
   }
@@ -67,8 +61,8 @@ public class EligibilityConverterTest {
 
     hasHealthcare.forEach(
         i -> {
-          JourneyFixture.configureMockJourney(journey, i);
-          Eligibility eli = EligibilityConverter.convert(journey);
+          Eligibility eli =
+              EligibilityConverter.convert(new JourneyBuilder().withEligibility(i).build());
           assertThat(eli.getHealthcareProfessionals()).isNotNull();
         });
 
@@ -76,8 +70,8 @@ public class EligibilityConverterTest {
         EnumSet.complementOf(EnumSet.of(CHILDBULK, CHILDVEHIC, WALKD, NONE, TERMILL));
     noHealthcare.forEach(
         i -> {
-          JourneyFixture.configureMockJourney(journey, i);
-          Eligibility eli = EligibilityConverter.convert(journey);
+          Eligibility eli =
+              EligibilityConverter.convert(new JourneyBuilder().withEligibility(i).build());
           assertThat(eli.getHealthcareProfessionals()).isNull();
         });
   }
@@ -88,8 +82,8 @@ public class EligibilityConverterTest {
 
     hasHealthcare.forEach(
         i -> {
-          JourneyFixture.configureMockJourney(journey, i);
-          Eligibility eli = EligibilityConverter.convert(journey);
+          Eligibility eli =
+              EligibilityConverter.convert(new JourneyBuilder().withEligibility(i).build());
           assertThat(eli.getDescriptionOfConditions()).isNotNull();
         });
 
@@ -97,8 +91,8 @@ public class EligibilityConverterTest {
         EnumSet.complementOf(EnumSet.of(CHILDBULK, CHILDVEHIC, WALKD, ARMS, NONE, TERMILL));
     noHealthcare.forEach(
         i -> {
-          JourneyFixture.configureMockJourney(journey, i);
-          Eligibility eli = EligibilityConverter.convert(journey);
+          Eligibility eli =
+              EligibilityConverter.convert(new JourneyBuilder().withEligibility(i).build());
           assertThat(eli.getDescriptionOfConditions()).isNull();
         });
   }
@@ -107,12 +101,6 @@ public class EligibilityConverterTest {
   public void convert_termill_or_none() {
     EnumSet.of(NONE, TERMILL)
         .forEach(
-            i -> {
-              JourneyFixture.configureMockJourney(journey, i);
-              EligibilityConverter.convert(journey);
-            });
+            i -> EligibilityConverter.convert(new JourneyBuilder().withEligibility(i).build()));
   }
-
-  @Test
-  public void getHealthcareProfessionals() {}
 }

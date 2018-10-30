@@ -8,8 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
@@ -19,14 +17,10 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm
 
 public class MedicationAddControllerTest extends ControllerTestFixture<MedicationAddController> {
 
-  @Mock private RouteMaster mockRouteMaster;
-
   @Before
   public void setup() {
-    MockitoAnnotations.initMocks(this);
-    super.setup(new MedicationAddController(mockRouteMaster));
+    super.setup(new MedicationAddController(new RouteMaster()));
     journey.setFormForStep(MedicationListForm.builder().medications(new ArrayList<>()).build());
-    applyRoutmasterDefaultMocks(mockRouteMaster);
   }
 
   @Override

@@ -1,16 +1,16 @@
 package uk.gov.dft.bluebadge.webapp.citizen.fixture;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation.SCO;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation.WLS;
+import static uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture.getDefaultJourneyToStepWithOptions;
+
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.component.CompoundDate;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation.SCO;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation.WLS;
-import static uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture.getDefaultJourneyToStepWithOptions;
 
 public class JourneyBuilder {
   private Nation nation;

@@ -33,14 +33,14 @@ public class GenderController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public GenderController(RouteMaster routeMaster) {
+  GenderController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 

@@ -24,7 +24,7 @@ public class ContactCouncilController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public ContactCouncilController(RouteMaster routeMaster) {
+  ContactCouncilController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
@@ -33,7 +33,7 @@ public class ContactCouncilController implements StepController {
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       Model model,
       SessionStatus sessionStatus) {
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 

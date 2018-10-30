@@ -1,6 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
@@ -11,23 +10,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import uk.gov.dft.bluebadge.webapp.citizen.FormObjectToParamMapper;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 
 public class ApplicantNameControllerTest extends ControllerTestFixture<ApplicantNameController> {
 
-  @Mock private RouteMaster mockRouteMaster;
-
   @Before
   public void setup() {
-    MockitoAnnotations.initMocks(this);
-    super.setup(new ApplicantNameController(mockRouteMaster));
-    applyRoutmasterDefaultMocks(mockRouteMaster);
+    super.setup(new ApplicantNameController(new RouteMaster()));
   }
 
   @Test
@@ -59,9 +53,6 @@ public class ApplicantNameControllerTest extends ControllerTestFixture<Applicant
     ApplicantNameForm applicantNameForm =
         ApplicantNameForm.builder().fullName("John").hasBirthName(false).birthName("John").build();
 
-    when(mockRouteMaster.redirectToOnSuccess(applicantNameForm))
-        .thenReturn("redirect:/testSuccess");
-
     mockMvc
         .perform(
             post("/name")
@@ -69,7 +60,7 @@ public class ApplicantNameControllerTest extends ControllerTestFixture<Applicant
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(Mappings.URL_DOB));
   }
 
   @Test

@@ -1,7 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.mainreason;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -16,37 +14,29 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingD
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficultyForm;
 
 public class WalkingDifficultyControllerTest {
 
   private MockMvc mockMvc;
 
-  @Mock private RouteMaster mockRouteMaster;
-
   @Before
   public void setup() {
-    MockitoAnnotations.initMocks(this);
-    WalkingDifficultyController controller = new WalkingDifficultyController(mockRouteMaster);
+    WalkingDifficultyController controller = new WalkingDifficultyController(new RouteMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
-    when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))
-        .thenReturn("redirect:/someValidationError");
   }
 
   @Test
@@ -102,12 +92,10 @@ public class WalkingDifficultyControllerTest {
   @Test
   public void show_givenNoSession_ShouldRedirectBackToStart() throws Exception {
 
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
-
     mockMvc
         .perform(get("/walking-difficulty"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/backToStart"));
+        .andExpect(redirectedUrl(Mappings.URL_ROOT));
   }
 
   @Test
@@ -117,16 +105,13 @@ public class WalkingDifficultyControllerTest {
         JourneyFixture.getDefaultJourneyToStep(
             StepDefinition.WALKING_DIFFICULTY, EligibilityCodeField.WALKD, Nation.ENG);
 
-    when(mockRouteMaster.redirectToOnSuccess(any(WalkingDifficultyForm.class)))
-        .thenReturn("redirect:/testSuccess");
-
     mockMvc
         .perform(
             post("/walking-difficulty")
                 .param("walkingDifficulty", "NONE")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(Mappings.URL_NOT_ELIGIBLE));
   }
 
   @Test
@@ -138,6 +123,6 @@ public class WalkingDifficultyControllerTest {
     mockMvc
         .perform(post("/walking-difficulty").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/someValidationError"));
+        .andExpect(redirectedUrl(Mappings.URL_WALKING_DIFFICULTY + RouteMaster.ERROR_SUFFIX));
   }
 }

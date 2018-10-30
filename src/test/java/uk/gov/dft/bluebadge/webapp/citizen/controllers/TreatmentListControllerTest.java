@@ -1,8 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -13,9 +11,8 @@ import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
@@ -24,14 +21,12 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
 
 public class TreatmentListControllerTest extends ControllerTestFixture<TreatmentListController> {
 
-  @Mock private RouteMaster mockRouteMaster;
+  private static final String SUCCESS_URL = Mappings.URL_MEDICATION_LIST;
 
   @Before
   public void setup() {
-    MockitoAnnotations.initMocks(this);
-    super.setup(new TreatmentListController(mockRouteMaster));
+    super.setup(new TreatmentListController(new RouteMaster()));
     journey.setFormForStep(TreatmentListForm.builder().treatments(new ArrayList<>()).build());
-    applyRoutmasterDefaultMocks(mockRouteMaster);
   }
 
   @Override
@@ -66,8 +61,6 @@ public class TreatmentListControllerTest extends ControllerTestFixture<Treatment
 
   @Test
   public void submit_showRedirectToNextStepInJourney() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(TreatmentListForm.class)))
-        .thenReturn("redirect:/testSuccess");
     mockMvc
         .perform(
             post(getUrl())
@@ -75,13 +68,11 @@ public class TreatmentListControllerTest extends ControllerTestFixture<Treatment
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(SUCCESS_URL));
   }
 
   @Test
   public void submit_showRedirectToNextStepInJourney_withTreatments() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(TreatmentListForm.class)))
-        .thenReturn("redirect:/testSuccess");
 
     TreatmentAddForm form = new TreatmentAddForm();
     form.setTreatmentDescription("A");
@@ -98,7 +89,7 @@ public class TreatmentListControllerTest extends ControllerTestFixture<Treatment
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(SUCCESS_URL));
 
     // Get again - will be different instance in journey now
     journeyForm = journey.getFormForStep(TREATMENT_LIST);
@@ -108,8 +99,6 @@ public class TreatmentListControllerTest extends ControllerTestFixture<Treatment
 
   @Test
   public void submit_setHasTreatmentsToNoIfEmpty() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(TreatmentListForm.class)))
-        .thenReturn("redirect:/testSuccess");
 
     TreatmentListForm journeyForm = journey.getFormForStep(TREATMENT_LIST);
     journeyForm.setHasTreatment("yes");
@@ -121,7 +110,7 @@ public class TreatmentListControllerTest extends ControllerTestFixture<Treatment
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(SUCCESS_URL));
 
     // Then has reset to no.
     assertEquals(
@@ -130,8 +119,6 @@ public class TreatmentListControllerTest extends ControllerTestFixture<Treatment
 
   @Test
   public void submit_bindingError() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(TreatmentListForm.class)))
-        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(

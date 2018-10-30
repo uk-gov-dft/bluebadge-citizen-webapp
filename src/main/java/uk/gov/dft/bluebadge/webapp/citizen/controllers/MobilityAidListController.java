@@ -31,13 +31,13 @@ public class MobilityAidListController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public MobilityAidListController(RouteMaster routeMaster) {
+  MobilityAidListController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
@@ -93,11 +93,11 @@ public class MobilityAidListController implements StepController {
       @RequestParam(name = "uuid") String uuid,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (journey.hasStepForm(MOBILITY_AID_LIST)
+    if (journey.hasStepForm(getStepDefinition())
         && null
-            != ((MobilityAidListForm) journey.getFormForStep(MOBILITY_AID_LIST))
+            != ((MobilityAidListForm) journey.getFormForStep(getStepDefinition()))
                 .getMobilityAids()) {
-      ((MobilityAidListForm) journey.getFormForStep(MOBILITY_AID_LIST))
+      ((MobilityAidListForm) journey.getFormForStep(getStepDefinition()))
           .getMobilityAids()
           .removeIf(item -> item.getId().equals(uuid));
     }

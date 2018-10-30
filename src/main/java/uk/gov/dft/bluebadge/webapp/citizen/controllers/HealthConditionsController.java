@@ -28,14 +28,14 @@ public class HealthConditionsController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public HealthConditionsController(RouteMaster routeMaster) {
+  HealthConditionsController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 

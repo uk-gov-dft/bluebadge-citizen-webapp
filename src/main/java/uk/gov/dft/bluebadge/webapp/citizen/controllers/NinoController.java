@@ -23,19 +23,19 @@ public class NinoController implements StepController {
 
   public static final String TEMPLATE = "nino";
   public static final String FORM_REQUEST = "formRequest";
-  public static final String NINO_BYPASS_URL = "/nino-bypass";
+  private static final String NINO_BYPASS_URL = "/nino-bypass";
 
   private final RouteMaster routeMaster;
 
   @Autowired
-  public NinoController(RouteMaster routeMaster) {
+  NinoController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping(Mappings.URL_NINO)
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 

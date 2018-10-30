@@ -1,7 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -11,37 +9,29 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ExistingBadgeForm;
 
 public class ExistingBadgeControllerTest {
 
   private MockMvc mockMvc;
-  @Mock private RouteMaster mockRouteMaster;
-
   private Journey journey;
 
   @Before
   public void setup() {
-    MockitoAnnotations.initMocks(this);
-    ExistingBadgeController controller = new ExistingBadgeController(mockRouteMaster);
+    ExistingBadgeController controller = new ExistingBadgeController(new RouteMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
 
     journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.EXISTING_BADGE);
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
-    when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))
-        .thenReturn("redirect:/someValidationError");
   }
 
   @Test
@@ -56,13 +46,11 @@ public class ExistingBadgeControllerTest {
 
   @Test
   public void submit_GivenFormValueIs_No_thenShouldDisplayRedirectToSuccess() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(ExistingBadgeForm.class)))
-        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(post("/existing-badge").param("hasExistingBadge", "no"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(Mappings.URL_RECEIVE_BENEFITS));
   }
 
   @Test
@@ -74,7 +62,7 @@ public class ExistingBadgeControllerTest {
                 .sessionAttr("JOURNEY", new Journey())
                 .param("hasBadgeNumber", "yes"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/someValidationError"));
+        .andExpect(redirectedUrl(Mappings.URL_EXISTING_BADGE + RouteMaster.ERROR_SUFFIX));
   }
 
   @Test
@@ -88,30 +76,26 @@ public class ExistingBadgeControllerTest {
                 .param("hasBadgeNumber", "yes")
                 .param("badgeNumber", "AB12"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/someValidationError"));
+        .andExpect(redirectedUrl(Mappings.URL_EXISTING_BADGE + RouteMaster.ERROR_SUFFIX));
   }
 
   @Test
   public void submit_GivenFormValueIs_Yes_WithoutBadgeNumberEntered_thenShouldRedirectToSuccess()
       throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(ExistingBadgeForm.class)))
-        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(
             post("/existing-badge").param("hasExistingBadge", "no").param("badgeNumber", "AB12CD"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(Mappings.URL_RECEIVE_BENEFITS));
   }
 
   @Test
   public void onByPassLink_ShouldRedirectToSuccess() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(ExistingBadgeForm.class)))
-        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(get("/existing-badge-bypass").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(Mappings.URL_RECEIVE_BENEFITS));
   }
 }

@@ -28,14 +28,14 @@ public class EnterAddressController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public EnterAddressController(RouteMaster routeMaster) {
+  EnterAddressController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 

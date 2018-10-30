@@ -23,7 +23,7 @@ public class OrganisationNotEligibleController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public OrganisationNotEligibleController(RouteMaster routeMaster) {
+  OrganisationNotEligibleController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
@@ -32,7 +32,7 @@ public class OrganisationNotEligibleController implements StepController {
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       Model model,
       SessionStatus sessionStatus) {
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 

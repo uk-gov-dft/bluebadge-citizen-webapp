@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -21,73 +20,66 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
-public class DeclarationSubmitControllerTest {
+class DeclarationSubmitControllerTest {
 
   private MockMvc mockMvc;
 
   @Mock ApplicationManagementService appService;
-  @Mock private RouteMaster mockRouteMaster;
-  @Mock Journey mockJourney;
+  Journey journey;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     MockitoAnnotations.initMocks(this);
     DeclarationSubmitController controller =
-        new DeclarationSubmitController(appService, mockRouteMaster);
+        new DeclarationSubmitController(appService, new RouteMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
+    journey = new JourneyBuilder().build();
   }
 
   @Test
-  public void showDeclaration_ShouldDisplayDeclarationTemplate() throws Exception {
-    when(mockJourney.isValidState(any())).thenReturn(true);
+  void showDeclaration_ShouldDisplayDeclarationTemplate() throws Exception {
 
     DeclarationForm formRequest = DeclarationForm.builder().build();
 
     mockMvc
-        .perform(get("/apply-for-a-blue-badge/declaration").sessionAttr("JOURNEY", mockJourney))
+        .perform(get("/apply-for-a-blue-badge/declaration").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("application-end/declaration"))
         .andExpect(model().attribute("formRequest", formRequest));
   }
 
   @Test
-  public void showDeclaration_givenNoSession_ShouldRedirectBackToStart() throws Exception {
-
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
+  void showDeclaration_givenNoSession_ShouldRedirectBackToStart() throws Exception {
 
     mockMvc
         .perform(get("/apply-for-a-blue-badge/declaration"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/backToStart"));
+        .andExpect(redirectedUrl(Mappings.URL_ROOT));
   }
 
   @Test
-  public void showDeclaration_givenInvalidState_ShouldRedirectBackToStart() throws Exception {
-
-    when(mockJourney.isValidState(any())).thenReturn(false);
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
+  void showDeclaration_givenInvalidState_ShouldRedirectBackToStart() throws Exception {
 
     mockMvc
         .perform(get("/apply-for-a-blue-badge/declaration"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/backToStart"));
+        .andExpect(redirectedUrl(Mappings.URL_ROOT));
   }
 
   @Test
-  public void submitDeclaration_ShouldDisplayApplicationSubmittedTemplate_WhenDeclarationIsAgreed()
+  void submitDeclaration_ShouldDisplayApplicationSubmittedTemplate_WhenDeclarationIsAgreed()
       throws Exception {
-
-    when(mockRouteMaster.redirectToOnSuccess(any(DeclarationForm.class)))
-        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(
@@ -95,17 +87,14 @@ public class DeclarationSubmitControllerTest {
                 .param("agreed", "true")
                 .sessionAttr("JOURNEY", JourneyFixture.getDefaultJourney()))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(Mappings.URL_APPLICATION_SUBMITTED));
 
     verify(appService, times(1)).create(any());
   }
 
   @Test
-  public void submitDeclaration_shouldSendFormDataWithinApplication_WhenDeclarationIsAgreed()
+  void submitDeclaration_shouldSendFormDataWithinApplication_WhenDeclarationIsAgreed()
       throws Exception {
-
-    when(mockRouteMaster.redirectToOnSuccess(any(DeclarationForm.class)))
-        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(
@@ -113,7 +102,7 @@ public class DeclarationSubmitControllerTest {
                 .param("agreed", "true")
                 .sessionAttr("JOURNEY", JourneyFixture.getDefaultJourney()))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(Mappings.URL_APPLICATION_SUBMITTED));
 
     ArgumentCaptor<Application> captor = ArgumentCaptor.forClass(Application.class);
     verify(appService, times(1)).create(captor.capture());
@@ -124,12 +113,13 @@ public class DeclarationSubmitControllerTest {
   }
 
   @Test
-  public void submitDeclaration_ShouldThrowValidationError_WhenDeclarationIsNotAgreed()
-      throws Exception {
+  void submitDeclaration_ShouldThrowValidationError_WhenDeclarationIsNotAgreed() throws Exception {
     mockMvc
         .perform(post("/apply-for-a-blue-badge/declaration").param("agreed", "false"))
-        .andExpect(status().isOk())
-        .andExpect(view().name("apply-for-a-blue-badge/declaration"))
-        .andExpect(model().attributeHasFieldErrorCode("formRequest", "agreed", "AssertTrue"));
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(Mappings.URL_DECLARATIONS + RouteMaster.ERROR_SUFFIX))
+        .andExpect(
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "agreed", "AssertTrue"));
   }
 }

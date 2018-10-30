@@ -1,7 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -12,13 +10,12 @@ import lombok.SneakyThrows;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
@@ -27,14 +24,11 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 public class MayBeEligibleControllerTest {
 
   private MockMvc mockMvc;
-
-  @Mock private RouteMaster mockRouteMaster;
   private Journey journey;
 
   @Before
   public void setup() {
-    MockitoAnnotations.initMocks(this);
-    MayBeEligibleController controller = new MayBeEligibleController(mockRouteMaster);
+    MayBeEligibleController controller = new MayBeEligibleController(new RouteMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -42,7 +36,6 @@ public class MayBeEligibleControllerTest {
     journey =
         JourneyFixture.getDefaultJourneyToStep(
             StepDefinition.MAIN_REASON, EligibilityCodeField.CHILDBULK);
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
   }
 
   @Test
@@ -68,19 +61,17 @@ public class MayBeEligibleControllerTest {
                 .sessionAttr(
                     "JOURNEY",
                     JourneyFixture.getDefaultJourneyToStep(StepDefinition.APPLICANT_TYPE)))
-        .andExpect(status().isOk())
-        .andExpect(view().name("backToStart"));
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(Mappings.URL_ROOT));
   }
 
   @Test
   @SneakyThrows
   public void startApplication_ShouldRedirectToNextPage() {
 
-    when(mockRouteMaster.redirectToOnSuccess(any())).thenReturn("redirect:/theNextPage");
-
     mockMvc
         .perform(get("/may-be-eligible/start"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/theNextPage"));
+        .andExpect(redirectedUrl(Mappings.URL_APPLICANT_NAME));
   }
 }

@@ -1,15 +1,25 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static org.junit.Assert.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
@@ -19,36 +29,22 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
 public class GenderControllerTest {
 
   private MockMvc mockMvc;
-
-  @Mock private RouteMaster mockRouteMaster;
   private Journey journey;
+
+  private static final String SUCCESS_URL = Mappings.URL_NINO;
 
   @Before
   public void setup() {
-    MockitoAnnotations.initMocks(this);
-    GenderController controller = new GenderController(mockRouteMaster);
+    GenderController controller = new GenderController(new RouteMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
-    journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.GENDER, EligibilityCodeField.DLA);
+    journey =
+        JourneyFixture.getDefaultJourneyToStep(StepDefinition.GENDER, EligibilityCodeField.DLA);
   }
 
   @Test
@@ -89,7 +85,8 @@ public class GenderControllerTest {
   @Test
   public void show_ShouldDisplayTheyGenderTerm() throws Exception {
 
-    Journey someoneElseJourney = new JourneyBuilder().forSomeOneElse().toStep(StepDefinition.GENDER).build();
+    Journey someoneElseJourney =
+        new JourneyBuilder().forSomeOneElse().toStep(StepDefinition.GENDER).build();
 
     MvcResult mvcResult =
         mockMvc
@@ -112,53 +109,47 @@ public class GenderControllerTest {
 
   @Test
   public void show_givenNoSession_ShouldRedirectBackToStart() throws Exception {
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
 
     mockMvc
         .perform(get("/gender"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/backToStart"));
+        .andExpect(redirectedUrl(Mappings.URL_ROOT));
   }
 
   @Test
   public void submit_givenMaleOption_thenShouldDisplayRedirectToSuccess() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(GenderForm.class), any(Journey.class)))
-        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(post("/gender").param("gender", "MALE").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(SUCCESS_URL));
   }
 
   @Test
   public void submit_givenFemaleOption_thenShouldDisplayRedirectToSuccess() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(GenderForm.class), any(Journey.class)))
-        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(post("/gender").param("gender", "FEMALE").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(SUCCESS_URL));
   }
 
   @Test
   public void submit_givenUnspecifiedOption_thenShouldDisplayRedirectToSuccess() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(GenderForm.class), any(Journey.class)))
-        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(post("/gender").param("gender", "UNSPECIFIE").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(SUCCESS_URL));
   }
 
   @Test
   public void submit_whenMissingGenderAnswer_ThenShouldHaveValidationError() throws Exception {
     mockMvc
         .perform(post("/gender").sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
-        .andExpect(view().name("gender"))
-        .andExpect(model().attributeHasFieldErrorCode("formRequest", "gender", "NotNull"));
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(Mappings.URL_GENDER + RouteMaster.ERROR_SUFFIX))
+        .andExpect(
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode("gender", "NotNull"));
   }
 }

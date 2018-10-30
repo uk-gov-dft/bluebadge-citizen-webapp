@@ -1,8 +1,22 @@
 package uk.gov.dft.bluebadge.webapp.citizen.fixture;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.AFRFCS;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.ARMS;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.BLIND;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDBULK;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDVEHIC;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.DLA;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.NONE;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.PIP;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.TERMILL;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WPMS;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation.SCO;
+
 import com.google.common.collect.Lists;
-import lombok.Builder;
-import lombok.Getter;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.GenderCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HowProvidedCodeField;
@@ -20,6 +34,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.EligibleForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ExistingBadgeForm;
@@ -52,24 +67,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WalkingTimeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
-
-import java.time.LocalDate;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Optional;
-
-import static org.mockito.Mockito.when;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.AFRFCS;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.BLIND;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDBULK;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDVEHIC;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.DLA;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.NONE;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.PIP;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.TERMILL;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WPMS;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation.SCO;
 
 public class JourneyFixture {
 
@@ -112,7 +109,8 @@ public class JourneyFixture {
     static final String HEALTHCARE_PRO_NAME = "name";
     public static final String EXISTING_BADGE_NO = "oldun";
     static final CompoundDate DOB_ADULT = new CompoundDate("1", "1", "1990");
-    static final CompoundDate DOB_CHILD = new CompoundDate("1", "1", String.valueOf(LocalDate.now().getYear()));
+    public static final CompoundDate DOB_CHILD =
+        new CompoundDate("1", "1", String.valueOf(LocalDate.now().getYear()));
   }
 
   public static ExistingBadgeForm getExistingBadgeForm() {
@@ -202,7 +200,7 @@ public class JourneyFixture {
     return ApplicantForm.builder().applicantType(type.name()).build();
   }
 
-  private static YourIssuingAuthorityForm getYourIssuingAuthorityForm() {
+  public static YourIssuingAuthorityForm getYourIssuingAuthorityForm() {
     return YourIssuingAuthorityForm.builder().localAuthorityShortCode(Values.LA_SHORT_CODE).build();
   }
 
@@ -210,7 +208,7 @@ public class JourneyFixture {
     return DateOfBirthForm.builder().dateOfBirth(dob).build();
   }
 
-  private static HealthConditionsForm getHealthConditionsForm() {
+  public static HealthConditionsForm getHealthConditionsForm() {
     return HealthConditionsForm.builder()
         .descriptionOfConditions(Values.DESCRIPTION_OF_CONDITIONS)
         .build();
@@ -289,18 +287,25 @@ public class JourneyFixture {
 
   public static Journey getDefaultJourneyToStep(
       StepDefinition step, EligibilityCodeField eligibility, Nation nation) {
-    return getDefaultJourneyToStepWithOptions(JourneyBuildOptions.builder().applicantType(Values.APPLICANT_TYPE)
-        .dob(Values.DOB_ADULT).step(step).eligibility(eligibility).nation(nation).build());
+    return getDefaultJourneyToStepWithOptions(
+        JourneyBuildOptions.builder()
+            .applicantType(Values.APPLICANT_TYPE)
+            .dob(Values.DOB_ADULT)
+            .step(step)
+            .eligibility(eligibility)
+            .nation(nation)
+            .build());
   }
 
   private static Journey addOrganisationJourney(Journey journey, JourneyBuildOptions options) {
     StepDefinition stepTo = options.getStep();
     journey.setFormForStep(OrganisationCareForm.builder().doesCare(Boolean.TRUE).build());
     if (stepTo == StepDefinition.ORGANISATION_CARE) return journey;
-    journey.setFormForStep(OrganisationTransportForm.builder().doesTransport(options.getOrgDoesCare()).build());
+    journey.setFormForStep(
+        OrganisationTransportForm.builder().doesTransport(options.getOrgDoesCare()).build());
     if (stepTo == StepDefinition.ORGANISATION_TRANSPORT) return journey;
     journey.setFormForStep(new OrganisationMayBeEligibleForm());
-    if(stepTo == StepDefinition.ORGANISATION_MAY_BE_ELIGIBLE) return journey;
+    if (stepTo == StepDefinition.ORGANISATION_MAY_BE_ELIGIBLE) return journey;
 
     return journey;
   }
@@ -312,7 +317,7 @@ public class JourneyFixture {
 
     Journey journey = new Journey();
 
-    if(StepDefinition.HOME == stepTo) return journey;
+    if (StepDefinition.HOME == stepTo) return journey;
 
     // Preamble section
     journey.setFormForStep(getApplicantForm(applicantType));
@@ -323,7 +328,7 @@ public class JourneyFixture {
     journey.setLocalAuthority(getLocalAuthorityRefData(options.getNation()));
     if (StepDefinition.YOUR_ISSUING_AUTHORITY == stepTo) return journey;
     // Branch off to org journey.
-    if(applicantType == ApplicantType.ORGANISATION){
+    if (applicantType == ApplicantType.ORGANISATION) {
       return addOrganisationJourney(journey, options);
     }
     journey.setFormForStep(getExistingBadgeForm());
@@ -394,6 +399,21 @@ public class JourneyFixture {
       if (StepDefinition.HIGHER_RATE_MOBILITY == stepTo) return journey;
       journey.setFormForStep(new EligibleForm());
     }
+    if (EligibilityCodeField.WPMS == eligibility) {
+      journey.setFormForStep(ReceiveBenefitsForm.builder().benefitType(WPMS).build());
+      if (StepDefinition.RECEIVE_BENEFITS == stepTo) return journey;
+      journey.setFormForStep(new EligibleForm());
+    }
+    if (EligibilityCodeField.ARMS == eligibility) {
+      journey.setFormForStep(ReceiveBenefitsForm.builder().benefitType(NONE).build());
+      journey.setFormForStep(MainReasonForm.builder().mainReasonOption(ARMS).build());
+      journey.setFormForStep(new MayBeEligibleForm());
+    }
+    if (EligibilityCodeField.CHILDVEHIC == eligibility) {
+      journey.setFormForStep(ReceiveBenefitsForm.builder().benefitType(NONE).build());
+      journey.setFormForStep(MainReasonForm.builder().mainReasonOption(CHILDVEHIC).build());
+      journey.setFormForStep(new MayBeEligibleForm());
+    }
 
     journey.setFormForStep(getHealthConditionsForm());
 
@@ -428,6 +448,8 @@ public class JourneyFixture {
     }
 
     journey.setFormForStep(getHealthcareProfessionalListForm());
+
+    journey.setFormForStep(DeclarationForm.builder().agreed(Boolean.TRUE).build());
     return journey;
   }
 
@@ -447,69 +469,5 @@ public class JourneyFixture {
 
   public static Journey getDefaultJourney() {
     return getDefaultJourneyToStep(null);
-  }
-
-  public static void configureMockJourney(
-      Journey mockJourney, EligibilityCodeField eligibilityType) {
-
-    // Eligibility type
-    when(mockJourney.getEligibilityCode()).thenReturn(eligibilityType);
-    if (EnumSet.of(PIP, DLA, AFRFCS, WPMS).contains(eligibilityType)) {
-      when(mockJourney.getFormForStep(StepDefinition.RECEIVE_BENEFITS))
-          .thenReturn(ReceiveBenefitsForm.builder().benefitType(eligibilityType).build());
-      when(mockJourney.getFormForStep(StepDefinition.MAIN_REASON)).thenReturn(null);
-    } else {
-      when(mockJourney.getFormForStep(StepDefinition.RECEIVE_BENEFITS))
-          .thenReturn(ReceiveBenefitsForm.builder().benefitType(NONE).build());
-      when(mockJourney.getFormForStep(StepDefinition.MAIN_REASON))
-          .thenReturn(MainReasonForm.builder().mainReasonOption(eligibilityType).build());
-    }
-
-    // Common steps
-    when(mockJourney.getLocalAuthority()).thenReturn(getLocalAuthorityRefData(SCO));
-    when(mockJourney.getFormForStep(StepDefinition.NAME)).thenReturn(getApplicantNameForm());
-    when(mockJourney.getFormForStep(StepDefinition.GENDER)).thenReturn(getGenderForm());
-    when(mockJourney.getFormForStep(StepDefinition.NINO)).thenReturn(getNinoForm());
-    when(mockJourney.getFormForStep(StepDefinition.DOB))
-        .thenReturn(getDateOfBirthForm(Values.DOB_ADULT));
-    when(mockJourney.getFormForStep(StepDefinition.CONTACT_DETAILS))
-        .thenReturn(getContactDetailsForm());
-    when(mockJourney.getFormForStep(StepDefinition.ADDRESS)).thenReturn(getEnterAddressForm());
-
-    if (WALKD == eligibilityType) {
-      when(mockJourney.getFormForStep(StepDefinition.TREATMENT_LIST))
-          .thenReturn(getTreatmentListForm());
-      when(mockJourney.getFormForStep(StepDefinition.MEDICATION_LIST))
-          .thenReturn(getMedicationListForm());
-      when(mockJourney.getFormForStep(StepDefinition.MOBILITY_AID_LIST))
-          .thenReturn(getMobilityAidListForm());
-      when(mockJourney.getFormForStep(StepDefinition.WALKING_TIME))
-          .thenReturn(getWalkingTimeForm());
-      when(mockJourney.getFormForStep(StepDefinition.WHAT_WALKING_DIFFICULTIES))
-          .thenReturn(getWhatMakesWalkingDifficultForm());
-    } else {
-      when(mockJourney.getFormForStep(StepDefinition.TREATMENT_LIST)).thenReturn(null);
-      when(mockJourney.getFormForStep(StepDefinition.MEDICATION_LIST)).thenReturn(null);
-      when(mockJourney.getFormForStep(StepDefinition.MOBILITY_AID_LIST)).thenReturn(null);
-      when(mockJourney.getFormForStep(StepDefinition.WALKING_TIME)).thenReturn(null);
-      when(mockJourney.getFormForStep(StepDefinition.WHAT_WALKING_DIFFICULTIES)).thenReturn(null);
-    }
-    if (EnumSet.of(WALKD, CHILDVEHIC, CHILDBULK).contains(eligibilityType)) {
-      when(mockJourney.getFormForStep(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST))
-          .thenReturn(getHealthcareProfessionalListForm());
-    } else {
-      when(mockJourney.getFormForStep(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST))
-          .thenReturn(null);
-    }
-
-    when(mockJourney.getFormForStep(StepDefinition.HEALTH_CONDITIONS))
-        .thenReturn(getHealthConditionsForm());
-    when(mockJourney.getDescriptionOfCondition()).thenReturn(Values.DESCRIPTION_OF_CONDITIONS);
-    when(mockJourney.getFormForStep(StepDefinition.EXISTING_BADGE))
-        .thenReturn(getExistingBadgeForm());
-  }
-
-  public static void configureMockJourney(Journey mockJourney) {
-    configureMockJourney(mockJourney, PIP);
   }
 }

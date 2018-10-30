@@ -1,12 +1,12 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Test;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class JourneyTest {
 
@@ -30,7 +30,8 @@ public class JourneyTest {
     assertThat(journey.hasStepForm(StepDefinition.HEALTH_CONDITIONS)).isTrue();
     assertThat(journey.hasStepForm(StepDefinition.WHERE_CAN_YOU_WALK)).isTrue();
 
-    journey.setFormForStep(ReceiveBenefitsForm.builder().benefitType(EligibilityCodeField.PIP).build());
+    journey.setFormForStep(
+        ReceiveBenefitsForm.builder().benefitType(EligibilityCodeField.PIP).build());
     // After eligibility changed the eligibility forms have been removed
     // Other forms stay
     assertThat(journey.hasStepForm(StepDefinition.YOUR_ISSUING_AUTHORITY)).isTrue();
@@ -43,24 +44,5 @@ public class JourneyTest {
     assertThat(journey.hasStepForm(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST)).isFalse();
     assertThat(journey.hasStepForm(StepDefinition.HEALTH_CONDITIONS)).isFalse();
     assertThat(journey.hasStepForm(StepDefinition.WHERE_CAN_YOU_WALK)).isFalse();
-  }
-
-  @Test
-  public void isValidState_general() {
-    // A valid journey
-    Journey journey = new JourneyBuilder().toStep(StepDefinition.DECLARATIONS).withEligibility(EligibilityCodeField.WALKD).build();
-    assertThat(journey.isValidState(StepDefinition.DECLARATIONS)).isTrue();
-
-    // Remove a step
-    journey.forms.remove(StepDefinition.CONTACT_DETAILS);
-    assertThat(journey.isValidState(StepDefinition.DECLARATIONS)).isFalse();
-  }
-
-  @Test
-  public void isValidState_firstStep() {
-    // These steps are always valid;
-    Journey journey = new JourneyBuilder().toStep(StepDefinition.HOME).build();
-    assertThat(journey.isValidState(StepDefinition.HOME)).isTrue();
-    assertThat(journey.isValidState(StepDefinition.APPLICANT_TYPE)).isTrue();
   }
 }

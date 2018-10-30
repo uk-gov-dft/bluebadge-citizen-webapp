@@ -32,14 +32,14 @@ public class MedicationAddController implements StepController {
   private static final String TEMPLATE = "walking/medication-add";
 
   @Autowired
-  public MedicationAddController(RouteMaster routeMaster) {
+  MedicationAddController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 

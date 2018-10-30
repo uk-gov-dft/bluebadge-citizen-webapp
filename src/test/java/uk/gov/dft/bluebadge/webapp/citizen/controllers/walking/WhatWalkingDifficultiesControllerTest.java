@@ -1,33 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.walking;
 
-import com.google.common.collect.ImmutableList;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
-import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
-import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
-import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
@@ -38,18 +12,41 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation.ENG;
 
+import com.google.common.collect.ImmutableList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
+
 public class WhatWalkingDifficultiesControllerTest {
 
   private MockMvc mockMvc;
   private Journey journey;
 
-  @Mock private RouteMaster mockRouteMaster;
+  private static final String ERROR_URL =
+      Mappings.URL_WHAT_WALKING_DIFFICULT + RouteMaster.ERROR_SUFFIX;
 
   @Before
   public void setup() {
-    MockitoAnnotations.initMocks(this);
     WhatWalkingDifficultiesController controller =
-        new WhatWalkingDifficultiesController(mockRouteMaster);
+        new WhatWalkingDifficultiesController(new RouteMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -58,10 +55,6 @@ public class WhatWalkingDifficultiesControllerTest {
     journey =
         JourneyFixture.getDefaultJourneyToStep(
             StepDefinition.WHAT_WALKING_DIFFICULTIES, WALKD, ENG);
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
-
-    when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))
-        .thenReturn("/someValidationError");
   }
 
   @Test
@@ -174,22 +167,12 @@ public class WhatWalkingDifficultiesControllerTest {
   public void show_shouldRedirect_whenJourneyNotSetup() throws Exception {
     mockMvc
         .perform(get("/what-makes-walking-difficult").sessionAttr("JOURNEY", new Journey()))
-        .andExpect(status().isOk())
-        .andExpect(view().name("backToStart"));
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(Mappings.URL_ROOT));
   }
 
   @Test
   public void submit_showRedirectToNextStepInJourney() throws Exception {
-    List<WalkingDifficultyTypeCodeField> whatList =
-        ImmutableList.of(
-            WalkingDifficultyTypeCodeField.PAIN, WalkingDifficultyTypeCodeField.SOMELSE);
-    WhatMakesWalkingDifficultForm form =
-        WhatMakesWalkingDifficultForm.builder()
-            .whatWalkingDifficulties(whatList)
-            .somethingElseDescription("test test")
-            .build();
-
-    when(mockRouteMaster.redirectToOnSuccess(form)).thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(
@@ -199,15 +182,13 @@ public class WhatWalkingDifficultiesControllerTest {
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(Mappings.URL_MOBILITY_AID_LIST));
   }
 
   @Test
   public void submit_whenBlankFormSubmitted_thenShouldRedirectToShowWithValidationErrors()
       throws Exception {
     WhatMakesWalkingDifficultForm form = WhatMakesWalkingDifficultForm.builder().build();
-
-    when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any())).thenCallRealMethod();
 
     mockMvc
         .perform(
@@ -227,11 +208,11 @@ public class WhatWalkingDifficultiesControllerTest {
             post("/what-makes-walking-difficult")
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
-        .andExpect(view().name("/someValidationError"))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(ERROR_URL))
         .andExpect(
-            model()
-                .attributeHasFieldErrorCode("formRequest", "whatWalkingDifficulties", "NotEmpty"));
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "whatWalkingDifficulties", "NotEmpty"));
   }
 
   @Test
@@ -245,10 +226,10 @@ public class WhatWalkingDifficultiesControllerTest {
                 .param("whatWalkingDifficulties", "PAIN, SOMELSE")
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
-        .andExpect(view().name("/someValidationError"))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(ERROR_URL))
         .andExpect(
-            model()
-                .attributeHasFieldErrorCode("formRequest", "somethingElseDescription", "NotBlank"));
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "somethingElseDescription", "NotBlank"));
   }
 }

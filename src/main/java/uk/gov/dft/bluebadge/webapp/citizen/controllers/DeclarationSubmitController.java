@@ -30,8 +30,7 @@ public class DeclarationSubmitController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public DeclarationSubmitController(
-      ApplicationManagementService appService, RouteMaster routeMaster) {
+  DeclarationSubmitController(ApplicationManagementService appService, RouteMaster routeMaster) {
     this.appService = appService;
     this.routeMaster = routeMaster;
   }
@@ -39,7 +38,7 @@ public class DeclarationSubmitController implements StepController {
   @GetMapping
   public String showDeclaration(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 

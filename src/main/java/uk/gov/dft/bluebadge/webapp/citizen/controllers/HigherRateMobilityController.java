@@ -35,13 +35,13 @@ public class HigherRateMobilityController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public HigherRateMobilityController(RouteMaster routeMaster) {
+  HigherRateMobilityController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 

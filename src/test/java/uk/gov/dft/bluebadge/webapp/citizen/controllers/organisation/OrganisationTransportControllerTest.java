@@ -1,7 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.organisation;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -20,28 +18,22 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.organisation.OrganisationTransportForm;
 
 @Slf4j
 @TestInstance(Lifecycle.PER_CLASS)
 class OrganisationTransportControllerTest {
 
   private MockMvc mockMvc;
-
-  @Mock private RouteMaster mockRouteMaster;
   private Journey journey;
 
   @BeforeEach
@@ -57,18 +49,23 @@ class OrganisationTransportControllerTest {
   @BeforeAll
   void setup() {
     MockitoAnnotations.initMocks(this);
-    OrganisationTransportController controller = new OrganisationTransportController(mockRouteMaster);
+    OrganisationTransportController controller =
+        new OrganisationTransportController(new RouteMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
-    journey = new JourneyBuilder().forOrganisation().toStep(StepDefinition.ORGANISATION_TRANSPORT).build();
+    journey =
+        new JourneyBuilder()
+            .forOrganisation()
+            .toStep(StepDefinition.ORGANISATION_TRANSPORT)
+            .build();
   }
 
   @Test
   @SneakyThrows
   @DisplayName("Should display organisation transport template")
-  public void show_Template() {
+  void show_Template() {
     mockMvc
         .perform(get("/organisation-transport").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
@@ -80,40 +77,51 @@ class OrganisationTransportControllerTest {
   @Test
   @SneakyThrows
   @DisplayName("Should redirect back to start if session is absent")
-  public void show_redirectBackToStart() {
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
-
+  void show_redirectBackToStart() {
     mockMvc
         .perform(get("/organisation-transport"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/backToStart"));
+        .andExpect(redirectedUrl(Mappings.URL_ROOT));
   }
 
-  @ParameterizedTest
+  @Test
   @SneakyThrows
-  @ValueSource(strings = {"true", "false"})
   @DisplayName("Should redirect to success when either option is selected")
-  public void submit_redirectToSuccess(String value) {
-    when(mockRouteMaster.redirectToOnSuccess(any(OrganisationTransportForm.class)))
-        .thenReturn("redirect:/testSuccess");
+  void submit_redirectToSuccess() {
 
     mockMvc
         .perform(
             post("/organisation-transport")
-                .param("doesTransport", value)
+                .param("doesTransport", "true")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(Mappings.URL_ORGANISATION_MAY_BE_ELIGIBLE));
+  }
+
+  @Test
+  @SneakyThrows
+  @DisplayName("Should redirect to success when either option is selected")
+  void submit_redirectToSuccess_false() {
+
+    mockMvc
+        .perform(
+            post("/organisation-transport")
+                .param("doesTransport", "false")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl(Mappings.URL_ORGANISATION_NOT_ELIGIBLE));
   }
 
   @Test
   @SneakyThrows
   @DisplayName("Should return validation error when none of the options selected")
-  public void submit_validationError() {
+  void submit_validationError() {
     mockMvc
         .perform(post("/organisation-transport").sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
-        .andExpect(view().name("organisation-transport"))
-        .andExpect(model().attributeHasFieldErrorCode("formRequest", "doesTransport", "NotNull"));
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(Mappings.URL_ORGANISATION_TRANSPORT + RouteMaster.ERROR_SUFFIX))
+        .andExpect(
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "doesTransport", "NotNull"));
   }
 }

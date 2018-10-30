@@ -23,14 +23,14 @@ public class EligibleController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public EligibleController(RouteMaster routeMaster) {
+  EligibleController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 

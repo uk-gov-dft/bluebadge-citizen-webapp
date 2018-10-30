@@ -1,29 +1,21 @@
 package uk.gov.dft.bluebadge.webapp.citizen.appbuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Person;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
 
 public class PersonConverterTest {
 
-  @Mock Journey journey;
-
-  @Before
-  public void setUp() {
-    MockitoAnnotations.initMocks(this);
-    JourneyFixture.configureMockJourney(journey);
-  }
-
   @Test
   public void convert() {
+    Journey journey = new JourneyBuilder().forYou().build();
     Person result = PersonConverter.convert(journey);
     assertThat(result.getBadgeHolderName()).isEqualTo(JourneyFixture.Values.FULL_NAME);
     assertThat(result.getNameAtBirth()).isEqualTo(JourneyFixture.Values.BIRTH_NAME);
@@ -32,7 +24,22 @@ public class PersonConverterTest {
     assertThat(result.getNino()).isEqualTo(JourneyFixture.Values.NINO);
 
     // Try with null nino.
-    when(journey.getFormForStep(StepDefinition.NINO)).thenReturn(null);
+    NinoForm ninoForm = journey.getFormForStep(StepDefinition.NINO);
+    ninoForm.setNino(null);
+    result = PersonConverter.convert(journey);
+    assertThat(result.getNino()).isNull();
+  }
+
+  @Test
+  public void convert_young_applicant() {
+    // Journey for adult with Nino.
+    Journey journey = new JourneyBuilder().forYou().anAdult().build();
+    Person result = PersonConverter.convert(journey);
+    assertThat(result.getNino()).isEqualTo(JourneyFixture.Values.NINO);
+
+    // Then user changes to a young applicant.
+    DateOfBirthForm birthForm = journey.getFormForStep(StepDefinition.DOB);
+    birthForm.setDateOfBirth(JourneyFixture.Values.DOB_CHILD);
     result = PersonConverter.convert(journey);
     assertThat(result.getNino()).isNull();
   }

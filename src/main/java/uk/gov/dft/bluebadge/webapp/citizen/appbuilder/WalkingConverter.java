@@ -1,14 +1,10 @@
 package uk.gov.dft.bluebadge.webapp.citizen.appbuilder;
 
-import java.util.ArrayList;
-import java.util.List;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Medication;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Treatment;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingAid;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficulty;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingLengthOfTimeCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingSpeedCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
@@ -16,6 +12,9 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WalkingTimeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
+
+import java.util.ArrayList;
+import java.util.List;
 
 class WalkingConverter {
 
@@ -33,7 +32,6 @@ class WalkingConverter {
 
     return WalkingDifficulty.builder()
         .walkingLengthOfTimeCode(walkingTimeForm.getWalkingTime())
-        .walkingSpeedCode(getWalkingSpeed(walkingTimeForm))
         .typeCodes(whatMakesWalkingDifficultForm.getWhatWalkingDifficulties())
         .otherDescription(getOtherDesc(whatMakesWalkingDifficultForm))
         .walkingAids(getWalkingAids(mobilityAidListForm))
@@ -48,12 +46,6 @@ class WalkingConverter {
             .contains(WalkingDifficultyTypeCodeField.SOMELSE)
         ? whatMakesWalkingDifficultForm.getSomethingElseDescription()
         : null;
-  }
-
-  static WalkingSpeedCodeField getWalkingSpeed(WalkingTimeForm walkingTimeForm) {
-    return walkingTimeForm.getWalkingTime() == WalkingLengthOfTimeCodeField.CANTWALK
-        ? null
-        : WalkingSpeedCodeField.SLOW;
   }
 
   static List<WalkingAid> getWalkingAids(MobilityAidListForm mobilityAidListForm) {
