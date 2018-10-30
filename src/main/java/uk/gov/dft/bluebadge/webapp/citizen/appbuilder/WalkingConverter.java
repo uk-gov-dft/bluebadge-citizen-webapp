@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.appbuilder;
 
+import java.util.ArrayList;
+import java.util.List;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Medication;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Treatment;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingAid;
@@ -12,9 +14,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WalkingTimeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
-
-import java.util.ArrayList;
-import java.util.List;
 
 class WalkingConverter {
 

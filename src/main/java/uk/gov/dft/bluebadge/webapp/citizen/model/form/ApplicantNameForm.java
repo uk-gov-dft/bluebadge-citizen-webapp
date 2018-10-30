@@ -27,8 +27,7 @@ public class ApplicantNameForm implements StepForm, Serializable {
   private String birthName;
 
   public Boolean isBirthNameValid() {
-    return (!Boolean.TRUE.equals(hasBirthName)
-        || StringUtils.isNotBlank(birthName));
+    return (!Boolean.TRUE.equals(hasBirthName) || StringUtils.isNotBlank(birthName));
   }
 
   @Override

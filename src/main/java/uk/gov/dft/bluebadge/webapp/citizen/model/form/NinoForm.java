@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
+import java.io.Serializable;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import lombok.Builder;
@@ -9,8 +10,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.validation.ValidationPatterns;
-
-import java.io.Serializable;
 
 @Builder
 @Data

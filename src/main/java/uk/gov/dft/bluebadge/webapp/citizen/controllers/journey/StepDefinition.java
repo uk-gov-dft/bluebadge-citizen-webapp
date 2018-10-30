@@ -80,8 +80,4 @@ public enum StepDefinition {
   public static StepDefinition getFirstStep() {
     return StepDefinition.APPLICANT_TYPE;
   }
-
-  public static StepDefinition getLastPersonalDetailsStep() {
-    return CONTACT_DETAILS;
-  }
 }

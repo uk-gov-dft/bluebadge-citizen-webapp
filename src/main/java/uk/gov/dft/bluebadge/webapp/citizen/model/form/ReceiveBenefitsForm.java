@@ -7,9 +7,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefini
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.PIP_MOVING_AROUND;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;

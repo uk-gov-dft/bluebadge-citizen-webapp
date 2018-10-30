@@ -33,8 +33,7 @@ public class ChooseYourCouncilController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  ChooseYourCouncilController(
-      ReferenceDataService referenceDataService, RouteMaster routeMaster) {
+  ChooseYourCouncilController(ReferenceDataService referenceDataService, RouteMaster routeMaster) {
     this.referenceDataService = referenceDataService;
     this.routeMaster = routeMaster;
   }
@@ -73,7 +72,8 @@ public class ChooseYourCouncilController implements StepController {
     }
 
     journey.setLocalAuthority(
-        referenceDataService.lookupLocalAuthorityFromCouncilCode(formRequest.getCouncilShortCode()));
+        referenceDataService.lookupLocalAuthorityFromCouncilCode(
+            formRequest.getCouncilShortCode()));
     journey.setFormForStep(formRequest);
     return routeMaster.redirectToOnSuccess(formRequest);
   }

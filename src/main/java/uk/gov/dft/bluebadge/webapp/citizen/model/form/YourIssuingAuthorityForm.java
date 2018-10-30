@@ -34,7 +34,7 @@ public class YourIssuingAuthorityForm implements StepForm, Serializable {
   @Override
   public boolean preserveStep(Journey journey) {
     LocalAuthorityRefData authority = journey.getLocalAuthority();
-    if(null == authority || null == authority.getShortCode()){
+    if (null == authority || null == authority.getShortCode()) {
       return false;
     }
 

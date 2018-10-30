@@ -14,14 +14,12 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Wa
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficulty;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingLengthOfTimeCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingSpeedCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WalkingTimeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
 
 public class WalkingConverterTest {

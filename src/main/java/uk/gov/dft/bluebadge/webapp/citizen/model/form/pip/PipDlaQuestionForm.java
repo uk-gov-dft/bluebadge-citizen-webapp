@@ -5,7 +5,6 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipDlaQuestionF
 
 import java.io.Serializable;
 import java.util.Optional;
-import java.util.Set;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
@@ -45,5 +44,4 @@ public class PipDlaQuestionForm implements Serializable, StepForm {
   }
 
   @NotNull private PipDlaQuestionForm.PipReceivedDlaOption receivedDlaOption;
-
 }

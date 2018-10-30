@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Test;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
@@ -11,8 +13,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class JourneyTest {
 

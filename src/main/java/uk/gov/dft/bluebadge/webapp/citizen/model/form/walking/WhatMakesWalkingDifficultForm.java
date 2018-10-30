@@ -3,7 +3,6 @@ package uk.gov.dft.bluebadge.webapp.citizen.model.form.walking;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -54,5 +53,4 @@ public class WhatMakesWalkingDifficultForm implements StepForm, Serializable {
   }
 
   interface SomethingElseGroup {}
-
 }

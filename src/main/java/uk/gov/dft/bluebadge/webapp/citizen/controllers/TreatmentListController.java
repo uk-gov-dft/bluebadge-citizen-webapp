@@ -67,7 +67,7 @@ public class TreatmentListController implements StepController {
       return routeMaster.redirectToOnBindingError(this, treatmentListForm, bindingResult, attr);
     }
 
-    TreatmentListForm journeyForm = journey.getFormForStep(TREATMENT_LIST);
+    TreatmentListForm journeyForm = journey.getFormForStep(getStepDefinition());
     // Reset if no selected
     // Treat as No selected if no aids added whilst yes was selected
     if ("no".equals(treatmentListForm.getHasTreatment())
@@ -90,9 +90,10 @@ public class TreatmentListController implements StepController {
       @RequestParam(name = "uuid") String uuid,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (journey.hasStepForm(TREATMENT_LIST)
-        && null != ((TreatmentListForm) journey.getFormForStep(TREATMENT_LIST)).getTreatments()) {
-      ((TreatmentListForm) journey.getFormForStep(TREATMENT_LIST))
+    if (journey.hasStepForm(getStepDefinition())
+        && null
+            != ((TreatmentListForm) journey.getFormForStep(getStepDefinition())).getTreatments()) {
+      ((TreatmentListForm) journey.getFormForStep(getStepDefinition()))
           .getTreatments()
           .removeIf(item -> item.getId().equals(uuid));
     }

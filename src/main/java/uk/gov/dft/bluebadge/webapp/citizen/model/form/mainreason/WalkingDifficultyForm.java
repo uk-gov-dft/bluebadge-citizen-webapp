@@ -2,7 +2,6 @@ package uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason;
 
 import java.io.Serializable;
 import java.util.Optional;
-import java.util.Set;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
@@ -44,5 +43,4 @@ public class WalkingDifficultyForm implements StepForm, Serializable {
   }
 
   @NotNull private WalkingDifficulty walkingDifficulty;
-
 }

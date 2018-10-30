@@ -2,7 +2,6 @@ package uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs;
 
 import java.io.Serializable;
 import java.util.Optional;
-import java.util.Set;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
@@ -37,5 +36,4 @@ public class MentalDisorderForm implements Serializable, StepForm {
   public boolean preserveStep(Journey journey) {
     return false;
   }
-
 }

@@ -1,7 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
 import java.io.Serializable;
-import java.util.Set;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.Builder;
@@ -33,5 +32,4 @@ public class WhereCanYouWalkForm implements StepForm, Serializable {
   public boolean preserveStep(Journey journey) {
     return false;
   }
-
 }

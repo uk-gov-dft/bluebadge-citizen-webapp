@@ -14,8 +14,6 @@ import org.junit.Test;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
@@ -23,7 +21,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 
 public class EligibleControllerTest {
 
@@ -37,9 +34,7 @@ public class EligibleControllerTest {
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
-    journey =
-        JourneyFixture.getDefaultJourneyToStep(
-            StepDefinition.MAIN_REASON, BLIND);
+    journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.MAIN_REASON, BLIND);
   }
 
   @Test
@@ -47,11 +42,16 @@ public class EligibleControllerTest {
   public void show_ShouldDisplayEligibleTemplate() {
 
     mockMvc
-        .perform(get("/eligible").sessionAttr("JOURNEY", new JourneyBuilder().withEligibility(BLIND).inEngland().build()))
+        .perform(
+            get("/eligible")
+                .sessionAttr(
+                    "JOURNEY", new JourneyBuilder().withEligibility(BLIND).inEngland().build()))
         .andExpect(view().name("eligible"))
         .andExpect(status().isOk())
         .andExpect(model().attribute("formRequest", Matchers.nullValue()))
-        .andExpect(model().attribute("localAuthority", JourneyFixture.getLocalAuthorityRefData(Nation.ENG)));
+        .andExpect(
+            model()
+                .attribute("localAuthority", JourneyFixture.getLocalAuthorityRefData(Nation.ENG)));
   }
 
   @Test

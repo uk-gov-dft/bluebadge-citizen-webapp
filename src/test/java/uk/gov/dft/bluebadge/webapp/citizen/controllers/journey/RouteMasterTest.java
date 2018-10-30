@@ -24,17 +24,18 @@ public class RouteMasterTest {
 
   @Test
   public void redirectOnSuccessWithForm_singleNextStep() {
-    StepForm testForm = new StepForm() {
-      @Override
-      public StepDefinition getAssociatedStep() {
-        return HOME;
-      }
+    StepForm testForm =
+        new StepForm() {
+          @Override
+          public StepDefinition getAssociatedStep() {
+            return HOME;
+          }
 
-      @Override
-      public boolean preserveStep(Journey journey) {
-        return false;
-      }
-    };
+          @Override
+          public boolean preserveStep(Journey journey) {
+            return false;
+          }
+        };
 
     assertThat(routeMaster.redirectToOnSuccess(testForm))
         .isEqualTo("redirect:" + Mappings.URL_APPLICANT_TYPE);
@@ -42,17 +43,18 @@ public class RouteMasterTest {
 
   @Test(expected = IllegalStateException.class)
   public void redirectOnSuccessWithForm_whenMultiple_thenExcpetion() {
-    StepForm testForm = new StepForm() {
-      @Override
-      public StepDefinition getAssociatedStep() {
-        return RECEIVE_BENEFITS;
-      }
+    StepForm testForm =
+        new StepForm() {
+          @Override
+          public StepDefinition getAssociatedStep() {
+            return RECEIVE_BENEFITS;
+          }
 
-      @Override
-      public boolean preserveStep(Journey journey) {
-        return false;
-      }
-    };
+          @Override
+          public boolean preserveStep(Journey journey) {
+            return false;
+          }
+        };
 
     routeMaster.redirectToOnSuccess(testForm);
   }

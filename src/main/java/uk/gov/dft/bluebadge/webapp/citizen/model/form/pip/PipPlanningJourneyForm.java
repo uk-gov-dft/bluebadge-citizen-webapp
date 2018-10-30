@@ -4,7 +4,6 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipPlanningJour
 
 import java.io.Serializable;
 import java.util.Optional;
-import java.util.Set;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
@@ -58,5 +57,4 @@ public class PipPlanningJourneyForm implements Serializable, StepForm {
   }
 
   @NotNull private PipPlanningJourneyForm.PipPlanningJourneyOption planningJourneyOption;
-
 }

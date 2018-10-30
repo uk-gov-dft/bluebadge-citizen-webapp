@@ -6,7 +6,6 @@ import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefini
 
 import java.io.Serializable;
 import java.util.Optional;
-import java.util.Set;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
@@ -41,5 +40,4 @@ public class OrganisationCareForm implements StepForm, Serializable {
   public boolean preserveStep(Journey journey) {
     return false;
   }
-
 }
