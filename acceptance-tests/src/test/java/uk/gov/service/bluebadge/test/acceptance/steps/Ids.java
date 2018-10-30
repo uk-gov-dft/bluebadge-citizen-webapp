@@ -9,6 +9,7 @@ class Ids {
     static final String APPLICANT_ORGANISATION_OPTION =
         APPLICANT_TYPE_OPTION_LIST + ".ORGANISATION";
     static final String COUNCIL_INPUT = "councilShortCode";
+
     static final String EXISTING_BADGE_OPTION = "hasExistingBadge";
     static final String BADGE_NUMBER = "badgeNumber";
     static final String BADGE_NUMBER_BYPASS_LINK = "bypass_link";

@@ -64,27 +64,6 @@ public class WalkingConverterTest {
   }
 
   @Test
-  public void getWalkingSpeed() {
-    // If cant walk null else slow
-    EnumSet<WalkingLengthOfTimeCodeField> cant = EnumSet.of(WalkingLengthOfTimeCodeField.CANTWALK);
-
-    cant.forEach(
-        i ->
-            assertThat(
-                    WalkingConverter.getWalkingSpeed(
-                        WalkingTimeForm.builder().walkingTime(i).build()))
-                .isNull());
-
-    EnumSet.complementOf(cant)
-        .forEach(
-            i ->
-                assertThat(
-                        WalkingConverter.getWalkingSpeed(
-                            WalkingTimeForm.builder().walkingTime(i).build()))
-                    .isEqualTo(WalkingSpeedCodeField.SLOW));
-  }
-
-  @Test
   public void getWalkingAids_withOne() {
     List<WalkingAid> result =
         WalkingConverter.getWalkingAids(JourneyFixture.getMobilityAidListForm());

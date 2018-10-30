@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.validation.ValidationPatterns;
 @EqualsAndHashCode
 public class NinoForm implements StepForm {
 
+  @NotBlank(message = "{field.nino.NotBlank}")
   @Pattern(regexp = ValidationPatterns.NINO_CASE_INSENSITIVE)
   private String nino;
 

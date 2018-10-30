@@ -32,6 +32,7 @@ public class TestContentUrls {
     add("applicant", "/");
     add("describe health conditions", "/health-conditions");
     add("declaration", "/apply-for-a-blue-badge/declaration");
+    add("home", "/");
   }
 
   private void add(String pageName, String url) {

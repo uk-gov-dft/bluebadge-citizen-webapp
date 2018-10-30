@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.lang3.StringUtils;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 
@@ -17,6 +18,10 @@ public class ExistingBadgeForm implements StepForm, Serializable {
   private Boolean hasExistingBadge;
 
   private String badgeNumber;
+
+  public boolean hasBadgeNumber() {
+    return StringUtils.isNotBlank(getBadgeNumber());
+  }
 
   @Override
   public StepDefinition getAssociatedStep() {
