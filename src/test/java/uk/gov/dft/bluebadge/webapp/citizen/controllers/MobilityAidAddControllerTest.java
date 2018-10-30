@@ -1,7 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
@@ -11,46 +9,35 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode;
 
-import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 
 public class MobilityAidAddControllerTest {
 
   private MockMvc mockMvc;
   private Journey journey;
 
-  @Mock private RouteMaster mockRouteMaster;
-
   @Before
   public void setup() {
-    MockitoAnnotations.initMocks(this);
-    MobilityAidAddController controller = new MobilityAidAddController(mockRouteMaster);
+    MobilityAidAddController controller = new MobilityAidAddController(new RouteMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
 
-    ApplicantForm applicantForm =
-        ApplicantForm.builder().applicantType(ApplicantType.YOURSELF.toString()).build();
-
-    journey = new Journey();
-    journey.setApplicantForm(applicantForm);
-    journey.setMobilityAidListForm(
-        MobilityAidListForm.builder().mobilityAids(new ArrayList<>()).build());
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
-    when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any())).thenCallRealMethod();
+    journey =
+        JourneyFixture.getDefaultJourneyToStep(
+            StepDefinition.MOBILITY_AID_LIST, EligibilityCodeField.WALKD);
   }
 
   @Test
@@ -66,8 +53,8 @@ public class MobilityAidAddControllerTest {
   public void show_shouldRedirect_whenJourneyNotSetup() throws Exception {
     mockMvc
         .perform(get("/add-mobility-aid").sessionAttr("JOURNEY", new Journey()))
-        .andExpect(status().isOk())
-        .andExpect(view().name("backToStart"));
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(Mappings.URL_ROOT));
   }
 
   @Test

@@ -1,20 +1,20 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.HEALTHCARE_PROFESSIONAL_LIST;
 
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalListForm;
@@ -22,17 +22,13 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalList
 public class HealthcareProfessionalListControllerTest
     extends ControllerTestFixture<HealthcareProfessionalListController> {
 
-  @Mock private RouteMaster mockRouteMaster;
-
   @Before
   public void setup() {
-    MockitoAnnotations.initMocks(this);
-    super.setup(new HealthcareProfessionalListController(mockRouteMaster));
-    journey.setHealthcareProfessionalListForm(
+    super.setup(new HealthcareProfessionalListController(new RouteMaster()));
+    journey.setFormForStep(
         HealthcareProfessionalListForm.builder()
             .healthcareProfessionals(new ArrayList<>())
             .build());
-    applyRoutmasterDefaultMocks(mockRouteMaster);
   }
 
   @Override
@@ -43,6 +39,16 @@ public class HealthcareProfessionalListControllerTest
   @Override
   protected String getUrl() {
     return "/list-healthcare-professionals";
+  }
+
+  @Override
+  protected StepDefinition getStep() {
+    return HEALTHCARE_PROFESSIONAL_LIST;
+  }
+
+  @Override
+  protected EligibilityCodeField getEligibilityType() {
+    return EligibilityCodeField.WALKD;
   }
 
   @Test
@@ -57,8 +63,6 @@ public class HealthcareProfessionalListControllerTest
 
   @Test
   public void submit_showRedirectToNextStepInJourney() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(HealthcareProfessionalListForm.class)))
-        .thenReturn("redirect:/testSuccess");
     mockMvc
         .perform(
             post(getUrl())
@@ -66,22 +70,20 @@ public class HealthcareProfessionalListControllerTest
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(Mappings.URL_DECLARATIONS));
   }
 
   @Test
   public void submit_showRedirectToNextStepInJourney_withTreatments() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(HealthcareProfessionalListForm.class)))
-        .thenReturn("redirect:/testSuccess");
 
     HealthcareProfessionalAddForm form = new HealthcareProfessionalAddForm();
     form.setHealthcareProfessionalLocation("Island");
     form.setHealthcareProfessionalName("Dr No");
 
-    journey.getHealthcareProfessionalListForm().setHasHealthcareProfessional("yes");
-    journey
-        .getHealthcareProfessionalListForm()
-        .setHealthcareProfessionals(Lists.newArrayList(form));
+    HealthcareProfessionalListForm journeyForm =
+        journey.getFormForStep(HEALTHCARE_PROFESSIONAL_LIST);
+    journeyForm.setHasHealthcareProfessional("yes");
+    journeyForm.setHealthcareProfessionals(Lists.newArrayList(form));
 
     mockMvc
         .perform(
@@ -90,20 +92,21 @@ public class HealthcareProfessionalListControllerTest
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(Mappings.URL_DECLARATIONS));
 
-    assertEquals("yes", journey.getHealthcareProfessionalListForm().getHasHealthcareProfessional());
-    assertEquals(
-        1, journey.getHealthcareProfessionalListForm().getHealthcareProfessionals().size());
+    // Get form again.  Will be different instance in journey now
+    journeyForm = journey.getFormForStep(HEALTHCARE_PROFESSIONAL_LIST);
+    assertEquals("yes", journeyForm.getHasHealthcareProfessional());
+    assertEquals(1, journeyForm.getHealthcareProfessionals().size());
   }
 
   @Test
   public void submit_setHasProfessionalsToNoIfEmpty() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(HealthcareProfessionalListForm.class)))
-        .thenReturn("redirect:/testSuccess");
 
-    journey.getHealthcareProfessionalListForm().setHasHealthcareProfessional("yes");
-    journey.getHealthcareProfessionalListForm().setHealthcareProfessionals(new ArrayList<>());
+    HealthcareProfessionalListForm journeyForm =
+        journey.getFormForStep(HEALTHCARE_PROFESSIONAL_LIST);
+    journeyForm.setHasHealthcareProfessional("yes");
+    journeyForm.setHealthcareProfessionals(new ArrayList<>());
     mockMvc
         .perform(
             post(getUrl())
@@ -111,15 +114,17 @@ public class HealthcareProfessionalListControllerTest
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(Mappings.URL_DECLARATIONS));
+
     // Then has reset to no.
-    assertEquals("no", journey.getHealthcareProfessionalListForm().getHasHealthcareProfessional());
+    assertEquals(
+        "no",
+        ((HealthcareProfessionalListForm) journey.getFormForStep(HEALTHCARE_PROFESSIONAL_LIST))
+            .getHasHealthcareProfessional());
   }
 
   @Test
   public void submit_bindingError() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(HealthcareProfessionalListForm.class)))
-        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(

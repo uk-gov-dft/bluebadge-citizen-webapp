@@ -77,4 +77,8 @@ public enum StepDefinition {
     }
     return next.iterator().next();
   }
+
+  public static StepDefinition getFirstStep() {
+    return StepDefinition.APPLICANT_TYPE;
+  }
 }

@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.HEALTHCARE_PROFESSIONAL_LIST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
@@ -29,27 +30,31 @@ public class HealthcareProfessionalAddController implements StepController {
   private static final String TEMPLATE = "healthcare-professional-add";
 
   @Autowired
-  public HealthcareProfessionalAddController(RouteMaster routeMaster) {
+  HealthcareProfessionalAddController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
     // Can hit add link before previous form submitted.
-    if (null == journey.getHealthcareProfessionalListForm()
-        || null == journey.getHealthcareProfessionalListForm().getHealthcareProfessionals()) {
-      journey.setHealthcareProfessionalListForm(
+    if (!journey.hasStepForm(HEALTHCARE_PROFESSIONAL_LIST)
+        || null
+            == ((HealthcareProfessionalListForm)
+                    journey.getFormForStep(HEALTHCARE_PROFESSIONAL_LIST))
+                .getHealthcareProfessionals()) {
+      journey.setFormForStep(
           HealthcareProfessionalListForm.builder()
               .healthcareProfessionals(new ArrayList<>())
               .build());
     }
 
-    journey.getHealthcareProfessionalListForm().setHasHealthcareProfessional("yes");
+    ((HealthcareProfessionalListForm) journey.getFormForStep(HEALTHCARE_PROFESSIONAL_LIST))
+        .setHasHealthcareProfessional("yes");
 
     // On returning to form (binding errors), take previously submitted values.
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -72,8 +77,7 @@ public class HealthcareProfessionalAddController implements StepController {
           this, healthcareProfessionalAddForm, bindingResult, attr);
     }
 
-    journey
-        .getHealthcareProfessionalListForm()
+    ((HealthcareProfessionalListForm) journey.getFormForStep(HEALTHCARE_PROFESSIONAL_LIST))
         .getHealthcareProfessionals()
         .add(healthcareProfessionalAddForm);
 

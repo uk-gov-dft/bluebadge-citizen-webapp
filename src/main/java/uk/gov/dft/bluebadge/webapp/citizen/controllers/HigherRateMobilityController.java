@@ -35,19 +35,19 @@ public class HigherRateMobilityController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public HigherRateMobilityController(RouteMaster routeMaster) {
+  HigherRateMobilityController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
     // On returning to form, take previously submitted values.
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getHigherRateMobilityForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getHigherRateMobilityForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     // If navigating forward from previous form, reset
@@ -70,7 +70,7 @@ public class HigherRateMobilityController implements StepController {
       return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
     }
 
-    journey.setHigherRateMobilityForm(formRequest);
+    journey.setFormForStep(formRequest);
     return routeMaster.redirectToOnSuccess(formRequest);
   }
 

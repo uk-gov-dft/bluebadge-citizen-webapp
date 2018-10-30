@@ -1,6 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -16,34 +16,30 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataService;
 
 public class YourIssuingAuthorityControllerTest {
 
   private MockMvc mockMvc;
-  private YourIssuingAuthorityController controller;
-  private LocalAuthorityRefData laRefData = new LocalAuthorityRefData();
   @Mock ReferenceDataService mockReferenceDataService;
 
-  @Mock Journey mockJourney;
-
-  @Mock private RouteMaster mockRouteMaster;
+  Journey journey;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new YourIssuingAuthorityController(mockRouteMaster, mockReferenceDataService);
-    when(mockJourney.getChooseYourCouncilForm())
-        .thenReturn(ChooseYourCouncilForm.builder().councilShortCode("TTT").build());
-    when(mockReferenceDataService.lookupLocalAuthorityFromCouncilCode("TTT")).thenReturn(laRefData);
-    laRefData.setShortCode("HHH");
-    laRefData.setDescription("An LA");
+    YourIssuingAuthorityController controller =
+        new YourIssuingAuthorityController(new RouteMaster(), mockReferenceDataService);
+    journey = new JourneyBuilder().toStep(StepDefinition.YOUR_ISSUING_AUTHORITY).build();
+    when(mockReferenceDataService.lookupLocalAuthorityFromCouncilCode(anyString()))
+        .thenReturn(JourneyFixture.getLocalAuthorityRefData(Nation.ENG));
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -52,31 +48,23 @@ public class YourIssuingAuthorityControllerTest {
 
   @Test
   public void show_whenFirstvisit() throws Exception {
-    when(mockJourney.isValidState(any())).thenReturn(true);
-
-    YourIssuingAuthorityForm formRequest =
-        YourIssuingAuthorityForm.builder()
-            .localAuthorityShortCode("HHH")
-            .localAuthorityDescription("An LA")
-            .build();
 
     mockMvc
-        .perform(get(Mappings.URL_YOUR_ISSUING_AUTHORITY).sessionAttr("JOURNEY", mockJourney))
+        .perform(
+            get(Mappings.URL_YOUR_ISSUING_AUTHORITY)
+                .sessionAttr(
+                    "JOURNEY", new JourneyBuilder().toStep(StepDefinition.CHOOSE_COUNCIL).build()))
         .andExpect(status().isOk())
         .andExpect(view().name("issuing-authority"))
-        .andExpect(model().attribute("formRequest", formRequest));
+        .andExpect(model().attribute("formRequest", JourneyFixture.getYourIssuingAuthorityForm()));
   }
 
   @Test
   public void submit_givenValidForm_thenShouldDisplayRedirectToSuccess() throws Exception {
 
-    when(mockRouteMaster.redirectToOnSuccess(
-            any(YourIssuingAuthorityForm.class), any(Journey.class)))
-        .thenReturn("redirect:/testSuccess");
-
     mockMvc
-        .perform(post(Mappings.URL_YOUR_ISSUING_AUTHORITY).sessionAttr("JOURNEY", mockJourney))
+        .perform(post(Mappings.URL_YOUR_ISSUING_AUTHORITY).sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(Mappings.URL_EXISTING_BADGE));
   }
 }

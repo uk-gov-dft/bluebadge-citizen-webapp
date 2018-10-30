@@ -7,6 +7,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.validator.DateConstraintToEnum;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.validator.ValidCompoundDate;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.component.CompoundDate;
 
 @Data
@@ -21,5 +22,10 @@ public class ProveBenefitForm implements StepForm {
   @Override
   public StepDefinition getAssociatedStep() {
     return StepDefinition.PROVE_BENEFIT;
+  }
+
+  @Override
+  public boolean preserveStep(Journey journey) {
+    return false;
   }
 }

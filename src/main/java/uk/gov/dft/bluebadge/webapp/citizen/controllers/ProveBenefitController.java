@@ -35,12 +35,12 @@ public class ProveBenefitController implements StepController {
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getProveBenefitForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getProveBenefitForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -67,7 +67,7 @@ public class ProveBenefitController implements StepController {
       return routeMaster.redirectToOnBindingError(this, proveBenefitForm, bindingResult, attr);
     }
 
-    journey.setProveBenefitForm(proveBenefitForm);
+    journey.setFormForStep(proveBenefitForm);
 
     return routeMaster.redirectToOnSuccess(proveBenefitForm);
   }

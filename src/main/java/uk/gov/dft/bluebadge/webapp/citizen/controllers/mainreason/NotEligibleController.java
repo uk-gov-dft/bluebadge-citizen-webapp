@@ -24,7 +24,7 @@ public class NotEligibleController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public NotEligibleController(RouteMaster routeMaster) {
+  NotEligibleController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
@@ -33,7 +33,7 @@ public class NotEligibleController implements StepController {
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       Model model,
       SessionStatus sessionStatus) {
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 

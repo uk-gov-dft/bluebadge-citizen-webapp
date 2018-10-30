@@ -8,11 +8,14 @@ import java.util.Optional;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 @Data
 @Builder
+@EqualsAndHashCode
 public class PipDlaQuestionForm implements Serializable, StepForm {
   public enum PipReceivedDlaOption {
     HAS_RECEIVED_DLA,
@@ -33,6 +36,11 @@ public class PipDlaQuestionForm implements Serializable, StepForm {
       return Optional.of(StepDefinition.MAIN_REASON);
     }
     return Optional.empty();
+  }
+
+  @Override
+  public boolean preserveStep(Journey journey) {
+    return false;
   }
 
   @NotNull private PipDlaQuestionForm.PipReceivedDlaOption receivedDlaOption;

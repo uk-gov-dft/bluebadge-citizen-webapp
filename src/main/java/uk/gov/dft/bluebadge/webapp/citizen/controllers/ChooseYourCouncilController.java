@@ -33,8 +33,7 @@ public class ChooseYourCouncilController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public ChooseYourCouncilController(
-      ReferenceDataService referenceDataService, RouteMaster routeMaster) {
+  ChooseYourCouncilController(ReferenceDataService referenceDataService, RouteMaster routeMaster) {
     this.referenceDataService = referenceDataService;
     this.routeMaster = routeMaster;
   }
@@ -42,12 +41,12 @@ public class ChooseYourCouncilController implements StepController {
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getChooseYourCouncilForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getChooseYourCouncilForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -72,7 +71,10 @@ public class ChooseYourCouncilController implements StepController {
       return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
     }
 
-    journey.setChooseYourCouncilForm(formRequest);
+    journey.setLocalAuthority(
+        referenceDataService.lookupLocalAuthorityFromCouncilCode(
+            formRequest.getCouncilShortCode()));
+    journey.setFormForStep(formRequest);
     return routeMaster.redirectToOnSuccess(formRequest);
   }
 

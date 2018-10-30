@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Data;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 @Data
 @Builder
@@ -33,5 +34,10 @@ public class OrganisationTransportForm implements StepForm, Serializable {
     return doesTransport
         ? Optional.of(ORGANISATION_MAY_BE_ELIGIBLE)
         : Optional.of(ORGANISATION_NOT_ELIGIBLE);
+  }
+
+  @Override
+  public boolean preserveStep(Journey journey) {
+    return false;
   }
 }

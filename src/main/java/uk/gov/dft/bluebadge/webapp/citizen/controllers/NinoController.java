@@ -23,24 +23,24 @@ public class NinoController implements StepController {
 
   public static final String TEMPLATE = "nino";
   public static final String FORM_REQUEST = "formRequest";
-  public static final String NINO_BYPASS_URL = "/nino-bypass";
+  private static final String NINO_BYPASS_URL = "/nino-bypass";
 
   private final RouteMaster routeMaster;
 
   @Autowired
-  public NinoController(RouteMaster routeMaster) {
+  NinoController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping(Mappings.URL_NINO)
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getNinoForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getNinoForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -53,7 +53,7 @@ public class NinoController implements StepController {
   @GetMapping(NINO_BYPASS_URL)
   public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     NinoForm formRequest = NinoForm.builder().build();
-    journey.setNinoForm(formRequest);
+    journey.setFormForStep(formRequest);
     return routeMaster.redirectToOnSuccess(formRequest);
   }
 
@@ -68,7 +68,7 @@ public class NinoController implements StepController {
       return routeMaster.redirectToOnBindingError(this, ninoForm, bindingResult, attr);
     }
 
-    journey.setNinoForm(ninoForm);
+    journey.setFormForStep(ninoForm);
 
     return routeMaster.redirectToOnSuccess(ninoForm);
   }

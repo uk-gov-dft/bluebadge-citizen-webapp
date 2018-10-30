@@ -34,20 +34,20 @@ public class WalkingTimeController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public WalkingTimeController(RouteMaster routeMaster) {
+  WalkingTimeController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
     //On returning to form, take previously submitted values.
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getWalkingTimeForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getWalkingTimeForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     // If navigating forward from previous form, reset
@@ -71,7 +71,7 @@ public class WalkingTimeController implements StepController {
       return routeMaster.redirectToOnBindingError(this, walkingTimeForm, bindingResult, attr);
     }
 
-    journey.setWalkingTimeForm(walkingTimeForm);
+    journey.setFormForStep(walkingTimeForm);
 
     return routeMaster.redirectToOnSuccess(walkingTimeForm);
   }
@@ -85,7 +85,7 @@ public class WalkingTimeController implements StepController {
   public RadioOptionsGroup walkingTimeOptions(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return null;
     }
 
