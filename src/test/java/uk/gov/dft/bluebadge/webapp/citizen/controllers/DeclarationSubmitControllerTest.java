@@ -268,8 +268,7 @@ public class DeclarationSubmitControllerTest {
     assertThat(application.getEligibility().getWalkingDifficulty()).isNotNull();
     assertThat(application.getEligibility().getWalkingDifficulty().getWalkingLengthOfTimeCode())
         .isEqualTo(WalkingLengthOfTimeCodeField.MORETEN);
-    assertThat(application.getEligibility().getWalkingDifficulty().getWalkingSpeedCode())
-        .isNotNull();
+    assertThat(application.getEligibility().getWalkingDifficulty().getWalkingSpeedCode()).isNull();
   }
 
   @Test
