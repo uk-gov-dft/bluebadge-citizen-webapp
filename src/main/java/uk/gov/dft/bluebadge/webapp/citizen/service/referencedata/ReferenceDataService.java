@@ -1,13 +1,18 @@
 package uk.gov.dft.bluebadge.webapp.citizen.service.referencedata;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.WebApplicationContext;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataDomainEnum;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataGroupEnum;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.ReferenceDataApiClient;
@@ -17,6 +22,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceD
 
 @Service
 @Slf4j
+@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class ReferenceDataService {
 
   private Map<String, List<ReferenceData>> groupedReferenceDataList = null;
@@ -63,19 +69,13 @@ public class ReferenceDataService {
     }
   }
 
-  private void initialise() {
-    if (!isLoaded.get()) {
-      init();
-    }
-  }
-
   public List<ReferenceData> retrieveReferenceDataList(RefDataGroupEnum referenceDataGroup) {
-    initialise();
+    init();
     return groupedReferenceDataList.get(referenceDataGroup.getGroupKey());
   }
 
   public LocalAuthorityRefData lookupLocalAuthorityFromCouncilCode(String localCouncilShortCode) {
-    initialise();
+    init();
     LocalCouncilRefData council = localCouncilMap.get(localCouncilShortCode);
     if (null == council) {
       log.warn("No council found for {}.", localCouncilShortCode);
@@ -91,6 +91,7 @@ public class ReferenceDataService {
   }
 
   public LocalAuthorityRefData retrieveLocalAuthority(String localAuthorityShortCode) {
+    init();
     return localAuthorityMap.get(localAuthorityShortCode);
   }
 }
