@@ -1,14 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
-
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
@@ -23,6 +14,16 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
 
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
+
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
+
 @Slf4j
 public class Journey implements Serializable {
 
@@ -35,16 +36,20 @@ public class Journey implements Serializable {
 
   public void setFormForStep(StepForm form) {
     // If changing values in a form may need to invalidate later forms in the journey
-    if (hasStepForm(form.getAssociatedStep())
-        && !form.equals(getFormForStep(form.getAssociatedStep()))) {
-      cleanUpSteps(new HashSet<>(), form.getCleanUpSteps(this));
-    }
+    boolean doCleanUp =
+        (hasStepForm(form.getAssociatedStep())
+            && !form.equals(getFormForStep(form.getAssociatedStep())));
+
     forms.put(form.getAssociatedStep(), form);
 
     if (form.getAssociatedStep() == StepDefinition.APPLICANT_TYPE) {
       who = isApplicantYourself() ? "you." : "oth.";
     } else if (form.getAssociatedStep() == StepDefinition.DOB) {
       ageGroup = isApplicantYoung() ? "young." : "adult.";
+    }
+
+    if (doCleanUp) {
+      cleanUpSteps(new HashSet<>(), form.getAssociatedStep().getNext());
     }
   }
 
@@ -66,8 +71,10 @@ public class Journey implements Serializable {
             stepDefinition -> {
               if (hasStepForm(stepDefinition)) {
                 StepForm f = getFormForStep(stepDefinition);
-                cleanUpSteps(alreadyCleaned, f.getCleanUpSteps(this));
-                forms.remove(stepDefinition);
+                cleanUpSteps(alreadyCleaned, f.getAssociatedStep().getNext());
+                if (!f.preserveStep(this)) {
+                  forms.remove(stepDefinition);
+                }
                 alreadyCleaned.add(stepDefinition);
               }
             });

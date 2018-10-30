@@ -10,6 +10,7 @@ import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 @Data
 @Builder
@@ -26,13 +27,17 @@ public class ApplicantNameForm implements StepForm, Serializable {
   private String birthName;
 
   public Boolean isBirthNameValid() {
-    return (hasBirthName == null
-        || !Boolean.TRUE.equals(hasBirthName)
+    return (!Boolean.TRUE.equals(hasBirthName)
         || StringUtils.isNotBlank(birthName));
   }
 
   @Override
   public StepDefinition getAssociatedStep() {
     return StepDefinition.NAME;
+  }
+
+  @Override
+  public boolean preserveStep(Journey journey) {
+    return true;
   }
 }

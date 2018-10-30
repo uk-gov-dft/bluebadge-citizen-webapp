@@ -52,10 +52,11 @@ public class PipPlanningJourneyForm implements Serializable, StepForm {
     return Optional.empty();
   }
 
+  @Override
+  public boolean preserveStep(Journey journey) {
+    return false;
+  }
+
   @NotNull private PipPlanningJourneyForm.PipPlanningJourneyOption planningJourneyOption;
 
-  @Override
-  public Set<StepDefinition> getCleanUpSteps(Journey journey) {
-    return getAssociatedStep().getNext();
-  }
 }

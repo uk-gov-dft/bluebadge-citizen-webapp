@@ -33,6 +33,11 @@ public class WhatMakesWalkingDifficultForm implements StepForm, Serializable {
     return StepDefinition.WHAT_WALKING_DIFFICULTIES;
   }
 
+  @Override
+  public boolean preserveStep(Journey journey) {
+    return false;
+  }
+
   public static class GroupProvider
       implements DefaultGroupSequenceProvider<WhatMakesWalkingDifficultForm> {
     @Override
@@ -50,8 +55,4 @@ public class WhatMakesWalkingDifficultForm implements StepForm, Serializable {
 
   interface SomethingElseGroup {}
 
-  @Override
-  public Set<StepDefinition> getCleanUpSteps(Journey journey) {
-    return getAssociatedStep().getNext();
-  }
 }

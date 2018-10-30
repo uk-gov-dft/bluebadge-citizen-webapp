@@ -61,4 +61,9 @@ public class ContactDetailsForm implements StepForm, Serializable {
         return Optional.of(StepDefinition.HEALTH_CONDITIONS);
     }
   }
+
+  @Override
+  public boolean preserveStep(Journey journey) {
+    return true;
+  }
 }

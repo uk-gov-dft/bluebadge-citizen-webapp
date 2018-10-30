@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 @Builder
 @Data
@@ -19,5 +20,10 @@ public class DeclarationForm implements StepForm, Serializable {
   @Override
   public StepDefinition getAssociatedStep() {
     return StepDefinition.DECLARATIONS;
+  }
+
+  @Override
+  public boolean preserveStep(Journey journey) {
+    return false;
   }
 }

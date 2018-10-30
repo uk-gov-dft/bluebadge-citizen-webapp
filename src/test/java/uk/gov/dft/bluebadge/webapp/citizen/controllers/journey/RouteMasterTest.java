@@ -24,7 +24,17 @@ public class RouteMasterTest {
 
   @Test
   public void redirectOnSuccessWithForm_singleNextStep() {
-    StepForm testForm = () -> HOME;
+    StepForm testForm = new StepForm() {
+      @Override
+      public StepDefinition getAssociatedStep() {
+        return HOME;
+      }
+
+      @Override
+      public boolean preserveStep(Journey journey) {
+        return false;
+      }
+    };
 
     assertThat(routeMaster.redirectToOnSuccess(testForm))
         .isEqualTo("redirect:" + Mappings.URL_APPLICANT_TYPE);
@@ -32,7 +42,17 @@ public class RouteMasterTest {
 
   @Test(expected = IllegalStateException.class)
   public void redirectOnSuccessWithForm_whenMultiple_thenExcpetion() {
-    StepForm testForm = () -> RECEIVE_BENEFITS;
+    StepForm testForm = new StepForm() {
+      @Override
+      public StepDefinition getAssociatedStep() {
+        return RECEIVE_BENEFITS;
+      }
+
+      @Override
+      public boolean preserveStep(Journey journey) {
+        return false;
+      }
+    };
 
     routeMaster.redirectToOnSuccess(testForm);
   }
@@ -49,6 +69,11 @@ public class RouteMasterTest {
           @Override
           public Optional<StepDefinition> determineNextStep() {
             return Optional.of(ELIGIBLE);
+          }
+
+          @Override
+          public boolean preserveStep(Journey journey) {
+            return false;
           }
         };
 
@@ -69,6 +94,11 @@ public class RouteMasterTest {
           public Optional<StepDefinition> determineNextStep() {
             return Optional.of(DECLARATIONS);
           }
+
+          @Override
+          public boolean preserveStep(Journey journey) {
+            return false;
+          }
         };
 
     routeMaster.redirectToOnSuccess(testForm);
@@ -88,6 +118,9 @@ public class RouteMasterTest {
     journey.setFormForStep(
         ReceiveBenefitsForm.builder().benefitType(EligibilityCodeField.AFRFCS).build());
     assertThat(routeMaster.isValidState(StepDefinition.DECLARATIONS, journey)).isFalse();
+    assertThat(routeMaster.isValidState(StepDefinition.CONTACT_DETAILS, journey)).isFalse();
+    // First few steps not removed.
+    assertThat(routeMaster.isValidState(StepDefinition.YOUR_ISSUING_AUTHORITY, journey)).isTrue();
   }
 
   @Test

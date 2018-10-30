@@ -30,7 +30,8 @@ public class WhereCanYouWalkForm implements StepForm, Serializable {
   }
 
   @Override
-  public Set<StepDefinition> getCleanUpSteps(Journey journey) {
-    return getAssociatedStep().getNext();
+  public boolean preserveStep(Journey journey) {
+    return false;
   }
+
 }

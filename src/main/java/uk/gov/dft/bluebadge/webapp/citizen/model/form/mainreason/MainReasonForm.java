@@ -44,13 +44,7 @@ public class MainReasonForm implements StepForm {
   @NotNull private EligibilityCodeField mainReasonOption;
 
   @Override
-  public Set<StepDefinition> getCleanUpSteps(Journey journey) {
-
-    // Clean all eligibility based steps - leave personal details.
-    Set<StepDefinition> steps = new HashSet<>();
-    steps.addAll(getAssociatedStep().getNext());
-    steps.addAll(StepDefinition.getLastPersonalDetailsStep().getNext());
-
-    return steps;
+  public boolean preserveStep(Journey journey) {
+    return false;
   }
 }

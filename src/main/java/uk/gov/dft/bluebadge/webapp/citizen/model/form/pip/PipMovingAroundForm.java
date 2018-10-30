@@ -58,7 +58,7 @@ public class PipMovingAroundForm implements Serializable, StepForm {
   @NotNull private PipMovingAroundOption movingAroundPoints;
 
   @Override
-  public Set<StepDefinition> getCleanUpSteps(Journey journey) {
-    return getAssociatedStep().getNext();
+  public boolean preserveStep(Journey journey) {
+    return false;
   }
 }

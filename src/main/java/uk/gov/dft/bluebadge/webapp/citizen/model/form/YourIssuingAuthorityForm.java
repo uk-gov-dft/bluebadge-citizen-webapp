@@ -5,6 +5,7 @@ import java.util.Optional;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
@@ -28,5 +29,15 @@ public class YourIssuingAuthorityForm implements StepForm, Serializable {
     }
 
     return Optional.of(StepDefinition.EXISTING_BADGE);
+  }
+
+  @Override
+  public boolean preserveStep(Journey journey) {
+    LocalAuthorityRefData authority = journey.getLocalAuthority();
+    if(null == authority || null == authority.getShortCode()){
+      return false;
+    }
+
+    return authority.getShortCode().equals(localAuthorityShortCode);
   }
 }

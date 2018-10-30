@@ -41,7 +41,7 @@ public class CompensationSchemeForm implements Serializable, StepForm {
   }
 
   @Override
-  public Set<StepDefinition> getCleanUpSteps(Journey journey) {
-    return getAssociatedStep().getNext();
+  public boolean preserveStep(Journey journey) {
+    return false;
   }
 }

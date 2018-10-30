@@ -33,4 +33,9 @@ public class GenderForm implements StepForm, Serializable {
 
     return Optional.of(StepDefinition.NINO);
   }
+
+  @Override
+  public boolean preserveStep(Journey journey) {
+    return true;
+  }
 }

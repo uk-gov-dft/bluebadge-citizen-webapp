@@ -1,9 +1,8 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey;
 
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Set;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+
+import java.util.Optional;
 
 public interface StepForm {
 
@@ -18,12 +17,13 @@ public interface StepForm {
   }
 
   /**
-   * Journey is included to provide context so cleaning forms can be dynamic.
-   *
-   * @param journey journey.
-   * @return Set of steps to clean.
+   * Used by journey to remove steps when a 'branching' step is changed.
+   * Some steps, such as personal details do not get removed, others such as
+   * eligibility do.  E.g. change eligibility type in journey and all
+   * eligibility related steps are removed, but when eligibility is filled
+   * back in the user will find the previously populated contact details.
+   * @param journey Journey being cleaned.
+   * @return true to not remove step form from journey, false to remove.
    */
-  default Set<StepDefinition> getCleanUpSteps(Journey journey) {
-    return Collections.emptySet();
-  }
+  boolean preserveStep(Journey journey);
 }

@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.BLIND;
 
 import lombok.SneakyThrows;
 import org.hamcrest.Matchers;
@@ -15,9 +16,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
@@ -36,24 +39,19 @@ public class EligibleControllerTest {
             .build();
     journey =
         JourneyFixture.getDefaultJourneyToStep(
-            StepDefinition.MAIN_REASON, EligibilityCodeField.BLIND);
+            StepDefinition.MAIN_REASON, BLIND);
   }
 
   @Test
   @SneakyThrows
   public void show_ShouldDisplayEligibleTemplate() {
-    YourIssuingAuthorityForm yourIssuingAuthorityForm =
-        YourIssuingAuthorityForm.builder().localAuthorityShortCode("bob").build();
-    journey.setFormForStep(yourIssuingAuthorityForm);
-    LocalAuthorityRefData localAuthorityRefData = new LocalAuthorityRefData();
-    journey.setLocalAuthority(localAuthorityRefData);
 
     mockMvc
-        .perform(get("/eligible").sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
+        .perform(get("/eligible").sessionAttr("JOURNEY", new JourneyBuilder().withEligibility(BLIND).inEngland().build()))
         .andExpect(view().name("eligible"))
+        .andExpect(status().isOk())
         .andExpect(model().attribute("formRequest", Matchers.nullValue()))
-        .andExpect(model().attribute("localAuthority", localAuthorityRefData));
+        .andExpect(model().attribute("localAuthority", JourneyFixture.getLocalAuthorityRefData(Nation.ENG)));
   }
 
   @Test

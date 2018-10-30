@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason;
 
+import java.io.Serializable;
 import java.util.Optional;
 import java.util.Set;
 import javax.validation.constraints.NotNull;
@@ -13,7 +14,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 @Data
 @Builder
 @EqualsAndHashCode
-public class WalkingDifficultyForm implements StepForm {
+public class WalkingDifficultyForm implements StepForm, Serializable {
 
   public enum WalkingDifficulty {
     HELP,
@@ -37,10 +38,11 @@ public class WalkingDifficultyForm implements StepForm {
     }
   }
 
+  @Override
+  public boolean preserveStep(Journey journey) {
+    return false;
+  }
+
   @NotNull private WalkingDifficulty walkingDifficulty;
 
-  @Override
-  public Set<StepDefinition> getCleanUpSteps(Journey journey) {
-    return getAssociatedStep().getNext();
-  }
 }

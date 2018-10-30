@@ -39,10 +39,11 @@ public class PipDlaQuestionForm implements Serializable, StepForm {
     return Optional.empty();
   }
 
+  @Override
+  public boolean preserveStep(Journey journey) {
+    return false;
+  }
+
   @NotNull private PipDlaQuestionForm.PipReceivedDlaOption receivedDlaOption;
 
-  @Override
-  public Set<StepDefinition> getCleanUpSteps(Journey journey) {
-    return getAssociatedStep().getNext();
-  }
 }
