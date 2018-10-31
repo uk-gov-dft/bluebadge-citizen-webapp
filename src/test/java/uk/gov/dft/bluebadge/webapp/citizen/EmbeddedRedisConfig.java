@@ -5,10 +5,10 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+
 import redis.embedded.RedisServer;
 
-@Component
+//@Component
 @Slf4j
 public class EmbeddedRedisConfig {
   @Value("${spring.redis.port}")
