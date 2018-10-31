@@ -48,6 +48,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.OrganisationMayBeEligibleForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveBenefitForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
@@ -430,6 +431,10 @@ public class JourneyFixture {
     if (StepDefinition.NINO == stepTo) return journey;
     journey.setFormForStep(getEnterAddressForm());
     if (StepDefinition.ADDRESS == stepTo) return journey;
+
+    if(PIP == eligibility || DLA == eligibility) {
+      journey.setFormForStep(ProveBenefitForm.builder().hasProof(Boolean.TRUE).build());
+    }
 
     // Eligibility specific section
     if (WALKD == eligibility) {

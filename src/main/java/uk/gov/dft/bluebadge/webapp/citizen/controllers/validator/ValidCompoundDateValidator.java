@@ -10,14 +10,12 @@ public class ValidCompoundDateValidator
     implements ConstraintValidator<ValidCompoundDate, CompoundDate> {
 
   boolean mandatory;
-  DateConstraintToEnum constraintTo;
   ValidCompoundDate constraintAnnotation;
 
   @Override
   public void initialize(ValidCompoundDate constraintAnnotation) {
     this.constraintAnnotation = constraintAnnotation;
     mandatory = constraintAnnotation.mandatory();
-    constraintTo = constraintAnnotation.constraintTo();
   }
 
   @Override
@@ -29,20 +27,10 @@ public class ValidCompoundDateValidator
 
     if (!compoundDate.isDatePartMissing()) {
       try {
-        LocalDate date =
-            LocalDate.of(
-                Integer.parseInt(compoundDate.getYear()),
-                Integer.parseInt(compoundDate.getMonth()),
-                Integer.parseInt(compoundDate.getDay()));
-
-        if (constraintTo.equals(DateConstraintToEnum.PAST)) {
-          return date.isBefore(LocalDate.now());
-        }
-
-        if (constraintTo.equals(DateConstraintToEnum.FUTURE)) {
-          return date.isAfter(LocalDate.now());
-        }
-
+        LocalDate.of(
+            Integer.parseInt(compoundDate.getYear()),
+            Integer.parseInt(compoundDate.getMonth()),
+            Integer.parseInt(compoundDate.getDay()));
       } catch (Exception e) {
         return false; // If part of the date is invalid then we cannot test
       }

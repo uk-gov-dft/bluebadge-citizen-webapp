@@ -10,15 +10,13 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-@Constraint(validatedBy = ValidCompoundDateValidator.class)
+@Constraint(validatedBy = FutureCompoundDateValidator.class)
 @Target({FIELD, METHOD})
 @Retention(RUNTIME)
 @Documented
-public @interface ValidCompoundDate {
+public @interface FutureCompoundDate {
 
-  boolean mandatory() default true;
-
-  String message() default "{CompoundDate.invalid}";
+  String message() default "{CompoundDate.cannotBeInTheFuture}";
 
   Class<?>[] groups() default {};
 

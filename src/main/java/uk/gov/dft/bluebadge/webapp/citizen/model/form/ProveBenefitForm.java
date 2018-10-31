@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.validator.DateConstraintToEnum;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.validator.FutureCompoundDate;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.validator.ValidCompoundDate;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.component.CompoundDate;
@@ -16,7 +16,8 @@ public class ProveBenefitForm implements StepForm {
 
   @NotNull private Boolean hasProof;
 
-  @ValidCompoundDate(mandatory = false, constraintTo = DateConstraintToEnum.FUTURE)
+  @ValidCompoundDate(mandatory = false)
+  @FutureCompoundDate(message = "{NotFuture.awardEndDate}")
   private CompoundDate awardEndDate;
 
   @Override
