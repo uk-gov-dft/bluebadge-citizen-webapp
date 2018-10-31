@@ -115,8 +115,10 @@ public class WebDriverProvider {
       DesiredCapabilities caps = new DesiredCapabilities();
       //caps.setCapability("browser", "chrome");
       //caps.setCapability("browser_version", "62.0");
-      caps.setCapability("browser", "IE");
-      caps.setCapability("browser_version", "11.0");
+      caps.setCapability("browser", "Firefox");
+      caps.setCapability("browser_version", "64.0 beta");
+      //caps.setCapability("browser", "IE");
+      //caps.setCapability("browser_version", "11.0");
       caps.setCapability("os", "Windows");
       caps.setCapability("os_version", "10");
       caps.setCapability("resolution", "1024x768");
