@@ -15,7 +15,6 @@ import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nat
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.Objects;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.web.servlet.MockMvc;

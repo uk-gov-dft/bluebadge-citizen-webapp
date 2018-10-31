@@ -16,7 +16,6 @@ import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nat
 import com.google.common.collect.Lists;
 import java.time.LocalDate;
 import java.util.List;
-
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.GenderCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HowProvidedCodeField;

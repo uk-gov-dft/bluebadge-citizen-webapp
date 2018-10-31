@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import redis.embedded.RedisServer;
-import redis.embedded.exceptions.EmbeddedRedisException;
 
 @Component
 @Slf4j
@@ -23,7 +22,7 @@ public class EmbeddedRedisConfig {
     redisServer = new RedisServer(redisPort);
     try {
       redisServer.start();
-    } catch (EmbeddedRedisException e) {
+    } catch (Exception e) {
       log.error("Failed to start embedded redis.", e);
       throw e;
     }
