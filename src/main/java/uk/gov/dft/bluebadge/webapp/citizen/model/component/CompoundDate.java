@@ -2,7 +2,6 @@ package uk.gov.dft.bluebadge.webapp.citizen.model.component;
 
 import java.time.LocalDate;
 import lombok.EqualsAndHashCode;
-import org.apache.tomcat.jni.Local;
 
 @EqualsAndHashCode
 public class CompoundDate {

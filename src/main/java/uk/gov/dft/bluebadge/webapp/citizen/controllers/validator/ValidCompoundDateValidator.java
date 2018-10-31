@@ -26,6 +26,11 @@ public class ValidCompoundDateValidator
     }
 
     if (!compoundDate.isDatePartMissing()) {
+
+      if (compoundDate.getYear().length() != 4) {
+        return false;
+      }
+
       try {
         LocalDate.of(
             Integer.parseInt(compoundDate.getYear()),

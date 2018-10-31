@@ -1,6 +1,10 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import org.apache.tomcat.jni.Local;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.webapp.citizen.FormObjectToParamMapper;
@@ -9,14 +13,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.component.CompoundDate;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveBenefitForm;
-
-import java.time.LocalDate;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class ProveBenefitControllerTest extends ControllerTestFixture<ProveBenefitController> {
 
@@ -49,7 +46,8 @@ public class ProveBenefitControllerTest extends ControllerTestFixture<ProveBenef
   }
 
   @Test
-  public void submitProveBenefit_withYes_ShouldDirectApplicantToNextStepInJourney() throws Exception {
+  public void submitProveBenefit_withYes_ShouldDirectApplicantToNextStepInJourney()
+      throws Exception {
 
     ProveBenefitForm proveBenefitForm = ProveBenefitForm.builder().hasProof(true).build();
 
@@ -64,25 +62,27 @@ public class ProveBenefitControllerTest extends ControllerTestFixture<ProveBenef
   }
 
   @Test
-  public void submitProveBenefit_withNo_AndWithAValidDate_ShouldDirectApplicantToNextStepInJourney() throws Exception {
+  public void submitProveBenefit_withNo_AndWithAValidDate_ShouldDirectApplicantToNextStepInJourney()
+      throws Exception {
 
     LocalDate currentDate = LocalDate.now();
     CompoundDate date = new CompoundDate(currentDate);
     date.setYear(Integer.toString(currentDate.getYear() + 1));
 
-    ProveBenefitForm proveBenefitForm = ProveBenefitForm.builder().hasProof(false).awardEndDate(date).build();
+    ProveBenefitForm proveBenefitForm =
+        ProveBenefitForm.builder().hasProof(false).awardEndDate(date).build();
 
     mockMvc
-            .perform(
-                    post("/prove-benefit")
-                            .param("hasProof", proveBenefitForm.getHasProof().toString())
-                            .param("awardEndDate.day", proveBenefitForm.getAwardEndDate().getDay())
-                            .param("awardEndDate.month", proveBenefitForm.getAwardEndDate().getMonth())
-                            .param("awardEndDate.year", proveBenefitForm.getAwardEndDate().getYear())
-                            .contentType("application/x-www-form-urlencoded")
-                            .sessionAttr("JOURNEY", journey))
-            .andExpect(status().isFound())
-            .andExpect(redirectedUrl(Mappings.URL_DECLARATIONS));
+        .perform(
+            post("/prove-benefit")
+                .param("hasProof", proveBenefitForm.getHasProof().toString())
+                .param("awardEndDate.day", proveBenefitForm.getAwardEndDate().getDay())
+                .param("awardEndDate.month", proveBenefitForm.getAwardEndDate().getMonth())
+                .param("awardEndDate.year", proveBenefitForm.getAwardEndDate().getYear())
+                .contentType("application/x-www-form-urlencoded")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl(Mappings.URL_DECLARATIONS));
   }
 
   @Test
@@ -102,20 +102,22 @@ public class ProveBenefitControllerTest extends ControllerTestFixture<ProveBenef
   }
 
   @Test
-  public void submitProveBenefit_ShouldDisplayValidation_hasProofIsToNo_AndWithoutADate() throws Exception {
+  public void submitProveBenefit_ShouldDisplayValidation_hasProofIsToNo_AndWithoutADate()
+      throws Exception {
     LocalDate currentDate = LocalDate.now();
     CompoundDate date = new CompoundDate(currentDate);
     date.setYear(Integer.toString(currentDate.getYear() - 1));
 
-    ProveBenefitForm proveBenefitForm = ProveBenefitForm.builder().hasProof(false).awardEndDate(date).build();
+    ProveBenefitForm proveBenefitForm =
+        ProveBenefitForm.builder().hasProof(false).awardEndDate(date).build();
 
     mockMvc
         .perform(
             post("/prove-benefit")
-                    .param("hasProof", proveBenefitForm.getHasProof().toString())
-                    .param("awardEndDate.day", proveBenefitForm.getAwardEndDate().getDay())
-                    .param("awardEndDate.month", proveBenefitForm.getAwardEndDate().getMonth())
-                    .param("awardEndDate.year", proveBenefitForm.getAwardEndDate().getYear())
+                .param("hasProof", proveBenefitForm.getHasProof().toString())
+                .param("awardEndDate.day", proveBenefitForm.getAwardEndDate().getDay())
+                .param("awardEndDate.month", proveBenefitForm.getAwardEndDate().getMonth())
+                .param("awardEndDate.year", proveBenefitForm.getAwardEndDate().getYear())
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().is3xxRedirection())
@@ -125,22 +127,28 @@ public class ProveBenefitControllerTest extends ControllerTestFixture<ProveBenef
   }
 
   @Test
-  public void submitProveBenefit_ShouldDisplayValidation_WhenDateIsNotInTheFuture() throws Exception {
-    ProveBenefitForm proveBenefitForm = ProveBenefitForm.builder().hasProof(false).awardEndDate(new CompoundDate("", "", "")).build();
+  public void submitProveBenefit_ShouldDisplayValidation_WhenDateIsNotInTheFuture()
+      throws Exception {
+    ProveBenefitForm proveBenefitForm =
+        ProveBenefitForm.builder()
+            .hasProof(false)
+            .awardEndDate(new CompoundDate("", "", ""))
+            .build();
 
     mockMvc
-            .perform(
-                    post("/prove-benefit")
-                            .param("hasProof", proveBenefitForm.getHasProof().toString())
-                            .param("awardEndDate.day", proveBenefitForm.getAwardEndDate().getDay())
-                            .param("awardEndDate.month", proveBenefitForm.getAwardEndDate().getMonth())
-                            .param("awardEndDate.year", proveBenefitForm.getAwardEndDate().getYear())
-                            .contentType("application/x-www-form-urlencoded")
-                            .sessionAttr("JOURNEY", journey))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(flash().attribute("formRequest", proveBenefitForm))
-            .andExpect(
-                    formRequestFlashAttributeHasFieldErrorCode("awardEndDate", "ConditionalNotNull.awardEndDate"));
+        .perform(
+            post("/prove-benefit")
+                .param("hasProof", proveBenefitForm.getHasProof().toString())
+                .param("awardEndDate.day", proveBenefitForm.getAwardEndDate().getDay())
+                .param("awardEndDate.month", proveBenefitForm.getAwardEndDate().getMonth())
+                .param("awardEndDate.year", proveBenefitForm.getAwardEndDate().getYear())
+                .contentType("application/x-www-form-urlencoded")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(flash().attribute("formRequest", proveBenefitForm))
+        .andExpect(
+            formRequestFlashAttributeHasFieldErrorCode(
+                "awardEndDate", "ConditionalNotNull.awardEndDate"));
   }
 
   @Override
