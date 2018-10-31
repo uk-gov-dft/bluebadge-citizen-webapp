@@ -22,13 +22,18 @@ public class ApplicationSteps extends AbstractSpringSteps {
     this.commonSteps = commonSteps;
   }
 
-  @Given("^I navigate to applicant page and validate for \"(yourself|someone else)\"")
+  @Given("^I navigate to applicant page and validate for \"(yourself|someone else|an organisation)\"")
   public void iNavigateToApplicantPageAndValidate(String applicant) throws Exception {
 
     if ("yourself".equals(applicant.toLowerCase())) {
       journeyOption = applicantPage.APPLICANT_TYPE_YOURSELF_OPTION;
-    } else {
+    }
+    else if("someone else".equals(applicant.toLowerCase())){
       journeyOption = applicantPage.APPLICANT_TYPE_SOMELSE_OPTION;
+    }
+    else
+    {
+      journeyOption = applicantPage.APPLICANT_TYPE_ORG_OPTION;
     }
 
     commonPage.openByPageName("applicant");

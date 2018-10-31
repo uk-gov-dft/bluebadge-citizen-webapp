@@ -52,7 +52,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
     } else if (myselfOrOther.equalsIgnoreCase("someone else")) {
       commonPage.findPageElementById(applicantPage.APPLICANT_TYPE_SOMELSE_OPTION).click();
     } else if (myselfOrOther.equalsIgnoreCase("organisation")) {
-      commonPage.findPageElementById(Ids.Preamble.APPLICANT_ORGANISATION_OPTION).click();
+      commonPage.findPageElementById(applicantPage.APPLICANT_TYPE_ORG_OPTION).click();
     }
     pressContinue();
   }

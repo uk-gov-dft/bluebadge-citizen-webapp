@@ -243,6 +243,7 @@ public class CommonSteps extends AbstractSpringSteps {
 
   @And("^I should see \"([^\"]*)\" text on the page$")
   public void iShouldSeeTextOnPage(String content) {
+    String s = commonPage.getPageContent();
     assertTrue(commonPage.getPageContent().contains(content));
   }
 
@@ -327,6 +328,13 @@ public class CommonSteps extends AbstractSpringSteps {
 
       assertTrue(commonPage.findPageElementById("applicantType.SOMEONE_ELSE").isSelected());
     }
+  }
+
+  @And("^I verify validation message \"([^\"]*)\" \"$")
+  public void iVerifyValidationMessage(String message) {
+    this.iClickOnContinueButton();
+    this.andIshouldSeeErrorSummaryBox();
+    this.iShouldSeeTextOnPage(message);
   }
 
   @And("^I complete the already have a blue badge page \"(YES|NO|YES BUT DON'T KNOW)\"$")
