@@ -1,10 +1,5 @@
 package uk.gov.service.bluebadge.test.acceptance.webdriver;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -12,6 +7,14 @@ import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Manages WebDriver (the client component of the WebDriver).
@@ -28,19 +31,20 @@ public class WebDriverProvider {
   private static final Logger log = getLogger(WebDriverProvider.class);
 
   private static ChromeOptions chromeOptions;
-  private final WebDriverServiceProvider webDriverServiceProvider;
+    private final boolean isBstackMode;
+    private WebDriverServiceProvider webDriverServiceProvider;
 
   /**
    * When 'true', the WebDriver will be operating in a headless mode, i.e. not displaying web
    * browser window.
    */
-  private final boolean isHeadlessMode;
+  private boolean isHeadlessMode;
 
   /** When 'true', the WebDriver will be operating through zap proxy. */
-  private final boolean isZapMode;
+  private boolean isZapMode;
 
   /** Location that the web browser will be downloading content into. */
-  private final Path downloadDirectory;
+  private Path downloadDirectory;
 
   private WebDriver webDriver;
 
@@ -48,10 +52,12 @@ public class WebDriverProvider {
       final WebDriverServiceProvider webDriverServiceProvider,
       final boolean isHeadlessMode,
       final Path downloadDirectory,
-      final boolean isZapMode) {
+      final boolean isZapMode,
+      boolean isBstackMode) {
     this.webDriverServiceProvider = webDriverServiceProvider;
     this.isHeadlessMode = isHeadlessMode;
     this.isZapMode = isZapMode;
+    this.isBstackMode = isBstackMode;
     this.downloadDirectory = downloadDirectory;
   }
 
@@ -99,8 +105,34 @@ public class WebDriverProvider {
 
       capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
       webDriver = new RemoteWebDriver(webDriverServiceProvider.getUrl(), capabilities);
+
+    } else if (isBstackMode) {
+
+      final String USERNAME = "sampathmahavitha2";
+      final String AUTOMATE_KEY = "TgSoo4cFJycJxqXkzHxT";
+      final String URL = "https://" + USERNAME + ":" + AUTOMATE_KEY + "@hub-cloud.browserstack.com/wd/hub";
+
+      DesiredCapabilities caps = new DesiredCapabilities();
+      //caps.setCapability("browser", "chrome");
+      //caps.setCapability("browser_version", "62.0");
+      caps.setCapability("browser", "IE");
+      caps.setCapability("browser_version", "11.0");
+      caps.setCapability("os", "Windows");
+      caps.setCapability("os_version", "10");
+      caps.setCapability("resolution", "1024x768");
+      caps.setCapability("browserstack.local", "true");
+      caps.setCapability("browserstack.localIdentifier", "Test123");
+      caps.setCapability("browserstack.debug","true");
+
+        try {
+            webDriver = new RemoteWebDriver(new URL(URL), caps);
+            //webDriver.get("http://google.com");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
     } else {
-      webDriver = new RemoteWebDriver(webDriverServiceProvider.getUrl(), chromeOptions);
+        webDriver = new RemoteWebDriver(webDriverServiceProvider.getUrl(), chromeOptions);
     }
   }
 
