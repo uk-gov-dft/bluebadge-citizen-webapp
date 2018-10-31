@@ -432,7 +432,7 @@ public class JourneyFixture {
     journey.setFormForStep(getEnterAddressForm());
     if (StepDefinition.ADDRESS == stepTo) return journey;
 
-    if(PIP == eligibility || DLA == eligibility) {
+    if (PIP == eligibility || DLA == eligibility) {
       journey.setFormForStep(ProveBenefitForm.builder().hasProof(Boolean.TRUE).build());
     }
 

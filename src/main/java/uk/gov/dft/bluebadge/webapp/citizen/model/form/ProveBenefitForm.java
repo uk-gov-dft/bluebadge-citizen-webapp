@@ -16,7 +16,7 @@ public class ProveBenefitForm implements StepForm {
 
   @NotNull private Boolean hasProof;
 
-  @ValidCompoundDate(mandatory = false)
+  @ValidCompoundDate(message = "{ConditionalNotNull.awardEndDate}", mandatory = false)
   @FutureCompoundDate(message = "{NotFuture.awardEndDate}")
   private CompoundDate awardEndDate;
 

@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.model.component;
 
 import java.time.LocalDate;
 import lombok.EqualsAndHashCode;
+import org.apache.tomcat.jni.Local;
 
 @EqualsAndHashCode
 public class CompoundDate {
@@ -18,6 +19,12 @@ public class CompoundDate {
     this.day = day;
     this.month = month;
     this.year = year;
+  }
+
+  public CompoundDate(LocalDate date) {
+    day = Integer.toString(date.getDayOfMonth());
+    month = Integer.toString(date.getMonth().getValue());
+    year = Integer.toString(date.getYear());
   }
   /**
    * Builds a LocalDate from the individual date components.
