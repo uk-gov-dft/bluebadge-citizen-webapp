@@ -15,7 +15,7 @@ import redis.embedded.RedisServer;
 )
 @ActiveProfiles({"test", "dev"})
 @Slf4j
-public class BaseSpringBootTest {
+public abstract class BaseSpringBootTest {
   @LocalServerPort protected int port;
   @LocalManagementPort protected int managementPort;
 

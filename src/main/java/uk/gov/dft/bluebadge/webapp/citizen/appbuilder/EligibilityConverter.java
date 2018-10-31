@@ -81,6 +81,7 @@ class EligibilityConverter {
         break;
       case TERMILL:
       case NONE:
+      default:
         // Invalid to get here with no eligibility if person route
         // This code is all temporary too.
         throw new IllegalStateException("Invalid eligibility:" + eligibilityType);
