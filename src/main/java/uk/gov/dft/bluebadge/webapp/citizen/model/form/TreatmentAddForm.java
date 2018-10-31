@@ -5,8 +5,10 @@ import java.util.UUID;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode
 public class TreatmentAddForm implements Serializable {
 
   @Size(max = 100)

@@ -1,11 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -13,22 +7,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
 
 public class WhereCanYouWalkControllerTest {
@@ -43,27 +33,23 @@ public class WhereCanYouWalkControllerTest {
   private static final String TIME_TO_DESTINATION_MAX = StringUtils.leftPad("a", 100, 'b');
   private static final String TIME_TO_DESTINATION_OVER_MAX = TIME_TO_DESTINATION_MAX + "a";
 
+  private static final String SUCCESS_URL = Mappings.URL_TREATMENT_LIST;
+  private static final String ERROR_URL =
+      Mappings.URL_WHERE_CAN_YOU_WALK + RouteMaster.ERROR_SUFFIX;
   private MockMvc mockMvc;
-  private WhereCanYouWalkController controller;
 
-  @Mock private RouteMaster mockRouteMaster;
   private Journey journey;
 
   @Before
   public void setup() {
-    MockitoAnnotations.initMocks(this);
-    controller = new WhereCanYouWalkController(mockRouteMaster);
+    WhereCanYouWalkController controller = new WhereCanYouWalkController(new RouteMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
-    journey = new Journey();
-    journey.setApplicantForm(
-        ApplicantForm.builder().applicantType(ApplicantType.YOURSELF.name()).build());
-
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
-    when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))
-        .thenReturn("redirect:/someValidationError");
+    journey =
+        JourneyFixture.getDefaultJourneyToStep(
+            StepDefinition.WALKING_TIME, EligibilityCodeField.WALKD);
   }
 
   @Test
@@ -85,7 +71,7 @@ public class WhereCanYouWalkControllerTest {
             .timeToDestination("10 minutes")
             .build();
 
-    journey.setWhereCanYouWalkForm(formRequest);
+    journey.setFormForStep(formRequest);
 
     mockMvc
         .perform(
@@ -99,18 +85,15 @@ public class WhereCanYouWalkControllerTest {
 
   @Test
   public void show_givenNoSession_ShouldRedirectBackToStart() throws Exception {
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
 
     mockMvc
         .perform(get("/where-can-you-walk"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/backToStart"));
+        .andExpect(redirectedUrl(Mappings.URL_ROOT));
   }
 
   @Test
   public void submit_givenEmptyValues_thenShouldDisplayNotBlankValidationErrors() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(WhereCanYouWalkForm.class), any(Journey.class)))
-        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(
@@ -119,22 +102,17 @@ public class WhereCanYouWalkControllerTest {
                 .param("timeToDestination", "")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/someValidationError"));
-
-    ArgumentCaptor<BindingResult> captor = ArgumentCaptor.forClass(BindingResult.class);
-    verify(mockRouteMaster, times(1))
-        .redirectToOnBindingError(any(), any(), captor.capture(), any());
-    BindingResult bindingResult = (BindingResult) captor.getValue();
-
-    assertThat(bindingResult.getErrorCount()).isEqualTo(2);
-    assertTrue(containsError(bindingResult.getFieldErrors(), "destinationToHome", "", "NotBlank"));
-    assertTrue(containsError(bindingResult.getFieldErrors(), "timeToDestination", "", "NotBlank"));
+        .andExpect(
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "destinationToHome", "NotBlank"))
+        .andExpect(
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "timeToDestination", "NotBlank"))
+        .andExpect(redirectedUrl(ERROR_URL));
   }
 
   @Test
   public void submit_givenMinimumValidForm_thenShouldDisplayRedirectToSuccess() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(WhereCanYouWalkForm.class)))
-        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(
@@ -143,13 +121,11 @@ public class WhereCanYouWalkControllerTest {
                 .param("timeToDestination", TIME_TO_DESTINATION_MIN)
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(SUCCESS_URL));
   }
 
   @Test
   public void submit_givenValidForm_thenShouldDisplayRedirectToSuccess() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(WhereCanYouWalkForm.class)))
-        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(
@@ -158,14 +134,12 @@ public class WhereCanYouWalkControllerTest {
                 .param("timeToDestination", TIME_TO_DESTINATION)
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(SUCCESS_URL));
   }
 
   @Test
   public void submit_givenValidFormWithMaxValues_thenShouldDisplayRedirectToSuccess()
       throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(WhereCanYouWalkForm.class)))
-        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(
@@ -174,14 +148,12 @@ public class WhereCanYouWalkControllerTest {
                 .param("timeToDestination", TIME_TO_DESTINATION_MAX)
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(SUCCESS_URL));
   }
 
   @Test
   public void submit_givenValidFormWithOverMaxValues_thenShouldDisplaySizeValidationErrors()
       throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(WhereCanYouWalkForm.class), any(Journey.class)))
-        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(
@@ -190,43 +162,12 @@ public class WhereCanYouWalkControllerTest {
                 .param("timeToDestination", TIME_TO_DESTINATION_OVER_MAX)
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/someValidationError"));
-
-    ArgumentCaptor<BindingResult> captor = ArgumentCaptor.forClass(BindingResult.class);
-    verify(mockRouteMaster, times(1))
-        .redirectToOnBindingError(any(), any(), captor.capture(), any());
-    BindingResult bindingResult = (BindingResult) captor.getValue();
-
-    assertThat(bindingResult.getErrorCount()).isEqualTo(2);
-    assertTrue(
-        containsError(
-            bindingResult.getFieldErrors(),
-            "destinationToHome",
-            DESTINATION_TO_HOME_OVER_MAX,
-            "Size"));
-    assertTrue(
-        containsError(
-            bindingResult.getFieldErrors(),
-            "timeToDestination",
-            TIME_TO_DESTINATION_OVER_MAX,
-            "Size"));
-  }
-
-  private boolean containsError(
-      List<FieldError> fieldErrors, String field, String rejectedValue, String errorCode) {
-    for (FieldError fieldError : fieldErrors) {
-      if (isEqual(fieldError, field, rejectedValue, errorCode)) {
-        return true;
-      }
-      ;
-    }
-    return false;
-  }
-
-  private boolean isEqual(
-      FieldError fieldError, String field, String rejectedValue, String errorCode) {
-    return (fieldError.getField().equalsIgnoreCase(field)
-        && ((String) fieldError.getRejectedValue()).equalsIgnoreCase(rejectedValue)
-        && fieldError.getCode().equalsIgnoreCase(errorCode));
+        .andExpect(
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "destinationToHome", "Size"))
+        .andExpect(
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "timeToDestination", "Size"))
+        .andExpect(redirectedUrl(ERROR_URL));
   }
 }

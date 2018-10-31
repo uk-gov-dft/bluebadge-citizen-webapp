@@ -37,12 +37,12 @@ public class CompensationSchemeController implements StepController {
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getCompensationSchemeForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getCompensationSchemeForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -69,7 +69,7 @@ public class CompensationSchemeController implements StepController {
           this, lumpSumCompensationForm, bindingResult, attr);
     }
 
-    journey.setCompensationSchemeForm(lumpSumCompensationForm);
+    journey.setFormForStep(lumpSumCompensationForm);
     return routeMaster.redirectToOnSuccess(lumpSumCompensationForm, journey);
   }
 

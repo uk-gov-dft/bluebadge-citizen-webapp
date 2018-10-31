@@ -29,7 +29,7 @@ public class YourIssuingAuthorityController implements StepController {
   private ReferenceDataService referenceDataService;
 
   @Autowired
-  public YourIssuingAuthorityController(
+  YourIssuingAuthorityController(
       RouteMaster routeMaster, ReferenceDataService referenceDataService) {
     this.routeMaster = routeMaster;
     this.referenceDataService = referenceDataService;
@@ -38,13 +38,13 @@ public class YourIssuingAuthorityController implements StepController {
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
     if (!model.containsAttribute("formRequest")) {
       // Lookup local authority from council and populate model.
-      ChooseYourCouncilForm councilForm = journey.getChooseYourCouncilForm();
+      ChooseYourCouncilForm councilForm = journey.getFormForStep(StepDefinition.CHOOSE_COUNCIL);
       if (null == councilForm) {
         log.error("Got to issuing authority GET, without local council step being completed.");
       } else {
@@ -77,11 +77,7 @@ public class YourIssuingAuthorityController implements StepController {
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @ModelAttribute("formRequest") YourIssuingAuthorityForm yourIssuingAuthorityForm) {
 
-    journey.setYourIssuingAuthorityForm(yourIssuingAuthorityForm);
-    journey.setLocalAuthority(
-        referenceDataService.retrieveLocalAuthority(
-            yourIssuingAuthorityForm.getLocalAuthorityShortCode()));
-
+    journey.setFormForStep(yourIssuingAuthorityForm);
     return routeMaster.redirectToOnSuccess(yourIssuingAuthorityForm, journey);
   }
 

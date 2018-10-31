@@ -23,24 +23,24 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ExistingBadgeForm;
 public class ExistingBadgeController implements StepController {
 
   private static final String TEMPLATE = "existing-badge";
-  public static final String EXISTING_BADGE_BYPASS_URL = "/existing-badge-bypass";
+  private static final String EXISTING_BADGE_BYPASS_URL = "/existing-badge-bypass";
 
   private final RouteMaster routeMaster;
 
   @Autowired
-  public ExistingBadgeController(RouteMaster routeMaster) {
+  ExistingBadgeController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping(Mappings.URL_EXISTING_BADGE)
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getEnterAddressForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getExistingBadgeForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -53,7 +53,7 @@ public class ExistingBadgeController implements StepController {
   @GetMapping(EXISTING_BADGE_BYPASS_URL)
   public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     ExistingBadgeForm formRequest = ExistingBadgeForm.builder().hasExistingBadge(true).build();
-    journey.setExistingBadgeForm(formRequest);
+    journey.setFormForStep(formRequest);
     return routeMaster.redirectToOnSuccess(formRequest);
   }
 
@@ -82,7 +82,7 @@ public class ExistingBadgeController implements StepController {
       return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
     }
 
-    journey.setExistingBadgeForm(formRequest);
+    journey.setFormForStep(formRequest);
 
     return routeMaster.redirectToOnSuccess(formRequest);
   }

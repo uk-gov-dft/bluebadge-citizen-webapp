@@ -33,19 +33,19 @@ public class ReceiveBenefitsController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public ReceiveBenefitsController(RouteMaster routeMaster) {
+  ReceiveBenefitsController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
     //On returning to form, take previously submitted values.
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getReceiveBenefitsForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getReceiveBenefitsForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     // If navigating forward from previous form, reset
@@ -82,7 +82,7 @@ public class ReceiveBenefitsController implements StepController {
       return routeMaster.redirectToOnBindingError(this, receiveBenefitsForm, bindingResult, attr);
     }
 
-    journey.setReceiveBenefitsForm(receiveBenefitsForm);
+    journey.setFormForStep(receiveBenefitsForm);
     return routeMaster.redirectToOnSuccess(receiveBenefitsForm);
   }
 
