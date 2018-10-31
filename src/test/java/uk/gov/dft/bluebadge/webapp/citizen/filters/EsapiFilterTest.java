@@ -22,20 +22,16 @@ import org.apache.http.protocol.HttpContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import uk.gov.dft.bluebadge.webapp.citizen.BaseSpringBootTest;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles({"test", "dev"})
-public class EsapiFilterTest {
+public class EsapiFilterTest extends BaseSpringBootTest {
 
   public static final String IMG_SRC =
       "<img src=\"C:\\Documents and Settings\\screenshots\\Image01.png\"/>";
@@ -47,8 +43,6 @@ public class EsapiFilterTest {
       "http://bobssite.org?q=puppies%3Cscript%2520src%3D%22http%3A%2F%2Fmallorysevilsite.com%2Fauthstealer.js%22%3E%3C%2Fscript%3E";
   public static final String NASTY_STRING = "<script>console.log('fred');</script>But this is ok";
   public static final String GOOD_STRING = "nothing bad in here";
-
-  @LocalServerPort private int port;
 
   CloseableHttpClient client;
   CookieStore cookieStore;
