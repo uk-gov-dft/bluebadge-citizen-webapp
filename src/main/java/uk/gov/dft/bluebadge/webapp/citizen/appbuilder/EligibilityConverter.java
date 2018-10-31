@@ -7,6 +7,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.m
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Benefit;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Blind;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.BulkyMedicalEquipmentTypeCodeField;
@@ -22,95 +23,87 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveBenefitForm;
 
 class EligibilityConverter {
 
-  private EligibilityConverter() {}
+    private EligibilityConverter() {
+    }
 
-  static Eligibility convert(Journey journey) {
+    static Eligibility convert(Journey journey) {
 
-    Eligibility.EligibilityBuilder eligibility = null;
-    EligibilityCodeField eligibilityType = journey.getEligibilityCode();
-    switch (eligibilityType) {
-      case WALKD:
-        eligibility =
-            Eligibility.builder()
-                .typeCode(eligibilityType)
-                .descriptionOfConditions(journey.getDescriptionOfCondition())
-                .walkingDifficulty(WalkingConverter.convert(journey));
-        break;
-      case PIP:
-      case DLA:
-        ProveBenefitForm proveBenefit = journey.getFormForStep(StepDefinition.PROVE_BENEFIT);
-        Benefit.BenefitBuilder benefit = Benefit.builder().isIndefinite(proveBenefit.getHasProof());
+        Eligibility.EligibilityBuilder eligibility = Eligibility.builder();
+        EligibilityCodeField eligibilityType = journey.getEligibilityCode();
+        switch (eligibilityType) {
+            case WALKD:
+                eligibility
+                        .typeCode(eligibilityType)
+                        .descriptionOfConditions(journey.getDescriptionOfCondition())
+                        .walkingDifficulty(WalkingConverter.convert(journey));
+                break;
+            case PIP:
+            case DLA:
+                ProveBenefitForm proveBenefit = journey.getFormForStep(StepDefinition.PROVE_BENEFIT);
+                Benefit.BenefitBuilder benefit = Benefit.builder().isIndefinite(proveBenefit.getHasProof());
 
-        if (!proveBenefit.getHasProof()) {
-          benefit.expiryDate(proveBenefit.getAwardEndDate().getLocalDate());
+                if (!proveBenefit.getHasProof()) {
+                    benefit.expiryDate(proveBenefit.getAwardEndDate().getLocalDate());
+                }
+
+                eligibility.typeCode(eligibilityType).benefit(benefit.build());
+                break;
+            case WPMS:
+                eligibility.typeCode(eligibilityType)
+                        .benefit(Benefit.builder().isIndefinite(true).build());
+                break;
+            case AFRFCS:
+                eligibility.typeCode(eligibilityType);
+                break;
+            case BLIND:
+                eligibility.typeCode(eligibilityType).blind(Blind.builder().build());
+                break;
+            case ARMS:
+                eligibility.typeCode(eligibilityType)
+                        .descriptionOfConditions(journey.getDescriptionOfCondition())
+                        .disabilityArms(DisabilityArms.builder().isAdaptedVehicle(false).build());
+                break;
+            case CHILDBULK:
+                eligibility.typeCode(eligibilityType)
+                        .descriptionOfConditions(journey.getDescriptionOfCondition())
+                        .childUnder3(
+                                ChildUnder3.builder()
+                                        .bulkyMedicalEquipmentTypeCode(BulkyMedicalEquipmentTypeCodeField.NONE)
+                                        .build());
+                break;
+            case CHILDVEHIC:
+                eligibility.descriptionOfConditions(journey.getDescriptionOfCondition())
+                        .typeCode(eligibilityType);
+                break;
+            case TERMILL:
+            case NONE:
+            default:
+                // Invalid to get here with no eligibility if person route
+                // This code is all temporary too.
+                throw new IllegalStateException("Invalid eligibility:" + eligibilityType);
         }
 
-        eligibility = Eligibility.builder().typeCode(eligibilityType).benefit(benefit.build());
-        break;
-      case WPMS:
-        eligibility =
-            Eligibility.builder()
-                .typeCode(eligibilityType)
-                .benefit(Benefit.builder().isIndefinite(true).build());
-        break;
-      case AFRFCS:
-        eligibility = Eligibility.builder().typeCode(eligibilityType);
-        break;
-      case BLIND:
-        eligibility =
-            Eligibility.builder().typeCode(eligibilityType).blind(Blind.builder().build());
-        break;
-      case ARMS:
-        eligibility =
-            Eligibility.builder()
-                .typeCode(eligibilityType)
-                .descriptionOfConditions(journey.getDescriptionOfCondition())
-                .disabilityArms(DisabilityArms.builder().isAdaptedVehicle(false).build());
-        break;
-      case CHILDBULK:
-        eligibility =
-            Eligibility.builder()
-                .typeCode(eligibilityType)
-                .descriptionOfConditions(journey.getDescriptionOfCondition())
-                .childUnder3(
-                    ChildUnder3.builder()
-                        .bulkyMedicalEquipmentTypeCode(BulkyMedicalEquipmentTypeCodeField.NONE)
-                        .build());
-        break;
-      case CHILDVEHIC:
-        eligibility =
-            Eligibility.builder()
-                .descriptionOfConditions(journey.getDescriptionOfCondition())
-                .typeCode(eligibilityType);
-        break;
-      case TERMILL:
-      case NONE:
-        // Invalid to get here with no eligibility if person route
-        // This code is all temporary too.
-        throw new IllegalStateException("Invalid eligibility:" + eligibilityType);
+        // Healthcare Professionals
+        if (EnumSet.of(CHILDBULK, CHILDVEHIC, WALKD).contains(eligibilityType)) {
+            eligibility.healthcareProfessionals(getHealthcareProfessionals(journey));
+        }
+        return eligibility.build();
     }
 
-    // Healthcare Professionals
-    if (EnumSet.of(CHILDBULK, CHILDVEHIC, WALKD).contains(eligibilityType)) {
-      eligibility.healthcareProfessionals(getHealthcareProfessionals(journey));
+    static List<HealthcareProfessional> getHealthcareProfessionals(Journey journey) {
+
+        HealthcareProfessionalListForm listForm =
+                journey.getFormForStep(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST);
+        List<HealthcareProfessional> healthcareProfessionals = new ArrayList<>();
+        listForm
+                .getHealthcareProfessionals()
+                .forEach(
+                        i ->
+                                healthcareProfessionals.add(
+                                        HealthcareProfessional.builder()
+                                                .location(i.getHealthcareProfessionalLocation())
+                                                .name(i.getHealthcareProfessionalName())
+                                                .build()));
+        return healthcareProfessionals;
     }
-    return eligibility.build();
-  }
-
-  static List<HealthcareProfessional> getHealthcareProfessionals(Journey journey) {
-
-    HealthcareProfessionalListForm listForm =
-        journey.getFormForStep(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST);
-    List<HealthcareProfessional> healthcareProfessionals = new ArrayList<>();
-    listForm
-        .getHealthcareProfessionals()
-        .forEach(
-            i ->
-                healthcareProfessionals.add(
-                    HealthcareProfessional.builder()
-                        .location(i.getHealthcareProfessionalLocation())
-                        .name(i.getHealthcareProfessionalName())
-                        .build()));
-    return healthcareProfessionals;
-  }
 }

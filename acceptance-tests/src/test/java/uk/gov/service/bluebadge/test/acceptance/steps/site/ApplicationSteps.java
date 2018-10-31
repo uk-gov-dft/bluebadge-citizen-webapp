@@ -1,5 +1,7 @@
 package uk.gov.service.bluebadge.test.acceptance.steps.site;
 
+import cucumber.api.PendingException;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.ApplicantPage;
@@ -7,6 +9,8 @@ import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
 import uk.gov.service.bluebadge.test.acceptance.steps.AbstractSpringSteps;
 import uk.gov.service.bluebadge.test.acceptance.steps.ApplicationFixture;
 import uk.gov.service.bluebadge.test.acceptance.steps.CommonSteps;
+
+import java.time.LocalDate;
 
 public class ApplicationSteps extends AbstractSpringSteps {
 
@@ -40,4 +44,25 @@ public class ApplicationSteps extends AbstractSpringSteps {
     commonPage.findPageElementById(journeyOption).click();
     commonSteps.iClickOnContinueButton();
   }
+
+    @And("^I complete prove benefit page for \"(yes|no)\"")
+    public void iCompleteProveBenefitPage(String opt) {
+      if(opt.equals("yes")){
+        commonPage.findPageElementById("hasProof.yes").click();
+      }
+
+      if(opt.equals("no")) {
+        LocalDate date = LocalDate.now();
+        String day = Integer.toString(date.getDayOfMonth());
+        String month = Integer.toString(date.getMonth().getValue());
+        String year = Integer.toString(date.getYear() + 1);
+
+        commonPage.findPageElementById("hasProof.no").click();
+        commonPage.findPageElementById("awardEndDate.day").sendKeys(day);
+        commonPage.findPageElementById("awardEndDate.month").sendKeys(month);
+        commonPage.findPageElementById("awardEndDate.year").sendKeys(year);
+      }
+
+      commonSteps.iClickOnContinueButton();
+    }
 }
