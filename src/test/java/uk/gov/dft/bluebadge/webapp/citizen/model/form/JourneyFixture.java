@@ -1,6 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
-import java.util.Optional;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
@@ -41,7 +40,7 @@ public class JourneyFixture {
           new LocalAuthorityRefData.LocalAuthorityMetaData();
       meta.setNation(nation);
       LocalAuthorityRefData localAuthorityRefData = new LocalAuthorityRefData();
-      localAuthorityRefData.setLocalAuthorityMetaData(Optional.of(meta));
+      localAuthorityRefData.setLocalAuthorityMetaData(meta);
       journey.setLocalAuthority(localAuthorityRefData);
       return this;
     }

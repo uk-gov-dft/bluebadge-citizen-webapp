@@ -14,7 +14,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.google.common.collect.ImmutableList;
 import java.util.List;
-import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -56,7 +55,7 @@ public class WhatWalkingDifficultiesControllerTest {
     LocalAuthorityRefData.LocalAuthorityMetaData metaData =
         new LocalAuthorityRefData.LocalAuthorityMetaData();
     metaData.setNation(Nation.ENG);
-    testLA.setLocalAuthorityMetaData(Optional.of(metaData));
+    testLA.setLocalAuthorityMetaData(metaData);
 
     journey = new Journey();
     journey.setApplicantForm(applicantForm);
@@ -105,7 +104,7 @@ public class WhatWalkingDifficultiesControllerTest {
     LocalAuthorityRefData.LocalAuthorityMetaData metaData =
         new LocalAuthorityRefData.LocalAuthorityMetaData();
     metaData.setNation(Nation.SCO);
-    testLA.setLocalAuthorityMetaData(Optional.of(metaData));
+    testLA.setLocalAuthorityMetaData(metaData);
 
     journey.setLocalAuthority(testLA);
 
@@ -130,7 +129,7 @@ public class WhatWalkingDifficultiesControllerTest {
     LocalAuthorityRefData.LocalAuthorityMetaData metaData =
         new LocalAuthorityRefData.LocalAuthorityMetaData();
     metaData.setNation(Nation.WLS);
-    testLA.setLocalAuthorityMetaData(Optional.of(metaData));
+    testLA.setLocalAuthorityMetaData(metaData);
 
     journey.setLocalAuthority(testLA);
 
