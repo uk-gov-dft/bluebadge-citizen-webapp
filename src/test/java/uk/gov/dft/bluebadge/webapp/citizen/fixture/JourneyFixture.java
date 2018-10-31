@@ -258,7 +258,7 @@ public class JourneyFixture {
     LocalAuthorityRefData.LocalAuthorityMetaData meta =
         new LocalAuthorityRefData.LocalAuthorityMetaData();
     meta.setNation(nation);
-    localAuthorityRefData.setLocalAuthorityMetaData(Optional.of(meta));
+    localAuthorityRefData.setLocalAuthorityMetaData(meta);
     return localAuthorityRefData;
   }
 
