@@ -30,7 +30,7 @@ public class OrganisationTransportController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public OrganisationTransportController(RouteMaster routeMaster) {
+  OrganisationTransportController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
@@ -42,7 +42,7 @@ public class OrganisationTransportController implements StepController {
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
@@ -50,7 +50,7 @@ public class OrganisationTransportController implements StepController {
       attachForm(model, journey);
     }
 
-    setupModel(model, journey);
+    setupModel(model);
 
     return TEMPLATE;
   }
@@ -66,20 +66,20 @@ public class OrganisationTransportController implements StepController {
       return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
     }
 
-    journey.setOrganisationTransportForm(formRequest);
+    journey.setFormForStep(formRequest);
 
     return routeMaster.redirectToOnSuccess(formRequest);
   }
 
   private void attachForm(Model model, Journey journey) {
-    if (null != journey.getOrganisationTransportForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getOrganisationTransportForm());
+    if (journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     } else {
       model.addAttribute(FORM_REQUEST, OrganisationTransportForm.builder().build());
     }
   }
 
-  private void setupModel(Model model, Journey journey) {
+  private void setupModel(Model model) {
     model.addAttribute(
         "options", new RadioOptionsGroup("organisationTransport.page.title").withYesNoOptions());
   }

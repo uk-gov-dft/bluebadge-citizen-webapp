@@ -9,9 +9,13 @@ import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefini
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 
 public class RouteMasterTest {
-  RouteMaster routeMaster;
+  private RouteMaster routeMaster;
 
   @Before
   public void setup() {
@@ -19,19 +23,19 @@ public class RouteMasterTest {
   }
 
   @Test
-  public void redirectOnSuccess_singleNextStep() {
-    assertThat(routeMaster.redirectToOnSuccess(StepDefinition.HOME))
-        .isEqualTo("redirect:" + Mappings.URL_APPLICANT_TYPE);
-  }
-
-  @Test(expected = IllegalStateException.class)
-  public void redirectOnSuccess_whenMultiple_thenException() {
-    routeMaster.redirectToOnSuccess(StepDefinition.RECEIVE_BENEFITS);
-  }
-
-  @Test
   public void redirectOnSuccessWithForm_singleNextStep() {
-    StepForm testForm = () -> HOME;
+    StepForm testForm =
+        new StepForm() {
+          @Override
+          public StepDefinition getAssociatedStep() {
+            return HOME;
+          }
+
+          @Override
+          public boolean preserveStep(Journey journey) {
+            return false;
+          }
+        };
 
     assertThat(routeMaster.redirectToOnSuccess(testForm))
         .isEqualTo("redirect:" + Mappings.URL_APPLICANT_TYPE);
@@ -39,7 +43,18 @@ public class RouteMasterTest {
 
   @Test(expected = IllegalStateException.class)
   public void redirectOnSuccessWithForm_whenMultiple_thenExcpetion() {
-    StepForm testForm = () -> RECEIVE_BENEFITS;
+    StepForm testForm =
+        new StepForm() {
+          @Override
+          public StepDefinition getAssociatedStep() {
+            return RECEIVE_BENEFITS;
+          }
+
+          @Override
+          public boolean preserveStep(Journey journey) {
+            return false;
+          }
+        };
 
     routeMaster.redirectToOnSuccess(testForm);
   }
@@ -56,6 +71,11 @@ public class RouteMasterTest {
           @Override
           public Optional<StepDefinition> determineNextStep() {
             return Optional.of(ELIGIBLE);
+          }
+
+          @Override
+          public boolean preserveStep(Journey journey) {
+            return false;
           }
         };
 
@@ -76,8 +96,40 @@ public class RouteMasterTest {
           public Optional<StepDefinition> determineNextStep() {
             return Optional.of(DECLARATIONS);
           }
+
+          @Override
+          public boolean preserveStep(Journey journey) {
+            return false;
+          }
         };
 
     routeMaster.redirectToOnSuccess(testForm);
+  }
+
+  @Test
+  public void isValidState_general() {
+    // A valid journey
+    Journey journey =
+        new JourneyBuilder()
+            .toStep(StepDefinition.DECLARATIONS)
+            .withEligibility(EligibilityCodeField.WALKD)
+            .build();
+    assertThat(routeMaster.isValidState(StepDefinition.DECLARATIONS, journey)).isTrue();
+
+    // Remove a step
+    journey.setFormForStep(
+        ReceiveBenefitsForm.builder().benefitType(EligibilityCodeField.AFRFCS).build());
+    assertThat(routeMaster.isValidState(StepDefinition.DECLARATIONS, journey)).isFalse();
+    assertThat(routeMaster.isValidState(StepDefinition.CONTACT_DETAILS, journey)).isFalse();
+    // First few steps not removed.
+    assertThat(routeMaster.isValidState(StepDefinition.YOUR_ISSUING_AUTHORITY, journey)).isTrue();
+  }
+
+  @Test
+  public void isValidState_firstStep() {
+    // These steps are always valid;
+    Journey journey = new JourneyBuilder().toStep(StepDefinition.HOME).build();
+    assertThat(routeMaster.isValidState(StepDefinition.HOME, journey)).isTrue();
+    assertThat(routeMaster.isValidState(StepDefinition.APPLICANT_TYPE, journey)).isTrue();
   }
 }

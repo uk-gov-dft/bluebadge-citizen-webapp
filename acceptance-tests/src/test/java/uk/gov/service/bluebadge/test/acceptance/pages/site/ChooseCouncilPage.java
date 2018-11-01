@@ -10,7 +10,7 @@ public class ChooseCouncilPage {
 
   public static final String COUNCIL_INPUT = "councilShortCode";
 
-  public static final String VALIDATION_MESSAGE_FOR_NO_OPTION = "Select local council";
+  public static final String VALIDATION_MESSAGE_FOR_NO_OPTION = "Select the local council";
 
   public static final String PAGE_LABEL_1_YOURSELF =
       "You cannot get a Blue Badge if you live outside of the UK.";

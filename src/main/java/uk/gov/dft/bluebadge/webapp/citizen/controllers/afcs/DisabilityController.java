@@ -30,19 +30,19 @@ public class DisabilityController implements StepController {
   private static final String FORM_REQUEST = "formRequest";
 
   @Autowired
-  public DisabilityController(RouteMaster routeMaster) {
+  DisabilityController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getDisabilityForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getDisabilityForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -68,7 +68,7 @@ public class DisabilityController implements StepController {
       return routeMaster.redirectToOnBindingError(this, disabilityForm, bindingResult, attr);
     }
 
-    journey.setDisabilityForm(disabilityForm);
+    journey.setFormForStep(disabilityForm);
     return routeMaster.redirectToOnSuccess(disabilityForm);
   }
 

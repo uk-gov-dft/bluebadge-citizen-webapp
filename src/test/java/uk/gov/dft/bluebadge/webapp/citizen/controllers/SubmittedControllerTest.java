@@ -1,7 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -12,26 +10,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 public class SubmittedControllerTest {
 
   private MockMvc mockMvc;
-  private SubmittedController controller;
-
-  @Mock private RouteMaster mockRouteMaster;
-  @Mock Journey mockJourney;
 
   @Before
   public void setup() {
-    MockitoAnnotations.initMocks(this);
-    controller = new SubmittedController(mockRouteMaster);
+    SubmittedController controller = new SubmittedController(new RouteMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -40,12 +33,10 @@ public class SubmittedControllerTest {
 
   @Test
   public void showSubmitted_ShouldDisplaySubmittedTemplate_WhenThereIsAJourney() throws Exception {
-    when(mockJourney.isValidState(any())).thenReturn(true);
-    mockJourney.who = "you.";
+    Journey journey = new JourneyBuilder().forYou().build();
 
     mockMvc
-        .perform(get("/application-submitted").sessionAttr("JOURNEY", mockJourney))
-        .andExpect(status().isOk())
+        .perform(get("/application-submitted").sessionAttr("JOURNEY", journey))
         .andExpect(view().name("application-end/submitted"))
         .andExpect(model().attribute("mainMessage", "you.submittedPage.content.p1"))
         .andExpect(request().sessionAttribute("JOURNEY", Matchers.nullValue()));
@@ -54,23 +45,18 @@ public class SubmittedControllerTest {
   @Test
   public void showSubmitted_givenNoSession_ShouldRedirectBackToStart() throws Exception {
 
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
-
     mockMvc
         .perform(get("/application-submitted"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/backToStart"));
+        .andExpect(redirectedUrl(Mappings.URL_ROOT));
   }
 
   @Test
   public void showDeclaration_givenInvalidState_ShouldRedirectBackToStart() throws Exception {
 
-    when(mockJourney.isValidState(any())).thenReturn(false);
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
-
     mockMvc
         .perform(get("/application-submitted"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/backToStart"));
+        .andExpect(redirectedUrl(Mappings.URL_ROOT));
   }
 }

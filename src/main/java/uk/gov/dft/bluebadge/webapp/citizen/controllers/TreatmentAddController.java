@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.TREATMENT_LIST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
@@ -36,18 +37,17 @@ public class TreatmentAddController implements StepController {
   @GetMapping
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
     // Can hit add link before previous form submitted.
-    if (null == journey.getTreatmentListForm()
-        || null == journey.getTreatmentListForm().getTreatments()) {
-      journey.setTreatmentListForm(
-          TreatmentListForm.builder().treatments(new ArrayList<>()).build());
+    if (!journey.hasStepForm(TREATMENT_LIST)
+        || null == ((TreatmentListForm) journey.getFormForStep(TREATMENT_LIST)).getTreatments()) {
+      journey.setFormForStep(TreatmentListForm.builder().treatments(new ArrayList<>()).build());
     }
 
-    journey.getTreatmentListForm().setHasTreatment("yes");
+    ((TreatmentListForm) journey.getFormForStep(TREATMENT_LIST)).setHasTreatment("yes");
 
     // On returning to form, take previously submitted values.
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -68,7 +68,9 @@ public class TreatmentAddController implements StepController {
       return routeMaster.redirectToOnBindingError(this, treatmentAddForm, bindingResult, attr);
     }
 
-    journey.getTreatmentListForm().getTreatments().add(treatmentAddForm);
+    ((TreatmentListForm) journey.getFormForStep(TREATMENT_LIST))
+        .getTreatments()
+        .add(treatmentAddForm);
 
     return "redirect:" + Mappings.URL_TREATMENT_LIST;
   }

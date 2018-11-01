@@ -1,7 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -12,70 +10,60 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 
 public class HealthConditionsControllerTest {
 
   private MockMvc mockMvc;
-  private HealthConditionsController controller;
 
-  @Mock Journey mockJourney;
-
-  @Mock private RouteMaster mockRouteMaster;
+  private Journey journey;
 
   @Before
   public void setup() {
-    MockitoAnnotations.initMocks(this);
-    controller = new HealthConditionsController(mockRouteMaster);
+    HealthConditionsController controller = new HealthConditionsController(new RouteMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
+    journey = new JourneyBuilder().toStep(StepDefinition.HEALTH_CONDITIONS).build();
   }
 
   @Test
   public void show_ShouldDisplayHealthConditionsTemplate() throws Exception {
-    when(mockJourney.isValidState(any())).thenReturn(true);
-    HealthConditionsForm formRequest = HealthConditionsForm.builder().build();
-
     mockMvc
-        .perform(get("/health-conditions").sessionAttr("JOURNEY", mockJourney))
+        .perform(get("/health-conditions").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("health-conditions"))
-        .andExpect(model().attribute("formRequest", formRequest));
+        .andExpect(model().attribute("formRequest", JourneyFixture.getHealthConditionsForm()));
   }
 
   @Test
   public void show_givenNoSession_ShouldRedirectBackToStart() throws Exception {
 
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
-
     mockMvc
         .perform(get("/health-conditions"))
-        .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/backToStart"));
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(Mappings.URL_ROOT));
   }
 
   @Test
   public void submit_givenValidForm_thenShouldDisplayRedirectToSuccess() throws Exception {
-
-    when(mockRouteMaster.redirectToOnSuccess(any(HealthConditionsForm.class), any(Journey.class)))
-        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(
             post("/health-conditions")
                 .param("descriptionOfConditions", "test test")
                 .sessionAttr("JOURNEY", new Journey()))
-        .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(Mappings.URL_DECLARATIONS));
   }
 
   @Test
@@ -83,11 +71,11 @@ public class HealthConditionsControllerTest {
       throws Exception {
     mockMvc
         .perform(post("/health-conditions").sessionAttr("JOURNEY", new Journey()))
-        .andExpect(status().isOk())
-        .andExpect(view().name("health-conditions"))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(Mappings.URL_HEALTH_CONDITIONS + RouteMaster.ERROR_SUFFIX))
         .andExpect(
-            model()
-                .attributeHasFieldErrorCode("formRequest", "descriptionOfConditions", "NotNull"));
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "descriptionOfConditions", "NotNull"));
   }
 
   @Test
@@ -99,9 +87,10 @@ public class HealthConditionsControllerTest {
             post("/health-conditions")
                 .param("descriptionOfConditions", tooLong)
                 .sessionAttr("JOURNEY", new Journey()))
-        .andExpect(status().isOk())
-        .andExpect(view().name("health-conditions"))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(Mappings.URL_HEALTH_CONDITIONS + RouteMaster.ERROR_SUFFIX))
         .andExpect(
-            model().attributeHasFieldErrorCode("formRequest", "descriptionOfConditions", "Size"));
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "descriptionOfConditions", "Size"));
   }
 }

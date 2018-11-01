@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
@@ -16,6 +17,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 @Data
 @Builder
+@EqualsAndHashCode
 public class HealthConditionsForm implements StepForm, Serializable {
   @NotNull
   @Size(min = 1, max = 9000)
@@ -35,5 +37,10 @@ public class HealthConditionsForm implements StepForm, Serializable {
       return Optional.of(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST);
     }
     return Optional.of(StepDefinition.DECLARATIONS);
+  }
+
+  @Override
+  public boolean preserveStep(Journey journey) {
+    return false;
   }
 }

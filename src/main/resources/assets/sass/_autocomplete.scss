@@ -18,12 +18,13 @@
 }
 
 .autocomplete__input {
-	@include govuk-font(19);
 	background-color: transparent;
+	@include govuk-font(19);
 	position: relative;
 }
 
 .autocomplete__hint {
+	@include govuk-font(19);
 	color: #BFC1C3;
 	position: absolute;
 }
@@ -140,6 +141,11 @@
 		.autocomplete__input {
 			border-color: $govuk-error-colour;
 			border-width: 4px;
+		}
+
+		.autocomplete__hint {
+			padding-left: 6px;
+			padding-top: 6px;
 		}
 	}
 }

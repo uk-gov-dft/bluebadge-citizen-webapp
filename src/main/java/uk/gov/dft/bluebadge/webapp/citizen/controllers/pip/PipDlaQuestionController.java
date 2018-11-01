@@ -35,19 +35,19 @@ public class PipDlaQuestionController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public PipDlaQuestionController(RouteMaster routeMaster) {
+  PipDlaQuestionController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
     // On returning to form, take previously submitted values.
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getPipDlaQuestionForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getPipDlaQuestionForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     // If navigating forward from previous form, reset
@@ -83,7 +83,7 @@ public class PipDlaQuestionController implements StepController {
       return routeMaster.redirectToOnBindingError(this, pipDlaQuestionForm, bindingResult, attr);
     }
 
-    journey.setPipDlaQuestionForm(pipDlaQuestionForm);
+    journey.setFormForStep(pipDlaQuestionForm);
     return routeMaster.redirectToOnSuccess(pipDlaQuestionForm);
   }
 

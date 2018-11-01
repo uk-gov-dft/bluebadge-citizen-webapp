@@ -14,12 +14,11 @@ import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 public class ApplyInWelshControllerTest {
 
   private MockMvc mockMvc;
-  private ApplyInWelshController controller;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new ApplyInWelshController();
+    ApplyInWelshController controller = new ApplyInWelshController();
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())

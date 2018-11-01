@@ -1,49 +1,42 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 
 public class ContactDetailsControllerTest {
 
-  public static final String URL_CONTACT_DETAILS = "/contact-details";
-  public static final String VIEW_CONTACT_DETAILS = "contact-details";
+  private static final String URL_CONTACT_DETAILS = "/contact-details";
   private MockMvc mockMvc;
-  private ContactDetailsController controller;
   private Journey journey;
 
-  @Mock private RouteMaster mockRouteMaster;
+  private static final String SUCCESS_URL = Mappings.URL_DECLARATIONS;
+  private static final String ERROR_URL = Mappings.URL_CONTACT_DETAILS + RouteMaster.ERROR_SUFFIX;
 
   @Before
   public void setup() {
-    MockitoAnnotations.initMocks(this);
-    controller = new ContactDetailsController(mockRouteMaster);
+    ContactDetailsController controller = new ContactDetailsController(new RouteMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("redirect:/backToStart");
-    when(mockRouteMaster.redirectToOnSuccess(any(DateOfBirthForm.class)))
-        .thenReturn("redirect:/testSuccess");
   }
 
   @Test
@@ -56,7 +49,11 @@ public class ContactDetailsControllerTest {
         .perform(get(URL_CONTACT_DETAILS).sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("contact-details"))
-        .andExpect(model().attribute("formRequest", journey.getContactDetailsForm()));
+        .andExpect(
+            model()
+                .attribute(
+                    "formRequest",
+                    (ContactDetailsForm) journey.getFormForStep(StepDefinition.CONTACT_DETAILS)));
   }
 
   @Test
@@ -64,8 +61,7 @@ public class ContactDetailsControllerTest {
 
     // Set to applying for someone else
     Journey journey = JourneyFixture.getDefaultJourney();
-    ApplicantForm formForStep =
-        (ApplicantForm) journey.getFormForStep(StepDefinition.APPLICANT_TYPE);
+    ApplicantForm formForStep = journey.getFormForStep(StepDefinition.APPLICANT_TYPE);
     formForStep.setApplicantType(ApplicantType.SOMEONE_ELSE.toString());
 
     mockMvc
@@ -74,11 +70,11 @@ public class ContactDetailsControllerTest {
                 .param("fullName", "") // empty - invalid
                 .param("primaryPhoneNumber", "01270161666")
                 .sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
-        .andExpect(view().name(VIEW_CONTACT_DETAILS))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(ERROR_URL))
         .andExpect(
-            model()
-                .attributeHasFieldErrorCode("formRequest", "fullName", "Invalid.contact.fullName"));
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "fullName", "Invalid.contact.fullName"));
   }
 
   @Test
@@ -93,8 +89,8 @@ public class ContactDetailsControllerTest {
                 .param("fullName", "") // empty - valid
                 .param("primaryPhoneNumber", "01270161666")
                 .sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
-        .andExpect(view().name(VIEW_CONTACT_DETAILS))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(SUCCESS_URL))
         .andExpect(model().attributeDoesNotExist("fullName"));
   }
 
@@ -109,10 +105,11 @@ public class ContactDetailsControllerTest {
                 .param("fullName", "") // empty - valid
                 .param("primaryPhoneNumber", "")
                 .sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
-        .andExpect(view().name(VIEW_CONTACT_DETAILS))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(ERROR_URL))
         .andExpect(
-            model().attributeHasFieldErrorCode("formRequest", "primaryPhoneNumber", "NotBlank"));
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "primaryPhoneNumber", "NotBlank"));
   }
 
   @Test
@@ -126,10 +123,11 @@ public class ContactDetailsControllerTest {
                 .param("fullName", "") // empty - valid
                 .param("primaryPhoneNumber", "afaf123")
                 .sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
-        .andExpect(view().name(VIEW_CONTACT_DETAILS))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(ERROR_URL))
         .andExpect(
-            model().attributeHasFieldErrorCode("formRequest", "primaryPhoneNumber", "Pattern"));
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "primaryPhoneNumber", "Pattern"));
   }
 
   @Test
@@ -144,10 +142,11 @@ public class ContactDetailsControllerTest {
                 .param("primaryPhoneNumber", "01270646261")
                 .param("secondaryPhoneNumber", "afaf123")
                 .sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
-        .andExpect(view().name(VIEW_CONTACT_DETAILS))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(ERROR_URL))
         .andExpect(
-            model().attributeHasFieldErrorCode("formRequest", "secondaryPhoneNumber", "Pattern"));
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "secondaryPhoneNumber", "Pattern"));
   }
 
   @Test
@@ -162,9 +161,11 @@ public class ContactDetailsControllerTest {
                 .param("primaryPhoneNumber", "01270646261")
                 .param("emailAddress", "abc.com")
                 .sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
-        .andExpect(view().name(VIEW_CONTACT_DETAILS))
-        .andExpect(model().attributeHasFieldErrorCode("formRequest", "emailAddress", "Pattern"));
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(ERROR_URL))
+        .andExpect(
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "emailAddress", "Pattern"));
   }
 
   @Test
@@ -179,8 +180,8 @@ public class ContactDetailsControllerTest {
                 .param("primaryPhoneNumber", "01270646261")
                 .param("emailAddress", "a@bc.com")
                 .sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
-        .andExpect(view().name(VIEW_CONTACT_DETAILS))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(SUCCESS_URL))
         .andExpect(model().attributeDoesNotExist("emailAddress"));
   }
 

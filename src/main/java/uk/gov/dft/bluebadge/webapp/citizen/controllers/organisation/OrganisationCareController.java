@@ -30,7 +30,7 @@ public class OrganisationCareController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public OrganisationCareController(RouteMaster routeMaster) {
+  OrganisationCareController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
@@ -42,7 +42,7 @@ public class OrganisationCareController implements StepController {
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
@@ -50,7 +50,7 @@ public class OrganisationCareController implements StepController {
       attachForm(model, journey);
     }
 
-    setupModel(model, journey);
+    setupModel(model);
 
     return TEMPLATE;
   }
@@ -66,20 +66,20 @@ public class OrganisationCareController implements StepController {
       return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
     }
 
-    journey.setOrganisationCareForm(formRequest);
+    journey.setFormForStep(formRequest);
 
     return routeMaster.redirectToOnSuccess(formRequest);
   }
 
   private void attachForm(Model model, Journey journey) {
-    if (null != journey.getOrganisationCareForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getOrganisationCareForm());
+    if (journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     } else {
       model.addAttribute(FORM_REQUEST, OrganisationCareForm.builder().build());
     }
   }
 
-  private void setupModel(Model model, Journey journey) {
+  private void setupModel(Model model) {
     RadioOptionsGroup group =
         new RadioOptionsGroup("organisationCare.page.title").withYesNoOptions();
     group.setHintKey("organisationCare.page.title.hint");

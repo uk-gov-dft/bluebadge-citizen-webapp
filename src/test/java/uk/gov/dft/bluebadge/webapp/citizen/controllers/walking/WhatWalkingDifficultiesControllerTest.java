@@ -2,8 +2,6 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers.walking;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
@@ -11,14 +9,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation.ENG;
 
 import com.google.common.collect.ImmutableList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -26,58 +25,47 @@ import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
 
 public class WhatWalkingDifficultiesControllerTest {
 
   private MockMvc mockMvc;
-  private WhatWalkingDifficultiesController controller;
   private Journey journey;
 
-  @Mock private RouteMaster mockRouteMaster;
+  private static final String ERROR_URL =
+      Mappings.URL_WHAT_WALKING_DIFFICULT + RouteMaster.ERROR_SUFFIX;
 
   @Before
   public void setup() {
-    MockitoAnnotations.initMocks(this);
-    controller = new WhatWalkingDifficultiesController(mockRouteMaster);
+    WhatWalkingDifficultiesController controller =
+        new WhatWalkingDifficultiesController(new RouteMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
 
-    ApplicantForm applicantForm =
-        ApplicantForm.builder().applicantType(ApplicantType.YOURSELF.toString()).build();
-    LocalAuthorityRefData testLA = new LocalAuthorityRefData();
-    LocalAuthorityRefData.LocalAuthorityMetaData metaData =
-        new LocalAuthorityRefData.LocalAuthorityMetaData();
-    metaData.setNation(Nation.ENG);
-    testLA.setLocalAuthorityMetaData(Optional.of(metaData));
-
-    journey = new Journey();
-    journey.setApplicantForm(applicantForm);
-    journey.setLocalAuthority(testLA);
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
-    // We are not testing the route master. So for convenience just forward to an error view so
-    // can test the error messages
-    when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any()))
-        .thenReturn("/someValidationError");
+    journey =
+        JourneyFixture.getDefaultJourneyToStep(
+            StepDefinition.WHAT_WALKING_DIFFICULTIES, WALKD, ENG);
   }
 
   @Test
   public void show_ShouldDisplayTemplate() throws Exception {
 
-    WhatMakesWalkingDifficultForm form = WhatMakesWalkingDifficultForm.builder().build();
-
     mockMvc
         .perform(get("/what-makes-walking-difficult").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("walking/what-walking-difficult"))
-        .andExpect(model().attribute("formRequest", form))
+        .andExpect(
+            model().attribute("formRequest", JourneyFixture.getWhatMakesWalkingDifficultForm()))
         .andExpect(model().attributeExists("walkingDifficulties"));
   }
 
@@ -91,11 +79,14 @@ public class WhatWalkingDifficultiesControllerTest {
             .andReturn();
 
     RadioOptionsGroup options =
-        (RadioOptionsGroup) mvcResult.getModelAndView().getModel().get("walkingDifficulties");
+        (RadioOptionsGroup)
+            Objects.requireNonNull(mvcResult.getModelAndView())
+                .getModel()
+                .get("walkingDifficulties");
     assertThat(options.getOptions())
         .extracting("shortCode", "messageKey")
-        .contains(tuple("DANGER", "you.ENG.whatMakesWalkingDifficult.select.option.dangerous"))
-        .doesNotContain(tuple("STRUGGLE", "you.whatMakesWalkingDifficult.select.option.struggle"));
+        .contains(tuple("DANGER", "oth.ENG.whatMakesWalkingDifficult.select.option.dangerous"))
+        .doesNotContain(tuple("STRUGGLE", "oth.whatMakesWalkingDifficult.select.option.struggle"));
   }
 
   @Test
@@ -117,35 +108,40 @@ public class WhatWalkingDifficultiesControllerTest {
             .andReturn();
 
     RadioOptionsGroup options =
-        (RadioOptionsGroup) mvcResult.getModelAndView().getModel().get("walkingDifficulties");
+        (RadioOptionsGroup)
+            Objects.requireNonNull(mvcResult.getModelAndView())
+                .getModel()
+                .get("walkingDifficulties");
     assertThat(options.getOptions())
         .extracting("shortCode", "messageKey")
-        .contains(tuple("DANGER", "you.SCO.whatMakesWalkingDifficult.select.option.dangerous"))
-        .contains(tuple("STRUGGLE", "you.whatMakesWalkingDifficult.select.option.struggle"));
+        .contains(tuple("DANGER", "oth.SCO.whatMakesWalkingDifficult.select.option.dangerous"))
+        .contains(tuple("STRUGGLE", "oth.whatMakesWalkingDifficult.select.option.struggle"));
   }
 
   @Test
   public void show_givenNationWales_walkingDifficultiesShouldBeNationSpecific() throws Exception {
-    LocalAuthorityRefData testLA = new LocalAuthorityRefData();
-    LocalAuthorityRefData.LocalAuthorityMetaData metaData =
-        new LocalAuthorityRefData.LocalAuthorityMetaData();
-    metaData.setNation(Nation.WLS);
-    testLA.setLocalAuthorityMetaData(Optional.of(metaData));
-
-    journey.setLocalAuthority(testLA);
+    Journey wales =
+        new JourneyBuilder()
+            .inWales()
+            .toStep(StepDefinition.WHAT_WALKING_DIFFICULTIES)
+            .withEligibility(WALKD)
+            .build();
 
     MvcResult mvcResult =
         mockMvc
-            .perform(get("/what-makes-walking-difficult").sessionAttr("JOURNEY", journey))
+            .perform(get("/what-makes-walking-difficult").sessionAttr("JOURNEY", wales))
             .andExpect(status().isOk())
             .andExpect(model().attributeExists("walkingDifficulties"))
             .andReturn();
 
     RadioOptionsGroup options =
-        (RadioOptionsGroup) mvcResult.getModelAndView().getModel().get("walkingDifficulties");
+        (RadioOptionsGroup)
+            Objects.requireNonNull(mvcResult.getModelAndView())
+                .getModel()
+                .get("walkingDifficulties");
     assertThat(options.getOptions())
         .extracting("shortCode", "messageKey")
-        .contains(tuple("STRUGGLE", "you.whatMakesWalkingDifficult.select.option.struggle"));
+        .contains(tuple("STRUGGLE", "oth.whatMakesWalkingDifficult.select.option.struggle"));
   }
 
   @Test
@@ -159,7 +155,7 @@ public class WhatWalkingDifficultiesControllerTest {
             .somethingElseDescription("test test")
             .build();
 
-    journey.setWhatMakesWalkingDifficultForm(form);
+    journey.setFormForStep(form);
     mockMvc
         .perform(get("/what-makes-walking-difficult").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
@@ -171,22 +167,12 @@ public class WhatWalkingDifficultiesControllerTest {
   public void show_shouldRedirect_whenJourneyNotSetup() throws Exception {
     mockMvc
         .perform(get("/what-makes-walking-difficult").sessionAttr("JOURNEY", new Journey()))
-        .andExpect(status().isOk())
-        .andExpect(view().name("backToStart"));
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(Mappings.URL_ROOT));
   }
 
   @Test
   public void submit_showRedirectToNextStepInJourney() throws Exception {
-    List<WalkingDifficultyTypeCodeField> whatList =
-        ImmutableList.of(
-            WalkingDifficultyTypeCodeField.PAIN, WalkingDifficultyTypeCodeField.SOMELSE);
-    WhatMakesWalkingDifficultForm form =
-        WhatMakesWalkingDifficultForm.builder()
-            .whatWalkingDifficulties(whatList)
-            .somethingElseDescription("test test")
-            .build();
-
-    when(mockRouteMaster.redirectToOnSuccess(form)).thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(
@@ -196,15 +182,13 @@ public class WhatWalkingDifficultiesControllerTest {
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(Mappings.URL_MOBILITY_AID_LIST));
   }
 
   @Test
   public void submit_whenBlankFormSubmitted_thenShouldRedirectToShowWithValidationErrors()
       throws Exception {
     WhatMakesWalkingDifficultForm form = WhatMakesWalkingDifficultForm.builder().build();
-
-    when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any())).thenCallRealMethod();
 
     mockMvc
         .perform(
@@ -218,29 +202,23 @@ public class WhatWalkingDifficultiesControllerTest {
 
   @Test
   public void submit_whenBlankFormSubmitted_thenShouldHaveNotEmptyErrorMessage() throws Exception {
-    WhatMakesWalkingDifficultForm form = WhatMakesWalkingDifficultForm.builder().build();
 
     mockMvc
         .perform(
             post("/what-makes-walking-difficult")
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
-        .andExpect(view().name("/someValidationError"))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(ERROR_URL))
         .andExpect(
-            model()
-                .attributeHasFieldErrorCode("formRequest", "whatWalkingDifficulties", "NotEmpty"));
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "whatWalkingDifficulties", "NotEmpty"));
   }
 
   @Test
   public void
       submit_whenSomethingElseSelectedAndNoDescription_thenShouldRedirectToShowWithValidationErrors()
           throws Exception {
-    List<WalkingDifficultyTypeCodeField> whatList =
-        ImmutableList.of(
-            WalkingDifficultyTypeCodeField.PAIN, WalkingDifficultyTypeCodeField.SOMELSE);
-    WhatMakesWalkingDifficultForm form =
-        WhatMakesWalkingDifficultForm.builder().whatWalkingDifficulties(whatList).build();
 
     mockMvc
         .perform(
@@ -248,10 +226,10 @@ public class WhatWalkingDifficultiesControllerTest {
                 .param("whatWalkingDifficulties", "PAIN, SOMELSE")
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
-        .andExpect(view().name("/someValidationError"))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(ERROR_URL))
         .andExpect(
-            model()
-                .attributeHasFieldErrorCode("formRequest", "somethingElseDescription", "NotBlank"));
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "somethingElseDescription", "NotBlank"));
   }
 }

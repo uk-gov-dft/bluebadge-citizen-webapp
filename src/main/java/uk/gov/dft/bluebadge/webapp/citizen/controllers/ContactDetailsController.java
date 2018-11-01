@@ -35,13 +35,13 @@ public class ContactDetailsController implements StepController {
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
     //On returning to form, take previously submitted values.
-    if (!model.containsAttribute(FORM_REQUEST) && null != journey.getContactDetailsForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getContactDetailsForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     // If navigating forward from previous form, reset
@@ -68,7 +68,7 @@ public class ContactDetailsController implements StepController {
       return routeMaster.redirectToOnBindingError(this, contactDetailsForm, bindingResult, attr);
     }
 
-    journey.setContactDetailsForm(contactDetailsForm);
+    journey.setFormForStep(contactDetailsForm);
     return routeMaster.redirectToOnSuccess(contactDetailsForm, journey);
   }
 
