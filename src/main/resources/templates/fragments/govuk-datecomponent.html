@@ -18,8 +18,7 @@
     <div th:fragment="govuk-datecomponent(label, hint, compoundDate, date)"
          th:class="${#fields.hasErrors(date)} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
 
-        <fieldset class="govuk-fieldset"
-            th:aria-describedby="${hint} ? ${date} + '-hint'" role="group">
+        <fieldset class="govuk-fieldset" th:aria-describedby="${hint} ? ${date} + '-hint'" role="group">
 
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l" th:if="${label}">
                 <h1 th:text="${label}" data-uipath="${date} + '.legend'" class="govuk-fieldset__heading" />
@@ -31,28 +30,32 @@
                 th:data-uipath="*{__${date}__} + '.error'"
                 th:id="*{__${date}__} + '-error'"
                 th:if="${#fields.hasErrors(date)}"
-                th:errors="*{__${date}__}" />
+                th:errors="*{__${date}__}"></span>
 
-            <div class="govuk-date-input" th:id="${date}">
+            <div class="govuk-date-input">
 
                 <div class="govuk-date-input__item">
                     <div class="govuk-form-group">
-                        <label class="govuk-label govuk-date-input__label" th:data-uipath="${date} + '.day.label'">Day</label>
-                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" type="text" th:data-uipath="${date} + '.day.field'" th:field="*{__${date}__.day}">
+                        <label th:for="${date}" class="govuk-label govuk-date-input__label" th:data-uipath="${date} + '.day.label'">Day</label>
+                        <input th:field="*{__${date}__.day}"
+                               th:class="('govuk-input govuk-date-input__input govuk-input--width-2') + (${#fields.hasErrors(date)}? ' govuk-input--error' : '')"
+                               type="text"th:data-uipath="${date} + '.day.field'" th:id="${date}">
                     </div>
                 </div>
 
                 <div class="govuk-date-input__item">
                     <div class="govuk-form-group">
-                        <label class="govuk-label govuk-date-input__label" th:data-uipath="${date} + '.month.label'">Month</label>
-                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" type="number" th:data-uipath="${date} + '.month.field'"  th:field="*{__${date}__.month}">
+                        <label class="govuk-label govuk-date-input__label" th:data-uipath="${date} + '.month.label'" th:for="${date + '.month'}">Month</label>
+                        <input th:class="('govuk-input govuk-date-input__input govuk-input--width-2') + (${#fields.hasErrors(date)}? ' govuk-input--error' : '')"
+                               type="number" th:data-uipath="${date} + '.month.field'"  th:field="*{__${date}__.month}">
                     </div>
                 </div>
 
                 <div class="govuk-date-input__item">
                     <div class="govuk-form-group">
-                        <label class="govuk-label govuk-date-input__label" th:data-uipath="${date} + '.year.label'">Year</label>
-                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" type="number" th:data-uipath="${date} + '.year.field'" th:field="*{__${date}__.year}">
+                        <label class="govuk-label govuk-date-input__label" th:data-uipath="${date} + '.year.label'" th:for="${date + '.year'}">Year</label>
+                        <input th:class="('govuk-input govuk-date-input__input govuk-input--width-4') + (${#fields.hasErrors(date)}? ' govuk-input--error' : '')"
+                               type="number" th:data-uipath="${date} + '.year.field'" th:field="*{__${date}__.year}">
                     </div>
                 </div>
 

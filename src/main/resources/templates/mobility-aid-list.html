@@ -15,7 +15,7 @@
             <form th:action="@{/list-mobility-aids}" th:object="${formRequest}" method="POST" novalidate>
 
                 <div th:class="${#fields.hasErrors('hasWalkingAid')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
-                    <fieldset class="govuk-fieldset" id="hasWalkingAid" aria-describedby="mobility-aids-hint">
+                    <fieldset class="govuk-fieldset" aria-describedby="mobility-aids-hint">
 
                         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                             <h1 class="govuk-fieldset__heading" th:text="#{${JOURNEY.who} + 'mobility.aid.list.body.title'}"></h1>
@@ -30,16 +30,16 @@
                         <div class="govuk-radios" data-module="radios">
 
                             <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="hasWalkingAidyes"
+                                <input class="govuk-radios__input" id="hasWalkingAid"
                                        type="radio" th:field="*{hasWalkingAid}"
-                                       value="yes" data-aria-controls="conditional-hasWalkingAidyes" autocomplete="off">
+                                       value="yes" data-aria-controls="conditional-hasWalkingAid">
                                 <label class="govuk-label govuk-radios__label"
-                                       for="hasWalkingAidyes"
+                                       for="hasWalkingAid"
                                        th:text="#{'radio.option.yes'}"></label>
                             </div>
 
                             <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
-                                 id="conditional-hasWalkingAidyes">
+                                 id="conditional-hasWalkingAid">
                                 <table class="govuk-table">
                                     <thead class="govuk-table__head" data-uipath="table.head">
                                     <tr class="govuk-table__row">

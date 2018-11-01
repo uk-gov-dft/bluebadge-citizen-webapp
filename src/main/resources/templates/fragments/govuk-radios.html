@@ -14,51 +14,10 @@
 
    -------------------------------------------------------------------------------- */
 
-   <div th:fragment="radios-options(layout)" th:class="${layout} == 'inline' ? 'govuk-radios govuk-radios--inline' : 'govuk-radios'">
-      <div class="govuk-radios__item" th:each="option : ${options}" th:data-uipath="${name} + '.radio-options'">
-
-         <input th:id="${name} + '.' + ${option.shortCode}"
-                class="govuk-radios__input"
-                th:data-uipath="${name} + '.option.' + ${option.shortCode}"
-                type="radio"
-                th:value="${option.shortCode}"
-                th:field="*{__${name}__}" autocomplete="off">
-
-         <label class="govuk-label govuk-radios__label"
-                th:data-uipath="${name} + '.label.' + ${option.shortCode}"
-                th:for="${name} + '.' + ${option.shortCode}"
-                th:text="${option.description}"></label>
-      </div>
-   </div>
-
-
-   <div  th:fragment="govuk-radios-stacked(label, name, hint, options)"
-         th:class="${#fields.hasErrors(name)} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
-
-      <fieldset class="govuk-fieldset" th:id="${name}" th:aria-describedby="${hint} ? ${name} + '-hint' : null">
-
-         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l" th:if="${label}">
-            <h1 class="govuk-fieldset__heading" th:data-uipath="${name} + '.label'" th:text="${label}"></h1>
-         </legend>
-
-         <span th:id="${name} + '-hint'" th:data-uipath="${name} + '.hint'" class="govuk-hint" th:if="${hint}" />
-
-         <span class="govuk-error-message"
-               th:data-uipath="${name} + '.error'"
-               th:if="${#fields.hasErrors(name)}"
-               th:errors="*{__${name}__}"></span>
-
-         <div th:replace="~{ :: radios-options('stacked') }"></div>
-
-      </fieldset>
-
-   </div>
-
    <div  th:fragment="govuk-radios(name, radioGroup)"
          th:class="${#fields.hasErrors(name)} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
 
       <fieldset class="govuk-fieldset"
-                th:id="${name}"
                 th:aria-describedby="${radioGroup.getHintKey()} ? ${name} + '-hint' : null">
 
          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l"
@@ -87,20 +46,36 @@
 
          <div class="govuk-radios__item"
               th:with="shortCode=${option.getShortCode()}"
-              th:each="option : ${radioGroup.getOptions()}"
+              th:each="option, iter : ${radioGroup.getOptions()}"
               th:data-uipath="${name} + '.radio-options'">
 
-            <input th:id="${name} + '.' + ${shortCode}"
-                   class="govuk-radios__input"
-                   th:data-uipath="${name} + '.option.' + ${shortCode}"
-                   type="radio"
-                   th:value="${shortCode}"
-                   th:field="*{__${name}__}" autocomplete="off">
+            <div th:remove="tag" th:if="${iter.index == 0}">
+               <input th:id="${name}"
+                      class="govuk-radios__input"
+                      th:data-uipath="${name} + '.option.' + ${shortCode}"
+                      type="radio"
+                      th:value="${shortCode}"
+                      th:field="*{__${name}__}">
 
-            <label class="govuk-label govuk-radios__label"
-                   th:data-uipath="${name} + '.label.' + ${shortCode}"
-                   th:for="${name} + '.' + ${shortCode}"
-            th:text="#{${option.getMessageKey()}}"></label>
+               <label class="govuk-label govuk-radios__label"
+                      th:data-uipath="${name} + '.label.' + ${shortCode}"
+                      th:for="${name}"
+                      th:text="#{${option.getMessageKey()}}"></label>
+            </div>
+
+            <div th:remove="tag" th:unless="${iter.index == 0}">
+               <input th:id="${name} + '.' + ${shortCode}"
+                      class="govuk-radios__input"
+                      th:data-uipath="${name} + '.option.' + ${shortCode}"
+                      type="radio"
+                      th:value="${shortCode}"
+                      th:field="*{__${name}__}">
+
+               <label class="govuk-label govuk-radios__label"
+                      th:data-uipath="${name} + '.label.' + ${shortCode}"
+                      th:for="${name} + '.' + ${shortCode}"
+                      th:text="#{${option.getMessageKey()}}"></label>
+            </div>
          </div>
 
       </fieldset>

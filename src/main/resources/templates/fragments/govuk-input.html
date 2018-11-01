@@ -29,7 +29,7 @@ for id and attaching label to the input field.
 
     <span class="govuk-error-message"
           th:data-uipath="${name} + '.error'"
-          th:id="${name} + '-hint'"
+          th:id="${name} + '-error'"
           th:if="${#fields.hasErrors(name)}"
           th:errors="*{__${name}__}" />
 
@@ -40,7 +40,7 @@ for id and attaching label to the input field.
            th:name="${name}"
            th:type="${type}"
            th:field="*{__${name}__}"
-           th:aria-describedby="${hint} ? (${#fields.hasErrors(name)} ? ${name} + '-hint ' + ${name} + '-error' : ${name} + '-hint') : null " />
+           th:aria-describedby="${#fields.hasErrors(name)} ? ${name} + '-error' : (${hint} ? ${name} + '-hint' : null)">
 
 </div><!-- govuk-o-form-group -->
 
