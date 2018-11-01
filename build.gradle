@@ -116,6 +116,7 @@ configurations.all {
         // don't cache changing modules at all
         cacheChangingModulesFor 0, 'seconds'
     }
+    exclude group: 'commons-logging', module: 'commons-logging'
 }
 
 dependencies {
