@@ -56,7 +56,7 @@ public class ApplicationSteps extends AbstractSpringSteps {
       String year = Integer.toString(date.getYear() + 1);
 
       commonPage.findPageElementById("hasProof.no").click();
-      commonPage.findPageElementById("awardEndDate.day").sendKeys(day);
+      commonPage.findPageElementById("awardEndDate").sendKeys(day);
       commonPage.findPageElementById("awardEndDate.month").sendKeys(month);
       commonPage.findPageElementById("awardEndDate.year").sendKeys(year);
     }
