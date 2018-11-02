@@ -12,9 +12,11 @@ import org.junit.Test;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
@@ -80,8 +82,7 @@ public class ContactDetailsControllerTest {
   @Test
   public void show_givenYouApply_ShouldNotValidateFullName() throws Exception {
 
-    // Set to applying for someone else
-    givenDefaultJourney();
+    journey = new JourneyBuilder().forYou().withEligibility(EligibilityCodeField.WPMS).build();
 
     mockMvc
         .perform(
@@ -171,7 +172,7 @@ public class ContactDetailsControllerTest {
   @Test
   public void submit_givenYouApply_ValidEmailAddress() throws Exception {
 
-    givenDefaultJourney();
+    journey = new JourneyBuilder().forYou().withEligibility(EligibilityCodeField.WPMS).build();
 
     mockMvc
         .perform(
