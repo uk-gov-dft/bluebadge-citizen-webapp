@@ -8,59 +8,77 @@
 
     @label - String: Label for form input field
     @hint - String: Adds hint for the input field underneath the label
-    @Day - String: Name of day field
-    @Month - String: Name of month field
-    @year - String: Name of year field
     @name - String: Name for the form input field.
 
     -------------------------------------------------------------------------------- */
 
-    <div th:fragment="govuk-datecomponent(label, hint, compoundDate, date)"
+    <div th:fragment="govuk-datecomponent-h1(label, hint, date)"
          th:class="${#fields.hasErrors(date)} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
 
         <fieldset class="govuk-fieldset" th:aria-describedby="${hint} ? ${date} + '-hint'" role="group">
 
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l" th:if="${label}">
-                <h1 th:text="${label}" data-uipath="${date} + '.legend'" class="govuk-fieldset__heading" />
+                <h1 th:text="${label}" class="govuk-fieldset__heading" />
             </legend>
 
-            <span th:id="${date} + '-hint'" class="govuk-hint" th:if="${hint}" th:utext="${hint}"></span>
+            <span th:id="${date} + '-hint'" class="govuk-hint" th:if="${hint}" th:text="${hint}"></span>
 
             <span class="govuk-error-message"
-                th:data-uipath="*{__${date}__} + '.error'"
-                th:id="*{__${date}__} + '-error'"
-                th:if="${#fields.hasErrors(date)}"
-                th:errors="*{__${date}__}"></span>
+                  th:id="*{__${date}__} + '-error'"
+                  th:if="${#fields.hasErrors(date)}"
+                  th:errors="*{__${date}__}"></span>
 
-            <div class="govuk-date-input">
-
-                <div class="govuk-date-input__item">
-                    <div class="govuk-form-group">
-                        <label th:for="${date}" class="govuk-label govuk-date-input__label" th:data-uipath="${date} + '.day.label'">Day</label>
-                        <input th:field="*{__${date}__.day}"
-                               th:class="('govuk-input govuk-date-input__input govuk-input--width-2') + (${#fields.hasErrors(date)}? ' govuk-input--error' : '')"
-                               type="text"th:data-uipath="${date} + '.day.field'" th:id="${date}">
-                    </div>
-                </div>
-
-                <div class="govuk-date-input__item">
-                    <div class="govuk-form-group">
-                        <label class="govuk-label govuk-date-input__label" th:data-uipath="${date} + '.month.label'" th:for="${date + '.month'}">Month</label>
-                        <input th:class="('govuk-input govuk-date-input__input govuk-input--width-2') + (${#fields.hasErrors(date)}? ' govuk-input--error' : '')"
-                               type="number" th:data-uipath="${date} + '.month.field'"  th:field="*{__${date}__.month}">
-                    </div>
-                </div>
-
-                <div class="govuk-date-input__item">
-                    <div class="govuk-form-group">
-                        <label class="govuk-label govuk-date-input__label" th:data-uipath="${date} + '.year.label'" th:for="${date + '.year'}">Year</label>
-                        <input th:class="('govuk-input govuk-date-input__input govuk-input--width-4') + (${#fields.hasErrors(date)}? ' govuk-input--error' : '')"
-                               type="number" th:data-uipath="${date} + '.year.field'" th:field="*{__${date}__.year}">
-                    </div>
-                </div>
-
-            </div>
+            <div th:replace="~{ :: govuk-datecomponentBase(${date}) }"></div>
         </fieldset>
+    </div>
+
+
+    <div th:fragment="govuk-datecomponent(label, hint, date)"
+         th:class="${#fields.hasErrors(date)} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+
+        <fieldset class="govuk-fieldset"
+                  th:aria-describedby="${hint} ? ${date} + '-hint'" role="group">
+
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m"
+                    th:if="${label}"
+                    th:text="${label}">
+            </legend>
+
+            <span th:id="${date} + '-hint'" class="govuk-hint" th:if="${hint}" th:text="${hint}"></span>
+
+            <span class="govuk-error-message"
+                  th:id="*{__${date}__} + '-error'"
+                  th:if="${#fields.hasErrors(date)}"
+                  th:errors="*{__${date}__}"></span>
+
+            <div th:replace="~{ :: govuk-datecomponentBase(${date}) }"></div>
+
+        </fieldset>
+    </div>
+
+
+
+    <div th:fragment="govuk-datecomponentBase(date)" class="govuk-date-input" th:id="${date}">
+        <div class="govuk-date-input__item">
+            <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" th:for="${date}"  th:data-uipath="${date} + '.day.label'">Day</label>
+                <input class="govuk-input govuk-date-input__input govuk-input--width-2" type="text" th:data-uipath="${date} + '.day.field'" th:field="*{__${date}__.day}" th:id="${date}">
+            </div>
+        </div>
+
+        <div class="govuk-date-input__item" th:with="monthId=${date}+'.month'">
+            <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" th:for="${monthId}"  th:data-uipath="${date} + '.month.label'">Month</label>
+                <input class="govuk-input govuk-date-input__input govuk-input--width-2" type="number" th:data-uipath="${date} + '.month.field'"  th:field="*{__${date}__.month}" th:id="${monthId}">
+            </div>
+        </div>
+
+        <div class="govuk-date-input__item" th:with="yearId=${date}+'.year'">
+            <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" th:for="${yearId}" th:data-uipath="${date} + '.year.label'">Year</label>
+                <input class="govuk-input govuk-date-input__input govuk-input--width-4" type="number" th:data-uipath="${date} + '.year.field'" th:field="*{__${date}__.year}" th:id="${yearId}">
+            </div>
+        </div>
     </div>
 
 </body>
