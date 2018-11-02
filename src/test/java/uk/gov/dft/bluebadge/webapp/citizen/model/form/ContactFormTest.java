@@ -2,7 +2,10 @@ package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.DLA;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.PIP;
 
+import java.util.EnumSet;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +36,7 @@ public class ContactFormTest {
   @ValueSource(strings = {"PIP", "DLA", "AFRFCS", "WPMS", "BLIND"})
   @DisplayName(
       "Should skip `health conditions` step in case if PIP, DLA, AFRFCS, WPMS, or BLIND benefit type was selected")
-  public void submit_shouldSkipHealthConditionsStep(String input) throws Exception {
+  public void submit_shouldSkipHealthConditionsStep(String input) {
 
     Journey journey = JourneyFixture.getDefaultJourney();
     ReceiveBenefitsForm benefitsForm =
@@ -42,13 +45,17 @@ public class ContactFormTest {
     ContactDetailsForm contactForm = ContactDetailsForm.builder().build();
 
     assertTrue(contactForm.determineNextStep(journey).isPresent());
-    assertEquals(contactForm.determineNextStep(journey).get(), StepDefinition.DECLARATIONS);
+    if (EnumSet.of(PIP, DLA).contains(EligibilityCodeField.valueOf(input))) {
+      assertEquals(contactForm.determineNextStep(journey).get(), StepDefinition.PROVE_BENEFIT);
+    } else {
+      assertEquals(contactForm.determineNextStep(journey).get(), StepDefinition.DECLARATIONS);
+    }
   }
 
   @Test
   @DisplayName(
       "Should show `health conditions` step in case if benefit code selected is different from PIP, DLA, AFCS, WPMS, or BLIND")
-  public void submit_shouldShowHealthConditionsStep() throws Exception {
+  public void submit_shouldShowHealthConditionsStep() {
 
     Journey journey = JourneyFixture.getDefaultJourney();
     ReceiveBenefitsForm benefitsForm = ReceiveBenefitsForm.builder().build();
