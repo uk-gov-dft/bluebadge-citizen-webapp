@@ -46,7 +46,7 @@ public class ApplicationSteps extends AbstractSpringSteps {
   @And("^I complete prove benefit page for \"(yes|no)\"")
   public void iCompleteProveBenefitPage(String opt) {
     if (opt.equals("yes")) {
-      commonPage.findPageElementById("hasProof.yes").click();
+      commonPage.findPageElementById("hasProof").click();
     }
 
     if (opt.equals("no")) {
