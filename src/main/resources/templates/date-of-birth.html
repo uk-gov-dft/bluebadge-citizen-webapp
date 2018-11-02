@@ -14,9 +14,7 @@
 
             <form th:action="@{/date-of-birth}" th:object="${formRequest}" method="post" novalidate>
 
-                <div class="govuk-form-group">
-                    <div th:replace="~{ fragments/govuk-datecomponent :: govuk-datecomponent(#{${JOURNEY.who} + 'dateOfBirthPage.body.title'}, #{example.daymonthyear}, ${formRequest.dateOfBirth}, 'dateOfBirth') }"/>
-                </div>
+                <div th:replace="~{ fragments/govuk-datecomponent :: govuk-datecomponent-h1(#{${JOURNEY.who} + 'dateOfBirthPage.body.title'}, #{example.daymonthyear}, 'dateOfBirth') }"/>
 
                 <button type="submit" class="govuk-button" data-uipath="button.continue" th:text="#{btn.label.continue}"></button>
 

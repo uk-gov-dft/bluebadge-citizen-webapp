@@ -47,6 +47,7 @@ class WalkingConverter {
         : null;
   }
 
+  @SuppressWarnings("squid:S1168")
   static List<WalkingAid> getWalkingAids(MobilityAidListForm mobilityAidListForm) {
 
     if (null != mobilityAidListForm && "yes".equals(mobilityAidListForm.getHasWalkingAid())) {
@@ -66,6 +67,7 @@ class WalkingConverter {
     return null;
   }
 
+  @SuppressWarnings("squid:S1168")
   static List<Treatment> getTreatments(TreatmentListForm treatmentListForm) {
 
     if (null != treatmentListForm && "yes".equals(treatmentListForm.getHasTreatment())) {
@@ -84,6 +86,7 @@ class WalkingConverter {
     return null;
   }
 
+  @SuppressWarnings("squid:S1168")
   static List<Medication> getMedications(MedicationListForm medicationListForm) {
 
     if (null != medicationListForm && "yes".equals(medicationListForm.getHasMedication())) {

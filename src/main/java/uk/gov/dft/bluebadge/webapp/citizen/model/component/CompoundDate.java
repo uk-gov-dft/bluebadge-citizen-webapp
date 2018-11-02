@@ -19,6 +19,12 @@ public class CompoundDate {
     this.month = month;
     this.year = year;
   }
+
+  public CompoundDate(LocalDate date) {
+    day = Integer.toString(date.getDayOfMonth());
+    month = Integer.toString(date.getMonth().getValue());
+    year = Integer.toString(date.getYear());
+  }
   /**
    * Builds a LocalDate from the individual date components.
    *
