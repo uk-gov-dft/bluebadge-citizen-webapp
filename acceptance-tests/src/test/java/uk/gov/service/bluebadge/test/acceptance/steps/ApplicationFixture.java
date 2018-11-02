@@ -1,9 +1,7 @@
 package uk.gov.service.bluebadge.test.acceptance.steps;
 
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.*;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.EMAIL_ADDRESS;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.FULL_NAME;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.PRIMARY_CONTACT_NUMBER;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.SECONDARY_CONTACT_NUMBER;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.HAS_RECEIVED_DLA;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.MAIN_REASON_LIST;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.NEVER_RECEIVED_DLA;
@@ -25,9 +23,7 @@ import cucumber.api.java.en.Given;
 import java.util.Calendar;
 import org.openqa.selenium.By;
 import org.springframework.beans.factory.annotation.Autowired;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.ApplicantPage;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.ChooseCouncilPage;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.*;
 
 public class ApplicationFixture extends AbstractSpringSteps {
 
@@ -86,7 +82,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("I complete receive benefit page for \"(PIP|DLA|AFRFCS|WPMS|NONE)\"")
   public void iCompleteReceiveBenefitPageFor(String benefit) {
-    commonPage.findPageElementById(Ids.EleCheck.BENEFIT_RECEIVED_LIST + "." + benefit).click();
+    commonPage.findPageElementById(BenifitsPage.BENEFIT_RECEIVED_LIST + "." + benefit).click();
     pressContinue();
   }
 
@@ -350,15 +346,15 @@ public class ApplicationFixture extends AbstractSpringSteps {
   @And("^I complete the already have a blue badge page for \"(YES|NO|YES BUT DON'T KNOW)\"$")
   public void iCompleteTheAlreadyHaveABlueBadgePageFor(String opt) throws Throwable {
     if ("YES BUT DON'T KNOW".equals(opt)) {
-      commonPage.findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + "_yes").click();
-      commonPage.findPageElementById(Ids.Preamble.BADGE_NUMBER_BYPASS_LINK).click();
+      commonPage.findPageElementById(AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION + "_yes").click();
+      commonPage.findPageElementById(AlreadyHaveBlueBadgePage.BADGE_NUMBER_BYPASS_LINK).click();
     } else {
       commonPage
-          .findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + "_" + opt.toLowerCase())
+          .findPageElementById(AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION + "_" + opt.toLowerCase())
           .click();
 
       if ("YES".equals(opt)) {
-        commonPage.findPageElementById(Ids.Preamble.BADGE_NUMBER).sendKeys("AB12CD");
+        commonPage.findPageElementById(AlreadyHaveBlueBadgePage.BADGE_NUMBER).sendKeys("AB12CD");
       }
 
       pressContinue();

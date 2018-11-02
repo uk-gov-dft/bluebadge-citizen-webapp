@@ -1,14 +1,9 @@
 package uk.gov.service.bluebadge.test.acceptance.steps;
 
 class Ids {
-  class Preamble {
-    static final String EXISTING_BADGE_OPTION = "hasExistingBadge";
-    static final String BADGE_NUMBER = "badgeNumber";
-    static final String BADGE_NUMBER_BYPASS_LINK = "bypass_link";
-  }
 
   class EleCheck {
-    static final String BENEFIT_RECEIVED_LIST = "benefitType";
+
     static final String MAIN_REASON_LIST = "mainReasonOption";
     static final String WALKING_DIFFICULTY_LIST = "walkingDifficulty";
     static final String WHAT_WALKING_DIFFICULTY_LIST = "whatWalkingDifficulties";

@@ -7,7 +7,7 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate choose council page for "yourself" and select a council in "england"
     And   I validate "your" local authority page in "england"
     And   I validate "you" already have a blue badge page for "Yes"
-
+    And   I validate "you" benefit page for "NONE"
 
   Scenario: Page title and error message validation - someone else
     Given I navigate to applicant page and validate for "someone else"
