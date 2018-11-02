@@ -26,7 +26,7 @@ public class ApplicationSteps extends AbstractSpringSteps {
   public void iNavigateToApplicantPageAndValidate(String applicant) throws Exception {
 
     if ("yourself".equals(applicant.toLowerCase())) {
-      journeyOption = applicantPage.APPLICANT_TYPE_YOURSELF_OPTION;
+      journeyOption = applicantPage.APPLICANT_TYPE_OPTION_LIST;
     } else {
       journeyOption = applicantPage.APPLICANT_TYPE_SOMELSE_OPTION;
     }
