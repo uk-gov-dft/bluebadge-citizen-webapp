@@ -15,7 +15,7 @@
             <form th:action="@{/prove-benefit}" th:object="${formRequest}" method="POST" novalidate>
 
                 <div th:class="${#fields.hasErrors('hasProof')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
-                    <fieldset class="govuk-fieldset" id="hasProof">
+                    <fieldset class="govuk-fieldset">
                         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                             <h1 class="govuk-fieldset__heading" th:text="${title}"></h1>
                         </legend>
@@ -29,12 +29,12 @@
                                 <input class="govuk-radios__input"
                                        type="radio"
                                        th:field="*{hasProof}"
-                                       id="hasProof.yes"
+                                       id="hasProof"
                                        name="hasProof"
                                        value="yes"
-                                       data-aria-controls="conditional-hasProof">
+                                       data-aria-controls="conditional-hasProofYes">
                                 <label class="govuk-label govuk-radios__label"
-                                       for="hasProof.yes"
+                                       for="hasProof"
                                        th:text="#{radio.option.yes}"></label>
                             </div>
 
@@ -45,13 +45,13 @@
                                        value="no"
                                        id="hasProof.no"
                                        name="hasProof"
-                                       data-aria-controls="conditional-hasProof">
+                                       data-aria-controls="conditional-hasProofNo">
                                 <label class="govuk-label govuk-radios__label"
                                        for="hasProof.no"
                                        th:text="#{radio.option.no}"></label>
                             </div>
                             <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
-                                 id="conditional-hasProof">
+                                 id="conditional-hasProofNo">
 
                                 <div th:replace="~{ fragments/govuk-datecomponent :: govuk-datecomponent(#{${JOURNEY.who} + 'proveBenefit.field.awardDate.label'}, #{proveBenefit.field.awardDate.label.hint}, 'awardEndDate') }"/>
 

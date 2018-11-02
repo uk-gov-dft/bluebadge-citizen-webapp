@@ -81,7 +81,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("I complete receive benefit page for \"(PIP|DLA|AFRFCS|WPMS|NONE)\"")
   public void iCompleteReceiveBenefitPageFor(String benefit) {
-    if(benefit.equals("PIP")) {
+    if (benefit.equals("PIP")) {
       commonPage.findPageElementById(Ids.EleCheck.BENEFIT_RECEIVED_LIST).click();
     } else {
       commonPage.findPageElementById(Ids.EleCheck.BENEFIT_RECEIVED_LIST + "." + benefit).click();
@@ -91,17 +91,19 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("I complete moving around points page for \"(12|10|8|4|0)\"")
   public void iCompleteMovingAroundPointsPageFor(String points) {
-    if(points.equals("12")) {
+    if (points.equals("12")) {
       commonPage.findPageElementById(Ids.EleCheck.MOVING_POINTS).click();
     } else {
-      commonPage.findPageElementById(Ids.EleCheck.MOVING_POINTS + ".MOVING_POINTS_" + points).click();
+      commonPage
+          .findPageElementById(Ids.EleCheck.MOVING_POINTS + ".MOVING_POINTS_" + points)
+          .click();
     }
     pressContinue();
   }
 
   @And("I complete main reason page for \"(TERMILL|CHILDBULK|CHILDVEHIC|WALKD|ARMS|BLIND|NONE)\"")
   public void iCompleteMainReasonPageFor(String benefit) {
-    if("TERMILL".equals(benefit)) {
+    if ("TERMILL".equals(benefit)) {
       commonPage.findPageElementById(MAIN_REASON_LIST).click();
     } else {
       commonPage.findPageElementById(MAIN_REASON_LIST + "." + benefit).click();
@@ -165,20 +167,24 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("^I complete planning points page for \"(12|10|8|4|0)\"")
   public void iCompletePlanningPointsPageFor(String points) {
-    if("12".equals(points)) {
+    if ("12".equals(points)) {
       commonPage.findPageElementById(Ids.EleCheck.PLANNING_POINTS).click();
     } else {
-      commonPage.findPageElementById(Ids.EleCheck.PLANNING_POINTS + ".PLANNING_POINTS_" + points).click();
+      commonPage
+          .findPageElementById(Ids.EleCheck.PLANNING_POINTS + ".PLANNING_POINTS_" + points)
+          .click();
     }
     pressContinue();
   }
 
   @And("^I complete what makes walking difficult page for \"(HELP|PLAN|PAIN|DANGEROUS|NONE)\"$")
   public void iCompleteWhatMakesWalkingDifficultPageFor(String difficulty) {
-    if(difficulty.equals("HELP")) {
+    if (difficulty.equals("HELP")) {
       commonPage.findPageElementById(Ids.EleCheck.WALKING_DIFFICULTY_LIST).click();
     } else {
-      commonPage.findPageElementById(Ids.EleCheck.WALKING_DIFFICULTY_LIST + "." + difficulty).click();
+      commonPage
+          .findPageElementById(Ids.EleCheck.WALKING_DIFFICULTY_LIST + "." + difficulty)
+          .click();
     }
     pressContinue();
   }
@@ -228,7 +234,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("^I complete the walking time page with option \"(CANTWALK|LESSMIN|FEWMIN|MORETEN)\"$")
   public void iCompleteTheWalkingTimePage(String option) throws Throwable {
-    if("CANTWALK".equals(option)) {
+    if ("CANTWALK".equals(option)) {
       commonPage.findPageElementById(Ids.Walkd.WALKING_TIME).click();
     } else {
       commonPage.findPageElementById(Ids.Walkd.WALKING_TIME + "." + option).click();
@@ -245,30 +251,36 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("^I complete lump sum of the AFRFCS Scheme page for \"(YES|NO)\"$")
   public void iCompleteLumpSumToOfTheAFRFCSSchemePageFor(String option) {
-    if("YES".equals(option)) {
+    if ("YES".equals(option)) {
       commonPage.findPageElementById(Ids.EleCheck.RECEIVED_COMPENSATION).click();
     } else {
-      commonPage.findPageElementById(Ids.EleCheck.RECEIVED_COMPENSATION + "." + option.toLowerCase()).click();
+      commonPage
+          .findPageElementById(Ids.EleCheck.RECEIVED_COMPENSATION + "." + option.toLowerCase())
+          .click();
     }
     pressContinue();
   }
 
   @And("^I complete have permanent disability page for \"(YES|NO)\"$")
   public void iCompleteHavePermanentDisabilityDisabilityPageFor(String option) {
-    if("YES".equals(option)) {
+    if ("YES".equals(option)) {
       commonPage.findPageElementById(Ids.EleCheck.HAS_DISABILITY).click();
     } else {
-      commonPage.findPageElementById(Ids.EleCheck.HAS_DISABILITY + "." + option.toLowerCase()).click();
+      commonPage
+          .findPageElementById(Ids.EleCheck.HAS_DISABILITY + "." + option.toLowerCase())
+          .click();
     }
     pressContinue();
   }
 
   @And("^I complete has mental disorder page for \"(YES|NO)\"$")
   public void iCompleteHasMentalDisorderPageFor(String option) {
-    if("YES".equals(option)) {
+    if ("YES".equals(option)) {
       commonPage.findPageElementById(Ids.EleCheck.HAS_MENTAL_DISORDER).click();
     } else {
-      commonPage.findPageElementById(Ids.EleCheck.HAS_MENTAL_DISORDER + "." + option.toLowerCase()).click();
+      commonPage
+          .findPageElementById(Ids.EleCheck.HAS_MENTAL_DISORDER + "." + option.toLowerCase())
+          .click();
     }
     pressContinue();
   }
@@ -276,9 +288,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   @And("^I complete has mobility component page for \"(YES|NO)\"$")
   public void iCompleteHasMobilityComponentPage(String option) {
     if ("YES".equals(option))
-      commonPage
-          .findPageElementById(Ids.EleCheck.AWARDED_HIGHER_RATE_MOBILITY)
-          .click();
+      commonPage.findPageElementById(Ids.EleCheck.AWARDED_HIGHER_RATE_MOBILITY).click();
     else
       commonPage
           .findPageElementById(Ids.EleCheck.AWARDED_HIGHER_RATE_MOBILITY + "." + "false")
@@ -295,10 +305,12 @@ public class ApplicationFixture extends AbstractSpringSteps {
   @And(
       "^I complete the what makes walking difficult page for \"(PAIN|BREATH|BALANCE|LONGTIME|DANGER|STRUGGLE|SOMELSE)\"$")
   public void iCompleteTheWhatMakesWalkingDifficultPageFor(String difficulty) throws Throwable {
-    if("PAIN".equals(difficulty)) {
+    if ("PAIN".equals(difficulty)) {
       commonPage.findPageElementById(Ids.EleCheck.WHAT_WALKING_DIFFICULTY_LIST).click();
     } else {
-      commonPage.findPageElementById(Ids.EleCheck.WHAT_WALKING_DIFFICULTY_LIST + difficulty).click();
+      commonPage
+          .findPageElementById(Ids.EleCheck.WHAT_WALKING_DIFFICULTY_LIST + difficulty)
+          .click();
     }
     pressContinue();
   }
@@ -332,7 +344,9 @@ public class ApplicationFixture extends AbstractSpringSteps {
   public void iCompleteTheTreatmentsPage(String option) {
 
     if ("NO".equals(option)) {
-      commonPage.findPageElementById(Ids.Walkd.TREATMENT_HAS_TREATMENT_OPTION + option.toLowerCase()).click();
+      commonPage
+          .findPageElementById(Ids.Walkd.TREATMENT_HAS_TREATMENT_OPTION + option.toLowerCase())
+          .click();
     }
 
     if ("YES".equals(option)) {
@@ -362,7 +376,9 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
       addMedication(option);
     } else {
-      commonPage.findPageElementById(Ids.Walkd.MEDICATION_HAS_MEDICATION_OPTION + option.toLowerCase()).click();
+      commonPage
+          .findPageElementById(Ids.Walkd.MEDICATION_HAS_MEDICATION_OPTION + option.toLowerCase())
+          .click();
     }
     pressContinue();
   }
@@ -370,10 +386,12 @@ public class ApplicationFixture extends AbstractSpringSteps {
   private void addMedication(String option) {
     clickButtonById(Ids.Walkd.MEDICATION_ADD_FIRST_LINK);
     clearAndSendKeys(Ids.Walkd.MEDICATION_ADD_MEDICATION_DESCRIPTION, "Paracetamol");
-    if("YES".equals(option)) {
+    if ("YES".equals(option)) {
       commonPage.findPageElementById(Ids.Walkd.MEDICATION_PRESCRIBED_OPTION).click();
     } else {
-      commonPage.findPageElementById(Ids.Walkd.MEDICATION_PRESCRIBED_OPTION + "." + option.toLowerCase()).click();
+      commonPage
+          .findPageElementById(Ids.Walkd.MEDICATION_PRESCRIBED_OPTION + "." + option.toLowerCase())
+          .click();
     }
     clearAndSendKeys(Ids.Walkd.MEDICATION_DOSAGE_TEXT, "50mg");
     clearAndSendKeys(Ids.Walkd.MEDICATION_FREQUENCY_TEXT, "Every night");
@@ -385,8 +403,10 @@ public class ApplicationFixture extends AbstractSpringSteps {
     if ("YES BUT DON'T KNOW".equals(opt)) {
       commonPage.findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION).click();
       commonPage.findPageElementById(Ids.Preamble.BADGE_NUMBER_BYPASS_LINK).click();
-    } else if("NO".equals(opt)) {
-      commonPage.findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + "_" + opt.toLowerCase()).click();
+    } else if ("NO".equals(opt)) {
+      commonPage
+          .findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + "_" + opt.toLowerCase())
+          .click();
       pressContinue();
     } else {
       commonPage.findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION).click();
@@ -413,10 +433,12 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("^I complete the healthcare professionals page for \"(YES|NO)\"$")
   public void iCompleteTheHealthcareProfessionalsPage(String option) {
-    if("YES".equals(option)) {
+    if ("YES".equals(option)) {
       commonPage.findPageElementById(Ids.Eligibility.HEALTHCARE_PRO_HAS_OPTION).click();
     } else {
-      commonPage.findPageElementById(Ids.Eligibility.HEALTHCARE_PRO_HAS_OPTION + option.toLowerCase()).click();
+      commonPage
+          .findPageElementById(Ids.Eligibility.HEALTHCARE_PRO_HAS_OPTION + option.toLowerCase())
+          .click();
     }
 
     if ("YES".equals(option)) {

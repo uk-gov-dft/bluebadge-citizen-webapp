@@ -334,7 +334,7 @@ public class CommonSteps extends AbstractSpringSteps {
     if ("YES BUT DON't KNOW".equals(opt)) {
       commonPage.findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION).click();
       commonPage.findPageElementById(Ids.Preamble.BADGE_NUMBER_BYPASS_LINK).click();
-    } else if("YES".equals(opt)) {
+    } else if ("YES".equals(opt)) {
       commonPage.findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION).click();
       commonPage.findPageElementById(Ids.Preamble.BADGE_NUMBER).sendKeys("AB12CD");
     } else {
