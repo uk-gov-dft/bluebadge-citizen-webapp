@@ -1,9 +1,10 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.view;
 
+import java.io.Serializable;
 import java.util.Objects;
 import org.springframework.util.Assert;
 
-public class ErrorViewModel {
+public class ErrorViewModel implements Serializable {
 
   private String title = "error.summary.title";
   private String description = null;

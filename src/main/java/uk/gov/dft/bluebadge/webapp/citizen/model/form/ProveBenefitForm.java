@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
+import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +13,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.component.CompoundDate;
 
 @Data
 @Builder
-public class ProveBenefitForm implements StepForm {
+public class ProveBenefitForm implements StepForm, Serializable {
 
   @NotNull private Boolean hasProof;
 
