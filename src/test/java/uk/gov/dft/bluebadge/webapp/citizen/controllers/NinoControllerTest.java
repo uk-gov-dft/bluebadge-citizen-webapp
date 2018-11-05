@@ -67,10 +67,8 @@ public class NinoControllerTest {
         .perform(post("/nino").sessionAttr("JOURNEY", new Journey()).param("nino", ""))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(ERROR_URL))
-        .andExpect(
-            formRequestFlashAttributeHasFieldErrorCode("nino", "Pattern"))
-        .andExpect(formRequestFlashAttributeCount(1))
-    ;
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("nino", "Pattern"))
+        .andExpect(formRequestFlashAttributeCount(1));
   }
 
   @Test
@@ -80,10 +78,8 @@ public class NinoControllerTest {
         .perform(post("/nino").sessionAttr("JOURNEY", new Journey()).param("nino", INVALID_NINO))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(ERROR_URL))
-        .andExpect(
-            formRequestFlashAttributeHasFieldErrorCode("nino", "Pattern"))
-        .andExpect(formRequestFlashAttributeCount(1))
-    ;
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("nino", "Pattern"))
+        .andExpect(formRequestFlashAttributeCount(1));
   }
 
   @Test

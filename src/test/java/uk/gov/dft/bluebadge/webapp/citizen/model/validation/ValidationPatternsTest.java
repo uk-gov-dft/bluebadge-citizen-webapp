@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 class ValidationPatternsTest {
   @Test
-  public void personNameRegex(){
+  public void personNameRegex() {
     Pattern pattern = Pattern.compile(PERSON_NAME);
     assertThat(pattern.matcher("").find()).isTrue();
     assertThat(pattern.matcher("Bob").find()).isTrue();
@@ -20,8 +20,9 @@ class ValidationPatternsTest {
     assertThat(pattern.matcher("Bob 1").find()).isFalse();
     assertThat(pattern.matcher("Bob ,").find()).isFalse();
   }
+
   @Test
-  public void ninoRegex(){
+  public void ninoRegex() {
     Pattern pattern = Pattern.compile(NINO);
     assertThat(pattern.matcher("JA341288A").find()).isTrue();
     assertThat(pattern.matcher("JA 34 12 88 A").find()).isTrue();
@@ -30,8 +31,9 @@ class ValidationPatternsTest {
     assertThat(pattern.matcher("Bob 1").find()).isFalse();
     assertThat(pattern.matcher("Bob ,").find()).isFalse();
   }
+
   @Test
-  public void ninoCaseInsensitiveRegex(){
+  public void ninoCaseInsensitiveRegex() {
     Pattern pattern = Pattern.compile(NINO_CASE_INSENSITIVE);
     assertThat(pattern.matcher("jr341288a").find()).isTrue();
     assertThat(pattern.matcher("jR341288B").find()).isTrue();

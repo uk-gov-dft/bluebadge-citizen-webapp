@@ -55,13 +55,12 @@ public abstract class ControllerTestFixture<T> {
                         hasProperty("field", equalTo(fieldName)),
                         hasProperty("code", equalTo(error))))));
   }
+
   public static ResultMatcher formRequestFlashAttributeCount(int expectedErrorCount) {
     return flash()
         .attribute(
             "org.springframework.validation.BindingResult.formRequest",
-            hasProperty(
-                "fieldErrors",
-                hasSize(expectedErrorCount)));
+            hasProperty("fieldErrors", hasSize(expectedErrorCount)));
   }
 
   protected void show_ShouldDisplayTemplate() throws Exception {
