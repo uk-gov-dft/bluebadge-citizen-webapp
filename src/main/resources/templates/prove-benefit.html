@@ -15,7 +15,7 @@
             <form th:action="@{/prove-benefit}" th:object="${formRequest}" method="POST" novalidate>
 
                 <div th:class="${#fields.hasErrors('hasProof')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
-                    <fieldset class="govuk-fieldset" id="hasProof">
+                    <fieldset class="govuk-fieldset">
                         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                             <h1 class="govuk-fieldset__heading" th:text="${title}"></h1>
                         </legend>
@@ -29,12 +29,12 @@
                                 <input class="govuk-radios__input"
                                        type="radio"
                                        th:field="*{hasProof}"
-                                       id="hasProof.yes"
+                                       id="hasProof"
                                        name="hasProof"
                                        value="yes"
                                        data-aria-controls="conditional-hasProof">
                                 <label class="govuk-label govuk-radios__label"
-                                       for="hasProof.yes"
+                                       for="hasProof"
                                        th:text="#{radio.option.yes}"></label>
                             </div>
 
