@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -54,15 +55,30 @@ public class ExistingBadgeControllerTest {
   }
 
   @Test
+  public void submit_whenNoValueIsSet_thenShouldDisplayRedirectToSuccess() throws Exception {
+
+    mockMvc
+        .perform(post("/existing-badge"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl(Mappings.URL_EXISTING_BADGE + RouteMaster.ERROR_SUFFIX))
+        .andExpect(
+            formRequestFlashAttributeHasFieldErrorCode("hasExistingBadge", "NotNull"))
+        ;
+  }
+
+  @Test
   public void submit_GivenFormValueIs_Yes_WithoutBadgeNumber_thenShouldDisplayError()
       throws Exception {
     mockMvc
         .perform(
             post("/existing-badge")
                 .sessionAttr("JOURNEY", new Journey())
-                .param("hasBadgeNumber", "yes"))
+                .param("hasExistingBadge", "yes"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(Mappings.URL_EXISTING_BADGE + RouteMaster.ERROR_SUFFIX));
+        .andExpect(redirectedUrl(Mappings.URL_EXISTING_BADGE + RouteMaster.ERROR_SUFFIX))
+        .andExpect(
+            formRequestFlashAttributeHasFieldErrorCode("badgeNumber", "badgeNumber.NotBlank"))
+    ;
   }
 
   @Test
@@ -73,10 +89,30 @@ public class ExistingBadgeControllerTest {
         .perform(
             post("/existing-badge")
                 .sessionAttr("JOURNEY", new Journey())
-                .param("hasBadgeNumber", "yes")
+                .param("hasExistingBadge", "yes")
                 .param("badgeNumber", "AB12"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(Mappings.URL_EXISTING_BADGE + RouteMaster.ERROR_SUFFIX));
+        .andExpect(redirectedUrl(Mappings.URL_EXISTING_BADGE + RouteMaster.ERROR_SUFFIX))
+        .andExpect(
+            formRequestFlashAttributeHasFieldErrorCode("badgeNumber", "badgeNumber.NotBlank"))
+    ;
+  }
+
+  @Test
+  public void
+      submit_GivenFormValueIs_Yes_WithBadgeWithInvalidCharacters_thenShouldDisplayError()
+          throws Exception {
+    mockMvc
+        .perform(
+            post("/existing-badge")
+                .sessionAttr("JOURNEY", new Journey())
+                .param("hasExistingBadge", "yes")
+                .param("badgeNumber", ".,2"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl(Mappings.URL_EXISTING_BADGE + RouteMaster.ERROR_SUFFIX))
+        .andExpect(
+            formRequestFlashAttributeHasFieldErrorCode("badgeNumber", "Pattern"))
+    ;
   }
 
   @Test
