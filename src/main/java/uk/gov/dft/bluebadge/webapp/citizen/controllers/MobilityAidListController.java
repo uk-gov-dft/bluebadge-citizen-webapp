@@ -80,6 +80,7 @@ public class MobilityAidListController implements StepController {
               .build());
     } else {
       journeyListForm.setHasWalkingAid(mobilityAidListForm.getHasWalkingAid());
+      journey.setFormForStep(journeyListForm);
     }
 
     // Don't overwrite mobility/AidList in journey
