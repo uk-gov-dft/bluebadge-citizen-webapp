@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.validation.ValidationPatterns.PERSON_NAME;
+
 import java.io.Serializable;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -18,7 +20,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 @EqualsAndHashCode
 public class ApplicantNameForm implements StepForm, Serializable {
   @NotBlank(message = "{field.fullName.NotBlank}")
-  @Pattern(regexp = "^[\\p{L} \\.'\\-]*$")
+  @Pattern(regexp = PERSON_NAME)
   @Size(max = 100)
   private String fullName;
 
@@ -26,7 +28,7 @@ public class ApplicantNameForm implements StepForm, Serializable {
   private Boolean hasBirthName;
 
   @Size(max = 100)
-  @Pattern(regexp = "^[\\p{L} \\.'\\-]*$")
+  @Pattern(regexp = PERSON_NAME)
   private String birthName;
 
   public Boolean isBirthNameValid() {

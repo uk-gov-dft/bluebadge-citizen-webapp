@@ -16,7 +16,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.validation.ValidationPatterns;
 @EqualsAndHashCode
 public class NinoForm implements StepForm, Serializable {
 
-  @NotBlank(message = "{field.nino.NotBlank}")
   @Pattern(regexp = ValidationPatterns.NINO_CASE_INSENSITIVE)
   private String nino;
 
