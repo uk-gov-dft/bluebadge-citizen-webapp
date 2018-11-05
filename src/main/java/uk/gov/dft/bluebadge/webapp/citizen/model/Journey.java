@@ -19,6 +19,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
@@ -32,6 +33,7 @@ public class Journey implements Serializable {
   private Map<StepDefinition, StepForm> forms = new HashMap<>();
   public String who;
   public String ageGroup;
+  public String walkingAid;
 
   public void setFormForStep(StepForm form) {
     // If changing values in a form may need to invalidate later forms in the journey
@@ -45,6 +47,8 @@ public class Journey implements Serializable {
       who = isApplicantYourself() ? "you." : "oth.";
     } else if (form.getAssociatedStep() == StepDefinition.DOB) {
       ageGroup = isApplicantYoung() ? "young." : "adult.";
+    } else if (form.getAssociatedStep() == StepDefinition.MOBILITY_AID_LIST) {
+      walkingAid = hasMobilityAid() ? "withWalkingAid." : "withoutWalkingAid.";
     }
 
     if (doCleanUp) {
@@ -111,6 +115,14 @@ public class Journey implements Serializable {
           .isAfter(LocalDate.now().minusYears(16L));
     }
     return null;
+  }
+
+  private boolean hasMobilityAid() {
+    if (hasStepForm(StepDefinition.MOBILITY_AID_LIST)) {
+      MobilityAidListForm mobilityAidListForm = getFormForStep(StepDefinition.MOBILITY_AID_LIST);
+      return "yes".equals(mobilityAidListForm.getHasWalkingAid());
+    }
+    return false;
   }
 
   // -- META DATA BELOW --
