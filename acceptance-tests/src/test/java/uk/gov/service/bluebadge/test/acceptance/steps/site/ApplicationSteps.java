@@ -47,9 +47,7 @@ public class ApplicationSteps extends AbstractSpringSteps {
   public void iCompleteProveBenefitPage(String opt) {
     if (opt.equals("yes")) {
       commonPage.findPageElementById("hasProof").click();
-    }
-
-    if (opt.equals("no")) {
+    } else {
       LocalDate date = LocalDate.now();
       String day = Integer.toString(date.getDayOfMonth());
       String month = Integer.toString(date.getMonth().getValue());
