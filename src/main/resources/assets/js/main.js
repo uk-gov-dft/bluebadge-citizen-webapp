@@ -1,4 +1,5 @@
-// import polyfill from '@babel/polyfill';
+require('@babel/polyfill');
+
 import All from 'govuk-frontend/all';
 import AutoComplete from './autocomplete';
 import GAClickTracker from './ga-tracker';
@@ -32,3 +33,4 @@ if (select) {
         },
     });
 }
+

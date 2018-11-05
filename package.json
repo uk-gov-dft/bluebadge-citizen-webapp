@@ -13,11 +13,11 @@
   "dependencies": {
     "accessible-autocomplete": "^1.6.1",
     "babel-core": "^6.26.3",
-    "govuk-frontend": "1.1.1"
+    "govuk-frontend": "1.1.1",
+    "@babel/polyfill": "^7.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
-    "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
     "del": "^3.0.0",
     "eslint": "^4.19.1",
