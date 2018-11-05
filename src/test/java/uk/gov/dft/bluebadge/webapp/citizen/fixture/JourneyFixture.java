@@ -16,7 +16,6 @@ import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nat
 import com.google.common.collect.Lists;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.GenderCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HowProvidedCodeField;
@@ -259,7 +258,7 @@ public class JourneyFixture {
     LocalAuthorityRefData.LocalAuthorityMetaData meta =
         new LocalAuthorityRefData.LocalAuthorityMetaData();
     meta.setNation(nation);
-    localAuthorityRefData.setLocalAuthorityMetaData(Optional.of(meta));
+    localAuthorityRefData.setLocalAuthorityMetaData(meta);
     return localAuthorityRefData;
   }
 

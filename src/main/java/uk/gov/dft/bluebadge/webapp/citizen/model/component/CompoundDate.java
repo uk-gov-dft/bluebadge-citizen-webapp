@@ -1,10 +1,11 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.component;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
-public class CompoundDate {
+public class CompoundDate implements Serializable {
 
   private String day;
   private String month;

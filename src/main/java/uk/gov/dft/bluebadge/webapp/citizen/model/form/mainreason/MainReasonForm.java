@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason;
 
+import java.io.Serializable;
 import java.util.Optional;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
@@ -13,7 +14,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 @Data
 @Builder
 @EqualsAndHashCode
-public class MainReasonForm implements StepForm {
+public class MainReasonForm implements StepForm, Serializable {
 
   @Override
   public StepDefinition getAssociatedStep() {
