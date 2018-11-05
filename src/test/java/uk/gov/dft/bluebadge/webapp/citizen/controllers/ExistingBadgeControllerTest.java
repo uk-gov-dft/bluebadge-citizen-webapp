@@ -61,9 +61,7 @@ public class ExistingBadgeControllerTest {
         .perform(post("/existing-badge"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(Mappings.URL_EXISTING_BADGE + RouteMaster.ERROR_SUFFIX))
-        .andExpect(
-            formRequestFlashAttributeHasFieldErrorCode("hasExistingBadge", "NotNull"))
-        ;
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("hasExistingBadge", "NotNull"));
   }
 
   @Test
@@ -77,8 +75,7 @@ public class ExistingBadgeControllerTest {
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(Mappings.URL_EXISTING_BADGE + RouteMaster.ERROR_SUFFIX))
         .andExpect(
-            formRequestFlashAttributeHasFieldErrorCode("badgeNumber", "badgeNumber.NotBlank"))
-    ;
+            formRequestFlashAttributeHasFieldErrorCode("badgeNumber", "badgeNumber.NotBlank"));
   }
 
   @Test
@@ -94,14 +91,12 @@ public class ExistingBadgeControllerTest {
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(Mappings.URL_EXISTING_BADGE + RouteMaster.ERROR_SUFFIX))
         .andExpect(
-            formRequestFlashAttributeHasFieldErrorCode("badgeNumber", "badgeNumber.NotBlank"))
-    ;
+            formRequestFlashAttributeHasFieldErrorCode("badgeNumber", "badgeNumber.NotBlank"));
   }
 
   @Test
-  public void
-      submit_GivenFormValueIs_Yes_WithBadgeWithInvalidCharacters_thenShouldDisplayError()
-          throws Exception {
+  public void submit_GivenFormValueIs_Yes_WithBadgeWithInvalidCharacters_thenShouldDisplayError()
+      throws Exception {
     mockMvc
         .perform(
             post("/existing-badge")
@@ -110,9 +105,7 @@ public class ExistingBadgeControllerTest {
                 .param("badgeNumber", ".,2"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(Mappings.URL_EXISTING_BADGE + RouteMaster.ERROR_SUFFIX))
-        .andExpect(
-            formRequestFlashAttributeHasFieldErrorCode("badgeNumber", "Pattern"))
-    ;
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("badgeNumber", "Pattern"));
   }
 
   @Test
