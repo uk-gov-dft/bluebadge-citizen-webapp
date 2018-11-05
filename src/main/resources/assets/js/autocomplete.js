@@ -2,31 +2,31 @@ import accessibleAutocomplete from 'accessible-autocomplete';
 
 export default (options) => {
     const sourceSelect = (query, callback) => {
-        var optionsWithAValue = [].filter.call(options.selectElement.options, function(option) {
-            return option.value != ''
-        })
+        const optionsWithAValue = [].filter.call(options.selectElement.options, (option) => {
+            return option.value !== '';
+        });
 
-        var orgs = optionsWithAValue.map(function(select) {
+        const orgs = optionsWithAValue.map((select) => {
 
-            var dataAbbreviations = select.getAttribute('data-abbreviations');
-            dataAbbreviations = dataAbbreviations ? dataAbbreviations.split('|') : []
+            let dataAbbreviations = select.getAttribute('data-abbreviations');
+            dataAbbreviations = dataAbbreviations ? dataAbbreviations.split('|') : [];
 
-            var dataOtherNames = select.getAttribute('data-other-names');
-            dataOtherNames = dataOtherNames ? dataOtherNames.split('|') : []
+            let dataOtherNames = select.getAttribute('data-other-names');
+            dataOtherNames = dataOtherNames ? dataOtherNames.split('|') : [];
 
             return {
-                'current_name': select.label,
-                'abbreviations': dataAbbreviations,
-                'other_names': dataOtherNames
-            }
-        })
+                current_name: select.label,
+                abbreviations: dataAbbreviations,
+                other_names: dataOtherNames,
+            };
+        });
 
-        var regexes = query.trim().split(/\s+/).map(function(word) {
-            var pattern = '\\b' + word.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
-            return new RegExp(pattern, 'i')
-        })
+        const regexes = query.trim().split(/\s+/).map((word) => {
+            const pattern = '\\b' + word.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+            return new RegExp(pattern, 'i');
+        });
 
-        var matches = orgs.map(function(organisation) {
+        const matches = orgs.map((organisation) => {
 
             var allNames = [organisation.current_name]
                 .concat(organisation.other_names)
@@ -36,9 +36,9 @@ export default (options) => {
             organisation['resultPosition'] = null
 
 
-            for (var i = 0; i < allNames.length; i++) {
+            for (let i = 0; i < allNames.length; i++) {
 
-                var matches = regexes.reduce(function(acc, regex) {
+                const matches = regexes.reduce(function(acc, regex) {
 
                     var matchPosition = allNames[i].search(regex)
                     if (matchPosition > -1) {
@@ -59,13 +59,13 @@ export default (options) => {
                 }
             }
 
-            return organisation
+            return organisation;
 
         })
 
-        var filteredMatches = matches.filter(function(organisation) {
-            return (organisation['resultPosition'] != null )
-        })
+        const filteredMatches = matches.filter((organisation) => {
+            return (organisation.resultPosition != null);
+        });
 
         var sortedFilteredMatches = filteredMatches.sort(function(organisationA, organisationB) {
 
@@ -78,16 +78,16 @@ export default (options) => {
             }
         })
 
-        var results = sortedFilteredMatches.map(function(organisation) { return organisation['current_name'] });
+        const results = sortedFilteredMatches.map(organisation => organisation.current_name);
 
         return callback(results);
     };
 
-   if(options && !options.source){
-       options.source = sourceSelect
+   if (options && !options.source) {
+       options.source = sourceSelect;
    }
 
-   if(options && options.selectElement) {
+   if (options && options.selectElement) {
        accessibleAutocomplete.enhanceSelectElement(options);
    }
 };
