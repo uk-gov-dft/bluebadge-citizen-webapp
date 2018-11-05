@@ -22,9 +22,9 @@ blue-badge:
 
 logging:
   level:
-    root: ${APP_LOGGING_LEVEL:-INFO}
-
-    uk.gov.dft.bluebadge.webapp.citizen: ${APP_LOGGING_LEVEL:-DEBUG}
+    root: ${APP_LOGGING_LEVEL:INFO}
+    uk.gov.dft.bluebadge.webapp.citizen: ${APP_LOGGING_LEVEL:DEBUG}
+    org.springframework: INFO
 
 management:
   server:
@@ -42,6 +42,10 @@ spring:
       additional-exclude: sass/**,js/**
       poll-interval: 10
       quiet-period: 5
+  session:
+    store-type: redis
+  redis:
+    host: localhost
 
 server:
   port: 8780

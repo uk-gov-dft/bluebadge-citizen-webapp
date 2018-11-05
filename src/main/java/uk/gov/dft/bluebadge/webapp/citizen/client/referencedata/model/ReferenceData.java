@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import java.io.Serializable;
 import java.util.Map;
 import lombok.Data;
 
@@ -17,7 +18,7 @@ import lombok.Data;
   @JsonSubTypes.Type(value = LocalAuthorityRefData.class, name = "LA"),
   @JsonSubTypes.Type(value = LocalCouncilRefData.class, name = "LC")
 })
-public class ReferenceData {
+public class ReferenceData implements Serializable {
   private String shortCode;
   private String description;
   private Map<String, Object> metaData;
