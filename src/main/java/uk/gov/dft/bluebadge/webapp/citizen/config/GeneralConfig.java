@@ -14,9 +14,7 @@ public class GeneralConfig {
     return new ObjectMapper();
   }
 
-  /**
-   * Instantiates an EsapiFilter that filters requests for potential xss attacks.
-   */
+  /** Instantiates an EsapiFilter that filters requests for potential xss attacks. */
   @Bean
   @Order(500)
   public EsapiFilter getEsapiFilter() {
