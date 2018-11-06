@@ -28,11 +28,11 @@
                             <div class="govuk-radios__item">
                                 <input class="govuk-radios__input"
                                        type="radio"
-                                       th:field="*{hasProof}"
                                        id="hasProof"
                                        name="hasProof"
                                        value="yes"
-                                       data-aria-controls="conditional-hasProofYes">
+                                       th:checked="*{hasProof} == true ? 'checked'"
+                                       data-aria-controls="conditional-hasProof">
                                 <label class="govuk-label govuk-radios__label"
                                        for="hasProof"
                                        th:text="#{radio.option.yes}"></label>
@@ -41,10 +41,10 @@
                             <div class="govuk-radios__item">
                                 <input class="govuk-radios__input"
                                        type="radio"
-                                       th:field="*{hasProof}"
                                        value="no"
                                        id="hasProof.no"
                                        name="hasProof"
+                                       th:checked="*{hasProof} == false ? 'checked'"
                                        data-aria-controls="conditional-hasProofNo">
                                 <label class="govuk-label govuk-radios__label"
                                        for="hasProof.no"
