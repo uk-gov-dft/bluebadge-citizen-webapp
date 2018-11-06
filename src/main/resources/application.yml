@@ -47,6 +47,8 @@ spring:
       quiet-period: 5
   session:
     store-type: redis
+    redis:
+      namespace: spring:session:citizen
   redis:
     host: localhost
 
