@@ -35,14 +35,8 @@ const PATH = {
 	},
 };
 
-const babelConfig = {
-	presets: [['@babel/preset-env', { modules: false }]],
-	babelrc: false,
-	exclude: 'node_modules/**',
-};
-
 const rollupInputOptions = {
-	plugins: [resolve(), commonJS({ include: 'node_modules/**' }), babel(babelConfig)],
+	plugins: [resolve(), commonJS({ include: 'node_modules/**' }), babel()],
 };
 
 const rollupOutputOptions = {
