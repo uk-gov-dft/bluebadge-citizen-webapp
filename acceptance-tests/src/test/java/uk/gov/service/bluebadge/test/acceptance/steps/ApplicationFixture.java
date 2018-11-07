@@ -153,7 +153,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   @And("^I complete declaration page$")
   public void iCompleteDeclarationPage() {
     commonPage.findPageElementById("agreed").click();
-    pressContinue();
+    commonPage.findElementWithText("Submit application").click();
   }
 
   @And("^I complete planning points page for \"(12|10|8|4|0)\"")
