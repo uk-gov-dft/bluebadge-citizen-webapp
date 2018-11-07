@@ -60,7 +60,7 @@ public class CommonPage {
 
   //Needs to delete this
   public WebElement findElementAddMobilityAid() {
-    return helper.findElement(By.xpath("//*[@id=\"conditional-hasWalkingAidyes\"]/p/a"));
+    return helper.findElement(By.xpath("//*[@id=\"conditional-hasWalkingAid\"]/p/a"));
   }
 
   public void selectLocalCouncil(String textToSelect) {

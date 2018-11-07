@@ -20,10 +20,10 @@ class Ids {
     static final String MAIN_REASON_LIST = "mainReasonOption";
     static final String WALKING_DIFFICULTY_LIST = "walkingDifficulty";
     static final String WHAT_WALKING_DIFFICULTY_LIST = "whatWalkingDifficulties";
-    static final String HAS_RECEIVED_DLA = "receivedDlaOption.HAS_RECEIVED_DLA";
+    static final String HAS_RECEIVED_DLA = "receivedDlaOption";
     static final String NEVER_RECEIVED_DLA = "receivedDlaOption.NEVER_RECEIVED_DLA";
-    static final String MOVING_POINTS = "movingAroundPoints.MOVING_POINTS";
-    static final String PLANNING_POINTS = "planningJourneyOption.PLANNING_POINTS";
+    static final String MOVING_POINTS = "movingAroundPoints";
+    static final String PLANNING_POINTS = "planningJourneyOption";
     static final String GENDER_MALE = "gender.MALE";
     static final String GENDER_FEMALE = "gender.FEMALE";
     static final String GENDER_UNSPECIFIED = "gender.UNSPECIFIE";
@@ -47,9 +47,11 @@ class Ids {
   class Person {
     static final String NAME = "fullName";
     static final String HAS_BIRTH_NAME_NO_OPTION = "hasBirthName.no";
+    static final String DOB = "dateOfBirth";
     static final String DOB_DAY = "dateOfBirth.day";
     static final String DOB_MONTH = "dateOfBirth.month";
     static final String DOB_YEAR = "dateOfBirth.year";
+    static final String GENDER = "gender";
     static final String GENDER_MALE = "gender.MALE";
     static final String GENDER_FEMALE = "gender.FEMALE";
     static final String GENDER_UNSPECIFIED = "gender.UNSPECIFIE";
@@ -77,8 +79,8 @@ class Ids {
     // Id of link will be prefix + counter.  Counter starts at 1.
     static final String MOBILITY_AID_REMOVE_LINK_PREFIX = "mobility.aid.remove.link.";
     static final String MOBILITY_AID_ADD_FIRST_LINK = "addmobilityaidlink";
-    static final String MOBILITY_AID_TYPE_WHEELCHAIR = "aidTypeWHEELCHAIR";
-    static final String MOBILITY_AID_ADD_PROVIDED_CODE_PRESCRIBE = "howProvidedCodeField.PRESCRIBE";
+    static final String MOBILITY_AID_TYPE_WHEELCHAIR = "aidType";
+    static final String MOBILITY_AID_ADD_PROVIDED_CODE_PRESCRIBE = "howProvidedCodeField";
     static final String MOBILITY_AID_ADD_USAGE = "usage";
     static final String MOBILITY_AID_ADD_CONFIRM_BUTTON = "button.continue";
 

@@ -28,7 +28,7 @@ public class ApplicationSteps extends AbstractSpringSteps {
   public void iNavigateToApplicantPageAndValidate(String applicant) throws Exception {
 
     if ("yourself".equals(applicant.toLowerCase())) {
-      journeyOption = applicantPage.APPLICANT_TYPE_YOURSELF_OPTION;
+      journeyOption = applicantPage.APPLICANT_TYPE_OPTION_LIST;
     } else {
       journeyOption = applicantPage.APPLICANT_TYPE_SOMELSE_OPTION;
     }
@@ -54,7 +54,7 @@ public class ApplicationSteps extends AbstractSpringSteps {
       String year = Integer.toString(date.getYear() + 1);
 
       commonPage.findPageElementById("hasProof.no").click();
-      commonPage.findPageElementById("awardEndDate.day").sendKeys(day);
+      commonPage.findPageElementById("awardEndDate").sendKeys(day);
       commonPage.findPageElementById("awardEndDate.month").sendKeys(month);
       commonPage.findPageElementById("awardEndDate.year").sendKeys(year);
     }
