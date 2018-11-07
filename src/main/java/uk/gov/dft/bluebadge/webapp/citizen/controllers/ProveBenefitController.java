@@ -57,7 +57,9 @@ public class ProveBenefitController implements StepController {
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
-    if (proveBenefitForm.getHasProof() != null && proveBenefitForm.getHasProof() && proveBenefitForm.getAwardEndDate() != null) {
+    if (proveBenefitForm.getHasProof() != null
+        && proveBenefitForm.getHasProof()
+        && proveBenefitForm.getAwardEndDate() != null) {
       proveBenefitForm.getAwardEndDate().clearDate();
     }
 
