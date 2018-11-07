@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
 import java.io.Serializable;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,6 +19,7 @@ public class ExistingBadgeForm implements StepForm, Serializable {
   @NotNull(message = "{hasExistingBadge.NotNull}")
   private Boolean hasExistingBadge;
 
+  @Pattern(regexp = "[a-zA-Z0-9]*")
   private String badgeNumber;
 
   public boolean hasBadgeNumber() {

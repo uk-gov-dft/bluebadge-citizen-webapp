@@ -14,6 +14,11 @@ buildscript {
     }
 }
 
+if (project != rootProject) {
+	apply plugin : 'eclipse'
+	eclipse.project.name=(rootProject.name + project.path).replaceAll(':', '-');
+}
+
 dependencies {
     compile group: 'commons-io', name: 'commons-io', version:'2.6'
     compile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.25'

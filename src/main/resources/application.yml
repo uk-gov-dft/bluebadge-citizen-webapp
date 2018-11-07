@@ -19,6 +19,7 @@ blue-badge:
       connectiontimeout: 6000
       requesttimeout: 6000
       contextpath: /uk-gov-dft/application-management-service/1.0.0
+  env: ${bb_env:dev}
 
 logging:
   level:
@@ -35,6 +36,9 @@ management:
     web:
       exposure:
         include: '*'
+  endpoint:
+    health:
+      show-details: always
 
 spring:
   devtools:
@@ -44,6 +48,8 @@ spring:
       quiet-period: 5
   session:
     store-type: redis
+    redis:
+      namespace: spring:session:citizen
   redis:
     host: localhost
 
