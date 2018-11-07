@@ -1,16 +1,20 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason;
 
+import java.io.Serializable;
 import java.util.Optional;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 @Data
 @Builder
-public class MainReasonForm implements StepForm {
+@EqualsAndHashCode
+public class MainReasonForm implements StepForm, Serializable {
 
   @Override
   public StepDefinition getAssociatedStep() {
@@ -37,4 +41,9 @@ public class MainReasonForm implements StepForm {
   }
 
   @NotNull private EligibilityCodeField mainReasonOption;
+
+  @Override
+  public boolean preserveStep(Journey journey) {
+    return false;
+  }
 }

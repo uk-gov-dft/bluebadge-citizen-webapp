@@ -16,7 +16,7 @@
 
             <form th:action="@{/add-mobility-aid}" th:object="${formRequest}" method="POST" novalidate>
                 <div th:class="${#fields.hasErrors('aidType')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
-                    <fieldset class="govuk-fieldset" id="aidType">
+                    <fieldset class="govuk-fieldset">
                         <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
                             <div th:data-uipath="mobilityaid.type.optiongroup.label"
                                  th:text="#{mobilityaid.type.optiongroup.title}" th:remove="tag"></div>
@@ -29,11 +29,11 @@
                         <div class="govuk-radios" data-module="radios">
 
                             <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="aidTypeWHEELCHAIR"
+                                <input class="govuk-radios__input" id="aidType"
                                        type="radio" th:field="*{aidType}"
                                        th:value="WHEELCHAIR">
                                 <label class="govuk-label govuk-radios__label"
-                                       for="aidTypeWHEELCHAIR"
+                                       for="aidType"
                                        th:text="#{mobilityaid.type.option.wheelchair}"></label>
                             </div>
                             <div class="govuk-radios__item">

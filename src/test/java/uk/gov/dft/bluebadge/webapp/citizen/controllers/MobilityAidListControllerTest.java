@@ -1,8 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -13,43 +11,33 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 
 public class MobilityAidListControllerTest {
   private MockMvc mockMvc;
   private Journey journey;
-
-  @Mock private RouteMaster mockRouteMaster;
+  private static final String SUCCESS_URL = Mappings.URL_WALKING_TIME;
 
   @Before
   public void setup() {
-    MockitoAnnotations.initMocks(this);
-    MobilityAidListController controller = new MobilityAidListController(mockRouteMaster);
+    MobilityAidListController controller = new MobilityAidListController(new RouteMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
 
-    ApplicantForm applicantForm =
-        ApplicantForm.builder().applicantType(ApplicantType.YOURSELF.toString()).build();
-
-    journey = new Journey();
-    journey.setApplicantForm(applicantForm);
-    journey.setMobilityAidListForm(
-        MobilityAidListForm.builder().mobilityAids(new ArrayList<>()).build());
-    when(mockRouteMaster.backToCompletedPrevious()).thenReturn("backToStart");
-    // We are not testing the route master. So for convenience just forward to an error view so
-    // can test the error messages
-    when(mockRouteMaster.redirectToOnBindingError(any(), any(), any(), any())).thenCallRealMethod();
+    journey =
+        JourneyFixture.getDefaultJourneyToStep(
+            StepDefinition.MOBILITY_AID_LIST, EligibilityCodeField.WALKD);
   }
 
   @Test
@@ -65,14 +53,12 @@ public class MobilityAidListControllerTest {
   public void show_shouldRedirect_whenJourneyNotSetup() throws Exception {
     mockMvc
         .perform(get("/list-mobility-aids").sessionAttr("JOURNEY", new Journey()))
-        .andExpect(status().isOk())
-        .andExpect(view().name("backToStart"));
+        .andExpect(redirectedUrl(Mappings.URL_ROOT));
   }
 
   @Test
   public void submit_showRedirectToNextStepInJourney() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(MobilityAidListForm.class)))
-        .thenReturn("redirect:/testSuccess");
+
     mockMvc
         .perform(
             post("/list-mobility-aids")
@@ -80,16 +66,15 @@ public class MobilityAidListControllerTest {
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
+        .andExpect(redirectedUrl(SUCCESS_URL));
   }
 
   @Test
   public void submit_setHasAidsToNoIfEmpty() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(MobilityAidListForm.class)))
-        .thenReturn("redirect:/testSuccess");
 
-    journey.getMobilityAidListForm().setHasWalkingAid("yes");
-    journey.getMobilityAidListForm().setMobilityAids(new ArrayList<>());
+    MobilityAidListForm journeyListForm = journey.getFormForStep(StepDefinition.MOBILITY_AID_LIST);
+    journeyListForm.setHasWalkingAid("yes");
+    journeyListForm.setMobilityAids(new ArrayList<>());
     mockMvc
         .perform(
             post("/list-mobility-aids")
@@ -97,20 +82,19 @@ public class MobilityAidListControllerTest {
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/testSuccess"));
-    // Then has aids reset to no.
-    assertEquals("no", journey.getMobilityAidListForm().getHasWalkingAid());
+        .andExpect(redirectedUrl(SUCCESS_URL));
+    // Then has aids reset to no. (need to get back out of journey as new object.)
+    journeyListForm = journey.getFormForStep(StepDefinition.MOBILITY_AID_LIST);
+    assertEquals("no", journeyListForm.getHasWalkingAid());
   }
 
   @Test
   public void submit_bindingError() throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(MobilityAidListForm.class)))
-        .thenReturn("redirect:/testSuccess");
 
     mockMvc
         .perform(
             post("/list-mobility-aids")
-                //.param("hasWalkingAid", "")
+                // .param("hasWalkingAid", "")
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())

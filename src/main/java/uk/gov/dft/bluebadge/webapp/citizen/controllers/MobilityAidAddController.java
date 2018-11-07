@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.MOBILITY_AID_LIST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
@@ -32,25 +33,26 @@ public class MobilityAidAddController implements StepController {
   private static final String TEMPLATE = "mobility-aid-add";
 
   @Autowired
-  public MobilityAidAddController(RouteMaster routeMaster) {
+  MobilityAidAddController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
     // Can hit add link before previous form submitted.
-    if (null == journey.getMobilityAidListForm()
-        || null == journey.getMobilityAidListForm().getMobilityAids()) {
-      journey.setMobilityAidListForm(
-          MobilityAidListForm.builder().mobilityAids(new ArrayList<>()).build());
+    if (!journey.hasStepForm(MOBILITY_AID_LIST)
+        || null
+            == ((MobilityAidListForm) journey.getFormForStep(MOBILITY_AID_LIST))
+                .getMobilityAids()) {
+      journey.setFormForStep(MobilityAidListForm.builder().mobilityAids(new ArrayList<>()).build());
     }
 
-    journey.getMobilityAidListForm().setHasWalkingAid("yes");
+    ((MobilityAidListForm) journey.getFormForStep(MOBILITY_AID_LIST)).setHasWalkingAid("yes");
 
     // On returning to form, take previously submitted values.
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -88,7 +90,8 @@ public class MobilityAidAddController implements StepController {
       return routeMaster.redirectToOnBindingError(this, mobilityAidAddForm, bindingResult, attr);
     }
 
-    journey.getMobilityAidListForm().getMobilityAids().add(mobilityAidAddForm);
+    MobilityAidListForm listForm = journey.getFormForStep(MOBILITY_AID_LIST);
+    listForm.getMobilityAids().add(mobilityAidAddForm);
 
     return "redirect:" + Mappings.URL_MOBILITY_AID_LIST;
   }

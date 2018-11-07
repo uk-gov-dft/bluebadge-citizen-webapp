@@ -132,13 +132,13 @@ If you need to run only speficied features, then add a tag to feature file & spe
 Run a single feature
 
 ```
-gradle acceptanceTest -PbuildProfile=local -Dheadless=false -Dcucumber.options="--tags @SignIn"
+gradle acceptanceTests -DbaseUrl=http://localhost:8780 -Dheadless=false -Dcucumber.options="--tags @SignIn"
 ```
 
 Run multiple features
 
 ```
-gradle acceptanceTest -PbuildProfile=local -Dheadless=false -Dcucumber.options="--tags @SignIn,@ManageUsers"
+gradle acceptanceTests -DbaseUrl=http://localhost:8780 -Dheadless=false -Dcucumber.options="--tags @SignIn,@ManageUsers"
 ```
 Specify the relevant tag to run a feature file (Eg. @SignIn, @ManageUsers etc.)
 

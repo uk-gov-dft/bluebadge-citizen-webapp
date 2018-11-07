@@ -10,6 +10,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
@@ -18,6 +19,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 @Data
 @Builder
+@EqualsAndHashCode
 public class ContactDetailsForm implements StepForm, Serializable {
 
   @Size(max = 100)
@@ -50,13 +52,19 @@ public class ContactDetailsForm implements StepForm, Serializable {
     EligibilityCodeField benefitType = journey.getEligibilityCode();
     switch (benefitType) {
       case DLA:
+      case PIP:
+        return Optional.of(StepDefinition.PROVE_BENEFIT);
       case WPMS:
       case AFRFCS:
-      case PIP:
       case BLIND:
         return Optional.of(StepDefinition.DECLARATIONS);
       default:
         return Optional.of(StepDefinition.HEALTH_CONDITIONS);
     }
+  }
+
+  @Override
+  public boolean preserveStep(Journey journey) {
+    return true;
   }
 }

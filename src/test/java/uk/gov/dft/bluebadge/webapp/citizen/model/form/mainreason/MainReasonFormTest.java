@@ -6,14 +6,12 @@ import java.util.EnumSet;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
-import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.JourneyFixture;
 
+@SuppressWarnings("OptionalGetWithoutIsPresent")
 public class MainReasonFormTest {
 
   @Test
   public void determineNextStep_whenTermIll_thenContactCouncil() {
-    Journey journey = new JourneyFixture.JourneyBuilder().setEnglishLocalAuthority().build();
     MainReasonForm form =
         MainReasonForm.builder().mainReasonOption(EligibilityCodeField.TERMILL).build();
     assertThat(form.determineNextStep()).isNotEmpty();
@@ -22,7 +20,6 @@ public class MainReasonFormTest {
 
   @Test
   public void determineNextStep_whenWalking_thenContactCouncil() {
-    Journey journey = new JourneyFixture.JourneyBuilder().setEnglishLocalAuthority().build();
     MainReasonForm form =
         MainReasonForm.builder().mainReasonOption(EligibilityCodeField.WALKD).build();
     assertThat(form.determineNextStep()).isNotEmpty();
@@ -53,7 +50,6 @@ public class MainReasonFormTest {
 
   @Test
   public void determineNextStep_whenBlind_thenEligible() {
-    Journey journey = new JourneyFixture.JourneyBuilder().setEnglishLocalAuthority().build();
     MainReasonForm form =
         MainReasonForm.builder().mainReasonOption(EligibilityCodeField.BLIND).build();
     assertThat(form.determineNextStep()).isNotEmpty();

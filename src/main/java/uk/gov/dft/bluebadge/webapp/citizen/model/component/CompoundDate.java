@@ -1,8 +1,11 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.component;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+import lombok.EqualsAndHashCode;
 
-public class CompoundDate {
+@EqualsAndHashCode
+public class CompoundDate implements Serializable {
 
   private String day;
   private String month;
@@ -16,6 +19,12 @@ public class CompoundDate {
     this.day = day;
     this.month = month;
     this.year = year;
+  }
+
+  public CompoundDate(LocalDate date) {
+    day = Integer.toString(date.getDayOfMonth());
+    month = Integer.toString(date.getMonth().getValue());
+    year = Integer.toString(date.getYear());
   }
   /**
    * Builds a LocalDate from the individual date components.
@@ -32,6 +41,12 @@ public class CompoundDate {
     } catch (Exception e) {
       return null;
     }
+  }
+
+  public void clearDate() {
+    day = "";
+    month = "";
+    year = "";
   }
 
   /** Validates the component parts for valid numbers. */

@@ -6,7 +6,10 @@ class Ids {
     static final String APPLICANT_TYPE_YOURSELF_OPTION = APPLICANT_TYPE_OPTION_LIST + ".YOURSELF";
     static final String APPLICANT_TYPE_SOMELSE_OPTION =
         APPLICANT_TYPE_OPTION_LIST + ".SOMEONE_ELSE";
+    static final String APPLICANT_ORGANISATION_OPTION =
+        APPLICANT_TYPE_OPTION_LIST + ".ORGANISATION";
     static final String COUNCIL_INPUT = "councilShortCode";
+
     static final String EXISTING_BADGE_OPTION = "hasExistingBadge";
     static final String BADGE_NUMBER = "badgeNumber";
     static final String BADGE_NUMBER_BYPASS_LINK = "bypass_link";
@@ -17,10 +20,10 @@ class Ids {
     static final String MAIN_REASON_LIST = "mainReasonOption";
     static final String WALKING_DIFFICULTY_LIST = "walkingDifficulty";
     static final String WHAT_WALKING_DIFFICULTY_LIST = "whatWalkingDifficulties";
-    static final String HAS_RECEIVED_DLA = "receivedDlaOption.HAS_RECEIVED_DLA";
+    static final String HAS_RECEIVED_DLA = "receivedDlaOption";
     static final String NEVER_RECEIVED_DLA = "receivedDlaOption.NEVER_RECEIVED_DLA";
-    static final String MOVING_POINTS = "movingAroundPoints.MOVING_POINTS";
-    static final String PLANNING_POINTS = "planningJourneyOption.PLANNING_POINTS";
+    static final String MOVING_POINTS = "movingAroundPoints";
+    static final String PLANNING_POINTS = "planningJourneyOption";
     static final String GENDER_MALE = "gender.MALE";
     static final String GENDER_FEMALE = "gender.FEMALE";
     static final String GENDER_UNSPECIFIED = "gender.UNSPECIFIE";
@@ -37,14 +40,18 @@ class Ids {
     static final String HAS_DISABILITY = "hasDisability";
     static final String HAS_MENTAL_DISORDER = "hasMentalDisorder";
     static final String AWARDED_HIGHER_RATE_MOBILITY = "awardedHigherRateMobility";
+    static final String ORGANISATION_CARES = "doesCare";
+    static final String ORGANISATION_TRANSPORTS = "doesTransport";
   }
 
   class Person {
     static final String NAME = "fullName";
     static final String HAS_BIRTH_NAME_NO_OPTION = "hasBirthName.no";
+    static final String DOB = "dateOfBirth";
     static final String DOB_DAY = "dateOfBirth.day";
     static final String DOB_MONTH = "dateOfBirth.month";
     static final String DOB_YEAR = "dateOfBirth.year";
+    static final String GENDER = "gender";
     static final String GENDER_MALE = "gender.MALE";
     static final String GENDER_FEMALE = "gender.FEMALE";
     static final String GENDER_UNSPECIFIED = "gender.UNSPECIFIE";
@@ -72,8 +79,8 @@ class Ids {
     // Id of link will be prefix + counter.  Counter starts at 1.
     static final String MOBILITY_AID_REMOVE_LINK_PREFIX = "mobility.aid.remove.link.";
     static final String MOBILITY_AID_ADD_FIRST_LINK = "addmobilityaidlink";
-    static final String MOBILITY_AID_TYPE_WHEELCHAIR = "aidTypeWHEELCHAIR";
-    static final String MOBILITY_AID_ADD_PROVIDED_CODE_PRESCRIBE = "howProvidedCodeField.PRESCRIBE";
+    static final String MOBILITY_AID_TYPE_WHEELCHAIR = "aidType";
+    static final String MOBILITY_AID_ADD_PROVIDED_CODE_PRESCRIBE = "howProvidedCodeField";
     static final String MOBILITY_AID_ADD_USAGE = "usage";
     static final String MOBILITY_AID_ADD_CONFIRM_BUTTON = "button.continue";
 

@@ -35,21 +35,20 @@ public class WhatWalkingDifficultiesController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  public WhatWalkingDifficultiesController(RouteMaster routeMaster) {
+  WhatWalkingDifficultiesController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
     // On returning to form, take previously submitted values.
-    if (!model.containsAttribute(FORM_REQUEST)
-        && null != journey.getWhatMakesWalkingDifficultForm()) {
-      model.addAttribute(FORM_REQUEST, journey.getWhatMakesWalkingDifficultForm());
+    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
+      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     // If navigating forward from previous form, reset
@@ -75,7 +74,7 @@ public class WhatWalkingDifficultiesController implements StepController {
           this, whatMakesWalkingDifficultForm, bindingResult, attr);
     }
 
-    journey.setWhatMakesWalkingDifficultForm(whatMakesWalkingDifficultForm);
+    journey.setFormForStep(whatMakesWalkingDifficultForm);
 
     return routeMaster.redirectToOnSuccess(whatMakesWalkingDifficultForm);
   }
@@ -89,7 +88,7 @@ public class WhatWalkingDifficultiesController implements StepController {
   public RadioOptionsGroup walkingDifficulties(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if (!journey.isValidState(getStepDefinition())) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return null;
     }
 

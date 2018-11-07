@@ -11,7 +11,7 @@ import uk.gov.service.bluebadge.test.acceptance.pages.PageHelper;
 import uk.gov.service.bluebadge.test.acceptance.util.TestContentUrls;
 import uk.gov.service.bluebadge.test.acceptance.webdriver.WebDriverProvider;
 
-public class SitePage {
+public class CommonPage {
 
   private final WebDriverProvider webDriverProvider;
 
@@ -19,7 +19,7 @@ public class SitePage {
   private TestContentUrls urlLookup;
   private List<PageElements> pagesElements;
 
-  public SitePage(WebDriverProvider webDriverProvider, final PageHelper helper) {
+  public CommonPage(WebDriverProvider webDriverProvider, final PageHelper helper) {
     this.webDriverProvider = webDriverProvider;
     this.helper = helper;
     this.urlLookup = new TestContentUrls();
@@ -60,7 +60,7 @@ public class SitePage {
 
   //Needs to delete this
   public WebElement findElementAddMobilityAid() {
-    return helper.findElement(By.xpath("//*[@id=\"conditional-hasWalkingAidyes\"]/p/a"));
+    return helper.findElement(By.xpath("//*[@id=\"conditional-hasWalkingAid\"]/p/a"));
   }
 
   public void selectLocalCouncil(String textToSelect) {

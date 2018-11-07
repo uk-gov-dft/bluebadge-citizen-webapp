@@ -16,6 +16,8 @@ import javax.validation.Payload;
 @Documented
 public @interface ValidCompoundDate {
 
+  boolean mandatory() default true;
+
   String message() default "{CompoundDate.invalid}";
 
   Class<?>[] groups() default {};

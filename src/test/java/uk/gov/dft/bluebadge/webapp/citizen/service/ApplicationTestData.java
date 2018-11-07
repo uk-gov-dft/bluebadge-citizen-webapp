@@ -18,37 +18,40 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Wa
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingLengthOfTimeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingSpeedCodeField;
 
-public class ApplicationTestData {
+class ApplicationTestData {
 
-  public static Contact APPLICATION_CONTACT =
-      new Contact()
+  private static Contact APPLICATION_CONTACT =
+      Contact.builder()
           .buildingStreet("65 Basil Chambers")
           .line2("Northern Quarter")
           .townCity("Manchester")
           .postCode("SK6 8GH")
           .primaryPhoneNumber("016111234567")
           .secondaryPhoneNumber("079707777111")
-          .emailAddress("nobody@thisisatestabc.com");
+          .emailAddress("nobody@thisisatestabc.com")
+          .build();
 
-  public static Person APPLICATION_PERSON =
-      new Person()
+  private static Person APPLICATION_PERSON =
+      Person.builder()
           .badgeHolderName("John Smith")
           .nino("NS123456A")
           .dob(LocalDate.now())
-          .genderCode(GenderCodeField.FEMALE);
+          .genderCode(GenderCodeField.FEMALE)
+          .build();
 
-  public static Party APPLICATION_PARTY =
-      new Party()
+  private static Party APPLICATION_PARTY =
+      Party.builder()
           .typeCode(PartyTypeCodeField.PERSON)
           .contact(APPLICATION_CONTACT)
-          .person(APPLICATION_PERSON);
+          .person(APPLICATION_PERSON)
+          .build();
 
-  public static Eligibility APPLICATION_ELIGIBILITY =
-      new Eligibility()
+  private static Eligibility APPLICATION_ELIGIBILITY =
+      Eligibility.builder()
           .typeCode(EligibilityCodeField.WALKD)
           .descriptionOfConditions("This is a description")
           .walkingDifficulty(
-              new WalkingDifficulty()
+              WalkingDifficulty.builder()
                   .walkingLengthOfTimeCode(WalkingLengthOfTimeCodeField.LESSMIN)
                   .walkingSpeedCode(WalkingSpeedCodeField.SLOW)
                   .typeCodes(
@@ -57,24 +60,20 @@ public class ApplicationTestData {
                           WalkingDifficultyTypeCodeField.BALANCE))
                   .walkingAids(
                       Lists.newArrayList(
-                          new WalkingAid()
+                          WalkingAid.builder()
                               .description("walk aid description")
                               .usage("walk aid usage")
-                              .howProvidedCode(HowProvidedCodeField.PRESCRIBE))));
+                              .howProvidedCode(HowProvidedCodeField.PRESCRIBE)
+                              .build()))
+                  .build())
+          .build();
 
-  public static Application APPLICATION =
+  static Application APPLICATION =
       Application.builder()
           .applicationTypeCode(ApplicationTypeCodeField.NEW)
           .localAuthorityCode("ABERD")
           .paymentTaken(false)
           .party(APPLICATION_PARTY)
           .eligibility(APPLICATION_ELIGIBILITY)
-          .build();
-
-  public static Application BAD_APPLICATION =
-      Application.builder()
-          .applicationTypeCode(ApplicationTypeCodeField.NEW)
-          .localAuthorityCode("ABERD")
-          .paymentTaken(false)
           .build();
 }

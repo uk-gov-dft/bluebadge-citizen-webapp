@@ -28,6 +28,13 @@ public class Mappings {
   public static final String URL_NINO = "/nino";
   public static final String URL_ENTER_ADDRESS = "/enter-address";
   public static final String URL_EXISTING_BADGE = "/existing-badge";
+  public static final String URL_PROVE_BENEFIT = "/prove-benefit";
+
+  // organisation Journey routes
+  public static final String URL_ORGANISATION_CARE = "/organisation-care";
+  public static final String URL_ORGANISATION_TRANSPORT = "/organisation-transport";
+  public static final String URL_ORGANISATION_MAY_BE_ELIGIBLE = "/organisation-may-be-eligible";
+  public static final String URL_ORGANISATION_NOT_ELIGIBLE = "/organisation-not-eligible";
 
   // PIP Journey Routes
   public static final String URL_PIP_PLANNING_JOURNEY = "/planning-and-following";
@@ -79,6 +86,7 @@ public class Mappings {
           .put(StepDefinition.HIGHER_RATE_MOBILITY, URL_HIGHER_RATE_MOBILITY)
           .put(StepDefinition.ELIGIBLE, URL_ELIGIBLE)
           .put(StepDefinition.MAY_BE_ELIGIBLE, URL_MAY_BE_ELIGIBLE)
+          .put(StepDefinition.PROVE_BENEFIT, URL_PROVE_BENEFIT)
 
           // PIP Journey Mappings
           .put(StepDefinition.PIP_MOVING_AROUND, URL_PIP_MOVING_AROUND)
@@ -112,6 +120,12 @@ public class Mappings {
           .put(StepDefinition.HEALTHCARE_PROFESSIONALS_ADD, URL_HEALTHCARE_PROFESSIONALS_ADD)
           .put(StepDefinition.MEDICATION_LIST, URL_MEDICATION_LIST)
           .put(StepDefinition.MEDICATION_ADD, URL_MEDICATION_ADD)
+
+          //organisation mappings
+          .put(StepDefinition.ORGANISATION_CARE, URL_ORGANISATION_CARE)
+          .put(StepDefinition.ORGANISATION_TRANSPORT, URL_ORGANISATION_TRANSPORT)
+          .put(StepDefinition.ORGANISATION_MAY_BE_ELIGIBLE, URL_ORGANISATION_MAY_BE_ELIGIBLE)
+          .put(StepDefinition.ORGANISATION_NOT_ELIGIBLE, URL_ORGANISATION_NOT_ELIGIBLE)
           .build();
 
   public static StepDefinition getStep(String url) {

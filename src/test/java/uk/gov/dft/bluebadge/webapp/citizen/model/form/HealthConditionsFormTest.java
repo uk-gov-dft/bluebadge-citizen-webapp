@@ -17,7 +17,7 @@ public class HealthConditionsFormTest {
   @Test
   public void givenWalking_thenNextStepIsWalkingDifficulties() {
     Journey journey = new Journey();
-    journey.setMainReasonForm(MainReasonForm.builder().mainReasonOption(WALKD).build());
+    journey.setFormForStep(MainReasonForm.builder().mainReasonOption(WALKD).build());
 
     HealthConditionsForm form = HealthConditionsForm.builder().build();
     Optional<StepDefinition> nextStep = form.determineNextStep(journey);
@@ -34,7 +34,7 @@ public class HealthConditionsFormTest {
     assertThat(childPaths).isNotEmpty();
     for (EligibilityCodeField eligibility : childPaths) {
 
-      journey.setMainReasonForm(MainReasonForm.builder().mainReasonOption(eligibility).build());
+      journey.setFormForStep(MainReasonForm.builder().mainReasonOption(eligibility).build());
 
       HealthConditionsForm form = HealthConditionsForm.builder().build();
       Optional<StepDefinition> nextStep = form.determineNextStep(journey);
@@ -53,7 +53,7 @@ public class HealthConditionsFormTest {
     assertThat(others).isNotEmpty();
     for (EligibilityCodeField eligibility : others) {
 
-      journey.setMainReasonForm(MainReasonForm.builder().mainReasonOption(eligibility).build());
+      journey.setFormForStep(MainReasonForm.builder().mainReasonOption(eligibility).build());
 
       HealthConditionsForm form = HealthConditionsForm.builder().build();
       Optional<StepDefinition> nextStep = form.determineNextStep(journey);

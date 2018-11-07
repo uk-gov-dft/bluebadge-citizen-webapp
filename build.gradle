@@ -35,24 +35,24 @@ apply plugin: 'jacoco'
 apply plugin: 'org.owasp.dependencycheck'
 
 def getTheVersion() {
-    def version = rootProject.file('VERSION').text.trim()
-    def versionSuffix = "UnknownA"
     def workingDir = new File("${project.projectDir}")
+    def version = 'git describe --abbrev=0'.execute(null, workingDir)
+    version.waitFor()
+    def versionSuffix = "UnknownA"
     def result = 'git rev-parse --abbrev-ref HEAD'.execute(null, workingDir)
     result.waitFor()
     if (result.exitValue() == 0) {
         def gitBranch = result.text.trim().replaceAll('/','_')
-        if (gitBranch == 'develop') {
-            gitBranch = 'SNAPSHOT'
-        }
         if (gitBranch == 'master') {
             versionSuffix = ''
+        } else if (gitBranch == 'develop') {
+            versionSuffix = '-SNAPSHOT'
         } else {
             versionSuffix = '-' + gitBranch
         }
 
     }
-    return version + versionSuffix
+    return "${version.text.trim()}${versionSuffix}"
 }
 
 
@@ -60,6 +60,7 @@ task outputComputedVersion {
     def computedVersion = new File('VERSION-computed')
     computedVersion.delete()
     computedVersion.write(getTheVersion())
+    println(getTheVersion())
 }
 
 
@@ -115,10 +116,11 @@ configurations.all {
         // don't cache changing modules at all
         cacheChangingModulesFor 0, 'seconds'
     }
+    exclude group: 'commons-logging', module: 'commons-logging'
 }
 
 dependencies {
-    ext.commonVersion = '0.4.2-SNAPSHOT'
+    ext.commonVersion = '0.6.8-SNAPSHOT'
 
     compile( group: 'uk.gov.dft.bluebadge', name: 'bluebadge-common', version: "${commonVersion}", changing: true ){
         exclude group: 'org.mybatis.spring.boot', module: 'mybatis-spring-boot-starter'
@@ -132,7 +134,10 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-security')
     compile('org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.3.RELEASE')
     compile('org.springframework.boot:spring-boot-starter-actuator')
+    compile('org.springframework.boot:spring-boot-starter-data-redis')
+    compile('org.springframework.session:spring-session-data-redis')
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth', version: '2.0.1.RELEASE'
+    compile('org.owasp.esapi:esapi:2.1.0')
 
     compileOnly ('org.projectlombok:lombok:1.16.22')
 
@@ -165,7 +170,7 @@ test {
     useJUnitPlatform()
     useJUnit()
     testLogging {
-        events "passed", "skipped", "failed"
+        events "skipped", "failed"
     }
 }
 

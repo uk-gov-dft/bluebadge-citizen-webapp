@@ -2,7 +2,6 @@ package uk.gov.service.bluebadge.test.acceptance;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
-import java.io.IOException;
 import org.junit.AfterClass;
 import org.junit.runner.RunWith;
 
@@ -15,5 +14,5 @@ import org.junit.runner.RunWith;
 public class AcceptanceTest {
   // no-op, config class only
   @AfterClass
-  public static void teardown() throws IOException {}
+  public static void teardown() {}
 }
