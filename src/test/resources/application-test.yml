@@ -7,3 +7,6 @@ blue-badge:
   applicationmanagementservice:
       contextpath: /test-applicationmanagementservice
 
+spring:
+  session:
+    store-type: none
