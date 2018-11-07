@@ -15,7 +15,7 @@
             <form th:action="@{/list-treatments}" th:object="${formRequest}" method="POST" novalidate>
 
                 <div th:class="${#fields.hasErrors('hasTreatment')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
-                    <fieldset class="govuk-fieldset" id="hasTreatment">
+                    <fieldset class="govuk-fieldset">
 
                         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                             <h1 class="govuk-fieldset__heading" th:text="#{${JOURNEY.who} + 'treatment.list.body.title'}"></h1>
@@ -32,16 +32,16 @@
                         <div class="govuk-radios" data-module="radios">
 
                             <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="hasTreatmentyes"
+                                <input class="govuk-radios__input" id="hasTreatment"
                                        type="radio" th:field="*{hasTreatment}"
-                                       value="yes" data-aria-controls="conditional-hasTreatmentyes" autocomplete="off">
+                                       value="yes" data-aria-controls="conditional-hasTreatment" autocomplete="off">
                                 <label class="govuk-label govuk-radios__label"
-                                       for="hasTreatmentyes"
+                                       for="hasTreatment"
                                        th:text="#{'radio.option.yes'}"></label>
                             </div>
 
                             <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
-                                 id="conditional-hasTreatmentyes">
+                                 id="conditional-hasTreatment">
                                 <table class="govuk-table">
                                     <thead class="govuk-table__head" data-uipath="table.head">
                                     <tr class="govuk-table__row">

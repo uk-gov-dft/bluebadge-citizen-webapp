@@ -43,6 +43,12 @@ public class CompoundDate implements Serializable {
     }
   }
 
+  public void clearDate() {
+    day = "";
+    month = "";
+    year = "";
+  }
+
   /** Validates the component parts for valid numbers. */
   public boolean isDatePartMissing() {
     return !isParsablePositive(year) || !isParsablePositive(month) || !isParsablePositive(day);

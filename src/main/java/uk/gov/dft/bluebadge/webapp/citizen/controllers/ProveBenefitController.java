@@ -58,6 +58,12 @@ public class ProveBenefitController implements StepController {
       RedirectAttributes attr) {
 
     if (proveBenefitForm.getHasProof() != null
+        && proveBenefitForm.getHasProof()
+        && proveBenefitForm.getAwardEndDate() != null) {
+      proveBenefitForm.getAwardEndDate().clearDate();
+    }
+
+    if (proveBenefitForm.getHasProof() != null
         && !proveBenefitForm.getHasProof()
         && proveBenefitForm.getAwardEndDate().isDatePartMissing()) {
       bindingResult.rejectValue("awardEndDate", "ConditionalNotNull.awardEndDate");

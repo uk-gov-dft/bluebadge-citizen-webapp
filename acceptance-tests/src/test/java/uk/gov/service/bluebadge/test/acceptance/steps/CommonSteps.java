@@ -321,7 +321,7 @@ public class CommonSteps extends AbstractSpringSteps {
 
     if (selfOrOther.equalsIgnoreCase("yourself")) {
 
-      assertTrue(commonPage.findPageElementById("applicantType.YOURSELF").isSelected());
+      assertTrue(commonPage.findPageElementById("applicantType").isSelected());
 
     } else if (selfOrOther.equalsIgnoreCase("someone else")) {
 
@@ -332,16 +332,15 @@ public class CommonSteps extends AbstractSpringSteps {
   @And("^I complete the already have a blue badge page \"(YES|NO|YES BUT DON'T KNOW)\"$")
   public void iCompleteTheAlreadyHaveABlueBadgePage(String opt) {
     if ("YES BUT DON't KNOW".equals(opt)) {
-      commonPage.findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + "_yes").click();
+      commonPage.findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION).click();
       commonPage.findPageElementById(Ids.Preamble.BADGE_NUMBER_BYPASS_LINK).click();
+    } else if ("YES".equals(opt)) {
+      commonPage.findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION).click();
+      commonPage.findPageElementById(Ids.Preamble.BADGE_NUMBER).sendKeys("AB12CD");
     } else {
       commonPage
           .findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + "_" + opt.toLowerCase())
           .click();
-
-      if ("YES".equals(opt)) {
-        commonPage.findPageElementById(Ids.Preamble.BADGE_NUMBER).sendKeys("AB12CD");
-      }
     }
   }
 }

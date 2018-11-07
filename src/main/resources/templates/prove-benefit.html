@@ -28,10 +28,10 @@
                             <div class="govuk-radios__item">
                                 <input class="govuk-radios__input"
                                        type="radio"
-                                       th:field="*{hasProof}"
                                        id="hasProof"
                                        name="hasProof"
                                        value="true"
+                                       th:field="*{hasProof}"
                                        data-aria-controls="conditional-hasProof">
                                 <label class="govuk-label govuk-radios__label"
                                        for="hasProof"
@@ -41,17 +41,17 @@
                             <div class="govuk-radios__item">
                                 <input class="govuk-radios__input"
                                        type="radio"
-                                       th:field="*{hasProof}"
                                        value="false"
                                        id="hasProof.no"
                                        name="hasProof"
-                                       data-aria-controls="conditional-hasProof">
+                                       th:field="*{hasProof}"
+                                       data-aria-controls="conditional-hasProofNo">
                                 <label class="govuk-label govuk-radios__label"
                                        for="hasProof.no"
                                        th:text="#{radio.option.no}"></label>
                             </div>
                             <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
-                                 id="conditional-hasProof">
+                                 id="conditional-hasProofNo">
 
                                 <div th:replace="~{ fragments/govuk-datecomponent :: govuk-datecomponent(#{${JOURNEY.who} + 'proveBenefit.field.awardDate.label'}, #{proveBenefit.field.awardDate.label.hint}, 'awardEndDate') }"/>
 
