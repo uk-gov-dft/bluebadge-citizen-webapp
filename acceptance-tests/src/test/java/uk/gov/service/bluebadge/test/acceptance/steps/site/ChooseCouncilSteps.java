@@ -24,27 +24,21 @@ public class ChooseCouncilSteps extends AbstractSpringSteps {
 
   @And(
       "^I validate choose council page for \"(yourself|someone else)\" and select a council in \"(england|wales|scotland)\"")
-  public void iValidateChooseCouncilPageForAndSelectACouncil(String applicant, String country)
-      throws Throwable {
+  public void iValidateChooseCouncilPageForAndSelectACouncil(String applicant, String country) {
     String council = chooseCouncil(country);
     verifyPageContent(applicant);
+    commonSteps.iVerifyValidationMessage(chooseCouncilPage.VALIDATION_MESSAGE_FOR_NO_OPTION);
 
-    commonSteps.iClickOnContinueButton();
-    commonSteps.andIshouldSeeErrorSummaryBox();
-    commonSteps.iShouldSeeTextOnPage(chooseCouncilPage.VALIDATION_MESSAGE_FOR_NO_OPTION);
     commonPage.findPageElementById(chooseCouncilPage.COUNCIL_INPUT).sendKeys(council);
     commonPage.selectFromAutoCompleteList(chooseCouncilPage.COUNCIL_INPUT, council);
     commonSteps.iClickOnContinueButton();
   }
 
   public String chooseCouncil(String country) {
-    String council = "Worcester";
     String fullCouncil = "Worcester city council";
     if ("scotland".equalsIgnoreCase(country)) {
-      council = "Aberdeenshire";
       fullCouncil = "Aberdeenshire council";
     } else if ("wales".equalsIgnoreCase(country)) {
-      council = "Anglesey";
       fullCouncil = "Isle of Anglesey county council";
     }
     return fullCouncil;
@@ -62,4 +56,6 @@ public class ChooseCouncilSteps extends AbstractSpringSteps {
       commonSteps.thenIShouldSeeTheContent(chooseCouncilPage.PAGE_LABEL_1_SOMEONE_ELSE);
     }
   }
+
+
 }
