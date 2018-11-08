@@ -116,10 +116,11 @@ configurations.all {
         // don't cache changing modules at all
         cacheChangingModulesFor 0, 'seconds'
     }
+    exclude group: 'commons-logging', module: 'commons-logging'
 }
 
 dependencies {
-    ext.commonVersion = '0.6.2-SNAPSHOT'
+    ext.commonVersion = '0.6.8-SNAPSHOT'
 
     compile( group: 'uk.gov.dft.bluebadge', name: 'bluebadge-common', version: "${commonVersion}", changing: true ){
         exclude group: 'org.mybatis.spring.boot', module: 'mybatis-spring-boot-starter'
@@ -133,6 +134,8 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-security')
     compile('org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.3.RELEASE')
     compile('org.springframework.boot:spring-boot-starter-actuator')
+    compile('org.springframework.boot:spring-boot-starter-data-redis')
+    compile('org.springframework.session:spring-session-data-redis')
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth', version: '2.0.1.RELEASE'
     compile('org.owasp.esapi:esapi:2.1.0')
 
@@ -167,7 +170,7 @@ test {
     useJUnitPlatform()
     useJUnit()
     testLogging {
-        events "passed", "skipped", "failed"
+        events "skipped", "failed"
     }
 }
 

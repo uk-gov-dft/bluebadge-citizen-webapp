@@ -28,8 +28,12 @@ public class BenefitsSteps extends AbstractSpringSteps {
         verifyPageContent(applicant);
         commonSteps.iVerifyValidationMessage(BenifitsPage.VALIDATION_MESSAGE_FOR_NO_OPTION);
 
-        commonPage.findPageElementById(AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION + "_" + option.toLowerCase()).click();
-
+        if ("PIP".equals(option)) {
+            commonPage.findPageElementById(BenifitsPage.BENEFIT_RECEIVED_LIST).click();
+        } else {
+            commonPage.findPageElementById(BenifitsPage.BENEFIT_RECEIVED_LIST + "." + option).click();
+        }
+        commonSteps.iClickOnContinueButton();
     }
 
     public void verifyPageContent(String applicant) {

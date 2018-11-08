@@ -6,6 +6,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture.formRequestFlashAttributeCount;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -64,7 +66,9 @@ public class NinoControllerTest {
     mockMvc
         .perform(post("/nino").sessionAttr("JOURNEY", new Journey()).param("nino", ""))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(ERROR_URL));
+        .andExpect(redirectedUrl(ERROR_URL))
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("nino", "Pattern"))
+        .andExpect(formRequestFlashAttributeCount(1));
   }
 
   @Test
@@ -73,7 +77,9 @@ public class NinoControllerTest {
     mockMvc
         .perform(post("/nino").sessionAttr("JOURNEY", new Journey()).param("nino", INVALID_NINO))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(ERROR_URL));
+        .andExpect(redirectedUrl(ERROR_URL))
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("nino", "Pattern"))
+        .andExpect(formRequestFlashAttributeCount(1));
   }
 
   @Test

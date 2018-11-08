@@ -21,3 +21,7 @@ server:
   
 # Google Analytics Code
 GACode:  ${GACODE:UA-124760983-5}
+
+spring:
+  redis:
+    host: redis.elasticache-citizen.${bb_env}.${url}

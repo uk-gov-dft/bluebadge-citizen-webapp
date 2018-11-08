@@ -19,7 +19,7 @@
                 <div th:replace="~{ fragments/govuk-input :: govuk-input(#{whatsYourNamePage.field.label}, 'fullName', null, 'text', null)}"></div>
 
                 <div th:class="${#fields.hasErrors('hasBirthName')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
-                    <fieldset class="govuk-fieldset" id="hasBirthName">
+                    <fieldset class="govuk-fieldset">
                         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
                             <h2 class="govuk-fieldset__heading"
                                 th:text="#{${JOURNEY.who} + 'whatsYourNamePage.birthName.title'}"></h2>
@@ -34,12 +34,12 @@
                                 <input class="govuk-radios__input"
                                        type="radio"
                                        th:field="*{hasBirthName}"
-                                       id="hasBirthName.no"
+                                       id="hasBirthName"
                                        name="hasBirthName"
                                        value="no"
-                                       data-aria-controls="conditional-how-contacted-conditional-1">
+                                       data-aria-controls="conditional-hasBirthName">
                                 <label class="govuk-label govuk-radios__label"
-                                       for="hasBirthName.no"
+                                       for="hasBirthName"
                                        th:text="#{${JOURNEY.who} + 'whatsYourNamePage.birthName.field.option.no'}"></label>
                             </div>
 
@@ -47,16 +47,16 @@
                                 <input class="govuk-radios__input"
                                        type="radio"
                                        th:field="*{hasBirthName}"
-                                       value="yes"
+                                       value="true"
                                        id="hasBirthName.yes"
                                        name="hasBirthName"
-                                       data-aria-controls="conditional-how-contacted-conditional-1">
+                                       data-aria-controls="conditional-hasBirthNameYes">
                                 <label class="govuk-label govuk-radios__label"
                                        for="hasBirthName.yes"
                                        th:text="#{${JOURNEY.who} + 'whatsYourNamePage.birthName.field.option.yes'}"></label>
                             </div>
                             <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
-                                 id="conditional-how-contacted-conditional-1">
+                                 id="conditional-hasBirthNameYes">
 
                                 <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + 'whatsYourNamePage.birthName.field.label'}, 'birthName', null, 'text', null)}"></div>
                             </div>

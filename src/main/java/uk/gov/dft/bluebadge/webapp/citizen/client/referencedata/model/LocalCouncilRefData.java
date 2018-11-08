@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
 import java.util.Optional;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,17 +11,21 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class LocalCouncilRefData extends ReferenceData {
   @JsonProperty("metaData")
-  private Optional<LocalCouncilMetaData> localCouncilMetaData;
+  private LocalCouncilMetaData localCouncilMetaData;
 
   @JsonIgnore
   public String getIssuingAuthorityShortCode() {
-    return localCouncilMetaData
+    return getLocalCouncilMetaData()
         .map(LocalCouncilMetaData::getIssuingAuthorityShortCode)
         .orElse(null);
   }
 
+  public Optional<LocalCouncilMetaData> getLocalCouncilMetaData() {
+    return Optional.ofNullable(localCouncilMetaData);
+  }
+
   @Data
-  public static class LocalCouncilMetaData {
+  public static class LocalCouncilMetaData implements Serializable {
     private String issuingAuthorityShortCode;
   }
 }

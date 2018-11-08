@@ -7,3 +7,7 @@ blue-badge:
   applicationmanagementservice:
     servicehost:
       host: applications-service
+
+spring:
+  redis:
+    host: redis

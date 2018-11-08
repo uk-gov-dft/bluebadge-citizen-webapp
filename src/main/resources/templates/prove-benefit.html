@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}"
+        th:with="title=#{${JOURNEY.who} + proveBenefit.title(${JOURNEY.getEligibilityCode()})}">
+<head>
+    <title th:text="(${errorSummary}? #{common.title.error} : '')  + ${title}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form th:action="@{/prove-benefit}" th:object="${formRequest}" method="POST" novalidate>
+
+                <div th:class="${#fields.hasErrors('hasProof')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+                    <fieldset class="govuk-fieldset">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                            <h1 class="govuk-fieldset__heading" th:text="${title}"></h1>
+                        </legend>
+
+                        <span class="govuk-error-message"
+                              data-uipath="hasProof.error"
+                              th:errors="*{hasProof}"></span>
+
+                        <div class="govuk-radios" data-module="radios">
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input"
+                                       type="radio"
+                                       id="hasProof"
+                                       name="hasProof"
+                                       value="true"
+                                       th:field="*{hasProof}"
+                                       data-aria-controls="conditional-hasProof">
+                                <label class="govuk-label govuk-radios__label"
+                                       for="hasProof"
+                                       th:text="#{radio.option.yes}"></label>
+                            </div>
+
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input"
+                                       type="radio"
+                                       value="false"
+                                       id="hasProof.no"
+                                       name="hasProof"
+                                       th:field="*{hasProof}"
+                                       data-aria-controls="conditional-hasProofNo">
+                                <label class="govuk-label govuk-radios__label"
+                                       for="hasProof.no"
+                                       th:text="#{radio.option.no}"></label>
+                            </div>
+                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
+                                 id="conditional-hasProofNo">
+
+                                <div th:replace="~{ fragments/govuk-datecomponent :: govuk-datecomponent(#{${JOURNEY.who} + 'proveBenefit.field.awardDate.label'}, #{proveBenefit.field.awardDate.label.hint}, 'awardEndDate') }"/>
+
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <button type="submit"
+                        class="govuk-button"
+                        data-uipath="button.continue"
+                        th:text="#{btn.label.continue}"></button>
+
+            </form>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

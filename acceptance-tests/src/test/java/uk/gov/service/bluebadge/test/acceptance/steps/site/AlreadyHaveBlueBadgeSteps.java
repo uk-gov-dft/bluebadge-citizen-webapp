@@ -28,12 +28,15 @@ public class AlreadyHaveBlueBadgeSteps extends AbstractSpringSteps {
         verifyPageContent(applicant);
         commonSteps.iVerifyValidationMessage(AlreadyHaveBlueBadgePage.VALIDATION_MESSAGE_FOR_NO_OPTION);
 
-        commonPage.findPageElementById(AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION + "_" + option.toLowerCase()).click();
-
         if ("Yes".equals(option)){
+            commonPage.findPageElementById(AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION).click();
             commonSteps.iVerifyValidationMessage(AlreadyHaveBlueBadgePage.VALIDATION_MESSAGE_FOR_NO_BADGE);
-            commonPage.findPageElementById(AlreadyHaveBlueBadgePage.BADGE_NUMBER).sendKeys("AbEdd 0 0882X1217R");
+            commonPage.findPageElementById(AlreadyHaveBlueBadgePage.BADGE_NUMBER).sendKeys("AbEddd00882X1217R");
         }
+        else
+            commonPage.findPageElementById(AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION + "_" + option.toLowerCase()).click();
+
+        commonSteps.iClickOnContinueButton();
     }
 
     public void verifyPageContent(String applicant) {

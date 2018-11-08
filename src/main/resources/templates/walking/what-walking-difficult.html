@@ -25,8 +25,23 @@
                               th:errors="*{whatWalkingDifficulties}"></span>
 
                         <div id="walking-difficulties-list" class="govuk-checkboxes" data-module="checkboxes" >
-                            <div th:remove="tag" th:each="checkboxOption, iterStat: ${walkingDifficulties.options}" th:with="lastControl=${checkboxOption.shortCode} +'-conditional'">
-                                <div class="govuk-checkboxes__item">
+                            <div th:remove="tag" th:each="checkboxOption, iterStat: ${walkingDifficulties.options}"
+                                 th:with="lastControl=${checkboxOption.shortCode} +'-conditional'">
+
+                                <div class="govuk-checkboxes__item" th:if="${iterStat.index == 0}">
+                                    <input class="govuk-checkboxes__input"
+                                           type="checkbox"
+                                           th:field="*{whatWalkingDifficulties}"
+                                           id="whatWalkingDifficulties"
+                                           th:name="whatWalkingDifficulties"
+                                           th:value="${checkboxOption.shortCode}"
+                                           th:attr="data-aria-controls=${lastControl}">
+                                    <label class="govuk-label govuk-checkboxes__label"
+                                           for="whatWalkingDifficulties"
+                                           th:text="#{${checkboxOption.messageKey}}"></label>
+                                </div>
+
+                                <div class="govuk-checkboxes__item" th:unless="${iterStat.index == 0}">
                                     <input class="govuk-checkboxes__input"
                                            type="checkbox"
                                            th:field="*{whatWalkingDifficulties}"

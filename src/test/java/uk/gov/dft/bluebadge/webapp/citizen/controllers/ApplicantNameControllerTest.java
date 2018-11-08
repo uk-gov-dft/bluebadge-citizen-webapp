@@ -81,6 +81,26 @@ public class ApplicantNameControllerTest extends ControllerTestFixture<Applicant
   }
 
   @Test
+  public void submitApplicationName_ShouldDisplayValidation_WhenInvalidCharactersUsed()
+      throws Exception {
+    ApplicantNameForm applicantNameForm = ApplicantNameForm.builder().build();
+    applicantNameForm.setFullName("bob12");
+    applicantNameForm.setBirthName(",jane");
+    applicantNameForm.setHasBirthName(true);
+
+    mockMvc
+        .perform(
+            post("/name")
+                .params(FormObjectToParamMapper.convert(applicantNameForm))
+                .contentType("application/x-www-form-urlencoded")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(flash().attribute("formRequest", applicantNameForm))
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("fullName", "Pattern"))
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("birthName", "Pattern"));
+  }
+
+  @Test
   public void submitApplicationName_ShouldDisplayValidation_BirthNameIsNotSet() throws Exception {
     ApplicantNameForm applicantNameForm =
         ApplicantNameForm.builder().fullName("John").hasBirthName(true).birthName("").build();

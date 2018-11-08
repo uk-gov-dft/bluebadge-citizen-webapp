@@ -1,6 +1,8 @@
 package uk.gov.service.bluebadge.test.acceptance.steps.site;
 
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
+import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.ApplicantPage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
@@ -26,7 +28,7 @@ public class ApplicationSteps extends AbstractSpringSteps {
         String journeyOption;
 
         if ("yourself".equals(applicant.toLowerCase())) {
-            journeyOption = applicantPage.APPLICANT_TYPE_YOURSELF_OPTION;
+            journeyOption = applicantPage.APPLICANT_TYPE_OPTION_LIST;
         } else if ("someone else".equals(applicant.toLowerCase())) {
             journeyOption = applicantPage.APPLICANT_TYPE_SOMELSE_OPTION;
         } else {
@@ -47,4 +49,23 @@ public class ApplicationSteps extends AbstractSpringSteps {
         commonPage.findPageElementById(journeyOption).click();
         commonSteps.iClickOnContinueButton();
     }
+
+  @And("^I complete prove benefit page for \"(yes|no)\"")
+  public void iCompleteProveBenefitPage(String opt) {
+    if (opt.equals("yes")) {
+      commonPage.findPageElementById("hasProof").click();
+    } else {
+      LocalDate date = LocalDate.now();
+      String day = Integer.toString(date.getDayOfMonth());
+      String month = Integer.toString(date.getMonth().getValue());
+      String year = Integer.toString(date.getYear() + 1);
+
+      commonPage.findPageElementById("hasProof.no").click();
+      commonPage.findPageElementById("awardEndDate").sendKeys(day);
+      commonPage.findPageElementById("awardEndDate.month").sendKeys(month);
+      commonPage.findPageElementById("awardEndDate.year").sendKeys(year);
+    }
+
+    commonSteps.iClickOnContinueButton();
+  }
 }
