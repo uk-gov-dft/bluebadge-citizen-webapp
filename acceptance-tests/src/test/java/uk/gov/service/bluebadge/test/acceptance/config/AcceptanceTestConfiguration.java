@@ -43,8 +43,10 @@ public class AcceptanceTestConfiguration {
         webDriverServiceProvider,
         acceptanceTestProperties.isHeadlessMode(),
         acceptanceTestProperties.getDownloadDir(),
-        acceptanceTestProperties.isZapMode()
-    ,true);
+        acceptanceTestProperties.isZapMode(),
+        acceptanceTestProperties.isbStackMode(),
+        acceptanceTestProperties.getBrowserName(),
+        acceptanceTestProperties.getBrowserVersion());
   }
 
   @Bean(initMethod = "initialise", destroyMethod = "dispose")
@@ -71,7 +73,10 @@ public class AcceptanceTestConfiguration {
             Boolean.parseBoolean(System.getProperty("headless", "true")),
             Paths.get(buildDirectory, "download"),
             Paths.get(buildDirectory),
-            Boolean.parseBoolean(System.getProperty("zapMode", "false")));
+            Boolean.parseBoolean(System.getProperty("zapMode", "false")),
+            Boolean.parseBoolean(System.getProperty("bStackMode", "false")),
+            System.getProperty("bStackBrowserName", "false"),
+            System.getProperty("bStackBrowserVersion", "false"));
 
     log.info("Applying test properties: {}", acceptanceTestProperties);
 

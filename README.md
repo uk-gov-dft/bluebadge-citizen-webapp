@@ -142,6 +142,12 @@ gradle acceptanceTests -DbaseUrl=http://localhost:8780 -Dheadless=false -Dcucumb
 ```
 Specify the relevant tag to run a feature file (Eg. @SignIn, @ManageUsers etc.)
 
+
+#Running Acceptance tests on Browserstack
+
+./BrowserStackLocal --key TgSoo4cFJycJxqXkzHxT --local-identifier Test123
+
+
 # How to deploy to QA enviroment
 How to Deploy to QA environment
 

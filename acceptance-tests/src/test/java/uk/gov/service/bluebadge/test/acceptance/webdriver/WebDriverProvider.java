@@ -31,7 +31,7 @@ public class WebDriverProvider {
   private static final Logger log = getLogger(WebDriverProvider.class);
 
   private static ChromeOptions chromeOptions;
-    private final boolean isBstackMode;
+
     private WebDriverServiceProvider webDriverServiceProvider;
 
   /**
@@ -43,22 +43,35 @@ public class WebDriverProvider {
   /** When 'true', the WebDriver will be operating through zap proxy. */
   private boolean isZapMode;
 
+  /** When 'true', the WebDriver will be from BrowserStack. */
+  private final boolean isBstackMode;
+
+  /** This is the target browser on BrowserStack */
+  private final String bStackBrowserName;
+
+  /** This is the target browser version on BrowserStack */
+  private final String bStackBrowserVersion;
+
   /** Location that the web browser will be downloading content into. */
   private Path downloadDirectory;
 
   private WebDriver webDriver;
 
   public WebDriverProvider(
-      final WebDriverServiceProvider webDriverServiceProvider,
-      final boolean isHeadlessMode,
-      final Path downloadDirectory,
-      final boolean isZapMode,
-      boolean isBstackMode) {
+          final WebDriverServiceProvider webDriverServiceProvider,
+          final boolean isHeadlessMode,
+          final Path downloadDirectory,
+          final boolean isZapMode,
+          boolean isBstackMode,
+          String bStackBrowserName,
+          String bStackBrowserVersion) {
     this.webDriverServiceProvider = webDriverServiceProvider;
     this.isHeadlessMode = isHeadlessMode;
     this.isZapMode = isZapMode;
     this.isBstackMode = isBstackMode;
     this.downloadDirectory = downloadDirectory;
+    this.bStackBrowserName = bStackBrowserName;
+    this.bStackBrowserVersion = bStackBrowserVersion;
   }
 
   public WebDriver getWebDriver() {
@@ -115,10 +128,14 @@ public class WebDriverProvider {
       DesiredCapabilities caps = new DesiredCapabilities();
       //caps.setCapability("browser", "chrome");
       //caps.setCapability("browser_version", "62.0");
-      caps.setCapability("browser", "Firefox");
-      caps.setCapability("browser_version", "64.0 beta");
+      //caps.setCapability("browser", "Firefox");
+      //caps.setCapability("browser_version", "64.0 beta");
       //caps.setCapability("browser", "IE");
       //caps.setCapability("browser_version", "11.0");
+      caps.setCapability("browser", bStackBrowserName);
+      caps.setCapability("browser_version", bStackBrowserVersion);
+      caps.setCapability("ignoreZoomSetting", true);
+      caps.setCapability("nativeEvents",false);
       caps.setCapability("os", "Windows");
       caps.setCapability("os_version", "10");
       caps.setCapability("resolution", "1024x768");
