@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.ARMS;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDBULK;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDVEHIC;
 
@@ -35,6 +36,9 @@ public class HealthConditionsForm implements StepForm, Serializable {
     }
     if (journey.getEligibilityCode() == CHILDBULK || journey.getEligibilityCode() == CHILDVEHIC) {
       return Optional.of(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST);
+    }
+    if(journey.getEligibilityCode() == ARMS){
+      return Optional.of(StepDefinition.ARMS_HOW_OFTEN_DRIVE);
     }
     return Optional.of(StepDefinition.DECLARATIONS);
   }
