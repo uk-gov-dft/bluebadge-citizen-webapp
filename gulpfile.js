@@ -133,7 +133,7 @@ gulp.task('js', ['clean:js', 'html5-shiv'], () => {
 
 gulp.task('default', ['sass', 'js', 'images', 'govuk-assets']);
 
-gulp.task('watch', ['sass-lint', 'sass', 'js-lint', 'js', 'images', 'govuk-assets'], () => {
+gulp.task('watch', ['sass', 'js', 'images', 'govuk-assets'], () => {
 	gulp.watch(PATH.sourceAssets.sass, ['sass']);
-	gulp.watch(PATH.sourceAssets.js, ['js']);
+	gulp.watch(`${BASE_PATH}/assets/js/*.js`, ['js']);
 });

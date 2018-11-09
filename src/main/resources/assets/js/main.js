@@ -3,10 +3,26 @@ require('@babel/polyfill');
 import All from 'govuk-frontend/all';
 import AutoComplete from './autocomplete';
 import GAClickTracker from './ga-tracker';
+import FileUploader from "./file-upload";
 
 All.initAll();
 
 GAClickTracker();
+
+window.onload = () => {
+    const continueBtn = document.getElementById("continue-btn");
+
+    new FileUploader().init({
+
+        init: () => {
+            continueBtn.style.display = 'none';
+        },
+
+        uploaded: () => {
+            continueBtn.style.display = 'block';
+        }
+    });
+}
 
 const select = document.getElementById('councilShortCode');
 
@@ -33,4 +49,3 @@ if (select) {
         },
     });
 }
-

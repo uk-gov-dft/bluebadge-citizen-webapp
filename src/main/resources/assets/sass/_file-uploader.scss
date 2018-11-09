@@ -1,0 +1,249 @@
+.drop-area {
+
+	&__container {
+		padding: 30px;
+		max-width: 480px;
+		margin-bottom: 30px;
+		border: 2px dashed rgba(govuk-colour(blue), .8);
+
+		.govuk-body {
+			margin-bottom: 0;
+		}
+	}
+
+	&__icon {
+		width: 20%;
+		padding-right: 15px;
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	&__icon-wrapper {
+		padding: 15px;
+		line-height: 0;
+		border-radius: 50%;
+		vertical-align: top;
+		display: inline-block;
+		background-color: govuk-colour(blue);
+
+		@include mq($from: tablet) {
+			padding: 20px;
+		}
+
+		svg {
+			width: 55px;
+			height: 55px;
+
+			path {
+				fill: #fff;
+			}
+		}
+
+		/*.is-desktop & {
+			.icon-arrow-down {display: block;}
+			.fa-camera {display: none;}
+		}*/
+	}
+
+	&__instructions {
+		width: 70%;
+		display: inline-block;
+		vertical-align: middle;
+
+		.govuk-button--upload-btn {
+			margin-bottom: 10px;
+			background-color: govuk-colour(blue);
+		}
+	}
+}
+
+.drop-area--active {
+	.drop-area__container {
+		border-color: $govuk-focus-colour;
+	}
+
+	.drop-area__icon-wrapper {
+		background-color: $govuk-focus-colour;
+	}
+
+	.icon--upload-arrow {
+		background: lighten($govuk-focus-colour, 10%);
+	}
+}
+
+.drop-area--preview-mode {
+
+	.drop-area__container {
+		// visually hide
+		display: none;
+	}
+
+	.drop-area__preview {
+		display: block;
+	}
+}
+
+.drop-area__preview {
+	display: none;
+	margin-top: 10px;
+
+	&-item {
+
+		@include govuk-media-query($from: tablet) {
+			width: 280px;
+			margin-right: 10px;
+			margin-bottom: 10px;
+			display: inline-block;
+		}
+
+		@include govuk-media-query($from: desktop) {
+			width: 300px;
+		}
+
+		img {
+			width: 100%;
+			vertical-align: middle;
+			image-orientation: from-image;
+		}
+	}
+}
+
+
+/// ----------------------
+
+
+/*#drop-area {
+	border: 2px dashed rgba(govuk-colour(blue), 0.8);
+	max-width: 480px;
+	margin-bottom: 30px;
+	padding: 30px;
+  //  @include mq($from: tablet) {
+	 // padding: 40px;
+  //  }
+	p.govuk-body {
+		margin-bottom: 0;
+	}
+	.drag-drop-text {
+		display: none;
+		  .is-desktop & {
+			display: inline;
+		  }
+	}
+ }
+ #drop-area.highlight {
+	border-color: $govuk-focus-colour;
+	.icon--upload-arrow {
+		background: lighten($govuk-focus-colour, 10%);
+	}
+ }
+ 
+ #gallery, .dummy-container {
+	margin-top: 10px;
+ }
+ #gallery img, .dummy-container img {
+	image-orientation: from-image;	
+	width: 300px;
+	margin-bottom: 10px;
+	margin-right: 10px;
+	vertical-align: middle;
+ }
+ // #fileElem {
+ //   display: none;
+ // }
+ 
+ progress {
+	 padding: 0;
+	 border: none;
+	 border-radius: 0;
+ 
+	 display: block;
+	 color: $govuk-link-colour;
+	 background-color: govuk-colour(grey-3);
+	 width: 100%;
+ }
+ 
+ /* Chrome */
+ /*progress::-webkit-progress-bar {
+	  background-color: govuk-colour(grey-3);
+ }
+ 
+ progress::-moz-progress-bar { 
+	background-color: $govuk-link-colour;	
+ }
+ 
+ progress::-webkit-progress-value {
+	background-color: $govuk-link-colour;
+ }
+
+.icon--upload-arrow {
+	background: govuk-colour(blue);
+	border-radius: 50%;
+	display: inline-block;
+	line-height: 0;
+	padding: 15px;
+	vertical-align: top;
+	@include mq($from: tablet) {
+		padding: 20px;
+	}
+	.icon-arrow-down {display: none;}
+	svg {
+		width: 100%; height: 100%;
+	}
+	.is-desktop & {
+		.icon-arrow-down {display: block;}
+		.fa-camera {display: none;}
+	}
+	path {
+		fill: white;
+	}
+}
+
+.upload-arrow-container {
+	display: inline-block;
+	padding-right: 15px;
+	vertical-align: middle;
+	width: 20%;
+}
+
+.upload-section-text {
+	display: inline-block;
+	vertical-align: middle;
+	width: 70%;
+	.upload-label {
+		background-color: govuk-colour(blue);
+		margin-bottom: 10px;
+	}
+}
+
+.upload-finished-button {
+	.upload-label {
+		background-color: govuk-colour(blue);
+	}
+}
+
+.tablet-upload-text {
+	display: none;
+	.is-desktop & {
+		display: inline;
+	}
+}
+
+.mobile-upload-alternative-text {
+	display: none;
+}
+
+.hide-take-photo-text {
+	.mobile-upload-alternative-text {
+		display: block;	
+	}
+	.mobile-upload-text {
+		display: none;
+	}
+}
+
+.mobile-upload-text, .mobile-upload-alternative-text {
+	.is-desktop & {
+		display: none;
+	}
+}
+*/
