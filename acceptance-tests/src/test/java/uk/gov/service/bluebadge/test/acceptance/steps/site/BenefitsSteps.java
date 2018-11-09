@@ -1,9 +1,7 @@
 package uk.gov.service.bluebadge.test.acceptance.steps.site;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import org.springframework.beans.factory.annotation.Autowired;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.AlreadyHaveBlueBadgePage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.BenifitsPage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
 import uk.gov.service.bluebadge.test.acceptance.steps.AbstractSpringSteps;
@@ -37,6 +35,7 @@ public class BenefitsSteps extends AbstractSpringSteps {
     }
 
     public void verifyPageContent(String applicant) {
+        commonSteps.iShouldSeeTheCorrectURL(BenifitsPage.PAGE_URL);
         if ("you".equals(applicant.toLowerCase())) {
             commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(BenifitsPage.PAGE_TITLE_YOURSELF);
             commonSteps.iShouldSeeTheHeading(BenifitsPage.PAGE_TITLE_YOURSELF);

@@ -1,7 +1,5 @@
 package uk.gov.service.bluebadge.test.acceptance.pages.site;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,6 +8,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import uk.gov.service.bluebadge.test.acceptance.pages.PageHelper;
 import uk.gov.service.bluebadge.test.acceptance.util.TestContentUrls;
 import uk.gov.service.bluebadge.test.acceptance.webdriver.WebDriverProvider;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommonPage {
 
@@ -114,4 +115,9 @@ public class CommonPage {
   public PageHelper getHelper() {
     return helper;
   }
+
+  public String getPageURL() {
+    return webDriverProvider.getWebDriver().getCurrentUrl();
+  }
+
 }

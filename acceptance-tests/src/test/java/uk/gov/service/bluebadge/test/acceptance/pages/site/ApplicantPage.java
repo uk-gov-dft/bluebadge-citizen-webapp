@@ -2,6 +2,7 @@ package uk.gov.service.bluebadge.test.acceptance.pages.site;
 
 public class ApplicantPage {
 
+  public static final String PAGE_URL = "/applicant";
   public static final String PAGE_TITLE = "Who are you applying for?";
   public static final String PAGE_HEADING = "Who are you applying for?";
 
