@@ -25,7 +25,7 @@ logging:
   level:
     root: ${APP_LOGGING_LEVEL:INFO}
     uk.gov.dft.bluebadge.webapp.citizen: ${APP_LOGGING_LEVEL:DEBUG}
-    org.springframework: DEBUG
+    org.springframework: INFO
     io.lettuce: DEBUG
 
 management:
