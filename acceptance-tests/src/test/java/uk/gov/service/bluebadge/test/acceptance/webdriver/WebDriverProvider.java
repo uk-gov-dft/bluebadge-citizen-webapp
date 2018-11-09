@@ -126,26 +126,17 @@ public class WebDriverProvider {
       final String URL = "https://" + USERNAME + ":" + AUTOMATE_KEY + "@hub-cloud.browserstack.com/wd/hub";
 
       DesiredCapabilities caps = new DesiredCapabilities();
-      //caps.setCapability("browser", "chrome");
-      //caps.setCapability("browser_version", "62.0");
-      //caps.setCapability("browser", "Firefox");
-      //caps.setCapability("browser_version", "64.0 beta");
-      //caps.setCapability("browser", "IE");
-      //caps.setCapability("browser_version", "11.0");
-      caps.setCapability("browser", bStackBrowserName);
+      caps.setCapability("browser", bStackBrowserName.toUpperCase());
       caps.setCapability("browser_version", bStackBrowserVersion);
-      caps.setCapability("ignoreZoomSetting", true);
-      caps.setCapability("nativeEvents",false);
       caps.setCapability("os", "Windows");
       caps.setCapability("os_version", "10");
       caps.setCapability("resolution", "1024x768");
       caps.setCapability("browserstack.local", "true");
       caps.setCapability("browserstack.localIdentifier", "Test123");
-      caps.setCapability("browserstack.debug","true");
+//      caps.setCapability("browserstack.debug","true");
 
         try {
             webDriver = new RemoteWebDriver(new URL(URL), caps);
-            //webDriver.get("http://google.com");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

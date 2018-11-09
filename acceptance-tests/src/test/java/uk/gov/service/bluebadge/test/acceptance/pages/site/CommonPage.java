@@ -3,8 +3,11 @@ package uk.gov.service.bluebadge.test.acceptance.pages.site;
 import java.util.ArrayList;
 import java.util.List;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import uk.gov.service.bluebadge.test.acceptance.pages.PageHelper;
@@ -105,6 +108,13 @@ public class CommonPage {
 
   public WebElement findPageElementById(String elementId) {
     return helper.findElement(By.id(elementId));
+  }
+
+  public void selectRadioButton(String elementId) {
+
+    JavascriptExecutor js = (JavascriptExecutor) webDriverProvider.getWebDriver();
+    js.executeScript("window.document.getElementById('"+ elementId+"').click()");
+
   }
 
   public String getH1Tag() {
