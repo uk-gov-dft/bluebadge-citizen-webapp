@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="#{${JOURNEY.who} + proveIdentity.title}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.who} + proveIdentity.title}"></h1>
+
+            <p class="govuk-body" th:text="#{${JOURNEY.who} + proveIdentity.content.p1}"></p>
+
+            <ul class="govuk-list govuk-list--bullet">
+                <li th:text="#{${JOURNEY.who} + proveIdentity.ul.li1}"></li>
+                <li th:text="#{${JOURNEY.who} + proveIdentity.ul.li2}"></li>
+                <ul th:remove="tag" th:unless="${JOURNEY.isApplicantYoung()}">
+                    <li th:text="#{${JOURNEY.who} + proveIdentity.ul.li3}"></li>
+                    <li th:text="#{${JOURNEY.who} + proveIdentity.ul.li4}"></li>
+                </ul>
+            </ul>
+
+            <form th:action="@{/prove-identity}" th:object="${formRequest}" method="post" enctype="multipart/form-data" novalidate>
+                <div th:replace="~{ fragments/file-uploader :: fileUploader('Upload photo or scan', 'document') }"></div>
+
+                <button type="submit"
+                        id="continue-btn"
+                        class="govuk-button"
+                        data-uipath="button.continue"
+                        th:text="#{btn.label.continue}"></button>
+            </form>
+
+            <details class="govuk-details">
+                <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text"
+                          th:text="#{proveIdentity.cantUpload.title}"></span>
+                </summary>
+                <div class="govuk-details__text">
+                    <p th:text="#{${JOURNEY.who} + proveIdentity.cantUpload.content.p1}"></p>
+                    <p th:text="#{proveIdentity.cantUpload.content.p2}"></p>
+                    <a href="/declarations" th:text="#{proveIdentity.cantUpload.link}"></a>
+                </div>
+            </details>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
