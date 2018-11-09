@@ -348,7 +348,8 @@ public class CommonSteps extends AbstractSpringSteps {
       commonPage.findPageElementById(AlreadyHaveBlueBadgePage.BADGE_NUMBER).sendKeys("AB12CD");
     } else {
       commonPage
-          .findPageElementById(AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION + "_" + opt.toLowerCase())
+          .findPageElementById(
+              AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION + "_" + opt.toLowerCase())
           .click();
     }
   }
