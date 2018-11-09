@@ -13,7 +13,9 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     Then  I should see "You may be" eligible page
     When  I complete eligible page
     And   I validate name page for a "Self" application
-
+    And   I validate date of birth page for a "Self" application
+    And   I validate gender page for a "Self" application with option as "FEMALE"
+    And   I validate enter address page for a "Self" application
 
   Scenario: Page title and error message validation - someone else
     Given I navigate to applicant page and validate for "someone else"
@@ -26,6 +28,9 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     Then  I should see "They may be" eligible page
     When  I complete eligible page
     And   I validate name page for a "Someone else" application
+    And   I validate date of birth page for a "Someone else" application
+    And   I validate gender page for a "Self" application with option as "MALE"
+    And   I validate enter address page for a "Someone else" application
 #
 #
 #  Scenario: Page title and error message validation - an organisation
