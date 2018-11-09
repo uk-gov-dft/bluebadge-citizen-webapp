@@ -26,6 +26,7 @@ logging:
     root: ${APP_LOGGING_LEVEL:INFO}
     uk.gov.dft.bluebadge.webapp.citizen: ${APP_LOGGING_LEVEL:DEBUG}
     org.springframework: DEBUG
+    io.lettuce: DEBUG
 
 management:
   server:
@@ -51,9 +52,11 @@ spring:
     redis:
       namespace: spring:session:citizen
   redis:
-    host: redis.ci.does.not.exist
-  profiles:
-    active: dev
+    host: localhost
+#    host: redis.ci.does.not.exist
+#    port: 10000
+#  profiles:
+#    active: dev
 
 server:
   port: 8780
