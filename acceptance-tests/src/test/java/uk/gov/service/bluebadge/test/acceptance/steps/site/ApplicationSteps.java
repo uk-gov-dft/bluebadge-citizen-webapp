@@ -48,7 +48,8 @@ public class ApplicationSteps extends AbstractSpringSteps {
         commonSteps.iClickOnContinueButton();
         commonSteps.andIshouldSeeErrorSummaryBox();
         commonSteps.iShouldSeeTextOnPage(applicantPage.VALIDATION_MESSAGE_FOR_NO_OPTION);
-        commonPage.findPageElementById(journeyOption).click();
+
+        commonPage.selectRadioButton(journeyOption);
         commonSteps.iClickOnContinueButton();
     }
 

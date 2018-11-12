@@ -23,6 +23,7 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate choose council page for "someone else" and select a council in "wales"
     And   I validate "their" local authority page in "wales"
     And   I validate "they" already have a blue badge page for "No"
+<<<<<<< Updated upstream
     And   I validate "they" benefit page for "NONE"
     And   I validate "they" main reason page for "WALKD"
     And   I validate "them" walking difficulty page for "HELP"
@@ -39,3 +40,11 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
 #    Given I navigate to applicant page and validate for "an organisation"
 #    And   I validate choose council page for "yourself" and select a council in "scotland"
 #    And   I validate "your" local authority page in "scotland"
+=======
+
+
+  Scenario: Page title and error message validation - an organisation
+    Given I navigate to applicant page and validatgit pulle for "an organisation"
+    And   I validate choose council page for "yourself" and select a council in "scotland"
+    And   I validate "your" local authority page in "scotland"
+>>>>>>> Stashed changes

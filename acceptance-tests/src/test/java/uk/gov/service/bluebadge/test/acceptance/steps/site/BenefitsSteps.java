@@ -27,9 +27,9 @@ public class BenefitsSteps extends AbstractSpringSteps {
         commonSteps.iVerifyValidationMessage(BenifitsPage.VALIDATION_MESSAGE_FOR_NO_OPTION);
 
         if ("PIP".equals(option)) {
-            commonPage.findPageElementById(BenifitsPage.BENEFIT_RECEIVED_LIST).click();
+            commonPage.selectRadioButton(BenifitsPage.BENEFIT_RECEIVED_LIST);
         } else {
-            commonPage.findPageElementById(BenifitsPage.BENEFIT_RECEIVED_LIST + "." + option).click();
+            commonPage.selectRadioButton(BenifitsPage.BENEFIT_RECEIVED_LIST + "." + option);
         }
         commonSteps.iClickOnContinueButton();
     }

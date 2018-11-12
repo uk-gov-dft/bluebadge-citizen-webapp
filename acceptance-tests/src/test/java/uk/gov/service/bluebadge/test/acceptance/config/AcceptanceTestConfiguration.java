@@ -1,8 +1,5 @@
 package uk.gov.service.bluebadge.test.acceptance.config;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
-import java.nio.file.Paths;
 import org.slf4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +10,10 @@ import uk.gov.service.bluebadge.test.acceptance.steps.ScenarioContext;
 import uk.gov.service.bluebadge.test.acceptance.util.TestContentUrls;
 import uk.gov.service.bluebadge.test.acceptance.webdriver.WebDriverProvider;
 import uk.gov.service.bluebadge.test.acceptance.webdriver.WebDriverServiceProvider;
+
+import java.nio.file.Paths;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Central configuration class, enabling acceptance tests to benefit from Spring-based dependency
@@ -42,7 +43,13 @@ public class AcceptanceTestConfiguration {
         webDriverServiceProvider,
         acceptanceTestProperties.isHeadlessMode(),
         acceptanceTestProperties.getDownloadDir(),
-        acceptanceTestProperties.isZapMode());
+        acceptanceTestProperties.isZapMode(),
+        acceptanceTestProperties.isbStackMode(),
+        acceptanceTestProperties.getBrowserName(),
+        acceptanceTestProperties.getBrowserVersion(),
+        acceptanceTestProperties.getBrowserStackUser(),
+        acceptanceTestProperties.getBrowserStackKey()
+    );
   }
 
   @Bean(initMethod = "initialise", destroyMethod = "dispose")
@@ -69,7 +76,13 @@ public class AcceptanceTestConfiguration {
             Boolean.parseBoolean(System.getProperty("headless", "true")),
             Paths.get(buildDirectory, "download"),
             Paths.get(buildDirectory),
-            Boolean.parseBoolean(System.getProperty("zapMode", "false")));
+            Boolean.parseBoolean(System.getProperty("zapMode", "false")),
+            Boolean.parseBoolean(System.getProperty("bStackMode", "false")),
+            System.getProperty("bStackBrowserName", "false"),
+            System.getProperty("bStackBrowserVersion", "false"),
+            System.getProperty("bStackUser", " "),
+            System.getProperty("bStackKey", " ")
+        );
 
     log.info("Applying test properties: {}", acceptanceTestProperties);
 
