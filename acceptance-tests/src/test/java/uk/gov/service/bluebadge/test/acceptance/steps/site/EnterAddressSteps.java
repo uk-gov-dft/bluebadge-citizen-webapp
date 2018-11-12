@@ -23,7 +23,7 @@ public class EnterAddressSteps extends AbstractSpringSteps {
     }
 
     @And("^I validate enter address page for a \"([^\"]*)\" application$")
-    public void iValidateEnterAddressPageForAApplication(String applicant,String option)  {
+    public void iValidateEnterAddressPageForAApplication(String applicant)  {
         verifyPageContent(applicant);
 
         //To validate Continue without entering data in the address fields
@@ -37,12 +37,34 @@ public class EnterAddressSteps extends AbstractSpringSteps {
         commonPage.findPageElementById("buildingAndStreet").sendKeys(EnterAddressPage.GREATER_THAN_100_CHARACTERS);
         commonPage.findPageElementById("townOrCity").sendKeys(EnterAddressPage.VALID_TOWN);
         commonPage.findPageElementById("postcode").sendKeys(EnterAddressPage.VALID_POSTCODE);
-        commonSteps.iVerifyValidationMessage(EnterAddressPage.VALIDATION_MESSAGE_FOR_EMPTY_BUILDING_AND_STREET);
+        commonSteps.iVerifyValidationMessage(EnterAddressPage.VALIDATION_MESSAGE_FOR_GT100_BUILDING_AND_STREET);
 
+        //To validate length limit <=100 characters for Town/City
+        commonPage.findPageElementById("buildingAndStreet").clear();
+        commonPage.findPageElementById("townOrCity").clear();
+        commonPage.findPageElementById("postcode").clear();
+        commonPage.findPageElementById("buildingAndStreet").sendKeys(EnterAddressPage.VALID_BUILDING_STREET);
+        commonPage.findPageElementById("townOrCity").sendKeys(EnterAddressPage.GREATER_THAN_100_CHARACTERS);
+        commonPage.findPageElementById("postcode").sendKeys(EnterAddressPage.VALID_POSTCODE);
+        commonSteps.iVerifyValidationMessage(EnterAddressPage.VALIDATION_MESSAGE_FOR_GT100_TOWN_CITY);
 
+        //To validate Invalid  post code field
+        commonPage.findPageElementById("buildingAndStreet").clear();
+        commonPage.findPageElementById("townOrCity").clear();
+        commonPage.findPageElementById("postcode").clear();
+        commonPage.findPageElementById("buildingAndStreet").sendKeys(EnterAddressPage.VALID_BUILDING_STREET);
+        commonPage.findPageElementById("townOrCity").sendKeys(EnterAddressPage.VALID_TOWN);
+        commonPage.findPageElementById("postcode").sendKeys(EnterAddressPage.INVALID_POSTCODE);
+        commonSteps.iVerifyValidationMessage(EnterAddressPage.VALIDATION_MESSAGE_FOR_INVALID_POSTCODE);
 
+        //Enter valid values and Continue
+        commonPage.findPageElementById("buildingAndStreet").clear();
+        commonPage.findPageElementById("townOrCity").clear();
+        commonPage.findPageElementById("postcode").clear();
+        commonPage.findPageElementById("buildingAndStreet").sendKeys(EnterAddressPage.VALID_BUILDING_STREET);
+        commonPage.findPageElementById("townOrCity").sendKeys(EnterAddressPage.VALID_TOWN);
+        commonPage.findPageElementById("postcode").sendKeys(EnterAddressPage.VALID_POSTCODE);
 
-        commonPage.findPageElementById("gender"+"."+option).click();
         commonSteps.iClickOnContinueButton();
     }
 

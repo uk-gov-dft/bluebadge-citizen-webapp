@@ -26,7 +26,7 @@ public class GenderSteps extends AbstractSpringSteps {
         //To validate Non Selection of Gender
         commonSteps.iVerifyValidationMessage(GenderPage.VALIDATION_MESSAGE_FOR_NON_SELECTION_OF_GENDER);
 
-        commonPage.findPageElementById("gender"+"."+option).click();
+        commonPage.findElementWithUiPath(GenderPage.GENDER_LIST+"."+option).click();
         commonSteps.iClickOnContinueButton();
     }
     

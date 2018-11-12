@@ -15,6 +15,7 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate name page for a "Self" application
     And   I validate date of birth page for a "Self" application
     And   I validate gender page for a "Self" application with option as "FEMALE"
+    And   I validate nino page for a "Self" application
     And   I validate enter address page for a "Self" application
 
   Scenario: Page title and error message validation - someone else
@@ -29,7 +30,8 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     When  I complete eligible page
     And   I validate name page for a "Someone else" application
     And   I validate date of birth page for a "Someone else" application
-    And   I validate gender page for a "Self" application with option as "MALE"
+    And   I validate gender page for a "Someone else" application with option as "MALE"
+    And   I validate nino page for a "Someone else" application
     And   I validate enter address page for a "Someone else" application
 #
 #
