@@ -15,7 +15,6 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate "their" local authority page in "wales"
     And   I validate "they" already have a blue badge page for "No"
 
-
   Scenario: Page title and error message validation - an organisation
     Given I navigate to applicant page and validate for "an organisation"
     And   I validate choose council page for "yourself" and select a council in "scotland"
