@@ -12,43 +12,44 @@ import uk.gov.service.bluebadge.test.acceptance.steps.CommonSteps;
 
 public class ApplicationSteps extends AbstractSpringSteps {
 
-  private CommonSteps commonSteps;
-  private ApplicantPage applicantPage;
-  private CommonPage commonPage;
-  private ApplicationFixture applicationFixture;
+    private CommonSteps commonSteps;
+    private ApplicantPage applicantPage;
+    private CommonPage commonPage;
+    private ApplicationFixture applicationFixture;
 
-  @Autowired
-  public ApplicationSteps(CommonPage commonPage, CommonSteps commonSteps) {
-    this.commonPage = commonPage;
-    this.commonSteps = commonSteps;
-  }
-
-  @Given(
-      "^I navigate to applicant page and validate for \"(yourself|someone else|an organisation)\"")
-  public void iNavigateToApplicantPageAndValidate(String applicant) throws Exception {
-    String journeyOption;
-
-    if ("yourself".equals(applicant.toLowerCase())) {
-      journeyOption = applicantPage.APPLICANT_TYPE_OPTION_LIST;
-    } else if ("someone else".equals(applicant.toLowerCase())) {
-      journeyOption = applicantPage.APPLICANT_TYPE_SOMELSE_OPTION;
-    } else {
-      journeyOption = applicantPage.APPLICANT_TYPE_ORG_OPTION;
+    @Autowired
+    public ApplicationSteps(CommonPage commonPage, CommonSteps commonSteps) {
+        this.commonPage = commonPage;
+        this.commonSteps = commonSteps;
     }
 
-    commonPage.openByPageName("applicant");
-    this.verifyPageContent(journeyOption);
-  }
+    @Given("^I navigate to applicant page and validate for \"(yourself|someone else|an organisation)\"")
+    public void iNavigateToApplicantPageAndValidate(String applicant) throws Exception {
+        String journeyOption;
 
-  public void verifyPageContent(String journeyOption) {
-    commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(applicantPage.PAGE_TITLE);
-    commonSteps.iShouldSeeTheHeading(applicantPage.PAGE_HEADING);
-    commonSteps.iClickOnContinueButton();
-    commonSteps.andIshouldSeeErrorSummaryBox();
-    commonSteps.iShouldSeeTextOnPage(applicantPage.VALIDATION_MESSAGE_FOR_NO_OPTION);
-    commonPage.findPageElementById(journeyOption).click();
-    commonSteps.iClickOnContinueButton();
-  }
+        if ("yourself".equals(applicant.toLowerCase())) {
+            journeyOption = applicantPage.APPLICANT_TYPE_OPTION_LIST;
+        } else if ("someone else".equals(applicant.toLowerCase())) {
+            journeyOption = applicantPage.APPLICANT_TYPE_SOMELSE_OPTION;
+        } else {
+            journeyOption = applicantPage.APPLICANT_TYPE_ORG_OPTION;
+        }
+
+        commonPage.openByPageName("applicant");
+        this.verifyPageContent(journeyOption);
+    }
+
+
+    public void verifyPageContent(String journeyOption) {
+        commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(applicantPage.PAGE_TITLE);
+        commonSteps.iShouldSeeTheHeading(applicantPage.PAGE_HEADING);
+        commonSteps.iClickOnContinueButton();
+        commonSteps.andIshouldSeeErrorSummaryBox();
+        commonSteps.iShouldSeeTextOnPage(applicantPage.VALIDATION_MESSAGE_FOR_NO_OPTION);
+
+        commonPage.selectRadioButton(journeyOption);
+        commonSteps.iClickOnContinueButton();
+    }
 
   @And("^I complete prove benefit page for \"(yes|no)\"")
   public void iCompleteProveBenefitPage(String opt) {
