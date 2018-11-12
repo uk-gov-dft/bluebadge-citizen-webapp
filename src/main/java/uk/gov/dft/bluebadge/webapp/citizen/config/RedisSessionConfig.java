@@ -6,6 +6,7 @@ import org.springframework.session.data.redis.config.ConfigureRedisAction;
 
 @Configuration
 public class RedisSessionConfig {
+  RedisSessionConfig() {}
 
   @Bean
   public static ConfigureRedisAction configureRedisAction() {
