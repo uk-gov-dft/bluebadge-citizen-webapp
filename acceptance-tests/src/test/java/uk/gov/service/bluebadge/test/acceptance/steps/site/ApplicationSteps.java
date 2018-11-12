@@ -2,13 +2,14 @@ package uk.gov.service.bluebadge.test.acceptance.steps.site;
 
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
-import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.ApplicantPage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
 import uk.gov.service.bluebadge.test.acceptance.steps.AbstractSpringSteps;
 import uk.gov.service.bluebadge.test.acceptance.steps.ApplicationFixture;
 import uk.gov.service.bluebadge.test.acceptance.steps.CommonSteps;
+
+import java.time.LocalDate;
 
 public class ApplicationSteps extends AbstractSpringSteps {
 
@@ -41,6 +42,7 @@ public class ApplicationSteps extends AbstractSpringSteps {
 
 
     public void verifyPageContent(String journeyOption) {
+        commonSteps.iShouldSeeTheCorrectURL(applicantPage.PAGE_URL);
         commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(applicantPage.PAGE_TITLE);
         commonSteps.iShouldSeeTheHeading(applicantPage.PAGE_HEADING);
         commonSteps.iClickOnContinueButton();
