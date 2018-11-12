@@ -42,6 +42,27 @@ management:
       show-details: always
 
 spring:
+  redis:
+    host: localhost
+#    host: redis.ci.does.not.exist
+#    port: 10000
+#    timeout:
+#    url:
+#    password:
+#    ssl:
+#    cluster:
+#      nodes:
+#      max-redirects:
+#    sentinel:
+#      master:
+#      nodes:
+#    lettuce:
+#      shutdown-timeout:
+#      pool:
+#        max-active:
+#        max-idle:
+#        max-wait:
+#        min-idle:
   devtools:
     restart:
       additional-exclude: sass/**,js/**
@@ -51,12 +72,8 @@ spring:
     store-type: redis
     redis:
       namespace: spring:session:citizen
-  redis:
-    host: localhost
-#    host: redis.ci.does.not.exist
-#    port: 10000
-#  profiles:
-#    active: dev
+  profiles:
+    active: dev
 
 server:
   port: 8780
