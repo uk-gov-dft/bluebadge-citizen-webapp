@@ -52,6 +52,12 @@ public class WebDriverProvider {
   /** This is the target browser version on BrowserStack */
   private final String bStackBrowserVersion;
 
+  /** This is the Username for BrowserStack account */
+  private final String bStackBrowserUser;
+
+  /** This is the Key for BrowserStack account */
+  private final String bStackBrowserKey;
+
   /** Location that the web browser will be downloading content into. */
   private Path downloadDirectory;
 
@@ -64,7 +70,9 @@ public class WebDriverProvider {
           final boolean isZapMode,
           boolean isBstackMode,
           String bStackBrowserName,
-          String bStackBrowserVersion) {
+          String bStackBrowserVersion,
+          String bStackBrowserUser,
+          String bStackBrowserKey) {
     this.webDriverServiceProvider = webDriverServiceProvider;
     this.isHeadlessMode = isHeadlessMode;
     this.isZapMode = isZapMode;
@@ -72,6 +80,8 @@ public class WebDriverProvider {
     this.downloadDirectory = downloadDirectory;
     this.bStackBrowserName = bStackBrowserName;
     this.bStackBrowserVersion = bStackBrowserVersion;
+    this.bStackBrowserUser = bStackBrowserUser;
+    this.bStackBrowserKey = bStackBrowserKey;
   }
 
   public WebDriver getWebDriver() {
@@ -121,9 +131,7 @@ public class WebDriverProvider {
 
     } else if (isBstackMode) {
 
-      final String USERNAME = "sampathmahavitha2";
-      final String AUTOMATE_KEY = "TgSoo4cFJycJxqXkzHxT";
-      final String URL = "https://" + USERNAME + ":" + AUTOMATE_KEY + "@hub-cloud.browserstack.com/wd/hub";
+      final String URL = "https://" + bStackBrowserUser + ":" + bStackBrowserKey + "@hub-cloud.browserstack.com/wd/hub";
 
       DesiredCapabilities caps = new DesiredCapabilities();
       caps.setCapability("browser", bStackBrowserName.toUpperCase());
@@ -133,7 +141,7 @@ public class WebDriverProvider {
       caps.setCapability("resolution", "1024x768");
       caps.setCapability("browserstack.local", "true");
       caps.setCapability("browserstack.localIdentifier", "Test123");
-//      caps.setCapability("browserstack.debug","true");
+      //caps.setCapability("browserstack.debug","true");
 
         try {
             webDriver = new RemoteWebDriver(new URL(URL), caps);

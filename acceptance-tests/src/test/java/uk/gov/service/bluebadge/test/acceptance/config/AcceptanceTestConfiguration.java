@@ -46,7 +46,10 @@ public class AcceptanceTestConfiguration {
         acceptanceTestProperties.isZapMode(),
         acceptanceTestProperties.isbStackMode(),
         acceptanceTestProperties.getBrowserName(),
-        acceptanceTestProperties.getBrowserVersion());
+        acceptanceTestProperties.getBrowserVersion(),
+        acceptanceTestProperties.getBrowserStackUser(),
+        acceptanceTestProperties.getBrowserStackKey()
+    );
   }
 
   @Bean(initMethod = "initialise", destroyMethod = "dispose")
@@ -76,7 +79,10 @@ public class AcceptanceTestConfiguration {
             Boolean.parseBoolean(System.getProperty("zapMode", "false")),
             Boolean.parseBoolean(System.getProperty("bStackMode", "false")),
             System.getProperty("bStackBrowserName", "false"),
-            System.getProperty("bStackBrowserVersion", "false"));
+            System.getProperty("bStackBrowserVersion", "false"),
+            System.getProperty("bStackUser", " "),
+            System.getProperty("bStackKey", " ")
+        );
 
     log.info("Applying test properties: {}", acceptanceTestProperties);
 

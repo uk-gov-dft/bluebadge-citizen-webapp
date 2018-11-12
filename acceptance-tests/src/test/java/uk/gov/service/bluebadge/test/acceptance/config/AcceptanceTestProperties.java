@@ -12,9 +12,11 @@ public class AcceptanceTestProperties {
   private final boolean bStackMode;
   private final String browserName;
   private final String browserVersion;
+  private final String browserStackUser;
+  private final String browserStackKey;
 
   AcceptanceTestProperties(
-          final boolean headlessMode, final Path downloadDir, final Path tempDir, boolean zapMode, boolean bStackMode, String browserName, String browserVersion) {
+          final boolean headlessMode, final Path downloadDir, final Path tempDir, boolean zapMode, boolean bStackMode, String browserName, String browserVersion, String browserStackUser,String browserStackKey) {
     this.headlessMode = headlessMode;
     this.downloadDir = downloadDir;
     this.tempDir = tempDir;
@@ -22,6 +24,8 @@ public class AcceptanceTestProperties {
     this.bStackMode = bStackMode;
     this.browserName = browserName;
     this.browserVersion = browserVersion;
+    this.browserStackUser = browserStackUser;
+    this.browserStackKey = browserStackKey;
   }
 
   public Path getDownloadDir() {
@@ -48,6 +52,14 @@ public class AcceptanceTestProperties {
     return browserName;
   }
 
+  public String getBrowserStackUser() {
+    return browserStackUser;
+  }
+
+  public String getBrowserStackKey() {
+    return browserStackKey;
+  }
+
   public Path getTempDir() {
     return tempDir;
   }
@@ -69,6 +81,10 @@ public class AcceptanceTestProperties {
         + browserName
         + ", browserVersion="
         + browserVersion
+        + ", browserStackUser="
+        + browserStackUser
+        + ", browserStackKey="
+        + browserStackKey
         + '}';
   }
 
