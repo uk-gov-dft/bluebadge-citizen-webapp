@@ -12,7 +12,7 @@ tearDown() {
 
     # This really cleans everything up so there's nothing previous that could contaminate
     echo "Pruning docker containers/images"
-    docker system prune -a -f
+    docker system prune -a -f --filter "tag=latest"
 
     if [[ -d dev-env-develop ]]; then
       echo "Tearing down existing dev-env-develop directory"
