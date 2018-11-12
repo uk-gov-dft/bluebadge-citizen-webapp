@@ -11,6 +11,5 @@ public class AlreadyHaveBlueBadgePage {
 
   public static final String VALIDATION_MESSAGE_FOR_NO_OPTION = "Select an option";
   public static final String VALIDATION_MESSAGE_FOR_NO_BADGE = "Enter the first six characters of badge number";
-
-
+  public static final String PAGE_URL = "/existing-badge";
 }
