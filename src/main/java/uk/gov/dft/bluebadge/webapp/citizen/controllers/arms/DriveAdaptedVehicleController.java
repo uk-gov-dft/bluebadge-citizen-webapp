@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.arms;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -58,6 +59,11 @@ public class DriveAdaptedVehicleController implements StepController {
       @Valid @ModelAttribute(FORM_REQUEST) ArmsAdaptedVehicleForm armsAdaptedVehicleForm,
       BindingResult bindingResult,
       RedirectAttributes attr) {
+
+    if(Boolean.TRUE.equals(armsAdaptedVehicleForm.getHasAdaptedVehicle()) && StringUtils.isEmpty(armsAdaptedVehicleForm.getAdaptedVehicleDescription())){
+      bindingResult.rejectValue("adaptedVehicleDescription", "NotBlank.adaptedVehicleDescription");
+    }
+
     if (bindingResult.hasErrors()) {
       return routeMaster.redirectToOnBindingError(
           this, armsAdaptedVehicleForm, bindingResult, attr);

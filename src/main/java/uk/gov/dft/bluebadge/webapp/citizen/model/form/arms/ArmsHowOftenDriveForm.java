@@ -17,7 +17,7 @@ import java.io.Serializable;
 public class ArmsHowOftenDriveForm implements Serializable, StepForm {
 
   @NotBlank
-  @Size(min = 1, max = 100)
+  @Size(max = 100)
   private String howOftenDrive;
 
   @Override
