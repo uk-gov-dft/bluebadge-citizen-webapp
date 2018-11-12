@@ -1,19 +1,16 @@
 package uk.gov.service.bluebadge.test.acceptance.pages.site;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import uk.gov.service.bluebadge.test.acceptance.pages.PageHelper;
 import uk.gov.service.bluebadge.test.acceptance.util.TestContentUrls;
 import uk.gov.service.bluebadge.test.acceptance.webdriver.WebDriverProvider;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CommonPage {
 
@@ -114,8 +111,7 @@ public class CommonPage {
   public void selectRadioButton(String elementId) {
 
     JavascriptExecutor js = (JavascriptExecutor) webDriverProvider.getWebDriver();
-    js.executeScript("window.document.getElementById('"+ elementId+"').click()");
-
+    js.executeScript("window.document.getElementById('" + elementId + "').click()");
   }
 
   public String getH1Tag() {
@@ -129,5 +125,4 @@ public class CommonPage {
   public String getPageURL() {
     return webDriverProvider.getWebDriver().getCurrentUrl();
   }
-
 }

@@ -16,7 +16,15 @@ public class AcceptanceTestProperties {
   private final String browserStackKey;
 
   AcceptanceTestProperties(
-          final boolean headlessMode, final Path downloadDir, final Path tempDir, boolean zapMode, boolean bStackMode, String browserName, String browserVersion, String browserStackUser,String browserStackKey) {
+      final boolean headlessMode,
+      final Path downloadDir,
+      final Path tempDir,
+      boolean zapMode,
+      boolean bStackMode,
+      String browserName,
+      String browserVersion,
+      String browserStackUser,
+      String browserStackKey) {
     this.headlessMode = headlessMode;
     this.downloadDir = downloadDir;
     this.tempDir = tempDir;
@@ -87,7 +95,4 @@ public class AcceptanceTestProperties {
         + browserStackKey
         + '}';
   }
-
-
-
 }
