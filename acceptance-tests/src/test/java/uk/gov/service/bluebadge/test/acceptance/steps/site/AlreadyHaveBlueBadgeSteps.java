@@ -33,7 +33,7 @@ public class AlreadyHaveBlueBadgeSteps extends AbstractSpringSteps {
           AlreadyHaveBlueBadgePage.VALIDATION_MESSAGE_FOR_NO_BADGE);
       commonPage
           .findPageElementById(AlreadyHaveBlueBadgePage.BADGE_NUMBER)
-          .sendKeys("AbEddd00882X1217R");
+          .sendKeys("AbEddd 0 0882X1217R");
     } else
       commonPage.selectRadioButton(
           AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION + "_" + option.toLowerCase());
