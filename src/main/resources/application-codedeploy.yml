@@ -26,4 +26,4 @@ spring:
   redis:
     host:
     cluster:
-      nodes: redis.elasticache-citizen.${bb_env}.${url}
+      nodes: redis.elasticache-citizen.${bb_env}.${url}:6379
