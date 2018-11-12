@@ -74,8 +74,9 @@ public class ExistingBadgeController implements StepController {
       }
 
       if (badgeNum.length() > 6) {
-        formRequest.setBadgeNumber(badgeNum.substring(0, 6));
+        badgeNum = badgeNum.substring(0, 6);
       }
+      formRequest.setBadgeNumber(badgeNum);
     }
 
     if (bindingResult.hasErrors()) {
