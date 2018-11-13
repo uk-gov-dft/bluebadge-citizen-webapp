@@ -19,6 +19,27 @@ import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 public class EligibilityConverterTest {
 
   @Test
+  public void convert_arms() {
+    Eligibility eligibility =
+        EligibilityConverter.convert(
+            JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS, ARMS));
+    assertThat(eligibility.getDisabilityArms()).isNotNull();
+    assertThat(eligibility.getDisabilityArms().getAdaptedVehicleDescription()).isEqualTo(JourneyFixture.Values.ARMS_ADAPTED_VEH_DESC);
+    assertThat(eligibility.getDisabilityArms().getDrivingFrequency()).isEqualTo(JourneyFixture.Values.ARMS_HOW_OFTEN_DRIVE);
+
+    // Arms null for other types...
+    EnumSet<EligibilityCodeField> notWalking =
+        EnumSet.complementOf(EnumSet.of(ARMS, TERMILL, NONE));
+    notWalking.forEach(
+        i -> {
+          Eligibility eli =
+              EligibilityConverter.convert(
+                  JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS, i));
+          assertThat(eli.getDisabilityArms()).isNull();
+        });
+  }
+
+  @Test
   public void convert_walkd() {
 
     Eligibility eligibility =
