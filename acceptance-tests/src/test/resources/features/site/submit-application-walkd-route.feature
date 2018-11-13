@@ -57,7 +57,6 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete declaration page
     Then  I should see page titled "Application submitted" with GOV.UK suffix
 
-
   Scenario: Walking application for someone else need help selected full application, and council in England
     Given I complete applicant page for "someone else"
     And   I complete select council page for "england"
