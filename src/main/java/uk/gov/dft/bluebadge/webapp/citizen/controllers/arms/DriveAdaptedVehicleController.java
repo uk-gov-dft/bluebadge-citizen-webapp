@@ -42,6 +42,7 @@ public class DriveAdaptedVehicleController extends SimpleStepController {
   }
 
   @GetMapping
+  @Override
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
     return super.show(journey, model);
   }

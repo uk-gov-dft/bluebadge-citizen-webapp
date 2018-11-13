@@ -1,6 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey;
 
-import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
@@ -8,6 +7,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.StepController;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
+
+import java.util.Optional;
 
 @Component
 @Slf4j
@@ -79,6 +80,7 @@ public class RouteMaster {
         return isValidState(StepDefinition.MEDICATION_LIST, journey);
       case HOME:
         return true;
+      default:
     }
 
     // First step always valid.
