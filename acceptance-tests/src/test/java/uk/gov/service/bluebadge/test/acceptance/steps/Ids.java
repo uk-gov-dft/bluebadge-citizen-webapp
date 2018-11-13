@@ -92,4 +92,11 @@ class Ids {
     static final String HEALTHCARE_PRO_ADD_DESCRIPTION = "healthcareProfessionalName";
     static final String HEALTHCARE_PRO_ADD_LOCATION = "healthcareProfessionalLocation";
   }
+
+  class Arms {
+    static final String DIFFICULTY_PARKING_METERS_DESC = "parkingMetersDifficultyDescription";
+    static final String IS_ADAPTED_VEHICLE_OPTION = "hasAdaptedVehicle";
+    static final String ADAPTED_VEHICLE_DESCRIPTIOM = "adaptedVehicleDescription";
+    static final String HOW_OFTEN_DRIVE = "howOftenDrive";
+  }
 }

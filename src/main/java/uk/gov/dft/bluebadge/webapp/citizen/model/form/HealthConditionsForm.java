@@ -37,7 +37,7 @@ public class HealthConditionsForm implements StepForm, Serializable {
     if (journey.getEligibilityCode() == CHILDBULK || journey.getEligibilityCode() == CHILDVEHIC) {
       return Optional.of(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST);
     }
-    if(journey.getEligibilityCode() == ARMS){
+    if (journey.getEligibilityCode() == ARMS) {
       return Optional.of(StepDefinition.ARMS_HOW_OFTEN_DRIVE);
     }
     return Optional.of(StepDefinition.DECLARATIONS);

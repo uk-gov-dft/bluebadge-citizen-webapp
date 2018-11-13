@@ -74,6 +74,7 @@ public class Mappings {
   public static final String URL_ARMS_HOW_OFTEN_DRIVE = "/how-often-drive";
   public static final String URL_ARMS_DRIVE_ADAPTED_VEHICLE = "/drive-adapted-vehicle";
   public static final String URL_ARMS_DIFFICULTY_PARKING_METERS = "/difficulty-parking-meters";
+
   private Mappings() {}
 
   private static final BiMap<StepDefinition, String> stepToUrlMapping =

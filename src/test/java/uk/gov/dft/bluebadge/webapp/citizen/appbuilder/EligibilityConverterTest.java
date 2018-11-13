@@ -24,8 +24,10 @@ public class EligibilityConverterTest {
         EligibilityConverter.convert(
             JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS, ARMS));
     assertThat(eligibility.getDisabilityArms()).isNotNull();
-    assertThat(eligibility.getDisabilityArms().getAdaptedVehicleDescription()).isEqualTo(JourneyFixture.Values.ARMS_ADAPTED_VEH_DESC);
-    assertThat(eligibility.getDisabilityArms().getDrivingFrequency()).isEqualTo(JourneyFixture.Values.ARMS_HOW_OFTEN_DRIVE);
+    assertThat(eligibility.getDisabilityArms().getAdaptedVehicleDescription())
+        .isEqualTo(JourneyFixture.Values.ARMS_ADAPTED_VEH_DESC);
+    assertThat(eligibility.getDisabilityArms().getDrivingFrequency())
+        .isEqualTo(JourneyFixture.Values.ARMS_HOW_OFTEN_DRIVE);
 
     // Arms null for other types...
     EnumSet<EligibilityCodeField> notWalking =

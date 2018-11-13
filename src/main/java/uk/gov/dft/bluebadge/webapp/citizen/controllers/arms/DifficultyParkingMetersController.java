@@ -1,5 +1,9 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.arms;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,17 +21,12 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.arms.ArmsDifficultyParkingMetersForm;
 
-import javax.validation.Valid;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-
 @Controller
 @RequestMapping(Mappings.URL_ARMS_DIFFICULTY_PARKING_METERS)
 public class DifficultyParkingMetersController extends SimpleStepController {
 
   @Autowired
-  public DifficultyParkingMetersController(RouteMaster routeMaster) {
+  DifficultyParkingMetersController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 

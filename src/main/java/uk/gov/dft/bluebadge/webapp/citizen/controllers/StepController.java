@@ -19,6 +19,4 @@ public interface StepController {
   default Journey getJourney() {
     return new Journey();
   }
-
-
 }
