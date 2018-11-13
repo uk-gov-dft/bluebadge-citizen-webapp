@@ -18,13 +18,6 @@
 
                 <h2 class="govuk-body-l" th:text="#{${JOURNEY.who} + 'eligiblePage.need.provide.text'}"></h2>
 
-                <p class="govuk-body"
-                   th:text="#{eligiblePage.photo.or.scan.text}"></p>
-
-                <ul class="govuk-list govuk-list--bullet">
-                    <li th:text="#{eligiblePage.proof.of.identity.text}"></li>
-                </ul>
-
                 <!-- WALKD only begin -->
                 <div th:if="${isWalkD}">
                     <p class="govuk-body" th:text="#{${JOURNEY.who} + 'eligiblePage.provide.further.details.text'}"></p>
