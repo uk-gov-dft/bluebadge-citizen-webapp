@@ -44,25 +44,6 @@ management:
 spring:
   redis:
     host: localhost
-#    host: redis.ci.does.not.exist
-#    port: 10000
-#    timeout:
-#    url:
-#    password:
-#    ssl:
-#    cluster:
-#      nodes:
-#      max-redirects:
-#    sentinel:
-#      master:
-#      nodes:
-#    lettuce:
-#      shutdown-timeout:
-#      pool:
-#        max-active:
-#        max-idle:
-#        max-wait:
-#        min-idle:
   devtools:
     restart:
       additional-exclude: sass/**,js/**
