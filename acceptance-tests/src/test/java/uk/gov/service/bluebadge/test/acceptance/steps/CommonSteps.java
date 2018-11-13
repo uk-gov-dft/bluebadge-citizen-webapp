@@ -1,10 +1,20 @@
 package uk.gov.service.bluebadge.test.acceptance.steps;
 
+import static java.util.stream.Collectors.toList;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.startsWith;
+import static org.junit.Assert.*;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.*;
+
 import cucumber.api.DataTable;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
 import org.hamcrest.Matcher;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -12,17 +22,6 @@ import org.openqa.selenium.support.ui.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.AlreadyHaveBlueBadgePage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.*;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.*;
 
 public class CommonSteps extends AbstractSpringSteps {
 
@@ -351,7 +350,6 @@ public class CommonSteps extends AbstractSpringSteps {
     for (String message : messages) {
       this.iShouldSeeTextOnPage(message);
     }
-
   }
 
   @And("^I complete the already have a blue badge page \"(YES|NO|YES BUT DON'T KNOW)\"$")
@@ -363,23 +361,24 @@ public class CommonSteps extends AbstractSpringSteps {
       commonPage.findPageElementById(AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION).click();
       commonPage.findPageElementById(AlreadyHaveBlueBadgePage.BADGE_NUMBER).sendKeys("AB12CD");
     } else {
-      commonPage.findPageElementById(AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION + "_" + opt.toLowerCase()).click();
+      commonPage
+          .findPageElementById(
+              AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION + "_" + opt.toLowerCase())
+          .click();
     }
   }
 
-
   @Then("^I should see the correct URL$")
-  public void iShouldSeeTheCorrectURL(String expectedURL)  {
+  public void iShouldSeeTheCorrectURL(String expectedURL) {
     URL fullURL = null;
 
     try {
 
-        fullURL = new URL(commonPage.getPageURL());
-        assertThat(fullURL.getPath(), is(expectedURL));
+      fullURL = new URL(commonPage.getPageURL());
+      assertThat(fullURL.getPath(), is(expectedURL));
 
     } catch (MalformedURLException e) {
       e.printStackTrace();
     }
-
   }
 }

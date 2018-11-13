@@ -28,7 +28,7 @@ public class JourneyToApplicationConverterTest {
         .isNull();
     assertThat(
             JourneyToApplicationConverter.getExistingBadgeNumber(
-                ExistingBadgeForm.builder().hasExistingBadge(true).badgeNumber("1").build()))
-        .isEqualTo("1");
+                ExistingBadgeForm.builder().hasExistingBadge(true).badgeNumber("12 34 AB").build()))
+        .isEqualTo("1234AB");
   }
 }
