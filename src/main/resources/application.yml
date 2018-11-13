@@ -42,8 +42,6 @@ management:
       show-details: always
 
 spring:
-  redis:
-    host: localhost
   devtools:
     restart:
       additional-exclude: sass/**,js/**
@@ -53,8 +51,8 @@ spring:
     store-type: redis
     redis:
       namespace: spring:session:citizen
-  profiles:
-    active: dev
+  redis:
+    host: localhost
 
 server:
   port: 8780
