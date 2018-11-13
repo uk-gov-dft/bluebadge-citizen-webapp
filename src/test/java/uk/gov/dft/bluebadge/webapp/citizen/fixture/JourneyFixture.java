@@ -110,7 +110,7 @@ public class JourneyFixture {
     public static final String EMAIL_ADDRESS = "a@b.c";
     static final String HEALTHCARE_PRO_LOCATION = "location";
     static final String HEALTHCARE_PRO_NAME = "name";
-    public static final String EXISTING_BADGE_NO = "oldun";
+    public static final String EXISTING_BADGE_NO = "1234AB";
     static final CompoundDate DOB_ADULT = new CompoundDate("1", "1", "1990");
     public static final CompoundDate DOB_CHILD =
         new CompoundDate("1", "1", String.valueOf(LocalDate.now().getYear()));

@@ -2,16 +2,22 @@ package uk.gov.service.bluebadge.test.acceptance.steps.site;
 
 import cucumber.api.java.en.And;
 import org.springframework.beans.factory.annotation.Autowired;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.LocalAuthorityPage;
 import uk.gov.service.bluebadge.test.acceptance.steps.AbstractSpringSteps;
+import uk.gov.service.bluebadge.test.acceptance.steps.ApplicationFixture;
 import uk.gov.service.bluebadge.test.acceptance.steps.CommonSteps;
 
 public class LocalAuthoritySteps extends AbstractSpringSteps {
 
   private CommonSteps commonSteps;
+  private ChooseCouncilSteps chooseCouncilSteps;
+  private CommonPage commonPage;
+  private ApplicationFixture applicationFixture;
 
   @Autowired
-  public LocalAuthoritySteps(CommonSteps commonSteps) {
+  public LocalAuthoritySteps(CommonPage commonPage, CommonSteps commonSteps) {
+    this.commonPage = commonPage;
     this.commonSteps = commonSteps;
   }
 
@@ -32,6 +38,7 @@ public class LocalAuthoritySteps extends AbstractSpringSteps {
   }
 
   public void verifyPageContent(String la, String applicant) {
+    commonSteps.iShouldSeeTheCorrectURL(LocalAuthorityPage.PAGE_URL);
     if ("your".equals(applicant.toLowerCase())) {
       commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(LocalAuthorityPage.PAGE_TITLE_YOURSELF);
       commonSteps.iShouldSeeTheHeading(LocalAuthorityPage.PAGE_TITLE_YOURSELF);
