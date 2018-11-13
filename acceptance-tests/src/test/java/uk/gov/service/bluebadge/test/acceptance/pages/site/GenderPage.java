@@ -9,5 +9,4 @@ public class GenderPage {
   public static final String VALIDATION_MESSAGE_FOR_NON_SELECTION_OF_GENDER = "Select gender";
 
   public static final String GENDER_LIST = "gender.option";
-
 }
