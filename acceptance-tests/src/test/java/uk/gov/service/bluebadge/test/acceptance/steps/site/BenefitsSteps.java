@@ -1,9 +1,7 @@
 package uk.gov.service.bluebadge.test.acceptance.steps.site;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import org.springframework.beans.factory.annotation.Autowired;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.AlreadyHaveBlueBadgePage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.BenifitsPage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
 import uk.gov.service.bluebadge.test.acceptance.steps.AbstractSpringSteps;

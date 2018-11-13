@@ -42,7 +42,7 @@ public class ChooseCouncilSteps extends AbstractSpringSteps {
 
   public void verifyPageContent(String applicant) {
 
-    commonSteps.iShouldSeeTheCorrectURL(chooseCouncilPage.PAGE_URL);
+    commonSteps.iShouldSeeTheCorrectURL(ChooseCouncilPage.PAGE_URL);
 
     if ("yourself".equals(applicant.toLowerCase())) {
       commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(ChooseCouncilPage.PAGE_TITLE_YOURSELF);
