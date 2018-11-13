@@ -59,6 +59,4 @@ public class ChooseCouncilSteps extends AbstractSpringSteps {
       commonSteps.thenIShouldSeeTheContent(chooseCouncilPage.PAGE_LABEL_1_SOMEONE_ELSE);
     }
   }
-
-
 }

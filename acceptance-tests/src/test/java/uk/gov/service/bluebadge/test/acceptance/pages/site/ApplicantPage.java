@@ -10,6 +10,6 @@ public class ApplicantPage {
   public static final String APPLICANT_TYPE_SOMELSE_OPTION =
       APPLICANT_TYPE_OPTION_LIST + ".SOMEONE_ELSE";
   public static final String APPLICANT_TYPE_ORG_OPTION =
-          APPLICANT_TYPE_OPTION_LIST + ".ORGANISATION";
+      APPLICANT_TYPE_OPTION_LIST + ".ORGANISATION";
   public static final String VALIDATION_MESSAGE_FOR_NO_OPTION = "Select who you are applying for";
 }

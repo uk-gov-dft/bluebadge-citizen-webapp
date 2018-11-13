@@ -9,7 +9,12 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.MAIN_R
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.NEVER_RECEIVED_DLA;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.PLACE_CAN_WALK;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.TIME_TO_DESTINATION;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.*;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_MONTH;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_YEAR;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_FEMALE;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_UNSPECIFIED;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_ADD_CONFIRM_BUTTON;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_ADD_PROVIDED_CODE_PRESCRIBE;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_ADD_USAGE;
@@ -18,11 +23,13 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import java.util.Calendar;
-
-import gherkin.lexer.Id;
 import org.openqa.selenium.By;
 import org.springframework.beans.factory.annotation.Autowired;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.*;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.AlreadyHaveBlueBadgePage;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.ApplicantPage;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.BenifitsPage;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.ChooseCouncilPage;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
 
 public class ApplicationFixture extends AbstractSpringSteps {
 
@@ -143,8 +150,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("^I complete gender page for \"(Boy|Girl|Man|Woman|Identify in a different way)\"")
   public void iCompleteGenderPageFor(String gender) {
-    if (gender.equals("Boy") || gender.equals("Man"))
-      commonPage.selectRadioButton(GENDER);
+    if (gender.equals("Boy") || gender.equals("Man")) commonPage.selectRadioButton(GENDER);
     else if (gender.equals("Girl") || gender.equals("Woman"))
       commonPage.selectRadioButton(GENDER_FEMALE);
     else commonPage.selectRadioButton(GENDER_UNSPECIFIED);
@@ -278,8 +284,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   public void iCompleteHasMobilityComponentPage(String option) {
     if ("YES".equals(option))
       commonPage.selectRadioButton(Ids.EleCheck.AWARDED_HIGHER_RATE_MOBILITY);
-    else
-      commonPage.selectRadioButton(Ids.EleCheck.AWARDED_HIGHER_RATE_MOBILITY + "." + "false");
+    else commonPage.selectRadioButton(Ids.EleCheck.AWARDED_HIGHER_RATE_MOBILITY + "." + "false");
     pressContinue();
   }
 
@@ -290,7 +295,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And(
-          "^I complete the what makes walking difficult page for \"(PAIN|BREATH|BALANCE|LONGTIME|DANGER|STRUGGLE|SOMELSE)\"$")
+      "^I complete the what makes walking difficult page for \"(PAIN|BREATH|BALANCE|LONGTIME|DANGER|STRUGGLE|SOMELSE)\"$")
   public void iCompleteTheWhatMakesWalkingDifficultPageFor(String difficulty) throws Throwable {
     if ("PAIN".equals(difficulty)) {
       commonPage.selectRadioButton(Ids.EleCheck.WHAT_WALKING_DIFFICULTY_LIST);
@@ -359,7 +364,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
       addMedication(option);
     } else {
-      commonPage.selectRadioButton(Ids.Walkd.MEDICATION_HAS_MEDICATION_OPTION + option.toLowerCase());
+      commonPage.selectRadioButton(
+          Ids.Walkd.MEDICATION_HAS_MEDICATION_OPTION + option.toLowerCase());
     }
     pressContinue();
   }
@@ -370,7 +376,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
     if ("YES".equals(option)) {
       commonPage.selectRadioButton(Ids.Walkd.MEDICATION_PRESCRIBED_OPTION);
     } else {
-      commonPage.selectRadioButton(Ids.Walkd.MEDICATION_PRESCRIBED_OPTION + "." + option.toLowerCase());
+      commonPage.selectRadioButton(
+          Ids.Walkd.MEDICATION_PRESCRIBED_OPTION + "." + option.toLowerCase());
     }
     clearAndSendKeys(Ids.Walkd.MEDICATION_DOSAGE_TEXT, "50mg");
     clearAndSendKeys(Ids.Walkd.MEDICATION_FREQUENCY_TEXT, "Every night");
@@ -384,26 +391,25 @@ public class ApplicationFixture extends AbstractSpringSteps {
       commonPage.findPageElementById(AlreadyHaveBlueBadgePage.BADGE_NUMBER_BYPASS_LINK).click();
     } else if ("YES".equals(opt)) {
       commonPage.selectRadioButton(AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION);
-      commonPage.findPageElementById(AlreadyHaveBlueBadgePage.BADGE_NUMBER).sendKeys("AB12CD");
+      commonPage.findPageElementById(AlreadyHaveBlueBadgePage.BADGE_NUMBER).sendKeys("AB 12 CD");
       pressContinue();
     } else {
-      commonPage.selectRadioButton(AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION + "_" + opt.toLowerCase());
+      commonPage.selectRadioButton(
+          AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION + "_" + opt.toLowerCase());
       pressContinue();
     }
   }
 
   @And("^I complete does organisation care for \"(YES|NO)\"$")
   public void iCompleteOrganisationCaresPage(String option) {
-    if ("YES".equals(option))
-      commonPage.selectRadioButton(Ids.EleCheck.ORGANISATION_CARES);
+    if ("YES".equals(option)) commonPage.selectRadioButton(Ids.EleCheck.ORGANISATION_CARES);
     else commonPage.selectRadioButton(Ids.EleCheck.ORGANISATION_CARES + "." + "no");
     pressContinue();
   }
 
   @And("^I complete does organisation transport for \"(YES|NO)\"$")
   public void iCompleteOrganisationTransportsPage(String option) {
-    if ("YES".equals(option))
-      commonPage.selectRadioButton(Ids.EleCheck.ORGANISATION_TRANSPORTS);
+    if ("YES".equals(option)) commonPage.selectRadioButton(Ids.EleCheck.ORGANISATION_TRANSPORTS);
     else commonPage.selectRadioButton(Ids.EleCheck.ORGANISATION_TRANSPORTS + "." + "no");
     pressContinue();
   }
@@ -413,7 +419,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
     if ("YES".equals(option)) {
       commonPage.selectRadioButton(Ids.Eligibility.HEALTHCARE_PRO_HAS_OPTION);
     } else {
-      commonPage.selectRadioButton(Ids.Eligibility.HEALTHCARE_PRO_HAS_OPTION + option.toLowerCase());
+      commonPage.selectRadioButton(
+          Ids.Eligibility.HEALTHCARE_PRO_HAS_OPTION + option.toLowerCase());
     }
 
     if ("YES".equals(option)) {

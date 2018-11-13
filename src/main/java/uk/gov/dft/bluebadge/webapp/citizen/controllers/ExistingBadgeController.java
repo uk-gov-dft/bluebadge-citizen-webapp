@@ -72,10 +72,6 @@ public class ExistingBadgeController implements StepController {
       if (badgeNum.isEmpty() || badgeNum.length() < 6) {
         bindingResult.rejectValue("badgeNumber", "badgeNumber.NotBlank");
       }
-
-      if (badgeNum.length() > 6) {
-        formRequest.setBadgeNumber(badgeNum.substring(0, 6));
-      }
     }
 
     if (bindingResult.hasErrors()) {

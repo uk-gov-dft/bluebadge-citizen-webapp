@@ -9,5 +9,4 @@ public class MainReasonPage {
   public static final String VALIDATION_MESSAGE_FOR_NO_OPTION = "Select the reason for application";
 
   public static final String MAIN_REASONS_LIST = "mainReasonOption";
-
 }
