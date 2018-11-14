@@ -56,6 +56,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.CompensationSchemeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.DisabilityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.MentalDisorderForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.blind.RegisteredForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficultyForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.organisation.OrganisationCareForm;
@@ -367,6 +368,7 @@ public class JourneyFixture {
       if (StepDefinition.RECEIVE_BENEFITS == stepTo) return journey;
       journey.setFormForStep(MainReasonForm.builder().mainReasonOption(BLIND).build());
       if (StepDefinition.MAIN_REASON == stepTo) return journey;
+      journey.setFormForStep(new EligibleForm());
     }
     if (EligibilityCodeField.NONE == eligibility) {
       journey.setFormForStep(ReceiveBenefitsForm.builder().benefitType(NONE).build());
@@ -469,6 +471,10 @@ public class JourneyFixture {
     return PipDlaQuestionForm.builder()
         .receivedDlaOption(PipDlaQuestionForm.PipReceivedDlaOption.HAS_RECEIVED_DLA)
         .build();
+  }
+
+  public static RegisteredForm getRegisteredForm() {
+    return RegisteredForm.builder().hasRegistered(true).build();
   }
 
   public static Journey getDefaultJourney() {
