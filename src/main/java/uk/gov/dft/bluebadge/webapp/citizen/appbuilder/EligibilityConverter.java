@@ -61,7 +61,12 @@ class EligibilityConverter {
             .blind(
                 Blind.builder()
                     .registeredAtLaId(
-                        (registeredCouncil != null
+                        (registeredCouncil != null && registeredCouncil
+                          .getLocalAuthorityForRegisteredBlind() != null &&
+                          registeredCouncil
+                            .getLocalAuthorityForRegisteredBlind().getLocalAuthorityMetaData() != null &&
+                          registeredCouncil
+                            .getLocalAuthorityForRegisteredBlind().getLocalAuthorityMetaData().isPresent()
                             ? registeredCouncil
                                 .getLocalAuthorityForRegisteredBlind()
                                 .getLocalAuthorityMetaData()
