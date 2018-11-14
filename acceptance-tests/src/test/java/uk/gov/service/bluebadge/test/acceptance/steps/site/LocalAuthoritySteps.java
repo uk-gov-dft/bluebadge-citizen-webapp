@@ -38,6 +38,7 @@ public class LocalAuthoritySteps extends AbstractSpringSteps {
   }
 
   public void verifyPageContent(String la, String applicant) {
+    commonSteps.iShouldSeeTheCorrectURL(LocalAuthorityPage.PAGE_URL);
     if ("your".equals(applicant.toLowerCase())) {
       commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(LocalAuthorityPage.PAGE_TITLE_YOURSELF);
       commonSteps.iShouldSeeTheHeading(LocalAuthorityPage.PAGE_TITLE_YOURSELF);

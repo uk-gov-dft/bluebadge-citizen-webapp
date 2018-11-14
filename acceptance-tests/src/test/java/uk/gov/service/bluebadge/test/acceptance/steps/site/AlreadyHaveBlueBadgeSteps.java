@@ -28,22 +28,21 @@ public class AlreadyHaveBlueBadgeSteps extends AbstractSpringSteps {
     commonSteps.iVerifyValidationMessage(AlreadyHaveBlueBadgePage.VALIDATION_MESSAGE_FOR_NO_OPTION);
 
     if ("Yes".equals(option)) {
-      commonPage.findPageElementById(AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION).click();
+      commonPage.selectRadioButton(AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION);
       commonSteps.iVerifyValidationMessage(
           AlreadyHaveBlueBadgePage.VALIDATION_MESSAGE_FOR_NO_BADGE);
       commonPage
           .findPageElementById(AlreadyHaveBlueBadgePage.BADGE_NUMBER)
-          .sendKeys("AbEddd00882X1217R");
+          .sendKeys("AbEddd 0 0882X1217R");
     } else
-      commonPage
-          .findPageElementById(
-              AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION + "_" + option.toLowerCase())
-          .click();
+      commonPage.selectRadioButton(
+          AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION + "_" + option.toLowerCase());
 
     commonSteps.iClickOnContinueButton();
   }
 
   public void verifyPageContent(String applicant) {
+    commonSteps.iShouldSeeTheCorrectURL(AlreadyHaveBlueBadgePage.PAGE_URL);
     if ("you".equals(applicant.toLowerCase())) {
       commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(
           AlreadyHaveBlueBadgePage.PAGE_TITLE_YOURSELF);

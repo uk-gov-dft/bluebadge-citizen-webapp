@@ -115,7 +115,7 @@ without having to restart the application. To do so, make sure to have the appli
 standalone mode ([see instructions above](#RUN WITH GRADLE)) and then, to run the tests, execute (from project folder ..../citizen-webapp):
 
 ```
-gradle acceptanceTest -PbuildProfile=local
+gradle acceptanceTest -DbaseUrl=http://localhost:8780 -Dheadless=false -Dcucumber.options="--tags @SubmitApplicationARMSRoute"
 ```
 
 -PbuildProfile is the profile for environment that you want to run tests against{Eg, local,dev,qa,prepod,prod}
@@ -141,6 +141,23 @@ Run multiple features
 gradle acceptanceTests -DbaseUrl=http://localhost:8780 -Dheadless=false -Dcucumber.options="--tags @SignIn,@ManageUsers"
 ```
 Specify the relevant tag to run a feature file (Eg. @SignIn, @ManageUsers etc.)
+
+
+#Running Acceptance tests on Browserstack
+---Run this to enable local testing
+
+Download https://www.browserstack.com/browserstack-local/BrowserStackLocal-darwin-x64.zip and unzip
+
+Go to that directory and run below command
+
+./BrowserStackLocal --key TgSoo4cFJycJxqXkzHxT --local-identifier Test123
+
+---Run this in Terminal
+gradle acceptanceTest -Dheadless=false -DbStackMode=true -DbaseUrl=http://dft.local:8780 -Dcucumber.options="--tags @SubmitApplicationWALKDRoute" -DbStackBrowserName="chrome" -DbStackBrowserVersion="70.0" -DbStackUser="<user>" -DbStackKey="<key>"
+
+You can find the browsers and versions in https://www.browserstack.com/automate/java
+
+
 
 # How to deploy to QA enviroment
 How to Deploy to QA environment

@@ -41,12 +41,14 @@ public class ApplicationSteps extends AbstractSpringSteps {
   }
 
   public void verifyPageContent(String journeyOption) {
+    commonSteps.iShouldSeeTheCorrectURL(applicantPage.PAGE_URL);
     commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(applicantPage.PAGE_TITLE);
     commonSteps.iShouldSeeTheHeading(applicantPage.PAGE_HEADING);
     commonSteps.iClickOnContinueButton();
     commonSteps.andIshouldSeeErrorSummaryBox();
     commonSteps.iShouldSeeTextOnPage(applicantPage.VALIDATION_MESSAGE_FOR_NO_OPTION);
-    commonPage.findPageElementById(journeyOption).click();
+
+    commonPage.selectRadioButton(journeyOption);
     commonSteps.iClickOnContinueButton();
   }
 

@@ -19,7 +19,7 @@ public class ExistingBadgeForm implements StepForm, Serializable {
   @NotNull(message = "{hasExistingBadge.NotNull}")
   private Boolean hasExistingBadge;
 
-  @Pattern(regexp = "[a-zA-Z0-9]*")
+  @Pattern(regexp = "[a-zA-Z0-9 ]*")
   private String badgeNumber;
 
   public boolean hasBadgeNumber() {
