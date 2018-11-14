@@ -6,7 +6,6 @@ import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
@@ -25,9 +24,7 @@ public class PermissionForm implements Serializable, StepForm {
   }
 
   @Override
-  public Optional<StepDefinition> determineNextStep(Journey journey) {
-    Nation nation = journey.getLocalAuthority().getNation();
-
+  public Optional<StepDefinition> determineNextStep() {
     if (hasPermission) {
       return Optional.of(StepDefinition.REGISTERED_COUNCIL);
     }
