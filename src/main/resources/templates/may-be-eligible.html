@@ -16,7 +16,12 @@
                 <h1 class="govuk-heading-l"
                     th:text="#{${JOURNEY.who} + 'mayBeEligiblePage.title'}"></h1>
 
-                <h2 class="govuk-body-l" th:text="#{${JOURNEY.who} + 'eligiblePage.need.provide.text'}"></h2>
+                <p class="govuk-body" th:text="#{eligiblePage.also.need.provide.text}"></p>
+
+                <ul class="govuk-list govuk-list--bullet">
+                    <li th:text="#{${JOURNEY.who} + 'eligiblePage.nino.text'}"></li>
+                    <li th:text="#{eligiblePage.provide.contact.text}"></li>
+                </ul>
 
                 <!-- WALKD only begin -->
                 <div th:if="${isWalkD}">
@@ -30,14 +35,6 @@
                 </div>
                 <!-- WALKD only end -->
 
-                <p class="govuk-body" th:text="#{eligiblePage.also.need.provide.text}"></p>
-
-                <ul class="govuk-list govuk-list--bullet">
-                    <li th:text="#{${JOURNEY.who} + 'eligiblePage.nino.text'}"></li>
-                    <li th:text="#{eligiblePage.provide.contact.text}"></li>
-                </ul>
-
-
                 <a th:href="@{may-be-eligible/start}"
                    role="button"
                    class="govuk-button"
@@ -45,13 +42,13 @@
 
                 <p class="govuk-body">
                     <span th:remove="tag" th:text="#{${JOURNEY.who} + 'eligiblePage.council.timeframe.text'}"></span>
-                    <a th:href="${localAuthority.contactUrl}" th:text="${localAuthority.description}"></a>
-                    <span th:remove="tag" th:text="#{eligiblePage.website.posttext}"></span>
+                    <a th:href="${localAuthority.contactUrl}" th:text="${localAuthority.description}">
+                    </a><span th:remove="tag" th:text="#{eligiblePage.website.posttext}"></span>
                 </p>
 
                 <h2 class="govuk-heading-m" th:text="#{eligiblePage.not.apply.online.text}">Don’t want to apply online?</h2>
 
-                <p class="govuk-body" th:if="${localAuthority.contactUrl}">
+                <p class="govuk-body">
                     <span th:remove="tag" th:text="#{eligiblePage.council.contact.pretext}">Website:</span>
                     <a th:href="${localAuthority.contactUrl}"
                        th:text="${localAuthority.description} + #{eligiblePage.council.contact.posttext}">
