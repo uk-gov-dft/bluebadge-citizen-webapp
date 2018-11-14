@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.appbuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.ARMS;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.BLIND;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDBULK;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDVEHIC;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.NONE;
@@ -12,9 +13,12 @@ import java.util.EnumSet;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Eligibility;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.blind.RegisteredCouncilForm;
 
 public class EligibilityConverterTest {
 
@@ -30,9 +34,9 @@ public class EligibilityConverterTest {
         EnumSet.complementOf(EnumSet.of(WALKD, TERMILL, NONE));
     notWalking.forEach(
         i -> {
-          Eligibility eli =
-              EligibilityConverter.convert(
-                  JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS, i));
+          Journey journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS, i);
+          setUpRegisteredCouncilFormWhenBlind(i, journey);
+          Eligibility eli = EligibilityConverter.convert(journey);
           assertThat(eli.getWalkingDifficulty()).isNull();
         });
   }
@@ -48,8 +52,9 @@ public class EligibilityConverterTest {
         EnumSet.complementOf(EnumSet.of(CHILDBULK, TERMILL, NONE));
     notchild.forEach(
         i -> {
-          Eligibility eli =
-              EligibilityConverter.convert(new JourneyBuilder().withEligibility(i).build());
+          Journey journey = new JourneyBuilder().withEligibility(i).build();
+          setUpRegisteredCouncilFormWhenBlind(i, journey);
+          Eligibility eli = EligibilityConverter.convert(journey);
           assertThat(eli.getChildUnder3()).isNull();
         });
   }
@@ -70,8 +75,9 @@ public class EligibilityConverterTest {
         EnumSet.complementOf(EnumSet.of(CHILDBULK, CHILDVEHIC, WALKD, NONE, TERMILL));
     noHealthcare.forEach(
         i -> {
-          Eligibility eli =
-              EligibilityConverter.convert(new JourneyBuilder().withEligibility(i).build());
+          Journey journey = new JourneyBuilder().withEligibility(i).build();
+          setUpRegisteredCouncilFormWhenBlind(i, journey);
+          Eligibility eli = EligibilityConverter.convert(journey);
           assertThat(eli.getHealthcareProfessionals()).isNull();
         });
   }
@@ -91,8 +97,9 @@ public class EligibilityConverterTest {
         EnumSet.complementOf(EnumSet.of(CHILDBULK, CHILDVEHIC, WALKD, ARMS, NONE, TERMILL));
     noHealthcare.forEach(
         i -> {
-          Eligibility eli =
-              EligibilityConverter.convert(new JourneyBuilder().withEligibility(i).build());
+          Journey journey = new JourneyBuilder().withEligibility(i).build();
+          setUpRegisteredCouncilFormWhenBlind(i, journey);
+          Eligibility eli = EligibilityConverter.convert(journey);
           assertThat(eli.getDescriptionOfConditions()).isNull();
         });
   }
@@ -102,5 +109,22 @@ public class EligibilityConverterTest {
     EnumSet.of(NONE, TERMILL)
         .forEach(
             i -> EligibilityConverter.convert(new JourneyBuilder().withEligibility(i).build()));
+  }
+
+  private void setUpRegisteredCouncilFormWhenBlind(EligibilityCodeField i, Journey journey) {
+    if (i.equals(BLIND)) {
+      LocalAuthorityRefData.LocalAuthorityMetaData localAuthorityMetaData =
+        new LocalAuthorityRefData.LocalAuthorityMetaData();
+      localAuthorityMetaData.setIssuingAuthorityShortCode("WARCC");
+      LocalAuthorityRefData localAuthorityRefData = new LocalAuthorityRefData();
+      localAuthorityRefData.setLocalAuthorityMetaData(localAuthorityMetaData);
+
+      RegisteredCouncilForm form =
+        RegisteredCouncilForm.builder()
+          .localAuthorityForRegisteredBlind(localAuthorityRefData)
+          .build();
+
+      journey.setFormForStep(form);
+    }
   }
 }

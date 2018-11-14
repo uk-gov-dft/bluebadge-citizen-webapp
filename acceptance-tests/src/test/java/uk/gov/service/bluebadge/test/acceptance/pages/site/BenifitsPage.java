@@ -8,5 +8,4 @@ public class BenifitsPage {
   public static final String VALIDATION_MESSAGE_FOR_NO_OPTION = "Select a benefit option";
 
   public static final String BENEFIT_RECEIVED_LIST = "benefitType";
-
 }

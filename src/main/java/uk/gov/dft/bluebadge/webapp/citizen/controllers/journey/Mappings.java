@@ -70,6 +70,11 @@ public class Mappings {
   public static final String URL_WHERE_CAN_YOU_WALK = "/where-can-you-walk";
   public static final String URL_WALKING_TIME = "/walking-time";
 
+  // Blind
+  public static final String URL_REGISTERED = "/blind/registered";
+  public static final String URL_PERMISSION = "/blind/permission";
+  public static final String URL_REGISTERED_COUNCIL = "/blind/registered-council";
+
   private Mappings() {}
 
   private static final BiMap<StepDefinition, String> stepToUrlMapping =
@@ -110,6 +115,9 @@ public class Mappings {
           .put(StepDefinition.WHAT_WALKING_DIFFICULTIES, URL_WHAT_WALKING_DIFFICULT)
           .put(StepDefinition.CHOOSE_COUNCIL, URL_CHOOSE_YOUR_COUNCIL)
           .put(StepDefinition.YOUR_ISSUING_AUTHORITY, URL_YOUR_ISSUING_AUTHORITY)
+          .put(StepDefinition.REGISTERED, URL_REGISTERED)
+          .put(StepDefinition.PERMISSION, URL_PERMISSION)
+          .put(StepDefinition.REGISTERED_COUNCIL, URL_REGISTERED_COUNCIL)
           .put(StepDefinition.DECLARATIONS, URL_DECLARATIONS)
           .put(StepDefinition.SUBMITTED, URL_APPLICATION_SUBMITTED)
           .put(StepDefinition.MOBILITY_AID_LIST, URL_MOBILITY_AID_LIST)

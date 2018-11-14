@@ -19,6 +19,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveBenefitForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.blind.RegisteredCouncilForm;
 
 class EligibilityConverter {
 
@@ -53,7 +54,15 @@ class EligibilityConverter {
         eligibility.typeCode(eligibilityType);
         break;
       case BLIND:
-        eligibility.typeCode(eligibilityType).blind(Blind.builder().build());
+        RegisteredCouncilForm registeredCouncil =
+            journey.getFormForStep(StepDefinition.REGISTERED_COUNCIL);
+        eligibility
+            .typeCode(eligibilityType)
+            .blind(
+                Blind.builder()
+                    .registeredAtLaId(
+                        registeredCouncil.getLocalAuthorityForRegisteredBlind().getShortCode())
+                    .build());
         break;
       case ARMS:
         eligibility

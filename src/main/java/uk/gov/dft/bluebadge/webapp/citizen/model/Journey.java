@@ -35,6 +35,8 @@ public class Journey implements Serializable {
   public String ageGroup;
   public String walkingAid;
 
+  private LocalAuthorityRefData localAuthority;
+
   public void setFormForStep(StepForm form) {
     // If changing values in a form may need to invalidate later forms in the journey
     boolean doCleanUp =
@@ -86,8 +88,6 @@ public class Journey implements Serializable {
   public boolean hasStepForm(StepDefinition stepDefinition) {
     return getFormForStep(stepDefinition) != null;
   }
-
-  private LocalAuthorityRefData localAuthority;
 
   public Boolean isApplicantYourself() {
     if (hasStepForm(StepDefinition.APPLICANT_TYPE)) {
