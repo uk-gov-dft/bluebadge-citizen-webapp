@@ -44,9 +44,18 @@
                    th:text="#{eligiblePage.startApplication.link.title}"></a>
 
                 <p class="govuk-body">
-                    <span th:remove="tag" th:text="#{${JOURNEY.who} + 'eligiblePage.council.timeframe.text'}"></span></br>
-                    <a th:href="${localAuthority.contactUrl}" th:text="${localAuthority.description}"></a><span th:remove="tag"
-                     th:text="#{eligiblePage.website.posttext}"></span>
+                    <span th:remove="tag" th:text="#{${JOURNEY.who} + 'eligiblePage.council.timeframe.text'}"></span>
+                    <a th:href="${localAuthority.contactUrl}" th:text="${localAuthority.description}"></a>
+                    <span th:remove="tag" th:text="#{eligiblePage.website.posttext}"></span>
+                </p>
+
+                <h2 class="govuk-heading-m" th:text="#{eligiblePage.not.apply.online.text}">Don’t want to apply online?</h2>
+
+                <p class="govuk-body" th:if="${localAuthority.contactUrl}">
+                    <span th:remove="tag" th:text="#{eligiblePage.council.contact.pretext}">Website:</span>
+                    <a th:href="${localAuthority.contactUrl}"
+                       th:text="${localAuthority.description} + #{eligiblePage.council.contact.posttext}">
+                        www.leedscitycouncil.gov.uk</a>
                 </p>
             </div>
         </section>
