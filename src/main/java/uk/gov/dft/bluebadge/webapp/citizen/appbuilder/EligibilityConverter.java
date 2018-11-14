@@ -64,8 +64,6 @@ class EligibilityConverter {
                         (registeredCouncil != null && registeredCouncil
                           .getLocalAuthorityForRegisteredBlind() != null &&
                           registeredCouncil
-                            .getLocalAuthorityForRegisteredBlind().getLocalAuthorityMetaData() != null &&
-                          registeredCouncil
                             .getLocalAuthorityForRegisteredBlind().getLocalAuthorityMetaData().isPresent()
                             ? registeredCouncil
                                 .getLocalAuthorityForRegisteredBlind()
