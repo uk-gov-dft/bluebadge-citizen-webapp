@@ -51,7 +51,7 @@ public class PermissionController implements StepController {
 
     RadioOptionsGroup radioOptions =
         new RadioOptionsGroup(journey.who + "permissionPage.title").withYesNoOptions();
-    radioOptions.setHintKey("you.permissionPage.hint");
+    radioOptions.setHintKey(journey.who + "permissionPage.hint");
 
     model.addAttribute("radioOptions", radioOptions);
 

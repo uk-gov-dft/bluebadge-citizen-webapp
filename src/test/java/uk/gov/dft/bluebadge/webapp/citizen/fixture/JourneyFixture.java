@@ -56,6 +56,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.CompensationSchemeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.DisabilityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.MentalDisorderForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.blind.PermissionForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.blind.RegisteredCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.blind.RegisteredForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficultyForm;
@@ -454,6 +456,28 @@ public class JourneyFixture {
     }
 
     journey.setFormForStep(getHealthcareProfessionalListForm());
+
+    if (EligibilityCodeField.BLIND == eligibility) {
+      if (StepDefinition.CONTACT_DETAILS == stepTo) return journey;
+
+      journey.setFormForStep(RegisteredForm.builder().hasRegistered(true).build());
+      if (StepDefinition.REGISTERED == stepTo) return journey;
+
+      journey.setFormForStep(PermissionForm.builder().hasPermission(true).build());
+      if (StepDefinition.PERMISSION == stepTo) return journey;
+
+      LocalAuthorityRefData localAuthorityRefData = new LocalAuthorityRefData();
+      LocalAuthorityRefData.LocalAuthorityMetaData localAuthorityMetaData =
+          new LocalAuthorityRefData.LocalAuthorityMetaData();
+      localAuthorityMetaData.setIssuingAuthorityShortCode("WARCC");
+      localAuthorityRefData.setLocalAuthorityMetaData(localAuthorityMetaData);
+
+      journey.setFormForStep(
+          RegisteredCouncilForm.builder()
+              .localAuthorityForRegisteredBlind(localAuthorityRefData)
+              .build());
+      if (StepDefinition.REGISTERED_COUNCIL == stepTo) return journey;
+    }
 
     journey.setFormForStep(DeclarationForm.builder().agreed(Boolean.TRUE).build());
     return journey;
