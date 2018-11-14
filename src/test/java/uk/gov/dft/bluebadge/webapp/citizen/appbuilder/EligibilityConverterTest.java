@@ -13,12 +13,10 @@ import java.util.EnumSet;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Eligibility;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.blind.RegisteredCouncilForm;
 
 public class EligibilityConverterTest {
 
@@ -35,7 +33,6 @@ public class EligibilityConverterTest {
     notWalking.forEach(
         i -> {
           Journey journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS, i);
-          setUpRegisteredCouncilFormWhenBlind(i, journey);
           Eligibility eli = EligibilityConverter.convert(journey);
           assertThat(eli.getWalkingDifficulty()).isNull();
         });
@@ -53,7 +50,6 @@ public class EligibilityConverterTest {
     notchild.forEach(
         i -> {
           Journey journey = new JourneyBuilder().withEligibility(i).build();
-          setUpRegisteredCouncilFormWhenBlind(i, journey);
           Eligibility eli = EligibilityConverter.convert(journey);
           assertThat(eli.getChildUnder3()).isNull();
         });
@@ -76,9 +72,25 @@ public class EligibilityConverterTest {
     noHealthcare.forEach(
         i -> {
           Journey journey = new JourneyBuilder().withEligibility(i).build();
-          setUpRegisteredCouncilFormWhenBlind(i, journey);
           Eligibility eli = EligibilityConverter.convert(journey);
           assertThat(eli.getHealthcareProfessionals()).isNull();
+        });
+  }
+
+  @Test
+  public void convert_blind() {
+
+    Eligibility eligibility =
+        EligibilityConverter.convert(
+            JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS, BLIND));
+    assertThat(eligibility.getBlind().getRegisteredAtLaId()).isNotNull();
+
+    EnumSet<EligibilityCodeField> notBlind = EnumSet.complementOf(EnumSet.of(BLIND, TERMILL, NONE));
+    notBlind.forEach(
+        i -> {
+          Journey journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS, i);
+          Eligibility eli = EligibilityConverter.convert(journey);
+          assertThat(eli.getBlind()).isNull();
         });
   }
 
@@ -98,7 +110,6 @@ public class EligibilityConverterTest {
     noHealthcare.forEach(
         i -> {
           Journey journey = new JourneyBuilder().withEligibility(i).build();
-          setUpRegisteredCouncilFormWhenBlind(i, journey);
           Eligibility eli = EligibilityConverter.convert(journey);
           assertThat(eli.getDescriptionOfConditions()).isNull();
         });
@@ -111,20 +122,20 @@ public class EligibilityConverterTest {
             i -> EligibilityConverter.convert(new JourneyBuilder().withEligibility(i).build()));
   }
 
-  private void setUpRegisteredCouncilFormWhenBlind(EligibilityCodeField i, Journey journey) {
-    if (i.equals(BLIND)) {
-      LocalAuthorityRefData.LocalAuthorityMetaData localAuthorityMetaData =
-          new LocalAuthorityRefData.LocalAuthorityMetaData();
-      localAuthorityMetaData.setIssuingAuthorityShortCode("WARCC");
-      LocalAuthorityRefData localAuthorityRefData = new LocalAuthorityRefData();
-      localAuthorityRefData.setLocalAuthorityMetaData(localAuthorityMetaData);
+  //private void setUpRegisteredCouncilFormWhenBlind(EligibilityCodeField i, Journey journey) {
+  /*if (i.equals(BLIND)) {
+    LocalAuthorityRefData.LocalAuthorityMetaData localAuthorityMetaData =
+        new LocalAuthorityRefData.LocalAuthorityMetaData();
+    localAuthorityMetaData.setIssuingAuthorityShortCode("WARCC");
+    LocalAuthorityRefData localAuthorityRefData = new LocalAuthorityRefData();
+    localAuthorityRefData.setLocalAuthorityMetaData(localAuthorityMetaData);
 
-      RegisteredCouncilForm form =
-          RegisteredCouncilForm.builder()
-              .localAuthorityForRegisteredBlind(localAuthorityRefData)
-              .build();
+    RegisteredCouncilForm form =
+        RegisteredCouncilForm.builder()
+            .localAuthorityForRegisteredBlind(localAuthorityRefData)
+            .build();
 
-      journey.setFormForStep(form);
-    }
-  }
+    journey.setFormForStep(form);
+  }*/
+  //}
 }

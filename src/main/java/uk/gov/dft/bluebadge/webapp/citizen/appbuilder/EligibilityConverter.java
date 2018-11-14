@@ -61,7 +61,13 @@ class EligibilityConverter {
             .blind(
                 Blind.builder()
                     .registeredAtLaId(
-                        registeredCouncil.getLocalAuthorityForRegisteredBlind().getShortCode())
+                        (registeredCouncil != null
+                            ? registeredCouncil
+                                .getLocalAuthorityForRegisteredBlind()
+                                .getLocalAuthorityMetaData()
+                                .get()
+                                .getIssuingAuthorityShortCode()
+                            : null))
                     .build());
         break;
       case ARMS:

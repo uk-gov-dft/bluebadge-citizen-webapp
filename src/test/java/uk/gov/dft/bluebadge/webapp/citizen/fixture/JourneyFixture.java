@@ -474,6 +474,7 @@ public class JourneyFixture {
 
       journey.setFormForStep(
           RegisteredCouncilForm.builder()
+              .registeredCouncil("WARCC")
               .localAuthorityForRegisteredBlind(localAuthorityRefData)
               .build());
       if (StepDefinition.REGISTERED_COUNCIL == stepTo) return journey;
