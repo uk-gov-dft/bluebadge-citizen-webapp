@@ -3,7 +3,7 @@
       th:data-ga-track-page="${JOURNEY.getEligibilityCode()}"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/master.html}">
+      layout:decorate="~{layouts/master.html}" xmlns="http://www.w3.org/1999/html">
 <head>
     <title th:text="#{${JOURNEY.who} + 'mayBeEligiblePage.title'}"></title>
 </head>
@@ -12,31 +12,49 @@
     <main layout:fragment="content">
 
         <section class="guidance-layout">
-            <h1 class="govuk-heading-l"
-                th:text="#{${JOURNEY.who} + 'mayBeEligiblePage.title'}"></h1>
+            <div class="govuk-!-width-three-quarters">
+                <h1 class="govuk-heading-l"
+                    th:text="#{${JOURNEY.who} + 'mayBeEligiblePage.title'}"></h1>
 
-            <h2 class="govuk-body-l" th:text="#{${JOURNEY.who} + 'eligiblePage.need.provide.text'}">What you’ll need to provide</h2>
+                <p class="govuk-body" th:text="#{eligiblePage.also.need.provide.text}"></p>
 
-            <ul class="govuk-list govuk-list--bullet">
-                <li th:text="#{eligiblePage.provide.contact.text}">contact details (phone number and email address)</li>
-            </ul>
+                <ul class="govuk-list govuk-list--bullet">
+                    <li th:text="#{${JOURNEY.who} + 'eligiblePage.nino.text'}"></li>
+                    <li th:text="#{eligiblePage.provide.contact.text}"></li>
+                </ul>
 
-            <a th:href="@{may-be-eligible/start}"
-               role="button"
-               class="govuk-button"
-               th:text="#{eligiblePage.startApplication.link.title}"></a>
+                <!-- WALKD only begin -->
+                <div th:if="${isWalkD}">
+                    <p class="govuk-body" th:text="#{${JOURNEY.who} + 'eligiblePage.provide.further.details.text'}"></p>
 
-            <p class="govuk-body"
-               th:text="#{${JOURNEY.who} + 'eligiblePage.council.timeframe.text'}">Your council can take up to 4 weeks to make a decision</p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li th:text="#{eligiblePage.use.mobility.aids.text}"></li>
+                        <li th:text="#{${JOURNEY.who} + 'eligiblePage.take.medication.text'}"></li>
+                        <li th:text="#{${JOURNEY.who} + 'eligiblePage.had.any.treatments.text'}"></li>
+                    </ul>
+                </div>
+                <!-- WALKD only end -->
 
-            <h2 class="govuk-heading-m" th:text="#{eligiblePage.not.apply.online.text}">Don’t want to apply online?</h2>
+                <a th:href="@{may-be-eligible/start}"
+                   role="button"
+                   class="govuk-button"
+                   th:text="#{eligiblePage.startApplication.link.title}"></a>
 
-            <p class="govuk-body" th:if="${localAuthority.contactUrl}">
-                <span th:remove="tag"
-                      th:text="#{eligiblePage.website.pretext}">Website:</span>
+                <p class="govuk-body">
+                    <span th:remove="tag" th:text="#{${JOURNEY.who} + 'eligiblePage.council.timeframe.text'}"></span>
+                    <a th:href="${localAuthority.contactUrl}" th:text="${localAuthority.description}">
+                    </a><span th:remove="tag" th:text="#{${JOURNEY.who} + 'eligiblePage.website.posttext'}"></span>
+                </p>
 
-                <a th:href="${localAuthority.contactUrl}" th:text="${localAuthority.description} + #{eligiblePage.website.posttext}">www.leeds city council.gov.uk</a>
-            </p>
+                <h2 class="govuk-heading-m" th:text="#{eligiblePage.not.apply.online.text}">Don’t want to apply online?</h2>
+
+                <p class="govuk-body">
+                    <span th:remove="tag" th:text="#{eligiblePage.council.contact.pretext}">Website:</span>
+                    <a th:href="${localAuthority.contactUrl}"
+                       th:text="${localAuthority.description} + #{eligiblePage.council.contact.posttext}">
+                        www.leedscitycouncil.gov.uk</a>
+                </p>
+            </div>
         </section>
     </main>
 
