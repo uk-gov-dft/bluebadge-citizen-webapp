@@ -11,9 +11,7 @@ import uk.gov.service.bluebadge.test.acceptance.steps.CommonSteps;
 public class ChooseCouncilSteps extends AbstractSpringSteps {
 
   private CommonSteps commonSteps;
-  private ChooseCouncilPage chooseCouncilPage;
   private CommonPage commonPage;
-  private ApplicationFixture applicationFixture;
   private String journeyOption;
 
   @Autowired
@@ -27,14 +25,14 @@ public class ChooseCouncilSteps extends AbstractSpringSteps {
   public void iValidateChooseCouncilPageForAndSelectACouncil(String applicant, String country) {
     String council = chooseCouncil(country);
     verifyPageContent(applicant);
-    commonSteps.iVerifyValidationMessage(chooseCouncilPage.VALIDATION_MESSAGE_FOR_NO_OPTION);
+    commonSteps.iVerifyValidationMessage(ChooseCouncilPage.VALIDATION_MESSAGE_FOR_NO_OPTION);
 
-    commonPage.findPageElementById(chooseCouncilPage.COUNCIL_INPUT).sendKeys(council);
-    commonPage.selectFromAutoCompleteList(chooseCouncilPage.COUNCIL_INPUT, council);
+    commonPage.findPageElementById(ChooseCouncilPage.COUNCIL_INPUT).sendKeys(council);
+    commonPage.selectFromAutoCompleteList(ChooseCouncilPage.COUNCIL_INPUT, council);
     commonSteps.iClickOnContinueButton();
   }
 
-  public String chooseCouncil(String country) {
+  private String chooseCouncil(String country) {
     String fullCouncil = "Worcester city council";
     if ("scotland".equalsIgnoreCase(country)) {
       fullCouncil = "Aberdeenshire council";
@@ -46,17 +44,17 @@ public class ChooseCouncilSteps extends AbstractSpringSteps {
 
   public void verifyPageContent(String applicant) {
 
-    commonSteps.iShouldSeeTheCorrectURL(chooseCouncilPage.PAGE_URL);
+    commonSteps.iShouldSeeTheCorrectURL(ChooseCouncilPage.PAGE_URL);
 
     if ("yourself".equals(applicant.toLowerCase())) {
-      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(chooseCouncilPage.PAGE_TITLE_YOURSELF);
-      commonSteps.iShouldSeeTheHeading(chooseCouncilPage.PAGE_TITLE_YOURSELF);
-      commonSteps.thenIShouldSeeTheContent(chooseCouncilPage.PAGE_LABEL_1_YOURSELF);
+      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(ChooseCouncilPage.PAGE_TITLE_YOURSELF);
+      commonSteps.iShouldSeeTheHeading(ChooseCouncilPage.PAGE_TITLE_YOURSELF);
+      commonSteps.thenIShouldSeeTheContent(ChooseCouncilPage.PAGE_LABEL_1_YOURSELF);
     } else {
       commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(
-          chooseCouncilPage.PAGE_TITLE_SOMEONE_ELSE);
-      commonSteps.iShouldSeeTheHeading(chooseCouncilPage.PAGE_TITLE_SOMEONE_ELSE);
-      commonSteps.thenIShouldSeeTheContent(chooseCouncilPage.PAGE_LABEL_1_SOMEONE_ELSE);
+              ChooseCouncilPage.PAGE_TITLE_SOMEONE_ELSE);
+      commonSteps.iShouldSeeTheHeading(ChooseCouncilPage.PAGE_TITLE_SOMEONE_ELSE);
+      commonSteps.thenIShouldSeeTheContent(ChooseCouncilPage.PAGE_LABEL_1_SOMEONE_ELSE);
     }
   }
 }

@@ -20,7 +20,7 @@ public class EnterAddressSteps extends AbstractSpringSteps {
     this.commonSteps = commonSteps;
   }
 
-  @And("^I validate enter address page for a \"([^\"]*)\" application$")
+  @And("^I validate enter address page for a \"(yourself|someone else)\" application$")
   public void iValidateEnterAddressPageForAApplication(String applicant) {
     verifyPageContent(applicant);
 
@@ -81,7 +81,7 @@ public class EnterAddressSteps extends AbstractSpringSteps {
 
     commonSteps.iShouldSeeTheCorrectURL(EnterAddressPage.PAGE_URL);
 
-    if ("you".equals(applicant.toLowerCase()) | "self".equals(applicant.toLowerCase())) {
+    if ("yourself".equals(applicant.toLowerCase())) {
       commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(EnterAddressPage.PAGE_TITLE_YOURSELF);
       commonSteps.iShouldSeeTheHeading(EnterAddressPage.PAGE_TITLE_YOURSELF);
     } else {

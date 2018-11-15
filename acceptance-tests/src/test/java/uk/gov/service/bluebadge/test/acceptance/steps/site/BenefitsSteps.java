@@ -5,15 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.BenifitsPage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
 import uk.gov.service.bluebadge.test.acceptance.steps.AbstractSpringSteps;
-import uk.gov.service.bluebadge.test.acceptance.steps.ApplicationFixture;
 import uk.gov.service.bluebadge.test.acceptance.steps.CommonSteps;
 
 public class BenefitsSteps extends AbstractSpringSteps {
 
   private CommonSteps commonSteps;
-  private ChooseCouncilSteps chooseCouncilSteps;
   private CommonPage commonPage;
-  private ApplicationFixture applicationFixture;
 
   @Autowired
   public BenefitsSteps(CommonPage commonPage, CommonSteps commonSteps) {
@@ -21,7 +18,7 @@ public class BenefitsSteps extends AbstractSpringSteps {
     this.commonSteps = commonSteps;
   }
 
-  @And("^I validate \"(you|they)\" benefit page for \"(PIP|DLA|AFRFCS|WPMS|NONE)\"")
+  @And("^I validate benefit page for \"(yourself|someone else)\" for \"(PIP|DLA|AFRFCS|WPMS|NONE)\"")
   public void iValidateBenefitPageFor(String applicant, String option) {
     verifyPageContent(applicant);
     commonSteps.iVerifyValidationMessage(BenifitsPage.VALIDATION_MESSAGE_FOR_NO_OPTION);
@@ -36,7 +33,7 @@ public class BenefitsSteps extends AbstractSpringSteps {
 
   public void verifyPageContent(String applicant) {
     commonSteps.iShouldSeeTheCorrectURL(BenifitsPage.PAGE_URL);
-    if ("you".equals(applicant.toLowerCase())) {
+    if ("yourself".equals(applicant.toLowerCase())) {
       commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(BenifitsPage.PAGE_TITLE_YOURSELF);
       commonSteps.iShouldSeeTheHeading(BenifitsPage.PAGE_TITLE_YOURSELF);
     } else {

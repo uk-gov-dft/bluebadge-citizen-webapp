@@ -5,15 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.AlreadyHaveBlueBadgePage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
 import uk.gov.service.bluebadge.test.acceptance.steps.AbstractSpringSteps;
-import uk.gov.service.bluebadge.test.acceptance.steps.ApplicationFixture;
 import uk.gov.service.bluebadge.test.acceptance.steps.CommonSteps;
 
 public class AlreadyHaveBlueBadgeSteps extends AbstractSpringSteps {
 
   private CommonSteps commonSteps;
-  private ChooseCouncilSteps chooseCouncilSteps;
   private CommonPage commonPage;
-  private ApplicationFixture applicationFixture;
 
   @Autowired
   public AlreadyHaveBlueBadgeSteps(CommonPage commonPage, CommonSteps commonSteps) {
@@ -21,7 +18,7 @@ public class AlreadyHaveBlueBadgeSteps extends AbstractSpringSteps {
     this.commonSteps = commonSteps;
   }
 
-  @And("^I validate \"(you|they)\" already have a blue badge page for \"(Yes|No)\"")
+  @And("^I validate already have a blue badge page for \"(yourself|someone else)\" for \"(Yes|No)\"")
   public void iValidateAlreadyHaveABlueBadgePageFor(String applicant, String option)
       throws Throwable {
     verifyPageContent(applicant);
@@ -43,7 +40,7 @@ public class AlreadyHaveBlueBadgeSteps extends AbstractSpringSteps {
 
   public void verifyPageContent(String applicant) {
     commonSteps.iShouldSeeTheCorrectURL(AlreadyHaveBlueBadgePage.PAGE_URL);
-    if ("you".equals(applicant.toLowerCase())) {
+    if ("yourself".equals(applicant.toLowerCase())) {
       commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(
           AlreadyHaveBlueBadgePage.PAGE_TITLE_YOURSELF);
       commonSteps.iShouldSeeTheHeading(AlreadyHaveBlueBadgePage.PAGE_TITLE_YOURSELF);

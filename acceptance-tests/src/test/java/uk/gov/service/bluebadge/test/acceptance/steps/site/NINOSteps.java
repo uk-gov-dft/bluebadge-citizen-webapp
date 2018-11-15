@@ -18,7 +18,7 @@ public class NINOSteps extends AbstractSpringSteps {
     this.commonSteps = commonSteps;
   }
 
-  @And("^I validate nino page for a \"([^\"]*)\" application$")
+  @And("^I validate nino page for a \"(yourself|someone else)\" application$")
   public void iValidateNinoPageForAApplication(String applicant) {
     verifyPageContent(applicant);
 
@@ -40,7 +40,7 @@ public class NINOSteps extends AbstractSpringSteps {
 
     commonSteps.iShouldSeeTheCorrectURL(NinoPage.PAGE_URL);
 
-    if ("you".equals(applicant.toLowerCase()) | "self".equals(applicant.toLowerCase())) {
+    if ("yourself".equals(applicant.toLowerCase())) {
       commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(NinoPage.PAGE_TITLE_YOURSELF);
       commonSteps.iShouldSeeTheHeading(NinoPage.PAGE_TITLE_YOURSELF);
     } else {

@@ -18,7 +18,7 @@ public class GenderSteps extends AbstractSpringSteps {
     this.commonSteps = commonSteps;
   }
 
-  @And("^I validate gender page for a \"([^\"]*)\" application with option as \"([^\"]*)\"$")
+  @And("^I validate gender page for a \"(yourself|someone else)\" application with option as \"([^\"]*)\"$")
   public void iValidateGenderPageForAApplication(String applicant, String option) {
     verifyPageContent(applicant);
 
@@ -33,7 +33,7 @@ public class GenderSteps extends AbstractSpringSteps {
 
     commonSteps.iShouldSeeTheCorrectURL(GenderPage.PAGE_URL);
 
-    if ("you".equals(applicant.toLowerCase()) | "self".equals(applicant.toLowerCase())) {
+    if ("yourself".equals(applicant.toLowerCase())) {
       commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(GenderPage.PAGE_TITLE_YOURSELF);
       commonSteps.iShouldSeeTheHeading(GenderPage.PAGE_TITLE_YOURSELF);
     } else {

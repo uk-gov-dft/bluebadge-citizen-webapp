@@ -29,7 +29,6 @@ public class CommonSteps extends AbstractSpringSteps {
   private static final String TAG_INPUT = "input";
 
   private CommonPage commonPage;
-  private String pageURL;
 
   @Autowired
   public CommonSteps(CommonPage commonPage) {
@@ -49,9 +48,7 @@ public class CommonSteps extends AbstractSpringSteps {
     } else if ("wales".equalsIgnoreCase(country)) {
       council = "Anglesey";
       fullCouncil = "Isle of Anglesey county council";
-    } else if ("ireland".equalsIgnoreCase(country)) {
-
-    }
+    } 
 
     // Applicant page
     givenINavigateToPage("applicant");
@@ -247,7 +244,6 @@ public class CommonSteps extends AbstractSpringSteps {
 
   @And("^I should see \"([^\"]*)\" text on the page$")
   public void iShouldSeeTextOnPage(String content) {
-    String s = commonPage.getPageContent();
     assertTrue(commonPage.getPageContent().contains(content));
   }
 
@@ -370,7 +366,7 @@ public class CommonSteps extends AbstractSpringSteps {
 
   @Then("^I should see the correct URL$")
   public void iShouldSeeTheCorrectURL(String expectedURL) {
-    URL fullURL = null;
+    URL fullURL;
 
     try {
 

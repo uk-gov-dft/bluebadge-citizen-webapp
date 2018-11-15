@@ -18,7 +18,7 @@ public class WalkingDifficultySteps extends AbstractSpringSteps {
     this.commonSteps = commonSteps;
   }
 
-  @And("^I validate \"(you|them)\" walking difficulty page for \"(HELP|NONE)\"")
+  @And("^I validate walking difficulty page for \"(yourself|someone else)\" for \"(HELP|NONE)\"")
   public void iValidateWalkingDifficultyPageFor(String applicant, String option) {
     verifyPageContent(applicant);
     commonSteps.iVerifyValidationMessage(WalkingDifficultyPage.VALIDATION_MESSAGE_FOR_NO_OPTION);
@@ -38,7 +38,7 @@ public class WalkingDifficultySteps extends AbstractSpringSteps {
 
     commonSteps.iShouldSeeTheCorrectURL(WalkingDifficultyPage.PAGE_URL);
 
-    if ("you".equals(applicant.toLowerCase())) {
+    if ("yourself".equals(applicant.toLowerCase())) {
       commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(
           WalkingDifficultyPage.PAGE_TITLE_YOURSELF);
       commonSteps.iShouldSeeTheHeading(WalkingDifficultyPage.PAGE_TITLE_YOURSELF);

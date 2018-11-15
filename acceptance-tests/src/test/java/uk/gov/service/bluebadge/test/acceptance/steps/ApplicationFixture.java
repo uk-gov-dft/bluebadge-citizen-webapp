@@ -1,41 +1,23 @@
 package uk.gov.service.bluebadge.test.acceptance.steps;
 
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.EMAIL_ADDRESS;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.FULL_NAME;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.PRIMARY_CONTACT_NUMBER;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.SECONDARY_CONTACT_NUMBER;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.HAS_RECEIVED_DLA;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.MAIN_REASON_LIST;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.NEVER_RECEIVED_DLA;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.PLACE_CAN_WALK;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.TIME_TO_DESTINATION;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_MONTH;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_YEAR;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.*;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.*;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.*;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_FEMALE;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_UNSPECIFIED;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_ADD_CONFIRM_BUTTON;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_ADD_PROVIDED_CODE_PRESCRIBE;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_ADD_USAGE;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_TYPE_WHEELCHAIR;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.*;
 
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
-import java.util.Calendar;
 import org.openqa.selenium.By;
 import org.springframework.beans.factory.annotation.Autowired;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.AlreadyHaveBlueBadgePage;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.ApplicantPage;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.BenifitsPage;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.ChooseCouncilPage;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.*;
+
+import java.util.Calendar;
 
 public class ApplicationFixture extends AbstractSpringSteps {
 
   private CommonPage commonPage;
-  private ApplicantPage applicantPage;
-  private ChooseCouncilPage chooseCouncilPage;
 
   @Autowired
   public ApplicationFixture(CommonPage commonPage) {
@@ -50,11 +32,11 @@ public class ApplicationFixture extends AbstractSpringSteps {
   public void iCompleteApplicantPage(String myselfOrOther) {
     commonPage.openByPageName("applicant");
     if (myselfOrOther.equalsIgnoreCase("yourself")) {
-      commonPage.selectRadioButton(applicantPage.APPLICANT_TYPE_OPTION_LIST);
+      commonPage.selectRadioButton(ApplicantPage.APPLICANT_TYPE_OPTION_LIST);
     } else if (myselfOrOther.equalsIgnoreCase("someone else")) {
-      commonPage.selectRadioButton(applicantPage.APPLICANT_TYPE_SOMELSE_OPTION);
+      commonPage.selectRadioButton(ApplicantPage.APPLICANT_TYPE_SOMELSE_OPTION);
     } else if (myselfOrOther.equalsIgnoreCase("organisation")) {
-      commonPage.selectRadioButton(applicantPage.APPLICANT_TYPE_ORG_OPTION);
+      commonPage.selectRadioButton(ApplicantPage.APPLICANT_TYPE_ORG_OPTION);
     }
     pressContinue();
   }
@@ -76,8 +58,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
       fullCouncil = "Isle of Anglesey county council";
     }
 
-    commonPage.findPageElementById(chooseCouncilPage.COUNCIL_INPUT).sendKeys(council);
-    commonPage.selectFromAutoCompleteList(chooseCouncilPage.COUNCIL_INPUT, fullCouncil);
+    commonPage.findPageElementById(ChooseCouncilPage.COUNCIL_INPUT).sendKeys(council);
+    commonPage.selectFromAutoCompleteList(ChooseCouncilPage.COUNCIL_INPUT, fullCouncil);
     pressContinue();
   }
 

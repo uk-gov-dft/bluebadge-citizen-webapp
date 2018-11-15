@@ -5,15 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.MainReasonPage;
 import uk.gov.service.bluebadge.test.acceptance.steps.AbstractSpringSteps;
-import uk.gov.service.bluebadge.test.acceptance.steps.ApplicationFixture;
 import uk.gov.service.bluebadge.test.acceptance.steps.CommonSteps;
 
 public class MainReasonSteps extends AbstractSpringSteps {
 
   private CommonSteps commonSteps;
-  private ChooseCouncilSteps chooseCouncilSteps;
   private CommonPage commonPage;
-  private ApplicationFixture applicationFixture;
 
   @Autowired
   public MainReasonSteps(CommonPage commonPage, CommonSteps commonSteps) {
@@ -21,7 +18,7 @@ public class MainReasonSteps extends AbstractSpringSteps {
     this.commonSteps = commonSteps;
   }
 
-  @And("^I validate \"(you|they)\" main reason page for \"(WALKD|NONE)\"")
+  @And("^I validate main reason page for \"(yourself|someone else)\" for \"(WALKD|NONE)\"")
   public void iValidateMainReasonPageFor(String applicant, String option) {
     verifyPageContent(applicant);
     commonSteps.iVerifyValidationMessage(MainReasonPage.VALIDATION_MESSAGE_FOR_NO_OPTION);
@@ -33,7 +30,7 @@ public class MainReasonSteps extends AbstractSpringSteps {
 
     commonSteps.iShouldSeeTheCorrectURL(MainReasonPage.PAGE_URL);
 
-    if ("you".equals(applicant.toLowerCase())) {
+    if ("yourself".equals(applicant.toLowerCase())) {
       commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(MainReasonPage.PAGE_TITLE_YOURSELF);
       commonSteps.iShouldSeeTheHeading(MainReasonPage.PAGE_TITLE_YOURSELF);
     } else {
