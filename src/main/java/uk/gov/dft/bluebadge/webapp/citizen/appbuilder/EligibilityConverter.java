@@ -15,6 +15,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Di
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Eligibility;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HealthcareProfessional;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalListForm;
@@ -56,23 +57,24 @@ class EligibilityConverter {
       case BLIND:
         RegisteredCouncilForm registeredCouncil =
             journey.getFormForStep(StepDefinition.REGISTERED_COUNCIL);
-        String localAuthority = null;
+        LocalAuthorityRefData.LocalAuthorityMetaData localAuthorityMetaData = null;
         if (registeredCouncil != null
-            && registeredCouncil.getLocalAuthorityForRegisteredBlind() != null
-            && registeredCouncil
-                .getLocalAuthorityForRegisteredBlind()
-                .getLocalAuthorityMetaData()
-                .isPresent()) {
-          localAuthority =
+            && registeredCouncil.getLocalAuthorityForRegisteredBlind() != null) {
+          localAuthorityMetaData =
               registeredCouncil
                   .getLocalAuthorityForRegisteredBlind()
                   .getLocalAuthorityMetaData()
-                  .get()
-                  .getIssuingAuthorityShortCode();
+                  .orElse(null);
         }
         eligibility
             .typeCode(eligibilityType)
-            .blind(Blind.builder().registeredAtLaId(localAuthority).build());
+            .blind(
+                Blind.builder()
+                    .registeredAtLaId(
+                        localAuthorityMetaData != null
+                            ? localAuthorityMetaData.getIssuingAuthorityShortCode()
+                            : null)
+                    .build());
         break;
       case ARMS:
         eligibility
