@@ -8,68 +8,20 @@
 
 <div th:fragment="fileUploader(label, name)">
 
-    <div id="drop-area" class="drop-area">
-
-        <div class="drop-area__preview">
-            <h3 class="govuk-heading-m">This your upload</h3>
-
-            <div class="drop-area__preview-holder"></div>
-
-            <p class="govuk-body">
-                <a class="drop-area__preview-reset-link" href="">Use a different photo or scan</a>
-            </p>
-        </div>
-
-        <div class="drop-area__container">
-
-            <div class="drop-area__icon">
-                <div class="drop-area__icon-wrapper">
-                    <svg class="icon-arrow-down" viewBox="0 0 32 32">
-                        <title>arrow-down</title>
-                        <path d="M16 1l-15 15h9v16h12v-16h9z"></path>
-                    </svg>
-                </div>
-            </div>
-
-            <div class="drop-area__instructions">
-                <button id="upload-btn" class="govuk-button govuk-button--upload-btn">
-                    <span class="mobile-upload-text">Take photo or upload using this device</span>
-                    <!--<span class="tablet-upload-text">Upload from this computer</span>
-                    <span class="mobile-upload-alternative-text">Upload photo using this device</span>-->
-                </button>
-            </div>
-
-        </div>
+    <div class="govuk-error-summary file-uploader-error" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+        <h2 class="govuk-error-summary__title" id="error-summary-title" th:text="#{fileUploader.error.title}"></h2>
+        <div class="govuk-error-summary__body" th:text="#{fileUploader.error.content}"></div>
     </div>
 
-    <!--<div id="drop-area" class="hide-no-js">
-        <div id="dragDropInstructions">
-            <div class="upload-arrow-container">
-                <div class="icon--upload-arrow">
-                    <svg id="icon-arrow-up" class="icon-arrow-down" viewBox="0 0 32 32">
-                        <title>arrow-down</title>
-                        <path d="M16 1l-15 15h9v16h12v-16h9z"></path>
-                    </svg>
-                </div>
-            </div>
-            <div class="upload-section-text">
-                <p class="govuk-body">
-                    <input type="file" class="govuk-visually-hidden" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
-                    <label class="govuk-button upload-label" for="fileElem">
-                        <span class="tablet-upload-text">Upload from this computer</span>
-                        <span class="mobile-upload-text">Take photo or upload using this device</span>
-                        <span class="mobile-upload-alternative-text">Upload photo using this device</span>
-                    </label>
-                </p>
-            </div>
-        </div>-->
-        <!--<div id="progressContainer" class="hidden">
-            <h3 class="govuk-heading-s">Upload progress</h3>
-            <progress id="progress-bar" max=100 value=0 class=""></progress>
-        </div>
-    </div>-->
+    <div id="file-uploader-container"
+         th:data-label-mobile="#{fileUploader.label.mobile}"
+         th:data-label-desktop="#{fileUploader.label.desktop}"
+         th:data-label-multiFile-caption="#{fileUploader.label.multiFile.caption}"
+         th:data-preview-title="#{fileUploader.preview.title}"
+         th:data-preview-reset-button="#{fileUploader.preview.resetBtn}"
+         th:data-preview-addFile-button="#{fileUploader.preview.addFileBtn}"
+         th:class="'govuk-form-group' + (${#fields.hasErrors('documentId')} == true ? ' govuk-form-group--error' : '')">
 
-    <div th:class="'govuk-form-group' + (${#fields.hasErrors('documentId')} == true ? ' govuk-form-group--error' : '')">
         <label class="govuk-label" th:for="${name}" th:text="${label}"></label>
         <span class="govuk-error-message" id="documentId-error" th:errors="*{__${'documentId'}__}"></span>
         <input class="govuk-file-upload"

@@ -73,3 +73,8 @@ security:
 
 # Google Analytics Code
 GACode:  ${GACODE:UA-124760983-5}
+
+amazon:
+  profile: applicationTestBucket
+  s3bucket: uk-gov-dft-test-applications-temp
+  signed-url-duration-ms: 60000

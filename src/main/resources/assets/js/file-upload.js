@@ -1,272 +1,317 @@
-const FileUploader = function () {
-	this.$dropArea = document.getElementsByClassName('drop-area').item(0);
-	this.$input = document.querySelectorAll('input[type="file"]').item(0);
-	this.$upload_btn = document.getElementsByClassName('govuk-button--upload-btn').item(0);
-	this.$preview_holder = document.getElementsByClassName('drop-area__preview-holder').item(0);
-	this.$preview_reset_link = document.getElementsByClassName('drop-area__preview-reset-link').item(0);
+export default class FileUploader {
 
-	this.$form_control = this.$input.parentNode;
+	constructor (options) {
+		if(!window.FileReader || !window.DragEvent) {
+			console.warn('File Uploader Component cannot be supported by this browser');
+			return;
+		}
 
-	this.$image_mime_types = "image/jpeg, image/gif, image/png";
+		if(!options || !options.el) {
+			console.warn('No target element provided');
+			return;
+		}
 
-	this.$DROPAREA_STATE = {
-		ERROR: 'drop-area--error',
-		ACTIVE: 'drop-area--active',
-		PREVIEW_MODE: 'drop-area--preview-mode'
-	}
-};
+		this.$isMobile = (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
 
-FileUploader.prototype.init = function(options) {
+		this.$options = options;
+		this.$fileInput = options.el;
+		this.$dropArea;
+		this.$previewHolder;
+		this.$uploadBtn;
+		this.$uploadIcon;
+		this.$resetBtn;
+		this.$addFileBtn;
+		this.$screenAnnouncer;
 
-	if(!window.FileReader || !window.DragEvent) {
-		console.warning('File Uploader Component cannot be supported by this browser');
-		return;
-	}
+		this.$container = this.renderFileUploader(options.container);
+		this.$container.appendChild(this.renderPreview());
+		this.$container.appendChild(this.renderDropArea());
+		this.$container.appendChild(this.$screenAnnouncer);
 
-	// need to support multiple inputs
-	const $input = this.$input;
-	const $dropArea = this.$dropArea;
-	const $DROPAREA_STATE = this.$DROPAREA_STATE;
-	const $upload_btn = this.$upload_btn;
-	const $preview_holder = this.$preview_holder;
-	const $preview_reset_link = this.$preview_reset_link;
+		this.$imageMimeTypes = "image/jpeg, image/gif, image/png";
 
-	// this.$form_control.classList.add('govuk-visually-hidden');
+		this.$DROPAREA_STATE = {
+			ACTIVE: 'file-uploader--active',
+			PREVIEW_MODE: 'file-uploader--preview-mode',
+		}
 
-	if(options && options.init && typeof options.init === 'function') {
-		options.init.call($input, $dropArea);
-	}
-
-	/**
-		Initialize Events
-	**/
-	/*
-	$upload_btn.addEventListener('click', this.buttonClick);
-	$preview_reset_link.addEventListener('click', this.cancelSelection);
-	$input.addEventListener('change', this.selectFile);
-	$dropArea.addEventListener('drop', this.selectFile);
-
-	['dragenter', 'dragover', 'dragleave', 'drop'].forEach();
-	['dragenter', 'dragover'].forEach();
-	['dragleave', 'drop'].forEach();
-
-	this.buttonClick = function (event) {
-		event.preventDefault();
-		$input.click();
+		this.registerEvents();
+		this.fireLifeCycleEvent('init');
 	}
 
-	this.selectFile = function () {
-		Array.from(this.files).forEach(this.renderPreview);
-	}
+	registerEvents() {
+		this.uploadBtnClick = this.uploadBtnClick.bind(this);
+		this.resetFileSelection = this.resetFileSelection.bind(this);
+		this.selectFile = this.selectFile.bind(this);
+		
+		this.$uploadBtn.addEventListener('click', this.uploadBtnClick);
+		this.$uploadIcon.addEventListener('click', this.uploadBtnClick);
+		this.$resetBtn.addEventListener('click', this.resetFileSelection);
+		this.$fileInput.addEventListener('change', this.selectFile);
 
-	this.cancelSelection = function (event) {
-		event.preventDefault();
-		$input.value = '';
-		$preview_holder.innerHTML = null;
-		this.$dropArea.classList.remove($DROPAREA_STATE.PREVIEW_MODE);
-	}
+		if(this.$fileInput.multiple && this.$addFileBtn) {
+			this.$addFileBtn.addEventListener('click', this.uploadBtnClick);
+		}
 
-	this.renderPreview = function (file) {
+		if(!this.$isMobile) {
+			this.$dropArea.addEventListener('drop', this.selectFile);
+			
+			['dragenter', 'dragover', 'dragleave', 'drop', document.body].forEach(eventName => {
+				this.$dropArea.addEventListener(eventName, event => {
+					this.preventDefault(event);
 
-	}
-	/// - new code end
-	*/
+					if(eventName === 'dragenter' ||eventName === 'dragover') {
+						this.$dropArea.addEventListener(eventName, () => {
+							this.$container.classList.add(this.$DROPAREA_STATE.ACTIVE);
+						});
+					}
 
-	$input.addEventListener('change', () => {
-		Array.from($input.files).forEach(this.render_preview);
-	});
-
-	$upload_btn.addEventListener('click', event => {
-		event.preventDefault();
-		event.stopPropagation();
-		$input.click();
-	});
-
-	$preview_reset_link.addEventListener('click', (event) => {
-		event.preventDefault();
-		$input.value = '';
-		$preview_holder.innerHTML = null;
-		$dropArea.classList.remove($DROPAREA_STATE.PREVIEW_MODE);
-	});
-
-	['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-		$dropArea.addEventListener(eventName, event => {
-			event.preventDefault();
-			event.stopPropagation();
-		});
-		document.body.addEventListener(eventName, event => {
-			event.preventDefault();
-			event.stopPropagation();
-		});
-	});
-
-	['dragenter', 'dragover'].forEach(eventName => {
-		$dropArea.addEventListener(eventName, () => $dropArea.classList.add($DROPAREA_STATE.ACTIVE));
-	});
-
-	['dragleave', 'drop'].forEach(eventName => {
-		$dropArea.addEventListener(eventName, () => $dropArea.classList.remove($DROPAREA_STATE.ACTIVE));
-	});
-	
-	$dropArea.addEventListener('drop', (event) => {
-		Array.from(event.dataTransfer.files).forEach(this.render_preview);
-	});
-
-	this.render_preview = (file) => {
-		const reader = new FileReader();
-		reader.readAsDataURL(file);
-
-		reader.onloadend = () => {
-			const el_preview_item = document.createElement('div');
-			el_preview_item.classList.add('drop-area__preview-item');
-
-			if(this.$image_mime_types.includes(file.type)) {
-				const el_img = document.createElement('img');
-				
-				el_img.src = reader.result;
-				el_preview_item.appendChild(el_img);
-				$preview_holder.appendChild(el_preview_item);
-				$dropArea.classList.add($DROPAREA_STATE.PREVIEW_MODE);
-				
-				if(options && options.uploaded && typeof options.uploaded === 'function') {
-					options.uploaded.call();
-				}
-			}
+					if(eventName === 'dragleave' ||eventName === 'drop') {
+						this.$dropArea.addEventListener(eventName, () => {
+							this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE)
+						});
+					}
+				});
+			});
 		}
 	}
+
+	preventDefault(event) {
+		if(event) {
+			event.preventDefault();
+			event.stopPropagation();
+		}
+	}
+
+	uploadBtnClick(event) {
+		event.preventDefault();
+		this.$fileInput.click();
+	}
+
+	resetFileSelection(event) {
+		event.preventDefault();
+		this.$fileInput.value = '';
+		this.$previewHolder.innerHTML = '';
+		this.$container.classList.remove(this.$DROPAREA_STATE.PREVIEW_MODE);
+		this.fireLifeCycleEvent('reset');
+		this.makeScreenAnnouncement('files removed');
+	}
+
+	selectFile(event) {
+		const files = event.target.files || event.dataTransfer.files;
+		
+		if(this.$fileInput.multiple && files.length > 0){
+			Array.from(files).filter(file => this.validateFile(file)).map(file => this.beginFileUpload(file));
+		} else if(files.length > 0 && this.validateFile(files.item(0))) {
+			this.beginFileUpload(files.item(0));
+		}
+
+	}
+
+	validateFile(file) {
+		// if (!file.type.match('image.*')) try this instead
+		if(this.$fileInput.accept.includes(file.type)) {
+			return file;
+		}
+	}
+
+	beginFileUpload(file) {
+		const xhr = new XMLHttpRequest();
+		xhr.open('POST', this.$options.uploadPath, true);
+		xhr.addEventListener('readystatechange', (e) => {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				// console.log('response ', xhr.response);
+				this.showPreview(file);
+				this.fireLifeCycleEvent('uploaded');
+			} else if (xhr.readyState == 4 && xhr.status != 200) {
+				this.fireLifeCycleEvent('uploadError');
+			}
+		});
+
+		
+		const formData = new FormData();
+		const csrfToken = document.querySelectorAll('input[name="_csrf"]').item(0).value;
+		csrfToken && formData.append('_csrf', csrfToken);
+		formData.append(this.$fileInput.name, file, file.name);
+		xhr.send(formData);
+
+		return file;
+	}
+
+	showPreview(file) {
+		const filePreview = this.renderFilepreview(file);
+		this.$previewHolder.appendChild(filePreview );
+		this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
+		this.$container.classList.add(this.$DROPAREA_STATE.PREVIEW_MODE);
+	}
+
+	renderFileUploader(container) {
+		container.classList.add('file-uplaoder');
+
+		const legacy = document.createElement("div");
+		legacy.classList.add('file-uploader__legacy');
+
+		while (container.childNodes.length > 0) {
+			legacy.appendChild(container.childNodes[0]);
+		}
+		
+		container.appendChild(legacy);
+
+		this.$screenAnnouncer = document.createElement('p');
+		this.$screenAnnouncer.classList.add("file-uploader__announcer");
+		this.$screenAnnouncer.setAttribute('aria-live', 'polite');
+
+		return container;
+	}
+
+	renderDropArea() {
+		const dropArea_svg = this.getUploadIcon();
+
+		const dropArea_icon = document.createElement('div');
+		dropArea_icon.classList.add('drop-area__icon-wrapper');
+		dropArea_icon.appendChild(dropArea_svg);
+
+		const dropArea_iconWrapper = document.createElement('div');
+		dropArea_iconWrapper.classList.add('drop-area__icon');
+		dropArea_iconWrapper.appendChild(dropArea_icon);
+		this.$uploadIcon = dropArea_iconWrapper;
+			
+		const dropArea_button = document.createElement('button');
+		dropArea_button.classList.add('drop-area__btn');
+		dropArea_button.innerHTML = this.getUploadButtonLabel();
+
+		this.$uploadBtn = dropArea_button;
+
+		const dropArea_instructions = document.createElement('div');
+		dropArea_instructions.classList.add('drop-area__instructions');
+		dropArea_instructions.appendChild(dropArea_button);
+
+		if(this.$fileInput.multiple) {
+			const dropArea_caption = document.createElement('p');
+			dropArea_caption.classList.add('drop-area__caption');
+			dropArea_caption.innerHTML = this.getDataAttrValue('label-multiFile-caption') || "(You can upload multiple photos)";
+			dropArea_instructions.appendChild(dropArea_caption);
+		}
+
+		const dropArea = document.createElement('div');
+		dropArea.classList.add('drop-area');
+		dropArea.appendChild(dropArea_iconWrapper);
+		dropArea.appendChild(dropArea_instructions);
+
+		this.$dropArea = dropArea;
+
+		return dropArea;
+	}
+
+	getUploadIcon() {
+		const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+		const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+		svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
+
+		if (this.$isMobile) {
+			svg.setAttribute("viewBox", "0 0 512 512");
+			path.setAttribute("d", "M512 144v288c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48h88l12.3-32.9c7-18.7 24.9-31.1 44.9-31.1h125.5c20 0 37.9 12.4 44.9 31.1L376 96h88c26.5 0 48 21.5 48 48zM376 288c0-66.2-53.8-120-120-120s-120 53.8-120 120 53.8 120 120 120 120-53.8 120-120zm-32 0c0 48.5-39.5 88-88 88s-88-39.5-88-88 39.5-88 88-88 88 39.5 88 88z");
+		} else {
+			svg.setAttribute("viewBox", "0 0 32 32");
+			path.setAttribute("d", "M16 1l-15 15h9v16h12v-16h9z");
+		}
+
+		svg.appendChild(path);
+		return svg;
+	}
+
+	getUploadButtonLabel() {
+		const mobileLabel = this.getDataAttrValue('label-mobile');
+		const desktopLabel = this.getDataAttrValue('label-desktop');
+
+		if(this.$isMobile && mobileLabel) {
+			return mobileLabel;
+		} else if(desktopLabel) {
+			return desktopLabel;
+		}
+
+		return "Upload photo";
+	}
+
+	renderPreview() {
+		const previewHolder = document.createElement('div');
+		previewHolder.classList.add('preview__holder');
+		this.$previewHolder = previewHolder;
+
+		const previewResetBtn = document.createElement('button');
+		previewResetBtn.classList.add('preview__resetBtn');
+		previewResetBtn.innerText = this.getDataAttrValue('preview-reset-button') || "Use a different photo or scan";
+		this.$resetBtn = previewResetBtn;
+
+		const previewHeading = document.createElement('h3');
+		previewHeading.innerText = this.getDataAttrValue('preview-title') || "This is your upload";
+		previewHeading.classList.add('preview__heading');
+
+		const fileUploaderPreview = document.createElement('div');
+		fileUploaderPreview.classList.add('preview');
+		fileUploaderPreview.appendChild(previewHeading);
+		fileUploaderPreview.appendChild(previewHolder);
+
+		if(this.$fileInput.multiple) {
+			const addFileBtn = document.createElement('button');
+			addFileBtn.classList.add('preview__addFileBtn');
+			addFileBtn.innerText = this.getDataAttrValue('preview-addFile-button') || "Add another photo or scan";
+			this.$addFileBtn = addFileBtn;
+			fileUploaderPreview.appendChild(addFileBtn);
+		}
+
+		fileUploaderPreview.appendChild(previewResetBtn);
+
+		return fileUploaderPreview;
+	}
+
+	renderFilepreview(file) {
+		const elPreviewItem = document.createElement('div');
+		elPreviewItem.classList.add('preview__item');
+
+		if(this.$imageMimeTypes.indexOf(file.type) !== -1) {
+			const elImg = document.createElement('img');
+			
+			// may replace this with s3 url?
+			const reader = new FileReader();
+			reader.readAsDataURL(file);
+			reader.onloadend = function() {
+				elImg.src = reader.result;
+				elPreviewItem.appendChild(elImg);
+			}
+		} else {
+			const elP = document.createElement('p');
+			elP.innerText = file.name;
+
+			const elSpan = document.createElement('span');
+			elSpan.innerText = "(Preview unavailable)";
+			elP.appendChild(elSpan);
+			
+			elPreviewItem.appendChild(elP);
+		}
+
+		this.makeScreenAnnouncement("File uploaded: " + file.name);
+
+		return elPreviewItem;
+	}
+
+	fireLifeCycleEvent(eventName, ...options) {
+		if(this.$options && this.$options[eventName] && typeof this.$options[eventName] === 'function') {
+			this.$options[eventName].call(options);
+		}
+	}
+
+	getDataAttrValue(key) {
+		if(this.$container){
+			return this.$container.getAttribute(`data-${key}`);
+		}
+		return null;
+	}
+
+	makeScreenAnnouncement(announcement) {
+		if(this.$screenAnnouncer) {
+			this.$screenAnnouncer.innerText = announcement;
+		}
+	}
+	
 }
-
-export default FileUploader;
-
-/*
-let dropArea = document.getElementById("drop-area")
-
-// Prevent default drag behaviors
-;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-  dropArea.addEventListener(eventName, preventDefaults, false)   
-  document.body.addEventListener(eventName, preventDefaults, false)
-})
-
-// Highlight drop area when item is dragged over it
-;['dragenter', 'dragover'].forEach(eventName => {
-  dropArea.addEventListener(eventName, highlight, false)
-})
-
-;['dragleave', 'drop'].forEach(eventName => {
-  dropArea.addEventListener(eventName, unhighlight, false)
-})
-
-// Handle dropped files
-dropArea.addEventListener('drop', handleDrop, false)
-
-function preventDefaults (e) {
-  e.preventDefault()
-  e.stopPropagation()
-}
-
-function highlight(e) {
-  dropArea.classList.add('highlight')
-}
-
-function unhighlight(e) {
-  dropArea.classList.remove('active')
-}
-
-function handleDrop(e) {
-  var dt = e.dataTransfer
-  var files = dt.files
-
-  handleFiles(files)
-}
-
-if ($('#dummiesToShow').attr('data-trigger') == "true") {
-  $('#dragDropInstructions, #cantUploadDetails, #help-uploading, #drop-area').hide();
-  $('#fileUploadedBox, #fileAlreadyUploaded').show();
-}
-
-let uploadProgress = []
-let progressBar = document.getElementById('progress-bar')
-
-function initializeProgress(numFiles) {
-  progressBar.value = 0
-  uploadProgress = []
-
-  document.getElementById('dragDropInstructions').classList.add('hidden')
-  document.getElementById('progressContainer').classList.remove('hidden')
-
-  if(numFiles === 1) {
-
-  } else {
-    $('#thisUploadHeading').text('These are your uploads')
-  }
-
-  for(let i = numFiles; i > 0; i--) {
-    uploadProgress.push(0)
-  }
-}
-
-function updateProgress(fileNumber, percent) {
-  uploadProgress[fileNumber] = percent
-  let total = uploadProgress.reduce((tot, curr) => tot + curr, 0) / uploadProgress.length
-  console.debug('update', fileNumber, percent, total)
-  progressBar.value = total
-}
-
-function handleFiles(files) {
-  files = Array.from(files)
-  initializeProgress(files.length)
-  files.forEach(uploadFile)
-  files.forEach(previewFile)
-}
-
-function previewFile(file) {
-  let reader = new FileReader()
-  reader.readAsDataURL(file)
-  reader.onloadend = function() {
-    let img = document.createElement('img')
-    img.src = reader.result
-    document.getElementById('fileUploadedBox').classList.remove('hidden')
-
-    if(document.getElementById('help-uploading')) {
-      document.getElementById('cantUploadDetails').classList.add('hidden')  
-      document.getElementById('help-uploading').classList.add('hidden')
-    }
-    
-    document.getElementById('drop-area').classList.add('hidden')
-    
-    document.getElementById('gallery').appendChild(img)
-    document.getElementById('theNameOfFile').value = "File uploaded: " + file.name
-    document.getElementById('theNameOfFile').focus()  
-  }
-}
-
-function uploadFile(file, i) {
-  var url = 'https://api.cloudinary.com/v1_1/henryneves/image/upload'
-  var xhr = new XMLHttpRequest()
-  var formData = new FormData()
-  xhr.open('POST', url, true)
-  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
-
-  // Update progress (can be used to show progress indicator)
-  xhr.upload.addEventListener("progress", function(e) {
-    updateProgress(i, (e.loaded * 100.0 / e.total) || 100)
-  })
-
-  xhr.addEventListener('readystatechange', function(e) {
-    if (xhr.readyState == 4 && xhr.status == 200) {
-      updateProgress(i, 100) // <- Add this
-    }
-    else if (xhr.readyState == 4 && xhr.status != 200) {
-      // Error. Inform the user
-    }
-  })
-
-  formData.append('upload_preset', 'cswfg8zn')
-  formData.append('file', file)
-  xhr.send(formData)
-}
-
-$('.upload-arrow-container').on('click', function() {
-  $('#fileElem').trigger('click');
-});
-*/
