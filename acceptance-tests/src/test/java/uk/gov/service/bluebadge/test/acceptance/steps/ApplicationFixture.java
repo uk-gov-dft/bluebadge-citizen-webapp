@@ -175,9 +175,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
     if ("12".equals(points)) {
       commonPage.selectRadioButton(Ids.EleCheck.PLANNING_POINTS);
     } else {
-      commonPage
-          .findPageElementById(Ids.EleCheck.PLANNING_POINTS + ".PLANNING_POINTS_" + points)
-          .click();
+      commonPage.selectRadioButton(Ids.EleCheck.PLANNING_POINTS + ".PLANNING_POINTS_" + points);
     }
     pressContinue();
   }
@@ -187,9 +185,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
     if (difficulty.equals("HELP")) {
       commonPage.selectRadioButton(Ids.EleCheck.WALKING_DIFFICULTY_LIST);
     } else {
-      commonPage
-          .findPageElementById(Ids.EleCheck.WALKING_DIFFICULTY_LIST + "." + difficulty)
-          .click();
+      commonPage.selectRadioButton(Ids.EleCheck.WALKING_DIFFICULTY_LIST + "." + difficulty);
     }
     pressContinue();
   }
@@ -259,9 +255,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
     if ("YES".equals(option)) {
       commonPage.selectRadioButton(Ids.EleCheck.RECEIVED_COMPENSATION);
     } else {
-      commonPage
-          .findPageElementById(Ids.EleCheck.RECEIVED_COMPENSATION + "." + option.toLowerCase())
-          .click();
+      commonPage.selectRadioButton(Ids.EleCheck.RECEIVED_COMPENSATION + "." + option.toLowerCase());
     }
     pressContinue();
   }
@@ -271,9 +265,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
     if ("YES".equals(option)) {
       commonPage.selectRadioButton(Ids.EleCheck.HAS_DISABILITY);
     } else {
-      commonPage
-          .findPageElementById(Ids.EleCheck.HAS_DISABILITY + "." + option.toLowerCase())
-          .click();
+      commonPage.selectRadioButton(Ids.EleCheck.HAS_DISABILITY + "." + option.toLowerCase());
     }
     pressContinue();
   }
@@ -283,9 +275,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
     if ("YES".equals(option)) {
       commonPage.selectRadioButton(Ids.EleCheck.HAS_MENTAL_DISORDER);
     } else {
-      commonPage
-          .findPageElementById(Ids.EleCheck.HAS_MENTAL_DISORDER + "." + option.toLowerCase())
-          .click();
+      commonPage.selectRadioButton(Ids.EleCheck.HAS_MENTAL_DISORDER + "." + option.toLowerCase());
     }
     pressContinue();
   }
@@ -293,11 +283,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
   @And("^I complete has mobility component page for \"(YES|NO)\"$")
   public void iCompleteHasMobilityComponentPage(String option) {
     if ("YES".equals(option))
-      commonPage.findPageElementById(Ids.EleCheck.AWARDED_HIGHER_RATE_MOBILITY).click();
-    else
-      commonPage
-          .findPageElementById(Ids.EleCheck.AWARDED_HIGHER_RATE_MOBILITY + "." + "false")
-          .click();
+      commonPage.selectRadioButton(Ids.EleCheck.AWARDED_HIGHER_RATE_MOBILITY);
+    else commonPage.selectRadioButton(Ids.EleCheck.AWARDED_HIGHER_RATE_MOBILITY + "." + "false");
     pressContinue();
   }
 
@@ -313,9 +300,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
     if ("PAIN".equals(difficulty)) {
       commonPage.selectRadioButton(Ids.EleCheck.WHAT_WALKING_DIFFICULTY_LIST);
     } else {
-      commonPage
-          .findPageElementById(Ids.EleCheck.WHAT_WALKING_DIFFICULTY_LIST + difficulty)
-          .click();
+      commonPage.selectRadioButton(Ids.EleCheck.WHAT_WALKING_DIFFICULTY_LIST + difficulty);
     }
     pressContinue();
   }
@@ -349,9 +334,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   public void iCompleteTheTreatmentsPage(String option) {
 
     if ("NO".equals(option)) {
-      commonPage
-          .findPageElementById(Ids.Walkd.TREATMENT_HAS_TREATMENT_OPTION + option.toLowerCase())
-          .click();
+      commonPage.selectRadioButton(Ids.Walkd.TREATMENT_HAS_TREATMENT_OPTION + option.toLowerCase());
     }
 
     if ("YES".equals(option)) {
@@ -381,9 +364,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
       addMedication(option);
     } else {
-      commonPage
-          .findPageElementById(Ids.Walkd.MEDICATION_HAS_MEDICATION_OPTION + option.toLowerCase())
-          .click();
+      commonPage.selectRadioButton(
+          Ids.Walkd.MEDICATION_HAS_MEDICATION_OPTION + option.toLowerCase());
     }
     pressContinue();
   }
@@ -394,9 +376,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
     if ("YES".equals(option)) {
       commonPage.selectRadioButton(Ids.Walkd.MEDICATION_PRESCRIBED_OPTION);
     } else {
-      commonPage
-          .findPageElementById(Ids.Walkd.MEDICATION_PRESCRIBED_OPTION + "." + option.toLowerCase())
-          .click();
+      commonPage.selectRadioButton(
+          Ids.Walkd.MEDICATION_PRESCRIBED_OPTION + "." + option.toLowerCase());
     }
     clearAndSendKeys(Ids.Walkd.MEDICATION_DOSAGE_TEXT, "50mg");
     clearAndSendKeys(Ids.Walkd.MEDICATION_FREQUENCY_TEXT, "Every night");
@@ -413,10 +394,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
       commonPage.findPageElementById(AlreadyHaveBlueBadgePage.BADGE_NUMBER).sendKeys("AB 12 CD");
       pressContinue();
     } else {
-      commonPage
-          .findPageElementById(
-              AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION + "_" + opt.toLowerCase())
-          .click();
+      commonPage.selectRadioButton(
+          AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION + "_" + opt.toLowerCase());
       pressContinue();
     }
   }
@@ -440,9 +419,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
     if ("YES".equals(option)) {
       commonPage.selectRadioButton(Ids.Eligibility.HEALTHCARE_PRO_HAS_OPTION);
     } else {
-      commonPage
-          .findPageElementById(Ids.Eligibility.HEALTHCARE_PRO_HAS_OPTION + option.toLowerCase())
-          .click();
+      commonPage.selectRadioButton(
+          Ids.Eligibility.HEALTHCARE_PRO_HAS_OPTION + option.toLowerCase());
     }
 
     if ("YES".equals(option)) {
