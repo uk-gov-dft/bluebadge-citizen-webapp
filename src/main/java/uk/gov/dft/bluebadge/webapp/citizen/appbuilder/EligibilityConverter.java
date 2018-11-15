@@ -56,22 +56,23 @@ class EligibilityConverter {
       case BLIND:
         RegisteredCouncilForm registeredCouncil =
             journey.getFormForStep(StepDefinition.REGISTERED_COUNCIL);
+        String localAuthority = null;
+        if (registeredCouncil != null
+            && registeredCouncil.getLocalAuthorityForRegisteredBlind() != null
+            && registeredCouncil
+                .getLocalAuthorityForRegisteredBlind()
+                .getLocalAuthorityMetaData()
+                .isPresent()) {
+          localAuthority =
+              registeredCouncil
+                  .getLocalAuthorityForRegisteredBlind()
+                  .getLocalAuthorityMetaData()
+                  .get()
+                  .getIssuingAuthorityShortCode();
+        }
         eligibility
             .typeCode(eligibilityType)
-            .blind(
-                Blind.builder()
-                    .registeredAtLaId(
-                        (registeredCouncil != null && registeredCouncil
-                          .getLocalAuthorityForRegisteredBlind() != null &&
-                          registeredCouncil
-                            .getLocalAuthorityForRegisteredBlind().getLocalAuthorityMetaData().isPresent()
-                            ? registeredCouncil
-                                .getLocalAuthorityForRegisteredBlind()
-                                .getLocalAuthorityMetaData()
-                                .get()
-                                .getIssuingAuthorityShortCode()
-                            : null))
-                    .build());
+            .blind(Blind.builder().registeredAtLaId(localAuthority).build());
         break;
       case ARMS:
         eligibility
