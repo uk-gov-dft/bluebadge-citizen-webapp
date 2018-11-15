@@ -55,7 +55,7 @@ public class DriveAdaptedVehicleController extends SimpleStepController {
       RedirectAttributes attr) {
 
     if (Boolean.TRUE.equals(armsAdaptedVehicleForm.getHasAdaptedVehicle())
-        && StringUtils.isEmpty(armsAdaptedVehicleForm.getAdaptedVehicleDescription())) {
+        && StringUtils.isBlank(armsAdaptedVehicleForm.getAdaptedVehicleDescription())) {
       bindingResult.rejectValue("adaptedVehicleDescription", "NotBlank");
     }
 
