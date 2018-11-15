@@ -31,7 +31,7 @@ public class RegisteredCouncilSteps extends AbstractSpringSteps {
 
   @And("^I complete registered council page$")
   public void iCompleteRegisteredCouncilPage() throws Throwable {
-    commonPage.findPageElementById("registeredCouncil").sendKeys("W");
+    commonPage.findPageElementById("registeredCouncil").sendKeys("a");
     commonSteps.iClickOnContinueButton();
   }
 }
