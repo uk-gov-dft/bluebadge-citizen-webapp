@@ -121,21 +121,4 @@ public class EligibilityConverterTest {
         .forEach(
             i -> EligibilityConverter.convert(new JourneyBuilder().withEligibility(i).build()));
   }
-
-  //private void setUpRegisteredCouncilFormWhenBlind(EligibilityCodeField i, Journey journey) {
-  /*if (i.equals(BLIND)) {
-    LocalAuthorityRefData.LocalAuthorityMetaData localAuthorityMetaData =
-        new LocalAuthorityRefData.LocalAuthorityMetaData();
-    localAuthorityMetaData.setIssuingAuthorityShortCode("WARCC");
-    LocalAuthorityRefData localAuthorityRefData = new LocalAuthorityRefData();
-    localAuthorityRefData.setLocalAuthorityMetaData(localAuthorityMetaData);
-
-    RegisteredCouncilForm form =
-        RegisteredCouncilForm.builder()
-            .localAuthorityForRegisteredBlind(localAuthorityRefData)
-            .build();
-
-    journey.setFormForStep(form);
-  }*/
-  //}
 }

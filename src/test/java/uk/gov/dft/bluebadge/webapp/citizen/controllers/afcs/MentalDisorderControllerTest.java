@@ -29,9 +29,7 @@ public class MentalDisorderControllerTest {
 
   @Before
   public void setup() {
-    uk.gov.dft.bluebadge.webapp.citizen.controllers.afcs.MentalDisorderController controller =
-        new uk.gov.dft.bluebadge.webapp.citizen.controllers.afcs.MentalDisorderController(
-            new RouteMaster());
+    MentalDisorderController controller = new MentalDisorderController(new RouteMaster());
 
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
