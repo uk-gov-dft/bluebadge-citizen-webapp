@@ -4,6 +4,7 @@ import cucumber.api.java.en.And;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
 import uk.gov.service.bluebadge.test.acceptance.steps.AbstractSpringSteps;
+import uk.gov.service.bluebadge.test.acceptance.steps.ApplicationFixture;
 import uk.gov.service.bluebadge.test.acceptance.steps.CommonSteps;
 
 public class RegisteredCouncilSteps extends AbstractSpringSteps {
@@ -26,12 +27,6 @@ public class RegisteredCouncilSteps extends AbstractSpringSteps {
   @And("^I complete permission page for \"(yes|no)\"$")
   public void iCompletePermissionPage(String answer) throws Throwable {
     commonPage.findElementWithUiPath("hasPermission.option." + answer).click();
-    commonSteps.iClickOnContinueButton();
-  }
-
-  @And("^I complete registered council page$")
-  public void iCompleteRegisteredCouncilPage() throws Throwable {
-    commonPage.findPageElementById("registeredCouncil").sendKeys("a");
     commonSteps.iClickOnContinueButton();
   }
 }
