@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.fixture;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.BulkyMedicalEquipmentTypeCodeField.OTHER;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.BulkyMedicalEquipmentTypeCodeField.PUMP;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.AFRFCS;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.ARMS;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.BLIND;
@@ -15,6 +17,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nat
 
 import com.google.common.collect.Lists;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.GenderCodeField;
@@ -43,6 +46,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalAddF
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MayBeEligibleForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.MedicalEquipmentForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
@@ -361,6 +365,8 @@ public class JourneyFixture {
       if (StepDefinition.RECEIVE_BENEFITS == stepTo) return journey;
       journey.setFormForStep(MainReasonForm.builder().mainReasonOption(CHILDBULK).build());
       if (StepDefinition.MAIN_REASON == stepTo) return journey;
+      journey.setFormForStep(new MayBeEligibleForm());
+      journey.setFormForStep(getMedicalEquipmentForm());
     }
     if (EligibilityCodeField.BLIND == eligibility) {
       journey.setFormForStep(ReceiveBenefitsForm.builder().benefitType(NONE).build());
@@ -459,6 +465,13 @@ public class JourneyFixture {
 
   private static StepForm getDisabilityForm() {
     return DisabilityForm.builder().hasDisability(Boolean.TRUE).build();
+  }
+
+  public static MedicalEquipmentForm getMedicalEquipmentForm() {
+    return MedicalEquipmentForm.builder()
+        .equipment(Arrays.asList(PUMP, OTHER))
+        .otherDescription("another medical equipment")
+        .build();
   }
 
   public static ChooseYourCouncilForm getChooseYourCouncilForm() {

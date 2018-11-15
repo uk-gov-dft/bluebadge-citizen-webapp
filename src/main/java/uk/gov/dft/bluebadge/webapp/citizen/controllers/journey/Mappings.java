@@ -64,6 +64,7 @@ public class Mappings {
   public static final String URL_MEDICATION_LIST = "/list-medication";
   public static final String URL_MEDICATION_REMOVE = "/list-medication/remove";
   public static final String URL_MEDICATION_ADD = "/add-medication";
+  public static final String URL_MEDICAL_EQUIPMENT = "/medical-equipment";
 
   // Walking difficulties route
   public static final String URL_WHAT_WALKING_DIFFICULT = "/what-makes-walking-difficult";
@@ -120,6 +121,7 @@ public class Mappings {
           .put(StepDefinition.HEALTHCARE_PROFESSIONALS_ADD, URL_HEALTHCARE_PROFESSIONALS_ADD)
           .put(StepDefinition.MEDICATION_LIST, URL_MEDICATION_LIST)
           .put(StepDefinition.MEDICATION_ADD, URL_MEDICATION_ADD)
+          .put(StepDefinition.MEDICAL_EQUIPMENT, URL_MEDICAL_EQUIPMENT)
 
           //organisation mappings
           .put(StepDefinition.ORGANISATION_CARE, URL_ORGANISATION_CARE)

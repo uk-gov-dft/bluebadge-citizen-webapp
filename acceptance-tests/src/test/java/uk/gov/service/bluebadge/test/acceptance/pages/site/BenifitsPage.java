@@ -9,5 +9,4 @@ public class BenifitsPage {
 
   public static final String BENEFIT_RECEIVED_LIST = "benefitType";
   public static final String PAGE_URL = "/benefits";
-
 }

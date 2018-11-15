@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="(${errorSummary}? #{common.title.error} : '')  + #{${JOURNEY.who} + 'whatMakesWalkingDifficult.title'}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <form th:action="@{/medical-equipment}" th:object="${formRequest}" method="post" novalidate>
+
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h1 class="govuk-fieldset__heading" th:text="#{${JOURNEY.who} + 'medicalEquipment.title'}"></h1>
+                    </legend>
+                    <div class="govuk-form-group" th:class="${#fields.hasErrors('equipment')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+
+                        <span class="govuk-error-message"
+                              data-uipath="equipment.error"
+                              th:errors="*{equipment}"></span>
+
+                        <div id="equipment-list" class="govuk-checkboxes" data-module="checkboxes" >
+                            <div th:remove="tag" th:each="checkboxOption, iterStat: ${equipment.options}"
+                                 th:with="lastControl=${checkboxOption.shortCode} +'-conditional'">
+
+                                <div class="govuk-checkboxes__item" th:if="${iterStat.index == 0}">
+                                    <input class="govuk-checkboxes__input"
+                                           type="checkbox"
+                                           th:field="*{equipment}"
+                                           id="medicalEquipment"
+                                           th:name="medicalEquipment"
+                                           th:value="${checkboxOption.shortCode}"
+                                           th:attr="data-aria-controls=${lastControl}">
+                                    <label class="govuk-label govuk-checkboxes__label"
+                                           for="medicalEquipment"
+                                           th:text="#{${checkboxOption.messageKey}}"></label>
+                                </div>
+
+                                <div class="govuk-checkboxes__item" th:unless="${iterStat.index == 0}">
+                                    <input class="govuk-checkboxes__input"
+                                           type="checkbox"
+                                           th:field="*{equipment}"
+                                           th:id="'medicalEquipment' + ${checkboxOption.shortCode}"
+                                           th:name="medicalEquipment"
+                                           th:value="${checkboxOption.shortCode}"
+                                           th:attr="data-aria-controls=${lastControl}">
+                                    <label class="govuk-label govuk-checkboxes__label"
+                                           th:for="'medicalEquipment' + ${checkboxOption.shortCode}"
+                                           th:text="#{${checkboxOption.messageKey}}"></label>
+                                </div>
+ 
+                                <div th:if="${iterStat.last}" class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden"
+                                     th:id="${lastControl}">
+
+                                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{medicalEquipment.option.other.desc}, 'otherDescription', null, 'text', null)}"></div>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <button type="submit"
+                        class="govuk-button"
+                        data-uipath="button.continue"
+                        th:text="#{btn.label.continue}"></button>
+
+            </form>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

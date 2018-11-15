@@ -1,11 +1,10 @@
 package uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import javax.validation.constraints.*;
 
 /** Gets or Sets BulkyMedicalEquipmentTypeCodeField */
 public enum BulkyMedicalEquipmentTypeCodeField {
-  NONE("NONE"),
+  OTHER("OTHER"),
 
   CAST("CAST"),
 

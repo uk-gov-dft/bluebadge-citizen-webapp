@@ -27,21 +27,29 @@ public class HealthConditionsFormTest {
   }
 
   @Test
-  public void givenChildBorV_thenNextStepIsDeclaration() {
+  public void givenChildVehic_thenNextStepIsDeclaration() {
     Journey journey = new Journey();
 
-    EnumSet<EligibilityCodeField> childPaths = EnumSet.of(CHILDBULK, CHILDVEHIC);
-    assertThat(childPaths).isNotEmpty();
-    for (EligibilityCodeField eligibility : childPaths) {
+    journey.setFormForStep(MainReasonForm.builder().mainReasonOption(CHILDVEHIC).build());
 
-      journey.setFormForStep(MainReasonForm.builder().mainReasonOption(eligibility).build());
+    HealthConditionsForm form = HealthConditionsForm.builder().build();
+    Optional<StepDefinition> nextStep = form.determineNextStep(journey);
 
-      HealthConditionsForm form = HealthConditionsForm.builder().build();
-      Optional<StepDefinition> nextStep = form.determineNextStep(journey);
+    assertThat(nextStep).isNotEmpty();
+    assertThat(nextStep.get()).isEqualTo(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST);
+  }
 
-      assertThat(nextStep).isNotEmpty();
-      assertThat(nextStep.get()).isEqualTo(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST);
-    }
+  @Test
+  public void givenChildBulk_thenNextStepIsMedicalEquipment() {
+    Journey journey = new Journey();
+
+    journey.setFormForStep(MainReasonForm.builder().mainReasonOption(CHILDBULK).build());
+
+    HealthConditionsForm form = HealthConditionsForm.builder().build();
+    Optional<StepDefinition> nextStep = form.determineNextStep(journey);
+
+    assertThat(nextStep).isNotEmpty();
+    assertThat(nextStep.get()).isEqualTo(StepDefinition.MEDICAL_EQUIPMENT);
   }
 
   @Test

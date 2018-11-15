@@ -33,8 +33,11 @@ public class HealthConditionsForm implements StepForm, Serializable {
     if (EligibilityCodeField.WALKD.equals(journey.getEligibilityCode())) {
       return Optional.of(StepDefinition.WHAT_WALKING_DIFFICULTIES);
     }
-    if (journey.getEligibilityCode() == CHILDBULK || journey.getEligibilityCode() == CHILDVEHIC) {
+    if (journey.getEligibilityCode() == CHILDVEHIC) {
       return Optional.of(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST);
+    }
+    if (journey.getEligibilityCode() == CHILDBULK) {
+      return Optional.of(StepDefinition.MEDICAL_EQUIPMENT);
     }
     return Optional.of(StepDefinition.DECLARATIONS);
   }
