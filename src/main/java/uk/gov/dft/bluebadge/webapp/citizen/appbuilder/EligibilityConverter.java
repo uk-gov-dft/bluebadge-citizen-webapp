@@ -19,6 +19,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveBenefitForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.arms.ArmsAdaptedVehicleForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.arms.ArmsHowOftenDriveForm;
 
 class EligibilityConverter {
 
@@ -56,10 +58,19 @@ class EligibilityConverter {
         eligibility.typeCode(eligibilityType).blind(Blind.builder().build());
         break;
       case ARMS:
+        ArmsAdaptedVehicleForm adaptedVehicleForm =
+            journey.getFormForStep(StepDefinition.ARMS_DRIVE_ADAPTED_VEHICLE);
+        ArmsHowOftenDriveForm howOftenDriveForm =
+            journey.getFormForStep(StepDefinition.ARMS_HOW_OFTEN_DRIVE);
         eligibility
             .typeCode(eligibilityType)
             .descriptionOfConditions(journey.getDescriptionOfCondition())
-            .disabilityArms(DisabilityArms.builder().isAdaptedVehicle(false).build());
+            .disabilityArms(
+                DisabilityArms.builder()
+                    .isAdaptedVehicle(adaptedVehicleForm.getHasAdaptedVehicle())
+                    .adaptedVehicleDescription(adaptedVehicleForm.getAdaptedVehicleDescription())
+                    .drivingFrequency(howOftenDriveForm.getHowOftenDrive())
+                    .build());
         break;
       case CHILDBULK:
         eligibility
@@ -90,7 +101,7 @@ class EligibilityConverter {
     return eligibility.build();
   }
 
-  static List<HealthcareProfessional> getHealthcareProfessionals(Journey journey) {
+  private static List<HealthcareProfessional> getHealthcareProfessionals(Journey journey) {
 
     HealthcareProfessionalListForm listForm =
         journey.getFormForStep(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST);
