@@ -22,10 +22,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
-import uk.gov.dft.bluebadge.webapp.citizen.model.Document;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveIdentityForm;
-import uk.gov.dft.bluebadge.webapp.citizen.service.DocumentService;
+import uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService;
 
 @Controller
 @Slf4j
@@ -34,12 +34,12 @@ public class ProveIdentityController implements StepController {
   public static final String TEMPLATE = "prove-identity";
 
   private final RouteMaster routeMaster;
-  private final DocumentService documentService;
+  private final ArtifactService artifactService;
 
   @Autowired
-  ProveIdentityController(RouteMaster routeMaster, DocumentService documentService) {
+  ProveIdentityController(RouteMaster routeMaster, ArtifactService artifactService) {
     this.routeMaster = routeMaster;
-    this.documentService = documentService;
+    this.artifactService = artifactService;
   }
 
   @GetMapping(Mappings.URL_PROVE_IDENTITY)
@@ -50,7 +50,11 @@ public class ProveIdentityController implements StepController {
     }
 
     if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
-      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
+      ProveIdentityForm proveIdentityForm = journey.getFormForStep(getStepDefinition());
+      if (null != proveIdentityForm.getJourneyArtifact()) {
+        artifactService.createAccessibleLinks(proveIdentityForm.getJourneyArtifact());
+      }
+      model.addAttribute(FORM_REQUEST, proveIdentityForm);
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -62,11 +66,15 @@ public class ProveIdentityController implements StepController {
 
   @PostMapping(value = "/prove-identity-ajax", produces = "application/json")
   @ResponseBody
-  public Map<String, Object> submitAjax(@RequestParam("document") MultipartFile document) {
-
+  public Map<String, Object> submitAjax(
+      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
+      @RequestParam("document") MultipartFile document,
+      ProveIdentityForm proveIdentityForm) {
     try {
-      Document uploadedDocument = documentService.uploadDocument(document);
-      return ImmutableMap.of("success", "true", "document", uploadedDocument);
+      JourneyArtifact uploadedJourneyArtifact = artifactService.upload(document);
+      proveIdentityForm.setJourneyArtifact(uploadedJourneyArtifact);
+      journey.setFormForStep(proveIdentityForm);
+      return ImmutableMap.of("success", "true", "document", uploadedJourneyArtifact);
     } catch (Exception e) {
       log.warn("Failed to upload document through ajax call.", e);
       return ImmutableMap.of("error", "Failed to upload");
@@ -81,13 +89,15 @@ public class ProveIdentityController implements StepController {
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
-    try {
-      Document uploadDocument = documentService.uploadDocument(document);
-      formRequest.setDocumentId(uploadDocument.getUrl().toString());
-    } catch (Exception e) {
-      log.warn("Failed to upload document", e);
-      ObjectError error = new ObjectError("document", "Failed to upload document");
-      bindingResult.addError(error);
+    if (!document.isEmpty()) {
+      try {
+        JourneyArtifact uploadJourneyArtifact = artifactService.upload(document);
+        formRequest.setJourneyArtifact(uploadJourneyArtifact);
+      } catch (Exception e) {
+        log.warn("Failed to upload document", e);
+        ObjectError error = new ObjectError("document", "Failed to upload document");
+        bindingResult.addError(error);
+      }
     }
 
     if (bindingResult.hasErrors()) {

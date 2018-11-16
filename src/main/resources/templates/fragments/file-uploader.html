@@ -21,10 +21,10 @@
          th:data-preview-reset-button="#{fileUploader.preview.resetBtn}"
          th:data-preview-addFile-button="#{fileUploader.preview.addFileBtn}"
          th:data-loader-text="#{fileUploader.loaderText}"
-         th:class="'govuk-form-group' + (${#fields.hasErrors('documentId')} == true ? ' govuk-form-group--error' : '')">
+         th:class="'govuk-form-group' + (${#fields.hasErrors('journeyArtifact')} == true ? ' govuk-form-group--error' : '')">
 
         <label class="govuk-label" th:for="${name}" th:text="${label}"></label>
-        <span class="govuk-error-message" id="documentId-error" th:errors="*{__${'documentId'}__}"></span>
+        <span class="govuk-error-message" id="documentId-error" th:errors="*{__${'journeyArtifact'}__}"></span>
         <input class="govuk-file-upload"
                th:id="${name}"
                th:name="${name}"
