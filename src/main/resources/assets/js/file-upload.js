@@ -2,7 +2,7 @@ export default class FileUploader {
 
 	constructor (options) {
 		if(!window.FileReader || !window.DragEvent) {
-			console.warn('File Uploader Component cannot be supported by this browser');
+			console.warn('File Uploader Component is not supported on this browser');
 			return;
 		}
 
