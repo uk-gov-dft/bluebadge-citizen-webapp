@@ -1,7 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.service;
 
 import com.amazonaws.HttpMethod;
-
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;

@@ -33,7 +33,7 @@ const initFileUploader = () => {
     }*/
 
     const el = document.querySelectorAll('input[type="file"]').item(0);
-    const container = document.getElementById("file-uploader-container");
+    const container = document.getElementById("proveIdentity-fileUploaderContainer");
     const continueBtn = document.getElementById("proveIdentity-continue-btn");
     const fileUploaderErrorBox = document.getElementsByClassName('file-uploader-error').item(0);
 
@@ -44,13 +44,16 @@ const initFileUploader = () => {
             uploadPath: "http://localhost:8780/prove-identity-ajax",
             reset: () => {
                 continueBtn.style.display = 'none';
+                fileUploaderErrorBox.classList.remove('file-uploader-error--active');
             },
             uploaded: () => {
                 continueBtn.style.display = 'inline-block';
                 fileUploaderErrorBox.classList.remove('file-uploader-error--active');
             },
             uploadError: () => {
-                fileUploaderErrorBox.classList.add('file-uploader-error--active');
+                if(!fileUploaderErrorBox.classList.contains('file-uploader-error--active')) {
+                    fileUploaderErrorBox.classList.add('file-uploader-error--active');
+                }
                 fileUploaderErrorBox.focus();
             }
         });

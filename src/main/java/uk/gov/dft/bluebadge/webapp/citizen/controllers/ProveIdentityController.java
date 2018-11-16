@@ -3,14 +3,8 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
-import com.amazonaws.services.s3.transfer.TransferManager;
-import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
-import com.amazonaws.services.s3.transfer.Upload;
 import com.google.common.collect.ImmutableMap;
-import java.io.File;
-import java.io.IOException;
 import java.util.Map;
-import java.util.UUID;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import uk.gov.dft.bluebadge.webapp.citizen.config.S3Config;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
@@ -88,11 +81,10 @@ public class ProveIdentityController implements StepController {
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
-    try{
+    try {
       Document uploadDocument = documentService.uploadDocument(document);
       formRequest.setDocumentId(uploadDocument.getUrl().toString());
-    }
-    catch(Exception e){
+    } catch (Exception e) {
       log.warn("Failed to upload document", e);
       ObjectError error = new ObjectError("document", "Failed to upload document");
       bindingResult.addError(error);

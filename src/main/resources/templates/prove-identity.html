@@ -26,6 +26,24 @@
             </ul>
 
             <form th:action="@{/prove-identity}" th:object="${formRequest}" method="post" enctype="multipart/form-data" novalidate>
+
+                <!--<div class="preview preview--static">
+                    <h3 class="preview__heading" th:text="#{fileUploader.preview.title}"></h3>
+                    <div class="preview__holder">
+                        <!-- image preview -->
+                        <!--<div class="preview__item">
+                            <img src="" alt="">
+                        </div>
+
+                        <!-- file preview -->
+                        <!--<div class="preview__item">
+                            <p>file name
+                                <span>(Preview unavailable)</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>-->
+
                 <div th:replace="~{ fragments/file-uploader :: fileUploader('Upload photo or scan', 'document') }"></div>
 
                 <button type="submit"
@@ -43,7 +61,9 @@
                 <div class="govuk-details__text">
                     <p th:text="#{${JOURNEY.who} + proveIdentity.cantUpload.content.p1}"></p>
                     <p th:text="#{proveIdentity.cantUpload.content.p2}"></p>
-                    <a href="/declarations" th:text="#{proveIdentity.cantUpload.link}"></a>
+                    <a data-ga-track-link="continue without proof identity"
+                       data-ga-track-link-action="alternative click"
+                       href="/declarations" th:text="#{proveIdentity.cantUpload.link}"></a>
                 </div>
             </details>
 

@@ -21,6 +21,13 @@
 		.drop-area__btn {
 			color: govuk-colour("black");
 			box-shadow: 0 2px 0 darken($govuk-focus-colour, 20%);
+
+			&:active,
+			&:focus,
+			&:hover {
+				color: govuk-colour("black");
+				box-shadow: 0 2px 0 darken($govuk-focus-colour, 20%);
+			}
 		}
 
 		.drop-area__btn,
@@ -38,11 +45,21 @@
 			display: block;
 		}
 	}
+
+	&--loading {
+		.drop-area__loader {
+			display: block;
+		}
+	}
 }
 
 .preview {
 	display: none;
 	margin-top: 10px;
+
+	&--static {
+		display: block;
+	}
 
 	&__heading {
 		@extend .govuk-heading-m;
@@ -164,6 +181,11 @@
 			@include govuk-font(19, regular);
 			text-align: center;
 		}
+	}
+
+	&__loader {
+		@include govuk-font(19, regular);
+		display: none;
 	}
 
 	&__caption {

@@ -13,13 +13,14 @@
         <div class="govuk-error-summary__body" th:text="#{fileUploader.error.content}"></div>
     </div>
 
-    <div id="file-uploader-container"
+    <div id="proveIdentity-fileUploaderContainer"
          th:data-label-mobile="#{fileUploader.label.mobile}"
          th:data-label-desktop="#{fileUploader.label.desktop}"
          th:data-label-multiFile-caption="#{fileUploader.label.multiFile.caption}"
          th:data-preview-title="#{fileUploader.preview.title}"
          th:data-preview-reset-button="#{fileUploader.preview.resetBtn}"
          th:data-preview-addFile-button="#{fileUploader.preview.addFileBtn}"
+         th:data-loader-text="#{fileUploader.loaderText}"
          th:class="'govuk-form-group' + (${#fields.hasErrors('documentId')} == true ? ' govuk-form-group--error' : '')">
 
         <label class="govuk-label" th:for="${name}" th:text="${label}"></label>

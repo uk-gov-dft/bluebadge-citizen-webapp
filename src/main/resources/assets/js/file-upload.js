@@ -31,6 +31,7 @@ export default class FileUploader {
 		this.$imageMimeTypes = "image/jpeg, image/gif, image/png";
 
 		this.$DROPAREA_STATE = {
+			LOADING: 'file-uploader--loading',
 			ACTIVE: 'file-uploader--active',
 			PREVIEW_MODE: 'file-uploader--preview-mode',
 		}
@@ -101,7 +102,9 @@ export default class FileUploader {
 		const files = event.target.files || event.dataTransfer.files;
 		
 		if(this.$fileInput.multiple && files.length > 0){
-			Array.from(files).filter(file => this.validateFile(file)).map(file => this.beginFileUpload(file));
+			Array.from(files)
+				.filter(file => this.validateFile(file))
+				.map(file => this.beginFileUpload(file));
 		} else if(files.length > 0 && this.validateFile(files.item(0))) {
 			this.beginFileUpload(files.item(0));
 		}
@@ -109,21 +112,38 @@ export default class FileUploader {
 	}
 
 	validateFile(file) {
-		// if (!file.type.match('image.*')) try this instead
+		// !file.type.match('image.*') try this instead
 		if(this.$fileInput.accept.includes(file.type)) {
 			return file;
 		}
+
+		this.makeScreenAnnouncement('Incorrect file type uploaded');
+		this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
 	}
 
 	beginFileUpload(file) {
 		const xhr = new XMLHttpRequest();
 		xhr.open('POST', this.$options.uploadPath, true);
+		xhr.responseType = "json";
+
 		xhr.addEventListener('readystatechange', (e) => {
+			this.$container.classList.add(this.$DROPAREA_STATE.LOADING);
+
 			if (xhr.readyState == 4 && xhr.status == 200) {
-				// console.log('response ', xhr.response);
-				this.showPreview(file);
-				this.fireLifeCycleEvent('uploaded');
-			} else if (xhr.readyState == 4 && xhr.status != 200) {
+				if(xhr.response.success) {
+					this.showPreview(response);
+					this.fireLifeCycleEvent('uploaded');
+				} else {
+					this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
+					this.fireLifeCycleEvent('uploadError');
+				}
+
+				this.$container.classList.remove(this.$DROPAREA_STATE.LOADING);
+			}
+
+			if(xhr.readyState == 4 && xhr.status != 200) {
+				this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
+				this.$container.classList.remove(this.$DROPAREA_STATE.LOADING);
 				this.fireLifeCycleEvent('uploadError');
 			}
 		});
@@ -138,11 +158,14 @@ export default class FileUploader {
 		return file;
 	}
 
-	showPreview(file) {
-		const filePreview = this.renderFilepreview(file);
-		this.$previewHolder.appendChild(filePreview );
+	showPreview(response) {
+		const filePreview = this.renderFilepreview(response);
+		this.$previewHolder.appendChild(filePreview);
 		this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
-		this.$container.classList.add(this.$DROPAREA_STATE.PREVIEW_MODE);
+
+		if(!this.$container.classList.contains(this.$DROPAREA_STATE.PREVIEW_MODE)) {
+			this.$container.classList.add(this.$DROPAREA_STATE.PREVIEW_MODE);
+		}
 	}
 
 	renderFileUploader(container) {
@@ -192,6 +215,11 @@ export default class FileUploader {
 			dropArea_caption.innerHTML = this.getDataAttrValue('label-multiFile-caption') || "(You can upload multiple photos)";
 			dropArea_instructions.appendChild(dropArea_caption);
 		}
+
+		const dropArea_loader = document.createElement('p');
+		dropArea_loader.classList.add('drop-area__loader');
+		dropArea_loader.innerHTML = this.getDataAttrValue('loader-text') || "Uploading files...";
+		dropArea_instructions.appendChild(dropArea_loader);
 
 		const dropArea = document.createElement('div');
 		dropArea.classList.add('drop-area');
@@ -265,32 +293,32 @@ export default class FileUploader {
 		return fileUploaderPreview;
 	}
 
-	renderFilepreview(file) {
+	renderFilepreview(response) {
 		const elPreviewItem = document.createElement('div');
 		elPreviewItem.classList.add('preview__item');
 
-		if(this.$imageMimeTypes.indexOf(file.type) !== -1) {
-			const elImg = document.createElement('img');
-			
-			// may replace this with s3 url?
-			const reader = new FileReader();
-			reader.readAsDataURL(file);
-			reader.onloadend = function() {
-				elImg.src = reader.result;
-				elPreviewItem.appendChild(elImg);
-			}
-		} else {
+		if(response.type === "file") {
 			const elP = document.createElement('p');
-			elP.innerText = file.name;
+			elP.innerText = response.fileName;
 
 			const elSpan = document.createElement('span');
 			elSpan.innerText = "(Preview unavailable)";
 			elP.appendChild(elSpan);
-			
 			elPreviewItem.appendChild(elP);
+		} else {
+			const elImg = document.createElement('img');
+			elImg.src = response.signedUrl;
+			elPreviewItem.appendChild(elImg);
+			
+			/*const reader = new FileReader();
+			reader.readAsDataURL(file);
+			reader.onloadend = function() {
+				elImg.src = reader.result;
+				elPreviewItem.appendChild(elImg);
+			}*/
 		}
 
-		this.makeScreenAnnouncement("File uploaded: " + file.name);
+		this.makeScreenAnnouncement("File uploaded: " + response.fileName);
 
 		return elPreviewItem;
 	}
