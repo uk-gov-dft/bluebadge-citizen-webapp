@@ -50,7 +50,7 @@ public class MedicalEquipmentController extends SimpleStepController {
       RedirectAttributes attr) {
 
     if (null != form.getEquipment()
-        && Boolean.TRUE.equals(form.getEquipment().contains(OTHER))
+        && form.getEquipment().contains(OTHER)
         && StringUtils.isBlank(form.getOtherDescription())) {
       bindingResult.rejectValue("otherDescription", "NotBlank");
     }
