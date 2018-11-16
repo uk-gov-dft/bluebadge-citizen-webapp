@@ -7,6 +7,8 @@ class Ids {
     static final String MAIN_REASON_LIST = "mainReasonOption";
     static final String WALKING_DIFFICULTY_LIST = "walkingDifficulty";
     static final String WHAT_WALKING_DIFFICULTY_LIST = "whatWalkingDifficulties";
+    static final String EQUIPMENT_LIST = "equipment";
+    static final String MEDICAL_EQUIPMENT = "medicalEquipment";
     static final String HAS_RECEIVED_DLA = "receivedDlaOption";
     static final String NEVER_RECEIVED_DLA = "receivedDlaOption.NEVER_RECEIVED_DLA";
     static final String MOVING_POINTS = "movingAroundPoints";

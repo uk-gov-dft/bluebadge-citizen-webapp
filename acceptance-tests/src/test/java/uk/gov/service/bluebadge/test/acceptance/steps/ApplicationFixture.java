@@ -305,6 +305,23 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
+  @And("^I complete medical equipment page$")
+  public void iCompleteMedicalEquipmentPage() throws Throwable {
+    commonPage.selectRadioButton(Ids.EleCheck.MEDICAL_EQUIPMENT);
+    pressContinue();
+  }
+
+  @And(
+      "^I complete medical equipment page for \"(PUMP|VENT|SUCTION|PARENT|SYRINGE|OXYADMIN|OXYSAT|CAST|OTHER)\"$")
+  public void iCompleteMedicalEquipmentPage(String difficulty) throws Throwable {
+    if ("VENT".equals(difficulty)) {
+      commonPage.selectRadioButton(Ids.EleCheck.MEDICAL_EQUIPMENT);
+    } else {
+      commonPage.selectRadioButton(Ids.EleCheck.MEDICAL_EQUIPMENT + difficulty);
+    }
+    pressContinue();
+  }
+
   private void clearAndSendKeys(String element, String value) {
     commonPage.findPageElementById(element).clear();
     commonPage.findPageElementById(element).sendKeys(value);
