@@ -11,12 +11,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
-import javax.imageio.ImageIO;
 import javax.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,19 +29,24 @@ import uk.gov.dft.bluebadge.webapp.citizen.config.S3Config;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Document;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveIdentityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.service.DocumentService;
 
 @Controller
+@Slf4j
 public class ProveIdentityController implements StepController {
 
   public static final String TEMPLATE = "prove-identity";
 
   private final RouteMaster routeMaster;
+  private final DocumentService documentService;
 
   @Autowired
-  ProveIdentityController(RouteMaster routeMaster) {
+  ProveIdentityController(RouteMaster routeMaster, DocumentService documentService) {
     this.routeMaster = routeMaster;
+    this.documentService = documentService;
   }
 
   @GetMapping(Mappings.URL_PROVE_IDENTITY)
@@ -63,36 +69,15 @@ public class ProveIdentityController implements StepController {
 
   @PostMapping(value = "/prove-identity-ajax", produces = "application/json")
   @ResponseBody
-  public Map<String, String> submitAjax(@RequestParam("document") MultipartFile document) {
+  public Map<String, Object> submitAjax(@RequestParam("document") MultipartFile document) {
 
-    /*StandardMultipartHttpServletRequest doc = (StandardMultipartHttpServletRequest) document;*/
     try {
-      System.out.println("submitAjax");
-
+      Document uploadedDocument = documentService.uploadDocument(document);
+      return ImmutableMap.of("success", "true", "document", uploadedDocument);
     } catch (Exception e) {
+      log.warn("Failed to upload document through ajax call.", e);
+      return ImmutableMap.of("error", "Failed to upload");
     }
-
-    if (!document.isEmpty()) {
-      String originalFilename = document.getOriginalFilename();
-      System.out.println("filename:" + originalFilename);
-      //      byte[] bI = org.apache.commons.codec.binary.Base64.decodeBase64((document.substring(document.indexOf(",") + 1)).getBytes());
-      //      InputStream fis = new ByteArrayInputStream(bI);
-      //      ObjectMetadata metadata = new ObjectMetadata();
-      //      metadata.setContentLength(bI.length);
-      //      metadata.setContentType("image/png");
-      //      AmazonS3 s3 = new S3Config().amazonS3();
-      //      String fileName = UUID.randomUUID().toString();
-      //      s3.putObject("uk-gov-dft-test-applications-temp", fileName, fis, metadata);
-      String fileType = "file";
-      try {
-        ImageIO.read(document.getInputStream()).toString();
-        fileType = "image";
-      } catch (Exception e) {
-      }
-      return ImmutableMap.of("success", "true", "type", fileType, "name", originalFilename);
-    }
-
-    return ImmutableMap.of("error", "Failed to upload: document is empty");
   }
 
   @PostMapping(Mappings.URL_PROVE_IDENTITY)
@@ -103,58 +88,14 @@ public class ProveIdentityController implements StepController {
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
-    if (!document.isEmpty()) {
-
-      String bucketName = "uk-gov-dft-test-applications-temp";
-      String keyName = UUID.randomUUID().toString() + "-" + document.getName();
-
-      TransferManager tm =
-          TransferManagerBuilder.standard()
-              .withS3Client(new S3Config().amazonS3())
-              .withMultipartUploadThreshold((long) (5 * 1024 * 1025))
-              .build();
-
-      File file = new File(document.getOriginalFilename());
-
-      try {
-        document.transferTo(file);
-      } catch (IOException e) {
-        System.out.println(e);
-      }
-
-      Upload upload = tm.upload(bucketName, keyName, file);
-
-      try {
-        upload.waitForUploadResult();
-      } catch (Exception e) {
-
-      }
-
-      // File file = new File("/Users/ali.ashik/Desktop/photo.jpg");
-      //Upload upload = tm.upload(bucketName, keyName, file);
-
-      /*ProgressListener progressListener =
-          progressEvent ->
-              System.out.println("Transferred bytes: " + progressEvent.getBytesTransferred());
-
-      File file = new File(document.getOriginalFilename());
-      PutObjectRequest request = new PutObjectRequest(bucketName, keyName, file);
-
-      try {
-        document.transferTo(file);
-        request.setGeneralProgressListener(progressListener);
-        Upload upload = tm.upload(request);
-        upload.waitForCompletion();
-      } catch (Exception e) {
-        System.out.println(e);
-      }*/
-
-      /*try {
-      } catch (InterruptedException e) {
-          System.out.println(e);
-      }*/
-
-      formRequest.setDocumentId("some-id-from-aws");
+    try{
+      Document uploadDocument = documentService.uploadDocument(document);
+      formRequest.setDocumentId(uploadDocument.getUrl().toString());
+    }
+    catch(Exception e){
+      log.warn("Failed to upload document", e);
+      ObjectError error = new ObjectError("document", "Failed to upload document");
+      bindingResult.addError(error);
     }
 
     if (bindingResult.hasErrors()) {
