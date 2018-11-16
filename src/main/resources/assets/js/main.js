@@ -10,7 +10,7 @@ All.initAll();
 GAClickTracker();
 
 window.onload = () => {
-    initFileUloader();
+    initFileUploader();
 }
 
 const isBrowser_IE = () => {
@@ -24,7 +24,7 @@ const isBrowser_IE = () => {
     return false;
 }
 
-const initFileUloader = () => {
+const initFileUploader = () => {
 
     // uncomment this code to stop support for IE browsers.
     // Make sure to recompile js code using `gulp js` command
