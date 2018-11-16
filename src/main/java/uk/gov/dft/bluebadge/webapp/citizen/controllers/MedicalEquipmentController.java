@@ -7,6 +7,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
@@ -26,11 +28,9 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.MedicalEquipmentForm;
 
 @Controller
 @RequestMapping(Mappings.URL_MEDICAL_EQUIPMENT)
-public class MedicalEquipmentController implements StepController {
+public class MedicalEquipmentController extends SimpleStepController {
 
   private static final String TEMPLATE = "medical-equipment";
-
-  private final RouteMaster routeMaster;
 
   @Autowired
   public MedicalEquipmentController(RouteMaster routeMaster) {
@@ -38,25 +38,8 @@ public class MedicalEquipmentController implements StepController {
   }
 
   @GetMapping
-  public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
-
-    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
-    }
-
-    // On returning to form, take previously submitted values.
-    if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
-      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
-    }
-
-    // If navigating forward from previous form, reset
-    if (!model.containsAttribute(FORM_REQUEST)) {
-      model.addAttribute(FORM_REQUEST, MedicalEquipmentForm.builder().build());
-    }
-
-    // Otherwise, is redirect from post with binding errors.
-
-    return TEMPLATE;
+  public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
+    return super.show(journey, model);
   }
 
   @PostMapping
@@ -66,13 +49,13 @@ public class MedicalEquipmentController implements StepController {
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
-    if (bindingResult.hasErrors()) {
-      return routeMaster.redirectToOnBindingError(this, form, bindingResult, attr);
+    if (null != form.getEquipment()
+        && Boolean.TRUE.equals(form.getEquipment().contains(OTHER))
+        && StringUtils.isBlank(form.getOtherDescription())) {
+      bindingResult.rejectValue("otherDescription", "NotBlank");
     }
 
-    journey.setFormForStep(form);
-
-    return routeMaster.redirectToOnSuccess(form);
+    return super.submit(journey, form, bindingResult, attr);
   }
 
   @Override
@@ -99,5 +82,15 @@ public class MedicalEquipmentController implements StepController {
     options.add(new RadioOption(OTHER.name(), "medicalEquipment.option.other"));
 
     return new RadioOptionsGroup(journey.who + "medicalEquipment.title", options);
+  }
+
+  @Override
+  protected String getTemplate() {
+    return TEMPLATE;
+  }
+
+  @Override
+  protected StepForm getNewFormInstance() {
+    return MedicalEquipmentForm.builder().build();
   }
 }
