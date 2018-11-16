@@ -25,7 +25,7 @@
                 <h1 th:text="${label}" data-uipath="${date} + '.legend'" class="govuk-fieldset__heading" />
             </legend>
 
-            <span th:id="${date} + '-hint'" class="govuk-hint" th:if="${hint}" th:utext="${hint}"></span>
+            <span th:id="${date} + '-hint'" class="govuk-hint" th:if="${hint}" th:text="${hint}"></span>
 
             <span class="govuk-error-message"
                 th:data-uipath="*{__${date}__} + '.error'"

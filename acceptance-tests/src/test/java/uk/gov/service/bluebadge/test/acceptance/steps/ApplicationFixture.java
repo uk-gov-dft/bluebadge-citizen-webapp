@@ -9,7 +9,12 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.MAIN_R
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.NEVER_RECEIVED_DLA;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.PLACE_CAN_WALK;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.TIME_TO_DESTINATION;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.*;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_MONTH;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_YEAR;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_FEMALE;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_UNSPECIFIED;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_ADD_CONFIRM_BUTTON;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_ADD_PROVIDED_CODE_PRESCRIBE;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_ADD_USAGE;
@@ -20,7 +25,11 @@ import cucumber.api.java.en.Given;
 import java.util.Calendar;
 import org.openqa.selenium.By;
 import org.springframework.beans.factory.annotation.Autowired;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.*;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.AlreadyHaveBlueBadgePage;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.ApplicantPage;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.BenifitsPage;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.ChooseCouncilPage;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
 
 public class ApplicationFixture extends AbstractSpringSteps {
 
@@ -399,7 +408,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
       commonPage.findPageElementById(AlreadyHaveBlueBadgePage.BADGE_NUMBER_BYPASS_LINK).click();
     } else if ("YES".equals(opt)) {
       commonPage.selectRadioButton(AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION);
-      commonPage.findPageElementById(AlreadyHaveBlueBadgePage.BADGE_NUMBER).sendKeys("AB12CD");
+      commonPage.findPageElementById(AlreadyHaveBlueBadgePage.BADGE_NUMBER).sendKeys("AB 12 CD");
       pressContinue();
     } else {
       commonPage.selectRadioButton(
@@ -442,6 +451,29 @@ public class ApplicationFixture extends AbstractSpringSteps {
       clearAndSendKeys(Ids.Eligibility.HEALTHCARE_PRO_ADD_LOCATION, "Pro Location");
       clickButtonById(Ids.Eligibility.HEALTHCARE_PRO_ADD_CONFIRM_BUTTON);
     }
+    pressContinue();
+  }
+
+  @And("^I complete the how often do you drive page$")
+  public void iCompleteHowOftenDoYouDrive() {
+    clearAndSendKeys(Ids.Arms.HOW_OFTEN_DRIVE, "Once a week");
+    pressContinue();
+  }
+
+  @And("^I complete the adapted vehicle page for \"(YES|NO)\"$")
+  public void iCompleteAdaptedVehicle(String option) {
+    commonPage
+        .findPageElementById(Ids.Arms.IS_ADAPTED_VEHICLE_OPTION + "_" + option.toLowerCase())
+        .click();
+    if ("YES".equals(option)) {
+      clearAndSendKeys(Ids.Arms.ADAPTED_VEHICLE_DESCRIPTIOM, "Vehicle description");
+    }
+    pressContinue();
+  }
+
+  @And("^I complete the difficulty with parking meters page$")
+  public void iCompleteDifficultyWithParkingMeters() {
+    clearAndSendKeys(Ids.Arms.DIFFICULTY_PARKING_METERS_DESC, "Parking meter difficulty");
     pressContinue();
   }
 }

@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.appbuilder;
 
+import org.apache.commons.lang3.StringUtils;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.ApplicationTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
@@ -30,9 +31,15 @@ public class JourneyToApplicationConverter {
 
     if (existingBadgeForm != null
         && existingBadgeForm.getHasExistingBadge() != null
-        && existingBadgeForm.getHasExistingBadge()) {
-      return existingBadgeForm.getBadgeNumber();
+        && existingBadgeForm.getHasExistingBadge()
+        && StringUtils.isNotBlank(existingBadgeForm.getBadgeNumber())) {
+
+      String badgeNumber =
+          existingBadgeForm.getBadgeNumber().replaceAll("\\s+", "").substring(0, 6);
+
+      return badgeNumber;
     }
+
     return null;
   }
 }

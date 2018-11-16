@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="(${errorSummary}? #{common.title.error} : '')  + #{${JOURNEY.who} + 'difficulty.parking.meters.title'}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.who} + 'difficulty.parking.meters.label'}"></h1>
+
+            <form th:action="@{/difficulty-parking-meters}" method="post" th:object="${formRequest}" novalidate
+                  autocomplete="off">
+
+                <span class="govuk-hint"
+                      th:text="#{${JOURNEY.who} + 'difficulty.parking.meters.hint'}"
+                      th:id="'parkingMetersDifficultyDescription-hint'"
+                      th:data-uipath="${name} + '.label_hint'" />
+
+                <span class="govuk-error-message"
+                      data-uipath="parkingMetersDifficultyDescription.error"
+                      th:errors="*{parkingMetersDifficultyDescription}"></span>
+
+                <textarea class="govuk-textarea govuk-textarea--fixed" th:field="*{parkingMetersDifficultyDescription}"
+                          id="parkingMetersDifficultyDescription" rows="5" name="parkingMetersDifficultyDescription"
+                          data-uipath="parkingMetersDifficultyDescription.text"></textarea>
+
+                <button type="submit" class="govuk-button" data-uipath="button.continue"
+                        th:text="#{btn.label.continue}"></button>
+
+            </form>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
