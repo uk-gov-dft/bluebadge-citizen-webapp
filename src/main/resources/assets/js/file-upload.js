@@ -131,7 +131,7 @@ export default class FileUploader {
 
 			if (xhr.readyState == 4 && xhr.status == 200) {
 				if(xhr.response.success) {
-					this.showPreview(response);
+					this.showPreview(xhr.response.document);
 					this.fireLifeCycleEvent('uploaded');
 				} else {
 					this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
@@ -139,12 +139,6 @@ export default class FileUploader {
 				}
 
 				this.$container.classList.remove(this.$DROPAREA_STATE.LOADING);
-			}
-
-			if(xhr.readyState == 4 && xhr.status != 200) {
-				this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
-				this.$container.classList.remove(this.$DROPAREA_STATE.LOADING);
-				this.fireLifeCycleEvent('uploadError');
 			}
 		});
 

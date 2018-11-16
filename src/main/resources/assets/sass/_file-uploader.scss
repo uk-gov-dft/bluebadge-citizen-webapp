@@ -130,14 +130,10 @@
 	border: 2px dashed rgba(govuk-colour(blue), .8);
 
 	&__icon {
-		width: 20%;
+		width: 24%;
 		padding-right: 15px;
 		display: inline-block;
 		vertical-align: middle;
-
-		@include govuk-media-query($from: tablet) {
-			width: 25%;
-		}
 	}
 
 	&__icon-wrapper {
