@@ -12,7 +12,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-            <form th:action="@{/blind/registered}" method="post" th:object="${formRequest}" novalidate>
+            <form th:action="@{/registered}" method="post" th:object="${formRequest}" novalidate>
                 <div th:replace="~{ fragments/govuk-radios :: govuk-radios('hasRegistered', ${radioOptions}) }"></div>
 
                 <button type="submit" class="govuk-button" data-uipath="button.continue" th:text="#{btn.label.continue}"></button>

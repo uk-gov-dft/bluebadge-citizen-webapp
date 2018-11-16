@@ -67,7 +67,7 @@ public class RegisteredCouncilControllerTest {
     RegisteredCouncilForm emptyForm = RegisteredCouncilForm.builder().build();
 
     mockMvc
-        .perform(get("/blind/registered-council").sessionAttr("JOURNEY", journey))
+        .perform(get("/registered-council").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("blind/registered-council"))
         .andExpect(model().attribute("formRequest", emptyForm))
@@ -93,7 +93,7 @@ public class RegisteredCouncilControllerTest {
     journey.setFormForStep(form);
 
     mockMvc
-        .perform(get("/blind/registered-council").sessionAttr("JOURNEY", journey))
+        .perform(get("/registered-council").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("blind/registered-council"))
         .andExpect(model().attribute("formRequest", form))
@@ -103,7 +103,7 @@ public class RegisteredCouncilControllerTest {
   @Test
   public void show_givenNoSession_ShouldRedirectBackToStart() throws Exception {
     mockMvc
-        .perform(get("/blind/registered-council"))
+        .perform(get("/registered-council"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(Mappings.URL_ROOT));
   }
@@ -111,7 +111,7 @@ public class RegisteredCouncilControllerTest {
   @Test
   public void submit_ShouldDisplayErrors_WhenNoOptionsAreSelected() throws Exception {
     mockMvc
-        .perform(post("/blind/registered-council"))
+        .perform(post("/registered-council"))
         .andExpect(redirectedUrl(Mappings.URL_REGISTERED_COUNCIL + RouteMaster.ERROR_SUFFIX));
   }
 
@@ -119,7 +119,7 @@ public class RegisteredCouncilControllerTest {
   public void submit_ShouldReturnToDeclarations_WhenCouncilIsSelected() throws Exception {
     mockMvc
         .perform(
-            post("/blind/registered-council")
+            post("/registered-council")
                 .sessionAttr("JOURNEY", journey)
                 .param("registeredCouncil", "WARCC"))
         .andExpect(status().isFound())

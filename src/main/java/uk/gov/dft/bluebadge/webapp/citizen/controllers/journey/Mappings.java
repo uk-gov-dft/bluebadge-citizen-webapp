@@ -71,9 +71,14 @@ public class Mappings {
   public static final String URL_WALKING_TIME = "/walking-time";
 
   // Blind
-  public static final String URL_REGISTERED = "/blind/registered";
-  public static final String URL_PERMISSION = "/blind/permission";
-  public static final String URL_REGISTERED_COUNCIL = "/blind/registered-council";
+  public static final String URL_REGISTERED = "/registered";
+  public static final String URL_PERMISSION = "/permission";
+  public static final String URL_REGISTERED_COUNCIL = "/registered-council";
+
+  // Arms route
+  public static final String URL_ARMS_HOW_OFTEN_DRIVE = "/how-often-drive";
+  public static final String URL_ARMS_DRIVE_ADAPTED_VEHICLE = "/drive-adapted-vehicle";
+  public static final String URL_ARMS_DIFFICULTY_PARKING_METERS = "/difficulty-parking-meters";
 
   private Mappings() {}
 
@@ -92,6 +97,11 @@ public class Mappings {
           .put(StepDefinition.ELIGIBLE, URL_ELIGIBLE)
           .put(StepDefinition.MAY_BE_ELIGIBLE, URL_MAY_BE_ELIGIBLE)
           .put(StepDefinition.PROVE_BENEFIT, URL_PROVE_BENEFIT)
+
+          // ARMS Journey Mappings
+          .put(StepDefinition.ARMS_HOW_OFTEN_DRIVE, URL_ARMS_HOW_OFTEN_DRIVE)
+          .put(StepDefinition.ARMS_DRIVE_ADAPTED_VEHICLE, URL_ARMS_DRIVE_ADAPTED_VEHICLE)
+          .put(StepDefinition.ARMS_DIFFICULTY_PARKING_METER, URL_ARMS_DIFFICULTY_PARKING_METERS)
 
           // PIP Journey Mappings
           .put(StepDefinition.PIP_MOVING_AROUND, URL_PIP_MOVING_AROUND)

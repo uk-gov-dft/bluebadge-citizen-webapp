@@ -56,6 +56,9 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.CompensationSchemeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.DisabilityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.MentalDisorderForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.arms.ArmsAdaptedVehicleForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.arms.ArmsDifficultyParkingMetersForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.arms.ArmsHowOftenDriveForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.blind.PermissionForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.blind.RegisteredCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.blind.RegisteredForm;
@@ -114,6 +117,10 @@ public class JourneyFixture {
     static final CompoundDate DOB_ADULT = new CompoundDate("1", "1", "1990");
     public static final CompoundDate DOB_CHILD =
         new CompoundDate("1", "1", String.valueOf(LocalDate.now().getYear()));
+    public static final String ARMS_ADAPTED_VEH_DESC = "Adapted vehicle desc";
+    public static final String ARMS_HOW_OFTEN_DRIVE = "How often drive";
+    public static final String ARMS_PARKING_METERS = "Parking metrs";
+    public static final Boolean IS_ADAPTED_VEHICLE = Boolean.TRUE;
   }
 
   public static ExistingBadgeForm getExistingBadgeForm() {
@@ -453,6 +460,23 @@ public class JourneyFixture {
       if (StepDefinition.TREATMENT_LIST == stepTo) return journey;
       journey.setFormForStep(getMedicationListForm());
       if (StepDefinition.MEDICATION_LIST == stepTo) return journey;
+    }
+
+    if (ARMS == eligibility) {
+      journey.setFormForStep(
+          ArmsHowOftenDriveForm.builder().howOftenDrive(Values.ARMS_HOW_OFTEN_DRIVE).build());
+      if (StepDefinition.ARMS_HOW_OFTEN_DRIVE == stepTo) return journey;
+      journey.setFormForStep(
+          ArmsAdaptedVehicleForm.builder()
+              .hasAdaptedVehicle(Values.IS_ADAPTED_VEHICLE)
+              .adaptedVehicleDescription(Values.ARMS_ADAPTED_VEH_DESC)
+              .build());
+      if (StepDefinition.ARMS_DRIVE_ADAPTED_VEHICLE == stepTo) return journey;
+      journey.setFormForStep(
+          ArmsDifficultyParkingMetersForm.builder()
+              .parkingMetersDifficultyDescription(Values.ARMS_PARKING_METERS)
+              .build());
+      if (StepDefinition.ARMS_DIFFICULTY_PARKING_METER == stepTo) return journey;
     }
 
     journey.setFormForStep(getHealthcareProfessionalListForm());

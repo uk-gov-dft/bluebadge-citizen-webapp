@@ -1,6 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.ARMS;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDBULK;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDVEHIC;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
@@ -14,6 +15,19 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
 
 public class HealthConditionsFormTest {
+
+  @Test
+  public void givenArms_thenNextStepIsHowOftenDrive() {
+    Journey journey = new Journey();
+    journey.setFormForStep(MainReasonForm.builder().mainReasonOption(ARMS).build());
+
+    HealthConditionsForm form = HealthConditionsForm.builder().build();
+    Optional<StepDefinition> nextStep = form.determineNextStep(journey);
+
+    assertThat(nextStep).isNotEmpty();
+    assertThat(nextStep.get()).isEqualTo(StepDefinition.ARMS_HOW_OFTEN_DRIVE);
+  }
+
   @Test
   public void givenWalking_thenNextStepIsWalkingDifficulties() {
     Journey journey = new Journey();
@@ -49,7 +63,7 @@ public class HealthConditionsFormTest {
     Journey journey = new Journey();
 
     EnumSet<EligibilityCodeField> others =
-        EnumSet.complementOf(EnumSet.of(WALKD, CHILDBULK, CHILDVEHIC));
+        EnumSet.complementOf(EnumSet.of(ARMS, WALKD, CHILDBULK, CHILDVEHIC));
     assertThat(others).isNotEmpty();
     for (EligibilityCodeField eligibility : others) {
 

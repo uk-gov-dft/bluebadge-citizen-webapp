@@ -48,7 +48,7 @@ public class RegisteredControllerTest {
     RegisteredForm emptyRegisteredForm = RegisteredForm.builder().build();
 
     mockMvc
-        .perform(get("/blind/registered").sessionAttr("JOURNEY", journey))
+        .perform(get("/registered").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("blind/registered"))
         .andExpect(model().attribute("formRequest", emptyRegisteredForm))
@@ -63,7 +63,7 @@ public class RegisteredControllerTest {
     journey.setFormForStep(registeredForm);
 
     mockMvc
-        .perform(get("/blind/registered").sessionAttr("JOURNEY", journey))
+        .perform(get("/registered").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("blind/registered"))
         .andExpect(model().attribute("formRequest", registeredForm))
@@ -74,7 +74,7 @@ public class RegisteredControllerTest {
   public void show_givenNoSession_ShouldRedirectBackToStart() throws Exception {
 
     mockMvc
-        .perform(get("/blind/registered"))
+        .perform(get("/registered"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(Mappings.URL_ROOT));
   }
@@ -83,7 +83,7 @@ public class RegisteredControllerTest {
   public void submit_ShouldDisplayErrors_WhenNoOptionsAreSelected() throws Exception {
 
     mockMvc
-        .perform(post("/blind/registered"))
+        .perform(post("/registered"))
         .andExpect(redirectedUrl(Mappings.URL_REGISTERED + RouteMaster.ERROR_SUFFIX));
   }
 
@@ -91,10 +91,7 @@ public class RegisteredControllerTest {
   public void submit_ShouldReturnToPermission_WhenYesIsSelected() throws Exception {
 
     mockMvc
-        .perform(
-            post("/blind/registered")
-                .sessionAttr("JOURNEY", journey)
-                .param("hasRegistered", "true"))
+        .perform(post("/registered").sessionAttr("JOURNEY", journey).param("hasRegistered", "true"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(Mappings.URL_PERMISSION));
   }
@@ -104,9 +101,7 @@ public class RegisteredControllerTest {
 
     mockMvc
         .perform(
-            post("/blind/registered")
-                .sessionAttr("JOURNEY", journey)
-                .param("hasRegistered", "false"))
+            post("/registered").sessionAttr("JOURNEY", journey).param("hasRegistered", "false"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(Mappings.URL_DECLARATIONS));
   }

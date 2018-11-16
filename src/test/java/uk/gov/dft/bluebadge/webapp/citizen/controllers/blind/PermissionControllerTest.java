@@ -49,7 +49,7 @@ public class PermissionControllerTest {
     PermissionForm emptyForm = PermissionForm.builder().build();
 
     mockMvc
-        .perform(get("/blind/permission").sessionAttr("JOURNEY", journey))
+        .perform(get("/permission").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("blind/permission"))
         .andExpect(model().attribute("formRequest", emptyForm))
@@ -66,7 +66,7 @@ public class PermissionControllerTest {
     journey.setFormForStep(form);
 
     mockMvc
-        .perform(get("/blind/permission").sessionAttr("JOURNEY", journey))
+        .perform(get("/permission").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("blind/permission"))
         .andExpect(model().attribute("formRequest", form))
@@ -76,7 +76,7 @@ public class PermissionControllerTest {
   @Test
   public void show_givenNoSession_ShouldRedirectBackToStart() throws Exception {
     mockMvc
-        .perform(get("/blind/permission"))
+        .perform(get("/permission"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(Mappings.URL_ROOT));
   }
@@ -84,17 +84,14 @@ public class PermissionControllerTest {
   @Test
   public void submit_ShouldDisplayErrors_WhenNoOptionsAreSelected() throws Exception {
     mockMvc
-        .perform(post("/blind/permission"))
+        .perform(post("/permission"))
         .andExpect(redirectedUrl(Mappings.URL_PERMISSION + RouteMaster.ERROR_SUFFIX));
   }
 
   @Test
   public void submit_ShouldReturnToRegisteredCouncil_WhenYesIsSelected() throws Exception {
     mockMvc
-        .perform(
-            post("/blind/permission")
-                .sessionAttr("JOURNEY", journey)
-                .param("hasPermission", "true"))
+        .perform(post("/permission").sessionAttr("JOURNEY", journey).param("hasPermission", "true"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(Mappings.URL_REGISTERED_COUNCIL));
   }
@@ -103,9 +100,7 @@ public class PermissionControllerTest {
   public void submit_ShouldReturnToDeclarations_WhenNoIsSelected() throws Exception {
     mockMvc
         .perform(
-            post("/blind/permission")
-                .sessionAttr("JOURNEY", journey)
-                .param("hasPermission", "false"))
+            post("/permission").sessionAttr("JOURNEY", journey).param("hasPermission", "false"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(Mappings.URL_DECLARATIONS));
   }

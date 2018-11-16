@@ -18,7 +18,7 @@
 
             <p class="govuk-body" th:text="#{${JOURNEY.who} + 'registeredCouncilPage.content.p2'}"></p>
 
-            <form th:action="@{/blind/registered-council}" method="post" th:object="${formRequest}" novalidate>
+            <form th:action="@{/registered-council}" method="post" th:object="${formRequest}" novalidate>
 
                 <div th:class="${#fields.hasErrors('registeredCouncil')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
 

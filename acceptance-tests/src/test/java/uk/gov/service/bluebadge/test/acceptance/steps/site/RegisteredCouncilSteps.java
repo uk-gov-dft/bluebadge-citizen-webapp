@@ -4,7 +4,6 @@ import cucumber.api.java.en.And;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
 import uk.gov.service.bluebadge.test.acceptance.steps.AbstractSpringSteps;
-import uk.gov.service.bluebadge.test.acceptance.steps.ApplicationFixture;
 import uk.gov.service.bluebadge.test.acceptance.steps.CommonSteps;
 
 public class RegisteredCouncilSteps extends AbstractSpringSteps {

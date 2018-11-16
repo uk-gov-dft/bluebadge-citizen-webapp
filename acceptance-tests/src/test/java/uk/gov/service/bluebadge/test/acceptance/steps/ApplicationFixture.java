@@ -445,4 +445,27 @@ public class ApplicationFixture extends AbstractSpringSteps {
     }
     pressContinue();
   }
+
+  @And("^I complete the how often do you drive page$")
+  public void iCompleteHowOftenDoYouDrive() {
+    clearAndSendKeys(Ids.Arms.HOW_OFTEN_DRIVE, "Once a week");
+    pressContinue();
+  }
+
+  @And("^I complete the adapted vehicle page for \"(YES|NO)\"$")
+  public void iCompleteAdaptedVehicle(String option) {
+    commonPage
+        .findPageElementById(Ids.Arms.IS_ADAPTED_VEHICLE_OPTION + "_" + option.toLowerCase())
+        .click();
+    if ("YES".equals(option)) {
+      clearAndSendKeys(Ids.Arms.ADAPTED_VEHICLE_DESCRIPTIOM, "Vehicle description");
+    }
+    pressContinue();
+  }
+
+  @And("^I complete the difficulty with parking meters page$")
+  public void iCompleteDifficultyWithParkingMeters() {
+    clearAndSendKeys(Ids.Arms.DIFFICULTY_PARKING_METERS_DESC, "Parking meter difficulty");
+    pressContinue();
+  }
 }
