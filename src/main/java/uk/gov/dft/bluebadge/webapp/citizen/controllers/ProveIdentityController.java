@@ -6,9 +6,12 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
 import com.amazonaws.services.s3.transfer.Upload;
+import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.UUID;
+import javax.imageio.ImageIO;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.config.S3Config;
@@ -58,26 +62,37 @@ public class ProveIdentityController implements StepController {
   }
 
   @PostMapping(value = "/prove-identity-ajax", produces = "application/json")
-  public Boolean submitAjax(@RequestParam("document") Object document) {
+  @ResponseBody
+  public Map<String, String> submitAjax(@RequestParam("document") MultipartFile document) {
 
-    /*StandardMultipartHttpServletRequest doc = (StandardMultipartHttpServletRequest) document;
+    /*StandardMultipartHttpServletRequest doc = (StandardMultipartHttpServletRequest) document;*/
     try {
-      System.out.println(doc.getPart("document").getName());
+      System.out.println("submitAjax");
+
     } catch (Exception e) {
-    }*/
+    }
 
-    /*if(!document.isEmpty()) {
-      byte[] bI = org.apache.commons.codec.binary.Base64.decodeBase64((document.substring(document.indexOf(",") + 1)).getBytes());
-      InputStream fis = new ByteArrayInputStream(bI);
-      ObjectMetadata metadata = new ObjectMetadata();
-      metadata.setContentLength(bI.length);
-      metadata.setContentType("image/png");
-      AmazonS3 s3 = new S3Config().amazonS3();
-      String fileName = UUID.randomUUID().toString();
-      s3.putObject("uk-gov-dft-test-applications-temp", fileName, fis, metadata);
-    }*/
+    if (!document.isEmpty()) {
+      String originalFilename = document.getOriginalFilename();
+      System.out.println("filename:" + originalFilename);
+      //      byte[] bI = org.apache.commons.codec.binary.Base64.decodeBase64((document.substring(document.indexOf(",") + 1)).getBytes());
+      //      InputStream fis = new ByteArrayInputStream(bI);
+      //      ObjectMetadata metadata = new ObjectMetadata();
+      //      metadata.setContentLength(bI.length);
+      //      metadata.setContentType("image/png");
+      //      AmazonS3 s3 = new S3Config().amazonS3();
+      //      String fileName = UUID.randomUUID().toString();
+      //      s3.putObject("uk-gov-dft-test-applications-temp", fileName, fis, metadata);
+      String fileType = "file";
+      try {
+        ImageIO.read(document.getInputStream()).toString();
+        fileType = "image";
+      } catch (Exception e) {
+      }
+      return ImmutableMap.of("success", "true", "type", fileType, "name", originalFilename);
+    }
 
-    return true;
+    return ImmutableMap.of("error", "Failed to upload: document is empty");
   }
 
   @PostMapping(Mappings.URL_PROVE_IDENTITY)
