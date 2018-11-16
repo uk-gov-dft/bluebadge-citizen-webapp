@@ -125,13 +125,13 @@ export default class FileUploader {
 		const xhr = new XMLHttpRequest();
 		xhr.open('POST', this.$options.uploadPath, true);
 		xhr.responseType = "json";
+		this.$container.classList.add(this.$DROPAREA_STATE.LOADING);
 
 		xhr.addEventListener('readystatechange', (e) => {
-			this.$container.classList.add(this.$DROPAREA_STATE.LOADING);
 
 			if (xhr.readyState == 4 && xhr.status == 200) {
-				if(xhr.response.success) {
-					this.showPreview(xhr.response.document);
+				if(xhr.response && xhr.response.success) {
+					this.showPreview(xhr.response.artifact);
 					this.fireLifeCycleEvent('uploaded');
 				} else {
 					this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);

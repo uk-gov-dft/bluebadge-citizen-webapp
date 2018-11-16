@@ -66,7 +66,7 @@ public class ProveIdentityController implements StepController {
 
     try {
       Document uploadedDocument = documentService.uploadDocument(document);
-      return ImmutableMap.of("success", "true", "document", uploadedDocument);
+      return ImmutableMap.of("success", "true", "artifact", uploadedDocument);
     } catch (Exception e) {
       log.warn("Failed to upload document through ajax call.", e);
       return ImmutableMap.of("error", "Failed to upload");

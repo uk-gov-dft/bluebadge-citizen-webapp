@@ -41,7 +41,7 @@ const initFileUploader = () => {
         new FileUploader({
             el: document.querySelectorAll('input[type="file"]').item(0),
             container: container,
-            uploadPath: "http://localhost:8780/prove-identity-ajax",
+            uploadPath: "/prove-identity-ajax",
             reset: () => {
                 continueBtn.style.display = 'none';
                 fileUploaderErrorBox.classList.remove('file-uploader-error--active');
