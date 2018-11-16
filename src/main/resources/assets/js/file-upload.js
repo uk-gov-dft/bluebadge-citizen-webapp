@@ -22,6 +22,12 @@ export default class FileUploader {
 		this.$resetBtn;
 		this.$addFileBtn;
 		this.$screenAnnouncer;
+		this.$csrfToken;
+
+		const csrfTokenField = document.querySelectorAll('input[name="_csrf"]').item(0);
+		if(csrfTokenField) {
+			this.$csrfToken = csrfTokenField.value;
+		}
 
 		this.$container = this.renderFileUploader(options.container);
 		this.$container.appendChild(this.renderPreview());
@@ -113,7 +119,7 @@ export default class FileUploader {
 
 	validateFile(file) {
 		// !file.type.match('image.*') try this instead
-		if(this.$fileInput.accept.includes(file.type)) {
+		if(this.$fileInput.accept.includes(file.type) && file.size <= 10485760) {
 			return file;
 		}
 
@@ -144,12 +150,9 @@ export default class FileUploader {
 
 		
 		const formData = new FormData();
-		const csrfToken = document.querySelectorAll('input[name="_csrf"]').item(0).value;
-		csrfToken && formData.append('_csrf', csrfToken);
+		formData.append('_csrf', this.$csrfToken);
 		formData.append(this.$fileInput.name, file, file.name);
 		xhr.send(formData);
-
-		return file;
 	}
 
 	showPreview(response) {
