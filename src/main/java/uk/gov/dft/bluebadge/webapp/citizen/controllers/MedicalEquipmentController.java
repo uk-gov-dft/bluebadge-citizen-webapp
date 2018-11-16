@@ -49,13 +49,21 @@ public class MedicalEquipmentController extends SimpleStepController {
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
+    validate(form, bindingResult);
+
+    return super.submit(journey, form, bindingResult, attr);
+  }
+
+  private void validate(MedicalEquipmentForm form, BindingResult bindingResult) {
     if (null != form.getEquipment()
         && Boolean.TRUE.equals(form.getEquipment().contains(OTHER))
         && StringUtils.isBlank(form.getOtherDescription())) {
       bindingResult.rejectValue("otherDescription", "NotBlank");
     }
-
-    return super.submit(journey, form, bindingResult, attr);
+    if (!StringUtils.isBlank(form.getOtherDescription())
+        && form.getOtherDescription().length() > 100) {
+      bindingResult.rejectValue("otherDescription", "Size");
+    }
   }
 
   @Override
