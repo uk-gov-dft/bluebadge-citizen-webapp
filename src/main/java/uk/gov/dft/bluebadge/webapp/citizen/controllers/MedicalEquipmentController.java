@@ -38,6 +38,7 @@ public class MedicalEquipmentController extends SimpleStepController {
   }
 
   @GetMapping
+  @Override
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
     return super.show(journey, model);
   }
@@ -56,7 +57,7 @@ public class MedicalEquipmentController extends SimpleStepController {
 
   private void validate(MedicalEquipmentForm form, BindingResult bindingResult) {
     if (null != form.getEquipment()
-        && Boolean.TRUE.equals(form.getEquipment().contains(OTHER))
+        && form.getEquipment().contains(OTHER)
         && StringUtils.isBlank(form.getOtherDescription())) {
       bindingResult.rejectValue("otherDescription", "NotBlank");
     }
