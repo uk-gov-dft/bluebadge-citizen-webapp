@@ -57,7 +57,7 @@ public class DocumentService {
       URL url = amazonS3.getUrl(uploadResult.getBucketName(), uploadResult.getKey());
       URL signedS3Url = generateSignedS3Url(uploadResult.getKey());
       return Document.builder()
-          .fileName(multipartFile.getName())
+          .fileName(multipartFile.getOriginalFilename())
           .type("file")
           .url(url)
           .signedUrl(signedS3Url)
