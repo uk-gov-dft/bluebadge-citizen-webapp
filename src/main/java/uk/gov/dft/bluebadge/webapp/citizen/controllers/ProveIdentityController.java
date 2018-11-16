@@ -104,7 +104,9 @@ public class ProveIdentityController implements StepController {
       return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
     }
 
-    journey.setFormForStep(formRequest);
+    if (null == journey.getFormForStep(getStepDefinition())) {
+      journey.setFormForStep(formRequest);
+    }
 
     return routeMaster.redirectToOnSuccess(formRequest, journey);
   }

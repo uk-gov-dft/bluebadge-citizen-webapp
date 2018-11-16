@@ -1,6 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.appbuilder;
 
-import com.google.common.collect.ImmutableList;
+import java.util.ArrayList;
 import java.util.List;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Artifact;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.ArtifactType;
@@ -16,12 +16,16 @@ class ArtifactConverter {
   static List<Artifact> convert(Journey journey) {
     ProveIdentityForm proveIdentityForm = journey.getFormForStep(StepDefinition.PROVE_IDENTITY);
     JourneyArtifact journeyArtifact = proveIdentityForm.getJourneyArtifact();
-    Artifact proofArtifact =
-        Artifact.builder()
-            .type(ArtifactType.PROOF_ID)
-            .link(journeyArtifact.getUrl().toString())
-            .build();
+    List<Artifact> result = new ArrayList<>();
 
-    return ImmutableList.of(proofArtifact);
+    if (null != journeyArtifact.getUrl()) {
+      result.add(
+          Artifact.builder()
+              .type(ArtifactType.PROOF_ID)
+              .link(journeyArtifact.getUrl().toString())
+              .build());
+    }
+
+    return result;
   }
 }

@@ -27,22 +27,22 @@
 
             <form th:action="@{/prove-identity}" th:object="${formRequest}" method="post" enctype="multipart/form-data" novalidate>
 
-                <!--<div class="preview preview--static">
+                <div th:if="*{journeyArtifact}" class="preview preview--static">
                     <h3 class="preview__heading" th:text="#{fileUploader.preview.title}"></h3>
                     <div class="preview__holder">
                         <!-- image preview -->
-                        <!--<div class="preview__item">
-                            <img src="url" alt="file name maybe - see henry">
+                        <div th:if="*{journeyArtifact.type == 'image'}" class="preview__item">
+                            <img th:src="*{journeyArtifact.signedUrl}" th:alt="*{journeyArtifact.fileName}" alt="file name maybe - see henry">
                         </div>
 
                         <!-- file preview -->
-                        <!--<div class="preview__item">
+                        <div th:if="*{journeyArtifact.type != 'image'}" class="preview__item">
                             <p>file name
                                 <span>(Preview unavailable)</span>
                             </p>
                         </div>
                     </div>
-                </div>-->
+                </div>
 
                 <div th:replace="~{ fragments/file-uploader :: fileUploader('Upload photo or scan', 'document') }"></div>
 
