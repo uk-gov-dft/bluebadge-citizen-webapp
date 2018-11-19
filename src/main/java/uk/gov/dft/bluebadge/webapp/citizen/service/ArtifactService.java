@@ -41,7 +41,7 @@ public class ArtifactService {
             .build();
   }
 
-  public JourneyArtifact upload(MultipartFile multipartFile) {
+  public JourneyArtifact upload(MultipartFile multipartFile) throws IOException, InterruptedException {
     /*
      Keep original file name for the session
      get a type of file from the controller proof/photo etc..
@@ -49,6 +49,8 @@ public class ArtifactService {
 
      determine if an image or a file. S3?
     */
+    Assert.notNull(multipartFile, "Multipart file is null.");
+
     if (multipartFile.isEmpty()) {
       throw new IllegalArgumentException("Upload failed. JourneyArtifact is empty");
     }
@@ -60,26 +62,22 @@ public class ArtifactService {
 
     String keyName = UUID.randomUUID().toString() + "-" + multipartFile.getOriginalFilename();
 
-    try {
-      keyName = URLEncoder.encode(keyName, "UTF-8");
-      ObjectMetadata meta = new ObjectMetadata();
-      meta.setContentLength(multipartFile.getSize());
-      Upload upload =
-          transferManager.upload(
-              s3Config.getS3Bucket(), keyName, multipartFile.getInputStream(), meta);
-      UploadResult uploadResult = upload.waitForUploadResult();
-      URL url = amazonS3.getUrl(uploadResult.getBucketName(), uploadResult.getKey());
-      URL signedS3Url = generateSignedS3Url(uploadResult.getKey());
+    keyName = URLEncoder.encode(keyName, "UTF-8");
+    ObjectMetadata meta = new ObjectMetadata();
+    meta.setContentLength(multipartFile.getSize());
+    Upload upload =
+        transferManager.upload(
+            s3Config.getS3Bucket(), keyName, multipartFile.getInputStream(), meta);
+    UploadResult uploadResult = upload.waitForUploadResult();
+    URL url = amazonS3.getUrl(uploadResult.getBucketName(), uploadResult.getKey());
+    URL signedS3Url = generateSignedS3Url(uploadResult.getKey());
 
-      return JourneyArtifact.builder()
-          .fileName(multipartFile.getOriginalFilename())
-          .type(determineFileType(multipartFile))
-          .url(url)
-          .signedUrl(signedS3Url)
-          .build();
-    } catch (Exception e) {
-      throw new RuntimeException("Failed to upload document.", e);
-    }
+    return JourneyArtifact.builder()
+        .fileName(multipartFile.getOriginalFilename())
+        .type(determineFileType(multipartFile))
+        .url(url)
+        .signedUrl(signedS3Url)
+        .build();
   }
 
   /** This really needs improving */
