@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
@@ -24,6 +25,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
+
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveIdentityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService;
 
@@ -32,6 +34,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService;
 public class ProveIdentityController implements StepController {
 
   public static final String TEMPLATE = "prove-identity";
+  private static final String DOC_BYPASS_URL = "proveId-bypass";
 
   private final RouteMaster routeMaster;
   private final ArtifactService artifactService;
@@ -62,6 +65,13 @@ public class ProveIdentityController implements StepController {
     }
 
     return TEMPLATE;
+  }
+
+  @GetMapping(DOC_BYPASS_URL)
+  public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+    ProveIdentityForm formRequest = ProveIdentityForm.builder().build();
+    journey.setFormForStep(formRequest);
+    return routeMaster.redirectToOnSuccess(formRequest);
   }
 
   @PostMapping(value = "/prove-identity-ajax", produces = "application/json")

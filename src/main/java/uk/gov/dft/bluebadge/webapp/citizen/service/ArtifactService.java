@@ -41,7 +41,8 @@ public class ArtifactService {
             .build();
   }
 
-  public JourneyArtifact upload(MultipartFile multipartFile) throws IOException, InterruptedException {
+  public JourneyArtifact upload(MultipartFile multipartFile)
+      throws IOException, InterruptedException {
     /*
      Keep original file name for the session
      get a type of file from the controller proof/photo etc..
