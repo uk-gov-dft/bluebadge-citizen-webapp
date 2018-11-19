@@ -11,8 +11,8 @@ import com.amazonaws.services.s3.transfer.Upload;
 import com.amazonaws.services.s3.transfer.model.UploadResult;
 import java.io.File;
 import java.io.IOException;
-
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Date;
@@ -48,7 +48,6 @@ public class ArtifactService {
      S3 to use generic file name from the type
 
      determine if an image or a file. S3?
-
     */
     if (multipartFile.isEmpty()) {
       throw new IllegalArgumentException("Upload failed. JourneyArtifact is empty");
@@ -62,6 +61,7 @@ public class ArtifactService {
     String keyName = UUID.randomUUID().toString() + "-" + multipartFile.getOriginalFilename();
 
     try {
+      keyName = URLEncoder.encode(keyName, "UTF-8");
       ObjectMetadata meta = new ObjectMetadata();
       meta.setContentLength(multipartFile.getSize());
       Upload upload =
@@ -70,6 +70,7 @@ public class ArtifactService {
       UploadResult uploadResult = upload.waitForUploadResult();
       URL url = amazonS3.getUrl(uploadResult.getBucketName(), uploadResult.getKey());
       URL signedS3Url = generateSignedS3Url(uploadResult.getKey());
+
       return JourneyArtifact.builder()
           .fileName(multipartFile.getOriginalFilename())
           .type(determineFileType(multipartFile))
@@ -102,21 +103,11 @@ public class ArtifactService {
     expTimeMillis += s3Config.getSignedUrlDurationMs();
     expiration.setTime(expTimeMillis);
 
-    // Generate the pre-signed URL with expiry.
-    //    try {
     GeneratePresignedUrlRequest generatePresignedUrlRequest =
         new GeneratePresignedUrlRequest(s3Config.getS3Bucket(), link)
             .withMethod(HttpMethod.GET)
             .withExpiration(expiration);
     return amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
-    //    }
-    //    catch (AmazonServiceException e) {
-    //      throw handleSdkClientException(
-    //          e, "Generate signed url for image failed, s3 storage could not process request.");
-    //    } catch (SdkClientException e) {
-    //      throw handleSdkClientException(
-    //          e, "Generate signed url for image failed, s3 storage could not be contacted.");
-    //    }
   }
 
   public void createAccessibleLinks(JourneyArtifact journeyArtifact) {
@@ -124,6 +115,11 @@ public class ArtifactService {
     URL url = journeyArtifact.getUrl();
     try {
       AmazonS3URI amazonS3URI = new AmazonS3URI(url.toURI());
+      log.debug(
+          "Create accessible link. Extracted bucket:{}, key:{}, from link:{}",
+          amazonS3URI.getBucket(),
+          amazonS3URI.getKey(),
+          url);
       URL signedS3Url = generateSignedS3Url(amazonS3URI.getKey());
       journeyArtifact.setSignedUrl(signedS3Url);
     } catch (Exception e) {
