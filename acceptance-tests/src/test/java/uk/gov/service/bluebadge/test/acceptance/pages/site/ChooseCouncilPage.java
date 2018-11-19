@@ -2,6 +2,7 @@ package uk.gov.service.bluebadge.test.acceptance.pages.site;
 
 public class ChooseCouncilPage {
 
+  public static final String PAGE_URL = "/choose-council";
   private static final String YOURSELF_LABEL = "your";
   private static final String SOMEONE_ELSE_LABEL = "their";
 

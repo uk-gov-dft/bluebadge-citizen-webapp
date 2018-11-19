@@ -16,7 +16,6 @@ public class ApplicationSteps extends AbstractSpringSteps {
   private ApplicantPage applicantPage;
   private CommonPage commonPage;
   private ApplicationFixture applicationFixture;
-  private String journeyOption;
 
   @Autowired
   public ApplicationSteps(CommonPage commonPage, CommonSteps commonSteps) {
@@ -24,22 +23,32 @@ public class ApplicationSteps extends AbstractSpringSteps {
     this.commonSteps = commonSteps;
   }
 
-  @Given("^I navigate to applicant page and validate for \"(yourself|someone else)\"")
+  @Given(
+      "^I navigate to applicant page and validate for \"(yourself|someone else|an organisation)\"")
   public void iNavigateToApplicantPageAndValidate(String applicant) throws Exception {
+    String journeyOption;
 
     if ("yourself".equals(applicant.toLowerCase())) {
       journeyOption = applicantPage.APPLICANT_TYPE_OPTION_LIST;
-    } else {
+    } else if ("someone else".equals(applicant.toLowerCase())) {
       journeyOption = applicantPage.APPLICANT_TYPE_SOMELSE_OPTION;
+    } else {
+      journeyOption = applicantPage.APPLICANT_TYPE_ORG_OPTION;
     }
 
     commonPage.openByPageName("applicant");
+    this.verifyPageContent(journeyOption);
+  }
+
+  public void verifyPageContent(String journeyOption) {
+    commonSteps.iShouldSeeTheCorrectURL(applicantPage.PAGE_URL);
     commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(applicantPage.PAGE_TITLE);
     commonSteps.iShouldSeeTheHeading(applicantPage.PAGE_HEADING);
     commonSteps.iClickOnContinueButton();
     commonSteps.andIshouldSeeErrorSummaryBox();
     commonSteps.iShouldSeeTextOnPage(applicantPage.VALIDATION_MESSAGE_FOR_NO_OPTION);
-    commonPage.findPageElementById(journeyOption).click();
+
+    commonPage.selectRadioButton(journeyOption);
     commonSteps.iClickOnContinueButton();
   }
 

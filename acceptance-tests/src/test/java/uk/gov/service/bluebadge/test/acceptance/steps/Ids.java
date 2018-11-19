@@ -1,25 +1,14 @@
 package uk.gov.service.bluebadge.test.acceptance.steps;
 
 class Ids {
-  class Preamble {
-    static final String APPLICANT_TYPE_OPTION_LIST = "applicantType";
-    static final String APPLICANT_TYPE_YOURSELF_OPTION = APPLICANT_TYPE_OPTION_LIST + ".YOURSELF";
-    static final String APPLICANT_TYPE_SOMELSE_OPTION =
-        APPLICANT_TYPE_OPTION_LIST + ".SOMEONE_ELSE";
-    static final String APPLICANT_ORGANISATION_OPTION =
-        APPLICANT_TYPE_OPTION_LIST + ".ORGANISATION";
-    static final String COUNCIL_INPUT = "councilShortCode";
-
-    static final String EXISTING_BADGE_OPTION = "hasExistingBadge";
-    static final String BADGE_NUMBER = "badgeNumber";
-    static final String BADGE_NUMBER_BYPASS_LINK = "bypass_link";
-  }
 
   class EleCheck {
-    static final String BENEFIT_RECEIVED_LIST = "benefitType";
+
     static final String MAIN_REASON_LIST = "mainReasonOption";
     static final String WALKING_DIFFICULTY_LIST = "walkingDifficulty";
     static final String WHAT_WALKING_DIFFICULTY_LIST = "whatWalkingDifficulties";
+    static final String EQUIPMENT_LIST = "equipment";
+    static final String MEDICAL_EQUIPMENT = "medicalEquipment";
     static final String HAS_RECEIVED_DLA = "receivedDlaOption";
     static final String NEVER_RECEIVED_DLA = "receivedDlaOption.NEVER_RECEIVED_DLA";
     static final String MOVING_POINTS = "movingAroundPoints";
@@ -104,5 +93,12 @@ class Ids {
     static final String HEALTHCARE_PRO_ADD_FIRST_LINK = "firstaddhealthcareprofessionallink";
     static final String HEALTHCARE_PRO_ADD_DESCRIPTION = "healthcareProfessionalName";
     static final String HEALTHCARE_PRO_ADD_LOCATION = "healthcareProfessionalLocation";
+  }
+
+  class Arms {
+    static final String DIFFICULTY_PARKING_METERS_DESC = "parkingMetersDifficultyDescription";
+    static final String IS_ADAPTED_VEHICLE_OPTION = "hasAdaptedVehicle";
+    static final String ADAPTED_VEHICLE_DESCRIPTIOM = "adaptedVehicleDescription";
+    static final String HOW_OFTEN_DRIVE = "howOftenDrive";
   }
 }

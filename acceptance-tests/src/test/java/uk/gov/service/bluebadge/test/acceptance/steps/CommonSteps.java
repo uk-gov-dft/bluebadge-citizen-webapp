@@ -12,12 +12,15 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import org.hamcrest.Matcher;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.springframework.beans.factory.annotation.Autowired;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.AlreadyHaveBlueBadgePage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
 
 public class CommonSteps extends AbstractSpringSteps {
@@ -26,6 +29,7 @@ public class CommonSteps extends AbstractSpringSteps {
   private static final String TAG_INPUT = "input";
 
   private CommonPage commonPage;
+  private String pageURL;
 
   @Autowired
   public CommonSteps(CommonPage commonPage) {
@@ -243,6 +247,7 @@ public class CommonSteps extends AbstractSpringSteps {
 
   @And("^I should see \"([^\"]*)\" text on the page$")
   public void iShouldSeeTextOnPage(String content) {
+    String s = commonPage.getPageContent();
     assertTrue(commonPage.getPageContent().contains(content));
   }
 
@@ -329,18 +334,51 @@ public class CommonSteps extends AbstractSpringSteps {
     }
   }
 
+  @And("^I verify validation message \"([^\"]*)\" \"$")
+  public void iVerifyValidationMessage(String message) {
+    this.iClickOnContinueButton();
+    this.andIshouldSeeErrorSummaryBox();
+    this.iShouldSeeTextOnPage(message);
+  }
+
+  @And("^I verify multiple validation messages \"([^\"]*)\" \"$")
+  public void iVerifyMultipleValidationMessages(List<String> messages) {
+
+    this.iClickOnContinueButton();
+    this.andIshouldSeeErrorSummaryBox();
+
+    for (String message : messages) {
+      this.iShouldSeeTextOnPage(message);
+    }
+  }
+
   @And("^I complete the already have a blue badge page \"(YES|NO|YES BUT DON'T KNOW)\"$")
   public void iCompleteTheAlreadyHaveABlueBadgePage(String opt) {
     if ("YES BUT DON't KNOW".equals(opt)) {
-      commonPage.findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION).click();
-      commonPage.findPageElementById(Ids.Preamble.BADGE_NUMBER_BYPASS_LINK).click();
+      commonPage.findPageElementById(AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION).click();
+      commonPage.findPageElementById(AlreadyHaveBlueBadgePage.BADGE_NUMBER_BYPASS_LINK).click();
     } else if ("YES".equals(opt)) {
-      commonPage.findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION).click();
-      commonPage.findPageElementById(Ids.Preamble.BADGE_NUMBER).sendKeys("AB12CD");
+      commonPage.findPageElementById(AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION).click();
+      commonPage.findPageElementById(AlreadyHaveBlueBadgePage.BADGE_NUMBER).sendKeys("AB12CD");
     } else {
       commonPage
-          .findPageElementById(Ids.Preamble.EXISTING_BADGE_OPTION + "_" + opt.toLowerCase())
+          .findPageElementById(
+              AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION + "_" + opt.toLowerCase())
           .click();
+    }
+  }
+
+  @Then("^I should see the correct URL$")
+  public void iShouldSeeTheCorrectURL(String expectedURL) {
+    URL fullURL = null;
+
+    try {
+
+      fullURL = new URL(commonPage.getPageURL());
+      assertThat(fullURL.getPath(), is(expectedURL));
+
+    } catch (MalformedURLException e) {
+      e.printStackTrace();
     }
   }
 }

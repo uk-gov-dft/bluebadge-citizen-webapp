@@ -79,6 +79,7 @@ public class RouteMaster {
         return isValidState(StepDefinition.MEDICATION_LIST, journey);
       case HOME:
         return true;
+      default:
     }
 
     // First step always valid.

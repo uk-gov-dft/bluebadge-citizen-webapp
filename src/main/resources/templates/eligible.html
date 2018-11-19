@@ -13,32 +13,39 @@
 <main layout:fragment="content">
 
     <section class="guidance-layout">
-        <h1 class="govuk-heading-l"
-            th:text="#{${JOURNEY.who} + 'eligiblePage.title'}"></h1>
+        <div class="govuk-!-width-three-quarters">
+            <h1 class="govuk-heading-l"
+                th:text="#{${JOURNEY.who} + 'eligiblePage.title'}"></h1>
 
-        <h2 class="govuk-body-l"
-            th:text="#{${JOURNEY.who} + 'eligiblePage.need.provide.text'}">What you’ll need to provide</h2>
+            <p class="govuk-body" th:text="#{eligiblePage.also.need.provide.text}"></p>
 
-        <ul class="govuk-list govuk-list--bullet">
-            <li th:text="#{eligiblePage.provide.contact.text}">contact details (phone number and email address)</li>
-        </ul>
+            <ul class="govuk-list govuk-list--bullet">
+                <li th:text="#{${JOURNEY.who} + 'eligiblePage.nino.text'}"></li>
+                <li th:text="#{eligiblePage.provide.contact.text}"></li>
+            </ul>
 
-        <a id="start" th:href="@{eligible/start}" role="button" class="govuk-button"
-           th:text="#{eligiblePage.startApplication.link.title}"></a>
+            <a th:href="@{eligible/start}"
+               role="button"
+               class="govuk-button"
+               th:text="#{eligiblePage.startApplication.link.title}"></a>
 
-        <p class="govuk-body" th:text="#{${JOURNEY.who} + 'eligiblePage.council.timeframe.text'}">Your council can take
-            up to 4 weeks to make a decision</p>
+            <p class="govuk-body">
+                <span th:remove="tag" th:text="#{${JOURNEY.who} + 'eligiblePage.council.timeframe.text'}"></span>
+                <a th:href="${localAuthority.contactUrl}" th:text="${localAuthority.description}">
+                </a><span th:remove="tag" th:text="#{${JOURNEY.who} + 'eligiblePage.website.posttext'}"></span>
+            </p>
 
-        <h2 class="govuk-heading-m" th:text="#{eligiblePage.not.apply.online.text}">Don’t want to apply online?</h2>
+            <h2 class="govuk-heading-m" th:text="#{eligiblePage.not.apply.online.text}">Don’t want to apply online?</h2>
 
-        <p class="govuk-body" th:if="${localAuthority.contactUrl}">
-            <span th:remove="tag"
-                  th:text="#{eligiblePage.website.pretext}">Website:</span>
-            <a th:href="${localAuthority.contactUrl}"
-               th:text="${localAuthority.description} + #{eligiblePage.website.posttext}">www.leeds
-                city council.gov.uk</a>
-        </p>
+            <p class="govuk-body">
+            <span th:remove="tag" th:text="#{eligiblePage.council.contact.pretext}">Website:</span>
+                <a th:href="${localAuthority.contactUrl}"
+                   th:text="${localAuthority.description} + #{eligiblePage.council.contact.posttext}">
+                    www.leedscitycouncil.gov.uk</a>
+            </p>
+        </div>
     </section>
+
 
 </main>
 
