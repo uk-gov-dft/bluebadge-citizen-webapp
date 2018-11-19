@@ -9,6 +9,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.MedicalEquipmentForm;
 
 public class MedicalEquipmentConverter {
 
+  private MedicalEquipmentConverter() {}
+
   static ChildUnder3 convert(Journey journey) {
 
     MedicalEquipmentForm form = journey.getFormForStep(StepDefinition.MEDICAL_EQUIPMENT);
