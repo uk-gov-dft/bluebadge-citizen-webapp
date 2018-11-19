@@ -18,7 +18,7 @@ class ArtifactConverter {
     JourneyArtifact journeyArtifact = proveIdentityForm.getJourneyArtifact();
     List<Artifact> result = new ArrayList<>();
 
-    if (null != journeyArtifact.getUrl()) {
+    if (null != journeyArtifact && null != journeyArtifact.getUrl()) {
       result.add(
           Artifact.builder()
               .type(ArtifactType.PROOF_ID)

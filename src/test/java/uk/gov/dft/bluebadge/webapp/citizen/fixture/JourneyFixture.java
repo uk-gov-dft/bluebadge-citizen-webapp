@@ -29,6 +29,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+
 import uk.gov.dft.bluebadge.webapp.citizen.model.component.CompoundDate;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
@@ -52,6 +53,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.OrganisationMayBeEligibleForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveBenefitForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveIdentityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
@@ -483,6 +485,7 @@ public class JourneyFixture {
 
     journey.setFormForStep(getHealthcareProfessionalListForm());
 
+    journey.setFormForStep(ProveIdentityForm.builder().build());
     journey.setFormForStep(DeclarationForm.builder().agreed(Boolean.TRUE).build());
     return journey;
   }

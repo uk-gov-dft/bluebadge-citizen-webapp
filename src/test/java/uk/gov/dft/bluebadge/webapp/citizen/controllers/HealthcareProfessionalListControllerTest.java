@@ -70,7 +70,7 @@ public class HealthcareProfessionalListControllerTest
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(Mappings.URL_DECLARATIONS));
+        .andExpect(redirectedUrl(Mappings.URL_PROVE_IDENTITY));
   }
 
   @Test
@@ -92,7 +92,7 @@ public class HealthcareProfessionalListControllerTest
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(Mappings.URL_DECLARATIONS));
+        .andExpect(redirectedUrl(Mappings.URL_PROVE_IDENTITY));
 
     // Get form again.  Will be different instance in journey now
     journeyForm = journey.getFormForStep(HEALTHCARE_PROFESSIONAL_LIST);
@@ -114,7 +114,7 @@ public class HealthcareProfessionalListControllerTest
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(Mappings.URL_DECLARATIONS));
+        .andExpect(redirectedUrl(Mappings.URL_PROVE_IDENTITY));
 
     // Then has reset to no.
     assertEquals(
