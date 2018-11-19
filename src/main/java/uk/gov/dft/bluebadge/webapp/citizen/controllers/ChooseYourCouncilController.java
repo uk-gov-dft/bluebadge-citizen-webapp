@@ -1,9 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-
-import java.util.List;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataGroupEnum;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalCouncilRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
@@ -21,6 +18,13 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataService;
+
+import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.codehaus.groovy.runtime.DefaultGroovyMethods.collect;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 @RequestMapping(Mappings.URL_CHOOSE_YOUR_COUNCIL)
@@ -55,8 +59,8 @@ public class ChooseYourCouncilController implements StepController {
 
     List<ReferenceData> councils =
         referenceDataService.retrieveReferenceDataList(RefDataGroupEnum.COUNCIL);
-    model.addAttribute("councils", councils);
-
+    List<ReferenceData> activeCouncils = getActiveCouncils(councils);
+    model.addAttribute("councils", activeCouncils);
     return TEMPLATE;
   }
 
@@ -81,5 +85,21 @@ public class ChooseYourCouncilController implements StepController {
   @Override
   public StepDefinition getStepDefinition() {
     return StepDefinition.CHOOSE_COUNCIL;
+  }
+
+  /*
+   * Returns the active ones from the list of the passed councils.
+   */
+  private List<ReferenceData> getActiveCouncils(List<ReferenceData> councils) {
+    return councils
+        .stream()
+        .filter(
+            council ->
+              ((LocalCouncilRefData) council)
+                  .getLocalCouncilMetaData()
+                  .map(LocalCouncilRefData.LocalCouncilMetaData::getIsActive)
+                  .orElse(false)
+            )
+        .collect(Collectors.toList());
   }
 }
