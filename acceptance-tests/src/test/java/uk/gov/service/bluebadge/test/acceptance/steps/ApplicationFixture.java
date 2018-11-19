@@ -305,6 +305,23 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
+  @And("^I complete medical equipment page$")
+  public void iCompleteMedicalEquipmentPage() throws Throwable {
+    commonPage.selectRadioButton(Ids.EleCheck.MEDICAL_EQUIPMENT);
+    pressContinue();
+  }
+
+  @And(
+      "^I complete medical equipment page for \"(PUMP|VENT|SUCTION|PARENT|SYRINGE|OXYADMIN|OXYSAT|CAST|OTHER)\"$")
+  public void iCompleteMedicalEquipmentPage(String difficulty) throws Throwable {
+    if ("VENT".equals(difficulty)) {
+      commonPage.selectRadioButton(Ids.EleCheck.MEDICAL_EQUIPMENT);
+    } else {
+      commonPage.selectRadioButton(Ids.EleCheck.MEDICAL_EQUIPMENT + difficulty);
+    }
+    pressContinue();
+  }
+
   private void clearAndSendKeys(String element, String value) {
     commonPage.findPageElementById(element).clear();
     commonPage.findPageElementById(element).sendKeys(value);
@@ -434,6 +451,29 @@ public class ApplicationFixture extends AbstractSpringSteps {
       clearAndSendKeys(Ids.Eligibility.HEALTHCARE_PRO_ADD_LOCATION, "Pro Location");
       clickButtonById(Ids.Eligibility.HEALTHCARE_PRO_ADD_CONFIRM_BUTTON);
     }
+    pressContinue();
+  }
+
+  @And("^I complete the how often do you drive page$")
+  public void iCompleteHowOftenDoYouDrive() {
+    clearAndSendKeys(Ids.Arms.HOW_OFTEN_DRIVE, "Once a week");
+    pressContinue();
+  }
+
+  @And("^I complete the adapted vehicle page for \"(YES|NO)\"$")
+  public void iCompleteAdaptedVehicle(String option) {
+    commonPage
+        .findPageElementById(Ids.Arms.IS_ADAPTED_VEHICLE_OPTION + "_" + option.toLowerCase())
+        .click();
+    if ("YES".equals(option)) {
+      clearAndSendKeys(Ids.Arms.ADAPTED_VEHICLE_DESCRIPTIOM, "Vehicle description");
+    }
+    pressContinue();
+  }
+
+  @And("^I complete the difficulty with parking meters page$")
+  public void iCompleteDifficultyWithParkingMeters() {
+    clearAndSendKeys(Ids.Arms.DIFFICULTY_PARKING_METERS_DESC, "Parking meter difficulty");
     pressContinue();
   }
 }

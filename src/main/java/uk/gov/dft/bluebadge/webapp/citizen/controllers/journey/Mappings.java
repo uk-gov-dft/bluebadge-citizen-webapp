@@ -64,11 +64,17 @@ public class Mappings {
   public static final String URL_MEDICATION_LIST = "/list-medication";
   public static final String URL_MEDICATION_REMOVE = "/list-medication/remove";
   public static final String URL_MEDICATION_ADD = "/add-medication";
+  public static final String URL_MEDICAL_EQUIPMENT = "/medical-equipment";
 
   // Walking difficulties route
   public static final String URL_WHAT_WALKING_DIFFICULT = "/what-makes-walking-difficult";
   public static final String URL_WHERE_CAN_YOU_WALK = "/where-can-you-walk";
   public static final String URL_WALKING_TIME = "/walking-time";
+
+  // Arms route
+  public static final String URL_ARMS_HOW_OFTEN_DRIVE = "/how-often-drive";
+  public static final String URL_ARMS_DRIVE_ADAPTED_VEHICLE = "/drive-adapted-vehicle";
+  public static final String URL_ARMS_DIFFICULTY_PARKING_METERS = "/difficulty-parking-meters";
 
   private Mappings() {}
 
@@ -87,6 +93,11 @@ public class Mappings {
           .put(StepDefinition.ELIGIBLE, URL_ELIGIBLE)
           .put(StepDefinition.MAY_BE_ELIGIBLE, URL_MAY_BE_ELIGIBLE)
           .put(StepDefinition.PROVE_BENEFIT, URL_PROVE_BENEFIT)
+
+          // ARMS Journey Mappings
+          .put(StepDefinition.ARMS_HOW_OFTEN_DRIVE, URL_ARMS_HOW_OFTEN_DRIVE)
+          .put(StepDefinition.ARMS_DRIVE_ADAPTED_VEHICLE, URL_ARMS_DRIVE_ADAPTED_VEHICLE)
+          .put(StepDefinition.ARMS_DIFFICULTY_PARKING_METER, URL_ARMS_DIFFICULTY_PARKING_METERS)
 
           // PIP Journey Mappings
           .put(StepDefinition.PIP_MOVING_AROUND, URL_PIP_MOVING_AROUND)
@@ -120,6 +131,7 @@ public class Mappings {
           .put(StepDefinition.HEALTHCARE_PROFESSIONALS_ADD, URL_HEALTHCARE_PROFESSIONALS_ADD)
           .put(StepDefinition.MEDICATION_LIST, URL_MEDICATION_LIST)
           .put(StepDefinition.MEDICATION_ADD, URL_MEDICATION_ADD)
+          .put(StepDefinition.MEDICAL_EQUIPMENT, URL_MEDICAL_EQUIPMENT)
 
           //organisation mappings
           .put(StepDefinition.ORGANISATION_CARE, URL_ORGANISATION_CARE)
