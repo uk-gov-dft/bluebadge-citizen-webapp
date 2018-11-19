@@ -35,7 +35,7 @@
                             <img th:src="*{journeyArtifact.signedUrl}" th:alt="*{journeyArtifact.fileName}" alt="file name maybe - see henry">
                         </div>
 
-                        <!-- file preview -->
+                        <!-- file preview TODO -->
                         <div th:if="*{journeyArtifact.type != 'image'}" class="preview__item">
                             <p>file name
                                 <span>(Preview unavailable)</span>
@@ -49,19 +49,20 @@
                 <button type="submit"
                         id="proveIdentity-continue-btn"
                         class="govuk-button"
+                        th:style="*{journeyArtifact} ? 'display:block' : 'display:none'"
                         data-uipath="button.continue"
                         th:text="#{btn.label.continue}"></button>
             </form>
 
             <details class="govuk-details">
                 <summary class="govuk-details__summary">
-                    <span class="govuk-details__summary-text"
+                    <span class="govuk-details__summary-text" id="cant-upload-text"
                           th:text="#{proveIdentity.cantUpload.title}"></span>
                 </summary>
                 <div class="govuk-details__text">
                     <p th:text="#{${JOURNEY.who} + proveIdentity.cantUpload.content.p1}"></p>
                     <p th:text="#{proveIdentity.cantUpload.content.p2}"></p>
-                    <a data-ga-track-link="continue without proof identity"
+                    <a id="continue-without-uploading" data-ga-track-link="continue without proof identity"
                        data-ga-track-link-action="alternative click"
                        href="/declarations" th:text="#{proveIdentity.cantUpload.link}"></a>
                 </div>

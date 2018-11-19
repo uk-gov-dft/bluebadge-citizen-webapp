@@ -21,6 +21,7 @@ Feature: DFT Blue badge Citizen app new application - CHILDBULK
     And   I complete describe health conditions page
     And   I complete medical equipment page
     And   I complete the healthcare professionals page for "YES"
+    And   I complete prove ID page with no documents
     And   I complete declaration page
     Then  I should see page titled "Application submitted" with GOV.UK suffix
 
