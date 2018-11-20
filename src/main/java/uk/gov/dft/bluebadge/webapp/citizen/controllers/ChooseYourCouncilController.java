@@ -1,5 +1,11 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static org.codehaus.groovy.runtime.DefaultGroovyMethods.collect;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,13 +24,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataService;
-
-import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.codehaus.groovy.runtime.DefaultGroovyMethods.collect;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 @RequestMapping(Mappings.URL_CHOOSE_YOUR_COUNCIL)
@@ -95,11 +94,10 @@ public class ChooseYourCouncilController implements StepController {
         .stream()
         .filter(
             council ->
-              ((LocalCouncilRefData) council)
-                  .getLocalCouncilMetaData()
-                  .map(LocalCouncilRefData.LocalCouncilMetaData::getIsActive)
-                  .orElse(false)
-            )
+                ((LocalCouncilRefData) council)
+                    .getLocalCouncilMetaData()
+                    .map(LocalCouncilRefData.LocalCouncilMetaData::getIsActive)
+                    .orElse(false))
         .collect(Collectors.toList());
   }
 }
