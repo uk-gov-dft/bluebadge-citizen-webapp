@@ -71,6 +71,11 @@ public class Mappings {
   public static final String URL_WHERE_CAN_YOU_WALK = "/where-can-you-walk";
   public static final String URL_WALKING_TIME = "/walking-time";
 
+  // Blind
+  public static final String URL_REGISTERED = "/registered";
+  public static final String URL_PERMISSION = "/permission";
+  public static final String URL_REGISTERED_COUNCIL = "/registered-council";
+
   // Arms route
   public static final String URL_ARMS_HOW_OFTEN_DRIVE = "/how-often-drive";
   public static final String URL_ARMS_DRIVE_ADAPTED_VEHICLE = "/drive-adapted-vehicle";
@@ -121,6 +126,9 @@ public class Mappings {
           .put(StepDefinition.WHAT_WALKING_DIFFICULTIES, URL_WHAT_WALKING_DIFFICULT)
           .put(StepDefinition.CHOOSE_COUNCIL, URL_CHOOSE_YOUR_COUNCIL)
           .put(StepDefinition.YOUR_ISSUING_AUTHORITY, URL_YOUR_ISSUING_AUTHORITY)
+          .put(StepDefinition.REGISTERED, URL_REGISTERED)
+          .put(StepDefinition.PERMISSION, URL_PERMISSION)
+          .put(StepDefinition.REGISTERED_COUNCIL, URL_REGISTERED_COUNCIL)
           .put(StepDefinition.DECLARATIONS, URL_DECLARATIONS)
           .put(StepDefinition.SUBMITTED, URL_APPLICATION_SUBMITTED)
           .put(StepDefinition.MOBILITY_AID_LIST, URL_MOBILITY_AID_LIST)

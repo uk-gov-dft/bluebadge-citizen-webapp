@@ -13,12 +13,14 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Di
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Eligibility;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HealthcareProfessional;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveBenefitForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.arms.ArmsAdaptedVehicleForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.arms.ArmsHowOftenDriveForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.blind.RegisteredCouncilForm;
 
 class EligibilityConverter {
 
@@ -53,7 +55,26 @@ class EligibilityConverter {
         eligibility.typeCode(eligibilityType);
         break;
       case BLIND:
-        eligibility.typeCode(eligibilityType).blind(Blind.builder().build());
+        RegisteredCouncilForm registeredCouncil =
+            journey.getFormForStep(StepDefinition.REGISTERED_COUNCIL);
+        LocalAuthorityRefData.LocalAuthorityMetaData localAuthorityMetaData = null;
+        if (registeredCouncil != null
+            && registeredCouncil.getLocalAuthorityForRegisteredBlind() != null) {
+          localAuthorityMetaData =
+              registeredCouncil
+                  .getLocalAuthorityForRegisteredBlind()
+                  .getLocalAuthorityMetaData()
+                  .orElse(null);
+        }
+        eligibility
+            .typeCode(eligibilityType)
+            .blind(
+                Blind.builder()
+                    .registeredAtLaId(
+                        localAuthorityMetaData != null
+                            ? localAuthorityMetaData.getIssuingAuthorityShortCode()
+                            : null)
+                    .build());
         break;
       case ARMS:
         ArmsAdaptedVehicleForm adaptedVehicleForm =

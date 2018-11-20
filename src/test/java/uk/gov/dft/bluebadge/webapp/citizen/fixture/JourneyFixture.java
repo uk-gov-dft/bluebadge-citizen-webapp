@@ -63,6 +63,9 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.MentalDisorderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.arms.ArmsAdaptedVehicleForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.arms.ArmsDifficultyParkingMetersForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.arms.ArmsHowOftenDriveForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.blind.PermissionForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.blind.RegisteredCouncilForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.blind.RegisteredForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficultyForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.organisation.OrganisationCareForm;
@@ -380,6 +383,7 @@ public class JourneyFixture {
       if (StepDefinition.RECEIVE_BENEFITS == stepTo) return journey;
       journey.setFormForStep(MainReasonForm.builder().mainReasonOption(BLIND).build());
       if (StepDefinition.MAIN_REASON == stepTo) return journey;
+      journey.setFormForStep(new EligibleForm());
     }
     if (EligibilityCodeField.NONE == eligibility) {
       journey.setFormForStep(ReceiveBenefitsForm.builder().benefitType(NONE).build());
@@ -483,6 +487,29 @@ public class JourneyFixture {
 
     journey.setFormForStep(getHealthcareProfessionalListForm());
 
+    if (EligibilityCodeField.BLIND == eligibility) {
+      if (StepDefinition.CONTACT_DETAILS == stepTo) return journey;
+
+      journey.setFormForStep(RegisteredForm.builder().hasRegistered(true).build());
+      if (StepDefinition.REGISTERED == stepTo) return journey;
+
+      journey.setFormForStep(PermissionForm.builder().hasPermission(true).build());
+      if (StepDefinition.PERMISSION == stepTo) return journey;
+
+      LocalAuthorityRefData localAuthorityRefData = new LocalAuthorityRefData();
+      LocalAuthorityRefData.LocalAuthorityMetaData localAuthorityMetaData =
+          new LocalAuthorityRefData.LocalAuthorityMetaData();
+      localAuthorityMetaData.setIssuingAuthorityShortCode("WARCC");
+      localAuthorityRefData.setLocalAuthorityMetaData(localAuthorityMetaData);
+
+      journey.setFormForStep(
+          RegisteredCouncilForm.builder()
+              .registeredCouncil("WARCC")
+              .localAuthorityForRegisteredBlind(localAuthorityRefData)
+              .build());
+      if (StepDefinition.REGISTERED_COUNCIL == stepTo) return journey;
+    }
+
     journey.setFormForStep(DeclarationForm.builder().agreed(Boolean.TRUE).build());
     return journey;
   }
@@ -506,6 +533,10 @@ public class JourneyFixture {
     return PipDlaQuestionForm.builder()
         .receivedDlaOption(PipDlaQuestionForm.PipReceivedDlaOption.HAS_RECEIVED_DLA)
         .build();
+  }
+
+  public static RegisteredForm getRegisteredForm() {
+    return RegisteredForm.builder().hasRegistered(true).build();
   }
 
   public static Journey getDefaultJourney() {
