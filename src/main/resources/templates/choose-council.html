@@ -41,7 +41,7 @@
 
                     <span class="govuk-error-message" data-uipath="councilShortCode.error" th:errors="*{councilShortCode}"></span>
 
-                    <select aria-labelledby="councilShortCode-label" th:field="*{councilShortCode}" id="councilShortCode" name="councilShortCode">
+                    <select class="select_autocomplete" aria-labelledby="councilShortCode-label" th:field="*{councilShortCode}" id="councilShortCode" name="councilShortCode">
                         <option value=""></option>
                         <option th:each="council : ${councils}"
                                 th:value="${council.shortCode}"
