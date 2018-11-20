@@ -9,8 +9,6 @@ import java.util.EnumSet;
 import java.util.List;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Benefit;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Blind;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.BulkyMedicalEquipmentTypeCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.ChildUnder3;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.DisabilityArms;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Eligibility;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
@@ -97,10 +95,7 @@ class EligibilityConverter {
         eligibility
             .typeCode(eligibilityType)
             .descriptionOfConditions(journey.getDescriptionOfCondition())
-            .childUnder3(
-                ChildUnder3.builder()
-                    .bulkyMedicalEquipmentTypeCode(BulkyMedicalEquipmentTypeCodeField.NONE)
-                    .build());
+            .childUnder3(MedicalEquipmentConverter.convert(journey));
         break;
       case CHILDVEHIC:
         eligibility
