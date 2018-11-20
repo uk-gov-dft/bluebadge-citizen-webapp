@@ -28,7 +28,7 @@ public class RegisteredForm implements Serializable, StepForm {
     if (hasRegistered) {
       return Optional.of(StepDefinition.PERMISSION);
     }
-    return Optional.of(StepDefinition.DECLARATIONS);
+    return Optional.of(StepDefinition.PROVE_IDENTITY);
   }
 
   @Override

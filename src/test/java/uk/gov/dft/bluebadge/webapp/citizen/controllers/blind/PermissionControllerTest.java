@@ -102,6 +102,6 @@ public class PermissionControllerTest {
         .perform(
             post("/permission").sessionAttr("JOURNEY", journey).param("hasPermission", "false"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(Mappings.URL_DECLARATIONS));
+        .andExpect(redirectedUrl(Mappings.URL_PROVE_IDENTITY));
   }
 }
