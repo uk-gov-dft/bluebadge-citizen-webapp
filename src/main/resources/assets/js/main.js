@@ -60,28 +60,32 @@ const initFileUploader = () => {
     }
 }
 
-const select = document.getElementById('councilShortCode');
+const select_autocomplete = Array.from(document.getElementsByClassName('select_autocomplete'));
 
-if (select) {
-    AutoComplete({
-        defaultValue: '',
-        autoselect: true,
-        selectElement: document.getElementById('councilShortCode'),
-        onConfirm: (query) => {
-            const input = document.getElementById('councilShortCode');
-            const value = input && input.value;
+if (select_autocomplete.length > 0) {
+    select_autocomplete.forEach(select => {
+            AutoComplete({
+                defaultValue: '',
+                autoselect: true,
+                selectElement: select,
+                onConfirm: (query) => {
+                    const input = document.getElementById(select.id.replace('-select', ''));
+                    const value = input.value;
 
-            if (value === '' || value === null) {
-                Array.from(select.options).forEach(option => option.selected = false);
-            }
+                    if (value === '' || value === null) {
+                        Array.from(select.options).forEach(option => option.selected = false);
+                    }
 
-            const requestedOption = Array.from(select.options).find((option) => {
-                return (option.innerText || option.textContent) === query;
+                    const requestedOption = Array.from(select.options).find((option) => {
+                        return (option.innerText || option.textContent) === query;
+                    });
+
+                    if (requestedOption) {
+                        requestedOption.selected = true;
+                    }
+                },
             });
+        }
+    )
 
-            if (requestedOption) {
-                requestedOption.selected = true;
-            }
-        },
-    });
 }

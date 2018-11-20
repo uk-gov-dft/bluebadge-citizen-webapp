@@ -85,6 +85,12 @@ class Ids {
     static final String MEDICATION_FREQUENCY_TEXT = "frequency";
   }
 
+  class RegisteredCouncil {
+    static final String HAS_REGISTERED = "hasRegistered";
+    static final String HAS_PERMISSION = "hasPermission";
+    static final String HAS_REGISTERED_COUNCIL = "registeredCouncil";
+  }
+
   class Eligibility {
     static final String HEALTHCARE_PRO_ADD_CONFIRM_BUTTON = "button.add.healthcare.professional";
     static final String HEALTHCARE_PRO_HAS_OPTION = "hasHealthcareProfessional";

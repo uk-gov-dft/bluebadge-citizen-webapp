@@ -66,6 +66,15 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("I complete select council page for \"(england|wales|scotland)\"")
   public void iCompleteSelectCouncilPage(String country) {
+    iCompleteSelectCouncilPage(country, chooseCouncilPage.COUNCIL_INPUT);
+  }
+
+  @And("^I complete registered council page for \"(england|wales|scotland)\"$")
+  public void iCompleteRegisteredCouncilPage(String country) throws Throwable {
+    iCompleteSelectCouncilPage(country, "registeredCouncil");
+  }
+
+  private void iCompleteSelectCouncilPage(String country, String inputId) {
     String council = "Worcester";
     String fullCouncil = "Worcester city council";
     if ("scotland".equalsIgnoreCase(country)) {
@@ -76,8 +85,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
       fullCouncil = "Isle of Anglesey county council";
     }
 
-    commonPage.findPageElementById(chooseCouncilPage.COUNCIL_INPUT).sendKeys(council);
-    commonPage.selectFromAutoCompleteList(chooseCouncilPage.COUNCIL_INPUT, fullCouncil);
+    commonPage.findPageElementById(inputId).sendKeys(council);
+    commonPage.selectFromAutoCompleteList(inputId, fullCouncil);
     pressContinue();
   }
 
