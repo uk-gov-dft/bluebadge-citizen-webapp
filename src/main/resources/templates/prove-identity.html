@@ -27,7 +27,7 @@
 
             <form th:action="@{/prove-identity}" th:object="${formRequest}" method="post" enctype="multipart/form-data" novalidate>
 
-                <div th:if="*{journeyArtifact}" class="preview preview--static">
+                <div id="upload-preview-div" th:if="*{journeyArtifact}" class="preview preview--static">
                     <h3 class="preview__heading" th:text="#{fileUploader.preview.title}"></h3>
                     <div class="preview__holder">
                         <!-- image preview -->

@@ -156,7 +156,7 @@ export default class FileUploader {
 	}
 
 	showPreview(response) {
-		const filePreview = this.renderFilepreview(response);
+		const filePreview = this.renderFilePreview(response);
 		this.$previewHolder.appendChild(filePreview);
 		this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
 
@@ -290,8 +290,8 @@ export default class FileUploader {
 		return fileUploaderPreview;
 	}
 
-	renderFilepreview(response) {
-		const elPreviewItem = document.createElement('div');
+    renderFilePreview(response) {
+        const elPreviewItem = this.getPreviewWrapper();
 		elPreviewItem.classList.add('preview__item');
 
 		if(response.type === "file") {
@@ -319,6 +319,19 @@ export default class FileUploader {
 
 		return elPreviewItem;
 	}
+
+	getPreviewWrapper() {
+        const wrapper = document.getElementById("upload-preview-div");
+        if (wrapper) {
+            while (wrapper.firstChild) {
+                wrapper.removeChild(wrapper.firstChild);
+            }
+        } else {
+            return document.createElement('div');
+        }
+
+        return wrapper;
+    }
 
 	fireLifeCycleEvent(eventName, ...options) {
 		if(this.$options && this.$options[eventName] && typeof this.$options[eventName] === 'function') {
