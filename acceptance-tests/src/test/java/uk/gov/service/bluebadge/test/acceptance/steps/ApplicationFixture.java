@@ -222,7 +222,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("^I complete NI number page$")
   public void iCompleteNINumberPage() throws Throwable {
-    clearAndSendKeys(Ids.Person.NI, "AB123456A");
+    clearAndSendKeys(Ids.Person.NI, "ab 12 34 56 A");
     pressContinue();
   }
 
