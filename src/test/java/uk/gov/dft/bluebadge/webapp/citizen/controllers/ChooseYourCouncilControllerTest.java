@@ -28,9 +28,12 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataSe
 
 public class ChooseYourCouncilControllerTest {
 
+  private static final String COUNCIL_SHORT_CODE = "test test";
+
   private MockMvc mockMvc;
 
   @Mock ReferenceDataService mockReferenceDataService;
+  @Mock Journey journeyMock;
 
   Journey journey;
 
@@ -77,20 +80,23 @@ public class ChooseYourCouncilControllerTest {
 
   @Test
   public void submit_givenValidForm_thenShouldDisplayRedirectToSuccess() throws Exception {
+    when(journeyMock.isLocalAuthorityActive()).thenReturn(true);
 
     mockMvc
         .perform(
             post(Mappings.URL_CHOOSE_YOUR_COUNCIL)
-                .param("councilShortCode", "test test")
-                .sessionAttr("JOURNEY", new Journey()))
+                .param("councilShortCode", COUNCIL_SHORT_CODE)
+                .sessionAttr("JOURNEY", journeyMock))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl(Mappings.URL_YOUR_ISSUING_AUTHORITY));
   }
 
   @Test
   public void submit_whenBindingException_ThenShouldHaveValidationError() throws Exception {
+    when(journeyMock.isLocalAuthorityActive()).thenReturn(true);
+
     mockMvc
-        .perform(post(Mappings.URL_CHOOSE_YOUR_COUNCIL).sessionAttr("JOURNEY", new Journey()))
+        .perform(post(Mappings.URL_CHOOSE_YOUR_COUNCIL).sessionAttr("JOURNEY", journeyMock))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl(Mappings.URL_CHOOSE_YOUR_COUNCIL + RouteMaster.ERROR_SUFFIX))
         .andExpect(

@@ -84,4 +84,29 @@ public class JourneyTest {
     journey.setFormForStep(ChooseYourCouncilForm.builder().councilShortCode("ABCD").build());
     assertThat(journey.hasStepForm(StepDefinition.YOUR_ISSUING_AUTHORITY)).isFalse();
   }
+
+  @Test
+  public void
+      isLocalAuthorityActive_shouldReturnTrue_whenLocalAuthorityDoesNotHaveDifferentServiceSignpostUrl() {
+    Journey journey = new Journey();
+    LocalAuthorityRefData localAuthority = new LocalAuthorityRefData();
+    localAuthority.setShortCode("WARCC");
+    localAuthority.setLocalAuthorityMetaData(new LocalAuthorityRefData.LocalAuthorityMetaData());
+    journey.setLocalAuthority(localAuthority);
+    assertThat(journey.isLocalAuthorityActive()).isTrue();
+  }
+
+  @Test
+  public void
+      isLocalAuthorityActive_shouldReturnFalse_whenLocalAuthorityHasDifferentServiceSignpostUrl() {
+    Journey journey = new Journey();
+    LocalAuthorityRefData localAuthority = new LocalAuthorityRefData();
+    localAuthority.setShortCode("WARCC");
+    LocalAuthorityRefData.LocalAuthorityMetaData localAuthorityMetaData =
+        new LocalAuthorityRefData.LocalAuthorityMetaData();
+    localAuthorityMetaData.setDifferentServiceSignpostUrl("http://localhost");
+    localAuthority.setLocalAuthorityMetaData(localAuthorityMetaData);
+    journey.setLocalAuthority(localAuthority);
+    assertThat(journey.isLocalAuthorityActive()).isFalse();
+  }
 }

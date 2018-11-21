@@ -119,6 +119,18 @@ public class Journey implements Serializable {
     return null;
   }
 
+  public Boolean isLocalAuthorityActive() {
+    if (getLocalAuthority().getShortCode().equalsIgnoreCase("KENTCC")) {
+      // TODO
+      return false;
+    } else {
+      return !getLocalAuthority()
+          .getLocalAuthorityMetaData()
+          .map(LocalAuthorityRefData.LocalAuthorityMetaData::getDifferentServiceSignpostUrl)
+          .isPresent();
+    }
+  }
+
   private boolean hasMobilityAid() {
     if (hasStepForm(StepDefinition.MOBILITY_AID_LIST)) {
       MobilityAidListForm mobilityAidListForm = getFormForStep(StepDefinition.MOBILITY_AID_LIST);
