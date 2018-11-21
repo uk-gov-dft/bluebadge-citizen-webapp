@@ -6,7 +6,7 @@ import com.amazonaws.services.s3.AmazonS3URI;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.transfer.TransferManager;
-import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
+
 import com.amazonaws.services.s3.transfer.Upload;
 import com.amazonaws.services.s3.transfer.model.UploadResult;
 import java.io.File;
@@ -18,6 +18,7 @@ import java.nio.file.Path;
 import java.util.Date;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,27 +30,17 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 public class ArtifactService {
   private final AmazonS3 amazonS3;
   private final S3Config s3Config;
-  private TransferManager transferManager;
+  private final TransferManager transferManager;
 
-  public ArtifactService(AmazonS3 amazonS3, S3Config s3Config) {
+  @Autowired
+  public ArtifactService(TransferManager transferManager, AmazonS3 amazonS3, S3Config s3Config) {
     this.amazonS3 = amazonS3;
     this.s3Config = s3Config;
-    transferManager =
-        TransferManagerBuilder.standard()
-            .withS3Client(amazonS3)
-            .withMultipartUploadThreshold((long) (5 * 1024 * 1025))
-            .build();
+    this.transferManager = transferManager;
   }
 
   public JourneyArtifact upload(MultipartFile multipartFile)
       throws IOException, InterruptedException {
-    /*
-     Keep original file name for the session
-     get a type of file from the controller proof/photo etc..
-     S3 to use generic file name from the type
-
-     determine if an image or a file. S3?
-    */
     Assert.notNull(multipartFile, "Multipart file is null.");
 
     if (multipartFile.isEmpty()) {
