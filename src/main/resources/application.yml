@@ -75,6 +75,5 @@ security:
 GACode:  ${GACODE:UA-124760983-5}
 
 amazon:
-  profile: bluebadge-dev
   s3bucket: uk-gov-dft-test-applications-temp
   signed-url-duration-ms: 60000

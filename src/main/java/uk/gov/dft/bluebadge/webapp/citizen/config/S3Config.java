@@ -1,9 +1,9 @@
 package uk.gov.dft.bluebadge.webapp.citizen.config;
 
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
-
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.transfer.TransferManager;
+import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,10 +15,6 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 @Setter
 public class S3Config {
-  @Value("${amazon.profile:default}")
-  @NotNull
-  private String profile;
-
   @Value("${amazon.s3bucket}")
   @NotNull
   private String s3Bucket;
@@ -32,9 +28,15 @@ public class S3Config {
   private Integer signedUrlDurationMs;
 
   @Bean
-  public AmazonS3 amazonS3() {
-    return AmazonS3ClientBuilder.standard()
-        .withCredentials(new ProfileCredentialsProvider(profile))
+  AmazonS3 amazonS3() {
+    return AmazonS3ClientBuilder.defaultClient();
+  }
+
+  @Bean
+  TransferManager transferManager() {
+    return TransferManagerBuilder.standard()
+        .withS3Client(amazonS3())
+        .withMultipartUploadThreshold((long) (5 * 1024 * 1025))
         .build();
   }
 }
