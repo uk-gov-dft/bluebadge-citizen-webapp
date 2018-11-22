@@ -1,6 +1,5 @@
 package uk.gov.service.bluebadge.test.acceptance.steps;
 
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.*;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.*;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.*;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_FEMALE;
@@ -13,10 +12,12 @@ import java.util.Calendar;
 import org.openqa.selenium.By;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.*;
+import uk.gov.service.bluebadge.test.acceptance.steps.site.ContactDetailsSteps;
 
 public class ApplicationFixture extends AbstractSpringSteps {
 
   private CommonPage commonPage;
+  private ContactDetailsSteps contactDetailsSteps;
 
   @Autowired
   public ApplicationFixture(CommonPage commonPage) {
@@ -188,16 +189,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("I complete contact page for \"(yourself|someone else)\"")
-  public void iCompleteContactPage(String myselfOrOther) {
-    if ("someone else".equalsIgnoreCase(myselfOrOther)) {
-      clearAndSendKeys(FULL_NAME, "Some Contact");
-    }
-
-    clearAndSendKeys(PRIMARY_CONTACT_NUMBER, "01270848484");
-    clearAndSendKeys(SECONDARY_CONTACT_NUMBER, "01270848400");
-    clearAndSendKeys(EMAIL_ADDRESS, "some@contact.com");
-
-    pressContinue();
+  public void iCompleteContactPage(String applicant) {
+    contactDetailsSteps.enterValidValuesAndContinue(applicant);
   }
 
   @And("^I complete address page$")

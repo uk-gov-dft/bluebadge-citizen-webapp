@@ -49,13 +49,6 @@ class Ids {
     static final String SKIP_WITHOUT_NI = "skipNiLink";
   }
 
-  class Contact {
-    static final String FULL_NAME = "fullName";
-    static final String PRIMARY_CONTACT_NUMBER = "primaryPhoneNumber";
-    static final String SECONDARY_CONTACT_NUMBER = "secondaryPhoneNumber";
-    static final String EMAIL_ADDRESS = "emailAddress";
-  }
-
   class Walkd {
     static final String TREATMENT_ADD_CONFIRM_BUTTON = "button.add.treatment";
     static final String TREATMENT_HAS_TREATMENT_OPTION = "hasTreatment";

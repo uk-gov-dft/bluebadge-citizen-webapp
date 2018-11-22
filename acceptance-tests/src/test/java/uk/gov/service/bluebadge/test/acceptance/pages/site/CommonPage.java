@@ -125,4 +125,9 @@ public class CommonPage {
   public String getPageURL() {
     return webDriverProvider.getWebDriver().getCurrentUrl();
   }
+
+  public void clearAndSendKeys(String element, String value) {
+    findPageElementById(element).clear();
+    findPageElementById(element).sendKeys(value);
+  }
 }

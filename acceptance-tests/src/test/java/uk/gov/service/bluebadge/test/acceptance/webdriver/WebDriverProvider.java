@@ -168,4 +168,10 @@ public class WebDriverProvider {
     webDriver.quit();
     webDriver = null;
   }
+
+  public void tearDownScenario(){
+    getWebDriver().manage().deleteAllCookies();
+  }
 }
+
+

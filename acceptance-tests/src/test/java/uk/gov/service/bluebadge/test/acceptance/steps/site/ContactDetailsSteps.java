@@ -16,7 +16,6 @@ public class ContactDetailsSteps extends AbstractSpringSteps {
 
   private CommonSteps commonSteps;
   private CommonPage commonPage;
-  List<String> messages = new ArrayList<>();
 
   @Autowired
   public ContactDetailsSteps(CommonPage commonPage, CommonSteps commonSteps) {
@@ -24,63 +23,14 @@ public class ContactDetailsSteps extends AbstractSpringSteps {
     this.commonSteps = commonSteps;
   }
 
-
   @And("^I validate contact details page for a \"(yourself|someone else)\" application$")
   public void iValidateContactDetailsPageForAApplication(String applicant) {
     verifyPageContent(applicant);
     validateMandatoryFields(applicant);
+    validateInvalidValues(applicant);
+    enterValidValuesAndContinue(applicant);
 
-
-
-
-
-    //To validate length limit <=100 characters for Building and Street Field
-    commonPage
-            .findPageElementById("buildingAndStreet")
-            .sendKeys(EnterAddressPage.GREATER_THAN_100_CHARACTERS);
-    commonPage.findPageElementById("townOrCity").sendKeys(EnterAddressPage.VALID_TOWN);
-    commonPage.findPageElementById("postcode").sendKeys(EnterAddressPage.VALID_POSTCODE);
-    commonSteps.iVerifyValidationMessage(
-            EnterAddressPage.VALIDATION_MESSAGE_FOR_GT100_BUILDING_AND_STREET);
-
-    //To validate length limit <=100 characters for Town/City
-    commonPage.findPageElementById("buildingAndStreet").clear();
-    commonPage.findPageElementById("townOrCity").clear();
-    commonPage.findPageElementById("postcode").clear();
-    commonPage
-            .findPageElementById("buildingAndStreet")
-            .sendKeys(EnterAddressPage.VALID_BUILDING_STREET);
-    commonPage
-            .findPageElementById("townOrCity")
-            .sendKeys(EnterAddressPage.GREATER_THAN_100_CHARACTERS);
-    commonPage.findPageElementById("postcode").sendKeys(EnterAddressPage.VALID_POSTCODE);
-    commonSteps.iVerifyValidationMessage(EnterAddressPage.VALIDATION_MESSAGE_FOR_GT100_TOWN_CITY);
-
-    //To validate Invalid  post code field
-    commonPage.findPageElementById("buildingAndStreet").clear();
-    commonPage.findPageElementById("townOrCity").clear();
-    commonPage.findPageElementById("postcode").clear();
-    commonPage
-            .findPageElementById("buildingAndStreet")
-            .sendKeys(EnterAddressPage.VALID_BUILDING_STREET);
-    commonPage.findPageElementById("townOrCity").sendKeys(EnterAddressPage.VALID_TOWN);
-    commonPage.findPageElementById("postcode").sendKeys(EnterAddressPage.INVALID_POSTCODE);
-    commonSteps.iVerifyValidationMessage(EnterAddressPage.VALIDATION_MESSAGE_FOR_INVALID_POSTCODE);
-
-    //Enter valid values and Continue
-    commonPage.findPageElementById("buildingAndStreet").clear();
-    commonPage.findPageElementById("townOrCity").clear();
-    commonPage.findPageElementById("postcode").clear();
-    commonPage
-            .findPageElementById("buildingAndStreet")
-            .sendKeys(EnterAddressPage.VALID_BUILDING_STREET);
-    commonPage.findPageElementById("townOrCity").sendKeys(EnterAddressPage.VALID_TOWN);
-    commonPage.findPageElementById("postcode").sendKeys(EnterAddressPage.VALID_POSTCODE);
-
-    commonSteps.iClickOnContinueButton();
   }
-
-
 
   public void verifyPageContent(String applicant) {
 
@@ -96,11 +46,43 @@ public class ContactDetailsSteps extends AbstractSpringSteps {
   }
 
   private void validateMandatoryFields(String applicant) {
+    List<String> messages = new ArrayList<>();
     messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_EMPTY_PHONE_NUMBER);
     if("someone else".equals(applicant)) {
       messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_CONTACT_FULL_NAME);
     }
 
     commonSteps.iVerifyMultipleValidationMessages(messages);
+  }
+
+  private void validateInvalidValues(String applicant) {
+    List<String> messages = new ArrayList<>();
+    commonPage.clearAndSendKeys(ContactDetailsPage.PRIMARY_CONTACT_NUMBER,"020 12212123 000");
+    commonPage.clearAndSendKeys(ContactDetailsPage.SECONDARY_CONTACT_NUMBER,"078 13345456 000");
+    commonPage.clearAndSendKeys(ContactDetailsPage.EMAIL_ADDRESS,"test@testmail.com");
+
+    messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_INVALID_MAIN_PHONE_NUMBER);
+    messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_INVALID_ALTERNATIVE_PHONE_NUMBER);
+    messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_INVALID_ALTERNATIVE_PHONE_NUMBER);
+
+    if ("someone else".equals(applicant.toLowerCase())) {
+      commonPage.clearAndSendKeys(ContactDetailsPage.FULL_NAME,"£$%^&* Invalid Name");
+      messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_INVALID_FULLNAME);
+    }
+
+    commonSteps.iVerifyMultipleValidationMessages(messages);
+    commonSteps.iClickOnContinueButton();
+  }
+
+  public void enterValidValuesAndContinue(String applicant) {
+    if ("someone else".equals(applicant.toLowerCase())) {
+      commonPage.clearAndSendKeys(ContactDetailsPage.FULL_NAME,"Test Contact");
+    }
+
+    commonPage.clearAndSendKeys(ContactDetailsPage.PRIMARY_CONTACT_NUMBER,"020 12212123");
+    commonPage.clearAndSendKeys(ContactDetailsPage.SECONDARY_CONTACT_NUMBER,"078 13345456");
+    commonPage.clearAndSendKeys(ContactDetailsPage.EMAIL_ADDRESS,"test@testmail.com");
+
+    commonSteps.iClickOnContinueButton();
   }
 }
