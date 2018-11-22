@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.ChooseCouncilPage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
 import uk.gov.service.bluebadge.test.acceptance.steps.AbstractSpringSteps;
-import uk.gov.service.bluebadge.test.acceptance.steps.ApplicationFixture;
 import uk.gov.service.bluebadge.test.acceptance.steps.CommonSteps;
 
 public class ChooseCouncilSteps extends AbstractSpringSteps {
@@ -52,7 +51,7 @@ public class ChooseCouncilSteps extends AbstractSpringSteps {
       commonSteps.thenIShouldSeeTheContent(ChooseCouncilPage.PAGE_LABEL_1_YOURSELF);
     } else {
       commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(
-              ChooseCouncilPage.PAGE_TITLE_SOMEONE_ELSE);
+          ChooseCouncilPage.PAGE_TITLE_SOMEONE_ELSE);
       commonSteps.iShouldSeeTheHeading(ChooseCouncilPage.PAGE_TITLE_SOMEONE_ELSE);
       commonSteps.thenIShouldSeeTheContent(ChooseCouncilPage.PAGE_LABEL_1_SOMEONE_ELSE);
     }

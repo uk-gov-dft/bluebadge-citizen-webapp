@@ -18,7 +18,8 @@ public class GenderSteps extends AbstractSpringSteps {
     this.commonSteps = commonSteps;
   }
 
-  @And("^I validate gender page for a \"(yourself|someone else)\" application with option as \"([^\"]*)\"$")
+  @And(
+      "^I validate gender page for a \"(yourself|someone else)\" application with option as \"([^\"]*)\"$")
   public void iValidateGenderPageForAApplication(String applicant, String option) {
     verifyPageContent(applicant);
 

@@ -18,7 +18,8 @@ public class AlreadyHaveBlueBadgeSteps extends AbstractSpringSteps {
     this.commonSteps = commonSteps;
   }
 
-  @And("^I validate already have a blue badge page for \"(yourself|someone else)\" for \"(Yes|No)\"")
+  @And(
+      "^I validate already have a blue badge page for \"(yourself|someone else)\" for \"(Yes|No)\"")
   public void iValidateAlreadyHaveABlueBadgePageFor(String applicant, String option)
       throws Throwable {
     verifyPageContent(applicant);

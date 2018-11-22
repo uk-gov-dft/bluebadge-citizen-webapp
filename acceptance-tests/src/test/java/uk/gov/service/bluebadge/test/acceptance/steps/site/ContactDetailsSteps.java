@@ -1,60 +1,40 @@
 package uk.gov.service.bluebadge.test.acceptance.steps.site;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.ContactDetailsPage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.EnterAddressPage;
 import uk.gov.service.bluebadge.test.acceptance.steps.AbstractSpringSteps;
 import uk.gov.service.bluebadge.test.acceptance.steps.CommonSteps;
 
-public class EnterAddressSteps extends AbstractSpringSteps {
+import java.util.ArrayList;
+import java.util.List;
+
+public class ContactDetailsSteps extends AbstractSpringSteps {
 
   private CommonSteps commonSteps;
   private CommonPage commonPage;
   List<String> messages = new ArrayList<>();
 
   @Autowired
-  public EnterAddressSteps(CommonPage commonPage, CommonSteps commonSteps) {
+  public ContactDetailsSteps(CommonPage commonPage, CommonSteps commonSteps) {
     this.commonPage = commonPage;
     this.commonSteps = commonSteps;
   }
 
-  @And("^I validate enter address page for a \"(yourself|someone else)\" application$")
-  public void iValidateEnterAddressPageForAApplication(String applicant) {
+
+  @And("^I validate contact details page for a \"(yourself|someone else)\" application$")
+  public void iValidateContactDetailsPageForAApplication(String applicant) {
     verifyPageContent(applicant);
-    validateMandotaryFields(applicant);
-    validateLengthLimitBuildingAndStreet(applicant);
-    validateLengthLimitTownAndCity(applicant);
-    validateInvalidPostcode(applicant);
-    enterValidValuesAndContinue(applicant);
+    validateMandatoryFields(applicant);
 
-  }
 
-  public void verifyPageContent(String applicant) {
 
-    commonSteps.iShouldSeeTheCorrectURL(EnterAddressPage.PAGE_URL);
 
-    if ("yourself".equals(applicant.toLowerCase())) {
-      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(EnterAddressPage.PAGE_TITLE_YOURSELF);
-      commonSteps.iShouldSeeTheHeading(EnterAddressPage.PAGE_TITLE_YOURSELF);
-    } else {
-      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(EnterAddressPage.PAGE_TITLE_SOMEONE_ELSE);
-      commonSteps.iShouldSeeTheHeading(EnterAddressPage.PAGE_TITLE_SOMEONE_ELSE);
-    }
-  }
 
-  private void validateMandotaryFields(String applicant) {
-
-    messages.add(EnterAddressPage.VALIDATION_MESSAGE_FOR_EMPTY_BUILDING_AND_STREET);
-    messages.add(EnterAddressPage.VALIDATION_MESSAGE_FOR_EMPTY_TOWN_CITY);
-    messages.add(EnterAddressPage.VALIDATION_MESSAGE_FOR_EMPTY_POSTCODE);
-    commonSteps.iVerifyMultipleValidationMessages(messages);
-  }
-
-  private void validateLengthLimitBuildingAndStreet(String applicant) {
-
+    //To validate length limit <=100 characters for Building and Street Field
     commonPage
             .findPageElementById("buildingAndStreet")
             .sendKeys(EnterAddressPage.GREATER_THAN_100_CHARACTERS);
@@ -62,9 +42,8 @@ public class EnterAddressSteps extends AbstractSpringSteps {
     commonPage.findPageElementById("postcode").sendKeys(EnterAddressPage.VALID_POSTCODE);
     commonSteps.iVerifyValidationMessage(
             EnterAddressPage.VALIDATION_MESSAGE_FOR_GT100_BUILDING_AND_STREET);
-  }
 
-  private void validateLengthLimitTownAndCity(String applicant) {
+    //To validate length limit <=100 characters for Town/City
     commonPage.findPageElementById("buildingAndStreet").clear();
     commonPage.findPageElementById("townOrCity").clear();
     commonPage.findPageElementById("postcode").clear();
@@ -76,10 +55,8 @@ public class EnterAddressSteps extends AbstractSpringSteps {
             .sendKeys(EnterAddressPage.GREATER_THAN_100_CHARACTERS);
     commonPage.findPageElementById("postcode").sendKeys(EnterAddressPage.VALID_POSTCODE);
     commonSteps.iVerifyValidationMessage(EnterAddressPage.VALIDATION_MESSAGE_FOR_GT100_TOWN_CITY);
-  }
 
-  private void validateInvalidPostcode(String applicant) {
-
+    //To validate Invalid  post code field
     commonPage.findPageElementById("buildingAndStreet").clear();
     commonPage.findPageElementById("townOrCity").clear();
     commonPage.findPageElementById("postcode").clear();
@@ -89,9 +66,8 @@ public class EnterAddressSteps extends AbstractSpringSteps {
     commonPage.findPageElementById("townOrCity").sendKeys(EnterAddressPage.VALID_TOWN);
     commonPage.findPageElementById("postcode").sendKeys(EnterAddressPage.INVALID_POSTCODE);
     commonSteps.iVerifyValidationMessage(EnterAddressPage.VALIDATION_MESSAGE_FOR_INVALID_POSTCODE);
-  }
 
-  private void enterValidValuesAndContinue(String applicant) {
+    //Enter valid values and Continue
     commonPage.findPageElementById("buildingAndStreet").clear();
     commonPage.findPageElementById("townOrCity").clear();
     commonPage.findPageElementById("postcode").clear();
@@ -102,5 +78,29 @@ public class EnterAddressSteps extends AbstractSpringSteps {
     commonPage.findPageElementById("postcode").sendKeys(EnterAddressPage.VALID_POSTCODE);
 
     commonSteps.iClickOnContinueButton();
+  }
+
+
+
+  public void verifyPageContent(String applicant) {
+
+    commonSteps.iShouldSeeTheCorrectURL(ContactDetailsPage.PAGE_URL);
+
+    if ("yourself".equals(applicant.toLowerCase())) {
+      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(ContactDetailsPage.PAGE_TITLE);
+      commonSteps.iShouldSeeTheHeading(ContactDetailsPage.PAGE_TITLE);
+    } else {
+      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(ContactDetailsPage.PAGE_TITLE);
+      commonSteps.iShouldSeeTheHeading(ContactDetailsPage.PAGE_TITLE);
+    }
+  }
+
+  private void validateMandatoryFields(String applicant) {
+    messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_EMPTY_PHONE_NUMBER);
+    if("someone else".equals(applicant)) {
+      messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_CONTACT_FULL_NAME);
+    }
+
+    commonSteps.iVerifyMultipleValidationMessages(messages);
   }
 }

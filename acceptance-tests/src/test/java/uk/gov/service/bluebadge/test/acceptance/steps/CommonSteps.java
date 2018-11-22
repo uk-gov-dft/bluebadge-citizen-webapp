@@ -48,7 +48,7 @@ public class CommonSteps extends AbstractSpringSteps {
     } else if ("wales".equalsIgnoreCase(country)) {
       council = "Anglesey";
       fullCouncil = "Isle of Anglesey county council";
-    } 
+    }
 
     // Applicant page
     givenINavigateToPage("applicant");

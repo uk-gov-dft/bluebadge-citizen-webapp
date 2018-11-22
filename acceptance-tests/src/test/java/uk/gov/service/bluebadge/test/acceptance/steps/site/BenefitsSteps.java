@@ -18,7 +18,8 @@ public class BenefitsSteps extends AbstractSpringSteps {
     this.commonSteps = commonSteps;
   }
 
-  @And("^I validate benefit page for \"(yourself|someone else)\" for \"(PIP|DLA|AFRFCS|WPMS|NONE)\"")
+  @And(
+      "^I validate benefit page for \"(yourself|someone else)\" for \"(PIP|DLA|AFRFCS|WPMS|NONE)\"")
   public void iValidateBenefitPageFor(String applicant, String option) {
     verifyPageContent(applicant);
     commonSteps.iVerifyValidationMessage(BenifitsPage.VALIDATION_MESSAGE_FOR_NO_OPTION);

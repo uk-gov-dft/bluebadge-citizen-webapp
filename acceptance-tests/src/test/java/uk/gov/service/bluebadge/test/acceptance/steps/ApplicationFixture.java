@@ -9,11 +9,10 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.*;
 
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
+import java.util.Calendar;
 import org.openqa.selenium.By;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.*;
-
-import java.util.Calendar;
 
 public class ApplicationFixture extends AbstractSpringSteps {
 

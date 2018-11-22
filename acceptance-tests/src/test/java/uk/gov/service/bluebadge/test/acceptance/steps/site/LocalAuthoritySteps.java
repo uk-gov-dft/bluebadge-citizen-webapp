@@ -15,7 +15,8 @@ public class LocalAuthoritySteps extends AbstractSpringSteps {
     this.commonSteps = commonSteps;
   }
 
-  @And("^I validate local authority page for \"(yourself|someone else)\" in \"(england|wales|scotland)\"")
+  @And(
+      "^I validate local authority page for \"(yourself|someone else)\" in \"(england|wales|scotland)\"")
   public void iValidateLocalAuthorityPage(String applicant, String country) {
     verifyPageContent(chooseCouncil(country), applicant);
     commonSteps.iClickOnContinueButton();
