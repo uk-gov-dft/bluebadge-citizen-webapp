@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.appbuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.ARMS;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.BLIND;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDBULK;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDVEHIC;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.NONE;
@@ -15,8 +16,32 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.El
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 public class EligibilityConverterTest {
+
+  @Test
+  public void convert_arms() {
+    Eligibility eligibility =
+        EligibilityConverter.convert(
+            JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS, ARMS));
+    assertThat(eligibility.getDisabilityArms()).isNotNull();
+    assertThat(eligibility.getDisabilityArms().getAdaptedVehicleDescription())
+        .isEqualTo(JourneyFixture.Values.ARMS_ADAPTED_VEH_DESC);
+    assertThat(eligibility.getDisabilityArms().getDrivingFrequency())
+        .isEqualTo(JourneyFixture.Values.ARMS_HOW_OFTEN_DRIVE);
+
+    // Arms null for other types...
+    EnumSet<EligibilityCodeField> notWalking =
+        EnumSet.complementOf(EnumSet.of(ARMS, TERMILL, NONE));
+    notWalking.forEach(
+        i -> {
+          Eligibility eli =
+              EligibilityConverter.convert(
+                  JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS, i));
+          assertThat(eli.getDisabilityArms()).isNull();
+        });
+  }
 
   @Test
   public void convert_walkd() {
@@ -30,9 +55,8 @@ public class EligibilityConverterTest {
         EnumSet.complementOf(EnumSet.of(WALKD, TERMILL, NONE));
     notWalking.forEach(
         i -> {
-          Eligibility eli =
-              EligibilityConverter.convert(
-                  JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS, i));
+          Journey journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS, i);
+          Eligibility eli = EligibilityConverter.convert(journey);
           assertThat(eli.getWalkingDifficulty()).isNull();
         });
   }
@@ -48,8 +72,8 @@ public class EligibilityConverterTest {
         EnumSet.complementOf(EnumSet.of(CHILDBULK, TERMILL, NONE));
     notchild.forEach(
         i -> {
-          Eligibility eli =
-              EligibilityConverter.convert(new JourneyBuilder().withEligibility(i).build());
+          Journey journey = new JourneyBuilder().withEligibility(i).build();
+          Eligibility eli = EligibilityConverter.convert(journey);
           assertThat(eli.getChildUnder3()).isNull();
         });
   }
@@ -70,9 +94,26 @@ public class EligibilityConverterTest {
         EnumSet.complementOf(EnumSet.of(CHILDBULK, CHILDVEHIC, WALKD, NONE, TERMILL));
     noHealthcare.forEach(
         i -> {
-          Eligibility eli =
-              EligibilityConverter.convert(new JourneyBuilder().withEligibility(i).build());
+          Journey journey = new JourneyBuilder().withEligibility(i).build();
+          Eligibility eli = EligibilityConverter.convert(journey);
           assertThat(eli.getHealthcareProfessionals()).isNull();
+        });
+  }
+
+  @Test
+  public void convert_blind() {
+
+    Eligibility eligibility =
+        EligibilityConverter.convert(
+            JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS, BLIND));
+    assertThat(eligibility.getBlind().getRegisteredAtLaId()).isNotNull();
+
+    EnumSet<EligibilityCodeField> notBlind = EnumSet.complementOf(EnumSet.of(BLIND, TERMILL, NONE));
+    notBlind.forEach(
+        i -> {
+          Journey journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS, i);
+          Eligibility eli = EligibilityConverter.convert(journey);
+          assertThat(eli.getBlind()).isNull();
         });
   }
 
@@ -91,8 +132,8 @@ public class EligibilityConverterTest {
         EnumSet.complementOf(EnumSet.of(CHILDBULK, CHILDVEHIC, WALKD, ARMS, NONE, TERMILL));
     noHealthcare.forEach(
         i -> {
-          Eligibility eli =
-              EligibilityConverter.convert(new JourneyBuilder().withEligibility(i).build());
+          Journey journey = new JourneyBuilder().withEligibility(i).build();
+          Eligibility eli = EligibilityConverter.convert(journey);
           assertThat(eli.getDescriptionOfConditions()).isNull();
         });
   }

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="(${errorSummary}? #{common.title.error} : '')  + #{${JOURNEY.who} + 'how.often.drive.title'}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.who} + 'how.often.drive.title'}"></h1>
+
+            <form th:action="@{/how-often-drive}" method="post" th:object="${formRequest}" novalidate
+                  autocomplete="off">
+
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + 'how.often.drive.field.label'}, 'howOftenDrive'
+                , null, 'text', null)}"></div>
+
+                <button type="submit" class="govuk-button" data-uipath="button.continue"
+                        th:text="#{btn.label.continue}"></button>
+
+            </form>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '2.0.4.RELEASE'
+        springBootVersion = '2.1.0.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -53,6 +53,24 @@ def getTheVersion() {
 
     }
     return "${version.text.trim()}${versionSuffix}"
+}
+
+def findUText() {
+    println("Looking for th:utext")
+    def hasError = false;
+    
+    for (File file : sourceSets.main.resources) {
+        if (file.getName().endsWith(".html")) {
+            file.eachLine { line ->
+                if (line.toLowerCase().contains("th:utext")) {
+                    println file.getAbsolutePath() + " - " + line
+                    hasError = true
+                }
+            }
+        }
+
+    }
+    return hasError
 }
 
 
@@ -132,11 +150,11 @@ dependencies {
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.6'
 
     compile('org.springframework.boot:spring-boot-starter-security')
-    compile('org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.3.RELEASE')
+    compile('org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.0.RELEASE')
     compile('org.springframework.boot:spring-boot-starter-actuator')
     compile('org.springframework.boot:spring-boot-starter-data-redis')
     compile('org.springframework.session:spring-session-data-redis')
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth', version: '2.0.1.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth', version: '2.0.2.RELEASE'
     compile('org.owasp.esapi:esapi:2.1.0')
 
     compileOnly ('org.projectlombok:lombok:1.16.22')
@@ -178,9 +196,13 @@ bootRun {
     sourceResources sourceSets.main
 }
 
+task checkUiResources {
+    if (findUText()) throw new GradleException("Failed due to illegal utext found in html")
+}
+
 build.dependsOn gulp_default
 build.finalizedBy(outputComputedVersion)
 
-compileJava.dependsOn 'googleJavaFormat'
+compileJava.dependsOn 'googleJavaFormat', 'checkUiResources'
 
 

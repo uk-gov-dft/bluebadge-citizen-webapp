@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
@@ -34,6 +35,7 @@ public class MayBeEligibleController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
+    model.addAttribute("isWalkD", EligibilityCodeField.WALKD == journey.getEligibilityCode());
     model.addAttribute("localAuthority", journey.getLocalAuthority());
 
     return TEMPLATE;

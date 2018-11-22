@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.ARMS;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 
 import java.io.Serializable;
@@ -22,6 +23,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.arms.ArmsDifficultyParkingMetersForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
 
 @Slf4j
@@ -34,6 +36,8 @@ public class Journey implements Serializable {
   public String who;
   public String ageGroup;
   public String walkingAid;
+
+  private LocalAuthorityRefData localAuthority;
 
   public void setFormForStep(StepForm form) {
     // If changing values in a form may need to invalidate later forms in the journey
@@ -86,8 +90,6 @@ public class Journey implements Serializable {
   public boolean hasStepForm(StepDefinition stepDefinition) {
     return getFormForStep(stepDefinition) != null;
   }
-
-  private LocalAuthorityRefData localAuthority;
 
   public Boolean isApplicantYourself() {
     if (hasStepForm(StepDefinition.APPLICANT_TYPE)) {
@@ -159,19 +161,26 @@ public class Journey implements Serializable {
   public String getDescriptionOfCondition() {
     HealthConditionsForm healthConditionsForm = getFormForStep(StepDefinition.HEALTH_CONDITIONS);
     WhereCanYouWalkForm whereCanYouWalkForm = getFormForStep(StepDefinition.WHERE_CAN_YOU_WALK);
+    ArmsDifficultyParkingMetersForm difficultyParkingMetersForm =
+        getFormForStep(StepDefinition.ARMS_DIFFICULTY_PARKING_METER);
 
     StringBuilder descriptionOfCondition = new StringBuilder();
     if (healthConditionsForm != null && healthConditionsForm.getDescriptionOfConditions() != null) {
       descriptionOfCondition.append(healthConditionsForm.getDescriptionOfConditions());
     }
 
-    if (WALKD.equals(getEligibilityCode()) && whereCanYouWalkForm != null) {
+    if (WALKD == getEligibilityCode() && whereCanYouWalkForm != null) {
       descriptionOfCondition
           .append(" - Able to walk to: ")
           .append(whereCanYouWalkForm.getDestinationToHome())
           .append(" - How long: ")
           .append(whereCanYouWalkForm.getTimeToDestination());
+    } else if (ARMS == getEligibilityCode() && difficultyParkingMetersForm != null) {
+      descriptionOfCondition
+          .append(" - Description of difficulties using a parking meter: ")
+          .append(difficultyParkingMetersForm.getParkingMetersDifficultyDescription());
     }
+
     if (descriptionOfCondition.length() == 0) {
       descriptionOfCondition.append("Dummy condition");
     }
