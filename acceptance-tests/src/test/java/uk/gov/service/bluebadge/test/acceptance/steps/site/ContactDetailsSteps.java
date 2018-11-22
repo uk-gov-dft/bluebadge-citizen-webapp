@@ -74,6 +74,8 @@ public class ContactDetailsSteps extends AbstractSpringSteps {
     commonSteps.iClickOnContinueButton();
   }
 
+
+  @And("I complete contact page for \"(yourself|someone else)\"")
   public void enterValidValuesAndContinue(String applicant) {
     if ("someone else".equals(applicant.toLowerCase())) {
       commonPage.clearAndSendKeys(ContactDetailsPage.FULL_NAME,"Test Contact");

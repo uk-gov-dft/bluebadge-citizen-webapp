@@ -188,11 +188,6 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
-  @And("I complete contact page for \"(yourself|someone else)\"")
-  public void iCompleteContactPage(String applicant) {
-    contactDetailsSteps.enterValidValuesAndContinue(applicant);
-  }
-
   @And("^I complete address page$")
   public void iCompleteAddressPage() throws Throwable {
     clearAndSendKeys("buildingAndStreet", "120");
