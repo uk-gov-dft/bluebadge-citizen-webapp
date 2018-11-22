@@ -1,7 +1,15 @@
+#preview-reset-btn{
+	display: none;
+}
 .js-enabled {
-	//#proveIdentity-continue-btn {
-	//	display: none;
-	//}
+	.js-hidden2 {
+		display: none;
+	}
+	.file-uploader--preview-mode {
+		#preview-reset-btn {
+			display: block;
+		}
+	}
 }
 
 .file-uploader {

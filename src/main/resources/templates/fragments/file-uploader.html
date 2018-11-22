@@ -21,15 +21,39 @@
          th:data-preview-reset-button="#{fileUploader.preview.resetBtn}"
          th:data-preview-addFile-button="#{fileUploader.preview.addFileBtn}"
          th:data-loader-text="#{fileUploader.loaderText}"
-         th:class="'govuk-form-group' + (${#fields.hasErrors('journeyArtifact')} == true ? ' govuk-form-group--error' : '')">
+         th:class="'govuk-form-group' + (${#fields.hasErrors('journeyArtifact')} == true ? ' govuk-form-group--error' : '')"
+         th:classappend="*{journeyArtifact} ? file-uploader--preview-mode"
+    >
+        <div id="upload-preview-div" class="preview">
+            <h3 class="preview__heading" th:text="#{fileUploader.preview.title}"></h3>
+            <div id="preview-holder" class="preview__holder">
+                <span th:if="*{journeyArtifact}" th:remove="tag">
+                    <!-- image preview -->
+                    <div th:if="*{journeyArtifact.type == 'image'}" class="preview__item">
+                        <img th:src="*{journeyArtifact.signedUrl}" th:alt="*{journeyArtifact.fileName}" alt="file name maybe - see henry">
+                    </div>
 
-        <label class="govuk-label" th:for="${name}" th:text="${label}"></label>
-        <span class="govuk-error-message" id="documentId-error" th:errors="*{__${'journeyArtifact'}__}"></span>
-        <input class="govuk-file-upload"
-               th:id="${name}"
-               th:name="${name}"
-               type="file"
-               accept="image/jpeg,image/gif,image/png,application/pdf">
+                    <!-- file preview TODO -->
+                    <div th:if="*{journeyArtifact.type != 'image'}" class="preview__item">
+                        <p>file name
+                            <span>(Preview unavailable)</span>
+                        </p>
+                    </div>
+                </span>
+            </div>
+        </div>
+
+        <button id="preview-reset-btn" class="preview__resetBtn" th:text="#{fileUploader.preview.resetBtn}">Use a different photo or scan</button>
+
+        <div class="js-hidden2">
+            <label class="govuk-label" th:for="${name}" th:text="${label}"></label>
+            <span class="govuk-error-message" id="documentId-error" th:errors="*{__${'journeyArtifact'}__}"></span>
+            <input class="govuk-file-upload"
+                   th:id="${name}"
+                   th:name="${name}"
+                   type="file"
+                   accept="image/jpeg,image/gif,image/png,application/pdf">
+        </div>
     </div>
 </div>
 

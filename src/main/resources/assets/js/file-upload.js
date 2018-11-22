@@ -30,7 +30,11 @@ export default class FileUploader {
 		}
 
 		this.$container = this.renderFileUploader(options.container);
-		this.$container.appendChild(this.renderPreview());
+        this.$previewHolder = document.getElementById('preview-holder');
+        this.$resetBtn = document.getElementById('preview-reset-btn');
+        console.warn(this.$previewHolder);
+        console.warn(this.$resetBtn);
+        // this.$container.appendChild(this.renderPreview());
 		this.$container.appendChild(this.renderDropArea());
 		this.$container.appendChild(this.$screenAnnouncer);
 
@@ -166,16 +170,16 @@ export default class FileUploader {
 	}
 
 	renderFileUploader(container) {
-		container.classList.add('file-uplaoder');
+		container.classList.add('file-uploader');
 
-		const legacy = document.createElement("div");
-		legacy.classList.add('file-uploader__legacy');
-
-		while (container.childNodes.length > 0) {
-			legacy.appendChild(container.childNodes[0]);
-		}
-		
-		container.appendChild(legacy);
+		// const legacy = document.createElement("div");
+		// legacy.classList.add('file-uploader__legacy');
+		//
+		// while (container.childNodes.length > 0) {
+		// 	legacy.appendChild(container.childNodes[0]);
+		// }
+		//
+		// container.appendChild(legacy);
 
 		this.$screenAnnouncer = document.createElement('p');
 		this.$screenAnnouncer.classList.add("file-uploader__announcer");
@@ -258,40 +262,45 @@ export default class FileUploader {
 		return "Upload photo";
 	}
 
-	renderPreview() {
-		const previewHolder = document.createElement('div');
-		previewHolder.classList.add('preview__holder');
-		this.$previewHolder = previewHolder;
-
-		const previewResetBtn = document.createElement('button');
-		previewResetBtn.classList.add('preview__resetBtn');
-		previewResetBtn.innerText = this.getDataAttrValue('preview-reset-button') || "Use a different photo or scan";
-		this.$resetBtn = previewResetBtn;
-
-		const previewHeading = document.createElement('h3');
-		previewHeading.innerText = this.getDataAttrValue('preview-title') || "This is your upload";
-		previewHeading.classList.add('preview__heading');
-
-		const fileUploaderPreview = document.createElement('div');
-		fileUploaderPreview.classList.add('preview');
-		fileUploaderPreview.appendChild(previewHeading);
-		fileUploaderPreview.appendChild(previewHolder);
-
-		if(this.$fileInput.multiple) {
-			const addFileBtn = document.createElement('button');
-			addFileBtn.classList.add('preview__addFileBtn');
-			addFileBtn.innerText = this.getDataAttrValue('preview-addFile-button') || "Add another photo or scan";
-			this.$addFileBtn = addFileBtn;
-			fileUploaderPreview.appendChild(addFileBtn);
-		}
-
-		fileUploaderPreview.appendChild(previewResetBtn);
-
-		return fileUploaderPreview;
-	}
+	// renderPreview() {
+	// 	const previewHolder = document.createElement('div');
+	// 	previewHolder.classList.add('preview__holder');
+	// 	this.$previewHolder = previewHolder;
+	//
+	// 	const previewResetBtn = document.createElement('button');
+	// 	previewResetBtn.classList.add('preview__resetBtn');
+	// 	previewResetBtn.innerText = this.getDataAttrValue('preview-reset-button') || "Use a different photo or scan";
+	// 	this.$resetBtn = previewResetBtn;
+	//
+	// 	const previewHeading = document.createElement('h3');
+	// 	previewHeading.innerText = this.getDataAttrValue('preview-title') || "This is your upload";
+	// 	previewHeading.classList.add('preview__heading');
+	//
+	// 	const fileUploaderPreview = document.createElement('div');
+	// 	fileUploaderPreview.classList.add('preview');
+	// 	fileUploaderPreview.appendChild(previewHeading);
+	// 	fileUploaderPreview.appendChild(previewHolder);
+	//
+	// 	if(this.$fileInput.multiple) {
+	// 		const addFileBtn = document.createElement('button');
+	// 		addFileBtn.classList.add('preview__addFileBtn');
+	// 		addFileBtn.innerText = this.getDataAttrValue('preview-addFile-button') || "Add another photo or scan";
+	// 		this.$addFileBtn = addFileBtn;
+	// 		fileUploaderPreview.appendChild(addFileBtn);
+	// 	}
+	//
+	// 	fileUploaderPreview.appendChild(previewResetBtn);
+	//
+	// 	return fileUploaderPreview;
+	// }
 
     renderFilePreview(response) {
-        const elPreviewItem = this.getPreviewWrapper();
+        const wrapper = document.getElementById("preview-holder");
+        while (wrapper.firstChild) {
+            wrapper.removeChild(wrapper.firstChild);
+        }
+
+        const elPreviewItem = document.createElement('div');
 		elPreviewItem.classList.add('preview__item');
 
 		if(response.type === "file") {
@@ -314,24 +323,25 @@ export default class FileUploader {
 				elPreviewItem.appendChild(elImg);
 			}*/
 		}
+        wrapper.appendChild(elPreviewItem);
 
 		this.makeScreenAnnouncement("File uploaded: " + response.fileName);
 
 		return elPreviewItem;
 	}
 
-	getPreviewWrapper() {
-        const wrapper = document.getElementById("upload-preview-div");
-        if (wrapper) {
-            while (wrapper.firstChild) {
-                wrapper.removeChild(wrapper.firstChild);
-            }
-        } else {
-            return document.createElement('div');
-        }
-
-        return wrapper;
-    }
+	// getPreviewWrapper() {
+    //     const wrapper = document.getElementById("preview-holder");
+    //     if (wrapper) {
+    //         while (wrapper.firstChild) {
+    //             wrapper.removeChild(wrapper.firstChild);
+    //         }
+    //     } else {
+    //         return document.createElement('div');
+    //     }
+	//
+    //     return wrapper;
+    // }
 
 	fireLifeCycleEvent(eventName, ...options) {
 		if(this.$options && this.$options[eventName] && typeof this.$options[eventName] === 'function') {
