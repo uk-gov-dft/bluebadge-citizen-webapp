@@ -60,6 +60,7 @@ public class ChooseYourCouncilController implements StepController {
         referenceDataService.retrieveReferenceDataList(RefDataGroupEnum.COUNCIL);
     List<ReferenceData> activeCouncils = getActiveCouncils(councils);
     model.addAttribute("councils", activeCouncils);
+
     return TEMPLATE;
   }
 
