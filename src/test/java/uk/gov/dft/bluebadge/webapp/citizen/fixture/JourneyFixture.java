@@ -497,11 +497,7 @@ public class JourneyFixture {
       if (StepDefinition.PERMISSION == stepTo) return journey;
 
       LocalAuthorityRefData localAuthorityRefData = new LocalAuthorityRefData();
-      LocalAuthorityRefData.LocalAuthorityMetaData localAuthorityMetaData =
-          new LocalAuthorityRefData.LocalAuthorityMetaData();
-      localAuthorityMetaData.setIssuingAuthorityShortCode("WARCC");
-      localAuthorityRefData.setLocalAuthorityMetaData(localAuthorityMetaData);
-
+      localAuthorityRefData.setShortCode("WARCC");
       journey.setFormForStep(
           RegisteredCouncilForm.builder()
               .registeredCouncil("WARCC")
