@@ -13,4 +13,4 @@ spring:
     host: redis
 
 amazon:
-  s3bucket: ${bb_application_tmp_bucket:bb_docker_dev_application_tmp_bucket}
+  s3bucket: ${bb_application_tmp_bucket:uk-gov-dft-ci-applications-temp}
