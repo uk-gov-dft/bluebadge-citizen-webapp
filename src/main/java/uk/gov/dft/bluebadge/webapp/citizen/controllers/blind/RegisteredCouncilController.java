@@ -78,10 +78,11 @@ public class RegisteredCouncilController implements StepController {
     if (bindingResult.hasErrors()) {
       return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
     }
-    LocalAuthorityRefData localAuthorityShortCode =
+
+    LocalAuthorityRefData localAuthority =
         referenceDataService.lookupLocalAuthorityFromCouncilCode(
             formRequest.getRegisteredCouncil());
-    formRequest.setLocalAuthorityForRegisteredBlind(localAuthorityShortCode);
+    formRequest.setLocalAuthorityForRegisteredBlind(localAuthority);
     journey.setFormForStep(formRequest);
     return routeMaster.redirectToOnSuccess(formRequest, journey);
   }

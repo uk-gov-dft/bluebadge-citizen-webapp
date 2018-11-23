@@ -69,6 +69,7 @@ if (select_autocomplete.length > 0) {
                 autoselect: true,
                 selectElement: select,
                 onConfirm: (query) => {
+                    const trimmedQuery = query.trim();
                     const input = document.getElementById(select.id.replace('-select', ''));
                     const value = input.value;
 
@@ -77,7 +78,7 @@ if (select_autocomplete.length > 0) {
                     }
 
                     const requestedOption = Array.from(select.options).find((option) => {
-                        return (option.innerText || option.textContent) === query;
+                        return (option.innerText.trim() || option.textContent.trim()) === trimmedQuery;
                     });
 
                     if (requestedOption) {
