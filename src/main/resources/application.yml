@@ -75,5 +75,5 @@ security:
 GACode:  ${GACODE:UA-124760983-5}
 
 amazon:
-  s3bucket: uk-gov-dft-test-applications-temp
+  s3bucket: uk-gov-dft-dev-applications-temp
   signed-url-duration-ms: 60000
