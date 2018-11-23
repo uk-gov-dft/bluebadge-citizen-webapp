@@ -56,7 +56,6 @@ public class ChooseYourCouncilControllerTest {
 
     LocalCouncilRefData.LocalCouncilMetaData localCouncilMetaData1 =
         new LocalCouncilRefData.LocalCouncilMetaData();
-    localCouncilMetaData1.setDifferentServiceSignpostUrl("http://differentService.com");
     localCouncilMetaData1.setIssuingAuthorityShortCode("WARCC");
     localCouncilRefData1 = new LocalCouncilRefData();
     localCouncilRefData1.setDescription("Description");
@@ -65,7 +64,6 @@ public class ChooseYourCouncilControllerTest {
 
     LocalCouncilRefData.LocalCouncilMetaData localCouncilMetaData2 =
         new LocalCouncilRefData.LocalCouncilMetaData();
-    localCouncilMetaData1.setDifferentServiceSignpostUrl(null);
     localCouncilMetaData2.setIssuingAuthorityShortCode("KENTCC");
     localCouncilRefData2 = new LocalCouncilRefData();
     localCouncilRefData2.setDescription("Description");

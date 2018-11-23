@@ -27,6 +27,5 @@ public class LocalCouncilRefData extends ReferenceData {
   @Data
   public static class LocalCouncilMetaData implements Serializable {
     private String issuingAuthorityShortCode;
-    private String differentServiceSignpostUrl;
   }
 }
