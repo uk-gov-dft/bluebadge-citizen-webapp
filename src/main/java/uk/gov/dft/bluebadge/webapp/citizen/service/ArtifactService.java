@@ -77,10 +77,12 @@ public class ArtifactService {
     Path path = new File(multipartFile.getOriginalFilename()).toPath();
     try {
       String mimeType = Files.probeContentType(path);
-      return mimeType.startsWith("image/") ? "image" : "file";
+      if(null != mimeType && mimeType.startsWith("image/")){
+        return "image";
+      }
     } catch (IOException e) {
-      return "file";
     }
+    return "file";
   }
 
   private URL generateSignedS3Url(String link) {
