@@ -81,6 +81,7 @@ public class ArtifactService {
         return "image";
       }
     } catch (IOException e) {
+      log.debug("Failed to determine file type for: {}.  Exception message:{}", multipartFile.getOriginalFilename(), e.getMessage());
     }
     return "file";
   }
