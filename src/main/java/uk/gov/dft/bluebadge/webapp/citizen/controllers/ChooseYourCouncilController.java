@@ -1,10 +1,8 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static org.codehaus.groovy.runtime.DefaultGroovyMethods.collect;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataGroupEnum;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalCouncilRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
@@ -58,8 +55,9 @@ public class ChooseYourCouncilController implements StepController {
 
     List<ReferenceData> councils =
         referenceDataService.retrieveReferenceDataList(RefDataGroupEnum.COUNCIL);
-    List<ReferenceData> activeCouncils = getActiveCouncils(councils);
-    model.addAttribute("councils", activeCouncils);
+    //List<ReferenceData> activeCouncils = getActiveCouncils(councils);
+    //    model.addAttribute("councils", activeCouncils);
+    model.addAttribute("councils", councils);
 
     return TEMPLATE;
   }
@@ -90,6 +88,7 @@ public class ChooseYourCouncilController implements StepController {
   /*
    * Returns the active ones from the list of the passed councils.
    */
+  /*
   private List<ReferenceData> getActiveCouncils(List<ReferenceData> councils) {
     return councils
         .stream()
@@ -97,8 +96,9 @@ public class ChooseYourCouncilController implements StepController {
             council ->
                 ((LocalCouncilRefData) council)
                     .getLocalCouncilMetaData()
-                    .map(LocalCouncilRefData.LocalCouncilMetaData::getIsActive)
+                    .map(LocalCouncilRefData.LocalCouncilMetaData::getDifferentServiceSignpostUrl)
+                  .map(StringUtils::isBlank)
                     .orElse(false))
         .collect(Collectors.toList());
-  }
+  }*/
 }

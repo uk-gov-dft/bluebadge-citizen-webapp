@@ -120,15 +120,15 @@ public class Journey implements Serializable {
   }
 
   public Boolean isLocalAuthorityActive() {
-    if (getLocalAuthority().getShortCode().equalsIgnoreCase("KENTCC")) {
-      // TODO
-      return false;
-    } else {
-      return !getLocalAuthority()
-          .getLocalAuthorityMetaData()
-          .map(LocalAuthorityRefData.LocalAuthorityMetaData::getDifferentServiceSignpostUrl)
-          .isPresent();
-    }
+    // if (getLocalAuthority().getShortCode().equalsIgnoreCase("KENTCC")) {
+    // TODO
+    // return false;
+    //} else {
+    return !getLocalAuthority()
+        .getLocalAuthorityMetaData()
+        .map(LocalAuthorityRefData.LocalAuthorityMetaData::getDifferentServiceSignpostUrl)
+        .isPresent();
+    //}
   }
 
   private boolean hasMobilityAid() {
