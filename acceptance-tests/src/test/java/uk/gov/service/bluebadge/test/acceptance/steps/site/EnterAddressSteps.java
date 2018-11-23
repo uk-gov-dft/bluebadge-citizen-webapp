@@ -65,41 +65,25 @@ public class EnterAddressSteps extends AbstractSpringSteps {
   }
 
   private void validateLengthLimitTownAndCity(String applicant) {
-    commonPage.findPageElementById("buildingAndStreet").clear();
-    commonPage.findPageElementById("townOrCity").clear();
-    commonPage.findPageElementById("postcode").clear();
-    commonPage
-            .findPageElementById("buildingAndStreet")
-            .sendKeys(EnterAddressPage.VALID_BUILDING_STREET);
-    commonPage
-            .findPageElementById("townOrCity")
-            .sendKeys(EnterAddressPage.GREATER_THAN_100_CHARACTERS);
-    commonPage.findPageElementById("postcode").sendKeys(EnterAddressPage.VALID_POSTCODE);
+    commonPage.clearAndSendKeys("buildingAndStreet",EnterAddressPage.VALID_BUILDING_STREET);
+    commonPage.clearAndSendKeys("townOrCity",EnterAddressPage.GREATER_THAN_100_CHARACTERS);
+    commonPage.clearAndSendKeys("postcode",EnterAddressPage.VALID_POSTCODE);
+
     commonSteps.iVerifyValidationMessage(EnterAddressPage.VALIDATION_MESSAGE_FOR_GT100_TOWN_CITY);
   }
 
   private void validateInvalidPostcode(String applicant) {
+    commonPage.clearAndSendKeys("buildingAndStreet",EnterAddressPage.VALID_BUILDING_STREET);
+    commonPage.clearAndSendKeys("townOrCity",EnterAddressPage.VALID_TOWN);
+    commonPage.clearAndSendKeys("postcode",EnterAddressPage.INVALID_POSTCODE);
 
-    commonPage.findPageElementById("buildingAndStreet").clear();
-    commonPage.findPageElementById("townOrCity").clear();
-    commonPage.findPageElementById("postcode").clear();
-    commonPage
-            .findPageElementById("buildingAndStreet")
-            .sendKeys(EnterAddressPage.VALID_BUILDING_STREET);
-    commonPage.findPageElementById("townOrCity").sendKeys(EnterAddressPage.VALID_TOWN);
-    commonPage.findPageElementById("postcode").sendKeys(EnterAddressPage.INVALID_POSTCODE);
     commonSteps.iVerifyValidationMessage(EnterAddressPage.VALIDATION_MESSAGE_FOR_INVALID_POSTCODE);
   }
 
   private void enterValidValuesAndContinue(String applicant) {
-    commonPage.findPageElementById("buildingAndStreet").clear();
-    commonPage.findPageElementById("townOrCity").clear();
-    commonPage.findPageElementById("postcode").clear();
-    commonPage
-            .findPageElementById("buildingAndStreet")
-            .sendKeys(EnterAddressPage.VALID_BUILDING_STREET);
-    commonPage.findPageElementById("townOrCity").sendKeys(EnterAddressPage.VALID_TOWN);
-    commonPage.findPageElementById("postcode").sendKeys(EnterAddressPage.VALID_POSTCODE);
+    commonPage.clearAndSendKeys("buildingAndStreet",EnterAddressPage.VALID_BUILDING_STREET);
+    commonPage.clearAndSendKeys("townOrCity",EnterAddressPage.VALID_TOWN);
+    commonPage.clearAndSendKeys("postcode",EnterAddressPage.VALID_POSTCODE);
 
     commonSteps.iClickOnContinueButton();
   }
