@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -102,19 +101,21 @@ public class ProveIdentityController implements StepController {
       try {
         JourneyArtifact uploadJourneyArtifact = artifactService.upload(document);
         formRequest.setJourneyArtifact(uploadJourneyArtifact);
+        journey.setFormForStep(formRequest);
       } catch (Exception e) {
         log.warn("Failed to upload document", e);
-        ObjectError error = new ObjectError("document", "Failed to upload document");
-        bindingResult.addError(error);
+        bindingResult.rejectValue("document", "", "Failed to upload document");
       }
+    }
+
+    ProveIdentityForm sessionForm = journey.getFormForStep(getStepDefinition());
+    if (null == sessionForm || null == sessionForm.getJourneyArtifact()) {
+      bindingResult.rejectValue(
+          "journeyArtifact", "NotNull.document", "Prove of identity is required");
     }
 
     if (bindingResult.hasErrors()) {
       return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
-    }
-
-    if (null == journey.getFormForStep(getStepDefinition())) {
-      journey.setFormForStep(formRequest);
     }
 
     return routeMaster.redirectToOnSuccess(formRequest, journey);
