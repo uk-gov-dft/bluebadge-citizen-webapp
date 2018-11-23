@@ -55,8 +55,6 @@ public class ChooseYourCouncilController implements StepController {
 
     List<ReferenceData> councils =
         referenceDataService.retrieveReferenceDataList(RefDataGroupEnum.COUNCIL);
-    //List<ReferenceData> activeCouncils = getActiveCouncils(councils);
-    //    model.addAttribute("councils", activeCouncils);
     model.addAttribute("councils", councils);
 
     return TEMPLATE;
@@ -84,21 +82,4 @@ public class ChooseYourCouncilController implements StepController {
   public StepDefinition getStepDefinition() {
     return StepDefinition.CHOOSE_COUNCIL;
   }
-
-  /*
-   * Returns the active ones from the list of the passed councils.
-   */
-  /*
-  private List<ReferenceData> getActiveCouncils(List<ReferenceData> councils) {
-    return councils
-        .stream()
-        .filter(
-            council ->
-                ((LocalCouncilRefData) council)
-                    .getLocalCouncilMetaData()
-                    .map(LocalCouncilRefData.LocalCouncilMetaData::getDifferentServiceSignpostUrl)
-                  .map(StringUtils::isBlank)
-                    .orElse(false))
-        .collect(Collectors.toList());
-  }*/
 }

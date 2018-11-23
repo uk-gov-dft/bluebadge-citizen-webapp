@@ -45,7 +45,6 @@ public class DifferentServiceSignpostController extends BaseFinalStepController 
     Optional<String> differentServiceSignpostUrl =
         localAuthorityMetadata.map(
             LocalAuthorityRefData.LocalAuthorityMetaData::getDifferentServiceSignpostUrl);
-    // TODO: What to do if no url, if we are here is because we have the url.
     model.addAttribute(
         "differentServiceSignpostUrl",
         differentServiceSignpostUrl.orElse(

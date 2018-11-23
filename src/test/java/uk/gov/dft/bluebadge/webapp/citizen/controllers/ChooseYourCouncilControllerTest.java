@@ -42,7 +42,6 @@ public class ChooseYourCouncilControllerTest {
   private LocalCouncilRefData localCouncilRefData1;
   private LocalCouncilRefData localCouncilRefData2;
   private List<ReferenceData> councils;
-  private List<ReferenceData> activeCouncils;
 
   @Before
   public void setup() {
@@ -74,7 +73,6 @@ public class ChooseYourCouncilControllerTest {
     localCouncilRefData2.setLocalCouncilMetaData(localCouncilMetaData2);
 
     councils = Lists.newArrayList(localCouncilRefData1, localCouncilRefData2);
-    activeCouncils = Lists.newArrayList(localCouncilRefData2);
   }
 
   @Test
@@ -89,7 +87,7 @@ public class ChooseYourCouncilControllerTest {
         .andExpect(status().isOk())
         .andExpect(view().name("choose-council"))
         .andExpect(model().attribute("formRequest", formRequest))
-        .andExpect(model().attribute("councils", activeCouncils));
+        .andExpect(model().attribute("councils", councils));
   }
 
   @Test
@@ -103,7 +101,7 @@ public class ChooseYourCouncilControllerTest {
         .andExpect(status().isOk())
         .andExpect(view().name("choose-council"))
         .andExpect(model().attribute("formRequest", JourneyFixture.getChooseYourCouncilForm()))
-        .andExpect(model().attribute("councils", activeCouncils));
+        .andExpect(model().attribute("councils", councils));
   }
 
   @Test
