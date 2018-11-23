@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.util.List;
 import org.assertj.core.util.Lists;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataGroupEnum;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalCouncilRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
@@ -34,6 +36,11 @@ public class ChooseYourCouncilControllerTest {
 
   Journey journey;
 
+  private LocalCouncilRefData localCouncilRefData1;
+  private LocalCouncilRefData localCouncilRefData2;
+  private List<ReferenceData> councils;
+  private List<ReferenceData> activeCouncils;
+
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
@@ -44,12 +51,33 @@ public class ChooseYourCouncilControllerTest {
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
     journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.CHOOSE_COUNCIL);
+
+    LocalCouncilRefData.LocalCouncilMetaData localCouncilMetaData1 =
+        new LocalCouncilRefData.LocalCouncilMetaData();
+    localCouncilMetaData1.setIsActive(false);
+    localCouncilMetaData1.setIssuingAuthorityShortCode("WARCC");
+    localCouncilRefData1 = new LocalCouncilRefData();
+    localCouncilRefData1.setDescription("Description");
+    localCouncilRefData1.setDisplayOrder(1);
+    localCouncilRefData1.setLocalCouncilMetaData(localCouncilMetaData1);
+
+    LocalCouncilRefData.LocalCouncilMetaData localCouncilMetaData2 =
+        new LocalCouncilRefData.LocalCouncilMetaData();
+    localCouncilMetaData2.setIsActive(true);
+    localCouncilMetaData2.setIssuingAuthorityShortCode("KENTCC");
+    localCouncilRefData2 = new LocalCouncilRefData();
+    localCouncilRefData2.setDescription("Description");
+    localCouncilRefData2.setDisplayOrder(1);
+    localCouncilRefData2.setLocalCouncilMetaData(localCouncilMetaData2);
+
+    councils = Lists.newArrayList(localCouncilRefData1, localCouncilRefData2);
+    activeCouncils = Lists.newArrayList(localCouncilRefData2);
   }
 
   @Test
-  public void show_whenFirstvisit() throws Exception {
+  public void show_whenFirstVisit() throws Exception {
     when(mockReferenceDataService.retrieveReferenceDataList(RefDataGroupEnum.COUNCIL))
-        .thenReturn(Lists.newArrayList(new ReferenceData()));
+        .thenReturn(councils);
     ChooseYourCouncilForm formRequest = ChooseYourCouncilForm.builder().build();
 
     Journey shortJourney = JourneyFixture.getDefaultJourneyToStep(StepDefinition.APPLICANT_TYPE);
@@ -58,21 +86,21 @@ public class ChooseYourCouncilControllerTest {
         .andExpect(status().isOk())
         .andExpect(view().name("choose-council"))
         .andExpect(model().attribute("formRequest", formRequest))
-        .andExpect(model().attributeExists("councils"));
+        .andExpect(model().attribute("councils", activeCouncils));
   }
 
   @Test
   public void show_whenRevisit() throws Exception {
 
     when(mockReferenceDataService.retrieveReferenceDataList(RefDataGroupEnum.COUNCIL))
-        .thenReturn(Lists.newArrayList(new ReferenceData()));
+        .thenReturn(councils);
 
     mockMvc
         .perform(get(Mappings.URL_CHOOSE_YOUR_COUNCIL).sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("choose-council"))
         .andExpect(model().attribute("formRequest", JourneyFixture.getChooseYourCouncilForm()))
-        .andExpect(model().attributeExists("councils"));
+        .andExpect(model().attribute("councils", activeCouncils));
   }
 
   @Test
