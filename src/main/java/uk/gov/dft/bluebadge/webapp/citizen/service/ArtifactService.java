@@ -6,7 +6,6 @@ import com.amazonaws.services.s3.AmazonS3URI;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.transfer.TransferManager;
-
 import com.amazonaws.services.s3.transfer.Upload;
 import com.amazonaws.services.s3.transfer.model.UploadResult;
 import java.io.File;
@@ -28,6 +27,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 @Service
 @Slf4j
 public class ArtifactService {
+  public static final String ENCODING_CHAR_SET = "UTF-8";
   private final AmazonS3 amazonS3;
   private final S3Config s3Config;
   private final TransferManager transferManager;
@@ -54,7 +54,7 @@ public class ArtifactService {
 
     String keyName = UUID.randomUUID().toString() + "-" + multipartFile.getOriginalFilename();
 
-    keyName = URLEncoder.encode(keyName, "UTF-8");
+    keyName = URLEncoder.encode(keyName, ENCODING_CHAR_SET);
     ObjectMetadata meta = new ObjectMetadata();
     meta.setContentLength(multipartFile.getSize());
     Upload upload =
