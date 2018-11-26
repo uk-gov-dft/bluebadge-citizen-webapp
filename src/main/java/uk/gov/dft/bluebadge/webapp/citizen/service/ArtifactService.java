@@ -3,20 +3,21 @@ package uk.gov.dft.bluebadge.webapp.citizen.service;
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3URI;
+import com.amazonaws.services.s3.internal.Mimetypes;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.Upload;
 import com.amazonaws.services.s3.transfer.model.UploadResult;
-import java.io.File;
+
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.nio.file.Files;
-import java.nio.file.Path;
+
 import java.util.Date;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -57,6 +58,8 @@ public class ArtifactService {
     keyName = URLEncoder.encode(keyName, ENCODING_CHAR_SET);
     ObjectMetadata meta = new ObjectMetadata();
     meta.setContentLength(multipartFile.getSize());
+    String mimetype = Mimetypes.getInstance().getMimetype(multipartFile.getOriginalFilename());
+    meta.setContentType(mimetype);
     Upload upload =
         transferManager.upload(
             s3Config.getS3Bucket(), keyName, multipartFile.getInputStream(), meta);
@@ -66,22 +69,15 @@ public class ArtifactService {
 
     return JourneyArtifact.builder()
         .fileName(multipartFile.getOriginalFilename())
-        .type(determineFileType(multipartFile))
+        .type(determineFileType(mimetype))
         .url(url)
         .signedUrl(signedS3Url)
         .build();
   }
 
-  /** This really needs improving */
-  private String determineFileType(MultipartFile multipartFile) {
-    Path path = new File(multipartFile.getOriginalFilename()).toPath();
-    try {
-      String mimeType = Files.probeContentType(path);
-      if(null != mimeType && mimeType.startsWith("image/")){
-        return "image";
-      }
-    } catch (IOException e) {
-      log.debug("Failed to determine file type for: {}.  Exception message:{}", multipartFile.getOriginalFilename(), e.getMessage());
+  private static String determineFileType(String mimeType) {
+    if (null != mimeType && mimeType.startsWith("image/")) {
+      return "image";
     }
     return "file";
   }
