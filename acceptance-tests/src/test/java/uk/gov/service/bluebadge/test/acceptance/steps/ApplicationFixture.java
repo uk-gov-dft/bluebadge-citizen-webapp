@@ -53,7 +53,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("^I complete registered council page for \"(england|wales|scotland)\"$")
   public void iCompleteRegisteredCouncilPage(String country) throws Throwable {
-    iCompleteSelectCouncilPage(country, "registeredCouncil");
+    iCompleteSelectCouncilPage(country, ChooseCouncilPage.REGISTERED_COUNCIL_INPUT);
   }
 
   private void iCompleteSelectCouncilPage(String country, String inputId) {
@@ -67,8 +67,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
       fullCouncil = "Isle of Anglesey county council";
     }
 
-    commonPage.findPageElementById(ChooseCouncilPage.COUNCIL_INPUT).sendKeys(council);
-    commonPage.selectFromAutoCompleteList(ChooseCouncilPage.COUNCIL_INPUT, fullCouncil);
+    commonPage.findPageElementById(inputId).sendKeys(council);
+    commonPage.selectFromAutoCompleteList(inputId, fullCouncil);
     pressContinue();
   }
 
