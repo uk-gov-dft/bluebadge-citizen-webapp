@@ -1,8 +1,8 @@
 export default class FileUploader {
 
 	constructor (options) {
-		if(!window.DragEvent) {
-			console.warn('File Uploader Component is not supported on this browser');
+		if(!supportsDragAndDrop()) {
+			console.warn('Drag and Drop is not supported on this browser');
 			return;
 		}
 
@@ -46,6 +46,11 @@ export default class FileUploader {
 		this.registerEvents();
 		this.fireLifeCycleEvent('init');
 	}
+
+    supportsDragAndDrop = function() {
+        var div = document.createElement('div');
+        return ('draggable' in div) || ('ondragstart' in div && 'ondrop' in div);
+    }
 
 	registerEvents() {
 		this.uploadBtnClick = this.uploadBtnClick.bind(this);
