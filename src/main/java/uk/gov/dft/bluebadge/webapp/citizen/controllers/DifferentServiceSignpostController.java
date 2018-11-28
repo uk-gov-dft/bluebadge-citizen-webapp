@@ -1,8 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-
-import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +14,10 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+
+import java.util.Optional;
+
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Slf4j
 @Controller
@@ -43,19 +44,16 @@ public class DifferentServiceSignpostController extends BaseFinalStepController 
       SessionStatus sessionStatus) {
 
     String urlToReturnTo = super.show(journey, model, sessionStatus);
-    if (urlToReturnTo.startsWith("redirect")) {
-      return urlToReturnTo;
+    if (!urlToReturnTo.startsWith("redirect")) {
+      Optional<LocalAuthorityRefData.LocalAuthorityMetaData> localAuthorityMetadata =
+          journey.getLocalAuthority().getLocalAuthorityMetaData();
+      Optional<String> differentServiceSignpostUrl =
+          localAuthorityMetadata.map(
+              LocalAuthorityRefData.LocalAuthorityMetaData::getDifferentServiceSignpostUrl);
+      model.addAttribute(
+          "differentServiceSignpostUrl",
+          differentServiceSignpostUrl.orElse(defaultDifferentServiceSignpostUrl));
     }
-
-    Optional<LocalAuthorityRefData.LocalAuthorityMetaData> localAuthorityMetadata =
-        journey.getLocalAuthority().getLocalAuthorityMetaData();
-    Optional<String> differentServiceSignpostUrl =
-        localAuthorityMetadata.map(
-            LocalAuthorityRefData.LocalAuthorityMetaData::getDifferentServiceSignpostUrl);
-    model.addAttribute(
-        "differentServiceSignpostUrl",
-        differentServiceSignpostUrl.orElse(defaultDifferentServiceSignpostUrl));
-
     return urlToReturnTo;
   }
 
