@@ -5,6 +5,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,9 +24,15 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 public class DifferentServiceSignpostController extends BaseFinalStepController {
   private static final String TEMPLATE = "different-service-signpost";
 
+  private String defaultDifferentServiceSignpostUrl;
+
   @Autowired
-  DifferentServiceSignpostController(RouteMaster routeMaster) {
+  DifferentServiceSignpostController(
+      RouteMaster routeMaster,
+      @Value("blue-badge.defaultDifferentServiceSignpostUrl")
+          String defaultDifferentServiceSignpostUrl) {
     super(routeMaster);
+    this.defaultDifferentServiceSignpostUrl = defaultDifferentServiceSignpostUrl;
   }
 
   @Override
@@ -47,8 +54,7 @@ public class DifferentServiceSignpostController extends BaseFinalStepController 
             LocalAuthorityRefData.LocalAuthorityMetaData::getDifferentServiceSignpostUrl);
     model.addAttribute(
         "differentServiceSignpostUrl",
-        differentServiceSignpostUrl.orElse(
-            "https://bluebadge.direct.gov.uk/bluebadge/why-are-you-here"));
+        differentServiceSignpostUrl.orElse(defaultDifferentServiceSignpostUrl));
 
     return urlToReturnTo;
   }

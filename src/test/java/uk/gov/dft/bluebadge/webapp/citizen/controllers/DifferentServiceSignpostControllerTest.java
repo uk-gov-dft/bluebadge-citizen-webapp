@@ -21,7 +21,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 public class DifferentServiceSignpostControllerTest {
 
-  public static final String DIFFERENT_SERVICE_SIGNPOST_URL =
+  public static final String DEFAULT_DIFFERENT_SERVICE_SIGNPOST_URL =
       "https://bluebadge.direct.gov.uk/bluebadge/why-are-you-here";
   private MockMvc mockMvc;
   private LocalAuthorityRefData localAuthorityRefData;
@@ -34,7 +34,8 @@ public class DifferentServiceSignpostControllerTest {
     MockitoAnnotations.initMocks(this);
 
     DifferentServiceSignpostController controller =
-        new DifferentServiceSignpostController(routeMasterMock);
+        new DifferentServiceSignpostController(
+            routeMasterMock, DEFAULT_DIFFERENT_SERVICE_SIGNPOST_URL);
 
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
@@ -45,7 +46,7 @@ public class DifferentServiceSignpostControllerTest {
     localAuthorityRefData.setShortCode("WARCC");
     LocalAuthorityRefData.LocalAuthorityMetaData localAuthorityMetaData =
         new LocalAuthorityRefData.LocalAuthorityMetaData();
-    localAuthorityMetaData.setDifferentServiceSignpostUrl(DIFFERENT_SERVICE_SIGNPOST_URL);
+    localAuthorityMetaData.setDifferentServiceSignpostUrl(DEFAULT_DIFFERENT_SERVICE_SIGNPOST_URL);
     when(journeyMock.getLocalAuthority()).thenReturn(localAuthorityRefData);
   }
 
@@ -61,7 +62,8 @@ public class DifferentServiceSignpostControllerTest {
         .andExpect(view().name("different-service-signpost"))
         .andExpect(model().attribute("localAuthority", localAuthorityRefData))
         .andExpect(
-            model().attribute("differentServiceSignpostUrl", DIFFERENT_SERVICE_SIGNPOST_URL));
+            model()
+                .attribute("differentServiceSignpostUrl", DEFAULT_DIFFERENT_SERVICE_SIGNPOST_URL));
   }
 
   @Test

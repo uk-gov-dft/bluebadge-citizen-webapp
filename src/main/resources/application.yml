@@ -20,6 +20,7 @@ blue-badge:
       requesttimeout: 6000
       contextpath: /uk-gov-dft/application-management-service/1.0.0
   env: ${bb_env:dev}
+  defaultDifferentServiceSignpostUrl: https://bluebadge.direct.gov.uk/bluebadge/why-are-you-here
 
 logging:
   level:
