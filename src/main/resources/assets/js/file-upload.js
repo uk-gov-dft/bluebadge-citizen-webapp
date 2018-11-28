@@ -47,7 +47,7 @@ export default class FileUploader {
 		this.fireLifeCycleEvent('init');
 	}
 
-    supportsDragAndDrop = function() {
+    supportsDragAndDrop(){
         var div = document.createElement('div');
         return ('draggable' in div) || ('ondragstart' in div && 'ondrop' in div);
     }
