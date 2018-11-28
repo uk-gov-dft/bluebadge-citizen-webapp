@@ -134,7 +134,8 @@ export default class FileUploader {
 		}
 
 		this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
-	}
+        this.fireLifeCycleEvent('uploadRejected');
+    }
 
 	beginFileUpload(file) {
 		const xhr = new XMLHttpRequest();

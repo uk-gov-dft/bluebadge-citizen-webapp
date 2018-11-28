@@ -215,4 +215,20 @@
 	&--active {
 		display: block;
 	}
+	&--error {
+		.file-uploader-msg-error{
+			display: block;
+		}
+	}
+	&--rejected {
+		.file-uploader-msg-rejected{
+			display: block;
+		}
+	}
+}
+.file-uploader-msg-error{
+	display: none;
+}
+.file-uploader-msg-rejected{
+	display: none;
 }

@@ -51,8 +51,22 @@ const initFileUploader = () => {
                 fileUploaderErrorBox.classList.remove('file-uploader-error--active');
             },
             uploadError: () => {
+                fileUploaderErrorBox.classList.remove('file-uploader-error--active');
+                fileUploaderErrorBox.classList.remove('file-uploader-error--error');
+                fileUploaderErrorBox.classList.remove('file-uploader-error--rejected');
                 if(!fileUploaderErrorBox.classList.contains('file-uploader-error--active')) {
                     fileUploaderErrorBox.classList.add('file-uploader-error--active');
+                    fileUploaderErrorBox.classList.add('file-uploader-error--error');
+                }
+                fileUploaderErrorBox.focus();
+            },
+            uploadRejected: () => {
+                fileUploaderErrorBox.classList.remove('file-uploader-error--active');
+                fileUploaderErrorBox.classList.remove('file-uploader-error--error');
+                fileUploaderErrorBox.classList.remove('file-uploader-error--rejected');
+                if(!fileUploaderErrorBox.classList.contains('file-uploader-error--active')) {
+                    fileUploaderErrorBox.classList.add('file-uploader-error--active');
+                    fileUploaderErrorBox.classList.add('file-uploader-error--rejected');
                 }
                 fileUploaderErrorBox.focus();
             }
