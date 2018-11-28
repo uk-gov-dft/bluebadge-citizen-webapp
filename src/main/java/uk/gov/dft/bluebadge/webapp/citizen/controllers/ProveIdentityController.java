@@ -26,6 +26,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveIdentityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService;
+import uk.gov.dft.bluebadge.webapp.citizen.service.UnsupportedMimetypeException;
 
 @Controller
 @Slf4j
@@ -103,6 +104,9 @@ public class ProveIdentityController implements StepController {
         JourneyArtifact uploadJourneyArtifact = artifactService.upload(document);
         formRequest.setJourneyArtifact(uploadJourneyArtifact);
         journey.setFormForStep(formRequest);
+      } catch (UnsupportedMimetypeException e) {
+        attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", "true");
+        return "redirect:" + Mappings.URL_PROVE_IDENTITY;
       } catch (Exception e) {
         log.warn("Failed to upload document", e);
         bindingResult.rejectValue("document", "", "Failed to upload document");
