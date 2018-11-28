@@ -32,7 +32,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService;
 public class ProveIdentityController implements StepController {
 
   public static final String TEMPLATE = "prove-identity";
-  private static final String DOC_BYPASS_URL = "proveId-bypass";
+  private static final String DOC_BYPASS_URL = "prove-id-bypass";
+  public static final String PROVE_IDENTITY_AJAX_URL = "/prove-identity-ajax";
 
   private final RouteMaster routeMaster;
   private final ArtifactService artifactService;
@@ -72,7 +73,7 @@ public class ProveIdentityController implements StepController {
     return routeMaster.redirectToOnSuccess(formRequest);
   }
 
-  @PostMapping(value = "/prove-identity-ajax", produces = "application/json")
+  @PostMapping(value = PROVE_IDENTITY_AJAX_URL, produces = "application/json")
   @ResponseBody
   public Map<String, Object> submitAjax(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,

@@ -110,7 +110,7 @@ public class ProveIdentityControllerTest {
   @Test
   public void onByPassLink_ShouldRedirectToSuccess() throws Exception {
     mockMvc
-        .perform(get("/proveId-bypass").sessionAttr("JOURNEY", journey))
+        .perform(get("/prove-id-bypass").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(SUCCESS_URL));
   }
