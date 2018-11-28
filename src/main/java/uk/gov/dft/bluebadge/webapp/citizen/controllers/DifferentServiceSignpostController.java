@@ -43,8 +43,8 @@ public class DifferentServiceSignpostController extends BaseFinalStepController 
       Model model,
       SessionStatus sessionStatus) {
 
-    String urlToReturnTo = super.show(journey, model, sessionStatus);
-    if (!urlToReturnTo.startsWith("redirect")) {
+    String template = super.show(journey, model, sessionStatus);
+    if (!template.startsWith("redirect")) {
       Optional<LocalAuthorityRefData.LocalAuthorityMetaData> localAuthorityMetadata =
           journey.getLocalAuthority().getLocalAuthorityMetaData();
       Optional<String> differentServiceSignpostUrl =
@@ -54,7 +54,7 @@ public class DifferentServiceSignpostController extends BaseFinalStepController 
           "differentServiceSignpostUrl",
           differentServiceSignpostUrl.orElse(defaultDifferentServiceSignpostUrl));
     }
-    return urlToReturnTo;
+    return template;
   }
 
   @Override
