@@ -1,7 +1,7 @@
 export default class FileUploader {
 
 	constructor (options) {
-		if(!supportsDragAndDrop()) {
+		if(!this.supportsDragAndDrop()) {
 			console.warn('Drag and Drop is not supported on this browser');
 			return;
 		}
