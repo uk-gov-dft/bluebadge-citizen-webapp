@@ -8,7 +8,8 @@
 
 <div th:fragment="fileUploader(label, name)">
 
-    <div class="govuk-error-summary file-uploader-error" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+    <div class="govuk-error-summary file-uploader-error" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary"
+        th:classappend="${MAX_FILE_SIZE_EXCEEDED} ? 'file-uploader-error--active file-uploader-error--rejected'">
         <h2 class="govuk-error-summary__title" id="error-summary-title" th:text="#{fileUploader.error.title}"></h2>
         <div class="govuk-error-summary__body file-uploader-msg-error" th:text="#{fileUploader.error.content}"></div>
         <div class="govuk-error-summary__body file-uploader-msg-rejected" th:text="#{fileUploader.rejected.content}"></div>
