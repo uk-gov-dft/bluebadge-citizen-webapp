@@ -14,17 +14,15 @@ public class JourneyToApplicationConverter {
   public static Application convert(Journey journey) {
     ExistingBadgeForm existingBadgeForm = journey.getFormForStep(StepDefinition.EXISTING_BADGE);
 
-    Application app =
-        Application.builder()
-            .applicationTypeCode(ApplicationTypeCodeField.NEW)
-            .localAuthorityCode(journey.getLocalAuthority().getShortCode())
-            .paymentTaken(false)
-            .existingBadgeNumber(getExistingBadgeNumber(existingBadgeForm))
-            .party(PartyConverter.convert(journey))
-            .eligibility(EligibilityConverter.convert(journey))
-            .build();
-
-    return app;
+    return Application.builder()
+        .applicationTypeCode(ApplicationTypeCodeField.NEW)
+        .localAuthorityCode(journey.getLocalAuthority().getShortCode())
+        .paymentTaken(false)
+        .existingBadgeNumber(getExistingBadgeNumber(existingBadgeForm))
+        .party(PartyConverter.convert(journey))
+        .eligibility(EligibilityConverter.convert(journey))
+        .artifacts(ArtifactConverter.convert(journey))
+        .build();
   }
 
   static String getExistingBadgeNumber(ExistingBadgeForm existingBadgeForm) {

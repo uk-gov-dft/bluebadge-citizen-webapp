@@ -43,7 +43,7 @@ public class HealthConditionsForm implements StepForm, Serializable {
     if (journey.getEligibilityCode() == CHILDBULK) {
       return Optional.of(StepDefinition.MEDICAL_EQUIPMENT);
     }
-    return Optional.of(StepDefinition.DECLARATIONS);
+    return Optional.of(StepDefinition.PROVE_IDENTITY);
   }
 
   @Override

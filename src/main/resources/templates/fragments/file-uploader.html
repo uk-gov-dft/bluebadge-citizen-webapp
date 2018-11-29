@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div th:fragment="fileUploader(label, name)">
+
+    <div class="govuk-error-summary file-uploader-error" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary"
+        th:classappend="${MAX_FILE_SIZE_EXCEEDED} ? 'file-uploader-error--active file-uploader-error--rejected'">
+        <h2 class="govuk-error-summary__title" id="error-summary-title" th:text="#{fileUploader.error.title}"></h2>
+        <div class="govuk-error-summary__body file-uploader-msg-error" th:text="#{fileUploader.error.content}"></div>
+        <div class="govuk-error-summary__body file-uploader-msg-rejected" th:text="#{fileUploader.rejected.content}"></div>
+    </div>
+
+    <div id="proveIdentity-fileUploaderContainer"
+         th:data-label-mobile="#{fileUploader.label.mobile}"
+         th:data-label-desktop="#{fileUploader.label.desktop}"
+         th:data-label-multiFile-caption="#{fileUploader.label.multiFile.caption}"
+         th:data-preview-title="#{fileUploader.preview.title}"
+         th:data-preview-reset-button="#{fileUploader.preview.resetBtn}"
+         th:data-preview-addFile-button="#{fileUploader.preview.addFileBtn}"
+         th:data-loader-text="#{fileUploader.loaderText}"
+         th:class="'govuk-form-group' + (${#fields.hasErrors('journeyArtifact')} == true ? ' govuk-form-group--error' : '')"
+         th:classappend="*{journeyArtifact} ? file-uploader--preview-mode"
+    >
+        <div id="upload-preview-div" class="preview">
+            <h3 class="preview__heading" th:text="#{fileUploader.preview.title}"></h3>
+            <div id="preview-holder" class="preview__holder">
+                <span th:if="*{journeyArtifact}" th:remove="tag">
+                    <!-- image preview -->
+                    <div th:if="*{journeyArtifact.type == 'image'}" class="preview__item">
+                        <img th:src="*{journeyArtifact.signedUrl}" th:alt="*{journeyArtifact.fileName}" alt="file name maybe - see henry">
+                    </div>
+
+                    <!-- file preview TODO -->
+                    <div th:if="*{journeyArtifact.type != 'image'}" class="preview__item">
+                        <p>file name
+                            <span>(Preview unavailable)</span>
+                        </p>
+                    </div>
+                </span>
+            </div>
+        </div>
+
+        <button id="preview-reset-btn" class="preview__resetBtn" th:text="#{fileUploader.preview.resetBtn}">Use a different photo or scan</button>
+
+        <div class="js-hidden2">
+            <label class="govuk-label" th:for="${name}" th:text="${label}"></label>
+            <span class="govuk-error-message" id="documentId-error" th:errors="*{__${'journeyArtifact'}__}"></span>
+            <input class="govuk-file-upload"
+                   th:id="${name}"
+                   th:name="${name}"
+                   type="file"
+                   accept="image/jpeg,image/gif,image/png,application/pdf">
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

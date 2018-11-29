@@ -29,7 +29,7 @@ public class ContactDetailsControllerTest {
   private MockMvc mockMvc;
   private Journey journey;
 
-  private static final String SUCCESS_URL = Mappings.URL_DECLARATIONS;
+  private static final String SUCCESS_URL = Mappings.URL_PROVE_IDENTITY;
   private static final String ERROR_URL = Mappings.URL_CONTACT_DETAILS + RouteMaster.ERROR_SUFFIX;
 
   @Before

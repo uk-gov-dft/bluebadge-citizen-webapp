@@ -173,6 +173,12 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
+  @And("^I complete prove ID page with no documents")
+  public void iCompleteProveIDPageWithNoDocuments() {
+    commonPage.findPageElementById("cant-upload-text").click();
+    commonPage.findPageElementById("continue-without-uploading").click();
+  }
+
   @And("^I complete declaration page$")
   public void iCompleteDeclarationPage() {
     commonPage.selectRadioButton("agreed");
