@@ -125,7 +125,7 @@ export default class FileUploader {
 
 	validateFile(file) {
 		// !file.type.match('image.*') try this instead
-		if(file.type === "" || !this.$fileInput.accept.includes(file.type)) {
+		if(file.type === "" || this.$fileInput.accept.indexOf(file.type) < 0) {
             this.makeScreenAnnouncement('Incorrect file type uploaded');
 		} else if(file.size > 10485760){
             this.makeScreenAnnouncement('Uploaded file too large');
@@ -149,6 +149,9 @@ export default class FileUploader {
 				if(xhr.response && xhr.response.success) {
 					this.showPreview(xhr.response.artifact);
 					this.fireLifeCycleEvent('uploaded');
+				} else if(typeof xhr.response === 'string' && JSON.parse(xhr.response).success){
+                    this.showPreview(JSON.parse(xhr.response).artifact);
+                    this.fireLifeCycleEvent('uploaded');
 				} else {
 					this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
 					this.fireLifeCycleEvent('uploadError');
