@@ -70,10 +70,10 @@ public class MainReasonController implements StepController {
         "formOptions",
         new RadioOptionsGroup.Builder()
             .titleMessageKeyApplicantAware("mainReasonPage.content.title", journey)
-            .addOptionApplicantAware(
-                EligibilityCodeField.TERMILL, "options.mainReasonPage.termill", journey)
             .addOptionApplicantAware(BLIND, "options.mainReasonPage.blind", journey)
             .addOptionApplicantAware(WALKD, walkingKey, journey)
+            .addOptionApplicantAware(
+                EligibilityCodeField.TERMILL, "options.mainReasonPage.termill", journey)
             .addOptionApplicantAware(ARMS, "options.mainReasonPage.arms", journey)
             .addOptionApplicantAware(CHILDBULK, "options.mainReasonPage.childbulk", journey)
             .addOptionApplicantAware(CHILDVEHIC, "options.mainReasonPage.childvehic", journey)
