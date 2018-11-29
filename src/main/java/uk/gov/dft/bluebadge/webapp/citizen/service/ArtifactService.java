@@ -13,12 +13,10 @@ import com.google.common.collect.ImmutableSet;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLEncoder;
-
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -31,7 +29,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 public class ArtifactService {
   public static final String ENCODING_CHAR_SET = "UTF-8";
   private static final Set<String> ACCEPTED_MIME_TYPES =
-      ImmutableSet.of("image/jpg", "image/gif", "image/png", "application/pdf");
+      ImmutableSet.of("image/jpeg", "image/gif", "image/png", "application/pdf");
   private final AmazonS3 amazonS3;
   private final S3Config s3Config;
   private final TransferManager transferManager;
