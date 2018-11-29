@@ -15,6 +15,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.common.ClientApiException;
 @ControllerAdvice
 public class ErrorControllerAdvice {
 
+  public static final String REDIRECT = "redirect:";
   private ObjectMapper objectMapper;
 
   public ErrorControllerAdvice(ObjectMapper objectMapper) {
@@ -24,7 +25,7 @@ public class ErrorControllerAdvice {
   @ExceptionHandler(Exception.class)
   public String handleException(Exception ex, HttpServletRequest req) {
     log.error("Request: {} raised {}.", req.getRequestURL(), ex.toString(), ex);
-    return "redirect:" + ErrorController.URL_500_ERROR;
+    return REDIRECT + ErrorController.URL_500_ERROR;
   }
 
   @ExceptionHandler(ClientApiException.class)
@@ -38,7 +39,7 @@ public class ErrorControllerAdvice {
     } catch (JsonProcessingException e) {
       log.warn("Failed to convert common response from exception.", e);
     }
-    return "redirect:" + ErrorController.URL_500_ERROR;
+    return REDIRECT + ErrorController.URL_500_ERROR;
   }
 
   @ExceptionHandler(MaxUploadSizeExceededException.class)
@@ -52,7 +53,7 @@ public class ErrorControllerAdvice {
     if (null != request.getAttribute("javax.servlet.error.request_uri")) {
       attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", "true");
       String uri = (String) request.getAttribute("javax.servlet.error.request_uri");
-      return "redirect:" + uri;
+      return REDIRECT + uri;
     }
     log.info("Handling MaxUploadSizeExceededException. Failed to determine the redirect path.");
     return handleException(exc, request);
