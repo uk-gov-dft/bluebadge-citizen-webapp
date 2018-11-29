@@ -4,7 +4,7 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/master.html}">
 <head>
-    <title th:text="(${errorSummary}? #{common.title.error} : '')  + #{contact.page.title}"></title>
+    <title th:text="(${errorSummary}? #{common.title.error} : '')  + #{${JOURNEY.who} + 'contact.page.title'}"></title>
 </head>
 <body>
 
@@ -12,7 +12,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-            <h1 class="govuk-heading-l" th:text="#{contact.body.title}"></h1>
+            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.who} + 'contact.body.title'}"></h1>
 
             <form th:action="@{/contact-details}" th:object="${formRequest}" method="POST" novalidate>
 
@@ -21,11 +21,21 @@
                     <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.fullName.field.label}, 'fullName', #{contact.fullName.field.hint}, 'text', null)}"></div>
                 </div>
 
-                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.primaryPhoneNumber.field.label}, 'primaryPhoneNumber', null, 'text', 'govuk-input--width-20')}"></div>
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.primaryPhoneNumber.field.label}, 'primaryPhoneNumber', #{contact.primaryPhoneNumber.field.hint}, 'text', 'govuk-input--width-20')}"></div>
+                <details class="govuk-details">
+                    <summary class="govuk-details__summary">
+                        <span class="govuk-details__summary-text" id="primaryPhoneNumberDetails" th:text="#{contact.primaryPhoneNumber.primaryPhoneNumberDetails.title}"></span>
+                    </summary>
+
+                    <div class="govuk-details__text">
+                        <p th:text="#{${JOURNEY.who} + contact.primaryPhoneNumber.primaryPhoneNumberDetails.content}"></p>
+                    </div>
+                </details>
+
 
                 <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.secondaryPhoneNumber.field.label}, 'secondaryPhoneNumber', null, 'text', 'govuk-input--width-20')}"></div>
 
-                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.emailAddress.field.label}, 'emailAddress', null, 'text', 'govuk-!-width-three-quarters')}"></div>
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.emailAddress.field.label}, 'emailAddress', #{contact.emailAddress.field.hint}, 'text', 'govuk-!-width-three-quarters')}"></div>
 
                 <button type="submit" class="govuk-button" data-uipath="button.continue" th:text="#{btn.label.continue}"></button>
 

@@ -62,7 +62,7 @@
         <div class="govuk-date-input__item">
             <div class="govuk-form-group">
                 <label class="govuk-label govuk-date-input__label" th:for="${date}"  th:data-uipath="${date} + '.day.label'">Day</label>
-                <input class="govuk-input govuk-date-input__input govuk-input--width-2" type="text" th:data-uipath="${date} + '.day.field'" th:field="*{__${date}__.day}" th:id="${date}">
+                <input class="govuk-input govuk-date-input__input govuk-input--width-2" type="number" th:data-uipath="${date} + '.day.field'" th:field="*{__${date}__.day}" th:id="${date}">
             </div>
         </div>
 
