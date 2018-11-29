@@ -26,7 +26,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
-
 import uk.gov.dft.bluebadge.webapp.citizen.config.S3Config;
 import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 

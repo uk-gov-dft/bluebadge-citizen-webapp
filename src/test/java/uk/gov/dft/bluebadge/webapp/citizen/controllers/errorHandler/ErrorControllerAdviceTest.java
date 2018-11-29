@@ -12,6 +12,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
 import uk.gov.dft.bluebadge.common.api.model.Error;
 import uk.gov.dft.bluebadge.common.api.model.ErrorErrors;
@@ -63,5 +66,28 @@ public class ErrorControllerAdviceTest {
 
     String template = controllerAdvice.handleClientApiException(ex, reqMock);
     assertThat(template).isEqualTo("redirect:/something-went-wrong");
+  }
+
+  @Test
+  public void handleMaxSizeException_shouldRedirectToOriginalUrl() {
+    MaxUploadSizeExceededException ex = new MaxUploadSizeExceededException(1000L);
+    RedirectAttributes ra = new RedirectAttributesModelMap();
+    when(reqMock.getAttribute("javax.servlet.error.request_uri")).thenReturn("/someUrl");
+
+    String template = controllerAdvice.handleMaxSizeException(ex, reqMock, ra);
+    assertThat(template).isEqualTo("redirect:/someUrl");
+    assertThat(ra.getFlashAttributes()).isNotNull();
+    assertThat(ra.getFlashAttributes().get("MAX_FILE_SIZE_EXCEEDED")).isEqualTo("true");
+  }
+
+  @Test
+  public void handleMaxSizeException_whenOriginalUrlNotAvailable_shouldRedirectToErrorPage() {
+    MaxUploadSizeExceededException ex = new MaxUploadSizeExceededException(1000L);
+    RedirectAttributes ra = new RedirectAttributesModelMap();
+    when(reqMock.getAttribute("javax.servlet.error.request_uri")).thenReturn(null);
+
+    String template = controllerAdvice.handleMaxSizeException(ex, reqMock, ra);
+    assertThat(template).isEqualTo("redirect:/something-went-wrong");
+    assertThat(ra.getFlashAttributes().get("MAX_FILE_SIZE_EXCEEDED")).isNull();
   }
 }
