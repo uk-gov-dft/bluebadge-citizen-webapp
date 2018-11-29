@@ -100,10 +100,14 @@
 		}
 
 		img {
-			height: 100%;
-			width: auto;
+			width: 100%;
+			height: auto;
 			vertical-align: middle;
 			image-orientation: from-image;
+			@include govuk-media-query($from: tablet) {
+				height: 100%;
+				width: auto;
+			}
 		}
 	}
 
