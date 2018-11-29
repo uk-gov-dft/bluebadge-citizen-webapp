@@ -1,8 +1,10 @@
 package uk.gov.dft.bluebadge.webapp.citizen.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -11,6 +13,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.Upload;
 import com.amazonaws.services.s3.transfer.model.UploadResult;
@@ -23,6 +26,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
+
 import uk.gov.dft.bluebadge.webapp.citizen.config.S3Config;
 import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 
@@ -54,15 +58,7 @@ class ArtifactServiceTest {
 
   @Test
   void upload() throws Exception {
-    Upload uploadMock = mock(Upload.class);
-    when(transferManagerMock.upload(any(), any(), any(), any())).thenReturn(uploadMock);
-    UploadResult uploadResultMock = mock(UploadResult.class);
-    when(uploadMock.waitForUploadResult()).thenReturn(uploadResultMock);
-    when(uploadResultMock.getBucketName()).thenReturn("resultBucket");
-    when(uploadResultMock.getKey()).thenReturn("resultKey");
-
-    when(amazonS3Mock.getUrl("resultBucket", "resultKey")).thenReturn(s3ObjectURL);
-    when(amazonS3Mock.generatePresignedUrl(any())).thenReturn(s3SignedUrl);
+    setupMocksForUpload("resultBucket", "resultKey");
 
     String testUpload = "Some thing to upload";
     MultipartFile multipartFile =
@@ -72,9 +68,74 @@ class ArtifactServiceTest {
     assertThat(journeyArtifact).isNotNull();
     assertThat(journeyArtifact.getUrl()).isEqualTo(s3ObjectURL);
     assertThat(journeyArtifact.getSignedUrl()).isEqualTo(s3SignedUrl);
+    assertThat(journeyArtifact.getType()).isEqualTo("image");
 
+    ArgumentCaptor<ObjectMetadata> captor = ArgumentCaptor.forClass(ObjectMetadata.class);
     verify(transferManagerMock, times(1))
-        .upload(Mockito.eq("test_bucket"), Mockito.endsWith("originalFile.jpg"), any(), any());
+        .upload(
+            Mockito.eq("test_bucket"),
+            Mockito.endsWith("originalFile.jpg"),
+            any(),
+            captor.capture());
+    ObjectMetadata objectMetadata = captor.getValue();
+    assertThat(objectMetadata).isNotNull();
+    assertThat(objectMetadata.getContentType()).isEqualTo("image/jpeg");
+  }
+
+  @Test
+  void upload_pdfUpload() throws Exception {
+    setupMocksForUpload("resultBucket", "resultKey");
+
+    String testUpload = "Some thing to upload";
+    MultipartFile multipartFile =
+        new MockMultipartFile("testFile", "originalFile.pdf", "", testUpload.getBytes());
+    JourneyArtifact journeyArtifact = artifactService.upload(multipartFile);
+
+    assertThat(journeyArtifact).isNotNull();
+    assertThat(journeyArtifact.getUrl()).isEqualTo(s3ObjectURL);
+    assertThat(journeyArtifact.getSignedUrl()).isEqualTo(s3SignedUrl);
+    assertThat(journeyArtifact.getType()).isEqualTo("file");
+
+    ArgumentCaptor<ObjectMetadata> captor = ArgumentCaptor.forClass(ObjectMetadata.class);
+    verify(transferManagerMock, times(1))
+        .upload(
+            Mockito.eq("test_bucket"),
+            Mockito.endsWith("originalFile.pdf"),
+            any(),
+            captor.capture());
+    ObjectMetadata objectMetadata = captor.getValue();
+    assertThat(objectMetadata).isNotNull();
+    assertThat(objectMetadata.getContentType()).isEqualTo("application/pdf");
+  }
+
+  @Test
+  void upload_invalidMimeType() throws Exception {
+    setupMocksForUpload("resultBucket", "resultKey");
+
+    String testUpload = "Some thing to upload";
+    MultipartFile multipartFile =
+        new MockMultipartFile("testFile", "originalFile.exe", "", testUpload.getBytes());
+
+    try {
+      artifactService.upload(multipartFile);
+      fail("no exception thrown");
+    } catch (UnsupportedMimetypeException e) {
+    }
+
+    verify(transferManagerMock, never()).upload(any(), any(), any(), any());
+  }
+
+  @SneakyThrows
+  private void setupMocksForUpload(String bucket, String key) {
+    Upload uploadMock = mock(Upload.class);
+    when(transferManagerMock.upload(any(), any(), any(), any())).thenReturn(uploadMock);
+    UploadResult uploadResultMock = mock(UploadResult.class);
+    when(uploadMock.waitForUploadResult()).thenReturn(uploadResultMock);
+    when(uploadResultMock.getBucketName()).thenReturn(bucket);
+    when(uploadResultMock.getKey()).thenReturn(key);
+
+    when(amazonS3Mock.getUrl(bucket, key)).thenReturn(s3ObjectURL);
+    when(amazonS3Mock.generatePresignedUrl(any())).thenReturn(s3SignedUrl);
   }
 
   @Test
