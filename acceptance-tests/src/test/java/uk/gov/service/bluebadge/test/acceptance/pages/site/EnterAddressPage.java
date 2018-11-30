@@ -3,8 +3,8 @@ package uk.gov.service.bluebadge.test.acceptance.pages.site;
 public class EnterAddressPage {
 
   public static final String PAGE_URL = "/enter-address";
-  public static final String PAGE_TITLE_YOURSELF = "Enter your address";
-  public static final String PAGE_TITLE_SOMEONE_ELSE = "Enter their address";
+  public static final String PAGE_TITLE_YOURSELF = "What's your address?";
+  public static final String PAGE_TITLE_SOMEONE_ELSE = "What's their address?";
 
   public static final String VALIDATION_MESSAGE_FOR_EMPTY_BUILDING_AND_STREET =
       "Enter a building and street";

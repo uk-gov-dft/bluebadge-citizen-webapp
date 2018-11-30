@@ -27,3 +27,6 @@ spring:
     host:
     cluster:
       nodes: redis.elasticache-citizen.${bb_env}.${url}:6379
+
+amazon:
+  s3bucket: ${bb_application_tmp_bucket}

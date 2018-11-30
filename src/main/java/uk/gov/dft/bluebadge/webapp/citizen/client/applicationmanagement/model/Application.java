@@ -1,6 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,5 +17,5 @@ public class Application {
   private String existingBadgeNumber;
   private Party party;
   private Eligibility eligibility;
-  private Artifacts artifacts;
+  private List<Artifact> artifacts;
 }

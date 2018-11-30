@@ -28,7 +28,7 @@ public class PermissionForm implements Serializable, StepForm {
     if (hasPermission) {
       return Optional.of(StepDefinition.REGISTERED_COUNCIL);
     }
-    return Optional.of(StepDefinition.DECLARATIONS);
+    return Optional.of(StepDefinition.PROVE_IDENTITY);
   }
 
   @Override

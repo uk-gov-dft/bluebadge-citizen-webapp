@@ -23,7 +23,6 @@ public class DifficultyParkingMetersControllerTest {
   private MockMvc mockMvc;
   private Journey journey;
 
-  private static final String SUCCESS_URL = Mappings.URL_DECLARATIONS;
   private static final String TEST_URL = "/difficulty-parking-meters";
 
   @Before
@@ -66,7 +65,7 @@ public class DifficultyParkingMetersControllerTest {
                 .param("parkingMetersDifficultyDescription", "Stuff")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(SUCCESS_URL));
+        .andExpect(redirectedUrl(Mappings.URL_PROVE_IDENTITY));
   }
 
   @Test

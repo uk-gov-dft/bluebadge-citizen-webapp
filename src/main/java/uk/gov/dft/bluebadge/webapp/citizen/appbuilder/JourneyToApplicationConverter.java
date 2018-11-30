@@ -21,6 +21,7 @@ public class JourneyToApplicationConverter {
         .existingBadgeNumber(getExistingBadgeNumber(existingBadgeForm))
         .party(PartyConverter.convert(journey))
         .eligibility(EligibilityConverter.convert(journey))
+        .artifacts(ArtifactConverter.convert(journey))
         .build();
   }
 

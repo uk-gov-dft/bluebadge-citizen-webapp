@@ -30,6 +30,7 @@ public class Mappings {
   public static final String URL_ENTER_ADDRESS = "/enter-address";
   public static final String URL_EXISTING_BADGE = "/existing-badge";
   public static final String URL_PROVE_BENEFIT = "/prove-benefit";
+  public static final String URL_PROVE_IDENTITY = "/prove-identity";
 
   // organisation Journey routes
   public static final String URL_ORGANISATION_CARE = "/organisation-care";
@@ -99,6 +100,7 @@ public class Mappings {
           .put(StepDefinition.ELIGIBLE, URL_ELIGIBLE)
           .put(StepDefinition.MAY_BE_ELIGIBLE, URL_MAY_BE_ELIGIBLE)
           .put(StepDefinition.PROVE_BENEFIT, URL_PROVE_BENEFIT)
+          .put(StepDefinition.PROVE_IDENTITY, URL_PROVE_IDENTITY)
 
           // ARMS Journey Mappings
           .put(StepDefinition.ARMS_HOW_OFTEN_DRIVE, URL_ARMS_HOW_OFTEN_DRIVE)
