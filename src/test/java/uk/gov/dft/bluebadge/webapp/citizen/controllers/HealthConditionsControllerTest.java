@@ -63,7 +63,7 @@ public class HealthConditionsControllerTest {
                 .param("descriptionOfConditions", "test test")
                 .sessionAttr("JOURNEY", new Journey()))
         .andExpect(status().is3xxRedirection())
-        .andExpect(redirectedUrl(Mappings.URL_DECLARATIONS));
+        .andExpect(redirectedUrl(Mappings.URL_PROVE_IDENTITY));
   }
 
   @Test

@@ -103,6 +103,6 @@ public class RegisteredControllerTest {
         .perform(
             post("/registered").sessionAttr("JOURNEY", journey).param("hasRegistered", "false"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(Mappings.URL_DECLARATIONS));
+        .andExpect(redirectedUrl(Mappings.URL_PROVE_IDENTITY));
   }
 }

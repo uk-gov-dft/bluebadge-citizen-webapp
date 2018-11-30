@@ -31,6 +31,7 @@ public class Journey implements Serializable {
 
   public static final String JOURNEY_SESSION_KEY = "JOURNEY";
   public static final String FORM_REQUEST = "formRequest";
+  public static final String SEPARATOR = "\n- - - - - - - - - - - - - - - - -\n";
 
   private Map<StepDefinition, StepForm> forms = new HashMap<>();
   public String who;
@@ -158,32 +159,51 @@ public class Journey implements Serializable {
     return null;
   }
 
+  /**
+   * Returns a built string whilst this data is not currently stored is separate fields.
+   *
+   * @return String aggregated string of conditions
+   */
   public String getDescriptionOfCondition() {
-    HealthConditionsForm healthConditionsForm = getFormForStep(StepDefinition.HEALTH_CONDITIONS);
-    WhereCanYouWalkForm whereCanYouWalkForm = getFormForStep(StepDefinition.WHERE_CAN_YOU_WALK);
-    ArmsDifficultyParkingMetersForm difficultyParkingMetersForm =
-        getFormForStep(StepDefinition.ARMS_DIFFICULTY_PARKING_METER);
 
     StringBuilder descriptionOfCondition = new StringBuilder();
+
+    boolean hasWalkingEligibilityText =
+        (WALKD == getEligibilityCode()) && hasStepForm(StepDefinition.WHERE_CAN_YOU_WALK);
+    boolean hasArmsEligibilityText =
+        (ARMS == getEligibilityCode()) && hasStepForm(StepDefinition.ARMS_DIFFICULTY_PARKING_METER);
+
+    HealthConditionsForm healthConditionsForm = getFormForStep(StepDefinition.HEALTH_CONDITIONS);
     if (healthConditionsForm != null && healthConditionsForm.getDescriptionOfConditions() != null) {
+
+      if (hasWalkingEligibilityText || hasArmsEligibilityText) {
+        descriptionOfCondition.append("Description of conditions:\n");
+      }
+
       descriptionOfCondition.append(healthConditionsForm.getDescriptionOfConditions());
     }
 
-    if (WALKD == getEligibilityCode() && whereCanYouWalkForm != null) {
+    if (hasWalkingEligibilityText) {
+      WhereCanYouWalkForm whereCanYouWalkForm = getFormForStep(StepDefinition.WHERE_CAN_YOU_WALK);
       descriptionOfCondition
-          .append(" - Able to walk to: ")
+          .append(SEPARATOR)
+          .append("Able to walk to and from:\n")
           .append(whereCanYouWalkForm.getDestinationToHome())
-          .append(" - How long: ")
+          .append(SEPARATOR)
+          .append("How long it takes:\n")
           .append(whereCanYouWalkForm.getTimeToDestination());
-    } else if (ARMS == getEligibilityCode() && difficultyParkingMetersForm != null) {
+    }
+
+    if (hasArmsEligibilityText) {
+      ArmsDifficultyParkingMetersForm difficultyParkingMetersForm =
+          getFormForStep(StepDefinition.ARMS_DIFFICULTY_PARKING_METER);
+
       descriptionOfCondition
-          .append(" - Description of difficulties using a parking meter: ")
+          .append(SEPARATOR)
+          .append("Description of difficulties using a parking meter:\n")
           .append(difficultyParkingMetersForm.getParkingMetersDifficultyDescription());
     }
 
-    if (descriptionOfCondition.length() == 0) {
-      descriptionOfCondition.append("Dummy condition");
-    }
     return descriptionOfCondition.toString();
   }
 }

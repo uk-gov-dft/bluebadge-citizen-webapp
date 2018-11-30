@@ -123,6 +123,6 @@ public class RegisteredCouncilControllerTest {
                 .sessionAttr("JOURNEY", journey)
                 .param("registeredCouncil", "WARCC"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(Mappings.URL_DECLARATIONS));
+        .andExpect(redirectedUrl(Mappings.URL_PROVE_IDENTITY));
   }
 }

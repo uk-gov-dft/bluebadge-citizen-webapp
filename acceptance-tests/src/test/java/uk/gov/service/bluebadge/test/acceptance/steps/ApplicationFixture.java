@@ -99,7 +99,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("I complete main reason page for \"(TERMILL|CHILDBULK|CHILDVEHIC|WALKD|ARMS|BLIND|NONE)\"")
   public void iCompleteMainReasonPageFor(String benefit) {
-    if ("TERMILL".equals(benefit)) {
+    if ("BLIND".equals(benefit)) {
       commonPage.selectRadioButton(MAIN_REASON_LIST);
     } else {
       commonPage.selectRadioButton(MAIN_REASON_LIST + "." + benefit);
@@ -153,6 +153,12 @@ public class ApplicationFixture extends AbstractSpringSteps {
   public void iCompleteDescribeHealthConditionsPage() throws Throwable {
     clearAndSendKeys("descriptionOfConditions", "Sample health condition");
     pressContinue();
+  }
+
+  @And("^I complete prove ID page with no documents")
+  public void iCompleteProveIDPageWithNoDocuments() {
+    commonPage.findPageElementById("cant-upload-text").click();
+    commonPage.findPageElementById("continue-without-uploading").click();
   }
 
   @And("^I complete declaration page$")

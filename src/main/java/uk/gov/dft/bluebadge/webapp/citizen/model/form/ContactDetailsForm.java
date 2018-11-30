@@ -55,9 +55,9 @@ public class ContactDetailsForm implements StepForm, Serializable {
       case PIP:
         return Optional.of(StepDefinition.PROVE_BENEFIT);
       case WPMS:
-        return Optional.of(StepDefinition.DECLARATIONS);
+        return Optional.of(StepDefinition.PROVE_IDENTITY);
       case AFRFCS:
-        return Optional.of(StepDefinition.DECLARATIONS);
+        return Optional.of(StepDefinition.PROVE_IDENTITY);
       case BLIND:
         return Optional.of(StepDefinition.REGISTERED);
       default:

@@ -12,7 +12,7 @@ tearDown() {
 
     # This really cleans everything up so there's nothing previous that could contaminate
     echo "Pruning docker containers/images"
-    docker system prune -a -f --filter "tag=latest"
+    docker system prune -a -f
 
     if [[ -d dev-env-develop ]]; then
       echo "Tearing down existing dev-env-develop directory"
@@ -56,7 +56,7 @@ gradle :outputComputedVersion
 
 echo "Using env.sh configuration as default."
 . dev-env-develop/env.sh
-chmod 444 dev-env-develop/scripts/db/*.sql
+sudo chmod 444 dev-env-develop/scripts/db/*.sql
 
 if ! [[ "$BRANCH_NAME" =~ ^develop.*|^release.* ]]; then
     echo "On branch '${BRANCH_NAME}'. So also using env-feature.sh configuration."

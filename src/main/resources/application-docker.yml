@@ -11,3 +11,6 @@ blue-badge:
 spring:
   redis:
     host: redis
+
+amazon:
+  s3bucket: ${bb_application_tmp_bucket:uk-gov-dft-dev-applications-temp}
