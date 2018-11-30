@@ -92,6 +92,7 @@ public class WhatWalkingDifficultiesControllerTest {
   public void show_givenNationScotland_walkingDifficultiesShouldBeNationSpecific()
       throws Exception {
     LocalAuthorityRefData testLA = new LocalAuthorityRefData();
+    testLA.setShortCode("ELOTH");
     LocalAuthorityRefData.LocalAuthorityMetaData metaData =
         new LocalAuthorityRefData.LocalAuthorityMetaData();
     metaData.setNation(Nation.SCO);
