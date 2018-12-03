@@ -24,47 +24,52 @@ public class WhatMakesWalkingDifficultSteps extends AbstractSpringSteps {
     this.commonSteps = commonSteps;
   }
 
-  @And("^I validate what makes walking difficult page for a \"(yourself|someone else)\" application for \"(HELP|PLAN|PAIN|DANGEROUS|NONE)\"$")
+  @And("^I validate what makes walking difficult page for a \"(yourself|someone else)\" application for \"(PAIN|BREATH|BALANCE|LONGTIME|DANGER|STRUGGLE|SOMELSE)\"$")
   public void iValidateWhatMakesWalkingDifficultPageForAApplication(String applicant, String difficulty){
+
     verifyPageContent(applicant);
     validateMandatoryFields();
 
-    enterValidValuesAndContinue(difficulty);
+    iCompleteTheWhatMakesWalkingDifficultPageFor(difficulty);
 
   }
 
 
   public void verifyPageContent(String applicant) {
 
-    commonSteps.iShouldSeeTheCorrectURL(WalkingDifficultyPage.PAGE_URL);
+    commonSteps.iShouldSeeTheCorrectURL(WhatMakesWalkingDifficultiesPage.PAGE_URL);
 
     if ("yourself".equals(applicant.toLowerCase())) {
-      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(WalkingDifficultyPage.PAGE_TITLE_YOURSELF);
-      commonSteps.iShouldSeeTheHeading(WalkingDifficultyPage.PAGE_TITLE_YOURSELF);
+      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(WhatMakesWalkingDifficultiesPage.PAGE_TITLE);
+      commonSteps.iShouldSeeTheHeading(WhatMakesWalkingDifficultiesPage.PAGE_TITLE);
     } else {
-      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(WalkingDifficultyPage.PAGE_TITLE_SOMEONE_ELSE);
-      commonSteps.iShouldSeeTheHeading(WalkingDifficultyPage.PAGE_TITLE_SOMEONE_ELSE);
+      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(WhatMakesWalkingDifficultiesPage.PAGE_TITLE_SOMEONE_ELSE);
+      commonSteps.iShouldSeeTheHeading(WhatMakesWalkingDifficultiesPage.PAGE_TITLE_SOMEONE_ELSE);
     }
   }
 
   private void validateMandatoryFields() {
     List<String> messages = new ArrayList<>();
-    messages.add(WalkingDifficultyPage.VALIDATION_MESSAGE_FOR_NO_OPTION);
+    messages.add(WhatMakesWalkingDifficultiesPage.VALIDATION_MESSAGE_FOR_NO_OPTION);
     commonSteps.iVerifyMultipleValidationMessages(messages);
   }
 
-
-  @And("I complete what makes walking difficult page for \"(HELP|PLAN|PAIN|DANGEROUS|NONE)\"$")
-  public void enterValidValuesAndContinue(String difficulty) {
-
-    if ("HELP".equals(difficulty)) {
-      commonPage.selectRadioButton(WhatMakesWalkingDifficultiesPage.WALKING_DIFFICULTY_LIST);
-    } else {
-      commonPage.selectRadioButton(WhatMakesWalkingDifficultiesPage.WALKING_DIFFICULTY_LIST + "." + difficulty);
-    }
-
+  @And("^I complete the what makes walking difficult page$")
+  public void iCompleteTheWhatMakesWalkingDifficultPage(){
+    commonPage.selectRadioButton(WhatMakesWalkingDifficultiesPage.WHAT_WALKING_DIFFICULTY_LIST);
     commonSteps.iClickOnContinueButton();
   }
 
+
+  @And(
+          "^I complete the what makes walking difficult page for \"(PAIN|BREATH|BALANCE|LONGTIME|DANGER|STRUGGLE|SOMELSE)\"$")
+  public void iCompleteTheWhatMakesWalkingDifficultPageFor(String difficulty) {
+    if ("PAIN".equals(difficulty)) {
+      commonPage.selectRadioButton(WhatMakesWalkingDifficultiesPage.WHAT_WALKING_DIFFICULTY_LIST);
+    } else {
+      commonPage.selectRadioButton(WhatMakesWalkingDifficultiesPage.WHAT_WALKING_DIFFICULTY_LIST + difficulty);
+    }
+    commonSteps.iClickOnContinueButton();
+  }
 
 }

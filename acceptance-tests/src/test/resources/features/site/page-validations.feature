@@ -19,7 +19,7 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate enter address page for a "yourself" application
     And   I validate contact details page for a "yourself" application
     And   I validate health conditions page for a "yourself" application
-    And   I validate what makes walking difficult page for a "yourself" application for "HELP"
+    And   I validate what makes walking difficult page for a "yourself" application for "PAIN"
 
   Scenario: Page title and error message validation - someone else
     Given I navigate to applicant page and validate for "someone else"
@@ -37,7 +37,7 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate nino page for a "someone else" application
     And   I validate enter address page for a "someone else" application
     And   I validate health conditions page for a "someone else" application
-    And   I validate what makes walking difficult page for a "someone else" application for "PAIN"
+    And   I validate what makes walking difficult page for a "someone else" application for "BALANCE"
 
   Scenario: Page title and error message validation - an organisation
     Given I navigate to applicant page and validate for "an organisation"

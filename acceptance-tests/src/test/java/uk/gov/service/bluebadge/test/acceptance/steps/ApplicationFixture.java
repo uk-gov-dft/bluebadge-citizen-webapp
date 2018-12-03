@@ -61,7 +61,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete registered council page for \"(england|wales|scotland)\"$")
-  public void iCompleteRegisteredCouncilPage(String country) throws Throwable {
+  public void iCompleteRegisteredCouncilPage(String country){
     iCompleteSelectCouncilPage(country, ChooseCouncilPage.REGISTERED_COUNCIL_INPUT);
   }
 
@@ -159,7 +159,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete describe health conditions page$")
-  public void iCompleteDescribeHealthConditionsPage() throws Throwable {
+  public void iCompleteDescribeHealthConditionsPage() {
     clearAndSendKeys("descriptionOfConditions", "Sample health condition");
     pressContinue();
   }
@@ -186,16 +186,6 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
-  @And("^I complete what makes walking difficult page for \"(HELP|PLAN|PAIN|DANGEROUS|NONE)\"$")
-  public void iCompleteWhatMakesWalkingDifficultPageFor(String difficulty) {
-    if (difficulty.equals("HELP")) {
-      commonPage.selectRadioButton(WalkingDifficultyPage.WALKING_DIFFICULTIES_LIST);
-    } else {
-      commonPage.selectRadioButton(WalkingDifficultyPage.WALKING_DIFFICULTIES_LIST + "." + difficulty);
-    }
-    pressContinue();
-  }
-
   @And("^I complete dla allowance page for \"(YES|NO)\"$")
   public void iCompleteDlaAllowancePageFor(String option) {
     if ("YES".equals(option)) commonPage.selectRadioButton(HAS_RECEIVED_DLA);
@@ -204,7 +194,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete address page$")
-  public void iCompleteAddressPage() throws Throwable {
+  public void iCompleteAddressPage() {
     clearAndSendKeys("buildingAndStreet", "120");
     clearAndSendKeys("optionalAddress", "London Road");
     clearAndSendKeys("townOrCity", "Manchester");
@@ -214,7 +204,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete NI number page$")
-  public void iCompleteNINumberPage() throws Throwable {
+  public void iCompleteNINumberPage() {
     clearAndSendKeys(Ids.Person.NI, "ab 12 34 56 A");
     pressContinue();
   }
@@ -227,7 +217,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete the walking time page with option \"(CANTWALK|LESSMIN|FEWMIN|MORETEN)\"$")
-  public void iCompleteTheWalkingTimePage(String option) throws Throwable {
+  public void iCompleteTheWalkingTimePage(String option) {
     if ("CANTWALK".equals(option)) {
       commonPage.selectRadioButton(Ids.Walkd.WALKING_TIME);
     } else {
@@ -237,7 +227,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete where can you walk page$")
-  public void iCompleteWhereCanYouWalkPage() throws Throwable {
+  public void iCompleteWhereCanYouWalkPage() {
     clearAndSendKeys(PLACE_CAN_WALK, "to the Post office on the High Street");
     clearAndSendKeys(TIME_TO_DESTINATION, "10 minutes");
     pressContinue();
@@ -281,32 +271,15 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
-  @And("^I complete the what makes walking difficult page$")
-  public void iCompleteTheWhatMakesWalkingDifficultPage() throws Throwable {
-    commonPage.selectRadioButton(Ids.EleCheck.WHAT_WALKING_DIFFICULTY_LIST);
-    pressContinue();
-  }
-
-  @And(
-      "^I complete the what makes walking difficult page for \"(PAIN|BREATH|BALANCE|LONGTIME|DANGER|STRUGGLE|SOMELSE)\"$")
-  public void iCompleteTheWhatMakesWalkingDifficultPageFor(String difficulty) throws Throwable {
-    if ("PAIN".equals(difficulty)) {
-      commonPage.selectRadioButton(Ids.EleCheck.WHAT_WALKING_DIFFICULTY_LIST);
-    } else {
-      commonPage.selectRadioButton(Ids.EleCheck.WHAT_WALKING_DIFFICULTY_LIST + difficulty);
-    }
-    pressContinue();
-  }
-
   @And("^I complete medical equipment page$")
-  public void iCompleteMedicalEquipmentPage() throws Throwable {
+  public void iCompleteMedicalEquipmentPage() {
     commonPage.selectRadioButton(Ids.EleCheck.MEDICAL_EQUIPMENT);
     pressContinue();
   }
 
   @And(
       "^I complete medical equipment page for \"(PUMP|VENT|SUCTION|PARENT|SYRINGE|OXYADMIN|OXYSAT|CAST|OTHER)\"$")
-  public void iCompleteMedicalEquipmentPage(String difficulty) throws Throwable {
+  public void iCompleteMedicalEquipmentPage(String difficulty)  {
     if ("VENT".equals(difficulty)) {
       commonPage.selectRadioButton(Ids.EleCheck.MEDICAL_EQUIPMENT);
     } else {
@@ -395,7 +368,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete the already have a blue badge page for \"(YES|NO|YES BUT DON'T KNOW)\"$")
-  public void iCompleteTheAlreadyHaveABlueBadgePageFor(String opt) throws Throwable {
+  public void iCompleteTheAlreadyHaveABlueBadgePageFor(String opt) {
     if ("YES BUT DON'T KNOW".equals(opt)) {
       commonPage.selectRadioButton(AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION);
       commonPage.findPageElementById(AlreadyHaveBlueBadgePage.BADGE_NUMBER_BYPASS_LINK).click();

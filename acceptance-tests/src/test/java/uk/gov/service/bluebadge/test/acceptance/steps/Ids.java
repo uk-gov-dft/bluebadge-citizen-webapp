@@ -5,7 +5,7 @@ class Ids {
   class EleCheck {
 
     static final String MAIN_REASON_LIST = "mainReasonOption";
-    static final String WHAT_WALKING_DIFFICULTY_LIST = "whatWalkingDifficulties";
+
     static final String EQUIPMENT_LIST = "equipment";
     static final String MEDICAL_EQUIPMENT = "medicalEquipment";
     static final String HAS_RECEIVED_DLA = "receivedDlaOption";

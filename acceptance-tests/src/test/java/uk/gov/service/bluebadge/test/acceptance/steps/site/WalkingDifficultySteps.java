@@ -23,15 +23,7 @@ public class WalkingDifficultySteps extends AbstractSpringSteps {
     verifyPageContent(applicant);
     commonSteps.iVerifyValidationMessage(WalkingDifficultyPage.VALIDATION_MESSAGE_FOR_NO_OPTION);
 
-    if ("help".equalsIgnoreCase(option)) {
-      commonPage.findPageElementById(WalkingDifficultyPage.WALKING_DIFFICULTIES_LIST).click();
-    } else {
-      commonPage
-          .findPageElementById(WalkingDifficultyPage.WALKING_DIFFICULTIES_LIST + "." + option)
-          .click();
-    }
-
-    commonSteps.iClickOnContinueButton();
+    enterValidValuesAndContinue(option);
   }
 
   public void verifyPageContent(String applicant) {
@@ -47,5 +39,17 @@ public class WalkingDifficultySteps extends AbstractSpringSteps {
           WalkingDifficultyPage.PAGE_TITLE_SOMEONE_ELSE);
       commonSteps.iShouldSeeTheHeading(WalkingDifficultyPage.PAGE_TITLE_SOMEONE_ELSE);
     }
+  }
+
+  @And("I complete what makes walking difficult page for \"(HELP|PLAN|PAIN|DANGEROUS|NONE)\"$")
+  public void enterValidValuesAndContinue(String difficulty) {
+
+    if ("HELP".equals(difficulty)) {
+      commonPage.selectRadioButton(WalkingDifficultyPage.WALKING_DIFFICULTIES_LIST);
+    } else {
+      commonPage.selectRadioButton(WalkingDifficultyPage.WALKING_DIFFICULTIES_LIST + "." + difficulty);
+    }
+
+    commonSteps.iClickOnContinueButton();
   }
 }
