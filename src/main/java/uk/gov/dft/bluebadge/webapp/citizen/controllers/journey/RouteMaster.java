@@ -111,7 +111,7 @@ public class RouteMaster {
       if (!journey.hasStepForm(currentLoopStep)) return false;
 
       StepDefinition nextStep;
-      if (currentLoopStep.getNext().size() == 0) {
+      if (currentLoopStep.getNext().isEmpty()) {
         // Got to end of journey and did not hit step being validated.
         // So the url requested is for a step invalid in this journey.
         return false;

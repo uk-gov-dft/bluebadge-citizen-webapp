@@ -22,6 +22,7 @@ public class Mappings {
   public static final String URL_APPLICATION_SUBMITTED = "/application-submitted";
   public static final String URL_CHOOSE_YOUR_COUNCIL = "/choose-council";
   public static final String URL_YOUR_ISSUING_AUTHORITY = "/your-issuing-authority";
+  public static final String URL_DIFFERENT_SERVICE_SIGNPOST = "/different-service-signpost";
   public static final String URL_DOB = "/date-of-birth";
   public static final String URL_CONTACT_DETAILS = "/contact-details";
   public static final String URL_GENDER = "/gender";
@@ -128,6 +129,7 @@ public class Mappings {
           .put(StepDefinition.WHAT_WALKING_DIFFICULTIES, URL_WHAT_WALKING_DIFFICULT)
           .put(StepDefinition.CHOOSE_COUNCIL, URL_CHOOSE_YOUR_COUNCIL)
           .put(StepDefinition.YOUR_ISSUING_AUTHORITY, URL_YOUR_ISSUING_AUTHORITY)
+          .put(StepDefinition.DIFFERENT_SERVICE_SIGNPOST, URL_DIFFERENT_SERVICE_SIGNPOST)
           .put(StepDefinition.REGISTERED, URL_REGISTERED)
           .put(StepDefinition.PERMISSION, URL_PERMISSION)
           .put(StepDefinition.REGISTERED_COUNCIL, URL_REGISTERED_COUNCIL)

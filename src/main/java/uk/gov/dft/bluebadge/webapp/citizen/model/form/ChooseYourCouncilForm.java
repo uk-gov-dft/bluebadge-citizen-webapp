@@ -1,6 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
 import java.io.Serializable;
+import java.util.Optional;
 import javax.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +17,14 @@ public class ChooseYourCouncilForm implements StepForm, Serializable {
 
   @NotBlank(message = "{councilShortCode.NotBank}")
   private String councilShortCode;
+
+  @Override
+  public Optional<StepDefinition> determineNextStep(Journey journey) {
+    if (journey.isLocalAuthorityActive()) {
+      return Optional.of(StepDefinition.YOUR_ISSUING_AUTHORITY);
+    }
+    return Optional.of(StepDefinition.DIFFERENT_SERVICE_SIGNPOST);
+  }
 
   @Override
   public StepDefinition getAssociatedStep() {

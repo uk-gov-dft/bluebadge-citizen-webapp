@@ -32,10 +32,7 @@ public class JourneyToApplicationConverter {
         && existingBadgeForm.getHasExistingBadge()
         && StringUtils.isNotBlank(existingBadgeForm.getBadgeNumber())) {
 
-      String badgeNumber =
-          existingBadgeForm.getBadgeNumber().replaceAll("\\s+", "").substring(0, 6);
-
-      return badgeNumber;
+      return existingBadgeForm.getBadgeNumber().replaceAll("\\s+", "").substring(0, 6);
     }
 
     return null;
