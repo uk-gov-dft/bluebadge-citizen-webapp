@@ -4,6 +4,7 @@ import All from 'govuk-frontend/all';
 import AutoComplete from './autocomplete';
 import GAClickTracker from './ga-tracker';
 import FileUploader from "./file-upload";
+import preventDoubleSubmission from "./prevent-double-submission";
 
 All.initAll();
 
@@ -11,7 +12,11 @@ GAClickTracker();
 
 window.onload = () => {
     initFileUploader();
-    preventDoubleSubmit();
+
+    const forms = Array.from(document.querySelectorAll('[data-prevent-double-submission]'));
+    if(forms.length > 0) {
+        forms.forEach(form => preventDoubleSubmission(form));
+    }
 }
 
 const isBrowser_IE = () => {
@@ -73,17 +78,6 @@ const initFileUploader = () => {
             }
         });
     }
-}
-
-const preventDoubleSubmit = () =>{
-    var forms = document.getElementsByClassName('prevent_double_form');
-    [].forEach.call(forms,  function(f){
-        f.addEventListener('submit', event => {
-            event.preventDefault();
-            f.submit();
-            for(var i=0; i<f.length; i++){f[i].disabled = true;}
-        });
-    });
 }
 
 const select_autocomplete = Array.from(document.getElementsByClassName('select_autocomplete'));
