@@ -36,6 +36,7 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate gender page for a "someone else" application with option as "MALE"
     And   I validate nino page for a "someone else" application
     And   I validate enter address page for a "someone else" application
+    And   I validate contact details page for a "someone else" application
     And   I validate health conditions page for a "someone else" application
     And   I validate what makes walking difficult page for a "someone else" application for "BALANCE"
 

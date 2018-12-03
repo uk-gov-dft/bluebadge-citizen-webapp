@@ -40,8 +40,8 @@ public class ContactDetailsSteps extends AbstractSpringSteps {
       commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(ContactDetailsPage.PAGE_TITLE);
       commonSteps.iShouldSeeTheHeading(ContactDetailsPage.PAGE_TITLE);
     } else {
-      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(ContactDetailsPage.PAGE_TITLE);
-      commonSteps.iShouldSeeTheHeading(ContactDetailsPage.PAGE_TITLE);
+      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(ContactDetailsPage.PAGE_TITLE_SOMEONE_ELSE);
+      commonSteps.iShouldSeeTheHeading(ContactDetailsPage.PAGE_TITLE_SOMEONE_ELSE);
     }
   }
 
@@ -67,7 +67,7 @@ public class ContactDetailsSteps extends AbstractSpringSteps {
 
     if ("someone else".equals(applicant.toLowerCase())) {
       commonPage.clearAndSendKeys(ContactDetailsPage.FULL_NAME,"£$%^&* Invalid Name");
-      messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_INVALID_FULLNAME);
+      //messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_INVALID_FULLNAME);
     }
 
     commonSteps.iVerifyMultipleValidationMessages(messages);
