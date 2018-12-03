@@ -55,8 +55,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
   public void iCompleteSelectCouncilPageForDifferentServiceSignpost() {
     String council = "Runnymede";
     String fullCouncil = "Runnymede borough council";
-    commonPage.findPageElementById(chooseCouncilPage.COUNCIL_INPUT).sendKeys(council);
-    commonPage.selectFromAutoCompleteList(chooseCouncilPage.COUNCIL_INPUT, fullCouncil);
+    commonPage.findPageElementById(ChooseCouncilPage.COUNCIL_INPUT).sendKeys(council);
+    commonPage.selectFromAutoCompleteList(ChooseCouncilPage.COUNCIL_INPUT, fullCouncil);
     pressContinue();
   }
 
@@ -189,9 +189,9 @@ public class ApplicationFixture extends AbstractSpringSteps {
   @And("^I complete what makes walking difficult page for \"(HELP|PLAN|PAIN|DANGEROUS|NONE)\"$")
   public void iCompleteWhatMakesWalkingDifficultPageFor(String difficulty) {
     if (difficulty.equals("HELP")) {
-      commonPage.selectRadioButton(Ids.EleCheck.WALKING_DIFFICULTY_LIST);
+      commonPage.selectRadioButton(WalkingDifficultyPage.WALKING_DIFFICULTIES_LIST);
     } else {
-      commonPage.selectRadioButton(Ids.EleCheck.WALKING_DIFFICULTY_LIST + "." + difficulty);
+      commonPage.selectRadioButton(WalkingDifficultyPage.WALKING_DIFFICULTIES_LIST + "." + difficulty);
     }
     pressContinue();
   }
