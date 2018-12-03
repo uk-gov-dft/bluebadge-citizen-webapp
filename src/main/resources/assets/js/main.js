@@ -11,6 +11,7 @@ GAClickTracker();
 
 window.onload = () => {
     initFileUploader();
+    preventDoubleSubmit();
 }
 
 const isBrowser_IE = () => {
@@ -72,6 +73,17 @@ const initFileUploader = () => {
             }
         });
     }
+}
+
+const preventDoubleSubmit = () =>{
+    var forms = document.getElementsByClassName('prevent_double_form');
+    [].forEach.call(forms,  function(f){
+        f.addEventListener('submit', event => {
+            event.preventDefault();
+            f.submit();
+            for(var i=0; i<f.length; i++){f[i].disabled = true;}
+        });
+    });
 }
 
 const select_autocomplete = Array.from(document.getElementsByClassName('select_autocomplete'));
