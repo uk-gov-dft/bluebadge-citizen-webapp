@@ -18,27 +18,19 @@ public class WalkingDifficultySteps extends AbstractSpringSteps {
     this.commonSteps = commonSteps;
   }
 
-  @And("^I validate \"(you|them)\" walking difficulty page for \"(HELP|NONE)\"")
+  @And("^I validate walking difficulty page for \"(yourself|someone else)\" for \"(HELP|NONE)\"")
   public void iValidateWalkingDifficultyPageFor(String applicant, String option) {
     verifyPageContent(applicant);
     commonSteps.iVerifyValidationMessage(WalkingDifficultyPage.VALIDATION_MESSAGE_FOR_NO_OPTION);
 
-    if ("help".equalsIgnoreCase(option)) {
-      commonPage.findPageElementById(WalkingDifficultyPage.WALKING_DIFFICULTIES_LIST).click();
-    } else {
-      commonPage
-          .findPageElementById(WalkingDifficultyPage.WALKING_DIFFICULTIES_LIST + "." + option)
-          .click();
-    }
-
-    commonSteps.iClickOnContinueButton();
+    enterValidValuesAndContinue(option);
   }
 
   public void verifyPageContent(String applicant) {
 
     commonSteps.iShouldSeeTheCorrectURL(WalkingDifficultyPage.PAGE_URL);
 
-    if ("you".equals(applicant.toLowerCase())) {
+    if ("yourself".equals(applicant.toLowerCase())) {
       commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(
           WalkingDifficultyPage.PAGE_TITLE_YOURSELF);
       commonSteps.iShouldSeeTheHeading(WalkingDifficultyPage.PAGE_TITLE_YOURSELF);
@@ -47,5 +39,17 @@ public class WalkingDifficultySteps extends AbstractSpringSteps {
           WalkingDifficultyPage.PAGE_TITLE_SOMEONE_ELSE);
       commonSteps.iShouldSeeTheHeading(WalkingDifficultyPage.PAGE_TITLE_SOMEONE_ELSE);
     }
+  }
+
+  @And("I complete what makes walking difficult page for \"(HELP|PLAN|PAIN|DANGEROUS|NONE)\"$")
+  public void enterValidValuesAndContinue(String difficulty) {
+
+    if ("HELP".equals(difficulty)) {
+      commonPage.selectRadioButton(WalkingDifficultyPage.WALKING_DIFFICULTIES_LIST);
+    } else {
+      commonPage.selectRadioButton(WalkingDifficultyPage.WALKING_DIFFICULTIES_LIST + "." + difficulty);
+    }
+
+    commonSteps.iClickOnContinueButton();
   }
 }

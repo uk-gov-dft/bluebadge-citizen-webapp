@@ -18,7 +18,7 @@ public class DOBSteps extends AbstractSpringSteps {
     this.commonSteps = commonSteps;
   }
 
-  @And("^I validate date of birth page for a \"([^\"]*)\" application$")
+  @And("^I validate date of birth page for a \"(yourself|someone else)\" application$")
   public void iValidateDateOfBirthPageForAApplication(String applicant) {
     verifyPageContent(applicant);
 
@@ -77,13 +77,13 @@ public class DOBSteps extends AbstractSpringSteps {
 
     commonSteps.iShouldSeeTheCorrectURL(DOBPage.PAGE_URL);
 
-    //        if ("you".equals(applicant.toLowerCase()) | "self".equals(applicant.toLowerCase())) {
-    //            commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(DOBPage.PAGE_TITLE_YOURSELF);
-    //            commonSteps.iShouldSeeTheHeading(DOBPage.PAGE_TITLE_YOURSELF);
-    //        } else {
-    //            commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(
-    //                    DOBPage.PAGE_TITLE_SOMEONE_ELSE);
-    //            commonSteps.iShouldSeeTheHeading(DOBPage.PAGE_TITLE_SOMEONE_ELSE);
-    //        }
+    if ("yourself".equals(applicant.toLowerCase())) {
+      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(DOBPage.PAGE_TITLE_YOURSELF);
+      commonSteps.iShouldSeeTheHeading(DOBPage.PAGE_HEADING);
+    } else {
+      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(
+              DOBPage.PAGE_TITLE_SOMEONE_ELSE);
+      commonSteps.iShouldSeeTheHeading(DOBPage.PAGE_HEADING_SOMEONE_ELSE);
+    }
   }
 }

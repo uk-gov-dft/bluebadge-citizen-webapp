@@ -11,6 +11,7 @@ public class ChooseCouncilSteps extends AbstractSpringSteps {
 
   private CommonSteps commonSteps;
   private CommonPage commonPage;
+  private String journeyOption;
 
   @Autowired
   public ChooseCouncilSteps(CommonPage commonPage, CommonSteps commonSteps) {
@@ -30,7 +31,7 @@ public class ChooseCouncilSteps extends AbstractSpringSteps {
     commonSteps.iClickOnContinueButton();
   }
 
-  public String chooseCouncil(String country) {
+  private String chooseCouncil(String country) {
     String fullCouncil = "Worcester city council";
     if ("scotland".equalsIgnoreCase(country)) {
       fullCouncil = "Aberdeenshire council";

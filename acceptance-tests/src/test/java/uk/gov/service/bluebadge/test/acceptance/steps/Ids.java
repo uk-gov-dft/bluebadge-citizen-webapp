@@ -5,8 +5,7 @@ class Ids {
   class EleCheck {
 
     static final String MAIN_REASON_LIST = "mainReasonOption";
-    static final String WALKING_DIFFICULTY_LIST = "walkingDifficulty";
-    static final String WHAT_WALKING_DIFFICULTY_LIST = "whatWalkingDifficulties";
+
     static final String EQUIPMENT_LIST = "equipment";
     static final String MEDICAL_EQUIPMENT = "medicalEquipment";
     static final String HAS_RECEIVED_DLA = "receivedDlaOption";
@@ -49,13 +48,6 @@ class Ids {
     static final String SKIP_WITHOUT_NI = "skipNiLink";
   }
 
-  class Contact {
-    static final String FULL_NAME = "fullName";
-    static final String PRIMARY_CONTACT_NUMBER = "primaryPhoneNumber";
-    static final String SECONDARY_CONTACT_NUMBER = "secondaryPhoneNumber";
-    static final String EMAIL_ADDRESS = "emailAddress";
-  }
-
   class Walkd {
     static final String TREATMENT_ADD_CONFIRM_BUTTON = "button.add.treatment";
     static final String TREATMENT_HAS_TREATMENT_OPTION = "hasTreatment";
@@ -64,14 +56,7 @@ class Ids {
     static final String TREATMENT_ADD_FIRST_LINK = "firstaddtreatmentlink";
     static final String TREATMENT_ADD_TREATMENT_DESCRIPTION = "treatmentDescription";
     static final String TREATMENT_ADD_TREATMENT_WHEN = "treatmentWhen";
-    static final String MOBILITY_AID_OPTION = "hasWalkingAid";
-    // Id of link will be prefix + counter.  Counter starts at 1.
-    static final String MOBILITY_AID_REMOVE_LINK_PREFIX = "mobility.aid.remove.link.";
-    static final String MOBILITY_AID_ADD_FIRST_LINK = "addmobilityaidlink";
-    static final String MOBILITY_AID_TYPE_WHEELCHAIR = "aidType";
-    static final String MOBILITY_AID_ADD_PROVIDED_CODE_PRESCRIBE = "howProvidedCodeField";
-    static final String MOBILITY_AID_ADD_USAGE = "usage";
-    static final String MOBILITY_AID_ADD_CONFIRM_BUTTON = "button.continue";
+
 
     static final String WALKING_TIME = "walkingTime";
 
