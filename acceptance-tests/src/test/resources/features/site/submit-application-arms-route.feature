@@ -1,4 +1,4 @@
-@SubmitApplicationARMSRoute
+@SubmitApplicationArmsRoute
 Feature: DFT Blue badge Citizen app new application - ARMS
   As a citizen user I want to be able to get information on council details via ARMS route
 
