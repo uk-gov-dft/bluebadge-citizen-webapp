@@ -64,6 +64,10 @@ public class CommonPage {
     return helper.findElement(By.xpath("//*[@id=\"conditional-hasWalkingAid\"]/p/a"));
   }
 
+  public WebElement findElementWithCSSSelector(String cssSeclector) {
+    return helper.findOptionalElement(By.cssSelector(cssSeclector));
+  }
+
   public void selectLocalCouncil(String textToSelect) {
     selectFromAutoCompleteList("councilShortCode", textToSelect);
   }
@@ -129,5 +133,10 @@ public class CommonPage {
   public void clearAndSendKeys(String element, String value) {
     findPageElementById(element).clear();
     findPageElementById(element).sendKeys(value);
+  }
+
+  public void waitElementPresent(String elementId){
+    WebElement myDynamicElement = (new WebDriverWait(getWebDriver(), 10))
+            .until(ExpectedConditions.presenceOfElementLocated(By.id(elementId)));
   }
 }

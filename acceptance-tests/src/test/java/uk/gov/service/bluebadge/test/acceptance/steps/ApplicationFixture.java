@@ -8,11 +8,18 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.*;
 
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
+
+import java.io.File;
 import java.util.Calendar;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
+import uk.gov.service.bluebadge.test.acceptance.pages.PageHelper;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.*;
 import uk.gov.service.bluebadge.test.acceptance.steps.site.ContactDetailsSteps;
+import uk.gov.service.bluebadge.test.acceptance.util.FileHelper;
 
 public class ApplicationFixture extends AbstractSpringSteps {
 
@@ -168,6 +175,29 @@ public class ApplicationFixture extends AbstractSpringSteps {
   public void iCompleteProveIDPageWithNoDocuments() {
     commonPage.findPageElementById("cant-upload-text").click();
     commonPage.findPageElementById("continue-without-uploading").click();
+  }
+
+  @And("^I complete prove ID page with a \"(JPG|GIF|PNG|PDF)\" document")
+  public void iCompleteProveIDPageWithADocument(String fileType) {
+
+    String filename = "evidence_" + fileType + "." + fileType.toLowerCase();
+
+
+    WebElement droparea = commonPage.findElementWithCSSSelector("#proveIdentity-fileUploaderContainer > div.drop-area");
+
+    String file_path = "";
+    if (System.getProperty("user.dir").endsWith("acceptance-tests")) {
+      file_path = System.getProperty("user.dir") + "/src/test/resources/attachments/" + filename;
+    } else {
+      file_path = System.getProperty("user.dir") + "/acceptance-tests/src/test/resources/attachments/" + filename;
+    }
+
+    // drop the file
+    FileHelper.DropFile(new File(file_path), droparea, 0, 0);
+
+    commonPage.waitElementPresent("preview-reset-btn");
+
+    pressContinue();
   }
 
   @And("^I complete declaration page$")
