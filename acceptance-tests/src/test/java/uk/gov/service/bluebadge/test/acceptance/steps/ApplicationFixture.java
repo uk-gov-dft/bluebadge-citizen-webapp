@@ -297,21 +297,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
     commonPage.findPageElementById(id).click();
   }
 
-  @And("^I complete the mobility aids page for \"(YES|NO)\"$")
-  public void iCompleteTheMobilityAidsPage(String option) {
-    if ("YES".equals(option)) {
-      commonPage.selectRadioButton(Ids.Walkd.MOBILITY_AID_OPTION);
-      // Needs to update this to use id or data-uipath
-      commonPage.findElementAddMobilityAid().click();
-      commonPage.selectRadioButton(MOBILITY_AID_TYPE_WHEELCHAIR);
-      clearAndSendKeys(MOBILITY_AID_ADD_USAGE, "All the time");
-      commonPage.selectRadioButton(MOBILITY_AID_ADD_PROVIDED_CODE_PRESCRIBE);
-      commonPage.findElementWithUiPath(MOBILITY_AID_ADD_CONFIRM_BUTTON).click();
-    } else {
-      commonPage.selectRadioButton(Ids.Walkd.MOBILITY_AID_OPTION + option.toLowerCase());
-    }
-    pressContinue();
-  }
+
 
   @And("^I complete the treatments page for \"(YES|NO)\"$")
   public void iCompleteTheTreatmentsPage(String option) {

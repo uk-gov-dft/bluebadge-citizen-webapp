@@ -56,14 +56,7 @@ class Ids {
     static final String TREATMENT_ADD_FIRST_LINK = "firstaddtreatmentlink";
     static final String TREATMENT_ADD_TREATMENT_DESCRIPTION = "treatmentDescription";
     static final String TREATMENT_ADD_TREATMENT_WHEN = "treatmentWhen";
-    static final String MOBILITY_AID_OPTION = "hasWalkingAid";
-    // Id of link will be prefix + counter.  Counter starts at 1.
-    static final String MOBILITY_AID_REMOVE_LINK_PREFIX = "mobility.aid.remove.link.";
-    static final String MOBILITY_AID_ADD_FIRST_LINK = "addmobilityaidlink";
-    static final String MOBILITY_AID_TYPE_WHEELCHAIR = "aidType";
-    static final String MOBILITY_AID_ADD_PROVIDED_CODE_PRESCRIBE = "howProvidedCodeField";
-    static final String MOBILITY_AID_ADD_USAGE = "usage";
-    static final String MOBILITY_AID_ADD_CONFIRM_BUTTON = "button.continue";
+
 
     static final String WALKING_TIME = "walkingTime";
 

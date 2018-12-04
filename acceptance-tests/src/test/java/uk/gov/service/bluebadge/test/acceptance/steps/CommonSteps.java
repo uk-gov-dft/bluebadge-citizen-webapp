@@ -236,6 +236,11 @@ public class CommonSteps extends AbstractSpringSteps {
     commonPage.findElementWithUiPath("button.continue").click();
   }
 
+  @And("^I click on Add button on a child page $")
+  public void iClickOnAddButtonOnChildPage(String element) {
+    commonPage.findElementWithUiPath(element).click();
+  }
+
   @And("^I should see error summary box$")
   public void andIshouldSeeErrorSummaryBox() {
     WebElement errorSummaryBox = commonPage.findElementWithUiPath("error-summary-box");
@@ -341,6 +346,17 @@ public class CommonSteps extends AbstractSpringSteps {
   public void iVerifyMultipleValidationMessages(List<String> messages) {
 
     this.iClickOnContinueButton();
+    this.andIshouldSeeErrorSummaryBox();
+
+    for (String message : messages) {
+      this.iShouldSeeTextOnPage(message);
+    }
+  }
+
+  @And("^I verify multiple validation messages in child pages \"$")
+  public void iVerifyMultipleValidationMessagesInChildPages(List<String> messages, String element) {
+
+    this.iClickOnAddButtonOnChildPage(element);
     this.andIshouldSeeErrorSummaryBox();
 
     for (String message : messages) {
