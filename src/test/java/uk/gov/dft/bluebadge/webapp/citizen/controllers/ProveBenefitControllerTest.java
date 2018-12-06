@@ -58,7 +58,7 @@ public class ProveBenefitControllerTest extends ControllerTestFixture<ProveBenef
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(Mappings.URL_DECLARATIONS));
+        .andExpect(redirectedUrl(Mappings.URL_PROVE_IDENTITY));
   }
 
   @Test
@@ -82,7 +82,7 @@ public class ProveBenefitControllerTest extends ControllerTestFixture<ProveBenef
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(Mappings.URL_DECLARATIONS));
+        .andExpect(redirectedUrl(Mappings.URL_PROVE_IDENTITY));
   }
 
   @Test

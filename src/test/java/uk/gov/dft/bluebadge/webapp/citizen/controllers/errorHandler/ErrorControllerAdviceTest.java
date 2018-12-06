@@ -1,8 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.errorHandler;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -14,7 +12,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
 import uk.gov.dft.bluebadge.common.api.model.Error;
 import uk.gov.dft.bluebadge.common.api.model.ErrorErrors;
@@ -23,7 +23,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.errorhandler.ErrorControl
 
 public class ErrorControllerAdviceTest {
 
-  @Mock private RedirectAttributes redirectAttributesMock;
   @Mock private HttpServletRequest reqMock;
   @Mock private ObjectMapper objectMapperMock;
 
@@ -41,9 +40,8 @@ public class ErrorControllerAdviceTest {
   public void handleException_shouldReturnRedirectToErrorTemplateAndPopulateRedirectAttributes() {
     Exception ex = new Exception("my error message");
 
-    String template = controllerAdvice.handleException(ex, reqMock, redirectAttributesMock);
+    String template = controllerAdvice.handleException(ex, reqMock);
     assertThat(template).isEqualTo("redirect:/something-went-wrong");
-    verify(redirectAttributesMock, times(1)).addFlashAttribute("exception", ex);
   }
 
   @Test
@@ -66,11 +64,30 @@ public class ErrorControllerAdviceTest {
     when(writerMock.writeValueAsString(ex.getCommonResponse()))
         .thenReturn("some api client error message");
 
-    String template =
-        controllerAdvice.handleClientApiException(ex, reqMock, redirectAttributesMock);
+    String template = controllerAdvice.handleClientApiException(ex, reqMock);
     assertThat(template).isEqualTo("redirect:/something-went-wrong");
-    verify(redirectAttributesMock)
-        .addFlashAttribute("commonResponse", "some api client error message");
-    verify(redirectAttributesMock, times(1)).addFlashAttribute("exception", ex);
+  }
+
+  @Test
+  public void handleMaxSizeException_shouldRedirectToOriginalUrl() {
+    MaxUploadSizeExceededException ex = new MaxUploadSizeExceededException(1000L);
+    RedirectAttributes ra = new RedirectAttributesModelMap();
+    when(reqMock.getAttribute("javax.servlet.error.request_uri")).thenReturn("/someUrl");
+
+    String template = controllerAdvice.handleMaxSizeException(ex, reqMock, ra);
+    assertThat(template).isEqualTo("redirect:/someUrl");
+    assertThat(ra.getFlashAttributes()).isNotNull();
+    assertThat(ra.getFlashAttributes().get("MAX_FILE_SIZE_EXCEEDED")).isEqualTo("true");
+  }
+
+  @Test
+  public void handleMaxSizeException_whenOriginalUrlNotAvailable_shouldRedirectToErrorPage() {
+    MaxUploadSizeExceededException ex = new MaxUploadSizeExceededException(1000L);
+    RedirectAttributes ra = new RedirectAttributesModelMap();
+    when(reqMock.getAttribute("javax.servlet.error.request_uri")).thenReturn(null);
+
+    String template = controllerAdvice.handleMaxSizeException(ex, reqMock, ra);
+    assertThat(template).isEqualTo("redirect:/something-went-wrong");
+    assertThat(ra.getFlashAttributes().get("MAX_FILE_SIZE_EXCEEDED")).isNull();
   }
 }

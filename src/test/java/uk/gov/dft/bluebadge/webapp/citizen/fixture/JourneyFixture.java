@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.fixture;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.BulkyMedicalEquipmentTypeCodeField.OTHER;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.BulkyMedicalEquipmentTypeCodeField.PUMP;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.AFRFCS;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.ARMS;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.BLIND;
@@ -15,6 +17,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nat
 
 import com.google.common.collect.Lists;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.GenderCodeField;
@@ -43,11 +46,13 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalAddF
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MayBeEligibleForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.MedicalEquipmentForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.OrganisationMayBeEligibleForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveBenefitForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveIdentityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
@@ -56,6 +61,12 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.CompensationSchemeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.DisabilityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.MentalDisorderForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.arms.ArmsAdaptedVehicleForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.arms.ArmsDifficultyParkingMetersForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.arms.ArmsHowOftenDriveForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.blind.PermissionForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.blind.RegisteredCouncilForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.blind.RegisteredForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.WalkingDifficultyForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.organisation.OrganisationCareForm;
@@ -111,6 +122,10 @@ public class JourneyFixture {
     static final CompoundDate DOB_ADULT = new CompoundDate("1", "1", "1990");
     public static final CompoundDate DOB_CHILD =
         new CompoundDate("1", "1", String.valueOf(LocalDate.now().getYear()));
+    public static final String ARMS_ADAPTED_VEH_DESC = "Adapted vehicle desc";
+    public static final String ARMS_HOW_OFTEN_DRIVE = "How often drive";
+    public static final String ARMS_PARKING_METERS = "Parking metrs";
+    public static final Boolean IS_ADAPTED_VEHICLE = Boolean.TRUE;
   }
 
   public static ExistingBadgeForm getExistingBadgeForm() {
@@ -361,12 +376,15 @@ public class JourneyFixture {
       if (StepDefinition.RECEIVE_BENEFITS == stepTo) return journey;
       journey.setFormForStep(MainReasonForm.builder().mainReasonOption(CHILDBULK).build());
       if (StepDefinition.MAIN_REASON == stepTo) return journey;
+      journey.setFormForStep(new MayBeEligibleForm());
+      journey.setFormForStep(getMedicalEquipmentForm());
     }
     if (EligibilityCodeField.BLIND == eligibility) {
       journey.setFormForStep(ReceiveBenefitsForm.builder().benefitType(NONE).build());
       if (StepDefinition.RECEIVE_BENEFITS == stepTo) return journey;
       journey.setFormForStep(MainReasonForm.builder().mainReasonOption(BLIND).build());
       if (StepDefinition.MAIN_REASON == stepTo) return journey;
+      journey.setFormForStep(new EligibleForm());
     }
     if (EligibilityCodeField.NONE == eligibility) {
       journey.setFormForStep(ReceiveBenefitsForm.builder().benefitType(NONE).build());
@@ -451,14 +469,58 @@ public class JourneyFixture {
       if (StepDefinition.MEDICATION_LIST == stepTo) return journey;
     }
 
+    if (ARMS == eligibility) {
+      journey.setFormForStep(
+          ArmsHowOftenDriveForm.builder().howOftenDrive(Values.ARMS_HOW_OFTEN_DRIVE).build());
+      if (StepDefinition.ARMS_HOW_OFTEN_DRIVE == stepTo) return journey;
+      journey.setFormForStep(
+          ArmsAdaptedVehicleForm.builder()
+              .hasAdaptedVehicle(Values.IS_ADAPTED_VEHICLE)
+              .adaptedVehicleDescription(Values.ARMS_ADAPTED_VEH_DESC)
+              .build());
+      if (StepDefinition.ARMS_DRIVE_ADAPTED_VEHICLE == stepTo) return journey;
+      journey.setFormForStep(
+          ArmsDifficultyParkingMetersForm.builder()
+              .parkingMetersDifficultyDescription(Values.ARMS_PARKING_METERS)
+              .build());
+      if (StepDefinition.ARMS_DIFFICULTY_PARKING_METER == stepTo) return journey;
+    }
+
     journey.setFormForStep(getHealthcareProfessionalListForm());
 
+    if (EligibilityCodeField.BLIND == eligibility) {
+      if (StepDefinition.CONTACT_DETAILS == stepTo) return journey;
+
+      journey.setFormForStep(RegisteredForm.builder().hasRegistered(true).build());
+      if (StepDefinition.REGISTERED == stepTo) return journey;
+
+      journey.setFormForStep(PermissionForm.builder().hasPermission(true).build());
+      if (StepDefinition.PERMISSION == stepTo) return journey;
+
+      LocalAuthorityRefData localAuthorityRefData = new LocalAuthorityRefData();
+      localAuthorityRefData.setShortCode("WARCC");
+      journey.setFormForStep(
+          RegisteredCouncilForm.builder()
+              .registeredCouncil("WARCC")
+              .localAuthorityForRegisteredBlind(localAuthorityRefData)
+              .build());
+      if (StepDefinition.REGISTERED_COUNCIL == stepTo) return journey;
+    }
+
+    journey.setFormForStep(ProveIdentityForm.builder().build());
     journey.setFormForStep(DeclarationForm.builder().agreed(Boolean.TRUE).build());
     return journey;
   }
 
   private static StepForm getDisabilityForm() {
     return DisabilityForm.builder().hasDisability(Boolean.TRUE).build();
+  }
+
+  public static MedicalEquipmentForm getMedicalEquipmentForm() {
+    return MedicalEquipmentForm.builder()
+        .equipment(Arrays.asList(PUMP, OTHER))
+        .otherDescription("another medical equipment")
+        .build();
   }
 
   public static ChooseYourCouncilForm getChooseYourCouncilForm() {
@@ -469,6 +531,10 @@ public class JourneyFixture {
     return PipDlaQuestionForm.builder()
         .receivedDlaOption(PipDlaQuestionForm.PipReceivedDlaOption.HAS_RECEIVED_DLA)
         .build();
+  }
+
+  public static RegisteredForm getRegisteredForm() {
+    return RegisteredForm.builder().hasRegistered(true).build();
   }
 
   public static Journey getDefaultJourney() {

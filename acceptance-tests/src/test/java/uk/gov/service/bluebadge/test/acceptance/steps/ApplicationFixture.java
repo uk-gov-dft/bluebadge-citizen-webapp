@@ -66,6 +66,15 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("I complete select council page for \"(england|wales|scotland)\"")
   public void iCompleteSelectCouncilPage(String country) {
+    iCompleteSelectCouncilPage(country, chooseCouncilPage.COUNCIL_INPUT);
+  }
+
+  @And("^I complete registered council page for \"(england|wales|scotland)\"$")
+  public void iCompleteRegisteredCouncilPage(String country) throws Throwable {
+    iCompleteSelectCouncilPage(country, "registeredCouncil");
+  }
+
+  private void iCompleteSelectCouncilPage(String country, String inputId) {
     String council = "Worcester";
     String fullCouncil = "Worcester city council";
     if ("scotland".equalsIgnoreCase(country)) {
@@ -76,8 +85,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
       fullCouncil = "Isle of Anglesey county council";
     }
 
-    commonPage.findPageElementById(chooseCouncilPage.COUNCIL_INPUT).sendKeys(council);
-    commonPage.selectFromAutoCompleteList(chooseCouncilPage.COUNCIL_INPUT, fullCouncil);
+    commonPage.findPageElementById(inputId).sendKeys(council);
+    commonPage.selectFromAutoCompleteList(inputId, fullCouncil);
     pressContinue();
   }
 
@@ -108,7 +117,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("I complete main reason page for \"(TERMILL|CHILDBULK|CHILDVEHIC|WALKD|ARMS|BLIND|NONE)\"")
   public void iCompleteMainReasonPageFor(String benefit) {
-    if ("TERMILL".equals(benefit)) {
+    if ("BLIND".equals(benefit)) {
       commonPage.selectRadioButton(MAIN_REASON_LIST);
     } else {
       commonPage.selectRadioButton(MAIN_REASON_LIST + "." + benefit);
@@ -162,6 +171,12 @@ public class ApplicationFixture extends AbstractSpringSteps {
   public void iCompleteDescribeHealthConditionsPage() throws Throwable {
     clearAndSendKeys("descriptionOfConditions", "Sample health condition");
     pressContinue();
+  }
+
+  @And("^I complete prove ID page with no documents")
+  public void iCompleteProveIDPageWithNoDocuments() {
+    commonPage.findPageElementById("cant-upload-text").click();
+    commonPage.findPageElementById("continue-without-uploading").click();
   }
 
   @And("^I complete declaration page$")
@@ -305,6 +320,23 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
+  @And("^I complete medical equipment page$")
+  public void iCompleteMedicalEquipmentPage() throws Throwable {
+    commonPage.selectRadioButton(Ids.EleCheck.MEDICAL_EQUIPMENT);
+    pressContinue();
+  }
+
+  @And(
+      "^I complete medical equipment page for \"(PUMP|VENT|SUCTION|PARENT|SYRINGE|OXYADMIN|OXYSAT|CAST|OTHER)\"$")
+  public void iCompleteMedicalEquipmentPage(String difficulty) throws Throwable {
+    if ("VENT".equals(difficulty)) {
+      commonPage.selectRadioButton(Ids.EleCheck.MEDICAL_EQUIPMENT);
+    } else {
+      commonPage.selectRadioButton(Ids.EleCheck.MEDICAL_EQUIPMENT + difficulty);
+    }
+    pressContinue();
+  }
+
   private void clearAndSendKeys(String element, String value) {
     commonPage.findPageElementById(element).clear();
     commonPage.findPageElementById(element).sendKeys(value);
@@ -434,6 +466,29 @@ public class ApplicationFixture extends AbstractSpringSteps {
       clearAndSendKeys(Ids.Eligibility.HEALTHCARE_PRO_ADD_LOCATION, "Pro Location");
       clickButtonById(Ids.Eligibility.HEALTHCARE_PRO_ADD_CONFIRM_BUTTON);
     }
+    pressContinue();
+  }
+
+  @And("^I complete the how often do you drive page$")
+  public void iCompleteHowOftenDoYouDrive() {
+    clearAndSendKeys(Ids.Arms.HOW_OFTEN_DRIVE, "Once a week");
+    pressContinue();
+  }
+
+  @And("^I complete the adapted vehicle page for \"(YES|NO)\"$")
+  public void iCompleteAdaptedVehicle(String option) {
+    commonPage
+        .findPageElementById(Ids.Arms.IS_ADAPTED_VEHICLE_OPTION + "_" + option.toLowerCase())
+        .click();
+    if ("YES".equals(option)) {
+      clearAndSendKeys(Ids.Arms.ADAPTED_VEHICLE_DESCRIPTIOM, "Vehicle description");
+    }
+    pressContinue();
+  }
+
+  @And("^I complete the difficulty with parking meters page$")
+  public void iCompleteDifficultyWithParkingMeters() {
+    clearAndSendKeys(Ids.Arms.DIFFICULTY_PARKING_METERS_DESC, "Parking meter difficulty");
     pressContinue();
   }
 }

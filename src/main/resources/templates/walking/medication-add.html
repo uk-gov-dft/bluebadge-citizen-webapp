@@ -18,7 +18,7 @@
 
                 <div th:replace="~{ fragments/govuk-input :: govuk-input(#{medication.name}, 'name', null, 'text', 'govuk-!-width-one-half')}"></div>
 
-                <div th:replace="~{ fragments/govuk-radios :: govuk-radios('prescribed', ${yesNoRadioOptions}) }"></div>
+                <div th:replace="~{ fragments/govuk-radios :: govuk-radios-small-legend('prescribed', ${yesNoRadioOptions}) }"></div>
 
                 <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + 'medication.dosage'}, 'dosage', #{medication.dosage.hint.text}, 'text', 'govuk-!-width-one-half')}"></div>
 

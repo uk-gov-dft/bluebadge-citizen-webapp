@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.client.common.ClientApiException;
 
@@ -13,6 +14,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.common.ClientApiException;
 @ControllerAdvice
 public class ErrorControllerAdvice {
 
+  public static final String REDIRECT = "redirect:";
   private ObjectMapper objectMapper;
 
   public ErrorControllerAdvice(ObjectMapper objectMapper) {
@@ -20,28 +22,36 @@ public class ErrorControllerAdvice {
   }
 
   @ExceptionHandler(Exception.class)
-  public String handleException(
-      Exception ex, HttpServletRequest req, RedirectAttributes redirectAttributes) {
+  public String handleException(Exception ex, HttpServletRequest req) {
     log.error("Request: {} raised {}.", req.getRequestURL(), ex.toString(), ex);
-    redirectAttributes.addFlashAttribute("exception", ex);
-    return "redirect:" + ErrorController.URL_500_ERROR;
+    return REDIRECT + ErrorController.URL_500_ERROR;
   }
 
   @ExceptionHandler(ClientApiException.class)
-  public String handleClientApiException(
-      ClientApiException ex, HttpServletRequest req, RedirectAttributes redirectAttributes) {
+  public String handleClientApiException(ClientApiException ex, HttpServletRequest req) {
     log.error("Request: {} raised {}.", req.getRequestURL(), ex.toString(), ex);
 
     try {
       String commonResponse =
           objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(ex.getCommonResponse());
       log.warn("Exception common response:{}", commonResponse);
-      redirectAttributes.addFlashAttribute("commonResponse", commonResponse);
     } catch (JsonProcessingException e) {
       log.warn("Failed to convert common response from exception.", e);
     }
+    return REDIRECT + ErrorController.URL_500_ERROR;
+  }
 
-    redirectAttributes.addFlashAttribute("exception", ex);
-    return "redirect:" + ErrorController.URL_500_ERROR;
+  @ExceptionHandler(MaxUploadSizeExceededException.class)
+  public String handleMaxSizeException(
+      MaxUploadSizeExceededException exc, HttpServletRequest request, RedirectAttributes attr) {
+    log.info("Handling MaxUploadSizeExceededException");
+
+    if (null != request.getAttribute("javax.servlet.error.request_uri")) {
+      attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", "true");
+      String uri = (String) request.getAttribute("javax.servlet.error.request_uri");
+      return REDIRECT + uri;
+    }
+    log.info("Handling MaxUploadSizeExceededException. Failed to determine the redirect path.");
+    return handleException(exc, request);
   }
 }

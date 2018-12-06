@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.ARMS;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 
 import java.io.Serializable;
@@ -22,6 +23,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.arms.ArmsDifficultyParkingMetersForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
 
 @Slf4j
@@ -29,11 +31,14 @@ public class Journey implements Serializable {
 
   public static final String JOURNEY_SESSION_KEY = "JOURNEY";
   public static final String FORM_REQUEST = "formRequest";
+  public static final String SEPARATOR = "\n- - - - - - - - - - - - - - - - -\n";
 
   private Map<StepDefinition, StepForm> forms = new HashMap<>();
   public String who;
   public String ageGroup;
   public String walkingAid;
+
+  private LocalAuthorityRefData localAuthority;
 
   public void setFormForStep(StepForm form) {
     // If changing values in a form may need to invalidate later forms in the journey
@@ -86,8 +91,6 @@ public class Journey implements Serializable {
   public boolean hasStepForm(StepDefinition stepDefinition) {
     return getFormForStep(stepDefinition) != null;
   }
-
-  private LocalAuthorityRefData localAuthority;
 
   public Boolean isApplicantYourself() {
     if (hasStepForm(StepDefinition.APPLICANT_TYPE)) {
@@ -156,25 +159,51 @@ public class Journey implements Serializable {
     return null;
   }
 
+  /**
+   * Returns a built string whilst this data is not currently stored is separate fields.
+   *
+   * @return String aggregated string of conditions
+   */
   public String getDescriptionOfCondition() {
-    HealthConditionsForm healthConditionsForm = getFormForStep(StepDefinition.HEALTH_CONDITIONS);
-    WhereCanYouWalkForm whereCanYouWalkForm = getFormForStep(StepDefinition.WHERE_CAN_YOU_WALK);
 
     StringBuilder descriptionOfCondition = new StringBuilder();
+
+    boolean hasWalkingEligibilityText =
+        (WALKD == getEligibilityCode()) && hasStepForm(StepDefinition.WHERE_CAN_YOU_WALK);
+    boolean hasArmsEligibilityText =
+        (ARMS == getEligibilityCode()) && hasStepForm(StepDefinition.ARMS_DIFFICULTY_PARKING_METER);
+
+    HealthConditionsForm healthConditionsForm = getFormForStep(StepDefinition.HEALTH_CONDITIONS);
     if (healthConditionsForm != null && healthConditionsForm.getDescriptionOfConditions() != null) {
+
+      if (hasWalkingEligibilityText || hasArmsEligibilityText) {
+        descriptionOfCondition.append("Description of conditions:\n");
+      }
+
       descriptionOfCondition.append(healthConditionsForm.getDescriptionOfConditions());
     }
 
-    if (WALKD.equals(getEligibilityCode()) && whereCanYouWalkForm != null) {
+    if (hasWalkingEligibilityText) {
+      WhereCanYouWalkForm whereCanYouWalkForm = getFormForStep(StepDefinition.WHERE_CAN_YOU_WALK);
       descriptionOfCondition
-          .append(" - Able to walk to: ")
+          .append(SEPARATOR)
+          .append("Able to walk to and from:\n")
           .append(whereCanYouWalkForm.getDestinationToHome())
-          .append(" - How long: ")
+          .append(SEPARATOR)
+          .append("How long it takes:\n")
           .append(whereCanYouWalkForm.getTimeToDestination());
     }
-    if (descriptionOfCondition.length() == 0) {
-      descriptionOfCondition.append("Dummy condition");
+
+    if (hasArmsEligibilityText) {
+      ArmsDifficultyParkingMetersForm difficultyParkingMetersForm =
+          getFormForStep(StepDefinition.ARMS_DIFFICULTY_PARKING_METER);
+
+      descriptionOfCondition
+          .append(SEPARATOR)
+          .append("Description of difficulties using a parking meter:\n")
+          .append(difficultyParkingMetersForm.getParkingMetersDifficultyDescription());
     }
+
     return descriptionOfCondition.toString();
   }
 }

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="(${errorSummary}? #{common.title.error} : '')  + #{${JOURNEY.who} + 'adapted.vehicle.title'}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <form th:action="@{/drive-adapted-vehicle}" method="post" th:object="${formRequest}" novalidate>
+                <div th:class="${#fields.hasErrors('hasAdaptedVehicle')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+                    <fieldset class="govuk-fieldset">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                            <h1 class="govuk-fieldset__heading" th:text="#{${JOURNEY.who} + adapted.vehicle.title}"></h1>
+                        </legend>
+
+                        <span class="govuk-error-message"
+                              data-uipath="hasAdaptedVehicle.error"
+                              id="hasAdaptedVehicle-hint"
+                              th:if="${#fields.hasErrors('hasAdaptedVehicle')}"
+                              th:errors="*{hasAdaptedVehicle}" />
+
+                        <div class="govuk-radios govuk-radios--conditional" data-module="radios">
+
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input"
+                                       id="hasAdaptedVehicle_yes"
+                                       name="hasAdaptedVehicle"
+                                       type="radio"
+                                       value="true"
+                                       th:field="*{hasAdaptedVehicle}"
+                                       data-aria-controls="conditional-hasAdaptedVehicle">
+
+                                <label class="govuk-label govuk-radios__label" for="hasAdaptedVehicle_yes" th:text="#{radio.option.yes}"></label>
+                            </div>
+
+                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-hasAdaptedVehicle">
+                                <div th:class="${#fields.hasErrors('adaptedVehicleDescription')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+
+                                    <label class="govuk-label" for="adaptedVehicleDescription" th:text="#{${JOURNEY.who} + 'adapted.vehicle.field.description.label'}"></label>
+
+                                    <span class="govuk-error-message"
+                                          data-uipath="adaptedVehicleDescription.error"
+                                          th:errors="*{adaptedVehicleDescription}"></span>
+
+                                    <textarea class="govuk-textarea govuk-textarea--fixed" th:field="*{adaptedVehicleDescription}"
+                                              id="adaptedVehicleDescription" rows="5" name="adaptedVehicleDescription"
+                                              data-uipath="adaptedVehicleDescription.text"></textarea>
+                                </div>
+                            </div>
+
+
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input"
+                                       id="hasAdaptedVehicle_no"
+                                       name="hasAdaptedVehicle"
+                                       type="radio"
+                                       value="false"
+                                       th:field="*{hasAdaptedVehicle}"
+                                       data-aria-controls="conditional-hasAdaptedVehicle_false">
+
+                                <label class="govuk-label govuk-radios__label" for="hasAdaptedVehicle_no" th:text="#{radio.option.no}"></label>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </div>
+
+                <button type="submit"
+                        class="govuk-button"
+                        data-uipath="button.continue"
+                        th:text="#{btn.label.continue}"></button>
+            </form>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

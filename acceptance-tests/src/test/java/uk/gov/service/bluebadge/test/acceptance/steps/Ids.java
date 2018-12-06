@@ -7,6 +7,8 @@ class Ids {
     static final String MAIN_REASON_LIST = "mainReasonOption";
     static final String WALKING_DIFFICULTY_LIST = "walkingDifficulty";
     static final String WHAT_WALKING_DIFFICULTY_LIST = "whatWalkingDifficulties";
+    static final String EQUIPMENT_LIST = "equipment";
+    static final String MEDICAL_EQUIPMENT = "medicalEquipment";
     static final String HAS_RECEIVED_DLA = "receivedDlaOption";
     static final String NEVER_RECEIVED_DLA = "receivedDlaOption.NEVER_RECEIVED_DLA";
     static final String MOVING_POINTS = "movingAroundPoints";
@@ -83,6 +85,12 @@ class Ids {
     static final String MEDICATION_FREQUENCY_TEXT = "frequency";
   }
 
+  class RegisteredCouncil {
+    static final String HAS_REGISTERED = "hasRegistered";
+    static final String HAS_PERMISSION = "hasPermission";
+    static final String HAS_REGISTERED_COUNCIL = "registeredCouncil";
+  }
+
   class Eligibility {
     static final String HEALTHCARE_PRO_ADD_CONFIRM_BUTTON = "button.add.healthcare.professional";
     static final String HEALTHCARE_PRO_HAS_OPTION = "hasHealthcareProfessional";
@@ -91,5 +99,12 @@ class Ids {
     static final String HEALTHCARE_PRO_ADD_FIRST_LINK = "firstaddhealthcareprofessionallink";
     static final String HEALTHCARE_PRO_ADD_DESCRIPTION = "healthcareProfessionalName";
     static final String HEALTHCARE_PRO_ADD_LOCATION = "healthcareProfessionalLocation";
+  }
+
+  class Arms {
+    static final String DIFFICULTY_PARKING_METERS_DESC = "parkingMetersDifficultyDescription";
+    static final String IS_ADAPTED_VEHICLE_OPTION = "hasAdaptedVehicle";
+    static final String ADAPTED_VEHICLE_DESCRIPTIOM = "adaptedVehicleDescription";
+    static final String HOW_OFTEN_DRIVE = "howOftenDrive";
   }
 }
