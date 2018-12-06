@@ -136,7 +136,7 @@ public class CommonPage {
   }
 
   public void waitElementPresent(String elementId){
-    WebElement myDynamicElement = (new WebDriverWait(getWebDriver(), 10))
+    WebElement myDynamicElement = (new WebDriverWait(getWebDriver(), 20))
             .until(ExpectedConditions.presenceOfElementLocated(By.id(elementId)));
   }
 }
