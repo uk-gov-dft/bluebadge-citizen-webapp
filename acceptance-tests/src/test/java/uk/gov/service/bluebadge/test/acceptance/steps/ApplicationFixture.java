@@ -4,7 +4,6 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.*;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.*;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_FEMALE;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_UNSPECIFIED;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.*;
 
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -13,10 +12,7 @@ import java.io.File;
 import java.util.Calendar;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
-import uk.gov.service.bluebadge.test.acceptance.pages.PageHelper;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.*;
 import uk.gov.service.bluebadge.test.acceptance.steps.site.ContactDetailsSteps;
 import uk.gov.service.bluebadge.test.acceptance.util.FileHelper;
@@ -193,7 +189,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
     }
 
     // drop the file
-    FileHelper.DropFile(new File(file_path), droparea, 0, 0);
+    FileHelper.dropFile(new File(file_path), droparea, 0, 0);
 
     commonPage.waitElementPresent("preview-reset-btn");
 

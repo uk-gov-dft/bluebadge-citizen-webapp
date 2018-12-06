@@ -70,7 +70,7 @@ public class FileHelper {
     return formattedFileSize;
   }
 
-  public static void DropFile(File filePath, WebElement target, int offsetX, int offsetY) {
+  public static void dropFile(File filePath, WebElement target, int offsetX, int offsetY) {
     if(!filePath.exists())
       throw new WebDriverException("File not found: " + filePath.toString());
 
