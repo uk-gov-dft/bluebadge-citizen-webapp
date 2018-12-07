@@ -135,8 +135,19 @@ public class CommonPage {
     findPageElementById(element).sendKeys(value);
   }
 
-  public void waitElementPresent(String elementId){
-    WebElement myDynamicElement = (new WebDriverWait(getWebDriver(), 20))
-            .until(ExpectedConditions.presenceOfElementLocated(By.id(elementId)));
+  public void waitForContinueButtonToBeDisplayed(){
+    for(int i = 0; i< 10; i++) {
+      if ((new WebDriverWait(getWebDriver(), 1))
+              .until(ExpectedConditions.presenceOfElementLocated((By.xpath("//*[@data-uipath='button.continue']")))).isDisplayed()) {
+        break;
+
+      }
+
+      try {
+        Thread.sleep(1000);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
   }
 }
