@@ -12,35 +12,30 @@ export default class FileUploader {
 		}
 
 		this.$isMobile = (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+		this.$classSuffix = "govuk-file-uploader";
 
 		this.$options = options;
+		this.$options.maxFileSize = options.maxFileSize || 100000;
+		// this.$options.showPreview = options.showPreview === false ? false : true;
+
 		this.$fileInput = options.el;
 		this.$dropArea;
-		this.$previewHolder;
+		// this.$previewHolder;
 		this.$uploadBtn;
 		this.$uploadIcon;
 		this.$resetBtn;
 		this.$addFileBtn;
 		this.$screenAnnouncer;
-		this.$csrfToken;
-
-		const csrfTokenField = document.querySelectorAll('input[name="_csrf"]').item(0);
-		if(csrfTokenField) {
-			this.$csrfToken = csrfTokenField.value;
-		}
-
+		
 		this.$container = this.renderFileUploader(options.container);
-        this.$previewHolder = document.getElementById('preview-holder');
-        this.$resetBtn = document.getElementById('preview-reset-btn');
 		this.$container.appendChild(this.renderDropArea());
 		this.$container.appendChild(this.$screenAnnouncer);
 
 		this.$imageMimeTypes = "image/jpeg, image/gif, image/png";
 
 		this.$DROPAREA_STATE = {
-			LOADING: 'file-uploader--loading',
-			ACTIVE: 'file-uploader--active',
-			PREVIEW_MODE: 'file-uploader--preview-mode',
+			LOADING: this.$classSuffix + '--loading',
+			ACTIVE: this.$classSuffix + '--active',
 		}
 
 		this.registerEvents();
@@ -48,7 +43,7 @@ export default class FileUploader {
 	}
 
     supportsDragAndDrop(){
-        var div = document.createElement('div');
+        const div = document.createElement('div');
         return ('draggable' in div) || ('ondragstart' in div && 'ondrop' in div);
     }
 
@@ -59,13 +54,15 @@ export default class FileUploader {
 		
 		this.$uploadBtn.addEventListener('click', this.uploadBtnClick);
 		this.$uploadIcon.addEventListener('click', this.uploadBtnClick);
-		this.$resetBtn.addEventListener('click', this.resetFileSelection);
 		this.$fileInput.addEventListener('change', this.selectFile);
 
+		// Only register this event if multiple file uploads is enabled
 		if(this.$fileInput.multiple && this.$addFileBtn) {
 			this.$addFileBtn.addEventListener('click', this.uploadBtnClick);
 		}
-
+		
+		// If device is mobile or tablet then we do not want to 
+		// register drag and drop events
 		if(!this.$isMobile) {
 			this.$dropArea.addEventListener('drop', this.selectFile);
 			
@@ -73,12 +70,16 @@ export default class FileUploader {
 				this.$dropArea.addEventListener(eventName, event => {
 					this.preventDefault(event);
 
+					// Adds active state class to the drop area when item is dragged into
+					// the drop zone.
 					if(eventName === 'dragenter' ||eventName === 'dragover') {
 						this.$dropArea.addEventListener(eventName, () => {
 							this.$container.classList.add(this.$DROPAREA_STATE.ACTIVE);
 						});
 					}
-
+					
+					// Removes active state class to the drop area when item is dragged out
+					// from the drop zone.
 					if(eventName === 'dragleave' ||eventName === 'drop') {
 						this.$dropArea.addEventListener(eventName, () => {
 							this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE)
@@ -104,10 +105,12 @@ export default class FileUploader {
 	resetFileSelection(event) {
 		event.preventDefault();
 		this.$fileInput.value = '';
-		this.$previewHolder.innerHTML = '';
-		this.$container.classList.remove(this.$DROPAREA_STATE.PREVIEW_MODE);
+		// this.$previewHolder.innerHTML = '';
+		// this.$container.classList.remove(this.$DROPAREA_STATE.PREVIEW_MODE);
 		this.fireLifeCycleEvent('reset');
 		this.makeScreenAnnouncement('files removed');
+
+		setTimeout(() => this.$uploadBtn.focus(), 1350);
 	}
 
 	selectFile(event) {
@@ -126,15 +129,15 @@ export default class FileUploader {
 	validateFile(file) {
 		// !file.type.match('image.*') try this instead
 		if(file.type === "" || this.$fileInput.accept.indexOf(file.type) < 0) {
-            this.makeScreenAnnouncement('Incorrect file type uploaded');
+         this.makeScreenAnnouncement('Incorrect file type uploaded');
 		} else if(file.size > 10485760){
-            this.makeScreenAnnouncement('Uploaded file too large');
+         this.makeScreenAnnouncement('Uploaded file too large');
 		} else {
-            return file;
+         return file;
 		}
 
 		this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
-        this.fireLifeCycleEvent('uploadRejected');
+      this.fireLifeCycleEvent('uploadRejected');
     }
 
 	beginFileUpload(file) {
@@ -147,28 +150,45 @@ export default class FileUploader {
 
 			if (xhr.readyState == 4 && xhr.status == 200) {
 				if(xhr.response && xhr.response.success) {
-					this.showPreview(xhr.response.artifact);
-					this.fireLifeCycleEvent('uploaded');
-				} else if(typeof xhr.response === 'string' && JSON.parse(xhr.response).success){
-                    this.showPreview(JSON.parse(xhr.response).artifact);
-                    this.fireLifeCycleEvent('uploaded');
+					this.fireLifeCycleEvent('uploaded', xhr.response);
+					this.makeScreenAnnouncement("File uploaded: " + file.fileName);
 				} else {
-					this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
-					this.fireLifeCycleEvent('uploadError');
+					this.fireLifeCycleEvent('uploadError', xhr.response);
 				}
 
 				this.$container.classList.remove(this.$DROPAREA_STATE.LOADING);
+				this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
 			}
 		});
 
 		const formData = new FormData();
-		formData.append('_csrf', this.$csrfToken);
 		formData.append(this.$fileInput.name, file, file.name);
+		this.fireLifeCycleEvent('beforeUpload', file, formData);
+
 		xhr.send(formData);
 	}
 
-	showPreview(response) {
-		const filePreview = this.renderFilePreview(response);
+	renderFileUploader(container) {
+		container.classList.add(this.$classSuffix);
+
+		const legacy = document.createElement("div");
+		legacy.classList.add(this.$classSuffix + '__legacy');
+
+		while (container.childNodes.length > 0) {
+			legacy.appendChild(container.childNodes[0]);
+		}
+		
+		container.appendChild(legacy);
+
+		this.$screenAnnouncer = document.createElement('p');
+		this.$screenAnnouncer.classList.add(this.$classSuffix + '__announcer');
+		this.$screenAnnouncer.setAttribute('aria-live', 'polite');
+
+		return container;
+	}
+
+	/* showPreview(response, fileName) {
+		const filePreview = this.renderFilePreview(response, fileName);
 		this.$previewHolder.appendChild(filePreview);
 		this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
 
@@ -177,15 +197,60 @@ export default class FileUploader {
 		}
 	}
 
-	renderFileUploader(container) {
-		container.classList.add('file-uploader');
+	renderPreview() {
+		const previewHolder = document.createElement('div');
+		previewHolder.classList.add('preview__holder');
+		this.$previewHolder = previewHolder;
 
-		this.$screenAnnouncer = document.createElement('p');
-		this.$screenAnnouncer.classList.add("file-uploader__announcer");
-		this.$screenAnnouncer.setAttribute('aria-live', 'polite');
+		const previewResetBtn = document.createElement('button');
+		previewResetBtn.classList.add('preview__resetBtn');
+		previewResetBtn.innerText = this.getDataAttrValue('preview-reset-button') || "Use a different photo or scan";
+		this.$resetBtn = previewResetBtn;
 
-		return container;
+		const previewHeading = document.createElement('h3');
+		previewHeading.innerText = this.getDataAttrValue('preview-title') || "This is your upload";
+		previewHeading.classList.add('preview__heading');
+
+		const fileUploaderPreview = document.createElement('div');
+		fileUploaderPreview.classList.add('preview');
+		fileUploaderPreview.appendChild(previewHeading);
+		fileUploaderPreview.appendChild(previewHolder);
+
+		if(this.$fileInput.multiple) {
+			const addFileBtn = document.createElement('button');
+			addFileBtn.classList.add('preview__addFileBtn');
+			addFileBtn.innerText = this.getDataAttrValue('preview-addFile-button') || "Add another photo or scan";
+			this.$addFileBtn = addFileBtn;
+			fileUploaderPreview.appendChild(addFileBtn);
+		}
+
+		fileUploaderPreview.appendChild(previewResetBtn);
+
+		return fileUploaderPreview;
 	}
+
+	renderFilePreview(response, fileName) {
+		const elPreviewItem = document.createElement('div');
+		elPreviewItem.classList.add('preview__item');
+
+		if(response.type === "file") {
+			const elP = document.createElement('p');
+			elP.innerText = response.fileName;
+
+			const elSpan = document.createElement('span');
+			elSpan.innerText = "(Preview unavailable)";
+			elP.appendChild(elSpan);
+			elPreviewItem.appendChild(elP);
+
+		} else {
+			const elImg = document.createElement('img');
+			elImg.src = response.signedUrl;
+			elImg.alt = fileName;
+			elPreviewItem.appendChild(elImg);
+		}
+
+		return elPreviewItem;
+	} */
 
 	renderDropArea() {
 		const dropArea_svg = this.getUploadIcon();
@@ -261,42 +326,6 @@ export default class FileUploader {
 		return "Upload photo";
 	}
 
-    renderFilePreview(response) {
-        const wrapper = document.getElementById("preview-holder");
-        while (wrapper.firstChild) {
-            wrapper.removeChild(wrapper.firstChild);
-        }
-
-        const elPreviewItem = document.createElement('div');
-		elPreviewItem.classList.add('preview__item');
-
-		if(response.type === "file") {
-			const elP = document.createElement('p');
-			elP.innerText = response.fileName;
-
-			const elSpan = document.createElement('span');
-			elSpan.innerText = "(Preview unavailable)";
-			elP.appendChild(elSpan);
-			elPreviewItem.appendChild(elP);
-		} else {
-			const elImg = document.createElement('img');
-			elImg.src = response.signedUrl;
-			elPreviewItem.appendChild(elImg);
-			
-			/*const reader = new FileReader();
-			reader.readAsDataURL(file);
-			reader.onloadend = function() {
-				elImg.src = reader.result;
-				elPreviewItem.appendChild(elImg);
-			}*/
-		}
-        wrapper.appendChild(elPreviewItem);
-
-		this.makeScreenAnnouncement("File uploaded: " + response.fileName);
-
-		return elPreviewItem;
-	}
-
     makeScreenAnnouncement(announcement) {
         if(this.$screenAnnouncer) {
             this.$screenAnnouncer.innerText = announcement;
@@ -304,8 +333,8 @@ export default class FileUploader {
     }
 
     fireLifeCycleEvent(eventName, ...options) {
-		if(this.$options && this.$options[eventName] && typeof this.$options[eventName] === 'function') {
-			this.$options[eventName].call(options);
+		 if(this.$options && this.$options[eventName] && typeof this.$options[eventName] === 'function') {
+			 this.$options[eventName](...options);
 		}
 	}
 

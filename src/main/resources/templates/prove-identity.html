@@ -30,8 +30,9 @@
                 <div th:replace="~{ fragments/file-uploader :: fileUploader('Upload photo or scan', 'document') }"></div>
 
                 <button type="submit"
-                        id="proveIdentity-continue-btn"
-                        class="govuk-button" th:classappend="!*{journeyArtifact} ? js-hidden2"
+                        data-file-uploader-show-on-success
+                        class="govuk-button"
+                        th:classappend="*{journeyArtifact} ? show"
                         data-uipath="button.continue"
                         th:text="#{btn.label.continue}"></button>
             </form>

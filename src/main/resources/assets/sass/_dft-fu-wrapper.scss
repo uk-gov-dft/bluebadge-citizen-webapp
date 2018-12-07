@@ -1,0 +1,99 @@
+#dft-fu-wrapper {
+	margin-bottom: 30px;
+
+	.preview,
+	.govuk-error-summary {
+		display: none;
+	}
+
+	&.preview-mode {
+		.preview {
+			display: block;
+		}
+
+		.govuk-file-uploader {
+			display: none;
+		}
+	}
+
+	&.error-mode {
+		.govuk-error-summary {
+			display: block;
+		}
+	}
+	
+}
+
+.preview {
+	margin-top: 10px;
+
+	&__heading {
+		@extend .govuk-heading-m;
+	}
+
+	&__item {
+		@include govuk-font(19, regular);
+
+		@include govuk-media-query($from: tablet) {
+			height: 200px;
+			margin-right: 10px;
+			margin-bottom: 10px;
+			display: inline-block;
+			vertical-align: middle;
+		}
+
+		p {
+			height: 160px;
+			margin: 0;
+			padding: 20px;
+			display: inline-block;
+			vertical-align: middle;
+			background-color: #eee;
+
+			span {
+				display: block;
+				margin-top: 10px;
+			}
+		}
+
+		img {
+			width: 100%;
+			height: auto;
+			vertical-align: middle;
+			image-orientation: from-image;
+			@include govuk-media-query($from: tablet) {
+				height: 100%;
+				width: auto;
+			}
+		}
+	}
+
+	&__addFileBtn {
+		@extend .govuk-button;
+		background-color: govuk-colour(blue);
+
+		&:active,
+		&:focus,
+		&:hover {
+			background-color: govuk-colour(blue);
+		}
+	}
+
+	&__resetBtn {
+		@include govuk-link-style-text;
+		@include govuk-link-common;
+		@include govuk-link-style-default;
+		@include govuk-font(19, regular);
+		border: 0;
+		padding: 0;
+		cursor: pointer;
+		display: block;
+		color: $govuk-link-colour;
+		text-decoration: underline;
+		background-color: transparent;
+	}
+}
+
+[data-file-uploader-show-on-success]:not(.show) {
+	display: none;
+}

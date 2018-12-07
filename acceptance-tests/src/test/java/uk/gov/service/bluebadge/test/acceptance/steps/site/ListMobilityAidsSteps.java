@@ -1,17 +1,13 @@
 package uk.gov.service.bluebadge.test.acceptance.steps.site;
 
 import cucumber.api.java.en.And;
-import org.springframework.beans.factory.annotation.Autowired;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.AddMobilityAidsPage;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.ListMobilityAidsPage;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.WhatMakesWalkingDifficultiesPage;
-import uk.gov.service.bluebadge.test.acceptance.steps.AbstractSpringSteps;
-import uk.gov.service.bluebadge.test.acceptance.steps.CommonSteps;
-
-
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.ListMobilityAidsPage;
+import uk.gov.service.bluebadge.test.acceptance.steps.AbstractSpringSteps;
+import uk.gov.service.bluebadge.test.acceptance.steps.CommonSteps;
 
 public class ListMobilityAidsSteps extends AbstractSpringSteps {
 
@@ -24,11 +20,12 @@ public class ListMobilityAidsSteps extends AbstractSpringSteps {
   public ListMobilityAidsSteps(CommonPage commonPage, CommonSteps commonSteps) {
     this.commonPage = commonPage;
     this.commonSteps = commonSteps;
-    this.addMobilityAidsSteps = new AddMobilityAidsSteps(commonPage,commonSteps);
+    this.addMobilityAidsSteps = new AddMobilityAidsSteps(commonPage, commonSteps);
   }
 
-  @And("^I validate the mobility aids page for a \"(yourself|someone else)\" application for \"(YES|NO)\"$")
-  public void iValidateListMobilityAidsPage(String applicant, String option){
+  @And(
+      "^I validate the mobility aids page for a \"(yourself|someone else)\" application for \"(YES|NO)\"$")
+  public void iValidateListMobilityAidsPage(String applicant, String option) {
 
     verifyPageContent(applicant);
     validateMandatoryFields();
@@ -41,7 +38,6 @@ public class ListMobilityAidsSteps extends AbstractSpringSteps {
       commonPage.selectRadioButton(ListMobilityAidsPage.MOBILITY_AID_OPTION + option.toLowerCase());
     }
     commonSteps.iClickOnContinueButton();
-
   }
 
   public void verifyPageContent(String applicant) {
@@ -52,7 +48,8 @@ public class ListMobilityAidsSteps extends AbstractSpringSteps {
       commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(ListMobilityAidsPage.PAGE_TITLE);
       commonSteps.iShouldSeeTheHeading(ListMobilityAidsPage.HEADER);
     } else {
-      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(ListMobilityAidsPage.PAGE_TITLE_SOMEONE_ELSE);
+      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(
+          ListMobilityAidsPage.PAGE_TITLE_SOMEONE_ELSE);
       commonSteps.iShouldSeeTheHeading(ListMobilityAidsPage.HEADER_SOMEONE_ELSE);
     }
   }
@@ -62,7 +59,6 @@ public class ListMobilityAidsSteps extends AbstractSpringSteps {
     messages.add(ListMobilityAidsPage.VALIDATION_MESSAGE_FOR_NO_OPTION);
     commonSteps.iVerifyMultipleValidationMessages(messages);
   }
-
 
   @And("^I complete the mobility aids page for \"(YES|NO)\"$")
   public void iCompleteTheMobilityAidsPage(String option) {
@@ -76,5 +72,4 @@ public class ListMobilityAidsSteps extends AbstractSpringSteps {
     }
     commonSteps.iClickOnContinueButton();
   }
-
 }

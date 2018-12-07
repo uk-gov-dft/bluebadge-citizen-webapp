@@ -3,14 +3,19 @@ require('@babel/polyfill');
 import All from 'govuk-frontend/all';
 import AutoComplete from './autocomplete';
 import GAClickTracker from './ga-tracker';
-import FileUploader from "./file-upload";
+import DFT_FileUploader from "./dft-file-uploader-wrapper";
 
 All.initAll();
 
 GAClickTracker();
 
 window.onload = () => {
-    initFileUploader();
+    new DFT_FileUploader();
+
+    const forms = Array.from(document.querySelectorAll('[data-prevent-double-submission]'));
+    if(forms.length > 0) {
+        forms.forEach(form => preventDoubleSubmission(form));
+    }
 }
 
 const isBrowser_IE = () => {
@@ -24,56 +29,6 @@ const isBrowser_IE = () => {
     return false;
 }
 
-const initFileUploader = () => {
-
-    // uncomment this code to stop support for IE browsers.
-    // Make sure to recompile js code using `gulp js` command
-    /*if(isBrowser_IE()){
-        return;
-    }*/
-
-    const el = document.querySelectorAll('input[type="file"]').item(0);
-    const container = document.getElementById("proveIdentity-fileUploaderContainer");
-    const continueBtn = document.getElementById("proveIdentity-continue-btn");
-    const fileUploaderErrorBox = document.getElementsByClassName('file-uploader-error').item(0);
-
-    if(el && container) {
-        new FileUploader({
-            el: document.querySelectorAll('input[type="file"]').item(0),
-            container: container,
-            uploadPath: "/prove-identity-ajax",
-            reset: () => {
-                continueBtn.style.display = 'none';
-                fileUploaderErrorBox.classList.remove('file-uploader-error--active');
-            },
-            uploaded: () => {
-                continueBtn.style.display = 'inline-block';
-                fileUploaderErrorBox.classList.remove('file-uploader-error--active');
-            },
-            uploadError: () => {
-                fileUploaderErrorBox.classList.remove('file-uploader-error--active');
-                fileUploaderErrorBox.classList.remove('file-uploader-error--error');
-                fileUploaderErrorBox.classList.remove('file-uploader-error--rejected');
-                if(!fileUploaderErrorBox.classList.contains('file-uploader-error--active')) {
-                    fileUploaderErrorBox.classList.add('file-uploader-error--active');
-                    fileUploaderErrorBox.classList.add('file-uploader-error--error');
-                }
-                fileUploaderErrorBox.focus();
-            },
-            uploadRejected: () => {
-                fileUploaderErrorBox.classList.remove('file-uploader-error--active');
-                fileUploaderErrorBox.classList.remove('file-uploader-error--error');
-                fileUploaderErrorBox.classList.remove('file-uploader-error--rejected');
-                if(!fileUploaderErrorBox.classList.contains('file-uploader-error--active')) {
-                    fileUploaderErrorBox.classList.add('file-uploader-error--active');
-                    fileUploaderErrorBox.classList.add('file-uploader-error--rejected');
-                }
-                fileUploaderErrorBox.focus();
-            }
-        });
-    }
-}
-
 const select_autocomplete = Array.from(document.getElementsByClassName('select_autocomplete'));
 
 if (select_autocomplete.length > 0) {
@@ -83,7 +38,6 @@ if (select_autocomplete.length > 0) {
                 autoselect: true,
                 selectElement: select,
                 onConfirm: (query) => {
-                    const trimmedQuery = query.trim();
                     const input = document.getElementById(select.id.replace('-select', ''));
                     const value = input.value;
 
@@ -92,7 +46,8 @@ if (select_autocomplete.length > 0) {
                     }
 
                     const requestedOption = Array.from(select.options).find((option) => {
-                        return (option.innerText.trim() || option.textContent.trim()) === trimmedQuery;
+                        const optionValue = option.innerText && option.innerText.trim();
+                        return optionValue === query;
                     });
 
                     if (requestedOption) {
