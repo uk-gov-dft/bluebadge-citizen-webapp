@@ -1,12 +1,16 @@
 package uk.gov.service.bluebadge.test.acceptance.pages.site;
 
+import static org.springframework.test.util.AssertionErrors.fail;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import uk.gov.service.bluebadge.test.acceptance.pages.PageHelper;
 import uk.gov.service.bluebadge.test.acceptance.util.TestContentUrls;
@@ -135,19 +139,25 @@ public class CommonPage {
     findPageElementById(element).sendKeys(value);
   }
 
-  public void waitForContinueButtonToBeDisplayed(){
-    for(int i = 0; i< 10; i++) {
-      if ((new WebDriverWait(getWebDriver(), 1))
-              .until(ExpectedConditions.presenceOfElementLocated((By.xpath("//*[@data-uipath='button.continue']")))).isDisplayed()) {
-        break;
+  public void waitForContinueButtonToBeDisplayed() {
 
-      }
+    Wait<WebDriver> wait = new FluentWait<WebDriver>(getWebDriver())
+            .withTimeout(20, TimeUnit.SECONDS)
+            .pollingEvery(5, TimeUnit.SECONDS)
+            .ignoring(NoSuchElementException.class);
 
-      try {
-        Thread.sleep(1000);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
+    WebElement aboutMe = wait.until(new Function<WebDriver, WebElement>() {
+      public WebElement apply(WebDriver driver) {
+        return driver.findElement(By.xpath("//*[@data-uipath='button.continue']"));
       }
-    }
+    });
   }
+
+
+
+
+
+
 }
+
+
