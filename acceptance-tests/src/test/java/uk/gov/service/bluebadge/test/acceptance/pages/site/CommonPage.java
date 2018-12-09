@@ -142,21 +142,17 @@ public class CommonPage {
   public void waitForContinueButtonToBeDisplayed() {
 
     Wait<WebDriver> wait = new FluentWait<WebDriver>(getWebDriver())
-            .withTimeout(20, TimeUnit.SECONDS)
+            .withTimeout(30, TimeUnit.SECONDS)
             .pollingEvery(5, TimeUnit.SECONDS)
             .ignoring(NoSuchElementException.class);
-
+  try{
     WebElement aboutMe = wait.until(new Function<WebDriver, WebElement>() {
       public WebElement apply(WebDriver driver) {
-        return driver.findElement(By.xpath("//*[@data-uipath='button.continue']"));
+        return getWebDriver().findElement(By.xpath("//*[@data-uipath='button.continue']"));
       }
     });
+  }catch (Exception e){e.printStackTrace();}
   }
-
-
-
-
-
 
 }
 
