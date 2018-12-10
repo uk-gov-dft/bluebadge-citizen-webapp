@@ -61,7 +61,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete registered council page for \"(england|wales|scotland)\"$")
-  public void iCompleteRegisteredCouncilPage(String country){
+  public void iCompleteRegisteredCouncilPage(String country) {
     iCompleteSelectCouncilPage(country, ChooseCouncilPage.REGISTERED_COUNCIL_INPUT);
   }
 
@@ -279,7 +279,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And(
       "^I complete medical equipment page for \"(PUMP|VENT|SUCTION|PARENT|SYRINGE|OXYADMIN|OXYSAT|CAST|OTHER)\"$")
-  public void iCompleteMedicalEquipmentPage(String difficulty)  {
+  public void iCompleteMedicalEquipmentPage(String difficulty) {
     if ("VENT".equals(difficulty)) {
       commonPage.selectRadioButton(Ids.EleCheck.MEDICAL_EQUIPMENT);
     } else {
@@ -296,8 +296,6 @@ public class ApplicationFixture extends AbstractSpringSteps {
   private void clickButtonById(String id) {
     commonPage.findPageElementById(id).click();
   }
-
-
 
   @And("^I complete the treatments page for \"(YES|NO)\"$")
   public void iCompleteTheTreatmentsPage(String option) {

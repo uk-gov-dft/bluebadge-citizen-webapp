@@ -81,8 +81,7 @@ public class DOBSteps extends AbstractSpringSteps {
       commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(DOBPage.PAGE_TITLE_YOURSELF);
       commonSteps.iShouldSeeTheHeading(DOBPage.PAGE_HEADING);
     } else {
-      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(
-              DOBPage.PAGE_TITLE_SOMEONE_ELSE);
+      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(DOBPage.PAGE_TITLE_SOMEONE_ELSE);
       commonSteps.iShouldSeeTheHeading(DOBPage.PAGE_HEADING_SOMEONE_ELSE);
     }
   }
