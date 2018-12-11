@@ -1,7 +1,6 @@
 package uk.gov.service.bluebadge.test.acceptance.steps;
 
 import cucumber.api.java.After;
-import cucumber.api.java.Before;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +22,12 @@ public class WebDriverSteps extends AbstractSpringSteps {
 
   // Low execution order ensures that the web driver is disposed after any other @After steps that may need it.
   @After(order = 0)
-  public void tearDown() {webDriverProvider.tearDownScenario();
-
+  public void tearDown() {
+    webDriverProvider.tearDownScenario();
   }
 
   @AfterClass
-  public void dispose(){webDriverProvider.dispose();}
-
+  public void dispose() {
+    webDriverProvider.dispose();
+  }
 }
