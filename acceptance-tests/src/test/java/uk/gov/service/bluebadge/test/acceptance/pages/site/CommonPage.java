@@ -1,12 +1,16 @@
 package uk.gov.service.bluebadge.test.acceptance.pages.site;
 
+import static org.springframework.test.util.AssertionErrors.fail;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import uk.gov.service.bluebadge.test.acceptance.pages.PageHelper;
 import uk.gov.service.bluebadge.test.acceptance.util.TestContentUrls;
@@ -62,6 +66,10 @@ public class CommonPage {
   //Needs to delete this
   public WebElement findElementAddMobilityAid() {
     return helper.findElement(By.xpath("//*[@id=\"conditional-hasWalkingAid\"]/p/a"));
+  }
+
+  public WebElement findElementWithCSSSelector(String cssSeclector) {
+    return helper.findOptionalElement(By.cssSelector(cssSeclector));
   }
 
   public void selectLocalCouncil(String textToSelect) {
@@ -130,4 +138,22 @@ public class CommonPage {
     findPageElementById(element).clear();
     findPageElementById(element).sendKeys(value);
   }
+
+  public void waitForContinueButtonToBeDisplayed() {
+
+    Wait<WebDriver> wait = new FluentWait<WebDriver>(getWebDriver())
+            .withTimeout(30, TimeUnit.SECONDS)
+            .pollingEvery(5, TimeUnit.SECONDS)
+            .ignoring(NoSuchElementException.class);
+  try{
+    WebElement aboutMe = wait.until(new Function<WebDriver, WebElement>() {
+      public WebElement apply(WebDriver driver) {
+        return getWebDriver().findElement(By.xpath("//*[@data-uipath='button.continue']"));
+      }
+    });
+  }catch (Exception e){e.printStackTrace();}
+  }
+
 }
+
+
