@@ -22,16 +22,6 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate what makes walking difficult page for a "yourself" application for "PAIN"
     And   I validate the mobility aids page for a "yourself" application for "YES"
 
-    And   I complete the walking time page with option "LESSMIN"
-    And   I complete where can you walk page
-    And   I complete the treatments page for "YES"
-    And   I complete the medications page for "YES"
-    And   I complete the healthcare professionals page for "YES"
-    And   I complete prove ID page with a "JPG" document
-    And   I complete declaration page
-    Then  I should see page titled "Application submitted" with GOV.UK suffix
-
-
   Scenario: Page title and error message validation - someone else
     Given I navigate to applicant page and validate for "someone else"
     And   I validate choose council page for "someone else" and select a council in "wales"
