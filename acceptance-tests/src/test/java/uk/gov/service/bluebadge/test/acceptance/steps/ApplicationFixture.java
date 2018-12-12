@@ -10,8 +10,15 @@ import cucumber.api.java.en.Given;
 
 import java.io.File;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.*;
 import uk.gov.service.bluebadge.test.acceptance.steps.site.ContactDetailsSteps;
@@ -31,9 +38,6 @@ public class ApplicationFixture extends AbstractSpringSteps {
     commonPage.findElementWithText("Continue").click();
   }
 
-  private void pressContinueOnFileUploadPage() {
-    commonPage.findPageElementById("proveIdentity-continue-btn").click();
-  }
 
   @Given("I complete applicant page for \"(yourself|someone else|organisation)\"")
   public void iCompleteApplicantPage(String myselfOrOther) {
@@ -195,9 +199,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
     // drop the file
     FileHelper.dropFile(new File(file_path), droparea, 0, 0);
 
-    commonPage.waitForContinueButtonToBeDisplayed();
-
-    pressContinueOnFileUploadPage();
+    commonPage.pressContinueOnFileUploadPage();
   }
 
   @And("^I complete declaration page$")

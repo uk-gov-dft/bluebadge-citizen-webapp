@@ -2,6 +2,7 @@ package uk.gov.service.bluebadge.test.acceptance.pages.site;
 
 import static org.springframework.test.util.AssertionErrors.fail;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -154,6 +155,19 @@ public class CommonPage {
   }catch (Exception e){e.printStackTrace();}
   }
 
+  public void pressContinueOnFileUploadPage() {
+
+    WebElement element = null;
+
+    WebDriverWait wait = new WebDriverWait(getWebDriver(),3000);
+
+    element = wait.until(ExpectedConditions.elementToBeClickable(By.id("proveIdentity-continue-btn")));
+
+    element.click();
+
+  }
+
 }
+
 
 
