@@ -27,7 +27,7 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete the treatments page for "YES"
     And   I complete the medications page for "YES"
     And   I complete the healthcare professionals page for "YES"
-    And   I complete prove ID page with no documents
+    And   I complete prove ID page with a "PNG" document
     And   I complete declaration page
     Then  I should see page titled "Application submitted" with GOV.UK suffix
 
@@ -55,7 +55,7 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete the treatments page for "YES"
     And   I complete the medications page for "YES"
     And   I complete the healthcare professionals page for "YES"
-    And   I complete prove ID page with no documents
+    And   I complete prove ID page with a "PDF" document
     And   I complete declaration page
     Then  I should see page titled "Application submitted" with GOV.UK suffix
 

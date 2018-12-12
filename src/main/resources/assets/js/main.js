@@ -4,6 +4,7 @@ import All from 'govuk-frontend/all';
 import AutoComplete from './autocomplete';
 import GAClickTracker from './ga-tracker';
 import DFT_FileUploader from './dft-file-uploader-wrapper';
+import preventDoubleSubmission from "./prevent-double-submission";
 
 All.initAll();
 
