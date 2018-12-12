@@ -57,7 +57,6 @@ class Ids {
     static final String TREATMENT_ADD_TREATMENT_DESCRIPTION = "treatmentDescription";
     static final String TREATMENT_ADD_TREATMENT_WHEN = "treatmentWhen";
 
-
     static final String WALKING_TIME = "walkingTime";
 
     // Medication stuff

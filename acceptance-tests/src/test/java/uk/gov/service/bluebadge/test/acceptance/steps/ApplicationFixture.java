@@ -7,18 +7,10 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_U
 
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
-
 import java.io.File;
 import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
-
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Wait;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.*;
 import uk.gov.service.bluebadge.test.acceptance.steps.site.ContactDetailsSteps;
@@ -37,7 +29,6 @@ public class ApplicationFixture extends AbstractSpringSteps {
   private void pressContinue() {
     commonPage.findElementWithText("Continue").click();
   }
-
 
   @Given("I complete applicant page for \"(yourself|someone else|organisation)\"")
   public void iCompleteApplicantPage(String myselfOrOther) {
@@ -72,13 +63,13 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete registered council page for \"(england|wales|scotland)\"$")
-  public void iCompleteRegisteredCouncilPage(String country){
+  public void iCompleteRegisteredCouncilPage(String country) {
     iCompleteSelectCouncilPage(country, ChooseCouncilPage.REGISTERED_COUNCIL_INPUT);
   }
 
   private void iCompleteSelectCouncilPage(String country, String inputId) {
-    String council = "Worcester";
-    String fullCouncil = "Worcester city council";
+    String council = "Blackpool";
+    String fullCouncil = "Blackpool borough council";
     if ("scotland".equalsIgnoreCase(country)) {
       council = "Aberdeenshire";
       fullCouncil = "Aberdeenshire council";
@@ -186,20 +177,25 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
     String filename = "evidence_" + fileType + "." + fileType.toLowerCase();
 
-    WebElement droparea = commonPage.findElementWithCSSSelector("#proveIdentity-fileUploaderContainer > div.drop-area");
-
+    WebElement droparea =
+        commonPage.findElementWithCSSSelector(
+            "#proveIdentity-fileUploaderContainer > div.drop-area");
 
     String file_path = "";
     if (System.getProperty("user.dir").endsWith("acceptance-tests")) {
       file_path = System.getProperty("user.dir") + "/src/test/resources/attachments/" + filename;
     } else {
-      file_path = System.getProperty("user.dir") + "/acceptance-tests/src/test/resources/attachments/" + filename;
+      file_path =
+          System.getProperty("user.dir")
+              + "/acceptance-tests/src/test/resources/attachments/"
+              + filename;
     }
 
     // drop the file
     FileHelper.dropFile(new File(file_path), droparea, 0, 0);
 
     commonPage.pressContinueOnFileUploadPage();
+
   }
 
   @And("^I complete declaration page$")
@@ -311,7 +307,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And(
       "^I complete medical equipment page for \"(PUMP|VENT|SUCTION|PARENT|SYRINGE|OXYADMIN|OXYSAT|CAST|OTHER)\"$")
-  public void iCompleteMedicalEquipmentPage(String difficulty)  {
+  public void iCompleteMedicalEquipmentPage(String difficulty) {
     if ("VENT".equals(difficulty)) {
       commonPage.selectRadioButton(Ids.EleCheck.MEDICAL_EQUIPMENT);
     } else {
@@ -328,8 +324,6 @@ public class ApplicationFixture extends AbstractSpringSteps {
   private void clickButtonById(String id) {
     commonPage.findPageElementById(id).click();
   }
-
-
 
   @And("^I complete the treatments page for \"(YES|NO)\"$")
   public void iCompleteTheTreatmentsPage(String option) {

@@ -1,13 +1,9 @@
 package uk.gov.service.bluebadge.test.acceptance.pages.site;
 
-import static org.springframework.test.util.AssertionErrors.fail;
-
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
-
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -140,34 +136,11 @@ public class CommonPage {
     findPageElementById(element).sendKeys(value);
   }
 
-  public void waitForContinueButtonToBeDisplayed() {
-
-    Wait<WebDriver> wait = new FluentWait<WebDriver>(getWebDriver())
-            .withTimeout(30, TimeUnit.SECONDS)
-            .pollingEvery(5, TimeUnit.SECONDS)
-            .ignoring(NoSuchElementException.class);
-  try{
-    WebElement aboutMe = wait.until(new Function<WebDriver, WebElement>() {
-      public WebElement apply(WebDriver driver) {
-        return getWebDriver().findElement(By.id("proveIdentity-continue-btn"));
-      }
-    });
-  }catch (Exception e){e.printStackTrace();}
-  }
-
-  public void pressContinueOnFileUploadPage() {
-
-    WebElement element = null;
-
-    WebDriverWait wait = new WebDriverWait(getWebDriver(),3000);
-
-    element = wait.until(ExpectedConditions.elementToBeClickable(By.id("proveIdentity-continue-btn")));
-
-    element.click();
-
-  }
+    public void pressContinueOnFileUploadPage() {
+      WebElement element = null;
+      WebDriverWait wait = new WebDriverWait(getWebDriver(),3000);
+      element = wait.until(ExpectedConditions.elementToBeClickable(By.id("proveIdentity-continue-btn")));
+      element.click();
+    }
 
 }
-
-
-
