@@ -18,13 +18,13 @@ public class RegisteredCouncilSteps extends AbstractSpringSteps {
   }
 
   @And("^I complete registered page for \"(yes|no)\"$")
-  public void iCompleteRegisteredPage(String answer){
+  public void iCompleteRegisteredPage(String answer) {
     commonPage.findElementWithUiPath("hasRegistered.option." + answer).click();
     commonSteps.iClickOnContinueButton();
   }
 
   @And("^I complete permission page for \"(yes|no)\"$")
-  public void iCompletePermissionPage(String answer){
+  public void iCompletePermissionPage(String answer) {
     commonPage.findElementWithUiPath("hasPermission.option." + answer).click();
     commonSteps.iClickOnContinueButton();
   }

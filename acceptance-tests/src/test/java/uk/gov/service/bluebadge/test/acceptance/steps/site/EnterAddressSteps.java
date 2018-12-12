@@ -29,7 +29,6 @@ public class EnterAddressSteps extends AbstractSpringSteps {
     validateLengthLimitTownAndCity(applicant);
     validateInvalidPostcode(applicant);
     enterValidValuesAndContinue(applicant);
-
   }
 
   public void verifyPageContent(String applicant) {
@@ -56,34 +55,34 @@ public class EnterAddressSteps extends AbstractSpringSteps {
   private void validateLengthLimitBuildingAndStreet(String applicant) {
 
     commonPage
-            .findPageElementById("buildingAndStreet")
-            .sendKeys(EnterAddressPage.GREATER_THAN_100_CHARACTERS);
+        .findPageElementById("buildingAndStreet")
+        .sendKeys(EnterAddressPage.GREATER_THAN_100_CHARACTERS);
     commonPage.findPageElementById("townOrCity").sendKeys(EnterAddressPage.VALID_TOWN);
     commonPage.findPageElementById("postcode").sendKeys(EnterAddressPage.VALID_POSTCODE);
     commonSteps.iVerifyValidationMessage(
-            EnterAddressPage.VALIDATION_MESSAGE_FOR_GT100_BUILDING_AND_STREET);
+        EnterAddressPage.VALIDATION_MESSAGE_FOR_GT100_BUILDING_AND_STREET);
   }
 
   private void validateLengthLimitTownAndCity(String applicant) {
-    commonPage.clearAndSendKeys("buildingAndStreet",EnterAddressPage.VALID_BUILDING_STREET);
-    commonPage.clearAndSendKeys("townOrCity",EnterAddressPage.GREATER_THAN_100_CHARACTERS);
-    commonPage.clearAndSendKeys("postcode",EnterAddressPage.VALID_POSTCODE);
+    commonPage.clearAndSendKeys("buildingAndStreet", EnterAddressPage.VALID_BUILDING_STREET);
+    commonPage.clearAndSendKeys("townOrCity", EnterAddressPage.GREATER_THAN_100_CHARACTERS);
+    commonPage.clearAndSendKeys("postcode", EnterAddressPage.VALID_POSTCODE);
 
     commonSteps.iVerifyValidationMessage(EnterAddressPage.VALIDATION_MESSAGE_FOR_GT100_TOWN_CITY);
   }
 
   private void validateInvalidPostcode(String applicant) {
-    commonPage.clearAndSendKeys("buildingAndStreet",EnterAddressPage.VALID_BUILDING_STREET);
-    commonPage.clearAndSendKeys("townOrCity",EnterAddressPage.VALID_TOWN);
-    commonPage.clearAndSendKeys("postcode",EnterAddressPage.INVALID_POSTCODE);
+    commonPage.clearAndSendKeys("buildingAndStreet", EnterAddressPage.VALID_BUILDING_STREET);
+    commonPage.clearAndSendKeys("townOrCity", EnterAddressPage.VALID_TOWN);
+    commonPage.clearAndSendKeys("postcode", EnterAddressPage.INVALID_POSTCODE);
 
     commonSteps.iVerifyValidationMessage(EnterAddressPage.VALIDATION_MESSAGE_FOR_INVALID_POSTCODE);
   }
 
   private void enterValidValuesAndContinue(String applicant) {
-    commonPage.clearAndSendKeys("buildingAndStreet",EnterAddressPage.VALID_BUILDING_STREET);
-    commonPage.clearAndSendKeys("townOrCity",EnterAddressPage.VALID_TOWN);
-    commonPage.clearAndSendKeys("postcode",EnterAddressPage.VALID_POSTCODE);
+    commonPage.clearAndSendKeys("buildingAndStreet", EnterAddressPage.VALID_BUILDING_STREET);
+    commonPage.clearAndSendKeys("townOrCity", EnterAddressPage.VALID_TOWN);
+    commonPage.clearAndSendKeys("postcode", EnterAddressPage.VALID_POSTCODE);
 
     commonSteps.iClickOnContinueButton();
   }
