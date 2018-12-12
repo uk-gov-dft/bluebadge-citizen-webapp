@@ -16,7 +16,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Wa
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingLengthOfTimeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm;
@@ -65,8 +64,7 @@ public class WalkingConverterTest {
   public void getWalkingAids_withOne() {
     List<WalkingAid> result =
         WalkingConverter.getWalkingAids(JourneyFixture.getMobilityAidListForm());
-    assertThat(result.get(0).getDescription())
-        .isEqualTo("Scooter");
+    assertThat(result.get(0).getDescription()).isEqualTo("Scooter");
     assertThat(result.get(0).getUsage()).isEqualTo("Usage");
     assertThat(result.get(0).getHowProvidedCode()).isEqualTo(HowProvidedCodeField.PRESCRIBE);
   }
