@@ -17,11 +17,12 @@ export default class DFT_FileUploader {
 	init(container) {
 
 		this.$dftFuContainer = container;
-		const input = document.getElementsByClassName('dft-fu-file-upload').item(0);
+		this.$input = document.getElementsByClassName('dft-fu-file-upload').item(0);
 		this.$previewHolder = this.getChildElement('-preview__holder');
 		this.$resetButton = this.getChildElement('__reset-btn');
 		this.$errorSummaryBody = this.getChildElement('-error-summary__body');
 		this.$showOnSuccessElements = Array.from(document.querySelectorAll('[data-file-uploader-show-on-success]'));
+		this.$addMore = this.getChildElement('__add-file-button');
 
 		this.$generalErrorMessage = this.getDataAttrValue('error-label') || 'File could not be uploaded';
 		this.$uploadRejectErrorMessage = this.getDataAttrValue('error-label-reject') || this.$generalErrorMessage;
@@ -31,13 +32,13 @@ export default class DFT_FileUploader {
 			error: this.$classPrefix + '--error',
 		}
 
-		if(this.$resetButton) {
+		if (this.$resetButton) {
 			this.resetButtonClick = this.resetButtonClick.bind(this);
 			this.$resetButton.addEventListener('click', this.resetButtonClick);
 		}
 
 		const options = {
-			el: input,
+			el: this.$input,
 			container: document.getElementsByClassName('dft-fu-file-uploader').item(0),
 			uploadPath: this.getDataAttrValue('ajax-request-url'),
 
@@ -49,6 +50,10 @@ export default class DFT_FileUploader {
 		}
 
 		this.$fu = new FileUploader(options);
+
+		if (this.$addMore) {
+			this.$addMore.addEventListener('click', this.$fu.uploadBtnClick);
+		}
 
 	}
 
@@ -112,14 +117,13 @@ export default class DFT_FileUploader {
 			img.alt = response.fileName;
 			previewItem.appendChild(img);
 		} else {
-			const p = document.createElement('p');
-			p.innerText = response.fileName;
-
 			const span = document.createElement('span');
 			span.innerText = '(Preview unavailable)';
+
+			previewItem.classList.add('dft-fu-preview__item--unavailable');
+			previewItem.innerText = response.fileName;
 			
-			p.appendChild(span);
-			previewItem.appendChild(p);
+			previewItem.appendChild(span);
 		}
 
 		return previewItem;

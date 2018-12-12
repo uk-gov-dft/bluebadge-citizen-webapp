@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 @Builder
 @Getter
-public class FileUploader {
+public class FileUploaderOptions {
   @NonNull private final String fieldName;
   private String fieldLabel;
 
@@ -27,7 +27,7 @@ public class FileUploader {
   private String addFileMessageKey;
   private String loadingMessageKey;
 
-  public static class FileUploaderBuilder {
+  public static class FileUploaderOptionsBuilder {
     private String fieldLabel = "fileUploader.field.label";
     private Boolean allowMultipleFileUploads = false;
     private String errorTitleMessageKey = "fileUploader.error.title";

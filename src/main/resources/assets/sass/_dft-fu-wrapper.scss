@@ -38,8 +38,9 @@
 		background-color: transparent;
 	}
 
-	&__addFileBtn {
+	&__add-file-button {
 		@extend .govuk-button;
+		margin-top: 10px;
 		background-color: govuk-colour(blue);
 
 		&:active,
@@ -73,20 +74,6 @@
 			vertical-align: middle;
 		}
 
-		p {
-			height: 160px;
-			margin: 0;
-			padding: 20px;
-			display: inline-block;
-			vertical-align: middle;
-			background-color: #eee;
-
-			span {
-				display: block;
-				margin-top: 10px;
-			}
-		}
-
 		img {
 			width: 100%;
 			height: auto;
@@ -96,6 +83,20 @@
 				height: 100%;
 				width: auto;
 			}
+		}
+	}
+
+	&__item--unavailable {
+		height: 160px;
+		margin: 0;
+		padding: 20px;
+		display: inline-block;
+		vertical-align: middle;
+		background-color: #eee;
+
+		span {
+			display: block;
+			margin-top: 10px;
 		}
 	}
 }

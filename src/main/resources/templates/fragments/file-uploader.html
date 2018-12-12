@@ -10,7 +10,6 @@
      th:fragment="fileUploader(options)"
      th:classappend="*{journeyArtifact} ? dft-fu--preview"
      th:data-ajax-request-url="${options.ajaxRequestUrl}"
-     th:data-error-label="#{${options.errorMessageKey}}"
      th:data-error-label-reject="#{${options.rejectErrorMessageKey}}">
 
     <div class="govuk-error-summary dft-fu-error-summary"
@@ -23,20 +22,24 @@
 
     <div class="dft-fu-preview">
         <h3 class="dft-fu-preview__heading" th:text="#{${options.previewTitleMessageKey}}"></h3>
-        <div class="dft-fu-preview__holder">
 
+        <div class="dft-fu-preview__holder">
             <th:block th:each="artifact : *{journeyArtifact}" th:remove="tag">
                 <div th:if="${artifact.type == 'image'}" class="dft-fu-preview__item">
                     <img th:src="${artifact.signedUrl}"
                          th:alt="${artifact.fileName}" alt="file name maybe - see henry">
                 </div>
 
-                <div th:if="${artifact.type != 'image'}" class="dft-fu-preview_item">
-                    <p>file name <span>(Preview unavailable)</span></p>
+                <div th:if="${artifact.type != 'image'}" class="dft-fu-preview__item dft-fu-preview__item--unavailable">
+                    <span th:text="${artifact.fileName}" th:remove="tag"></span>
+                    <span th:text="#{fileUploader.preview.previewUnavailable}"></span>
                 </div>
             </th:block>
-
         </div>
+
+        <button class="dft-fu__add-file-button"
+                th:if="${options.allowMultipleFileUpload}"
+                th:text="#{fileUploader.addMore}"></button>
 
         <button class="dft-fu__reset-btn"
                 th:text="#{${options.previewResetButtonMessageKey}}"></button>
