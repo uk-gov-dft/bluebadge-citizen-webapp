@@ -68,8 +68,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   private void iCompleteSelectCouncilPage(String country, String inputId) {
-    String council = "Worcester";
-    String fullCouncil = "Worcester city council";
+    String council = "Blackpool";
+    String fullCouncil = "Blackpool borough council";
     if ("scotland".equalsIgnoreCase(country)) {
       council = "Aberdeenshire";
       fullCouncil = "Aberdeenshire council";
@@ -194,9 +194,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
     // drop the file
     FileHelper.dropFile(new File(file_path), droparea, 0, 0);
 
-    commonPage.waitForContinueButtonToBeDisplayed();
+    commonPage.pressContinueOnFileUploadPage();
 
-    pressContinue();
   }
 
   @And("^I complete declaration page$")

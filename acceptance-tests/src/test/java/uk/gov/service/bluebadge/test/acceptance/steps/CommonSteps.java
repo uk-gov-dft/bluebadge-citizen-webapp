@@ -40,8 +40,8 @@ public class CommonSteps extends AbstractSpringSteps {
   public void givenICompleteApplicationUpToTheMainReasonPageInCountry(
       String myselfOrOther, String country) {
     // default to england
-    String council = "Worcester";
-    String fullCouncil = "Worcester city council";
+    String council = "Blackpool";
+    String fullCouncil = "Blackpool borough council";
     if ("scotland".equalsIgnoreCase(country)) {
       council = "Aberdeenshire";
       fullCouncil = "Aberdeenshire council";

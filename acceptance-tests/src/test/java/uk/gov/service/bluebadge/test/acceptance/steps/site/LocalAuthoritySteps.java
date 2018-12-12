@@ -23,7 +23,7 @@ public class LocalAuthoritySteps extends AbstractSpringSteps {
   }
 
   private String chooseCouncil(String country) {
-    String fullCouncil = "Worcestershire county council";
+    String fullCouncil = "Blackpool borough council";
     if ("scotland".equalsIgnoreCase(country)) {
       fullCouncil = "Aberdeenshire council";
     } else if ("wales".equalsIgnoreCase(country)) {

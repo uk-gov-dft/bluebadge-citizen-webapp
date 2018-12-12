@@ -136,24 +136,10 @@ public class CommonPage {
     findPageElementById(element).sendKeys(value);
   }
 
-  public void waitForContinueButtonToBeDisplayed() {
-
-    Wait<WebDriver> wait =
-        new FluentWait<WebDriver>(getWebDriver())
-            .withTimeout(30, TimeUnit.SECONDS)
-            .pollingEvery(5, TimeUnit.SECONDS)
-            .ignoring(NoSuchElementException.class);
-    try {
-      WebElement aboutMe =
-          wait.until(
-              new Function<WebDriver, WebElement>() {
-                public WebElement apply(WebDriver driver) {
-                  return getWebDriver()
-                      .findElement(By.xpath("//*[@data-uipath='button.continue']"));
-                }
-              });
-    } catch (Exception e) {
-      e.printStackTrace();
+    public void pressContinueOnFileUploadPage() {
+      WebElement element = null;
+      WebDriverWait wait = new WebDriverWait(getWebDriver(),3000);
+      element = wait.until(ExpectedConditions.elementToBeClickable(By.id("proveIdentity-continue-btn")));
+      element.click();
     }
-  }
 }
