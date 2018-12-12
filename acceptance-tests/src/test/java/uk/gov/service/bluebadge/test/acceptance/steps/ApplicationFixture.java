@@ -192,22 +192,6 @@ public class ApplicationFixture extends AbstractSpringSteps {
       file_path = System.getProperty("user.dir") + "/acceptance-tests/src/test/resources/attachments/" + filename;
     }
 
-    //DELETE THIS AFTER TESTING IN JENKINS
-    System.out.println("###############################");
-    System.out.println("###############################");
-    System.out.println("###############################");
-    System.out.println("###############################");
-    System.out.println("                                 ");
-    System.out.println("FILE PATH FOR UPLOAD: " + file_path);
-    System.out.println("                                  ");
-    System.out.println("###############################");
-    System.out.println("###############################");
-    System.out.println("###############################");
-    System.out.println("###############################");
-
-
-
-
     // drop the file
     FileHelper.dropFile(new File(file_path), droparea, 0, 0);
 
