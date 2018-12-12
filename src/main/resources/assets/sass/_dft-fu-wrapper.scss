@@ -40,7 +40,6 @@
 
 	&__add-file-button {
 		@extend .govuk-button;
-		margin-top: 10px;
 		background-color: govuk-colour(blue);
 
 		&:active,
@@ -61,6 +60,10 @@
 
 	&__heading {
 		@extend .govuk-heading-m;
+	}
+
+	&__holder {
+		margin-bottom: 10px;
 	}
 
 	&__item {

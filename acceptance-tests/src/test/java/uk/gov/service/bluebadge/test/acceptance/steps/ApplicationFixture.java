@@ -195,7 +195,6 @@ public class ApplicationFixture extends AbstractSpringSteps {
     FileHelper.dropFile(new File(file_path), droparea, 0, 0);
 
     commonPage.pressContinueOnFileUploadPage();
-
   }
 
   @And("^I complete declaration page$")
