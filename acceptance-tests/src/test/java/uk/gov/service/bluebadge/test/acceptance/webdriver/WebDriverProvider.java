@@ -169,9 +169,7 @@ public class WebDriverProvider {
     webDriver = null;
   }
 
-  public void tearDownScenario(){
+  public void tearDownScenario() {
     getWebDriver().manage().deleteAllCookies();
   }
 }
-
-

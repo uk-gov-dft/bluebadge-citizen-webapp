@@ -12,6 +12,6 @@ public class AddMobilityAidsPage {
 
   public static final String VALIDATION_MESSAGE_FOR_NO_TYPE = "Select the type of mobility aid";
   public static final String VALIDATION_MESSAGE_FOR_NO_HOW_USED = "Enter how mobility aid is used";
-  public static final String VALIDATION_MESSAGE_FOR_NO_HOW_PROVIDED = "Select how this mobility aid was provided";
-
+  public static final String VALIDATION_MESSAGE_FOR_NO_HOW_PROVIDED =
+      "Select how this mobility aid was provided";
 }
