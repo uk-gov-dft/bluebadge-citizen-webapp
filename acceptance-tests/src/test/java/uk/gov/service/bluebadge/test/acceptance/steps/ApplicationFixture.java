@@ -7,7 +7,6 @@ import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_U
 
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
-
 import java.io.File;
 import java.util.Calendar;
 import org.openqa.selenium.By;
@@ -178,14 +177,18 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
     String filename = "evidence_" + fileType + "." + fileType.toLowerCase();
 
-
-    WebElement droparea = commonPage.findElementWithCSSSelector("#proveIdentity-fileUploaderContainer > div.drop-area");
+    WebElement droparea =
+        commonPage.findElementWithCSSSelector(
+            "#proveIdentity-fileUploaderContainer > div.drop-area");
 
     String file_path = "";
     if (System.getProperty("user.dir").endsWith("acceptance-tests")) {
       file_path = System.getProperty("user.dir") + "/src/test/resources/attachments/" + filename;
     } else {
-      file_path = System.getProperty("user.dir") + "/acceptance-tests/src/test/resources/attachments/" + filename;
+      file_path =
+          System.getProperty("user.dir")
+              + "/acceptance-tests/src/test/resources/attachments/"
+              + filename;
     }
 
     // drop the file
