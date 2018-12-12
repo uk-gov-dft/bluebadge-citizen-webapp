@@ -148,7 +148,7 @@ public class CommonPage {
   try{
     WebElement aboutMe = wait.until(new Function<WebDriver, WebElement>() {
       public WebElement apply(WebDriver driver) {
-        return getWebDriver().findElement(By.xpath("//*[@data-uipath='button.continue']"));
+        return getWebDriver().findElement(By.id("proveIdentity-continue-btn"));
       }
     });
   }catch (Exception e){e.printStackTrace();}

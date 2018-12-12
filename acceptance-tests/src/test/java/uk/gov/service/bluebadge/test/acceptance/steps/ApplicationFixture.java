@@ -31,6 +31,10 @@ public class ApplicationFixture extends AbstractSpringSteps {
     commonPage.findElementWithText("Continue").click();
   }
 
+  private void pressContinueOnFileUploadPage() {
+    commonPage.findPageElementById("proveIdentity-continue-btn").click();
+  }
+
   @Given("I complete applicant page for \"(yourself|someone else|organisation)\"")
   public void iCompleteApplicantPage(String myselfOrOther) {
     commonPage.openByPageName("applicant");
@@ -178,8 +182,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
     String filename = "evidence_" + fileType + "." + fileType.toLowerCase();
 
-
     WebElement droparea = commonPage.findElementWithCSSSelector("#proveIdentity-fileUploaderContainer > div.drop-area");
+
 
     String file_path = "";
     if (System.getProperty("user.dir").endsWith("acceptance-tests")) {
@@ -188,12 +192,28 @@ public class ApplicationFixture extends AbstractSpringSteps {
       file_path = System.getProperty("user.dir") + "/acceptance-tests/src/test/resources/attachments/" + filename;
     }
 
+    //DELETE THIS AFTER TESTING IN JENKINS
+    System.out.println("###############################");
+    System.out.println("###############################");
+    System.out.println("###############################");
+    System.out.println("###############################");
+    System.out.println("                                 ");
+    System.out.println("FILE PATH FOR UPLOAD: " + file_path);
+    System.out.println("                                  ");
+    System.out.println("###############################");
+    System.out.println("###############################");
+    System.out.println("###############################");
+    System.out.println("###############################");
+
+
+
+
     // drop the file
     FileHelper.dropFile(new File(file_path), droparea, 0, 0);
 
     commonPage.waitForContinueButtonToBeDisplayed();
 
-    pressContinue();
+    pressContinueOnFileUploadPage();
   }
 
   @And("^I complete declaration page$")
