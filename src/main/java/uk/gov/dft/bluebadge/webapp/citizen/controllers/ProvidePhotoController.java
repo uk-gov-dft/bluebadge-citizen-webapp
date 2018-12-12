@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_MIME_TYPES;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
@@ -81,7 +82,7 @@ public class ProvidePhotoController implements StepController {
       @RequestParam("document") MultipartFile document,
       ProvidePhotoForm providePhotoForm) {
     try {
-      JourneyArtifact uploadedJourneyArtifact = artifactService.upload(document);
+      JourneyArtifact uploadedJourneyArtifact = artifactService.upload(document, IMAGE_MIME_TYPES);
       providePhotoForm.setJourneyArtifact(uploadedJourneyArtifact);
       journey.setFormForStep(providePhotoForm);
       return ImmutableMap.of("success", "true", "artifact", uploadedJourneyArtifact);
@@ -101,7 +102,7 @@ public class ProvidePhotoController implements StepController {
 
     if (!document.isEmpty()) {
       try {
-        JourneyArtifact uploadJourneyArtifact = artifactService.upload(document);
+        JourneyArtifact uploadJourneyArtifact = artifactService.upload(document, IMAGE_MIME_TYPES);
         formRequest.setJourneyArtifact(uploadJourneyArtifact);
         journey.setFormForStep(formRequest);
       } catch (UnsupportedMimetypeException e) {

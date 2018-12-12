@@ -9,6 +9,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_PDF_MIME_TYPES;
 
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
@@ -62,7 +63,7 @@ class ArtifactServiceTest {
     String testUpload = "Some thing to upload";
     MultipartFile multipartFile =
         new MockMultipartFile("testFile", "originalFile.jpg", "", testUpload.getBytes());
-    JourneyArtifact journeyArtifact = artifactService.upload(multipartFile);
+    JourneyArtifact journeyArtifact = artifactService.upload(multipartFile, IMAGE_PDF_MIME_TYPES);
 
     assertThat(journeyArtifact).isNotNull();
     assertThat(journeyArtifact.getUrl()).isEqualTo(s3ObjectURL);
@@ -88,7 +89,7 @@ class ArtifactServiceTest {
     String testUpload = "Some thing to upload";
     MultipartFile multipartFile =
         new MockMultipartFile("testFile", "originalFile.pdf", "", testUpload.getBytes());
-    JourneyArtifact journeyArtifact = artifactService.upload(multipartFile);
+    JourneyArtifact journeyArtifact = artifactService.upload(multipartFile, IMAGE_PDF_MIME_TYPES);
 
     assertThat(journeyArtifact).isNotNull();
     assertThat(journeyArtifact.getUrl()).isEqualTo(s3ObjectURL);
@@ -116,7 +117,7 @@ class ArtifactServiceTest {
         new MockMultipartFile("testFile", "originalFile.exe", "", testUpload.getBytes());
 
     try {
-      artifactService.upload(multipartFile);
+      artifactService.upload(multipartFile, IMAGE_PDF_MIME_TYPES);
       fail("no exception thrown");
     } catch (UnsupportedMimetypeException e) {
     }

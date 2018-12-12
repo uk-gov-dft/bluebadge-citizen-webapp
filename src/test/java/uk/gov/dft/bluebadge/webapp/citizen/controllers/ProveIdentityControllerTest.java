@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_PDF_MIME_TYPES;
 
 import java.net.URL;
 import lombok.SneakyThrows;
@@ -124,7 +125,7 @@ public class ProveIdentityControllerTest {
             .signedUrl(signedUrl)
             .type("file")
             .build();
-    when(artifactServiceMock.upload(any())).thenReturn(journeyArtifact);
+    when(artifactServiceMock.upload(any(), any())).thenReturn(journeyArtifact);
 
     String testUpload = "Some thing to upload";
     MockMultipartFile mockMultifile =
@@ -146,7 +147,7 @@ public class ProveIdentityControllerTest {
 
   @Test
   public void ajaxSubmit_givenFailedUpload_thenErrorResponse() throws Exception {
-    when(artifactServiceMock.upload(any())).thenThrow(new RuntimeException("Test"));
+    when(artifactServiceMock.upload(any(), any())).thenThrow(new RuntimeException("Test"));
 
     String testUpload = "Some thing to upload";
     MockMultipartFile mockMultifile =
@@ -205,7 +206,7 @@ public class ProveIdentityControllerTest {
             .type("image")
             .url(replacementUrl)
             .build();
-    when(artifactServiceMock.upload(mockMultifile)).thenReturn(replacingArtifact);
+    when(artifactServiceMock.upload(mockMultifile, IMAGE_PDF_MIME_TYPES)).thenReturn(replacingArtifact);
 
     mockMvc
         .perform(multipart("/prove-identity").file(mockMultifile).sessionAttr("JOURNEY", journey))
@@ -234,7 +235,7 @@ public class ProveIdentityControllerTest {
             .type("image")
             .url(replacementUrl)
             .build();
-    when(artifactServiceMock.upload(mockMultifile)).thenReturn(replacingArtifact);
+    when(artifactServiceMock.upload(mockMultifile, IMAGE_PDF_MIME_TYPES)).thenReturn(replacingArtifact);
 
     mockMvc
         .perform(multipart("/prove-identity").file(mockMultifile).sessionAttr("JOURNEY", journey))
