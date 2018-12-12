@@ -1,15 +1,13 @@
 package uk.gov.service.bluebadge.test.acceptance.steps.site;
 
 import cucumber.api.java.en.And;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.AddMobilityAidsPage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.ListMobilityAidsPage;
 import uk.gov.service.bluebadge.test.acceptance.steps.AbstractSpringSteps;
 import uk.gov.service.bluebadge.test.acceptance.steps.CommonSteps;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AddMobilityAidsSteps extends AbstractSpringSteps {
 
@@ -23,13 +21,12 @@ public class AddMobilityAidsSteps extends AbstractSpringSteps {
   }
 
   @And("^I validate the add mobility aids page \"$")
-  public void iValidateAddMobilityAidsPage(){
+  public void iValidateAddMobilityAidsPage() {
 
     verifyPageContent();
     validateMandatoryFields();
 
     iCompleteAddMobilityAidsPage();
-
   }
 
   public void verifyPageContent() {
@@ -43,7 +40,8 @@ public class AddMobilityAidsSteps extends AbstractSpringSteps {
     messages.add(AddMobilityAidsPage.VALIDATION_MESSAGE_FOR_NO_TYPE);
     messages.add(AddMobilityAidsPage.VALIDATION_MESSAGE_FOR_NO_HOW_USED);
     messages.add(AddMobilityAidsPage.VALIDATION_MESSAGE_FOR_NO_HOW_PROVIDED);
-    commonSteps.iVerifyMultipleValidationMessagesInChildPages(messages,AddMobilityAidsPage.MOBILITY_AID_ADD_CONFIRM_BUTTON);
+    commonSteps.iVerifyMultipleValidationMessagesInChildPages(
+        messages, AddMobilityAidsPage.MOBILITY_AID_ADD_CONFIRM_BUTTON);
   }
 
   @And("^I complete add mobility aids page \"$")
@@ -53,6 +51,4 @@ public class AddMobilityAidsSteps extends AbstractSpringSteps {
     commonPage.selectRadioButton(AddMobilityAidsPage.MOBILITY_AID_ADD_PROVIDED_CODE_PRESCRIBE);
     commonSteps.iClickOnAddButtonOnChildPage(AddMobilityAidsPage.MOBILITY_AID_ADD_CONFIRM_BUTTON);
   }
-
-
 }

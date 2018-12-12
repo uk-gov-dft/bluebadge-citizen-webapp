@@ -47,7 +47,8 @@ public class WalkingDifficultySteps extends AbstractSpringSteps {
     if ("HELP".equals(difficulty)) {
       commonPage.selectRadioButton(WalkingDifficultyPage.WALKING_DIFFICULTIES_LIST);
     } else {
-      commonPage.selectRadioButton(WalkingDifficultyPage.WALKING_DIFFICULTIES_LIST + "." + difficulty);
+      commonPage.selectRadioButton(
+          WalkingDifficultyPage.WALKING_DIFFICULTIES_LIST + "." + difficulty);
     }
 
     commonSteps.iClickOnContinueButton();

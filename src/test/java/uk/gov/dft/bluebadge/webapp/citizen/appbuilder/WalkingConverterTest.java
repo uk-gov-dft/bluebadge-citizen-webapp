@@ -66,7 +66,7 @@ public class WalkingConverterTest {
     List<WalkingAid> result =
         WalkingConverter.getWalkingAids(JourneyFixture.getMobilityAidListForm());
     assertThat(result.get(0).getDescription())
-        .isEqualTo(MobilityAidAddForm.AidType.SCOOTER.getType());
+        .isEqualTo("Scooter");
     assertThat(result.get(0).getUsage()).isEqualTo("Usage");
     assertThat(result.get(0).getHowProvidedCode()).isEqualTo(HowProvidedCodeField.PRESCRIBE);
   }
