@@ -13,7 +13,6 @@ public class MobilityAidAddFormTest {
     form.setAidType("Wheel chair");
     assertEquals("Wheel chair", form.getAidType());
     form.setAidType("Walking aid");
-    form.setCustomAidName("Custom");
     assertEquals("Walking aid", form.getAidType());
   }
 }

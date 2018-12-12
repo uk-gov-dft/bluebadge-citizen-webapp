@@ -63,7 +63,6 @@ public class MobilityAidAddControllerTest {
     mockMvc
         .perform(
             post("/add-mobility-aid")
-                .param("customAidName", "Custom")
                 .param("aidType", "WALKING_AID")
                 .param("howProvidedCodeField", "PRESCRIBE")
                 .param("usage", "usage")
@@ -88,22 +87,5 @@ public class MobilityAidAddControllerTest {
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/add-mobility-aid#error"))
         .andExpect(flash().attribute("formRequest", form));
-  }
-
-  @Test
-  public void submit_whenWalkingAidButNoCustom_thenShouldRedirectToShowWithValidationErrors()
-      throws Exception {
-
-    mockMvc
-        .perform(
-            post("/add-mobility-aid")
-                .param("aidType", "WALKING_AID")
-                .param("howProvidedCodeField", "PRESCRIBE")
-                .param("usage", "")
-                .param("customAidName", "")
-                .contentType("application/x-www-form-urlencoded")
-                .sessionAttr("JOURNEY", journey))
-        .andExpect(status().is3xxRedirection())
-        .andExpect(formRequestFlashAttributeHasFieldErrorCode("customAidName", "NotBlank"));
   }
 }

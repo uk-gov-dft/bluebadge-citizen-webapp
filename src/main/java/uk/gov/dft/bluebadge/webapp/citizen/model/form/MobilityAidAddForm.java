@@ -23,8 +23,5 @@ public class MobilityAidAddForm implements Serializable {
 
   @NotNull private HowProvidedCodeField howProvidedCodeField;
 
-  // Validation done in controller, not bean as is conditional (and was easier).
-  private String customAidName;
-
   private String id = UUID.randomUUID().toString();
 }
