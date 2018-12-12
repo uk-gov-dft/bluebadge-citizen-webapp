@@ -22,7 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
-import uk.gov.dft.bluebadge.webapp.citizen.model.FileUploader;
+import uk.gov.dft.bluebadge.webapp.citizen.model.FileUploaderOptions;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveIdentityForm;
@@ -77,8 +77,8 @@ public class ProveIdentityController implements StepController {
     return routeMaster.redirectToOnSuccess(formRequest);
   }
 
-  private FileUploader getFileUploaderOptions() {
-    return FileUploader.builder()
+  private FileUploaderOptions getFileUploaderOptions() {
+    return FileUploaderOptions.builder()
         .fieldName("document")
         .ajaxRequestUrl("/prove-identity-ajax")
         .fieldLabel("proveIdentity.fu.field.label")

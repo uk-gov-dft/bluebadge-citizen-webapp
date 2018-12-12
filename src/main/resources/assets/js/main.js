@@ -3,7 +3,7 @@ require('@babel/polyfill');
 import All from 'govuk-frontend/all';
 import AutoComplete from './autocomplete';
 import GAClickTracker from './ga-tracker';
-import DFT_FileUploader from "./dft-file-uploader-wrapper";
+import DFT_FileUploader from './dft-file-uploader-wrapper';
 
 All.initAll();
 
@@ -20,7 +20,7 @@ window.onload = () => {
 
 const isBrowser_IE = () => {
     const ua = window.navigator.userAgent;
-    const msie = ua.indexOf("MSIE ");
+    const msie = ua.indexOf('MSIE ');
 
     if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
         return true;

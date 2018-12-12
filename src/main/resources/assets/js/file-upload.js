@@ -11,8 +11,8 @@ export default class FileUploader {
 			return;
 		}
 
-		this.$isMobile = (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
-		this.$classPrefix = "govuk-file-uploader";
+		this.$isMobile = (typeof window.orientation !== 'undefined') || (navigator.userAgent.indexOf('IEMobile') !== -1);
+		this.$classPrefix = 'govuk-file-uploader';
 
 		this.$options = options;
 		this.$options.maxFileSize = options.maxFileSize ||  10485760;
@@ -28,7 +28,7 @@ export default class FileUploader {
 		this.$container.appendChild(this.renderDropArea());
 		this.$container.appendChild(this.$screenAnnouncer);
 
-		this.$imageMimeTypes = "image/jpeg, image/gif, image/png";
+		this.$imageMimeTypes = 'image/jpeg, image/gif, image/png';
 
 		this.$DROPAREA_STATE = {
 			LOADING: this.$classPrefix + '--loading',
@@ -122,7 +122,7 @@ export default class FileUploader {
 	}
 
 	validateFile(file) {
-		if(file.type === "" || this.$fileInput.accept.indexOf(file.type) < 0) {
+		if(file.type === '' || this.$fileInput.accept.indexOf(file.type) < 0) {
 			this.makeScreenAnnouncement('Incorrect file type uploaded');
 		} else if(this.$options.maxFileSize > 10485760){
 			this.makeScreenAnnouncement('Uploaded file too large');
@@ -138,14 +138,14 @@ export default class FileUploader {
 	beginFileUpload(file) {
 		const xhr = new XMLHttpRequest();
 		xhr.open('POST', this.$options.uploadPath, true);
-		xhr.responseType = "json";
+		xhr.responseType = 'json';
 		this.$container.classList.add(this.$DROPAREA_STATE.LOADING);
 
 		xhr.addEventListener('readystatechange', (e) => {
 
 			if (xhr.readyState == 4 && xhr.status == 200) {
 				if(xhr.response && xhr.response.success) {
-					this.makeScreenAnnouncement("File uploaded: " + file.fileName);
+					this.makeScreenAnnouncement('File uploaded: ' + file.fileName);
 					this.fireLifeCycleEvent('uploaded', xhr.response);
 					this.$screenAnnouncer.focus();
 				} else {
@@ -167,7 +167,7 @@ export default class FileUploader {
 	renderFileUploader(container) {
 		container.classList.add(this.$classPrefix);
 
-		const legacy = document.createElement("div");
+		const legacy = document.createElement('div');
 		legacy.classList.add(this.$classPrefix + '__legacy');
 
 		while (container.childNodes.length > 0) {
@@ -208,13 +208,13 @@ export default class FileUploader {
 		if(this.$fileInput.multiple) {
 			const dropArea_caption = document.createElement('p');
 			dropArea_caption.classList.add('drop-area__caption');
-			dropArea_caption.innerHTML = this.getDataAttrValue('label-multiFile-caption') || "(You can upload multiple photos)";
+			dropArea_caption.innerHTML = this.getDataAttrValue('label-multiFile-caption') || '(You can upload multiple photos)';
 			dropArea_instructions.appendChild(dropArea_caption);
 		}
 
 		const dropArea_loader = document.createElement('p');
 		dropArea_loader.classList.add('drop-area__loader');
-		dropArea_loader.innerHTML = this.getDataAttrValue('loader-text') || "Uploading files...";
+		dropArea_loader.innerHTML = this.getDataAttrValue('loader-text') || 'Uploading files...';
 		dropArea_instructions.appendChild(dropArea_loader);
 
 		const dropArea = document.createElement('div');
@@ -228,16 +228,16 @@ export default class FileUploader {
 	}
 
 	getUploadIcon() {
-		const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-		const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-		svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
+		const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+		const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+		svg.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', 'http://www.w3.org/1999/xlink');
 
 		if (this.$isMobile) {
-			svg.setAttribute("viewBox", "0 0 512 512");
-			path.setAttribute("d", "M512 144v288c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48h88l12.3-32.9c7-18.7 24.9-31.1 44.9-31.1h125.5c20 0 37.9 12.4 44.9 31.1L376 96h88c26.5 0 48 21.5 48 48zM376 288c0-66.2-53.8-120-120-120s-120 53.8-120 120 53.8 120 120 120 120-53.8 120-120zm-32 0c0 48.5-39.5 88-88 88s-88-39.5-88-88 39.5-88 88-88 88 39.5 88 88z");
+			svg.setAttribute('viewBox', '0 0 512 512');
+			path.setAttribute('d', 'M512 144v288c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48h88l12.3-32.9c7-18.7 24.9-31.1 44.9-31.1h125.5c20 0 37.9 12.4 44.9 31.1L376 96h88c26.5 0 48 21.5 48 48zM376 288c0-66.2-53.8-120-120-120s-120 53.8-120 120 53.8 120 120 120 120-53.8 120-120zm-32 0c0 48.5-39.5 88-88 88s-88-39.5-88-88 39.5-88 88-88 88 39.5 88 88z');
 		} else {
-			svg.setAttribute("viewBox", "0 0 32 32");
-			path.setAttribute("d", "M16 1l-15 15h9v16h12v-16h9z");
+			svg.setAttribute('viewBox', '0 0 32 32');
+			path.setAttribute('d', 'M16 1l-15 15h9v16h12v-16h9z');
 		}
 
 		svg.appendChild(path);
@@ -254,7 +254,7 @@ export default class FileUploader {
 			return desktopLabel;
 		}
 
-		return "Upload photo";
+		return 'Upload photo';
 	}
 
     makeScreenAnnouncement(announcement) {
