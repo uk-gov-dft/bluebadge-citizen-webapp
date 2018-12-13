@@ -28,13 +28,11 @@ class ArtifactConverter {
     return result;
   }
 
-  private static void convertArtifact(List<Artifact> result, JourneyArtifact journeyArtifact, ArtifactType artifactType) {
+  private static void convertArtifact(
+      List<Artifact> result, JourneyArtifact journeyArtifact, ArtifactType artifactType) {
     if (null != journeyArtifact) {
       result.add(
-          Artifact.builder()
-              .type(artifactType)
-              .link(journeyArtifact.getUrl().toString())
-              .build());
+          Artifact.builder().type(artifactType).link(journeyArtifact.getUrl().toString()).build());
     }
   }
 }
