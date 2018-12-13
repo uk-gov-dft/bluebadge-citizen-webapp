@@ -223,6 +223,7 @@ export default class FileUploader {
 		dropArea.appendChild(dropArea_instructions);
 
 		this.$dropArea = dropArea;
+		this.$dropArea.id = this.$fileInput.name + "-droparea";
 
 		return dropArea;
 	}
