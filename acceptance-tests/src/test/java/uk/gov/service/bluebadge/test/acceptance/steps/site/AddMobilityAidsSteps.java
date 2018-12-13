@@ -46,7 +46,7 @@ public class AddMobilityAidsSteps extends AbstractSpringSteps {
 
   @And("^I complete add mobility aids page \"$")
   public void iCompleteAddMobilityAidsPage() {
-    commonPage.selectRadioButton(AddMobilityAidsPage.MOBILITY_AID_TYPE_WHEELCHAIR);
+    commonPage.clearAndSendKeys(AddMobilityAidsPage.MOBILITY_AID_TYPE, "Wheel chair");
     commonPage.clearAndSendKeys(AddMobilityAidsPage.MOBILITY_AID_ADD_USAGE, "All the time");
     commonPage.selectRadioButton(AddMobilityAidsPage.MOBILITY_AID_ADD_PROVIDED_CODE_PRESCRIBE);
     commonSteps.iClickOnAddButtonOnChildPage(AddMobilityAidsPage.MOBILITY_AID_ADD_CONFIRM_BUTTON);
