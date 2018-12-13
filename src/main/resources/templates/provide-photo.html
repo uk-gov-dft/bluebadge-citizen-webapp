@@ -4,29 +4,36 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/master.html}">
 <head>
-    <title th:text="#{${JOURNEY.who} + proveIdentity.title}"></title>
+    <title th:text="#{${JOURNEY.who} + providePhoto.title}"></title>
 </head>
 <body>
 
 <main layout:fragment="content">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.who} + providePhoto.title}"></h1>
 
-            <h1 class="govuk-heading-l" th:text="'Provide Photo'"></h1>
-            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.who} + proveIdentity.title}"></h1>
+            <p class="govuk-body" th:text="#{${JOURNEY.who} + providePhoto.content.p1}"></p>
 
-            <p class="govuk-body" th:text="#{${JOURNEY.who} + proveIdentity.content.p1}"></p>
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full">
+                    <div class="provide-photo-box">
+                        <div class="provide-photo-box__image-wrapper">
+                            <img src="/images/passport-photo.png" class="provide-photo-box__image" />
+                        </div>
+                        <div class="provide-photo-box__text">
+                            <p class="govuk-body" th:text="#{${JOURNEY.who} + providePhoto.content.p2}"></p>
+                            <ul class="govuk-list govuk-list--bullet">
+                                <li th:text="#{${JOURNEY.who} + providePhoto.ul.li1}"></li>
+                                <li th:text="#{${JOURNEY.who} + providePhoto.ul.li2}"></li>
+                                <li th:text="#{${JOURNEY.who} + providePhoto.ul.li3}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <ul class="govuk-list govuk-list--bullet">
-                <li th:text="#{${JOURNEY.who} + proveIdentity.ul.li1}"></li>
-                <li th:text="#{${JOURNEY.who} + proveIdentity.ul.li2}"></li>
-                <ul th:remove="tag" th:unless="${JOURNEY.isApplicantYoung()}">
-                    <li th:text="#{${JOURNEY.who} + proveIdentity.ul.li3}"></li>
-                    <li th:text="#{${JOURNEY.who} + proveIdentity.ul.li4}"></li>
-                </ul>
-            </ul>
-
-            <form th:action="@{/prove-identity}" th:object="${formRequest}" method="post" enctype="multipart/form-data" novalidate>
+            <form th:action="@{/provide-photo}" th:object="${formRequest}" method="post" enctype="multipart/form-data" novalidate>
 
                 <div th:replace="~{ fragments/file-uploader :: fileUploader('Upload photo or scan', 'document') }"></div>
 
@@ -40,14 +47,14 @@
             <details class="govuk-details">
                 <summary class="govuk-details__summary">
                     <span class="govuk-details__summary-text" id="cant-upload-text"
-                          th:text="#{proveIdentity.cantUpload.title}"></span>
+                          th:text="#{providePhoto.cantUpload.title}"></span>
                 </summary>
                 <div class="govuk-details__text">
-                    <p th:text="#{${JOURNEY.who} + proveIdentity.cantUpload.content.p1}"></p>
-                    <p th:text="#{proveIdentity.cantUpload.content.p2}"></p>
-                    <a id="continue-without-uploading" data-ga-track-link="continue without proof identity"
+                    <p th:text="#{${JOURNEY.who} + providePhoto.cantUpload.content.p1}"></p>
+                    <p th:text="#{providePhoto.cantUpload.content.p2}"></p>
+                    <a id="continue-without-uploading" data-ga-track-link="continue without photo upload"
                        data-ga-track-link-action="alternative click"
-                       href="/prove-id-bypass" th:text="#{proveIdentity.cantUpload.link}"></a>
+                       href="/provide-photo-bypass" th:text="#{providePhoto.cantUpload.link}"></a>
                 </div>
             </details>
 
