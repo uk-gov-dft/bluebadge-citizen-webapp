@@ -2,51 +2,57 @@
 	margin-bottom: 30px;
 }
 
-.js-enabled .dft-fu {
+.js-enabled {
+	.dft-fu {
 	
-	&-existing-file-label {
-		display: none;
-	}
-
-	&--preview {
-		.dft-fu-preview {
-			display: block;
-		}
-
-		.dft-fu-file-uploader {
+		&-existing-file-label {
 			display: none;
 		}
-	}
 
-	&--error {
-		.dft-fu-error-summary {
+		&--preview {
+			.dft-fu-preview {
+				display: block;
+			}
+
+			.dft-fu-file-uploader {
+				display: none;
+			}
+		}
+
+		&--error {
+			.dft-fu-error-summary {
+				display: block;
+			}
+		}
+
+		&__reset-btn {
+			@include govuk-link-style-text;
+			@include govuk-link-common;
+			@include govuk-link-style-default;
+			@include govuk-font(19, regular);
+			border: 0;
+			padding: 0;
+			cursor: pointer;
 			display: block;
+			color: $govuk-link-colour;
+			text-decoration: underline;
+			background-color: transparent;
 		}
-	}
 
-	&__reset-btn {
-		@include govuk-link-style-text;
-		@include govuk-link-common;
-		@include govuk-link-style-default;
-		@include govuk-font(19, regular);
-		border: 0;
-		padding: 0;
-		cursor: pointer;
-		display: block;
-		color: $govuk-link-colour;
-		text-decoration: underline;
-		background-color: transparent;
-	}
-
-	&__add-file-button {
-		@extend .govuk-button;
-		background-color: govuk-colour(blue);
-
-		&:active,
-		&:focus,
-		&:hover {
+		&__add-file-button {
+			@extend .govuk-button;
 			background-color: govuk-colour(blue);
+
+			&:active,
+			&:focus,
+			&:hover {
+				background-color: govuk-colour(blue);
+			}
 		}
+	}
+
+	[data-file-uploader-show-on-success]:not(.show) {
+		display: none;
 	}
 }
 
@@ -102,8 +108,4 @@
 			margin-top: 10px;
 		}
 	}
-}
-
-[data-file-uploader-show-on-success]:not(.show) {
-	display: none;
 }
