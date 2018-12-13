@@ -120,6 +120,13 @@ public class Journey implements Serializable {
     return null;
   }
 
+  public Boolean isLocalAuthorityActive() {
+    return !getLocalAuthority()
+        .getLocalAuthorityMetaData()
+        .map(LocalAuthorityRefData.LocalAuthorityMetaData::getDifferentServiceSignpostUrl)
+        .isPresent();
+  }
+
   private boolean hasMobilityAid() {
     if (hasStepForm(StepDefinition.MOBILITY_AID_LIST)) {
       MobilityAidListForm mobilityAidListForm = getFormForStep(StepDefinition.MOBILITY_AID_LIST);

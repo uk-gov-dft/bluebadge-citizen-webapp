@@ -10,6 +10,7 @@ public class ChooseCouncilPage {
   public static final String PAGE_TITLE_SOMEONE_ELSE = "Choose their local council";
 
   public static final String COUNCIL_INPUT = "councilShortCode";
+  public static final String REGISTERED_COUNCIL_INPUT = "registeredCouncil";
 
   public static final String VALIDATION_MESSAGE_FOR_NO_OPTION = "Select the local council";
 

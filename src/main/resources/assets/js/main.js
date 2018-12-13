@@ -4,6 +4,7 @@ import All from 'govuk-frontend/all';
 import AutoComplete from './autocomplete';
 import GAClickTracker from './ga-tracker';
 import FileUploader from "./file-upload";
+import preventDoubleSubmission from "./prevent-double-submission";
 
 All.initAll();
 
@@ -11,6 +12,11 @@ GAClickTracker();
 
 window.onload = () => {
     initFileUploader();
+
+    const forms = Array.from(document.querySelectorAll('[data-prevent-double-submission]'));
+    if(forms.length > 0) {
+        forms.forEach(form => preventDoubleSubmission(form));
+    }
 }
 
 const isBrowser_IE = () => {

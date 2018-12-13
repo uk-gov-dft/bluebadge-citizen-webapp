@@ -29,7 +29,6 @@ public class CommonSteps extends AbstractSpringSteps {
   private static final String TAG_INPUT = "input";
 
   private CommonPage commonPage;
-  private String pageURL;
 
   @Autowired
   public CommonSteps(CommonPage commonPage) {
@@ -41,16 +40,14 @@ public class CommonSteps extends AbstractSpringSteps {
   public void givenICompleteApplicationUpToTheMainReasonPageInCountry(
       String myselfOrOther, String country) {
     // default to england
-    String council = "Worcester";
-    String fullCouncil = "Worcester city council";
+    String council = "Blackpool";
+    String fullCouncil = "Blackpool borough council";
     if ("scotland".equalsIgnoreCase(country)) {
       council = "Aberdeenshire";
       fullCouncil = "Aberdeenshire council";
     } else if ("wales".equalsIgnoreCase(country)) {
       council = "Anglesey";
       fullCouncil = "Isle of Anglesey county council";
-    } else if ("ireland".equalsIgnoreCase(country)) {
-
     }
 
     // Applicant page
@@ -239,6 +236,11 @@ public class CommonSteps extends AbstractSpringSteps {
     commonPage.findElementWithUiPath("button.continue").click();
   }
 
+  @And("^I click on Add button on a child page $")
+  public void iClickOnAddButtonOnChildPage(String element) {
+    commonPage.findElementWithUiPath(element).click();
+  }
+
   @And("^I should see error summary box$")
   public void andIshouldSeeErrorSummaryBox() {
     WebElement errorSummaryBox = commonPage.findElementWithUiPath("error-summary-box");
@@ -247,7 +249,6 @@ public class CommonSteps extends AbstractSpringSteps {
 
   @And("^I should see \"([^\"]*)\" text on the page$")
   public void iShouldSeeTextOnPage(String content) {
-    String s = commonPage.getPageContent();
     assertTrue(commonPage.getPageContent().contains(content));
   }
 
@@ -352,6 +353,17 @@ public class CommonSteps extends AbstractSpringSteps {
     }
   }
 
+  @And("^I verify multiple validation messages in child pages \"$")
+  public void iVerifyMultipleValidationMessagesInChildPages(List<String> messages, String element) {
+
+    this.iClickOnAddButtonOnChildPage(element);
+    this.andIshouldSeeErrorSummaryBox();
+
+    for (String message : messages) {
+      this.iShouldSeeTextOnPage(message);
+    }
+  }
+
   @And("^I complete the already have a blue badge page \"(YES|NO|YES BUT DON'T KNOW)\"$")
   public void iCompleteTheAlreadyHaveABlueBadgePage(String opt) {
     if ("YES BUT DON't KNOW".equals(opt)) {
@@ -370,7 +382,7 @@ public class CommonSteps extends AbstractSpringSteps {
 
   @Then("^I should see the correct URL$")
   public void iShouldSeeTheCorrectURL(String expectedURL) {
-    URL fullURL = null;
+    URL fullURL;
 
     try {
 

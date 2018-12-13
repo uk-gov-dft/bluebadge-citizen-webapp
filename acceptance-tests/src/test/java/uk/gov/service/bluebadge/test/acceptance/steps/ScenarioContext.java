@@ -15,11 +15,6 @@ public class ScenarioContext {
     scenarioContext = new HashMap<>();
   }
 
-  public void setContext(String key, Object value) {
-    log.debug("Saving [{},{}] into ScenarioContext", key, value.toString());
-    scenarioContext.put(key, value);
-  }
-
   public Object getContext(String key) {
     log.debug("Retrieving [{}] from ScenarioContext", key);
     return scenarioContext.get(key);

@@ -30,16 +30,18 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataSe
 
 public class ChooseYourCouncilControllerTest {
 
+  private static final String COUNCIL_SHORT_CODE = "test test";
+
   private MockMvc mockMvc;
 
   @Mock ReferenceDataService mockReferenceDataService;
+  @Mock Journey journeyMock;
 
   Journey journey;
 
   private LocalCouncilRefData localCouncilRefData1;
   private LocalCouncilRefData localCouncilRefData2;
   private List<ReferenceData> councils;
-  private List<ReferenceData> activeCouncils;
 
   @Before
   public void setup() {
@@ -54,7 +56,6 @@ public class ChooseYourCouncilControllerTest {
 
     LocalCouncilRefData.LocalCouncilMetaData localCouncilMetaData1 =
         new LocalCouncilRefData.LocalCouncilMetaData();
-    localCouncilMetaData1.setIsActive(false);
     localCouncilMetaData1.setIssuingAuthorityShortCode("WARCC");
     localCouncilRefData1 = new LocalCouncilRefData();
     localCouncilRefData1.setDescription("Description");
@@ -63,7 +64,6 @@ public class ChooseYourCouncilControllerTest {
 
     LocalCouncilRefData.LocalCouncilMetaData localCouncilMetaData2 =
         new LocalCouncilRefData.LocalCouncilMetaData();
-    localCouncilMetaData2.setIsActive(true);
     localCouncilMetaData2.setIssuingAuthorityShortCode("KENTCC");
     localCouncilRefData2 = new LocalCouncilRefData();
     localCouncilRefData2.setDescription("Description");
@@ -71,7 +71,6 @@ public class ChooseYourCouncilControllerTest {
     localCouncilRefData2.setLocalCouncilMetaData(localCouncilMetaData2);
 
     councils = Lists.newArrayList(localCouncilRefData1, localCouncilRefData2);
-    activeCouncils = Lists.newArrayList(localCouncilRefData2);
   }
 
   @Test
@@ -86,7 +85,7 @@ public class ChooseYourCouncilControllerTest {
         .andExpect(status().isOk())
         .andExpect(view().name("choose-council"))
         .andExpect(model().attribute("formRequest", formRequest))
-        .andExpect(model().attribute("councils", activeCouncils));
+        .andExpect(model().attribute("councils", councils));
   }
 
   @Test
@@ -100,25 +99,28 @@ public class ChooseYourCouncilControllerTest {
         .andExpect(status().isOk())
         .andExpect(view().name("choose-council"))
         .andExpect(model().attribute("formRequest", JourneyFixture.getChooseYourCouncilForm()))
-        .andExpect(model().attribute("councils", activeCouncils));
+        .andExpect(model().attribute("councils", councils));
   }
 
   @Test
   public void submit_givenValidForm_thenShouldDisplayRedirectToSuccess() throws Exception {
+    when(journeyMock.isLocalAuthorityActive()).thenReturn(true);
 
     mockMvc
         .perform(
             post(Mappings.URL_CHOOSE_YOUR_COUNCIL)
-                .param("councilShortCode", "test test")
-                .sessionAttr("JOURNEY", new Journey()))
+                .param("councilShortCode", COUNCIL_SHORT_CODE)
+                .sessionAttr("JOURNEY", journeyMock))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl(Mappings.URL_YOUR_ISSUING_AUTHORITY));
   }
 
   @Test
   public void submit_whenBindingException_ThenShouldHaveValidationError() throws Exception {
+    when(journeyMock.isLocalAuthorityActive()).thenReturn(true);
+
     mockMvc
-        .perform(post(Mappings.URL_CHOOSE_YOUR_COUNCIL).sessionAttr("JOURNEY", new Journey()))
+        .perform(post(Mappings.URL_CHOOSE_YOUR_COUNCIL).sessionAttr("JOURNEY", journeyMock))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl(Mappings.URL_CHOOSE_YOUR_COUNCIL + RouteMaster.ERROR_SUFFIX))
         .andExpect(
