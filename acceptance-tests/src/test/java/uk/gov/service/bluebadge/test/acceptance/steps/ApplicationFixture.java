@@ -172,8 +172,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
     commonPage.findPageElementById("continue-without-uploading").click();
   }
 
-  @And("^I complete prove ID page with a \"(JPG|GIF|PNG|PDF)\" document")
-  public void iCompleteProveIDPageWithADocument(String fileType) {
+  @And("^I complete \"(prove ID|provide photo)\" page with a \"(JPG|GIF|PNG|PDF)\" document")
+  public void iCompleteProveIDPageWithADocument(String pageName, String fileType) {
 
     String filename = "evidence_" + fileType + "." + fileType.toLowerCase();
 
