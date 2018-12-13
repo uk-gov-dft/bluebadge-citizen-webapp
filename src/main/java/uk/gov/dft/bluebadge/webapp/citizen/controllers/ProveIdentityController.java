@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.model.FileUploaderOptions;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveIdentityForm;
@@ -65,6 +66,8 @@ public class ProveIdentityController implements StepController {
       model.addAttribute(FORM_REQUEST, ProveIdentityForm.builder().build());
     }
 
+    model.addAttribute("fileUploaderOptions", getFileUploaderOptions());
+
     return TEMPLATE;
   }
 
@@ -73,6 +76,17 @@ public class ProveIdentityController implements StepController {
     ProveIdentityForm formRequest = ProveIdentityForm.builder().build();
     journey.setFormForStep(formRequest);
     return routeMaster.redirectToOnSuccess(formRequest);
+  }
+
+  private FileUploaderOptions getFileUploaderOptions() {
+    return FileUploaderOptions.builder()
+        .fieldName("document")
+        .ajaxRequestUrl("/prove-identity-ajax")
+        .fieldLabel("proveIdentity.fu.field.label")
+        .allowedFileTypes("image/jpeg,image/gif,image/png,application/pdf")
+        .allowMultipleFileUploads(false)
+        .rejectErrorMessageKey("proveIdentity.fu.rejected.content")
+        .build();
   }
 
   @PostMapping(value = PROVE_IDENTITY_AJAX_URL, produces = "application/json")
