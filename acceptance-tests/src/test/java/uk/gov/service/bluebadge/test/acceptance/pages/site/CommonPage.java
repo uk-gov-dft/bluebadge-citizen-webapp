@@ -2,10 +2,8 @@ package uk.gov.service.bluebadge.test.acceptance.pages.site;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-
 import org.openqa.selenium.support.ui.WebDriverWait;
 import uk.gov.service.bluebadge.test.acceptance.pages.PageHelper;
 import uk.gov.service.bluebadge.test.acceptance.util.TestContentUrls;
