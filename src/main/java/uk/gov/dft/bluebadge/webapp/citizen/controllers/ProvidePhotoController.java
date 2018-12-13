@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.model.FileUploaderOptions;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProvidePhotoForm;
@@ -65,6 +66,8 @@ public class ProvidePhotoController implements StepController {
       model.addAttribute(FORM_REQUEST, ProvidePhotoForm.builder().build());
     }
 
+    model.addAttribute("fileUploaderOptions", getFileUploaderOptions());
+
     return TEMPLATE;
   }
 
@@ -73,6 +76,17 @@ public class ProvidePhotoController implements StepController {
     ProvidePhotoForm formRequest = ProvidePhotoForm.builder().build();
     journey.setFormForStep(formRequest);
     return routeMaster.redirectToOnSuccess(formRequest);
+  }
+
+  private FileUploaderOptions getFileUploaderOptions() {
+    return FileUploaderOptions.builder()
+        .fieldName("document")
+        .ajaxRequestUrl(PROVIDE_PHOTO_AJAX_URL)
+        .fieldLabel("providePhoto.fu.field.label")
+        .allowedFileTypes("image/jpeg,image/gif,image/png")
+        .allowMultipleFileUploads(false)
+        .rejectErrorMessageKey("providePhoto.fu.rejected.content")
+        .build();
   }
 
   @PostMapping(value = PROVIDE_PHOTO_AJAX_URL, produces = "application/json")
