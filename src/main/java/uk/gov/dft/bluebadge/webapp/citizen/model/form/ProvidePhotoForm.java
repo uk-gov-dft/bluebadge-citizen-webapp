@@ -10,7 +10,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 
 @Data
 @Builder
-public class ProvidePhotoForm implements StepForm, Serializable {
+public class ProvidePhotoForm implements StepForm, ArtifactForm, Serializable {
 
   private JourneyArtifact journeyArtifact;
 
