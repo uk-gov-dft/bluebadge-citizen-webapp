@@ -2,7 +2,6 @@ package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.BLIND;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.DLA;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.PIP;
@@ -50,7 +49,7 @@ public class ContactFormTest {
     assertTrue(contactForm.determineNextStep(journey).isPresent());
     if (EnumSet.of(PIP, DLA).contains(benefitType)) {
       assertEquals(StepDefinition.PROVE_BENEFIT, contactForm.determineNextStep(journey).get());
-    } else if(BLIND == benefitType){
+    } else if (BLIND == benefitType) {
       assertEquals(StepDefinition.REGISTERED, contactForm.determineNextStep(journey).get());
     } else {
       assertEquals(StepDefinition.PROVE_IDENTITY, contactForm.determineNextStep(journey).get());
