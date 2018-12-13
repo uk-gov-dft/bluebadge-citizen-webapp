@@ -8,7 +8,6 @@
   &__text {
     display: inline-block;
     float: left;
-    margin-right: 20px;
   }
 
   &__image-wrapper {
@@ -17,6 +16,7 @@
     @include govuk-media-query($until: desktop) {
       float: none;
       display: block;
+      margin-right: 0;
       margin-bottom: govuk-spacing(3);
     }
   }
