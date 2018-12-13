@@ -30,7 +30,7 @@ public class TestContentUrls {
 
   private void setup() {
     add("applicant", "/");
-    add("describe health conditions", "/health-conditions");
+    add("describe health conditions or disabilities", "/health-conditions");
     add("declaration", "/apply-for-a-blue-badge/declaration");
     add("home", "/");
   }
