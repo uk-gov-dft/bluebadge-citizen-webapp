@@ -79,7 +79,7 @@ export default class DFT_FileUploader {
 			this.$previewHolder.appendChild(previewItem);
 			this.$dftFuContainer.classList.add(this.$state.preview);
 			this.$dftFuContainer.classList.remove(this.$state.error);
-			// this.$showOnSuccessElements.forEach(el => el.classList.add('show'));
+			this.$showOnSuccessElements.forEach(el => el.classList.add('show'));
 		}
 	}
 	

@@ -178,8 +178,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
     String filename = "evidence_" + fileType + "." + fileType.toLowerCase();
 
     WebElement droparea =
-        commonPage.findElementWithCSSSelector(
-            "#proveIdentity-fileUploaderContainer > div.drop-area");
+        commonPage.findPageElementById("document-droparea");
 
     String file_path = "";
     if (System.getProperty("user.dir").endsWith("acceptance-tests")) {

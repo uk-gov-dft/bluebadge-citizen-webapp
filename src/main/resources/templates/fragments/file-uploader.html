@@ -7,7 +7,7 @@
 <body>
 
 <div class="dft-fu"
-     th:fragment="fileUploader(options)"
+     th:fragment="fileUploader(name, options)"
      th:classappend="*{journeyArtifact} ? dft-fu--preview"
      th:data-ajax-request-url="${options.ajaxRequestUrl}"
      th:data-error-label-reject="#{${options.rejectErrorMessageKey}}">
@@ -59,7 +59,7 @@
 
         <input type="file"
                class="govuk-file-upload dft-fu-file-upload"
-               th:id="${options.fieldName}"
+               th:id="${name}"
                th:name="${options.fieldName}"
                th:multiple="${options.allowMultipleFileUploads}"
                th:accept="${options.allowedFileTypes}">
