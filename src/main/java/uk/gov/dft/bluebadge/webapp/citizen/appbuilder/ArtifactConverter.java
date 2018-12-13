@@ -8,24 +8,31 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveIdentityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProvidePhotoForm;
 
 class ArtifactConverter {
 
   private ArtifactConverter() {}
 
   static List<Artifact> convert(Journey journey) {
-    ProveIdentityForm proveIdentityForm = journey.getFormForStep(StepDefinition.PROVE_IDENTITY);
-    JourneyArtifact journeyArtifact = proveIdentityForm.getJourneyArtifact();
     List<Artifact> result = new ArrayList<>();
 
-    if (null != journeyArtifact) {
-      result.add(
-          Artifact.builder()
-              .type(ArtifactType.PROOF_ID)
-              .link(journeyArtifact.getUrl().toString())
-              .build());
-    }
+    ProveIdentityForm proveIdentityForm = journey.getFormForStep(StepDefinition.PROVE_IDENTITY);
+    JourneyArtifact journeyArtifact = proveIdentityForm.getJourneyArtifact();
+    convertArtifact(result, journeyArtifact, ArtifactType.PROOF_ID);
+
+    ProvidePhotoForm providePhotoForm = journey.getFormForStep(StepDefinition.PROVIDE_PHOTO);
+    journeyArtifact = providePhotoForm.getJourneyArtifact();
+    convertArtifact(result, journeyArtifact, ArtifactType.PHOTO);
 
     return result;
+  }
+
+  private static void convertArtifact(
+      List<Artifact> result, JourneyArtifact journeyArtifact, ArtifactType artifactType) {
+    if (null != journeyArtifact) {
+      result.add(
+          Artifact.builder().type(artifactType).link(journeyArtifact.getUrl().toString()).build());
+    }
   }
 }

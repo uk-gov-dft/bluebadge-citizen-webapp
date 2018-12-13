@@ -59,6 +59,7 @@ public class ProveIdentityControllerTest {
             .build();
 
     journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.PROVE_IDENTITY);
+    journey.setFormForStep(ProveIdentityForm.builder().build());
     docUrl = new URL("http://test");
     signedUrl = new URL("http://testSigned");
   }
