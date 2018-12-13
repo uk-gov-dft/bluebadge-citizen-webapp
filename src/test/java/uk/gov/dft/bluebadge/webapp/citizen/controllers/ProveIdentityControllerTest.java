@@ -41,7 +41,7 @@ public class ProveIdentityControllerTest {
   private MockMvc mockMvc;
 
   private Journey journey;
-  private static final String SUCCESS_URL = Mappings.URL_DECLARATIONS;
+  private static final String SUCCESS_URL = Mappings.URL_PROVIDE_PHOTO;
   private static final String ERROR_URL = Mappings.URL_PROVE_IDENTITY + RouteMaster.ERROR_SUFFIX;
   private ArtifactService artifactServiceMock;
   private URL signedUrl;
@@ -206,7 +206,8 @@ public class ProveIdentityControllerTest {
             .type("image")
             .url(replacementUrl)
             .build();
-    when(artifactServiceMock.upload(mockMultifile, IMAGE_PDF_MIME_TYPES)).thenReturn(replacingArtifact);
+    when(artifactServiceMock.upload(mockMultifile, IMAGE_PDF_MIME_TYPES))
+        .thenReturn(replacingArtifact);
 
     mockMvc
         .perform(multipart("/prove-identity").file(mockMultifile).sessionAttr("JOURNEY", journey))
@@ -235,7 +236,8 @@ public class ProveIdentityControllerTest {
             .type("image")
             .url(replacementUrl)
             .build();
-    when(artifactServiceMock.upload(mockMultifile, IMAGE_PDF_MIME_TYPES)).thenReturn(replacingArtifact);
+    when(artifactServiceMock.upload(mockMultifile, IMAGE_PDF_MIME_TYPES))
+        .thenReturn(replacingArtifact);
 
     mockMvc
         .perform(multipart("/prove-identity").file(mockMultifile).sessionAttr("JOURNEY", journey))

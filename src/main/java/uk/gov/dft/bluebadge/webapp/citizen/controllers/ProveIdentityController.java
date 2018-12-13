@@ -82,7 +82,8 @@ public class ProveIdentityController implements StepController {
       @RequestParam("document") MultipartFile document,
       ProveIdentityForm proveIdentityForm) {
     try {
-      JourneyArtifact uploadedJourneyArtifact = artifactService.upload(document, IMAGE_PDF_MIME_TYPES);
+      JourneyArtifact uploadedJourneyArtifact =
+          artifactService.upload(document, IMAGE_PDF_MIME_TYPES);
       proveIdentityForm.setJourneyArtifact(uploadedJourneyArtifact);
       journey.setFormForStep(proveIdentityForm);
       return ImmutableMap.of("success", "true", "artifact", uploadedJourneyArtifact);
@@ -102,7 +103,8 @@ public class ProveIdentityController implements StepController {
 
     if (!document.isEmpty()) {
       try {
-        JourneyArtifact uploadJourneyArtifact = artifactService.upload(document, IMAGE_PDF_MIME_TYPES);
+        JourneyArtifact uploadJourneyArtifact =
+            artifactService.upload(document, IMAGE_PDF_MIME_TYPES);
         formRequest.setJourneyArtifact(uploadJourneyArtifact);
         journey.setFormForStep(formRequest);
       } catch (UnsupportedMimetypeException e) {
