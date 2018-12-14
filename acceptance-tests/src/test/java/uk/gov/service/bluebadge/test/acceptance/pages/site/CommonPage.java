@@ -138,6 +138,5 @@ public class CommonPage {
     element =
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[text()='Continue']")));
     element.click();
-
   }
 }

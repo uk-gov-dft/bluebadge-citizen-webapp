@@ -7,10 +7,11 @@
 <body>
 
 <div class="dft-fu"
-     th:fragment="fileUploader(name, options)"
+     th:fragment="fileUploader(name, options, headingLevel)"
      th:classappend="*{journeyArtifact} ? dft-fu--preview"
      th:data-ajax-request-url="${options.ajaxRequestUrl}"
-     th:data-error-label-reject="#{${options.rejectErrorMessageKey}}">
+     th:data-upload-error-message="#{${options.errorMessageKey}}"
+     th:data-upload-reject-error-message="#{${options.rejectErrorMessageKey}}">
 
     <div class="govuk-error-summary dft-fu-error-summary"
          aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
@@ -21,7 +22,20 @@
 
 
     <div class="dft-fu-preview">
-        <h3 class="dft-fu-preview__heading" th:text="#{${options.previewTitleMessageKey}}"></h3>
+        <h1 th:if="${headingLevel == 'h1'}"
+            class="dft-fu-preview__heading"
+            th:classappend="${headingLevel == 'h1'}? dft-fu-preview__heading--l"
+            th:text="#{${options.previewTitleMessageKey}}"></h1>
+
+        <h2 th:if="${headingLevel == 'h2'}"
+            class="dft-fu-preview__heading"
+            th:classappend="${headingLevel == 'h2'}? dft-fu-preview__heading--m"
+            th:text="#{${options.previewTitleMessageKey}}"></h2>
+
+        <h3 th:if="${headingLevel == 'h3'}"
+            class="dft-fu-preview__heading"
+            th:classappend="${headingLevel == 'h3'}? dft-fu-preview__heading--s"
+            th:text="#{${options.previewTitleMessageKey}}"></h3>
 
         <div class="dft-fu-preview__holder">
             <th:block th:each="artifact : *{journeyArtifact}" th:remove="tag">
@@ -45,11 +59,11 @@
                 th:text="#{${options.previewResetButtonMessageKey}}"></button>
     </div>
 
-    <div th:data-label-mobile="#{${options.uploadButtonMobileMessageKey}}"
+    <div class="govuk-form-group dft-fu-file-uploader"
+         th:data-label-mobile="#{${options.uploadButtonMobileMessageKey}}"
          th:data-label-desktop="#{${options.uploadButtonDesktopMessageKey}}"
          th:data-label-multiFile-caption="#{${options.multiFileCaptionMessageKey}}"
          th:data-loader-text="#{${options.loadingMessageKey}}"
-         class="govuk-form-group dft-fu-file-uploader"
          th:classappend="${#fields.hasErrors('journeyArtifact')} == true ? ' govuk-form-group--error' : ''">
 
         <label class="govuk-label" th:for="${options.fieldName}" th:text="#{${options.fieldLabel}}"></label>
