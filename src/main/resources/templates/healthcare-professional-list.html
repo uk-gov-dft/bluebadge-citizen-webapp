@@ -28,7 +28,7 @@
 
                         <span class="govuk-hint"
                               th:text="#{${JOURNEY.who} + 'healthcare.professional.list.body.hint'}"
-                              th:data-uipath="healthcare.professional.list.body.hint">Healthcare pros hint.</span>
+                              th:data-uipath="healthcare.professional.list.body.hint"></span>
 
                         <div class="govuk-radios" data-module="radios">
 
@@ -73,12 +73,12 @@
 
                                 <p class="govuk-body" th:if="${#lists.isEmpty(formRequest.healthcareProfessionals)}">
                                     <a id="firstaddhealthcareprofessionallink" href="/add-healthcare-professional"
-                                       th:text="#{first.healthcare.professional.add.link.text}"> Add first link</a>
+                                       th:text="#{first.healthcare.professional.add.link.text}"></a>
                                 </p>
                                 <p class="govuk-body"
                                    th:if="${not #lists.isEmpty(formRequest.healthcareProfessionals)}">
                                     <a id="addhealthcareprofessionallink" href="/add-healthcare-professional"
-                                       th:text="#{healthcare.professional.add.link.text}"> Add another link</a>
+                                       th:text="#{healthcare.professional.add.link.text}"></a>
                                 </p>
                             </div>
 
