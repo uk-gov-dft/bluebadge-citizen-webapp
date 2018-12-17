@@ -24,10 +24,10 @@
         <h3 class="dft-fu-preview__heading" th:text="#{${options.previewTitleMessageKey}}"></h3>
 
         <div class="dft-fu-preview__holder">
-            <th:block th:each="artifact : *{journeyArtifact}" th:remove="tag">
+            <th:block th:each="artifact : *{journeyArtifacts}" th:remove="tag">
                 <div th:if="${artifact.type == 'image'}" class="dft-fu-preview__item">
                     <img th:src="${artifact.signedUrl}"
-                         th:alt="${artifact.fileName}" alt="file name maybe - see henry">
+                         th:alt="${artifact.fileName}" alt="file name">
                 </div>
 
                 <div th:if="${artifact.type != 'image'}" class="dft-fu-preview__item dft-fu-preview__item--unavailable">

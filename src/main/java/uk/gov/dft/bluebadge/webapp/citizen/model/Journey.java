@@ -22,6 +22,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
+
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.arms.ArmsDifficultyParkingMetersForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
@@ -64,6 +65,15 @@ public class Journey implements Serializable {
   @SuppressWarnings("unchecked")
   public <T> T getFormForStep(StepDefinition step) {
     return (T) forms.get(step);
+  }
+
+  public synchronized <T extends StepForm> T getOrSetFormForStep(T form) {
+    T formForStep = getFormForStep(form.getAssociatedStep());
+    if (formForStep == null) {
+      setFormForStep(form);
+      formForStep = form;
+    }
+    return formForStep;
   }
 
   private void cleanUpSteps(Set<StepDefinition> alreadyCleaned, Set<StepDefinition> steps) {
