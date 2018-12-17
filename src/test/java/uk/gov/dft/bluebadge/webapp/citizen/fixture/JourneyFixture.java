@@ -60,6 +60,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProvidePhotoForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.UploadSupportingDocumentsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.CompensationSchemeForm;
@@ -200,6 +201,12 @@ public class JourneyFixture {
     return WhereCanYouWalkForm.builder()
         .destinationToHome(Values.WHERE_WALK_DESTINATION)
         .timeToDestination(Values.WHERE_WALK_TIME)
+        .build();
+  }
+
+  private static UploadSupportingDocumentsForm getUploadSupportingDocumentsForm() {
+    return UploadSupportingDocumentsForm.builder()
+        .journeyArtifact(buildJourneyArtifact("http://s3/supportingDocument"))
         .build();
   }
 
@@ -467,6 +474,8 @@ public class JourneyFixture {
       if (StepDefinition.WALKING_TIME == stepTo) return journey;
       journey.setFormForStep(getWhereCanYouWalkForm());
       if (StepDefinition.WHERE_CAN_YOU_WALK == stepTo) return journey;
+      journey.setFormForStep(getUploadSupportingDocumentsForm());
+      if (StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS == stepTo) return journey;
       journey.setFormForStep(getTreatmentListForm());
       if (StepDefinition.TREATMENT_LIST == stepTo) return journey;
       journey.setFormForStep(getMedicationListForm());
