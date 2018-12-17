@@ -17,6 +17,13 @@
             <h1 class="govuk-heading-l"
                 th:text="#{${JOURNEY.who} + 'eligiblePage.title'}"></h1>
 
+            <p class="govuk-body" th:text="#{eligiblePage.need.provide.text}"></p>
+
+            <ul class="govuk-list govuk-list--bullet">
+                <li th:text="#{${JOURNEY.who} + 'eligiblePage.proof.id'}"></li>
+            </ul>
+            <p class="govuk-body"><a href="#submit_docs_id" th:text="#{eligiblePage.help.submitting.docs}"></a></p>
+
             <p class="govuk-body" th:text="#{eligiblePage.also.need.provide.text}"></p>
 
             <ul class="govuk-list govuk-list--bullet">
@@ -35,14 +42,17 @@
                 </a><span th:remove="tag" th:text="#{${JOURNEY.who} + 'eligiblePage.website.posttext'}"></span>
             </p>
 
-            <h2 class="govuk-heading-m" th:text="#{eligiblePage.not.apply.online.text}">Don’t want to apply online?</h2>
+            <h2 class="govuk-heading-m" th:text="#{eligiblePage.not.apply.online.text}"></h2>
 
             <p class="govuk-body">
-            <span th:remove="tag" th:text="#{eligiblePage.council.contact.pretext}">Website:</span>
+            <span th:remove="tag" th:text="#{eligiblePage.council.contact.pretext}"></span>
                 <a th:href="${localAuthority.contactUrl}"
-                   th:text="${localAuthority.description} + #{eligiblePage.council.contact.posttext}">
-                    www.leedscitycouncil.gov.uk</a>
+                   th:text="${localAuthority.description} + #{eligiblePage.council.contact.posttext}"></a>
             </p>
+
+            <h2 id="submit_docs_id" class="govuk-heading-m" th:text="#{eligiblePage.submitting.docs}"></h2>
+            <p class="govuk-body" th:text="#{${JOURNEY.who} + 'eligiblePage.submitting.docs.para1'}"></p>
+            <p class="govuk-body" th:text="#{eligiblePage.submitting.docs.para2}"></p>
         </div>
     </section>
 
