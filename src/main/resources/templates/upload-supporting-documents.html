@@ -12,6 +12,10 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
+            <div th:if="${MAX_FILE_SIZE_EXCEEDED}">
+                <div th:replace="~{ fragments/errors :: govuk-error-summary-static('fileUploader.error.title', 'uploadSupportingDocuments.fu.rejected.content') }"></div>
+            </div>
+
             <h1 class="govuk-heading-l" th:text="#{uploadSupportingDocuments.title}"></h1>
 
             <p class="govuk-body" th:text="#{${JOURNEY.who} + uploadSupportingDocuments.content.p1}"></p>
@@ -20,6 +24,7 @@
 
 
             <form th:action="@{/upload-supporting-documents}" th:object="${formRequest}" method="post" enctype="multipart/form-data" novalidate>
+
                 <div th:class="${#fields.hasErrors('hasDocuments')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
                     <fieldset class="govuk-fieldset">
                         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
@@ -46,9 +51,7 @@
 
                             <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
                                  id="conditional-hasDocuments">
-
-                                <div th:replace="~{ fragments/file-uploader :: fileUploader('journeyArtifact', ${fileUploaderOptions}) }"></div>
-
+                                <div th:replace="~{ fragments/file-uploader :: fileUploader('journeyArtifact', ${fileUploaderOptions}, 'h2') }"></div>
                             </div>
 
                             <div class="govuk-radios__item">
