@@ -54,6 +54,7 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete the what makes walking difficult page
     And   I complete the mobility aids page for "NO"
     And   I complete the walking time page with option "CANTWALK"
+    And   I complete upload "supporting documents page" with a "PNG" document
     And   I complete the treatments page for "YES"
     And   I complete the medications page for "YES"
     And   I complete the healthcare professionals page for "YES"
@@ -113,6 +114,7 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete the what makes walking difficult page for "STRUGGLE"
     And   I complete the mobility aids page for "YES"
     And   I complete the walking time page with option "CANTWALK"
+    And   I complete upload "supporting documents page" with a "PNG" document
     And   I complete the treatments page for "YES"
     And   I complete the medications page for "YES"
     And   I complete the healthcare professionals page for "YES"
