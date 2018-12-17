@@ -59,15 +59,7 @@
                 th:text="#{${options.previewResetButtonMessageKey}}"></button>
     </div>
 
-    <div class="govuk-form-group dft-fu-file-uploader"
-         th:data-label-mobile="#{${options.uploadButtonMobileMessageKey}}"
-         th:data-label-desktop="#{${options.uploadButtonDesktopMessageKey}}"
-         th:data-label-multiFile-caption="#{${options.multiFileCaptionMessageKey}}"
-         th:data-loader-text="#{${options.loadingMessageKey}}"
-         th:classappend="${#fields.hasErrors('journeyArtifact')} == true ? ' govuk-form-group--error' : ''">
-
-        <label class="govuk-label" th:for="${options.fieldName}" th:text="#{${options.fieldLabel}}"></label>
-        <span class="govuk-error-message" th:errors="*{__${'journeyArtifact'}__}"></span>
+        <button id="preview-reset-btn" class="preview__resetBtn" th:text="#{fileUploader.preview.resetBtn}"></button>
 
         <p th:if="*{journeyArtifact}" class="govuk-body dft-fu-existing-file-label">You have already uploaded a file: <span th:text="*{journeyArtifact.fileName}"></span></p>
 
