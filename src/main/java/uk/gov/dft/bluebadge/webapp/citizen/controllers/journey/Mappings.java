@@ -30,6 +30,7 @@ public class Mappings {
   public static final String URL_ENTER_ADDRESS = "/enter-address";
   public static final String URL_EXISTING_BADGE = "/existing-badge";
   public static final String URL_PROVE_BENEFIT = "/prove-benefit";
+  public static final String URL_UPLOAD_BENEFIT = "/upload-benefit";
   public static final String URL_PROVE_IDENTITY = "/prove-identity";
   public static final String URL_PROVIDE_PHOTO = "/provide-photo";
   public static final String URL_UPLOAD_SUPPORTING_DOCUMENTS = "/upload-supporting-documents";
@@ -102,6 +103,7 @@ public class Mappings {
           .put(StepDefinition.ELIGIBLE, URL_ELIGIBLE)
           .put(StepDefinition.MAY_BE_ELIGIBLE, URL_MAY_BE_ELIGIBLE)
           .put(StepDefinition.PROVE_BENEFIT, URL_PROVE_BENEFIT)
+          .put(StepDefinition.UPLOAD_BENEFIT, URL_UPLOAD_BENEFIT)
           .put(StepDefinition.PROVE_IDENTITY, URL_PROVE_IDENTITY)
           .put(StepDefinition.PROVIDE_PHOTO, URL_PROVIDE_PHOTO)
 

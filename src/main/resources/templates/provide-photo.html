@@ -35,7 +35,7 @@
 
             <form th:action="@{/provide-photo}" th:object="${formRequest}" method="post" enctype="multipart/form-data" novalidate>
 
-                <div th:replace="~{ fragments/file-uploader :: fileUploader('journeyArtifact', ${fileUploaderOptions}) }"></div>
+                <div th:replace="~{ fragments/file-uploader :: fileUploader('journeyArtifact', ${fileUploaderOptions}, 'h2') }"></div>
 
                 <button type="submit"
                         data-file-uploader-show-on-success

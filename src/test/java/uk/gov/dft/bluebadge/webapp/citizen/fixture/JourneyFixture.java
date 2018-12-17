@@ -15,6 +15,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.m
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WPMS;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation.SCO;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import java.net.URL;
 import java.time.LocalDate;
@@ -60,6 +61,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProvidePhotoForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.UploadBenefitForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.UploadSupportingDocumentsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
@@ -462,6 +464,10 @@ public class JourneyFixture {
 
     if (PIP == eligibility || DLA == eligibility) {
       journey.setFormForStep(ProveBenefitForm.builder().hasProof(Boolean.TRUE).build());
+      journey.setFormForStep(
+          UploadBenefitForm.builder()
+              .journeyArtifacts(ImmutableList.of(buildJourneyArtifact("http://s3/benefitLink")))
+              .build());
     }
 
     // Eligibility specific section

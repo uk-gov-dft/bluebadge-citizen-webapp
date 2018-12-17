@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="#{${JOURNEY.who} + upload.benefit.title}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.who} + upload.benefit.title}"></h1>
+
+            <p class="govuk-body" th:text="#{${JOURNEY.who} + upload.benefit.content.p1}"></p>
+
+            <ul class="govuk-list govuk-list--bullet">
+                <li th:text="#{upload.benefit.ul.li1}"></li>
+                <li th:text="#{upload.benefit.ul.li2}"></li>
+                <li th:text="#{upload.benefit.ul.li3}"></li>
+            </ul>
+
+            <details class="govuk-details">
+                <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text"
+                          th:text="#{upload.benefit.what.pages.title}"></span>
+                </summary>
+                <div class="govuk-details__text">
+                    <p th:text="#{upload.benefit.what.pages.p1}"></p>
+                    <div>Need the SVG here</div>
+                </div>
+            </details>
+
+            <form th:action="@{/upload-benefit}" th:object="${formRequest}" method="post" enctype="multipart/form-data" novalidate>
+
+                <div th:replace="~{ fragments/file-uploader :: fileUploader('journeyArtifact', ${fileUploaderOptions}, 'h2') }"></div>
+
+                <button type="submit"
+                        data-file-uploader-show-on-success
+                        class="govuk-button"
+                        th:classappend="*{journeyArtifact} ? show"
+                        data-uipath="button.continue"
+                        th:text="#{btn.label.continue}"></button>
+            </form>
+
+            <details class="govuk-details">
+                <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text" id="cant-upload-text"
+                          th:text="#{upload.benefit.cantUpload.title}"></span>
+                </summary>
+                <div class="govuk-details__text">
+                    <p th:text="#{${JOURNEY.who} + upload.benefit.cantUpload.content.p1}"></p>
+                    <p th:text="#{upload.benefit.cantUpload.content.p2}"></p>
+                    <a id="continue-without-uploading" data-ga-track-link="continue without proof identity"
+                       data-ga-track-link-action="alternative click"
+                       href="/upload-benefit-bypass" th:text="#{upload.benefit.cantUpload.link}"></a>
+                </div>
+            </details>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
