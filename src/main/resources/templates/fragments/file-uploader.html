@@ -20,7 +20,6 @@
         <div class="govuk-error-summary__body dft-fu-error-summary__body"></div>
     </div>
 
-
     <div class="dft-fu-preview">
         <h1 th:if="${headingLevel == 'h1'}"
             class="dft-fu-preview__heading"
@@ -38,10 +37,10 @@
             th:text="#{${options.previewTitleMessageKey}}"></h3>
 
         <div class="dft-fu-preview__holder">
-            <th:block th:each="artifact : *{journeyArtifacts}" th:remove="tag">
+            <th:block th:each="artifact : *{journeyArtifact}" th:remove="tag">
                 <div th:if="${artifact.type == 'image'}" class="dft-fu-preview__item">
                     <img th:src="${artifact.signedUrl}"
-                         th:alt="${artifact.fileName}" alt="file name">
+                         th:alt="${artifact.fileName}" alt="file name maybe - see henry">
                 </div>
 
                 <div th:if="${artifact.type != 'image'}" class="dft-fu-preview__item dft-fu-preview__item--unavailable">
@@ -59,7 +58,15 @@
                 th:text="#{${options.previewResetButtonMessageKey}}"></button>
     </div>
 
-        <button id="preview-reset-btn" class="preview__resetBtn" th:text="#{fileUploader.preview.resetBtn}"></button>
+    <div class="govuk-form-group dft-fu-file-uploader"
+         th:data-label-mobile="#{${options.uploadButtonMobileMessageKey}}"
+         th:data-label-desktop="#{${options.uploadButtonDesktopMessageKey}}"
+         th:data-label-multiFile-caption="#{${options.multiFileCaptionMessageKey}}"
+         th:data-loader-text="#{${options.loadingMessageKey}}"
+         th:classappend="${#fields.hasErrors('journeyArtifact')} == true ? ' govuk-form-group--error' : ''">
+
+        <label class="govuk-label" th:for="${options.fieldName}" th:text="#{${options.fieldLabel}}"></label>
+        <span class="govuk-error-message" th:errors="*{__${'journeyArtifact'}__}"></span>
 
         <p th:if="*{journeyArtifact}" class="govuk-body dft-fu-existing-file-label">You have already uploaded a file: <span th:text="*{journeyArtifact.fileName}"></span></p>
 
