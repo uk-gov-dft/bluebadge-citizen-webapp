@@ -17,14 +17,14 @@
 
         <p class="govuk-body">
             <span th:remove="tag"
-                  th:text="#{${JOURNEY.who} + 'contactCouncilPage.you.should.contact.prefix.text'}">You should contact...:</span>
+                  th:text="#{${JOURNEY.who} + 'contactCouncilPage.you.should.contact.prefix.text'}"></span>
             <a th:href="${localAuthority.contactUrl}" th:text="' ' + #{contactCouncilPage.council.contact.intext} + ' ' + ${localAuthority.description}"></a>
-            <span th:remove="tag" th:text="#{${JOURNEY.who} + 'contactCouncilPage.you.should.contact.suffix.text'}">and tell them...</span>
+            <span th:remove="tag" th:text="#{${JOURNEY.who} + 'contactCouncilPage.you.should.contact.suffix.text'}"></span>
 
         </p>
 
         <p class="govuk-body"
-           th:text="#{contactCouncilPage.council.help.text}">Your council will offer....</p>
+           th:text="#{contactCouncilPage.council.help.text}"></p>
     </section>
 </main>
 
