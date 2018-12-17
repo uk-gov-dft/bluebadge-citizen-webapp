@@ -22,7 +22,7 @@ class ArtifactConverter {
   static List<Artifact> convert(Journey journey) {
     List<Artifact> result = new ArrayList<>();
 
-    if(PIP == journey.getEligibilityCode()){
+    if (PIP == journey.getEligibilityCode()) {
       UploadBenefitForm uploadBenefitForm = journey.getFormForStep(StepDefinition.UPLOAD_BENEFIT);
       convertArtifact(result, uploadBenefitForm, ArtifactType.PROOF_ELIG);
     }
