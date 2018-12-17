@@ -119,7 +119,7 @@ public class ProveIdentityController implements StepController {
         formRequest.setJourneyArtifact(uploadJourneyArtifact);
         journey.setFormForStep(formRequest);
       } catch (UnsupportedMimetypeException e) {
-        attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", "true");
+        attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", true);
         return "redirect:" + Mappings.URL_PROVE_IDENTITY;
       } catch (Exception e) {
         log.warn("Failed to upload document", e);

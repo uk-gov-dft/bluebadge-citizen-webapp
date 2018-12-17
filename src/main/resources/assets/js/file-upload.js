@@ -29,6 +29,7 @@ export default class FileUploader {
 		this.$container.appendChild(this.$screenAnnouncer);
 
 		this.$imageMimeTypes = 'image/jpeg, image/gif, image/png';
+		this.$allowMultipleFileUploads = this.$fileInput.multiple;
 
 		this.$DROPAREA_STATE = {
 			LOADING: this.$classPrefix + '--loading',
@@ -54,7 +55,7 @@ export default class FileUploader {
 		this.$fileInput.addEventListener('change', event => this.selectFile(event.target.files), false);
 
 		// Only register this event if multiple file uploads is enabled
-		if(this.$fileInput.multiple && this.$addFileBtn) {
+		if(this.$allowMultipleFileUploads && this.$addFileBtn) {
 			this.$addFileBtn.addEventListener('click', this.uploadBtnClick);
 		}
 		
@@ -109,7 +110,7 @@ export default class FileUploader {
 	}
 
 	selectFile(files) {
-		if(this.$fileInput.multiple && files.length > 0){
+		if(this.$allowMultipleFileUploads && files.length > 0){
 			Array.from(files)
 				.filter(file => this.validateFile(file))
 				.map(file => this.beginFileUpload(file));
@@ -204,7 +205,7 @@ export default class FileUploader {
 		dropArea_instructions.classList.add('drop-area__instructions');
 		dropArea_instructions.appendChild(dropArea_button);
 
-		if(this.$fileInput.multiple) {
+		if(this.$allowMultipleFileUploads) {
 			const dropArea_caption = document.createElement('p');
 			dropArea_caption.classList.add('drop-area__caption');
 			dropArea_caption.innerHTML = this.getDataAttrValue('label-multiFile-caption') || '(You can upload multiple photos)';

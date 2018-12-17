@@ -12,6 +12,10 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
+            <div th:if="${MAX_FILE_SIZE_EXCEEDED}">
+                <div th:replace="~{ fragments/errors :: govuk-error-summary-static('fileUploader.error.title', 'proveIdentity.fu.rejected.content') }"></div>
+            </div>
+
             <h1 class="govuk-heading-l" th:text="#{${JOURNEY.who} + proveIdentity.title}"></h1>
 
             <p class="govuk-body" th:text="#{${JOURNEY.who} + proveIdentity.content.p1}"></p>

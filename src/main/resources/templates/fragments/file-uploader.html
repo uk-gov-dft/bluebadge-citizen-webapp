@@ -8,7 +8,7 @@
 
 <div class="dft-fu"
      th:fragment="fileUploader(name, options, headingLevel)"
-     th:classappend="*{journeyArtifact} ? dft-fu--preview"
+     th:classappend="*{journeyArtifact}? dft-fu--preview"
      th:data-ajax-request-url="${options.ajaxRequestUrl}"
      th:data-upload-error-message="#{${options.errorMessageKey}}"
      th:data-upload-reject-error-message="#{${options.rejectErrorMessageKey}}">
@@ -51,7 +51,7 @@
             </th:block>
         </div>
 
-        <button class="dft-fu__add-file-button"
+        <button class="dft-fu__add-file-btn"
                 th:if="${options.allowMultipleFileUploads}"
                 th:text="#{fileUploader.addMore}"></button>
 
