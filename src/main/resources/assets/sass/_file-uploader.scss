@@ -1,18 +1,4 @@
-#preview-reset-btn{
-	display: none;
-}
-.js-enabled {
-	.js-hidden2 {
-		display: none;
-	}
-	.file-uploader--preview-mode {
-		#preview-reset-btn {
-			display: block;
-		}
-	}
-}
-
-.file-uploader {
+.govuk-file-uploader {
 	&__announcer {
 		@include govuk-visually-hidden;
 	}
@@ -28,12 +14,14 @@
 
 		.drop-area__btn {
 			color: govuk-colour("black");
+			background-color: $govuk-focus-colour;
 			box-shadow: 0 2px 0 darken($govuk-focus-colour, 20%);
 
 			&:active,
 			&:focus,
 			&:hover {
 				color: govuk-colour("black");
+				background-color: $govuk-focus-colour;
 				box-shadow: 0 2px 0 darken($govuk-focus-colour, 20%);
 			}
 		}
@@ -44,16 +32,6 @@
 		}
 	}
 
-	&--preview-mode {
-		.drop-area {
-			display: none;
-		}
-
-		.preview {
-			display: block;
-		}
-	}
-
 	&--loading {
 		.drop-area__loader {
 			display: block;
@@ -61,85 +39,8 @@
 	}
 }
 
-.preview {
-	display: none;
-	margin-top: 10px;
-
-	&--static {
-		display: block;
-	}
-
-	&__heading {
-		@extend .govuk-heading-m;
-	}
-
-	&__item {
-		@include govuk-font(19, regular);
-
-		@include govuk-media-query($from: tablet) {
-			height: 200px;
-			max-width: 260px;
-			margin-right: 10px;
-			margin-bottom: 10px;
-			display: inline-block;
-			vertical-align: middle;
-		}
-
-		p {
-			height: 160px;
-			margin: 0;
-			padding: 20px;
-			display: inline-block;
-			vertical-align: middle;
-			background-color: #eee;
-
-			span {
-				display: block;
-				margin-top: 10px;
-			}
-		}
-
-		img {
-			width: 100%;
-			height: auto;
-			vertical-align: middle;
-			image-orientation: from-image;
-			@include govuk-media-query($from: tablet) {
-				height: 100%;
-				width: auto;
-			}
-		}
-	}
-
-	&__addFileBtn {
-		@extend .govuk-button;
-		background-color: govuk-colour(blue);
-
-		&:active,
-		&:focus,
-		&:hover {
-			background-color: govuk-colour(blue);
-		}
-	}
-
-	&__resetBtn {
-		@include govuk-link-style-text;
-		@include govuk-link-common;
-		@include govuk-link-style-default;
-		@include govuk-font(19, regular);
-		border: 0;
-		padding: 0;
-		cursor: pointer;
-		display: block;
-		color: $govuk-link-colour;
-		text-decoration: underline;
-		background-color: transparent;
-	}
-}
-
 .drop-area {
 	padding: 30px;
-	margin-bottom: 30px;
 	border: 2px dashed rgba(govuk-colour(blue), .8);
 
 	&__icon {
@@ -212,28 +113,4 @@
 			background-color: govuk-colour(blue);
 		}
 	}
-}
-
-.file-uploader-error {
-	display: none;
-
-	&--active {
-		display: block;
-	}
-	&--error {
-		.file-uploader-msg-error{
-			display: block;
-		}
-	}
-	&--rejected {
-		.file-uploader-msg-rejected{
-			display: block;
-		}
-	}
-}
-.file-uploader-msg-error{
-	display: none;
-}
-.file-uploader-msg-rejected{
-	display: none;
 }

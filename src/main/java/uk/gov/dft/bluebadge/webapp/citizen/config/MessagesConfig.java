@@ -16,7 +16,7 @@ public class MessagesConfig {
   public MessageSource messageSource() {
     final ReloadableResourceBundleMessageSource messageSource =
         new ReloadableResourceBundleMessageSource();
-    messageSource.setBasenames("classpath:messages");
+    messageSource.setBasenames("classpath:messages", "classpath:fileUploaderMessages");
     messageSource.setFallbackToSystemLocale(false);
     messageSource.setCacheSeconds(0);
     return messageSource;
