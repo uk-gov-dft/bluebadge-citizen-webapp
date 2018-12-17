@@ -135,8 +135,7 @@ public class CommonPage {
   public void pressContinueOnFileUploadPage() {
     WebElement element = null;
     WebDriverWait wait = new WebDriverWait(getWebDriver(), 3000);
-    element =
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[text()='Continue']")));
+    element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[text()='Continue']")));
     element.click();
   }
 }
