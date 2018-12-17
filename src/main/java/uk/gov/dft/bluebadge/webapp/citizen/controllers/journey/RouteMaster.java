@@ -55,7 +55,17 @@ public class RouteMaster {
       Object formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
-    attr.addFlashAttribute("errorSummary", new ErrorViewModel());
+    return redirectToOnBindingError(
+        currentStep, formRequest, bindingResult, attr, new ErrorViewModel());
+  }
+
+  public String redirectToOnBindingError(
+      StepController currentStep,
+      Object formRequest,
+      BindingResult bindingResult,
+      RedirectAttributes attr,
+      ErrorViewModel errorViewModel) {
+    attr.addFlashAttribute("errorSummary", errorViewModel);
     attr.addFlashAttribute(
         "org.springframework.validation.BindingResult.formRequest", bindingResult);
     attr.addFlashAttribute("formRequest", formRequest);

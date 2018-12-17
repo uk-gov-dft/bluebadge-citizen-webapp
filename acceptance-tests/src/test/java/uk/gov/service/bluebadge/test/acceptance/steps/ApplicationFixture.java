@@ -173,8 +173,12 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And(
-      "^I complete \"(prove ID|provide photo|upload benefit)\" page with a \"(JPG|GIF|PNG|PDF)\" document")
+      "^I complete \"(prove ID|provide photo|upload supporting documents|upload benefit)\" page with a \"(JPG|GIF|PNG|PDF)\" document")
   public void iCompleteProveIDPageWithADocument(String pageName, String fileType) {
+
+    if (pageName.equalsIgnoreCase("upload supporting documents")) {
+      commonPage.selectRadioButton(Ids.UploadSupportingDocuments.UPLOAD_SUPPORTING_DOCUMENTS_YES);
+    }
 
     String filename = "evidence_" + fileType + "." + fileType.toLowerCase();
 

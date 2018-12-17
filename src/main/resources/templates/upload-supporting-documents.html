@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="#{uploadSupportingDocuments.title}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l" th:text="#{uploadSupportingDocuments.title}"></h1>
+
+            <p class="govuk-body" th:text="#{${JOURNEY.who} + uploadSupportingDocuments.content.p1}"></p>
+
+            <p class="govuk-body" th:text="#{uploadSupportingDocuments.content.p2}"></p>
+
+
+            <form th:action="@{/upload-supporting-documents}" th:object="${formRequest}" method="post" enctype="multipart/form-data" novalidate>
+                <div th:class="${#fields.hasErrors('hasDocuments')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+                    <fieldset class="govuk-fieldset">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                            <h1 class="govuk-fieldset__heading" th:text="#{${JOURNEY.who} + uploadSupportingDocuments.content.question}"></h1>
+                        </legend>
+
+                        <span class="govuk-error-message"
+                              data-uipath="hasDocuments.error"
+                              th:errors="*{hasDocuments}"></span>
+
+                        <div class="govuk-radios" data-module="radios">
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input"
+                                       type="radio"
+                                       id="hasDocuments.yes"
+                                       name="hasDocuments"
+                                       value="true"
+                                       th:field="*{hasDocuments}"
+                                       data-aria-controls="conditional-hasDocuments">
+                                <label class="govuk-label govuk-radios__label"
+                                       for="hasDocuments.yes"
+                                       th:text="#{radio.option.yes}"></label>
+                            </div>
+
+                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
+                                 id="conditional-hasDocuments">
+
+                                <div th:replace="~{ fragments/file-uploader :: fileUploader('journeyArtifact', ${fileUploaderOptions}) }"></div>
+
+                            </div>
+
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input"
+                                       type="radio"
+                                       value="false"
+                                       id="hasDocuments.no"
+                                       name="hasDocuments"
+                                       th:field="*{hasDocuments}"
+                                       data-aria-controls="conditional-hasDocumentsNo">
+                                <label class="govuk-label govuk-radios__label"
+                                       for="hasDocuments.no"
+                                       th:text="#{radio.option.no}"></label>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <button type="submit"
+                        class="govuk-button"
+                        data-uipath="button.continue"
+                        th:text="#{btn.label.continue}"></button>
+            </form>
+
+            <details class="govuk-details">
+                <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text" id="cant-upload-text"
+                          th:text="#{uploadSupportingDocuments.cantUpload.title}"></span>
+                </summary>
+                <div class="govuk-details__text">
+                    <p th:text="#{uploadSupportingDocuments.cantUpload.content.p1}"></p>
+                    <p th:text="#{uploadSupportingDocuments.cantUpload.content.p2}"></p>
+                    <a id="continue-without-uploading" data-ga-track-link="continue without supporting documents"
+                       data-ga-track-link-action="alternative click"
+                       href="/upload-supporting-documents-bypass" th:text="#{uploadSupportingDocuments.cantUpload.link}"></a>
+                </div>
+            </details>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

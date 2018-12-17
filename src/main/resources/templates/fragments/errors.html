@@ -19,10 +19,10 @@ variable which comes from Thymleaf / Spring integration.
 -------------------------------------------------------------------------------- */
 
 <div th:fragment="govuk-error-summary(errorSummary)" tabindex="-1" role="alert" id="error"
-     class="govuk-error-summary"
-     data-uipath="error-summary-box"
-     th:aria-labelledby="error-summary-title"
-     th:if="${errorSummary} OR ${#fields.hasErrors('formRequest.*')}">
+           class="govuk-error-summary"
+           data-uipath="error-summary-box"
+           th:aria-labelledby="error-summary-title"
+           th:if="${errorSummary} OR ${#fields.hasErrors('formRequest.*')}">
 
     <h2 class="govuk-error-summary__title"
         th:if="${errorSummary} AND ${errorSummary.title}"
@@ -49,6 +49,22 @@ variable which comes from Thymleaf / Spring integration.
         </ul>
 
     </div>
+
+</div>
+
+<div th:fragment="govuk-error-summary-static(title, message)" tabindex="-1" role="alert" id="error"
+     class="govuk-error-summary"
+     data-uipath="error-summary-box"
+     th:aria-labelledby="error-summary-title">
+
+    <h2 class="govuk-error-summary__title"
+        th:if="${title}"
+        id="error-summary-title"
+        th:text="#{${title}}" />
+
+    <div th:if="${message}"
+         th:text="#{${message}}"
+         class="govuk-error-summary__body" />
 
 </div>
 
