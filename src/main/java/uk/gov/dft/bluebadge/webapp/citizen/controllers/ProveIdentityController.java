@@ -126,7 +126,7 @@ public class ProveIdentityController implements StepController {
         return "redirect:" + Mappings.URL_PROVE_IDENTITY;
       } catch (Exception e) {
         log.warn("Failed to upload document", e);
-        bindingResult.rejectValue("document", "", "Failed to upload document");
+        bindingResult.rejectValue("journeyArtifact", "", "Failed to upload document");
       }
     }
 

@@ -135,7 +135,7 @@ public class UploadBenefitController implements StepController {
         return "redirect:" + Mappings.URL_UPLOAD_BENEFIT;
       } catch (Exception e) {
         log.warn("Failed to upload document", e);
-        bindingResult.rejectValue("document", "", "Failed to upload document");
+        bindingResult.rejectValue("journeyArtifact", "", "Failed to upload document");
       }
     }
 
