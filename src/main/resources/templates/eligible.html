@@ -42,13 +42,12 @@
                 </a><span th:remove="tag" th:text="#{${JOURNEY.who} + 'eligiblePage.website.posttext'}"></span>
             </p>
 
-            <h2 class="govuk-heading-m" th:text="#{eligiblePage.not.apply.online.text}">Don’t want to apply online?</h2>
+            <h2 class="govuk-heading-m" th:text="#{eligiblePage.not.apply.online.text}"></h2>
 
             <p class="govuk-body">
-            <span th:remove="tag" th:text="#{eligiblePage.council.contact.pretext}">Website:</span>
+            <span th:remove="tag" th:text="#{eligiblePage.council.contact.pretext}"></span>
                 <a th:href="${localAuthority.contactUrl}"
-                   th:text="${localAuthority.description} + #{eligiblePage.council.contact.posttext}">
-                    www.leedscitycouncil.gov.uk</a>
+                   th:text="${localAuthority.description} + #{eligiblePage.council.contact.posttext}"></a>
             </p>
 
             <h2 id="submit_docs_id" class="govuk-heading-m" th:text="#{eligiblePage.submitting.docs}"></h2>
