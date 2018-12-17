@@ -11,6 +11,11 @@
 <main layout:fragment="content">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
+
+            <div th:if="${MAX_FILE_SIZE_EXCEEDED}">
+                <div th:replace="~{ fragments/errors :: govuk-error-summary-static('fileUploader.error.title', 'proveIdentity.fu.rejected.content') }"></div>
+            </div>
+
             <h1 class="govuk-heading-l" th:text="#{${JOURNEY.who} + providePhoto.title}"></h1>
 
             <p class="govuk-body" th:text="#{${JOURNEY.who} + providePhoto.content.p1}"></p>
@@ -35,7 +40,7 @@
 
             <form th:action="@{/provide-photo}" th:object="${formRequest}" method="post" enctype="multipart/form-data" novalidate>
 
-                <div th:replace="~{ fragments/file-uploader :: fileUploader('journeyArtifact', ${fileUploaderOptions}) }"></div>
+                <div th:replace="~{ fragments/file-uploader :: fileUploader('journeyArtifact', ${fileUploaderOptions}, 'h2') }"></div>
 
                 <button type="submit"
                         data-file-uploader-show-on-success
