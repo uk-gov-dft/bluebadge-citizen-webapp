@@ -4,7 +4,7 @@ export default class DFT_FileUploader {
 
 	constructor () {
 
-		if(!this.supportsDragAndDrop) {
+		if (!this.supportsDragAndDrop || !window.File) {
 			return;
 		}
 
@@ -17,15 +17,18 @@ export default class DFT_FileUploader {
 	init(container) {
 
 		this.$dftFuContainer = container;
+		// class is added if browser supports drag and drop.
+		this.$dftFuContainer.parentNode.classList.add('activated');
+
 		this.$input = document.getElementsByClassName('dft-fu-file-upload').item(0);
 		this.$previewHolder = this.getChildElement('-preview__holder');
 		this.$resetButton = this.getChildElement('__reset-btn');
 		this.$errorSummaryBody = this.getChildElement('-error-summary__body');
 		this.$showOnSuccessElements = Array.from(document.querySelectorAll('[data-file-uploader-show-on-success]'));
-		this.$addMore = this.getChildElement('__add-file-button');
+		this.$addMore = this.getChildElement('__add-file-btn');
 
-		this.$generalErrorMessage = this.getDataAttrValue('error-label') || 'File could not be uploaded';
-		this.$uploadRejectErrorMessage = this.getDataAttrValue('error-label-reject') || this.$generalErrorMessage;
+		this.$generalErrorMessage = this.getDataAttrValue('upload-error-message') || 'File could not be uploaded';
+		this.$uploadRejectErrorMessage = this.getDataAttrValue('upload-reject-error-message') || "File uploaded was of incorrect format or file size has exceeded the limit";
 
 		this.$state = {
 			preview: this.$classPrefix + '--preview',
@@ -67,9 +70,9 @@ export default class DFT_FileUploader {
 		if (csrfTokenField.length > 0) {
 			formData.append('_csrf', csrfTokenField.item(0).value);
 		}
-		
-		if (this.$previewHolder) {
-			this.$previewHolder.innerHTML = '';
+
+		if (!this.$input.multiple && this.$previewHolder) {
+			this.$previewHolder.innerText = '';
 		}
 	}
 	
@@ -85,18 +88,17 @@ export default class DFT_FileUploader {
 	
 	uploadError() {
 		this.handleError(this.$generalErrorMessage);
-		this.$showOnSuccessElements.forEach(el => el.classList.remove('show'));
 	}
 
 	uploadRejected() {
 		this.handleError(this.$uploadRejectErrorMessage);
-		this.$showOnSuccessElements.forEach(el => el.classList.remove('show'));
 	}
 
 	handleError(errorMessage) {
+		this.$errorSummaryBody.innerText = errorMessage;
 		this.$dftFuContainer.classList.remove(this.$state.preview);
 		this.$dftFuContainer.classList.add(this.$state.error);
-		this.$errorSummaryBody.innerText = errorMessage;
+		this.$showOnSuccessElements.forEach(el => el.classList.remove('show'));
 	}
 	
 	resetButtonClick(event) {
@@ -122,7 +124,6 @@ export default class DFT_FileUploader {
 
 			previewItem.classList.add('dft-fu-preview__item--unavailable');
 			previewItem.innerText = response.fileName;
-			
 			previewItem.appendChild(span);
 		}
 

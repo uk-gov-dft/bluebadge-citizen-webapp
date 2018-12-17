@@ -1,8 +1,8 @@
 export default class FileUploader {
 
 	constructor (options) {
-		if(!this.supportsDragAndDrop()) {
-			console.warn('Drag and Drop is not supported on this browser');
+		if(!this.supportsDragAndDrop() || !window.File) {
+			console.warn('File Uploader is not supported on this browser');
 			return;
 		}
 
@@ -15,7 +15,7 @@ export default class FileUploader {
 		this.$classPrefix = 'govuk-file-uploader';
 
 		this.$options = options;
-		this.$options.maxFileSize = options.maxFileSize ||  10485760;
+		this.$options.maxFileSize = parseInt(options.maxFileSize) ||  10485760;
 		this.$fileInput = options.el;
 		this.$dropArea;
 		this.$uploadBtn;
@@ -29,6 +29,7 @@ export default class FileUploader {
 		this.$container.appendChild(this.$screenAnnouncer);
 
 		this.$imageMimeTypes = 'image/jpeg, image/gif, image/png';
+		this.$allowMultipleFileUploads = this.$fileInput.multiple;
 
 		this.$DROPAREA_STATE = {
 			LOADING: this.$classPrefix + '--loading',
@@ -51,17 +52,17 @@ export default class FileUploader {
 		
 		this.$uploadBtn.addEventListener('click', this.uploadBtnClick);
 		this.$uploadIcon.addEventListener('click', this.uploadBtnClick);
-		this.$fileInput.addEventListener('change', this.selectFile);
+		this.$fileInput.addEventListener('change', event => this.selectFile(event.target.files), false);
 
 		// Only register this event if multiple file uploads is enabled
-		if(this.$fileInput.multiple && this.$addFileBtn) {
+		if(this.$allowMultipleFileUploads && this.$addFileBtn) {
 			this.$addFileBtn.addEventListener('click', this.uploadBtnClick);
 		}
 		
 		// If device is mobile or tablet then we do not want to 
 		// register drag and drop events
 		if(!this.$isMobile) {
-			this.$dropArea.addEventListener('drop', this.selectFile);
+			this.$dropArea.addEventListener('drop', event => this.selectFile(event.dataTransfer.files));
 			
 			['dragenter', 'dragover', 'dragleave', 'drop', document.body].forEach(eventName => {
 				this.$dropArea.addEventListener(eventName, event => {
@@ -108,10 +109,8 @@ export default class FileUploader {
 		setTimeout(() => this.$uploadBtn.focus(), 1350);
 	}
 
-	selectFile(event) {
-		const files = event.target.files || event.dataTransfer.files;
-		
-		if(this.$fileInput.multiple && files.length > 0){
+	selectFile(files) {
+		if(this.$allowMultipleFileUploads && files.length > 0){
 			Array.from(files)
 				.filter(file => this.validateFile(file))
 				.map(file => this.beginFileUpload(file));
@@ -124,7 +123,7 @@ export default class FileUploader {
 	validateFile(file) {
 		if(file.type === '' || this.$fileInput.accept.indexOf(file.type) < 0) {
 			this.makeScreenAnnouncement('Incorrect file type uploaded');
-		} else if(this.$options.maxFileSize > 10485760){
+		} else if(file.size > this.$options.maxFileSize){
 			this.makeScreenAnnouncement('Uploaded file too large');
 		} else {
 			return true;
@@ -132,24 +131,25 @@ export default class FileUploader {
 
 		this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
 		this.fireLifeCycleEvent('uploadRejected');
-		return false;
+		return null;
     }
 
 	beginFileUpload(file) {
 		const xhr = new XMLHttpRequest();
 		xhr.open('POST', this.$options.uploadPath, true);
-		xhr.responseType = 'json';
 		this.$container.classList.add(this.$DROPAREA_STATE.LOADING);
 
 		xhr.addEventListener('readystatechange', (e) => {
 
 			if (xhr.readyState == 4 && xhr.status == 200) {
-				if(xhr.response && xhr.response.success) {
+				const resp = JSON.parse(xhr.response);
+
+				if(resp && resp.success) {
 					this.makeScreenAnnouncement('File uploaded: ' + file.fileName);
-					this.fireLifeCycleEvent('uploaded', xhr.response);
+					this.fireLifeCycleEvent('uploaded', resp);
 					this.$screenAnnouncer.focus();
 				} else {
-					this.fireLifeCycleEvent('uploadError', xhr.response);
+					this.fireLifeCycleEvent('uploadError', resp);
 				}
 
 				this.$container.classList.remove(this.$DROPAREA_STATE.LOADING);
@@ -205,7 +205,7 @@ export default class FileUploader {
 		dropArea_instructions.classList.add('drop-area__instructions');
 		dropArea_instructions.appendChild(dropArea_button);
 
-		if(this.$fileInput.multiple) {
+		if(this.$allowMultipleFileUploads) {
 			const dropArea_caption = document.createElement('p');
 			dropArea_caption.classList.add('drop-area__caption');
 			dropArea_caption.innerHTML = this.getDataAttrValue('label-multiFile-caption') || '(You can upload multiple photos)';
