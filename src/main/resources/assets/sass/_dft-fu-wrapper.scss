@@ -1,5 +1,19 @@
 .dft-fu {
 	margin-bottom: 30px;
+
+	&__reset-btn {
+		display: none;
+	}
+}
+
+form.activated {
+	.dft-fu__reset-btn { 
+		display: block;
+	}
+
+	[data-file-uploader-show-on-success]:not(.show) {
+		display: none;
+	}
 }
 
 .js-enabled {
@@ -33,13 +47,13 @@
 			border: 0;
 			padding: 0;
 			cursor: pointer;
-			display: block;
+			display: none;
 			color: $govuk-link-colour;
 			text-decoration: underline;
 			background-color: transparent;
 		}
 
-		&__add-file-button {
+		&__add-file-btn {
 			@extend .govuk-button;
 			background-color: govuk-colour(blue);
 
@@ -49,10 +63,6 @@
 				background-color: govuk-colour(blue);
 			}
 		}
-	}
-
-	[data-file-uploader-show-on-success]:not(.show) {
-		display: none;
 	}
 }
 
@@ -80,13 +90,12 @@
 			margin-right: 10px;
 			margin-bottom: 10px;
 			display: inline-block;
-			vertical-align: middle;
+			vertical-align: top;
 		}
 
 		img {
 			width: 100%;
 			height: auto;
-			vertical-align: middle;
 			image-orientation: from-image;
 			@include govuk-media-query($from: tablet) {
 				height: 100%;
