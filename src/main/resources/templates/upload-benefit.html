@@ -45,7 +45,7 @@
                 <button type="submit"
                         data-file-uploader-show-on-success
                         class="govuk-button"
-                        th:classappend="*{journeyArtifact} ? show"
+                        th:classappend="*{not #lists.isEmpty(journeyArtifacts)} ? show"
                         data-uipath="button.continue"
                         th:text="#{btn.label.continue}"></button>
             </form>

@@ -126,16 +126,18 @@ public class UploadBenefitController implements StepController {
     if (!documents.isEmpty()) {
       try {
         for (MultipartFile document : documents) {
-          JourneyArtifact uploadJourneyArtifact =
-              artifactService.upload(document, IMAGE_PDF_MIME_TYPES);
-          sessionForm.addJourneyArtifact(uploadJourneyArtifact);
+          if(!document.isEmpty()) {
+            JourneyArtifact uploadJourneyArtifact =
+                artifactService.upload(document, IMAGE_PDF_MIME_TYPES);
+            sessionForm.addJourneyArtifact(uploadJourneyArtifact);
+          }
         }
       } catch (UnsupportedMimetypeException e) {
         attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", true);
         return "redirect:" + Mappings.URL_UPLOAD_BENEFIT;
       } catch (Exception e) {
         log.warn("Failed to upload document", e);
-        bindingResult.rejectValue("document", "", "Failed to upload document");
+        bindingResult.rejectValue("journeyArtifact", "", "Failed to upload document");
       }
     }
 
