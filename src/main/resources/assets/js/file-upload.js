@@ -17,6 +17,7 @@ export default class FileUploader {
 		this.$options = options;
 		this.$options.maxFileSize = parseInt(options.maxFileSize) ||  10485760;
 		this.$fileInput = options.el;
+		this.$allowMultipleFileUploads = this.$fileInput.multiple;
 		this.$dropArea;
 		this.$uploadBtn;
 		this.$uploadIcon;
@@ -29,7 +30,6 @@ export default class FileUploader {
 		this.$container.appendChild(this.$screenAnnouncer);
 
 		this.$imageMimeTypes = 'image/jpeg, image/gif, image/png';
-		this.$allowMultipleFileUploads = this.$fileInput.multiple;
 
 		this.$DROPAREA_STATE = {
 			LOADING: this.$classPrefix + '--loading',
@@ -110,13 +110,20 @@ export default class FileUploader {
 	}
 
 	selectFile(files) {
-		if(this.$allowMultipleFileUploads && files.length > 0){
+		if (this.$allowMultipleFileUploads && files.length > 0){
+			this.beginFileUpload(Array.from(files)
+				.filter(file => this.validateFile(file)));
+		} else if (files.length > 0 && this.validateFile(files.item(0))) {
+			this.beginFileUpload(files.item(0));
+		}
+
+		/*if(this.$allowMultipleFileUploads && files.length > 0){
 			Array.from(files)
 				.filter(file => this.validateFile(file))
 				.map(file => this.beginFileUpload(file));
 		} else if(files.length > 0 && this.validateFile(files.item(0))) {
 			this.beginFileUpload(files.item(0));
-		}
+		}*/
 
 	}
 

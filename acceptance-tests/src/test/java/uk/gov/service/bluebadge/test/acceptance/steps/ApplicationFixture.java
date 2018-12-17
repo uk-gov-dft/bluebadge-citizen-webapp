@@ -200,8 +200,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
     commonPage.pressContinueOnFileUploadPage();
   }
 
-  @And(
-    "^I complete upload \"supporting documents page\" with a \"(JPG|GIF|PNG|PDF)\" document")
+  @And("^I complete upload \"supporting documents page\" with a \"(JPG|GIF|PNG|PDF)\" document")
   public void iCompleteUploadSupportingDocumentPageWithADocument(String fileType) {
 
     commonPage.selectRadioButton(Ids.UploadSupportingDocuments.UPLOAD_SUPPORTING_DOCUMENTS_YES);
@@ -215,9 +214,9 @@ public class ApplicationFixture extends AbstractSpringSteps {
       file_path = System.getProperty("user.dir") + "/src/test/resources/attachments/" + filename;
     } else {
       file_path =
-        System.getProperty("user.dir")
-          + "/acceptance-tests/src/test/resources/attachments/"
-          + filename;
+          System.getProperty("user.dir")
+              + "/acceptance-tests/src/test/resources/attachments/"
+              + filename;
     }
 
     // drop the file

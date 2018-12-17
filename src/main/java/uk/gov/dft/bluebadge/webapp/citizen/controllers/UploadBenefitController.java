@@ -131,7 +131,7 @@ public class UploadBenefitController implements StepController {
           sessionForm.addJourneyArtifact(uploadJourneyArtifact);
         }
       } catch (UnsupportedMimetypeException e) {
-        attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", "true");
+        attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", true);
         return "redirect:" + Mappings.URL_UPLOAD_BENEFIT;
       } catch (Exception e) {
         log.warn("Failed to upload document", e);
