@@ -48,7 +48,7 @@ public class ArtifactService {
     Assert.notNull(multipartFile, "Multipart file is null.");
 
     if (multipartFile.isEmpty()) {
-      throw new IllegalArgumentException("Upload failed. JourneyArtifact is empty");
+      throw new IllegalArgumentException("Upload failed. MultipartFile is empty");
     }
 
     log.info(
