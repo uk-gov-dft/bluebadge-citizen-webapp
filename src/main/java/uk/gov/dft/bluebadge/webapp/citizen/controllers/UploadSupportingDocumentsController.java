@@ -129,13 +129,7 @@ public class UploadSupportingDocumentsController implements StepController {
         bindingResult.rejectValue("document", "", "Failed to upload document");
       }
     }
-    /*
-        UploadSupportingDocumentsForm sessionForm = journey.getFormForStep(getStepDefinition());
-        if (null == sessionForm || null == sessionForm.getJourneyArtifact()) {
-          bindingResult.rejectValue(
-            "journeyArtifact", "NotNull.document", "Prove of identity is required");
-        }
-    */
+
     if (bindingResult.hasErrors()) {
       return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
     }

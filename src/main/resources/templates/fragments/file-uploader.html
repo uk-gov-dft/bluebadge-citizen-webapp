@@ -73,7 +73,7 @@
         <input type="file"
                class="govuk-file-upload dft-fu-file-upload"
                th:id="${name}"
-               th:name="${options.allowMultipleFileUploads} ? ${options.fieldName} + '[]' : ${options.fieldName}"
+               th:name="${options.fieldName}"
                th:multiple="${options.allowMultipleFileUploads}"
                th:accept="${options.allowedFileTypes}">
     </div>

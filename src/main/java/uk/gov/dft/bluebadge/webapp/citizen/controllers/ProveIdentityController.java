@@ -81,7 +81,7 @@ public class ProveIdentityController implements StepController {
   private FileUploaderOptions getFileUploaderOptions() {
     return FileUploaderOptions.builder()
         .fieldName("document")
-        .ajaxRequestUrl("/prove-identity-ajax")
+        .ajaxRequestUrl(PROVE_IDENTITY_AJAX_URL)
         .fieldLabel("proveIdentity.fu.field.label")
         .allowedFileTypes("image/jpeg,image/gif,image/png,application/pdf")
         .allowMultipleFileUploads(false)

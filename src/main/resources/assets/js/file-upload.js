@@ -110,21 +110,10 @@ export default class FileUploader {
 	}
 
 	selectFile(files) {
-		if (this.$allowMultipleFileUploads && files.length > 0){
+		if (files.length > 0){
 			this.beginFileUpload(Array.from(files)
 				.filter(file => this.validateFile(file)));
-		} else if (files.length > 0 && this.validateFile(files.item(0))) {
-			this.beginFileUpload(files.item(0));
 		}
-
-		/*if(this.$allowMultipleFileUploads && files.length > 0){
-			Array.from(files)
-				.filter(file => this.validateFile(file))
-				.map(file => this.beginFileUpload(file));
-		} else if(files.length > 0 && this.validateFile(files.item(0))) {
-			this.beginFileUpload(files.item(0));
-		}*/
-
 	}
 
 	validateFile(file) {
@@ -141,7 +130,7 @@ export default class FileUploader {
 		return null;
     }
 
-	beginFileUpload(file) {
+	beginFileUpload(files) {
 		const xhr = new XMLHttpRequest();
 		xhr.open('POST', this.$options.uploadPath, true);
 		this.$container.classList.add(this.$DROPAREA_STATE.LOADING);
@@ -152,7 +141,7 @@ export default class FileUploader {
 				const resp = JSON.parse(xhr.response);
 
 				if(resp && resp.success) {
-					this.makeScreenAnnouncement('File uploaded: ' + file.fileName);
+					// this.makeScreenAnnouncement('File uploaded: ' + files.fileName);
 					this.fireLifeCycleEvent('uploaded', resp);
 					this.$screenAnnouncer.focus();
 				} else {
@@ -165,8 +154,8 @@ export default class FileUploader {
 		});
 
 		const formData = new FormData();
-		formData.append(this.$fileInput.name, file, file.name);
-		this.fireLifeCycleEvent('beforeUpload', file, formData);
+		files.forEach(file => formData.append(this.$fileInput.name, file));
+		this.fireLifeCycleEvent('beforeUpload', files, formData);
 
 		xhr.send(formData);
 	}
