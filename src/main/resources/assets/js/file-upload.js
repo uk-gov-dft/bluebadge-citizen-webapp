@@ -141,11 +141,11 @@ export default class FileUploader {
 				const resp = JSON.parse(xhr.response);
 
 				if(resp && resp.success) {
-					// this.makeScreenAnnouncement('File uploaded: ' + files.fileName);
-					this.fireLifeCycleEvent('uploaded', resp);
+					this.makeScreenAnnouncement('Your files have been uploaded');
+					this.fireLifeCycleEvent('uploaded', resp, files);
 					this.$screenAnnouncer.focus();
 				} else {
-					this.fireLifeCycleEvent('uploadError', resp);
+					this.fireLifeCycleEvent('uploadError', resp, files);
 				}
 
 				this.$container.classList.remove(this.$DROPAREA_STATE.LOADING);

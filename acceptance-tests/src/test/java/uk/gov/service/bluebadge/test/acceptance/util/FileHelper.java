@@ -106,7 +106,6 @@ public class FileHelper {
             + "return input;";
 
     WebElement input = (WebElement) jse.executeScript(JS_DROP_FILE, target, offsetX, offsetY);
-
     input.sendKeys(filePath.getAbsoluteFile().toString());
     wait.until(ExpectedConditions.stalenessOf(input));
   }
