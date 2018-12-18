@@ -18,8 +18,8 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete address page
     And   I complete contact page for "yourself"
     And   I complete prove benefit page for "yes"
-    And   I complete "prove ID" page with a "JPG" document
-    And   I complete "provide photo" page with a "JPG" document
+    And   I complete "prove ID" page with a "GIF" document
+    And   I complete "provide photo" page with a "GIF" document
     And   I complete declaration page
     Then  I should see page titled "Application submitted" with GOV.UK suffix
 
