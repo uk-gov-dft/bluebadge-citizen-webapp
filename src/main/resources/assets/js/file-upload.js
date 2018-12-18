@@ -142,7 +142,6 @@ export default class FileUploader {
 
 				if(resp && resp.success) {
 					// this.makeScreenAnnouncement('File uploaded: ' + files.fileName);
-					console.log(resp);
 					this.fireLifeCycleEvent('uploaded', resp, files);
 					this.$screenAnnouncer.focus();
 				} else {
