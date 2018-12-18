@@ -19,6 +19,7 @@ Feature: DFT Blue badge Citizen app new application - ARMS
     And   I complete address page
     And   I complete contact page for "yourself"
     And   I complete describe health conditions page
+    And   I complete upload "supporting documents page" with a "PNG" document
     And   I complete the how often do you drive page
     And   I complete the adapted vehicle page for "YES"
     And   I complete the difficulty with parking meters page

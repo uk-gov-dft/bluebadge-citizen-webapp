@@ -390,7 +390,6 @@ public class JourneyFixture {
       journey.setFormForStep(MainReasonForm.builder().mainReasonOption(CHILDBULK).build());
       if (StepDefinition.MAIN_REASON == stepTo) return journey;
       journey.setFormForStep(new MayBeEligibleForm());
-      journey.setFormForStep(getMedicalEquipmentForm());
     }
     if (EligibilityCodeField.BLIND == eligibility) {
       journey.setFormForStep(ReceiveBenefitsForm.builder().benefitType(NONE).build());
@@ -446,10 +445,6 @@ public class JourneyFixture {
       journey.setFormForStep(new MayBeEligibleForm());
     }
 
-    journey.setFormForStep(getHealthConditionsForm());
-
-    journey.setFormForStep(getContactDetailsForm());
-
     // Start application Section
     journey.setFormForStep(getApplicantNameForm());
     if (StepDefinition.NAME == stepTo) return journey;
@@ -461,6 +456,10 @@ public class JourneyFixture {
     if (StepDefinition.NINO == stepTo) return journey;
     journey.setFormForStep(getEnterAddressForm());
     if (StepDefinition.ADDRESS == stepTo) return journey;
+
+    journey.setFormForStep(getContactDetailsForm());
+
+    journey.setFormForStep(getHealthConditionsForm());
 
     if (PIP == eligibility || DLA == eligibility) {
       journey.setFormForStep(ProveBenefitForm.builder().hasProof(Boolean.TRUE).build());
@@ -489,6 +488,8 @@ public class JourneyFixture {
     }
 
     if (ARMS == eligibility) {
+      journey.setFormForStep(getUploadSupportingDocumentsForm());
+      if (StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS == stepTo) return journey;
       journey.setFormForStep(
           ArmsHowOftenDriveForm.builder().howOftenDrive(Values.ARMS_HOW_OFTEN_DRIVE).build());
       if (StepDefinition.ARMS_HOW_OFTEN_DRIVE == stepTo) return journey;
@@ -504,8 +505,6 @@ public class JourneyFixture {
               .build());
       if (StepDefinition.ARMS_DIFFICULTY_PARKING_METER == stepTo) return journey;
     }
-
-    journey.setFormForStep(getHealthcareProfessionalListForm());
 
     if (EligibilityCodeField.BLIND == eligibility) {
       if (StepDefinition.CONTACT_DETAILS == stepTo) return journey;
@@ -526,6 +525,16 @@ public class JourneyFixture {
       if (StepDefinition.REGISTERED_COUNCIL == stepTo) return journey;
     }
 
+    if (EligibilityCodeField.CHILDBULK == eligibility) {
+      if (StepDefinition.HEALTH_CONDITIONS == stepTo) return journey;
+      journey.setFormForStep(getUploadSupportingDocumentsForm());
+      if (StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS == stepTo) return journey;
+      journey.setFormForStep(getMedicalEquipmentForm());
+      if (StepDefinition.MEDICAL_EQUIPMENT == stepTo) return journey;
+    }
+
+    journey.setFormForStep(getHealthcareProfessionalListForm());
+
     journey.setFormForStep(
         ProveIdentityForm.builder()
             .journeyArtifact(buildJourneyArtifact("http://s3/proveIdLink"))
@@ -536,6 +545,13 @@ public class JourneyFixture {
             .build());
     journey.setFormForStep(DeclarationForm.builder().agreed(Boolean.TRUE).build());
     return journey;
+  }
+
+  private static UploadSupportingDocumentsForm getUploadSupportingDocumentsForm(
+      UploadSupportingDocumentsForm.UploadSupportingDocumentsFormBuilder
+          uploadSupportingDocumentsFormBuilder,
+      JourneyArtifact build) {
+    return uploadSupportingDocumentsFormBuilder.journeyArtifact(build).build();
   }
 
   @SneakyThrows
