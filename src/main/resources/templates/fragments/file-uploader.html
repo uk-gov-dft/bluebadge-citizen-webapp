@@ -14,9 +14,9 @@
      th:data-upload-reject-error-message="#{${options.rejectErrorMessageKey}}">
 
     <div class="govuk-error-summary dft-fu-error-summary"
-         aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+         aria-labelledby="fu-error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
 
-        <h2 class="govuk-error-summary__title" th:text="#{${options.errorTitleMessageKey}}"></h2>
+        <h2 id="fu-error-summary-title" class="govuk-error-summary__title" th:text="#{${options.errorTitleMessageKey}}"></h2>
         <div class="govuk-error-summary__body dft-fu-error-summary__body"></div>
     </div>
 
