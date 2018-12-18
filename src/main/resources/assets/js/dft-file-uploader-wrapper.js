@@ -77,13 +77,22 @@ export default class DFT_FileUploader {
 	}
 	
 	uploaded(response) {
-		if(response.success) {
+
+		if (response.artifact.constructor === Array) {
+			
+			response.artifact.forEach(artifact => {
+				const previewItem = this.createFilePreview(artifact);
+				this.$previewHolder.appendChild(previewItem);
+			});
+
+		} else {
 			const previewItem = this.createFilePreview(response.artifact);
 			this.$previewHolder.appendChild(previewItem);
-			this.$dftFuContainer.classList.add(this.$state.preview);
-			this.$dftFuContainer.classList.remove(this.$state.error);
-			this.$showOnSuccessElements.forEach(el => el.classList.add('show'));
 		}
+
+		this.$dftFuContainer.classList.add(this.$state.preview);
+		this.$dftFuContainer.classList.remove(this.$state.error);
+		this.$showOnSuccessElements.forEach(el => el.classList.add('show'));
 	}
 	
 	uploadError() {
