@@ -5,6 +5,8 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_
 import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_PDF_MIME_TYPES;
 
 import com.google.common.collect.ImmutableMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +59,7 @@ public class UploadSupportingDocumentsController implements StepController {
     if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
       UploadSupportingDocumentsForm form = journey.getFormForStep(getStepDefinition());
       if (null != form.getJourneyArtifact()) {
-        artifactService.createAccessibleLinks(form.getJourneyArtifact());
+        form.getJourneyArtifacts().forEach(artifactService::createAccessibleLinks);
       }
       model.addAttribute(FORM_REQUEST, form);
     }
@@ -93,14 +95,20 @@ public class UploadSupportingDocumentsController implements StepController {
   @ResponseBody
   public Map<String, Object> submitAjax(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @RequestParam("document") MultipartFile document,
+      @RequestParam("document") List<MultipartFile> documents,
       UploadSupportingDocumentsForm form) {
     try {
-      JourneyArtifact uploadedJourneyArtifact =
-          artifactService.upload(document, IMAGE_PDF_MIME_TYPES);
-      form.setJourneyArtifact(uploadedJourneyArtifact);
-      journey.setFormForStep(form);
-      return ImmutableMap.of("success", "true", "artifact", uploadedJourneyArtifact);
+
+      UploadSupportingDocumentsForm sessionForm = journey.getOrSetFormForStep(form);
+
+      List<JourneyArtifact> journeyArtifacts = new ArrayList<>();
+      for (MultipartFile doc : documents) {
+        JourneyArtifact journeyArtifact = artifactService.upload(doc, IMAGE_PDF_MIME_TYPES);
+        sessionForm.addJourneyArtifact(journeyArtifact);
+        journeyArtifacts.add(journeyArtifact);
+      }
+
+      return ImmutableMap.of("success", "true", "artifact", journeyArtifacts);
     } catch (Exception e) {
       log.warn("Failed to upload document through ajax call.", e);
       return ImmutableMap.of("error", "Failed to upload");
@@ -110,25 +118,39 @@ public class UploadSupportingDocumentsController implements StepController {
   @PostMapping(Mappings.URL_UPLOAD_SUPPORTING_DOCUMENTS)
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @RequestParam("document") MultipartFile document,
+      @RequestParam("document") List<MultipartFile> documents,
       @Valid @ModelAttribute("formRequest") UploadSupportingDocumentsForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
-    if (!document.isEmpty()) {
+    UploadSupportingDocumentsForm sessionForm = journey.getOrSetFormForStep(formRequest);
+
+    if (!documents.isEmpty()) {
       try {
-        JourneyArtifact uploadJourneyArtifact =
-            artifactService.upload(document, IMAGE_PDF_MIME_TYPES);
-        formRequest.setJourneyArtifact(uploadJourneyArtifact);
-        journey.setFormForStep(formRequest);
+        for (MultipartFile document : documents) {
+          if (!document.isEmpty()) {
+            JourneyArtifact uploadJourneyArtifact =
+                artifactService.upload(document, IMAGE_PDF_MIME_TYPES);
+            sessionForm.addJourneyArtifact(uploadJourneyArtifact);
+          }
+        }
       } catch (UnsupportedMimetypeException e) {
-        attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", "true");
+        attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", true);
         return "redirect:" + Mappings.URL_UPLOAD_SUPPORTING_DOCUMENTS;
       } catch (Exception e) {
         log.warn("Failed to upload document", e);
         bindingResult.rejectValue("document", "", "Failed to upload document");
       }
     }
+
+    /*    if (null == sessionForm
+      || null == sessionForm.getJourneyArtifacts()
+      || sessionForm.getJourneyArtifacts().isEmpty()) {
+      bindingResult.rejectValue(
+        "journeyArtifact",
+        "NotNull.upload.benefit.document",
+        "Supporting documents is required");
+    }*/
 
     if (bindingResult.hasErrors()) {
       return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);

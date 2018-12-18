@@ -208,7 +208,7 @@ public class JourneyFixture {
 
   private static UploadSupportingDocumentsForm getUploadSupportingDocumentsForm() {
     return UploadSupportingDocumentsForm.builder()
-        .journeyArtifact(buildJourneyArtifact("http://s3/supportingDocument"))
+        .journeyArtifacts(Lists.newArrayList(buildJourneyArtifact("http://s3/supportingDocument")))
         .build();
   }
 
@@ -551,7 +551,7 @@ public class JourneyFixture {
       UploadSupportingDocumentsForm.UploadSupportingDocumentsFormBuilder
           uploadSupportingDocumentsFormBuilder,
       JourneyArtifact build) {
-    return uploadSupportingDocumentsFormBuilder.journeyArtifact(build).build();
+    return uploadSupportingDocumentsFormBuilder.journeyArtifacts(Lists.newArrayList(build)).build();
   }
 
   @SneakyThrows
