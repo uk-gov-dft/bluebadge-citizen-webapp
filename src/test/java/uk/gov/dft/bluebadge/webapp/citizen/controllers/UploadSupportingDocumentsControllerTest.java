@@ -1,5 +1,25 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_PDF_MIME_TYPES;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import lombok.SneakyThrows;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -19,27 +39,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.UploadSupportingDocumentsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_PDF_MIME_TYPES;
-
 public class UploadSupportingDocumentsControllerTest {
 
   private MockMvc mockMvc;
@@ -58,7 +57,7 @@ public class UploadSupportingDocumentsControllerTest {
 
   @Before
   @SneakyThrows
-  public void setup() throws MalformedURLException  {
+  public void setup() throws MalformedURLException {
     artifactServiceMock = mock(ArtifactService.class);
     UploadSupportingDocumentsController controller =
         new UploadSupportingDocumentsController(new RouteMaster(), artifactServiceMock);
@@ -66,18 +65,19 @@ public class UploadSupportingDocumentsControllerTest {
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
-/*
-    artifactUrl = new URL("http", "localhost", 8080, "file");
-    journeyArtifact = JourneyArtifact.builder().fileName("filename").type("type").url(artifactUrl).build();
-    form = UploadSupportingDocumentsForm.builder().hasDocuments(true)
-      .journeyArtifact(journeyArtifact).build();
-*/
-  //  artifactUrl = new URL("http", "localhost", 8080, "file");
+    /*
+        artifactUrl = new URL("http", "localhost", 8080, "file");
+        journeyArtifact = JourneyArtifact.builder().fileName("filename").type("type").url(artifactUrl).build();
+        form = UploadSupportingDocumentsForm.builder().hasDocuments(true)
+          .journeyArtifact(journeyArtifact).build();
+    */
+    //  artifactUrl = new URL("http", "localhost", 8080, "file");
     //journeyArtifact = JourneyArtifact.builder().fileName("filename").type("type").url(artifactUrl).build();
     form = UploadSupportingDocumentsForm.builder().build();
 
-
-    journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS, EligibilityCodeField.WALKD);
+    journey =
+        JourneyFixture.getDefaultJourneyToStep(
+            StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS, EligibilityCodeField.WALKD);
     journey.setFormForStep(form);
     docUrl = new URL("http://test");
     signedUrl = new URL("http://testSigned");
@@ -89,8 +89,7 @@ public class UploadSupportingDocumentsControllerTest {
         .perform(get("/upload-supporting-documents").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("upload-supporting-documents"))
-        .andExpect(
-            model().attribute("formRequest", form));
+        .andExpect(model().attribute("formRequest", form));
   }
 
   @Test
@@ -202,16 +201,19 @@ public class UploadSupportingDocumentsControllerTest {
             .url(new URL("http://test"))
             .build();
     journey.setFormForStep(
-        UploadSupportingDocumentsForm.builder().hasDocuments(true).journeyArtifact(journeyArtifact).build());
+        UploadSupportingDocumentsForm.builder()
+            .hasDocuments(true)
+            .journeyArtifact(journeyArtifact)
+            .build());
     MockMultipartFile mockMultifile =
         new MockMultipartFile("document", "originalFile.jpg", "text/plain", (byte[]) null);
 
     mockMvc
         .perform(
             multipart("/upload-supporting-documents")
-              .file(mockMultifile)
-              .param("hasDocuments", "true")
-              .sessionAttr("JOURNEY", journey))
+                .file(mockMultifile)
+                .param("hasDocuments", "true")
+                .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(SUCCESS_URL));
 
@@ -246,9 +248,9 @@ public class UploadSupportingDocumentsControllerTest {
     mockMvc
         .perform(
             multipart("/upload-supporting-documents")
-              .file(mockMultifile)
-              .param("hasDocuments", "true")
-              .sessionAttr("JOURNEY", journey))
+                .file(mockMultifile)
+                .param("hasDocuments", "true")
+                .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(SUCCESS_URL));
 

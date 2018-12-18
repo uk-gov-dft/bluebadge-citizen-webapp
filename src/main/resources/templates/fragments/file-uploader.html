@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<div class="dft-fu"
+<div class="dft-fu dft-fu--legacy"
      th:fragment="fileUploader(name, options, headingLevel)"
      th:classappend="*{not #lists.isEmpty(journeyArtifacts)} ? dft-fu--preview"
      th:data-ajax-request-url="${options.ajaxRequestUrl}"
@@ -68,7 +68,7 @@
         <label class="govuk-label" th:for="${options.fieldName}" th:text="#{${options.fieldLabel}}"></label>
         <span class="govuk-error-message" th:errors="*{__${'journeyArtifact'}__}"></span>
 
-        <div th:if="*{journeyArtifacts}" class="dft-fu-existing-file-label govuk-!-margin-top-6">
+        <div th:if="*{journeyArtifacts.size() > 0}" class="dft-fu-existing-file-label govuk-!-margin-top-6">
             <p class="govuk-body" th:text="#{fileUploader.nonJs.uploadHistory.label}"></p>
 
             <ul class="govuk-list govuk-list--bullet">
