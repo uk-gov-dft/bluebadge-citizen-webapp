@@ -17,8 +17,8 @@ export default class DFT_FileUploader {
 	init(container) {
 
 		this.$dftFuContainer = container;
-		// class is added if browser supports drag and drop.
-		this.$dftFuContainer.parentNode.classList.add('activated');
+		// class is removed if browser supports drag and drop.
+		this.$dftFuContainer.classList.remove(this.$classPrefix + '--legacy');
 
 		this.$input = document.getElementsByClassName('dft-fu-file-upload').item(0);
 		this.$previewHolder = this.getChildElement('-preview__holder');
