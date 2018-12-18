@@ -30,6 +30,8 @@ export default class DFT_FileUploader {
 		this.$generalErrorMessage = this.getDataAttrValue('upload-error-message') || 'File could not be uploaded';
 		this.$uploadRejectErrorMessage = this.getDataAttrValue('upload-reject-error-message') || "File uploaded was of incorrect format or file size has exceeded the limit";
 
+		this.$endPoint = this.getDataAttrValue('ajax-request-url');
+
 		this.$state = {
 			preview: this.$classPrefix + '--preview',
 			error: this.$classPrefix + '--error',
@@ -40,10 +42,10 @@ export default class DFT_FileUploader {
 			this.$resetButton.addEventListener('click', this.resetButtonClick);
 		}
 
-		const options = {
+		this.$options = {
 			el: this.$input,
 			container: document.getElementsByClassName('dft-fu-file-uploader').item(0),
-			uploadPath: this.getDataAttrValue('ajax-request-url'),
+			uploadPath: this.$endPoint,
 
 			// Life cycle methods
 			beforeUpload: this.beforeUpload.bind(this),
@@ -52,7 +54,7 @@ export default class DFT_FileUploader {
 			uploadRejected: this.uploadRejected.bind(this),
 		}
 
-		this.$fu = new FileUploader(options);
+		this.$fu = new FileUploader(this.$options);
 
 		if (this.$addMore) {
 			this.$addMore.addEventListener('click', this.$fu.uploadBtnClick);
@@ -90,6 +92,7 @@ export default class DFT_FileUploader {
 			this.$previewHolder.appendChild(previewItem);
 		}
 
+		this.clearUploadHistory(false);
 		this.$dftFuContainer.classList.add(this.$state.preview);
 		this.$dftFuContainer.classList.remove(this.$state.error);
 		this.$showOnSuccessElements.forEach(el => el.classList.add('show'));
@@ -112,6 +115,7 @@ export default class DFT_FileUploader {
 	
 	resetButtonClick(event) {
 		this.$fu.resetFileSelection(event);
+		this.clearUploadHistory(true);
 		this.$previewHolder.innerHTML = '';
 		this.$dftFuContainer.classList.remove(this.$state.preview);
 		this.$dftFuContainer.classList.remove(this.$state.error);
@@ -149,6 +153,10 @@ export default class DFT_FileUploader {
 	supportsDragAndDrop(){
 		const div = document.createElement('div');
 		return ('draggable' in div) || ('ondragstart' in div && 'ondrop' in div);
+  }
+
+  clearUploadHistory(flag) {
+	  this.$options.uploadPath = `${this.$endPoint}?clear=${flag}`;
   }
 
 }
