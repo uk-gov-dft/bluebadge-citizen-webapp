@@ -68,7 +68,14 @@
         <label class="govuk-label" th:for="${options.fieldName}" th:text="#{${options.fieldLabel}}"></label>
         <span class="govuk-error-message" th:errors="*{__${'journeyArtifact'}__}"></span>
 
-        <p th:each="artifact : *{journeyArtifacts}" class="govuk-body dft-fu-existing-file-label">You have already uploaded a file: <span th:text="${artifact.fileName}"></span></p>
+        <div th:if="*{journeyArtifacts}" class="dft-fu-existing-file-label govuk-!-margin-top-6">
+            <p class="govuk-body" th:text="#{fileUploader.nonJs.uploadHistory.label}"></p>
+
+            <ul class="govuk-list govuk-list--bullet">
+                <li th:each="artifact : *{journeyArtifacts}" th:text="${artifact.fileName}"></li>
+            </ul>
+        </div>
+
 
         <input type="file"
                class="govuk-file-upload dft-fu-file-upload"
