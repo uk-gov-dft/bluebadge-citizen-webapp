@@ -4,39 +4,62 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/master.html}">
 <head>
-    <title th:text="#{${JOURNEY.who} + upload.benefit.title}"></title>
+    <title th:text="#{${JOURNEY.who} + upload.benefit. + ${#strings.toString(JOURNEY.eligibilityCode)} + .title}"></title>
 </head>
 <body>
 
 <main layout:fragment="content" th:classappend="has-file-uploader">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-
             <div th:if="${MAX_FILE_SIZE_EXCEEDED}">
                 <div th:replace="~{ fragments/errors :: govuk-error-summary-static('fileUploader.error.title', 'upload.benefit.fu.rejected.content') }"></div>
             </div>
 
-            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.who} + upload.benefit.title}"></h1>
+            <th:block th:if="${'PIP' == #strings.toString(JOURNEY.eligibilityCode)}">
+            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.who} + upload.benefit.PIP.title}"></h1>
 
-            <p class="govuk-body" th:text="#{${JOURNEY.who} + upload.benefit.content.p1}"></p>
+            <p class="govuk-body" th:text="#{${JOURNEY.who} + upload.benefit.PIP.content.p1}"></p>
 
             <ul class="govuk-list govuk-list--bullet">
-                <li th:text="#{upload.benefit.ul.li1}"></li>
-                <li th:text="#{upload.benefit.ul.li2}"></li>
-                <li th:text="#{upload.benefit.ul.li3}"></li>
+                <li th:text="#{upload.benefit.PIP.ul.li1}"></li>
+                <li th:text="#{upload.benefit.PIP.ul.li2}"></li>
+                <li th:text="#{upload.benefit.PIP.ul.li3}"></li>
             </ul>
 
             <details class="govuk-details">
                 <summary class="govuk-details__summary">
                     <span class="govuk-details__summary-text"
-                          th:text="#{upload.benefit.what.pages.title}"></span>
+                          th:text="#{upload.benefit.PIP.what.pages.title}"></span>
                 </summary>
                 <div class="govuk-details__text">
-                    <p th:text="#{upload.benefit.what.pages.p1}"></p>
+                    <p th:text="#{upload.benefit.PIP.what.pages.p1}"></p>
                     <img class="dft-img-block-100" src="/images/icon-letter-pip.png" alt="PIP letter example">
 
                 </div>
             </details>
+            </th:block>
+            <th:block th:if="${'DLA' == #strings.toString(JOURNEY.eligibilityCode)}">
+            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.who} + upload.benefit.DLA.title}"></h1>
+
+            <p class="govuk-body" th:text="#{${JOURNEY.who} + upload.benefit.DLA.content.p1}"></p>
+
+            <ul class="govuk-list govuk-list--bullet">
+                <li th:text="#{upload.benefit.DLA.ul.li1}"></li>
+                <li th:text="#{upload.benefit.DLA.ul.li2}"></li>
+            </ul>
+
+            <details class="govuk-details">
+                <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text"
+                          th:text="#{upload.benefit.DLA.what.pages.title}"></span>
+                </summary>
+                <div class="govuk-details__text">
+                    <p th:text="#{upload.benefit.DLA.what.pages.p1}"></p>
+                    <img class="dft-img-block-100" src="/images/icon-letter-pip.png" alt="DLA letter example">
+
+                </div>
+            </details>
+            </th:block>
 
             <form th:action="@{/upload-benefit}" th:object="${formRequest}" method="post" enctype="multipart/form-data" novalidate>
 
