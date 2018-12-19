@@ -136,7 +136,7 @@ public class CommonPage {
     WebElement element = null;
     WebDriverWait wait = new WebDriverWait(getWebDriver(), 3000);
     element =
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("proveIdentity-continue-btn")));
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[text()='Continue']")));
     element.click();
   }
 }

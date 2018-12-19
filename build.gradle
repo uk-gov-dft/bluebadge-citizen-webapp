@@ -175,7 +175,10 @@ dependencies {
 
     testCompile('org.junit.jupiter:junit-jupiter-api:5.3.1')
     testCompile('org.junit.jupiter:junit-jupiter-params:5.3.1')
-    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.3.1')
+    testRuntimeOnly(
+            'org.junit.jupiter:junit-jupiter-engine:5.3.1',
+            'org.junit.vintage:junit-vintage-engine:5.3.1'
+    )
 }
 
 jacoco {
@@ -187,7 +190,6 @@ test {
         excludes += ['.*uk.gov.dft.bluebadge.webapp.la.controller.request.*', '.*uk.gov.dft.bluebadge.webapp.la.controller.viewmodel.*', '.*uk.gov.dft.bluebadge.webapp.la.client.usermanagement.model.*','.*uk.gov.dft.bluebadge.webapp.la.exception.*']
     }
     useJUnitPlatform()
-    useJUnit()
     testLogging {
         events "skipped", "failed"
     }

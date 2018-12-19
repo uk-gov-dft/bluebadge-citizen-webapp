@@ -52,7 +52,7 @@
 
                                     <tbody class="govuk-table__body" data-uipath="table.body">
                                     <tr class="govuk-table__row" th:each="aid, iStat : *{mobilityAids}">
-                                        <td class="govuk-table__cell" th:text="${aid.aidTypeDescription}"></td>
+                                        <td class="govuk-table__cell" th:text="${aid.aidType}"></td>
                                         <td class="govuk-table__cell" th:text="${aid.usage}"></td>
                                         <td class="govuk-table__cell govuk-table__cell--numeric">
                                             <a th:href="@{/list-mobility-aids/remove(uuid=${aid.id})}"
