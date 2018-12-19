@@ -85,11 +85,11 @@ public class UploadBenefitControllerTest {
     journey.setFormForStep(existingForm);
 
     doAnswer(
-        invocation -> {
-          JourneyArtifact param = invocation.getArgument(0);
-          param.setSignedUrl(signedUrl);
-          return null;
-        })
+            invocation -> {
+              JourneyArtifact param = invocation.getArgument(0);
+              param.setSignedUrl(signedUrl);
+              return null;
+            })
         .when(artifactServiceMock)
         .createAccessibleLinks(journeyArtifact);
 
@@ -108,7 +108,8 @@ public class UploadBenefitControllerTest {
     assertThat(formRequest.getJourneyArtifacts()).extracting("signedUrl").containsOnly(signedUrl);
   }
 
-  private JourneyArtifact.JourneyArtifactBuilder testArtifactBuilder() throws MalformedURLException {
+  private JourneyArtifact.JourneyArtifactBuilder testArtifactBuilder()
+      throws MalformedURLException {
     return JourneyArtifact.builder()
         .fileName("abc.jpg")
         .type("image")
@@ -154,8 +155,10 @@ public class UploadBenefitControllerTest {
 
   @Test
   public void ajaxSubmit_givenSuccessMultipleUpload_thenArtifactInSession() throws Exception {
-    JourneyArtifact journeyArtifact1 = testArtifactBuilder().fileName("test1.pdf").signedUrl(signedUrl).build();
-    JourneyArtifact journeyArtifact2 = testArtifactBuilder().fileName("test2.pdf").signedUrl(signedUrl).build();
+    JourneyArtifact journeyArtifact1 =
+        testArtifactBuilder().fileName("test1.pdf").signedUrl(signedUrl).build();
+    JourneyArtifact journeyArtifact2 =
+        testArtifactBuilder().fileName("test2.pdf").signedUrl(signedUrl).build();
     when(artifactServiceMock.upload(any(), any())).thenReturn(journeyArtifact1, journeyArtifact2);
 
     String testUpload = "Some thing to upload";
@@ -179,16 +182,17 @@ public class UploadBenefitControllerTest {
         .andExpect(jsonPath("artifact[0].signedUrl").value(signedUrl.toString()))
         .andExpect(jsonPath("artifact[1].fileName").value("test2.pdf"))
         .andExpect(jsonPath("artifact[1].url").value(journeyArtifact2.getUrl().toString()))
-        .andExpect(jsonPath("artifact[1].signedUrl").value(signedUrl.toString()))
-    ;
+        .andExpect(jsonPath("artifact[1].signedUrl").value(signedUrl.toString()));
     UploadBenefitForm form = journey.getFormForStep(StepDefinition.UPLOAD_BENEFIT);
     assertThat(form.getJourneyArtifacts()).containsExactly(journeyArtifact1, journeyArtifact2);
   }
 
   @Test
-  public void ajaxSubmit_givenSuccessUpload_andExistingArtifact_thenAdditionalArtifactInSession() throws Exception {
+  public void ajaxSubmit_givenSuccessUpload_andExistingArtifact_thenAdditionalArtifactInSession()
+      throws Exception {
     JourneyArtifact existingArtifact = addArtifactToJourney("test.jpg");
-    JourneyArtifact journeyArtifact = testArtifactBuilder().fileName("test.pdf").type("file").signedUrl(signedUrl).build();
+    JourneyArtifact journeyArtifact =
+        testArtifactBuilder().fileName("test.pdf").type("file").signedUrl(signedUrl).build();
     when(artifactServiceMock.upload(any(), any())).thenReturn(journeyArtifact);
 
     String testUpload = "Some thing to upload";
@@ -210,9 +214,12 @@ public class UploadBenefitControllerTest {
   }
 
   @Test
-  public void ajaxSubmit_givenSuccessUpload_andExistingArtifact_whenClearRequested_thenOnlyNewArtifactInSession() throws Exception {
+  public void
+      ajaxSubmit_givenSuccessUpload_andExistingArtifact_whenClearRequested_thenOnlyNewArtifactInSession()
+          throws Exception {
     addArtifactToJourney("test.jpg");
-    JourneyArtifact journeyArtifact = testArtifactBuilder().fileName("test.pdf").type("file").signedUrl(signedUrl).build();
+    JourneyArtifact journeyArtifact =
+        testArtifactBuilder().fileName("test.pdf").type("file").signedUrl(signedUrl).build();
     when(artifactServiceMock.upload(any(), any())).thenReturn(journeyArtifact);
 
     String testUpload = "Some thing to upload";
@@ -253,11 +260,13 @@ public class UploadBenefitControllerTest {
         .andExpect(jsonPath("artifact").doesNotExist());
   }
 
-
   @Test
-  public void submit_GivenAlreadyUploadedDoc_whenSubmittedWithoutADoc_thenShouldDisplayRedirectToSuccess() throws Exception {
+  public void
+      submit_GivenAlreadyUploadedDoc_whenSubmittedWithoutADoc_thenShouldDisplayRedirectToSuccess()
+          throws Exception {
     JourneyArtifact journeyArtifact = testArtifactBuilder().fileName("test.jpg").build();
-    journey.setFormForStep(UploadBenefitForm.builder().journeyArtifacts(Lists.newArrayList(journeyArtifact)).build());
+    journey.setFormForStep(
+        UploadBenefitForm.builder().journeyArtifacts(Lists.newArrayList(journeyArtifact)).build());
 
     mockMvc
         .perform(multipart("/upload-benefit").sessionAttr("JOURNEY", journey))
@@ -270,8 +279,8 @@ public class UploadBenefitControllerTest {
 
   @Test
   public void
-  submit_GivenAlreadyUploadedDoc_whenSubmittedWithNewDoc_thenShouldDisplayRedirectToSuccessAndHaveNewArtifact()
-      throws Exception {
+      submit_GivenAlreadyUploadedDoc_whenSubmittedWithNewDoc_thenShouldDisplayRedirectToSuccessAndHaveNewArtifact()
+          throws Exception {
     JourneyArtifact journeyArtifact = addArtifactToJourney("test.jpg");
     MockMultipartFile mockMultifile =
         new MockMultipartFile("document", "originalFile.jpg", "text/plain", "test".getBytes());
@@ -303,14 +312,15 @@ public class UploadBenefitControllerTest {
 
   private JourneyArtifact addArtifactToJourney(String fileName) throws MalformedURLException {
     JourneyArtifact journeyArtifact = testArtifactBuilder().fileName(fileName).build();
-    journey.setFormForStep(UploadBenefitForm.builder().journeyArtifacts(Lists.newArrayList(journeyArtifact)).build());
+    journey.setFormForStep(
+        UploadBenefitForm.builder().journeyArtifacts(Lists.newArrayList(journeyArtifact)).build());
     return journeyArtifact;
   }
 
   @Test
   public void
-  submit_GivenNoExistingDoc_whenSubmittedWithNewDoc_thenShouldDisplayRedirectToSuccessAndHaveNewArtifact()
-      throws Exception {
+      submit_GivenNoExistingDoc_whenSubmittedWithNewDoc_thenShouldDisplayRedirectToSuccessAndHaveNewArtifact()
+          throws Exception {
     MockMultipartFile mockMultifile =
         new MockMultipartFile("document", "originalFile.jpg", "text/plain", "test".getBytes());
 
@@ -351,5 +361,4 @@ public class UploadBenefitControllerTest {
     UploadBenefitForm form = journey.getFormForStep(StepDefinition.UPLOAD_BENEFIT);
     assertThat(form.getJourneyArtifact()).isNull();
   }
-
 }
