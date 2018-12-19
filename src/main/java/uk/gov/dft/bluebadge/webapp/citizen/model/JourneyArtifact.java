@@ -13,7 +13,5 @@ public class JourneyArtifact implements Serializable {
   @NonNull private final String fileName;
   @NonNull private final String type;
   @NonNull private final URL url;
-
-  // TODO: Why transient?
   @Setter private transient URL signedUrl;
 }
