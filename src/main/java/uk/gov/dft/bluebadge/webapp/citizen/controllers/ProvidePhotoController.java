@@ -130,7 +130,8 @@ public class ProvidePhotoController implements StepController {
 
     ProvidePhotoForm sessionForm = journey.getFormForStep(getStepDefinition());
     if (null == sessionForm || null == sessionForm.getJourneyArtifact()) {
-      bindingResult.rejectValue("journeyArtifact", "NotNull.document", "Photo is required");
+      bindingResult.rejectValue(
+          "journeyArtifact", "providePhoto.NotNull.photo", "Photo is required");
     }
 
     if (bindingResult.hasErrors()) {

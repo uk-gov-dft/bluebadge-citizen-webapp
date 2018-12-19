@@ -98,7 +98,7 @@ public class JourneyFixture {
     static final String MEDICATION_DOSAGE = "Dosage";
     static final String MOBILITY_USAGE = "Usage";
     static final HowProvidedCodeField MOBILITY_HOW_PROVIDED = HowProvidedCodeField.PRESCRIBE;
-    static final MobilityAidAddForm.AidType MOBILITY_AID_TYPE = MobilityAidAddForm.AidType.SCOOTER;
+    static final String MOBILITY_AID_TYPE = "Scooter";
     static final WalkingLengthOfTimeCodeField WALKING_TIME = WalkingLengthOfTimeCodeField.LESSMIN;
     static final List<WalkingDifficultyTypeCodeField> WHAT_MAKES_WALKING_DIFFICULT =
         Lists.newArrayList(
