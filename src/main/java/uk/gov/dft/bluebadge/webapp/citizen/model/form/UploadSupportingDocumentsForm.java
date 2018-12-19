@@ -58,4 +58,8 @@ public class UploadSupportingDocumentsForm implements StepForm, ArtifactForm, Se
     }
     throw new IllegalStateException("Failed to determine next step for current step:" + this);
   }
+
+  public static class UploadSupportingDocumentsFormBuilder {
+    private List<JourneyArtifact> journeyArtifacts = new ArrayList<>();
+  }
 }

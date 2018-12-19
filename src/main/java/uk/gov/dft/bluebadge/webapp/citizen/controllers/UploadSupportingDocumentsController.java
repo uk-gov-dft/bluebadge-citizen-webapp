@@ -1,7 +1,15 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_PDF_MIME_TYPES;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,15 +32,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.UploadSupportingDocumentsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.UnsupportedMimetypeException;
-
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_PDF_MIME_TYPES;
 
 @Controller
 @Slf4j
@@ -116,6 +115,7 @@ public class UploadSupportingDocumentsController implements StepController {
         sessionForm.setHasDocuments(true);
       }
       for (MultipartFile doc : documents) {
+        // TODO: Why PDF mime types?
         JourneyArtifact journeyArtifact = artifactService.upload(doc, IMAGE_PDF_MIME_TYPES);
         sessionForm.addJourneyArtifact(journeyArtifact);
         journeyArtifacts.add(journeyArtifact);
@@ -146,9 +146,7 @@ public class UploadSupportingDocumentsController implements StepController {
       sessionForm.setHasDocuments(formRequest.getHasDocuments());
     }
 
-    if (sessionForm.getHasDocuments().booleanValue()
-        && documents != null
-        && !documents.isEmpty()) {
+    if (sessionForm.getHasDocuments().booleanValue() && documents != null && !documents.isEmpty()) {
       try {
         List<JourneyArtifact> newArtifacts = new ArrayList<>();
         for (MultipartFile document : documents) {
