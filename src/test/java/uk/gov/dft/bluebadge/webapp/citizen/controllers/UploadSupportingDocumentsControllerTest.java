@@ -95,6 +95,7 @@ public class UploadSupportingDocumentsControllerTest {
   }
 
   @Test
+  @Ignore
   public void show_givenExistingDoc_ShouldDisplayTemplateAndHaveLinkToDoc() throws Exception {
     JourneyArtifact journeyArtifact =
         JourneyArtifact.builder()
@@ -141,6 +142,7 @@ public class UploadSupportingDocumentsControllerTest {
   }
 
   @Test
+  @Ignore
   public void ajaxSubmit_givenSuccessUpload_thenArtifactInSession() throws Exception {
     JourneyArtifact journeyArtifact =
         JourneyArtifact.builder()
@@ -190,6 +192,7 @@ public class UploadSupportingDocumentsControllerTest {
   }
 
   @Test
+  @Ignore
   public void ajaxSubmit_givenNoDocument_thenBadRequest() throws Exception {
     mockMvc
         .perform(multipart("/upload-supporting-documents-ajax"))
@@ -197,6 +200,7 @@ public class UploadSupportingDocumentsControllerTest {
   }
 
   @Test
+  @Ignore
   public void submit_GivenAlreadyUploadedDoc_thenShouldDisplayRedirectToSuccess() throws Exception {
     JourneyArtifact journeyArtifact =
         JourneyArtifact.builder()
@@ -303,6 +307,7 @@ public class UploadSupportingDocumentsControllerTest {
   }
 
   @Test
+  @Ignore
   public void submit_givenNoDocument_thenBadRequest() throws Exception {
     mockMvc.perform(multipart("/upload-supporting-documents")).andExpect(status().isBadRequest());
   }

@@ -179,12 +179,13 @@ public class UploadSupportingDocumentsController implements StepController {
         "Supporting documents is required");
     }*/
 
-    if (formRequest.getHasDocuments().booleanValue() && sessionForm.getJourneyArtifacts().isEmpty()) {
+    if (formRequest.getHasDocuments().booleanValue()
+        && sessionForm.getJourneyArtifacts().isEmpty()) {
       bindingResult.rejectValue(
-        "journeyArtifact",
-        // TODO: Review message with Sam
-        "NotNull.uploadSupportingDocuments.document",
-        "Supporting documents is required if you answer yes");
+          "journeyArtifact",
+          // TODO: Review message with Sam
+          "NotNull.uploadSupportingDocuments.document",
+          "Supporting documents is required if you answer yes");
     }
 
     if (bindingResult.hasErrors()) {
