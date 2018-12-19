@@ -77,7 +77,10 @@ public class UploadSupportingDocumentsController implements StepController {
   @GetMapping(DOC_BYPASS_URL)
   public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     UploadSupportingDocumentsForm formRequest =
-        UploadSupportingDocumentsForm.builder().hasDocuments(false).journeyArtifacts(Lists.newArrayList()).build();
+        UploadSupportingDocumentsForm.builder()
+            .hasDocuments(false)
+            .journeyArtifacts(Lists.newArrayList())
+            .build();
     journey.setFormForStep(formRequest);
     return routeMaster.redirectToOnSuccess(formRequest, journey);
   }
@@ -131,7 +134,10 @@ public class UploadSupportingDocumentsController implements StepController {
 
     UploadSupportingDocumentsForm sessionForm = journey.getOrSetFormForStep(formRequest);
 
-    if (formRequest.getHasDocuments() != null && formRequest.getHasDocuments() && documents != null && !documents.isEmpty()) {
+    if (formRequest.getHasDocuments() != null
+        && formRequest.getHasDocuments()
+        && documents != null
+        && !documents.isEmpty()) {
       try {
         List<JourneyArtifact> newArtifacts = new ArrayList<>();
         for (MultipartFile document : documents) {
