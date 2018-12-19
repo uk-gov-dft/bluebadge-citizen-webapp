@@ -95,12 +95,12 @@ public class UploadBenefitController implements StepController {
   public Map<String, Object> submitAjax(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @RequestParam("document") List<MultipartFile> documents,
-      @RequestParam(name="clear", defaultValue = "false") Boolean clearPreviousArtifacts,
+      @RequestParam(name = "clear", defaultValue = "false") Boolean clearPreviousArtifacts,
       UploadBenefitForm uploadBenefitForm) {
     try {
       UploadBenefitForm sessionForm = journey.getOrSetFormForStep(uploadBenefitForm);
 
-      if(clearPreviousArtifacts){
+      if (clearPreviousArtifacts) {
         sessionForm.setJourneyArtifacts(new ArrayList<>());
       }
 
@@ -138,7 +138,7 @@ public class UploadBenefitController implements StepController {
             newArtifacts.add(uploadJourneyArtifact);
           }
         }
-        if(!newArtifacts.isEmpty()) {
+        if (!newArtifacts.isEmpty()) {
           sessionForm.setJourneyArtifacts(newArtifacts);
         }
       } catch (UnsupportedMimetypeException e) {

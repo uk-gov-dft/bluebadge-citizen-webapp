@@ -86,11 +86,11 @@ public class ProvidePhotoControllerTest {
     journey.setFormForStep(existingForm);
 
     doAnswer(
-        invocation -> {
-          JourneyArtifact param = invocation.getArgument(0);
-          param.setSignedUrl(signedUrl);
-          return null;
-        })
+            invocation -> {
+              JourneyArtifact param = invocation.getArgument(0);
+              param.setSignedUrl(signedUrl);
+              return null;
+            })
         .when(artifactServiceMock)
         .createAccessibleLinks(journeyArtifact);
 
@@ -191,8 +191,8 @@ public class ProvidePhotoControllerTest {
 
   @Test
   public void
-  submit_GivenAlreadyUploadedDoc_whenSubmittedWithNewDoc_thenShouldDisplayRedirectToSuccessAndHaveNewArtifact()
-      throws Exception {
+      submit_GivenAlreadyUploadedDoc_whenSubmittedWithNewDoc_thenShouldDisplayRedirectToSuccessAndHaveNewArtifact()
+          throws Exception {
     URL testUrl = new URL("http://test");
     JourneyArtifact journeyArtifact =
         JourneyArtifact.builder().fileName("test.jpg").type("image").url(testUrl).build();
@@ -207,8 +207,7 @@ public class ProvidePhotoControllerTest {
             .type("image")
             .url(replacementUrl)
             .build();
-    when(artifactServiceMock.upload(mockMultifile, IMAGE_MIME_TYPES))
-        .thenReturn(replacingArtifact);
+    when(artifactServiceMock.upload(mockMultifile, IMAGE_MIME_TYPES)).thenReturn(replacingArtifact);
 
     mockMvc
         .perform(multipart("/provide-photo").file(mockMultifile).sessionAttr("JOURNEY", journey))
@@ -225,8 +224,8 @@ public class ProvidePhotoControllerTest {
 
   @Test
   public void
-  submit_GivenNoExistingDoc_whenSubmittedWithNewDoc_thenShouldDisplayRedirectToSuccessAndHaveNewArtifact()
-      throws Exception {
+      submit_GivenNoExistingDoc_whenSubmittedWithNewDoc_thenShouldDisplayRedirectToSuccessAndHaveNewArtifact()
+          throws Exception {
     MockMultipartFile mockMultifile =
         new MockMultipartFile("document", "originalFile.jpg", "text/plain", "test".getBytes());
 
@@ -237,8 +236,7 @@ public class ProvidePhotoControllerTest {
             .type("image")
             .url(replacementUrl)
             .build();
-    when(artifactServiceMock.upload(mockMultifile, IMAGE_MIME_TYPES))
-        .thenReturn(replacingArtifact);
+    when(artifactServiceMock.upload(mockMultifile, IMAGE_MIME_TYPES)).thenReturn(replacingArtifact);
 
     mockMvc
         .perform(multipart("/provide-photo").file(mockMultifile).sessionAttr("JOURNEY", journey))
@@ -270,5 +268,4 @@ public class ProvidePhotoControllerTest {
     ProvidePhotoForm form = journey.getFormForStep(StepDefinition.PROVIDE_PHOTO);
     assertThat(form.getJourneyArtifact()).isNull();
   }
-
 }
