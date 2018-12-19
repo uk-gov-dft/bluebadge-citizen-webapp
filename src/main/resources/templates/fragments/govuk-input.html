@@ -34,7 +34,7 @@ for id and attaching label to the input field.
           th:errors="*{__${name}__}" />
 
     <input th:with="sizeClass=${inputSize} == null ? '' : ' ' + ${inputSize}"
-            th:class="${#fields.hasErrors(name)} ? ('govuk-input govuk-input--error' + ${sizeClass}) : ('govuk-input' + ${sizeClass})"
+           th:class="${#fields.hasErrors(name)} ? ('govuk-input govuk-input--error' + ${sizeClass}) : ('govuk-input' + ${sizeClass})"
            th:data-uipath="${name} + '.field'"
            th:id="${name}"
            th:name="${name}"
