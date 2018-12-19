@@ -147,7 +147,7 @@ export default class FileUploader {
 				} else {
 					this.fireLifeCycleEvent('uploadError', resp, files);
 				}
-
+            	this.$fileInput.value = '';
 				this.$container.classList.remove(this.$DROPAREA_STATE.LOADING);
 				this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
 			}
