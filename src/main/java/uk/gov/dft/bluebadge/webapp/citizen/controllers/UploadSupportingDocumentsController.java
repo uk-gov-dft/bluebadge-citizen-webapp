@@ -59,7 +59,7 @@ public class UploadSupportingDocumentsController implements StepController {
 
     if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
       UploadSupportingDocumentsForm form = journey.getFormForStep(getStepDefinition());
-      if (null != form.getJourneyArtifact()) {
+      if (null != form.getJourneyArtifacts()) {
         form.getJourneyArtifacts().forEach(artifactService::createAccessibleLinks);
       }
       model.addAttribute(FORM_REQUEST, form);
@@ -111,13 +111,16 @@ public class UploadSupportingDocumentsController implements StepController {
       }
 
       List<JourneyArtifact> journeyArtifacts = new ArrayList<>();
+      if (documents != null && !documents.isEmpty()) {
+        sessionForm.setHasDocuments(true);
+      }
       for (MultipartFile doc : documents) {
         JourneyArtifact journeyArtifact = artifactService.upload(doc, IMAGE_PDF_MIME_TYPES);
         sessionForm.addJourneyArtifact(journeyArtifact);
         journeyArtifacts.add(journeyArtifact);
       }
-
       return ImmutableMap.of("success", "true", "artifact", journeyArtifacts);
+      //return ImmutableMap.of("success", "true", "artifact", sessionForm.getJourneyArtifacts());
     } catch (Exception e) {
       log.warn("Failed to upload document through ajax call.", e);
       return ImmutableMap.of("error", "Failed to upload");
@@ -134,10 +137,15 @@ public class UploadSupportingDocumentsController implements StepController {
 
     UploadSupportingDocumentsForm sessionForm = journey.getOrSetFormForStep(formRequest);
 
-    if (formRequest.getHasDocuments() != null
-        && formRequest.getHasDocuments()
-        && documents != null
-        && !documents.isEmpty()) {
+    if (formRequest.getHasDocuments() != null && !formRequest.getHasDocuments().booleanValue()) {
+      sessionForm.setHasDocuments(Boolean.FALSE);
+      sessionForm.setJourneyArtifacts(new ArrayList<>());
+    }
+    if (sessionForm.getHasDocuments() == null) {
+      sessionForm.setHasDocuments(formRequest.getHasDocuments());
+    }
+
+    if (sessionForm.getHasDocuments().booleanValue() && documents != null && !documents.isEmpty()) {
       try {
         List<JourneyArtifact> newArtifacts = new ArrayList<>();
         for (MultipartFile document : documents) {
@@ -170,6 +178,14 @@ public class UploadSupportingDocumentsController implements StepController {
         "NotNull.upload.benefit.document",
         "Supporting documents is required");
     }*/
+
+    if (formRequest.getHasDocuments().booleanValue() && sessionForm.getJourneyArtifacts().isEmpty()) {
+      bindingResult.rejectValue(
+        "journeyArtifact",
+        // TODO: Review message with Sam
+        "NotNull.uploadSupportingDocuments.document",
+        "Supporting documents is required if you answer yes");
+    }
 
     if (bindingResult.hasErrors()) {
       return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
