@@ -65,7 +65,7 @@
          th:data-loader-text="#{${options.loadingMessageKey}}"
          th:classappend="${#fields.hasErrors('journeyArtifact')} == true ? ' govuk-form-group--error' : ''">
 
-        <label class="govuk-label" th:for="${options.fieldName}" th:text="#{${options.fieldLabel}}"></label>
+        <label class="govuk-label" th:for="${name}" th:text="#{${options.fieldLabel}}"></label>
         <span class="govuk-error-message" th:errors="*{__${'journeyArtifact'}__}"></span>
 
         <p th:if="*{journeyArtifact}" class="govuk-body dft-fu-existing-file-label">You have already uploaded a file: <span th:text="*{journeyArtifact.fileName}"></span></p>

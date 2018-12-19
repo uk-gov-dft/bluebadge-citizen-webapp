@@ -2,7 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_PDF_MIME_TYPES;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_MIME_TYPES;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
@@ -26,28 +26,28 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.FileUploaderOptions;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveIdentityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProvidePhotoForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.UnsupportedMimetypeException;
 
 @Controller
 @Slf4j
-public class ProveIdentityController implements StepController {
+public class ProvidePhotoController implements StepController {
 
-  public static final String TEMPLATE = "prove-identity";
-  private static final String DOC_BYPASS_URL = "prove-id-bypass";
-  public static final String PROVE_IDENTITY_AJAX_URL = "/prove-identity-ajax";
+  public static final String TEMPLATE = "provide-photo";
+  private static final String DOC_BYPASS_URL = "provide-photo-bypass";
+  public static final String PROVIDE_PHOTO_AJAX_URL = "/provide-photo-ajax";
 
   private final RouteMaster routeMaster;
   private final ArtifactService artifactService;
 
   @Autowired
-  ProveIdentityController(RouteMaster routeMaster, ArtifactService artifactService) {
+  ProvidePhotoController(RouteMaster routeMaster, ArtifactService artifactService) {
     this.routeMaster = routeMaster;
     this.artifactService = artifactService;
   }
 
-  @GetMapping(Mappings.URL_PROVE_IDENTITY)
+  @GetMapping(Mappings.URL_PROVIDE_PHOTO)
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
@@ -55,15 +55,15 @@ public class ProveIdentityController implements StepController {
     }
 
     if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
-      ProveIdentityForm proveIdentityForm = journey.getFormForStep(getStepDefinition());
-      if (null != proveIdentityForm.getJourneyArtifact()) {
-        artifactService.createAccessibleLinks(proveIdentityForm.getJourneyArtifact());
+      ProvidePhotoForm providePhotoForm = journey.getFormForStep(getStepDefinition());
+      if (null != providePhotoForm.getJourneyArtifact()) {
+        artifactService.createAccessibleLinks(providePhotoForm.getJourneyArtifact());
       }
-      model.addAttribute(FORM_REQUEST, proveIdentityForm);
+      model.addAttribute(FORM_REQUEST, providePhotoForm);
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
-      model.addAttribute(FORM_REQUEST, ProveIdentityForm.builder().build());
+      model.addAttribute(FORM_REQUEST, ProvidePhotoForm.builder().build());
     }
 
     model.addAttribute("fileUploaderOptions", getFileUploaderOptions());
@@ -73,7 +73,7 @@ public class ProveIdentityController implements StepController {
 
   @GetMapping(DOC_BYPASS_URL)
   public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
-    ProveIdentityForm formRequest = ProveIdentityForm.builder().build();
+    ProvidePhotoForm formRequest = ProvidePhotoForm.builder().build();
     journey.setFormForStep(formRequest);
     return routeMaster.redirectToOnSuccess(formRequest);
   }
@@ -81,25 +81,24 @@ public class ProveIdentityController implements StepController {
   private FileUploaderOptions getFileUploaderOptions() {
     return FileUploaderOptions.builder()
         .fieldName("document")
-        .ajaxRequestUrl(PROVE_IDENTITY_AJAX_URL)
-        .fieldLabel("proveIdentity.fu.field.label")
-        .allowedFileTypes("image/jpeg,image/gif,image/png,application/pdf")
+        .ajaxRequestUrl(PROVIDE_PHOTO_AJAX_URL)
+        .fieldLabel("providePhoto.fu.field.label")
+        .allowedFileTypes("image/jpeg,image/gif,image/png")
         .allowMultipleFileUploads(false)
-        .rejectErrorMessageKey("proveIdentity.fu.rejected.content")
+        .rejectErrorMessageKey("providePhoto.fu.rejected.content")
         .build();
   }
 
-  @PostMapping(value = PROVE_IDENTITY_AJAX_URL, produces = "application/json")
+  @PostMapping(value = PROVIDE_PHOTO_AJAX_URL, produces = "application/json")
   @ResponseBody
   public Map<String, Object> submitAjax(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @RequestParam("document") MultipartFile document,
-      ProveIdentityForm proveIdentityForm) {
+      ProvidePhotoForm providePhotoForm) {
     try {
-      JourneyArtifact uploadedJourneyArtifact =
-          artifactService.upload(document, IMAGE_PDF_MIME_TYPES);
-      proveIdentityForm.setJourneyArtifact(uploadedJourneyArtifact);
-      journey.setFormForStep(proveIdentityForm);
+      JourneyArtifact uploadedJourneyArtifact = artifactService.upload(document, IMAGE_MIME_TYPES);
+      providePhotoForm.setJourneyArtifact(uploadedJourneyArtifact);
+      journey.setFormForStep(providePhotoForm);
       return ImmutableMap.of("success", "true", "artifact", uploadedJourneyArtifact);
     } catch (Exception e) {
       log.warn("Failed to upload document through ajax call.", e);
@@ -107,33 +106,32 @@ public class ProveIdentityController implements StepController {
     }
   }
 
-  @PostMapping(Mappings.URL_PROVE_IDENTITY)
+  @PostMapping(Mappings.URL_PROVIDE_PHOTO)
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @RequestParam("document") MultipartFile document,
-      @Valid @ModelAttribute("formRequest") ProveIdentityForm formRequest,
+      @Valid @ModelAttribute("formRequest") ProvidePhotoForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
     if (!document.isEmpty()) {
       try {
-        JourneyArtifact uploadJourneyArtifact =
-            artifactService.upload(document, IMAGE_PDF_MIME_TYPES);
+        JourneyArtifact uploadJourneyArtifact = artifactService.upload(document, IMAGE_MIME_TYPES);
         formRequest.setJourneyArtifact(uploadJourneyArtifact);
         journey.setFormForStep(formRequest);
       } catch (UnsupportedMimetypeException e) {
         attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", true);
-        return "redirect:" + Mappings.URL_PROVE_IDENTITY;
+        return "redirect:" + Mappings.URL_PROVIDE_PHOTO;
       } catch (Exception e) {
         log.warn("Failed to upload document", e);
         bindingResult.rejectValue("document", "", "Failed to upload document");
       }
     }
 
-    ProveIdentityForm sessionForm = journey.getFormForStep(getStepDefinition());
+    ProvidePhotoForm sessionForm = journey.getFormForStep(getStepDefinition());
     if (null == sessionForm || null == sessionForm.getJourneyArtifact()) {
       bindingResult.rejectValue(
-          "journeyArtifact", "NotNull.document", "Prove of identity is required");
+          "journeyArtifact", "providePhoto.NotNull.photo", "Photo is required");
     }
 
     if (bindingResult.hasErrors()) {
@@ -145,6 +143,6 @@ public class ProveIdentityController implements StepController {
 
   @Override
   public StepDefinition getStepDefinition() {
-    return StepDefinition.PROVE_IDENTITY;
+    return StepDefinition.PROVIDE_PHOTO;
   }
 }

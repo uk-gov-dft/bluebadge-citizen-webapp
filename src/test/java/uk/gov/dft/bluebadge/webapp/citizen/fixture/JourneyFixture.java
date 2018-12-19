@@ -16,9 +16,11 @@ import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.m
 import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation.SCO;
 
 import com.google.common.collect.Lists;
+import java.net.URL;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import lombok.SneakyThrows;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.GenderCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HowProvidedCodeField;
@@ -29,6 +31,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 import uk.gov.dft.bluebadge.webapp.citizen.model.component.CompoundDate;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
@@ -53,6 +56,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.OrganisationMayBeEligibleForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveBenefitForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveIdentityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProvidePhotoForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
@@ -507,9 +511,21 @@ public class JourneyFixture {
       if (StepDefinition.REGISTERED_COUNCIL == stepTo) return journey;
     }
 
-    journey.setFormForStep(ProveIdentityForm.builder().build());
+    journey.setFormForStep(
+        ProveIdentityForm.builder()
+            .journeyArtifact(buildJourneyArtifact("http://s3/proveIdLink"))
+            .build());
+    journey.setFormForStep(
+        ProvidePhotoForm.builder()
+            .journeyArtifact(buildJourneyArtifact("http://s3/photoLink"))
+            .build());
     journey.setFormForStep(DeclarationForm.builder().agreed(Boolean.TRUE).build());
     return journey;
+  }
+
+  @SneakyThrows
+  private static JourneyArtifact buildJourneyArtifact(String testUrl) {
+    return JourneyArtifact.builder().url(new URL(testUrl)).fileName(testUrl).type("file").build();
   }
 
   private static StepForm getDisabilityForm() {
