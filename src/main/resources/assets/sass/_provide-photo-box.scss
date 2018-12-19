@@ -1,4 +1,16 @@
-// Miscellaneous classes
+.provide-photo-box-page {
+  .dft-fu-preview {
+    &__item {
+      img {
+			@include govuk-media-query($until: tablet) {
+				width: 50%;
+				height: auto;
+			}
+      }
+    }
+  }
+}
+
 .provide-photo-box {
   @include govuk-clearfix;
   position: relative;

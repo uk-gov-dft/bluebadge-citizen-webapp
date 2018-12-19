@@ -6,8 +6,8 @@
 <head>
     <title th:text="#{${JOURNEY.who} + providePhoto.title}"></title>
 </head>
-<body>
 
+<body th:classappend="'provide-photo-box-page'">
 <main layout:fragment="content">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
