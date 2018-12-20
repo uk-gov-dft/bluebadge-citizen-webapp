@@ -1,5 +1,28 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import com.google.common.collect.Lists;
+import lombok.SneakyThrows;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.UploadSupportingDocumentsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -17,29 +40,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_PDF_MIME_TYPES;
-
-import com.google.common.collect.Lists;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
-import lombok.SneakyThrows;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
-import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
-import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.UploadSupportingDocumentsForm;
-import uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService;
 
 public class UploadSupportingDocumentsControllerTest {
 
@@ -321,7 +321,6 @@ public class UploadSupportingDocumentsControllerTest {
   }
 
   @Test
-  @Ignore
   public void
       submit_GivenAlreadyUploadedDoc_whenSubmittedWithNewDoc_thenShouldDisplayRedirectToSuccessAndHaveNewArtifact()
           throws Exception {
@@ -330,6 +329,7 @@ public class UploadSupportingDocumentsControllerTest {
         JourneyArtifact.builder().fileName("test.jpg").type("image").url(testUrl).build();
     journey.setFormForStep(
         UploadSupportingDocumentsForm.builder()
+            .hasDocuments(true)
             .journeyArtifacts(Lists.newArrayList(journeyArtifact))
             .build());
     MockMultipartFile mockMultifile =
@@ -354,8 +354,10 @@ public class UploadSupportingDocumentsControllerTest {
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(SUCCESS_URL));
 
-    UploadSupportingDocumentsForm form = journey.getFormForStep(StepDefinition.PROVE_IDENTITY);
-    JourneyArtifact sessionArtitfact = form.getJourneyArtifact();
+    UploadSupportingDocumentsForm form = journey.getFormForStep(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
+    List<JourneyArtifact> sessionArtitfacts = form.getJourneyArtifacts();
+    assertThat(sessionArtitfacts).containsOnly(replacingArtifact);
+    JourneyArtifact sessionArtitfact = sessionArtitfacts.get(0);
     assertThat(sessionArtitfact).isNotSameAs(journeyArtifact);
     assertThat(sessionArtitfact.getUrl()).isEqualTo(replacementUrl);
     assertThat(sessionArtitfact.getType()).isEqualTo("image");
