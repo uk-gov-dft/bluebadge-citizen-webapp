@@ -20,6 +20,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_PDF_MIME_TYPES;
 
 import com.google.common.collect.Lists;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
 import lombok.SneakyThrows;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,28 +40,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.UploadSupportingDocumentsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_PDF_MIME_TYPES;
 
 public class UploadSupportingDocumentsControllerTest {
 
@@ -199,7 +180,8 @@ public class UploadSupportingDocumentsControllerTest {
         testArtifactBuilder().fileName("test1.pdf").signedUrl(signedUrl).build();
     JourneyArtifact journeyArtifact2 =
         testArtifactBuilder().fileName("test2.pdf").signedUrl(signedUrl).build();
-    when(artifactServiceMock.upload(any(), any())).thenReturn(journeyArtifact1, journeyArtifact2);
+    when(artifactServiceMock.upload(anyList(), any()))
+        .thenReturn(Lists.newArrayList(journeyArtifact1, journeyArtifact2));
 
     String testUpload = "Some thing to upload";
     MockMultipartFile mockMultifile1 =
@@ -234,7 +216,8 @@ public class UploadSupportingDocumentsControllerTest {
     JourneyArtifact existingArtifact = addArtifactToJourney("test.jpg");
     JourneyArtifact journeyArtifact =
         testArtifactBuilder().fileName("test.pdf").type("file").signedUrl(signedUrl).build();
-    when(artifactServiceMock.upload(any(), any())).thenReturn(journeyArtifact);
+    when(artifactServiceMock.upload(anyList(), any()))
+        .thenReturn(Lists.newArrayList(journeyArtifact));
     UploadSupportingDocumentsForm form =
         journey.getFormForStep(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
     form.setHasDocuments(true);
@@ -268,7 +251,8 @@ public class UploadSupportingDocumentsControllerTest {
     addArtifactToJourney("test.jpg");
     JourneyArtifact journeyArtifact =
         testArtifactBuilder().fileName("test.pdf").type("file").signedUrl(signedUrl).build();
-    when(artifactServiceMock.upload(any(), any())).thenReturn(journeyArtifact);
+    when(artifactServiceMock.upload(anyList(), any()))
+        .thenReturn(Lists.newArrayList(journeyArtifact));
     UploadSupportingDocumentsForm form =
         journey.getFormForStep(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
     form.setHasDocuments(true);
@@ -374,7 +358,8 @@ public class UploadSupportingDocumentsControllerTest {
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(SUCCESS_URL));
 
-    UploadSupportingDocumentsForm form = journey.getFormForStep(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
+    UploadSupportingDocumentsForm form =
+        journey.getFormForStep(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
     List<JourneyArtifact> sessionArtitfacts = form.getJourneyArtifacts();
     assertThat(sessionArtitfacts).containsOnly(replacingArtifact);
     JourneyArtifact sessionArtitfact = sessionArtitfacts.get(0);
