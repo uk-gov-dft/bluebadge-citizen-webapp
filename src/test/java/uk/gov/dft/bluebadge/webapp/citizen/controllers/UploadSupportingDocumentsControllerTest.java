@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -24,7 +25,6 @@ import java.net.URL;
 import java.util.List;
 import lombok.SneakyThrows;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
@@ -150,7 +150,8 @@ public class UploadSupportingDocumentsControllerTest {
             .signedUrl(signedUrl)
             .type("file")
             .build();
-    when(artifactServiceMock.upload(any(), any())).thenReturn(journeyArtifact);
+    when(artifactServiceMock.upload(anyList(), any()))
+        .thenReturn(Lists.newArrayList(journeyArtifact));
 
     String testUpload = "Some thing to upload";
     MockMultipartFile mockMultifile =
@@ -179,7 +180,8 @@ public class UploadSupportingDocumentsControllerTest {
         testArtifactBuilder().fileName("test1.pdf").signedUrl(signedUrl).build();
     JourneyArtifact journeyArtifact2 =
         testArtifactBuilder().fileName("test2.pdf").signedUrl(signedUrl).build();
-    when(artifactServiceMock.upload(any(), any())).thenReturn(journeyArtifact1, journeyArtifact2);
+    when(artifactServiceMock.upload(anyList(), any()))
+        .thenReturn(Lists.newArrayList(journeyArtifact1, journeyArtifact2));
 
     String testUpload = "Some thing to upload";
     MockMultipartFile mockMultifile1 =
@@ -214,7 +216,8 @@ public class UploadSupportingDocumentsControllerTest {
     JourneyArtifact existingArtifact = addArtifactToJourney("test.jpg");
     JourneyArtifact journeyArtifact =
         testArtifactBuilder().fileName("test.pdf").type("file").signedUrl(signedUrl).build();
-    when(artifactServiceMock.upload(any(), any())).thenReturn(journeyArtifact);
+    when(artifactServiceMock.upload(anyList(), any()))
+        .thenReturn(Lists.newArrayList(journeyArtifact));
     UploadSupportingDocumentsForm form =
         journey.getFormForStep(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
     form.setHasDocuments(true);
@@ -248,7 +251,8 @@ public class UploadSupportingDocumentsControllerTest {
     addArtifactToJourney("test.jpg");
     JourneyArtifact journeyArtifact =
         testArtifactBuilder().fileName("test.pdf").type("file").signedUrl(signedUrl).build();
-    when(artifactServiceMock.upload(any(), any())).thenReturn(journeyArtifact);
+    when(artifactServiceMock.upload(anyList(), any()))
+        .thenReturn(Lists.newArrayList(journeyArtifact));
     UploadSupportingDocumentsForm form =
         journey.getFormForStep(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
     form.setHasDocuments(true);
@@ -278,7 +282,7 @@ public class UploadSupportingDocumentsControllerTest {
 
   @Test
   public void ajaxSubmit_givenFailedUpload_thenErrorResponse() throws Exception {
-    when(artifactServiceMock.upload(any(), any())).thenThrow(new RuntimeException("Test"));
+    when(artifactServiceMock.upload(anyList(), any())).thenThrow(new RuntimeException("Test"));
 
     String testUpload = "Some thing to upload";
     MockMultipartFile mockMultifile =
@@ -321,7 +325,6 @@ public class UploadSupportingDocumentsControllerTest {
   }
 
   @Test
-  @Ignore
   public void
       submit_GivenAlreadyUploadedDoc_whenSubmittedWithNewDoc_thenShouldDisplayRedirectToSuccessAndHaveNewArtifact()
           throws Exception {
@@ -330,6 +333,7 @@ public class UploadSupportingDocumentsControllerTest {
         JourneyArtifact.builder().fileName("test.jpg").type("image").url(testUrl).build();
     journey.setFormForStep(
         UploadSupportingDocumentsForm.builder()
+            .hasDocuments(true)
             .journeyArtifacts(Lists.newArrayList(journeyArtifact))
             .build());
     MockMultipartFile mockMultifile =
@@ -342,8 +346,8 @@ public class UploadSupportingDocumentsControllerTest {
             .type("image")
             .url(replacementUrl)
             .build();
-    when(artifactServiceMock.upload(mockMultifile, IMAGE_PDF_MIME_TYPES))
-        .thenReturn(replacingArtifact);
+    when(artifactServiceMock.upload(Lists.newArrayList(mockMultifile), IMAGE_PDF_MIME_TYPES))
+        .thenReturn(Lists.newArrayList(replacingArtifact));
 
     mockMvc
         .perform(
@@ -354,8 +358,11 @@ public class UploadSupportingDocumentsControllerTest {
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(SUCCESS_URL));
 
-    UploadSupportingDocumentsForm form = journey.getFormForStep(StepDefinition.PROVE_IDENTITY);
-    JourneyArtifact sessionArtitfact = form.getJourneyArtifact();
+    UploadSupportingDocumentsForm form =
+        journey.getFormForStep(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
+    List<JourneyArtifact> sessionArtitfacts = form.getJourneyArtifacts();
+    assertThat(sessionArtitfacts).containsOnly(replacingArtifact);
+    JourneyArtifact sessionArtitfact = sessionArtitfacts.get(0);
     assertThat(sessionArtitfact).isNotSameAs(journeyArtifact);
     assertThat(sessionArtitfact.getUrl()).isEqualTo(replacementUrl);
     assertThat(sessionArtitfact.getType()).isEqualTo("image");
@@ -376,8 +383,8 @@ public class UploadSupportingDocumentsControllerTest {
             .type("image")
             .url(replacementUrl)
             .build();
-    when(artifactServiceMock.upload(mockMultifile, IMAGE_PDF_MIME_TYPES))
-        .thenReturn(replacingArtifact);
+    when(artifactServiceMock.upload(Lists.newArrayList(mockMultifile), IMAGE_PDF_MIME_TYPES))
+        .thenReturn(Lists.newArrayList(replacingArtifact));
 
     mockMvc
         .perform(

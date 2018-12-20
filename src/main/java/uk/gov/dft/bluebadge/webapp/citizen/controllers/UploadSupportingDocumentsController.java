@@ -110,17 +110,12 @@ public class UploadSupportingDocumentsController implements StepController {
         sessionForm.setJourneyArtifacts(new ArrayList<>());
       }
 
-      if (documents != null && !documents.isEmpty()) {
+      List<JourneyArtifact> journeyArtifacts =
+          artifactService.upload(documents, IMAGE_PDF_MIME_TYPES);
+      if (!journeyArtifacts.isEmpty()) {
+        sessionForm.getJourneyArtifacts().addAll(journeyArtifacts);
         sessionForm.setHasDocuments(true);
       }
-
-      List<JourneyArtifact> journeyArtifacts = new ArrayList<>();
-      for (MultipartFile doc : documents) {
-        JourneyArtifact journeyArtifact = artifactService.upload(doc, IMAGE_PDF_MIME_TYPES);
-        sessionForm.addJourneyArtifact(journeyArtifact);
-        journeyArtifacts.add(journeyArtifact);
-      }
-
       return ImmutableMap.of("success", "true", "artifact", journeyArtifacts);
     } catch (Exception e) {
       log.warn("Failed to upload document through ajax call.", e);
@@ -148,14 +143,8 @@ public class UploadSupportingDocumentsController implements StepController {
 
     if (sessionForm.getHasDocuments().booleanValue() && documents != null && !documents.isEmpty()) {
       try {
-        List<JourneyArtifact> newArtifacts = new ArrayList<>();
-        for (MultipartFile document : documents) {
-          if (!document.isEmpty()) {
-            JourneyArtifact uploadJourneyArtifact =
-                artifactService.upload(document, IMAGE_PDF_MIME_TYPES);
-            newArtifacts.add(uploadJourneyArtifact);
-          }
-        }
+        List<JourneyArtifact> newArtifacts =
+            artifactService.upload(documents, IMAGE_PDF_MIME_TYPES);
         if (!newArtifacts.isEmpty()) {
           sessionForm.setJourneyArtifacts(newArtifacts);
         }
@@ -171,20 +160,10 @@ public class UploadSupportingDocumentsController implements StepController {
       sessionForm.setJourneyArtifacts(Lists.newArrayList());
     }
 
-    /*    if (null == sessionForm
-      || null == sessionForm.getJourneyArtifacts()
-      || sessionForm.getJourneyArtifacts().isEmpty()) {
-      bindingResult.rejectValue(
-        "journeyArtifact",
-        "NotNull.upload.benefit.document",
-        "Supporting documents is required");
-    }*/
-
     if (formRequest.getHasDocuments().booleanValue()
         && sessionForm.getJourneyArtifacts().isEmpty()) {
       bindingResult.rejectValue(
           "journeyArtifact",
-          // TODO: Review message with Sam
           "NotNull.uploadSupportingDocuments.document",
           "Supporting documents is required if you answer yes");
     }

@@ -173,12 +173,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And(
-      "^I complete \"(prove ID|provide photo|upload supporting documents|upload benefit)\" page with a \"(JPG|GIF|PNG|PDF)\" document")
+      "^I complete \"(prove ID|provide photo|upload benefit)\" page with a \"(JPG|GIF|PNG|PDF)\" document")
   public void iCompleteProveIDPageWithADocument(String pageName, String fileType) {
-
-    if (pageName.equalsIgnoreCase("upload supporting documents")) {
-      commonPage.selectRadioButton(Ids.UploadSupportingDocuments.UPLOAD_SUPPORTING_DOCUMENTS_YES);
-    }
 
     String filename = "evidence_" + fileType + "." + fileType.toLowerCase();
 
@@ -202,27 +198,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("^I complete upload \"supporting documents page\" with a \"(JPG|GIF|PNG|PDF)\" document")
   public void iCompleteUploadSupportingDocumentPageWithADocument(String fileType) {
-
     commonPage.selectRadioButton(Ids.UploadSupportingDocuments.UPLOAD_SUPPORTING_DOCUMENTS_YES);
-
-    String filename = "evidence_" + fileType + "." + fileType.toLowerCase();
-
-    WebElement droparea = commonPage.findPageElementById("document-droparea");
-
-    String file_path = "";
-    if (System.getProperty("user.dir").endsWith("acceptance-tests")) {
-      file_path = System.getProperty("user.dir") + "/src/test/resources/attachments/" + filename;
-    } else {
-      file_path =
-          System.getProperty("user.dir")
-              + "/acceptance-tests/src/test/resources/attachments/"
-              + filename;
-    }
-
-    // drop the file
-    FileHelper.dropFile(new File(file_path), droparea, 0, 0);
-
-    commonPage.pressContinueOnFileUploadPage();
+    iCompleteProveIDPageWithADocument("supporting doc", fileType);
   }
 
   @And("^I complete declaration page$")

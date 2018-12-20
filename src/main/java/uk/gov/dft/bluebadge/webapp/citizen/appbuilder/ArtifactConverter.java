@@ -20,8 +20,9 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.*;
 
 class ArtifactConverter {
-  private static EnumSet<EligibilityCodeField> BENEFIT_UPLOAD_ELIG_TYPES = EnumSet.of(PIP, DLA);
-  private static EnumSet<EligibilityCodeField> SUPPORT_DOCS_ELIG_TYPES =
+  private static final EnumSet<EligibilityCodeField> BENEFIT_UPLOAD_ELIG_TYPES =
+      EnumSet.of(PIP, DLA);
+  private static final EnumSet<EligibilityCodeField> SUPPORT_DOCS_ELIG_TYPES =
       EnumSet.of(WALKD, ARMS, CHILDBULK, CHILDVEHIC);
 
   private ArtifactConverter() {}
