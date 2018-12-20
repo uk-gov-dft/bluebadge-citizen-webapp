@@ -20,11 +20,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_PDF_MIME_TYPES;
 
 import com.google.common.collect.Lists;
-import java.net.MalformedURLException;
-import java.net.URL;
 import lombok.SneakyThrows;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
@@ -41,7 +38,28 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.UploadSupportingDocumentsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService;
 
-@Ignore
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_PDF_MIME_TYPES;
+
 public class UploadSupportingDocumentsControllerTest {
 
   private MockMvc mockMvc;
@@ -54,8 +72,8 @@ public class UploadSupportingDocumentsControllerTest {
   private URL signedUrl;
   private URL docUrl;
 
-  private URL artifactUrl;
-  private JourneyArtifact journeyArtifact;
+  // private URL artifactUrl;
+  // private JourneyArtifact journeyArtifact;
   private UploadSupportingDocumentsForm form;
 
   @Before
@@ -75,7 +93,8 @@ public class UploadSupportingDocumentsControllerTest {
           .journeyArtifact(journeyArtifact).build();
     */
     //  artifactUrl = new URL("http", "localhost", 8080, "file");
-    //journeyArtifact = JourneyArtifact.builder().fileName("filename").type("type").url(artifactUrl).build();
+    // journeyArtifact =
+    // JourneyArtifact.builder().fileName("filename").type("type").url(artifactUrl).build();
     form = UploadSupportingDocumentsForm.builder().build();
 
     journey =
@@ -96,7 +115,6 @@ public class UploadSupportingDocumentsControllerTest {
   }
 
   @Test
-  @Ignore
   public void show_givenExistingDoc_ShouldDisplayTemplateAndHaveLinkToDoc() throws Exception {
     JourneyArtifact journeyArtifact =
         JourneyArtifact.builder()
@@ -130,8 +148,8 @@ public class UploadSupportingDocumentsControllerTest {
     verify(artifactServiceMock, times(1)).createAccessibleLinks(journeyArtifact);
     UploadSupportingDocumentsForm formRequest =
         (UploadSupportingDocumentsForm) mvcResult.getModelAndView().getModel().get("formRequest");
-    assertThat(formRequest.getJourneyArtifact()).isNotNull();
-    assertThat(formRequest.getJourneyArtifact().getSignedUrl()).isEqualTo(signedUrl);
+    assertThat(formRequest.getJourneyArtifacts()).isNotEmpty();
+    assertThat(formRequest.getJourneyArtifacts()).extracting("signedUrl").containsOnly(signedUrl);
   }
 
   @Test
@@ -143,7 +161,6 @@ public class UploadSupportingDocumentsControllerTest {
   }
 
   @Test
-  @Ignore
   public void ajaxSubmit_givenSuccessUpload_thenArtifactInSession() throws Exception {
     JourneyArtifact journeyArtifact =
         JourneyArtifact.builder()
@@ -168,12 +185,115 @@ public class UploadSupportingDocumentsControllerTest {
         .andExpect(status().isOk())
         .andExpect(content().contentTypeCompatibleWith("application/json"))
         .andExpect(jsonPath("success").value("true"))
-        .andExpect(jsonPath("artifact.fileName").value("test.pdf"))
-        .andExpect(jsonPath("artifact.url").value(docUrl.toString()))
-        .andExpect(jsonPath("artifact.signedUrl").value(signedUrl.toString()));
+        .andExpect(jsonPath("artifact[0].fileName").value("test.pdf"))
+        .andExpect(jsonPath("artifact[0].url").value(docUrl.toString()))
+        .andExpect(jsonPath("artifact[0].signedUrl").value(signedUrl.toString()));
     UploadSupportingDocumentsForm form =
         journey.getFormForStep(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
-    assertThat(form.getJourneyArtifact()).isSameAs(journeyArtifact);
+    assertThat(form.getJourneyArtifacts()).containsOnly(journeyArtifact);
+  }
+
+  @Test
+  public void ajaxSubmit_givenSuccessMultipleUpload_thenArtifactInSession() throws Exception {
+    JourneyArtifact journeyArtifact1 =
+        testArtifactBuilder().fileName("test1.pdf").signedUrl(signedUrl).build();
+    JourneyArtifact journeyArtifact2 =
+        testArtifactBuilder().fileName("test2.pdf").signedUrl(signedUrl).build();
+    when(artifactServiceMock.upload(any(), any())).thenReturn(journeyArtifact1, journeyArtifact2);
+
+    String testUpload = "Some thing to upload";
+    MockMultipartFile mockMultifile1 =
+        new MockMultipartFile("document", "originalFile.jpg", "text/plain", testUpload.getBytes());
+    MockMultipartFile mockMultifile2 =
+        new MockMultipartFile("document", "originalFile2.jpg", "text/plain", testUpload.getBytes());
+
+    mockMvc
+        .perform(
+            multipart("/upload-supporting-documents-ajax")
+                .file(mockMultifile1)
+                .file(mockMultifile2)
+                .sessionAttr("JOURNEY", journey))
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(content().contentTypeCompatibleWith("application/json"))
+        .andExpect(jsonPath("success").value("true"))
+        .andExpect(jsonPath("artifact[0].fileName").value("test1.pdf"))
+        .andExpect(jsonPath("artifact[0].url").value(journeyArtifact1.getUrl().toString()))
+        .andExpect(jsonPath("artifact[0].signedUrl").value(signedUrl.toString()))
+        .andExpect(jsonPath("artifact[1].fileName").value("test2.pdf"))
+        .andExpect(jsonPath("artifact[1].url").value(journeyArtifact2.getUrl().toString()))
+        .andExpect(jsonPath("artifact[1].signedUrl").value(signedUrl.toString()));
+    UploadSupportingDocumentsForm form =
+        journey.getFormForStep(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
+    assertThat(form.getJourneyArtifacts()).containsExactly(journeyArtifact1, journeyArtifact2);
+  }
+
+  @Test
+  public void ajaxSubmit_givenSuccessUpload_andExistingArtifact_thenAdditionalArtifactInSession()
+      throws Exception {
+    JourneyArtifact existingArtifact = addArtifactToJourney("test.jpg");
+    JourneyArtifact journeyArtifact =
+        testArtifactBuilder().fileName("test.pdf").type("file").signedUrl(signedUrl).build();
+    when(artifactServiceMock.upload(any(), any())).thenReturn(journeyArtifact);
+    UploadSupportingDocumentsForm form =
+        journey.getFormForStep(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
+    form.setHasDocuments(true);
+
+    String testUpload = "Some thing to upload";
+    MockMultipartFile mockMultifile =
+        new MockMultipartFile("document", "originalFile.jpg", "text/plain", testUpload.getBytes());
+
+    mockMvc
+        .perform(
+            multipart("/upload-supporting-documents-ajax")
+                .file(mockMultifile)
+                .sessionAttr("JOURNEY", journey)
+                .param("hasDocuments", "true"))
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(content().contentTypeCompatibleWith("application/json"))
+        .andExpect(jsonPath("success").value("true"))
+        .andExpect(jsonPath("artifact[0].fileName").value("test.pdf"))
+        .andExpect(jsonPath("artifact[0].url").value(journeyArtifact.getUrl().toString()))
+        .andExpect(jsonPath("artifact[0].signedUrl").value(signedUrl.toString()));
+    UploadSupportingDocumentsForm newForm =
+        journey.getFormForStep(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
+    assertThat(newForm.getJourneyArtifacts()).containsOnly(existingArtifact, journeyArtifact);
+  }
+
+  @Test
+  public void
+      ajaxSubmit_givenSuccessUpload_andExistingArtifact_whenClearRequested_thenOnlyNewArtifactInSession()
+          throws Exception {
+    addArtifactToJourney("test.jpg");
+    JourneyArtifact journeyArtifact =
+        testArtifactBuilder().fileName("test.pdf").type("file").signedUrl(signedUrl).build();
+    when(artifactServiceMock.upload(any(), any())).thenReturn(journeyArtifact);
+    UploadSupportingDocumentsForm form =
+        journey.getFormForStep(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
+    form.setHasDocuments(true);
+
+    String testUpload = "Some thing to upload";
+    MockMultipartFile mockMultifile =
+        new MockMultipartFile("document", "originalFile.jpg", "text/plain", testUpload.getBytes());
+
+    mockMvc
+        .perform(
+            multipart("/upload-supporting-documents-ajax")
+                .file(mockMultifile)
+                .param("clear", "true")
+                .param("hasDocuments", "true")
+                .sessionAttr("JOURNEY", journey))
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(content().contentTypeCompatibleWith("application/json"))
+        .andExpect(jsonPath("success").value("true"))
+        .andExpect(jsonPath("artifact[0].fileName").value("test.pdf"))
+        .andExpect(jsonPath("artifact[0].url").value(journeyArtifact.getUrl().toString()))
+        .andExpect(jsonPath("artifact[0].signedUrl").value(signedUrl.toString()));
+    UploadSupportingDocumentsForm newForm =
+        journey.getFormForStep(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
+    assertThat(newForm.getJourneyArtifacts()).containsOnly(journeyArtifact);
   }
 
   @Test
@@ -185,7 +305,10 @@ public class UploadSupportingDocumentsControllerTest {
         new MockMultipartFile("document", "originalFile.jpg", "text/plain", testUpload.getBytes());
 
     mockMvc
-        .perform(multipart("/upload-supporting-documents-ajax").file(mockMultifile))
+        .perform(
+            multipart("/upload-supporting-documents-ajax")
+                .file(mockMultifile)
+                .param("hasDocuments", "true"))
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(content().contentTypeCompatibleWith("application/json"))
@@ -194,46 +317,30 @@ public class UploadSupportingDocumentsControllerTest {
   }
 
   @Test
-  @Ignore
-  public void ajaxSubmit_givenNoDocument_thenBadRequest() throws Exception {
-    mockMvc
-        .perform(multipart("/upload-supporting-documents-ajax"))
-        .andExpect(status().isBadRequest());
-  }
-
-  @Test
-  @Ignore
-  public void submit_GivenAlreadyUploadedDoc_thenShouldDisplayRedirectToSuccess() throws Exception {
-    JourneyArtifact journeyArtifact =
-        JourneyArtifact.builder()
-            .fileName("test.jpg")
-            .type("image")
-            .url(new URL("http://test"))
-            .build();
+  public void
+      submit_GivenAlreadyUploadedDoc_whenSubmittedWithoutADoc_thenShouldDisplayRedirectToSuccess()
+          throws Exception {
+    JourneyArtifact journeyArtifact = testArtifactBuilder().fileName("test.jpg").build();
     journey.setFormForStep(
         UploadSupportingDocumentsForm.builder()
             .hasDocuments(true)
             .journeyArtifacts(Lists.newArrayList(journeyArtifact))
             .build());
-    MockMultipartFile mockMultifile =
-        new MockMultipartFile("document", "originalFile.jpg", "text/plain", (byte[]) null);
 
     mockMvc
         .perform(
             multipart("/upload-supporting-documents")
-                .file(mockMultifile)
-                .param("hasDocuments", "true")
-                .sessionAttr("JOURNEY", journey))
+                .sessionAttr("JOURNEY", journey)
+                .param("hasDocuments", "false"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(SUCCESS_URL));
 
     UploadSupportingDocumentsForm form =
         journey.getFormForStep(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
-    assertThat(form.getJourneyArtifact()).isSameAs(journeyArtifact);
+    assertThat(form.getJourneyArtifacts()).isEmpty();
   }
 
   @Test
-  @Ignore
   public void
       submit_GivenAlreadyUploadedDoc_whenSubmittedWithNewDoc_thenShouldDisplayRedirectToSuccessAndHaveNewArtifact()
           throws Exception {
@@ -242,6 +349,7 @@ public class UploadSupportingDocumentsControllerTest {
         JourneyArtifact.builder().fileName("test.jpg").type("image").url(testUrl).build();
     journey.setFormForStep(
         UploadSupportingDocumentsForm.builder()
+            .hasDocuments(true)
             .journeyArtifacts(Lists.newArrayList(journeyArtifact))
             .build());
     MockMultipartFile mockMultifile =
@@ -266,8 +374,10 @@ public class UploadSupportingDocumentsControllerTest {
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(SUCCESS_URL));
 
-    UploadSupportingDocumentsForm form = journey.getFormForStep(StepDefinition.PROVE_IDENTITY);
-    JourneyArtifact sessionArtitfact = form.getJourneyArtifact();
+    UploadSupportingDocumentsForm form = journey.getFormForStep(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
+    List<JourneyArtifact> sessionArtitfacts = form.getJourneyArtifacts();
+    assertThat(sessionArtitfacts).containsOnly(replacingArtifact);
+    JourneyArtifact sessionArtitfact = sessionArtitfacts.get(0);
     assertThat(sessionArtitfact).isNotSameAs(journeyArtifact);
     assertThat(sessionArtitfact.getUrl()).isEqualTo(replacementUrl);
     assertThat(sessionArtitfact.getType()).isEqualTo("image");
@@ -275,7 +385,6 @@ public class UploadSupportingDocumentsControllerTest {
   }
 
   @Test
-  @Ignore
   public void
       submit_GivenNoExistingDoc_whenSubmittedWithNewDoc_thenShouldDisplayRedirectToSuccessAndHaveNewArtifact()
           throws Exception {
@@ -296,26 +405,22 @@ public class UploadSupportingDocumentsControllerTest {
         .perform(
             multipart("/upload-supporting-documents")
                 .file(mockMultifile)
-                .sessionAttr("JOURNEY", journey))
+                .sessionAttr("JOURNEY", journey)
+                .param("hasDocuments", "true"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(SUCCESS_URL));
 
     UploadSupportingDocumentsForm form =
         journey.getFormForStep(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
-    JourneyArtifact sessionArtitfact = form.getJourneyArtifact();
-    assertThat(sessionArtitfact.getUrl()).isEqualTo(replacementUrl);
-    assertThat(sessionArtitfact.getType()).isEqualTo("image");
-    assertThat(sessionArtitfact.getFileName()).isEqualTo("originalFile2.jpg");
+    List<JourneyArtifact> sessionArtifacts = form.getJourneyArtifacts();
+    assertThat(sessionArtifacts).containsOnlyOnce(replacingArtifact);
+    JourneyArtifact sessionArtifact = sessionArtifacts.get(0);
+    assertThat(sessionArtifact.getUrl()).isEqualTo(replacementUrl);
+    assertThat(sessionArtifact.getType()).isEqualTo("image");
+    assertThat(sessionArtifact.getFileName()).isEqualTo("originalFile2.jpg");
   }
 
   @Test
-  @Ignore
-  public void submit_givenNoDocument_thenBadRequest() throws Exception {
-    mockMvc.perform(multipart("/upload-supporting-documents")).andExpect(status().isBadRequest());
-  }
-
-  @Test
-  @Ignore
   public void submit_givenNoSessionDoc_whenSubmitWithNoNewDoc_thenValidationError()
       throws Exception {
     MockMultipartFile mockMultifile = new MockMultipartFile("document", "", "", (byte[]) null);
@@ -324,11 +429,30 @@ public class UploadSupportingDocumentsControllerTest {
         .perform(
             multipart("/upload-supporting-documents")
                 .file(mockMultifile)
-                .sessionAttr("JOURNEY", journey))
+                .sessionAttr("JOURNEY", journey)
+                .param("hasDocuments", "true"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(ERROR_URL));
 
-    UploadSupportingDocumentsForm form = journey.getFormForStep(StepDefinition.PROVE_IDENTITY);
+    UploadSupportingDocumentsForm form =
+        journey.getFormForStep(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
     assertThat(form.getJourneyArtifact()).isNull();
+  }
+
+  private JourneyArtifact.JourneyArtifactBuilder testArtifactBuilder()
+      throws MalformedURLException {
+    return JourneyArtifact.builder()
+        .fileName("abc.jpg")
+        .type("image")
+        .url(new URL("http://test/abc"));
+  }
+
+  private JourneyArtifact addArtifactToJourney(String fileName) throws MalformedURLException {
+    JourneyArtifact journeyArtifact = testArtifactBuilder().fileName(fileName).build();
+    journey.setFormForStep(
+        UploadSupportingDocumentsForm.builder()
+            .journeyArtifacts(Lists.newArrayList(journeyArtifact))
+            .build());
+    return journeyArtifact;
   }
 }

@@ -117,7 +117,6 @@ public class UploadSupportingDocumentsController implements StepController {
         sessionForm.setHasDocuments(true);
       }
       return ImmutableMap.of("success", "true", "artifact", journeyArtifacts);
-      //return ImmutableMap.of("success", "true", "artifact", sessionForm.getJourneyArtifacts());
     } catch (Exception e) {
       log.warn("Failed to upload document through ajax call.", e);
       return ImmutableMap.of("error", "Failed to upload");
