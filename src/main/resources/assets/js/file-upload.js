@@ -36,6 +36,13 @@ export default class FileUploader {
 			ACTIVE: this.$classPrefix + '--active',
 		}
 
+		this.$ANNOUNCEMENTS = {
+			rejectedFile: 'File uploaded is too large or of the incorrect type',
+			rejectedFiles: 'Files uploaded are too large or of the incorrect type',
+			filesUploaded: 'Your files have been uploaded',
+			filesRemoved: 'Your files have been removed'
+		}
+
 		this.registerEvents();
 		this.fireLifeCycleEvent('init');
 	}
@@ -104,31 +111,32 @@ export default class FileUploader {
 		event.preventDefault();
 		this.$fileInput.value = '';
 		this.fireLifeCycleEvent('reset');
-		this.makeScreenAnnouncement('files removed');
+		this.makeScreenAnnouncement(this.$ANNOUNCEMENTS.filesRemoved);
 
 		setTimeout(() => this.$uploadBtn.focus(), 1350);
 	}
 
 	selectFile(files) {
-		if (files.length > 0){
-			this.beginFileUpload(Array.from(files)
-				.filter(file => this.validateFile(file)));
+		const validFiles = Array.from(files).filter(file => this.validateFile(file));
+
+		if(validFiles.length !== files.length) {
+			this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
+			this.makeScreenAnnouncement(this.$allowMultipleFileUploads ? this.$ANNOUNCEMENTS.rejectedFiles : this.$ANNOUNCEMENTS.rejectedFile);
+			this.fireLifeCycleEvent('uploadRejected');
+		} else {
+			this.beginFileUpload(validFiles);
 		}
 	}
 
 	validateFile(file) {
-		if(file.type === '' || this.$fileInput.accept.indexOf(file.type) < 0) {
-			this.makeScreenAnnouncement('Incorrect file type uploaded');
-		} else if(file.size > this.$options.maxFileSize){
-			this.makeScreenAnnouncement('Uploaded file too large');
-		} else {
-			return true;
+		if(file.type === '' ||
+			this.$fileInput.accept.indexOf(file.type) < 0 ||
+			file.size > this.$options.maxFileSize) {
+			return null;
 		}
 
-		this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
-		this.fireLifeCycleEvent('uploadRejected');
-		return null;
-    }
+		return file;
+   }
 
 	beginFileUpload(files) {
 		const xhr = new XMLHttpRequest();
@@ -141,7 +149,7 @@ export default class FileUploader {
 				const resp = JSON.parse(xhr.response);
 
 				if(resp && resp.success) {
-					this.makeScreenAnnouncement('Your files have been uploaded');
+					this.makeScreenAnnouncement(this.$ANNOUNCEMENTS.filesUploaded);
 					this.fireLifeCycleEvent('uploaded', resp, files);
 					this.$screenAnnouncer.focus();
 				} else {

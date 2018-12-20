@@ -24,7 +24,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.UploadBenefitForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.UploadSupportingDocumentsForm;
 
 class ArtifactConverter {
-  private static final EnumSet<EligibilityCodeField> BENEFIT_UPLOAD_ELIG_TYPES = EnumSet.of(PIP, DLA);
+  private static final EnumSet<EligibilityCodeField> BENEFIT_UPLOAD_ELIG_TYPES =
+      EnumSet.of(PIP, DLA);
   private static final EnumSet<EligibilityCodeField> SUPPORT_DOCS_ELIG_TYPES =
       EnumSet.of(WALKD, ARMS, CHILDBULK, CHILDVEHIC);
 
