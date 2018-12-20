@@ -120,7 +120,7 @@ public class ProvidePhotoController implements StepController {
         formRequest.setJourneyArtifact(uploadJourneyArtifact);
         journey.setFormForStep(formRequest);
       } catch (UnsupportedMimetypeException e) {
-        attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", "true");
+        attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", Boolean.TRUE);
         return "redirect:" + Mappings.URL_PROVIDE_PHOTO;
       } catch (Exception e) {
         log.warn("Failed to upload document", e);
@@ -130,7 +130,8 @@ public class ProvidePhotoController implements StepController {
 
     ProvidePhotoForm sessionForm = journey.getFormForStep(getStepDefinition());
     if (null == sessionForm || null == sessionForm.getJourneyArtifact()) {
-      bindingResult.rejectValue("journeyArtifact", "NotNull.document", "Photo is required");
+      bindingResult.rejectValue(
+          "journeyArtifact", "providePhoto.NotNull.photo", "Photo is required");
     }
 
     if (bindingResult.hasErrors()) {

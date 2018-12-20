@@ -13,24 +13,9 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Ho
 @EqualsAndHashCode
 public class MobilityAidAddForm implements Serializable {
 
-  public enum AidType {
-    WHEELCHAIR("Wheelchair"),
-    SCOOTER("Mobility scooter"),
-    WALKING_AID("Walking aid");
-
-    private String type;
-
-    AidType(String type) {
-
-      this.type = type;
-    }
-
-    public String getType() {
-      return type;
-    }
-  }
-
-  @NotNull private AidType aidType;
+  @NotBlank
+  @Size(max = 100)
+  private String aidType;
 
   @Size(max = 100)
   @NotBlank
@@ -38,14 +23,5 @@ public class MobilityAidAddForm implements Serializable {
 
   @NotNull private HowProvidedCodeField howProvidedCodeField;
 
-  // Validation done in controller, not bean as is conditional (and was easier).
-  private String customAidName;
-
   private String id = UUID.randomUUID().toString();
-
-  public String getAidTypeDescription() {
-    if (null == aidType) return "";
-    if (aidType == AidType.WALKING_AID) return customAidName;
-    return aidType.getType();
-  }
 }

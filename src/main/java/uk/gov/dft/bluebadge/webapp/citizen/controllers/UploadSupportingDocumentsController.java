@@ -5,6 +5,9 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_
 import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_PDF_MIME_TYPES;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -56,8 +59,8 @@ public class UploadSupportingDocumentsController implements StepController {
 
     if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
       UploadSupportingDocumentsForm form = journey.getFormForStep(getStepDefinition());
-      if (null != form.getJourneyArtifact()) {
-        artifactService.createAccessibleLinks(form.getJourneyArtifact());
+      if (null != form.getJourneyArtifacts()) {
+        form.getJourneyArtifacts().forEach(artifactService::createAccessibleLinks);
       }
       model.addAttribute(FORM_REQUEST, form);
     }
@@ -73,9 +76,13 @@ public class UploadSupportingDocumentsController implements StepController {
 
   @GetMapping(DOC_BYPASS_URL)
   public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
-    UploadSupportingDocumentsForm formRequest = UploadSupportingDocumentsForm.builder().build();
+    UploadSupportingDocumentsForm formRequest =
+        UploadSupportingDocumentsForm.builder()
+            .hasDocuments(false)
+            .journeyArtifacts(Lists.newArrayList())
+            .build();
     journey.setFormForStep(formRequest);
-    return routeMaster.redirectToOnSuccess(formRequest);
+    return routeMaster.redirectToOnSuccess(formRequest, journey);
   }
 
   private FileUploaderOptions getFileUploaderOptions() {
@@ -93,14 +100,23 @@ public class UploadSupportingDocumentsController implements StepController {
   @ResponseBody
   public Map<String, Object> submitAjax(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @RequestParam("document") MultipartFile document,
+      @RequestParam("document") List<MultipartFile> documents,
+      @RequestParam(name = "clear", defaultValue = "false") Boolean clearPreviousArtifacts,
       UploadSupportingDocumentsForm form) {
     try {
-      JourneyArtifact uploadedJourneyArtifact =
-          artifactService.upload(document, IMAGE_PDF_MIME_TYPES);
-      form.setJourneyArtifact(uploadedJourneyArtifact);
-      journey.setFormForStep(form);
-      return ImmutableMap.of("success", "true", "artifact", uploadedJourneyArtifact);
+      UploadSupportingDocumentsForm sessionForm = journey.getOrSetFormForStep(form);
+
+      if (clearPreviousArtifacts) {
+        sessionForm.setJourneyArtifacts(new ArrayList<>());
+      }
+
+      List<JourneyArtifact> journeyArtifacts =
+          artifactService.upload(documents, IMAGE_PDF_MIME_TYPES);
+      if (!journeyArtifacts.isEmpty()) {
+        sessionForm.getJourneyArtifacts().addAll(journeyArtifacts);
+        sessionForm.setHasDocuments(true);
+      }
+      return ImmutableMap.of("success", "true", "artifact", journeyArtifacts);
     } catch (Exception e) {
       log.warn("Failed to upload document through ajax call.", e);
       return ImmutableMap.of("error", "Failed to upload");
@@ -110,24 +126,46 @@ public class UploadSupportingDocumentsController implements StepController {
   @PostMapping(Mappings.URL_UPLOAD_SUPPORTING_DOCUMENTS)
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @RequestParam("document") MultipartFile document,
+      @RequestParam("document") List<MultipartFile> documents,
       @Valid @ModelAttribute("formRequest") UploadSupportingDocumentsForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
-    if (!document.isEmpty()) {
+    UploadSupportingDocumentsForm sessionForm = journey.getOrSetFormForStep(formRequest);
+
+    if (formRequest.getHasDocuments() != null && !formRequest.getHasDocuments().booleanValue()) {
+      sessionForm.setHasDocuments(Boolean.FALSE);
+      sessionForm.setJourneyArtifacts(new ArrayList<>());
+    }
+    if (sessionForm.getHasDocuments() == null) {
+      sessionForm.setHasDocuments(formRequest.getHasDocuments());
+    }
+
+    if (sessionForm.getHasDocuments().booleanValue() && documents != null && !documents.isEmpty()) {
       try {
-        JourneyArtifact uploadJourneyArtifact =
-            artifactService.upload(document, IMAGE_PDF_MIME_TYPES);
-        formRequest.setJourneyArtifact(uploadJourneyArtifact);
-        journey.setFormForStep(formRequest);
+        List<JourneyArtifact> newArtifacts =
+            artifactService.upload(documents, IMAGE_PDF_MIME_TYPES);
+        if (!newArtifacts.isEmpty()) {
+          sessionForm.setJourneyArtifacts(newArtifacts);
+        }
       } catch (UnsupportedMimetypeException e) {
-        attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", "true");
+        attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", true);
         return "redirect:" + Mappings.URL_UPLOAD_SUPPORTING_DOCUMENTS;
       } catch (Exception e) {
         log.warn("Failed to upload document", e);
         bindingResult.rejectValue("document", "", "Failed to upload document");
       }
+    }
+    if (formRequest.getHasDocuments() == null || !formRequest.getHasDocuments()) {
+      sessionForm.setJourneyArtifacts(Lists.newArrayList());
+    }
+
+    if (formRequest.getHasDocuments().booleanValue()
+        && sessionForm.getJourneyArtifacts().isEmpty()) {
+      bindingResult.rejectValue(
+          "journeyArtifact",
+          "NotNull.uploadSupportingDocuments.document",
+          "Supporting documents is required if you answer yes");
     }
 
     if (bindingResult.hasErrors()) {

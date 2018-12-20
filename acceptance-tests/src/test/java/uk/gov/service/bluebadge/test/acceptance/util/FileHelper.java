@@ -8,6 +8,7 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -108,5 +109,6 @@ public class FileHelper {
     WebElement input = (WebElement) jse.executeScript(JS_DROP_FILE, target, offsetX, offsetY);
     input.sendKeys(filePath.getAbsoluteFile().toString());
     wait.until(ExpectedConditions.stalenessOf(input));
+    wait.withTimeout(Duration.ofSeconds(1));
   }
 }

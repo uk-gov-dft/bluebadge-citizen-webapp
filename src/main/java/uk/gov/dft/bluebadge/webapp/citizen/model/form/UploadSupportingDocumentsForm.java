@@ -5,6 +5,8 @@ import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.m
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDVEHIC;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
@@ -21,7 +23,7 @@ public class UploadSupportingDocumentsForm implements StepForm, ArtifactForm, Se
 
   @NotNull private Boolean hasDocuments;
 
-  private JourneyArtifact journeyArtifact;
+  private List<JourneyArtifact> journeyArtifacts = new ArrayList<>();
 
   @Override
   public StepDefinition getAssociatedStep() {
@@ -31,6 +33,13 @@ public class UploadSupportingDocumentsForm implements StepForm, ArtifactForm, Se
   @Override
   public boolean preserveStep(Journey journey) {
     return true;
+  }
+
+  public void addJourneyArtifact(JourneyArtifact journeyArtifact) {
+    if (null == journeyArtifacts) {
+      journeyArtifacts = new ArrayList<>();
+    }
+    journeyArtifacts.add(journeyArtifact);
   }
 
   @Override
@@ -48,5 +57,9 @@ public class UploadSupportingDocumentsForm implements StepForm, ArtifactForm, Se
       return Optional.of(StepDefinition.MEDICAL_EQUIPMENT);
     }
     throw new IllegalStateException("Failed to determine next step for current step:" + this);
+  }
+
+  public static class UploadSupportingDocumentsFormBuilder {
+    private List<JourneyArtifact> journeyArtifacts = new ArrayList<>();
   }
 }

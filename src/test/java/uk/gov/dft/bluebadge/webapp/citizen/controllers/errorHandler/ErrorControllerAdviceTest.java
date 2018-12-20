@@ -77,7 +77,7 @@ public class ErrorControllerAdviceTest {
     String template = controllerAdvice.handleMaxSizeException(ex, reqMock, ra);
     assertThat(template).isEqualTo("redirect:/someUrl");
     assertThat(ra.getFlashAttributes()).isNotNull();
-    assertThat(ra.getFlashAttributes().get("MAX_FILE_SIZE_EXCEEDED")).isEqualTo("true");
+    assertThat(ra.getFlashAttributes().get("MAX_FILE_SIZE_EXCEEDED")).isEqualTo(true);
   }
 
   @Test

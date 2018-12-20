@@ -95,15 +95,19 @@ public class UploadBenefitController implements StepController {
   public Map<String, Object> submitAjax(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @RequestParam("document") List<MultipartFile> documents,
+      @RequestParam(name = "clear", defaultValue = "false") Boolean clearPreviousArtifacts,
       UploadBenefitForm uploadBenefitForm) {
     try {
       UploadBenefitForm sessionForm = journey.getOrSetFormForStep(uploadBenefitForm);
 
-      List<JourneyArtifact> journeyArtifacts = new ArrayList<>();
-      for (MultipartFile doc : documents) {
-        JourneyArtifact journeyArtifact = artifactService.upload(doc, IMAGE_PDF_MIME_TYPES);
-        sessionForm.addJourneyArtifact(journeyArtifact);
-        journeyArtifacts.add(journeyArtifact);
+      if (clearPreviousArtifacts) {
+        sessionForm.setJourneyArtifacts(new ArrayList<>());
+      }
+
+      List<JourneyArtifact> journeyArtifacts =
+          artifactService.upload(documents, IMAGE_PDF_MIME_TYPES);
+      if (!journeyArtifacts.isEmpty()) {
+        sessionForm.getJourneyArtifacts().addAll(journeyArtifacts);
       }
 
       return ImmutableMap.of("success", "true", "artifact", journeyArtifacts);
@@ -125,12 +129,10 @@ public class UploadBenefitController implements StepController {
 
     if (!documents.isEmpty()) {
       try {
-        for (MultipartFile document : documents) {
-          if (!document.isEmpty()) {
-            JourneyArtifact uploadJourneyArtifact =
-                artifactService.upload(document, IMAGE_PDF_MIME_TYPES);
-            sessionForm.addJourneyArtifact(uploadJourneyArtifact);
-          }
+        List<JourneyArtifact> newArtifacts =
+            artifactService.upload(documents, IMAGE_PDF_MIME_TYPES);
+        if (!newArtifacts.isEmpty()) {
+          sessionForm.setJourneyArtifacts(newArtifacts);
         }
       } catch (UnsupportedMimetypeException e) {
         attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", true);
