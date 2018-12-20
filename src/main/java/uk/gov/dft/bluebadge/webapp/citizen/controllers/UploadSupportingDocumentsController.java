@@ -164,7 +164,6 @@ public class UploadSupportingDocumentsController implements StepController {
         && sessionForm.getJourneyArtifacts().isEmpty()) {
       bindingResult.rejectValue(
           "journeyArtifact",
-          // TODO: Review message with Sam
           "NotNull.uploadSupportingDocuments.document",
           "Supporting documents is required if you answer yes");
     }
