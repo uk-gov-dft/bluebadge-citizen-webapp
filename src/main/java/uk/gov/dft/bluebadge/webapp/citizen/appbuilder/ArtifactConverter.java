@@ -17,11 +17,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Ar
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ArtifactForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveIdentityForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProvidePhotoForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.UploadBenefitForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.UploadSupportingDocumentsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.*;
 
 class ArtifactConverter {
   private static EnumSet<EligibilityCodeField> BENEFIT_UPLOAD_ELIG_TYPES = EnumSet.of(PIP, DLA);
@@ -49,6 +45,9 @@ class ArtifactConverter {
 
     ProvidePhotoForm providePhotoForm = journey.getFormForStep(StepDefinition.PROVIDE_PHOTO);
     convertArtifact(result, providePhotoForm, ArtifactType.PHOTO);
+
+    ProveAddressForm proveAddressForm = journey.getFormForStep(StepDefinition.PROVE_ADDRESS);
+    convertArtifact(result, proveAddressForm, ArtifactType.PROOF_ADD);
 
     return result;
   }
