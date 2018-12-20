@@ -160,15 +160,6 @@ public class UploadSupportingDocumentsController implements StepController {
       sessionForm.setJourneyArtifacts(Lists.newArrayList());
     }
 
-    /*    if (null == sessionForm
-      || null == sessionForm.getJourneyArtifacts()
-      || sessionForm.getJourneyArtifacts().isEmpty()) {
-      bindingResult.rejectValue(
-        "journeyArtifact",
-        "NotNull.upload.benefit.document",
-        "Supporting documents is required");
-    }*/
-
     if (formRequest.getHasDocuments().booleanValue()
         && sessionForm.getJourneyArtifacts().isEmpty()) {
       bindingResult.rejectValue(
