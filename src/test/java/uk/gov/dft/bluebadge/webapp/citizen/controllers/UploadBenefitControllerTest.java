@@ -297,8 +297,8 @@ public class UploadBenefitControllerTest {
             .type("image")
             .url(replacementUrl)
             .build();
-    when(artifactServiceMock.upload(mockMultifile, IMAGE_PDF_MIME_TYPES))
-        .thenReturn(replacingArtifact);
+    when(artifactServiceMock.upload(Lists.newArrayList(mockMultifile), IMAGE_PDF_MIME_TYPES))
+        .thenReturn(Lists.newArrayList(replacingArtifact));
 
     mockMvc
         .perform(multipart("/upload-benefit").file(mockMultifile).sessionAttr("JOURNEY", journey))
@@ -336,8 +336,8 @@ public class UploadBenefitControllerTest {
             .type("image")
             .url(replacementUrl)
             .build();
-    when(artifactServiceMock.upload(mockMultifile, IMAGE_PDF_MIME_TYPES))
-        .thenReturn(replacingArtifact);
+    when(artifactServiceMock.upload(Lists.newArrayList(mockMultifile), IMAGE_PDF_MIME_TYPES))
+        .thenReturn(Lists.newArrayList(replacingArtifact));
 
     mockMvc
         .perform(multipart("/upload-benefit").file(mockMultifile).sessionAttr("JOURNEY", journey))

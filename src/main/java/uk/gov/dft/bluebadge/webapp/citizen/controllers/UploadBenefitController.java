@@ -104,11 +104,10 @@ public class UploadBenefitController implements StepController {
         sessionForm.setJourneyArtifacts(new ArrayList<>());
       }
 
-      List<JourneyArtifact> journeyArtifacts = new ArrayList<>();
-      for (MultipartFile doc : documents) {
-        JourneyArtifact journeyArtifact = artifactService.upload(doc, IMAGE_PDF_MIME_TYPES);
-        sessionForm.addJourneyArtifact(journeyArtifact);
-        journeyArtifacts.add(journeyArtifact);
+      List<JourneyArtifact> journeyArtifacts =
+          artifactService.upload(documents, IMAGE_PDF_MIME_TYPES);
+      if (!journeyArtifacts.isEmpty()) {
+        sessionForm.getJourneyArtifacts().addAll(journeyArtifacts);
       }
 
       return ImmutableMap.of("success", "true", "artifact", journeyArtifacts);
