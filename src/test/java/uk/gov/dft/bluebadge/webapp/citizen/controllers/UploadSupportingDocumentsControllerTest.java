@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -151,7 +152,8 @@ public class UploadSupportingDocumentsControllerTest {
             .signedUrl(signedUrl)
             .type("file")
             .build();
-    when(artifactServiceMock.upload(any(), any())).thenReturn(journeyArtifact);
+    when(artifactServiceMock.upload(anyList(), any()))
+        .thenReturn(Lists.newArrayList(journeyArtifact));
 
     String testUpload = "Some thing to upload";
     MockMultipartFile mockMultifile =
@@ -176,7 +178,7 @@ public class UploadSupportingDocumentsControllerTest {
 
   @Test
   public void ajaxSubmit_givenFailedUpload_thenErrorResponse() throws Exception {
-    when(artifactServiceMock.upload(any(), any())).thenThrow(new RuntimeException("Test"));
+    when(artifactServiceMock.upload(anyList(), any())).thenThrow(new RuntimeException("Test"));
 
     String testUpload = "Some thing to upload";
     MockMultipartFile mockMultifile =

@@ -130,14 +130,8 @@ public class UploadBenefitController implements StepController {
 
     if (!documents.isEmpty()) {
       try {
-        List<JourneyArtifact> newArtifacts = new ArrayList<>();
-        for (MultipartFile document : documents) {
-          if (!document.isEmpty()) {
-            JourneyArtifact uploadJourneyArtifact =
-                artifactService.upload(document, IMAGE_PDF_MIME_TYPES);
-            newArtifacts.add(uploadJourneyArtifact);
-          }
-        }
+        List<JourneyArtifact> newArtifacts =
+            artifactService.upload(documents, IMAGE_PDF_MIME_TYPES);
         if (!newArtifacts.isEmpty()) {
           sessionForm.setJourneyArtifacts(newArtifacts);
         }

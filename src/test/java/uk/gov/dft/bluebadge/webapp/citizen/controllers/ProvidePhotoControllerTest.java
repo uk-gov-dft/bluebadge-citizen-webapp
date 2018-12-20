@@ -26,6 +26,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.multipart.MultipartFile;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
@@ -126,7 +127,7 @@ public class ProvidePhotoControllerTest {
             .signedUrl(signedUrl)
             .type("file")
             .build();
-    when(artifactServiceMock.upload(any(), any())).thenReturn(journeyArtifact);
+    when(artifactServiceMock.upload(any(MultipartFile.class), any())).thenReturn(journeyArtifact);
 
     String testUpload = "Some thing to upload";
     MockMultipartFile mockMultifile =
@@ -148,7 +149,8 @@ public class ProvidePhotoControllerTest {
 
   @Test
   public void ajaxSubmit_givenFailedUpload_thenErrorResponse() throws Exception {
-    when(artifactServiceMock.upload(any(), any())).thenThrow(new RuntimeException("Test"));
+    when(artifactServiceMock.upload(any(MultipartFile.class), any()))
+        .thenThrow(new RuntimeException("Test"));
 
     String testUpload = "Some thing to upload";
     MockMultipartFile mockMultifile =
