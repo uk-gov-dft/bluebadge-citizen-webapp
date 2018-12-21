@@ -14,6 +14,7 @@ public class FileUploaderOptions {
   private String allowedFileTypes;
   private String maxFileSize;
   @NonNull private final String ajaxRequestUrl;
+  private Integer maxFileUploadsAllowed;
 
   private String errorTitleMessageKey;
   private String errorMessageKey;
@@ -30,6 +31,7 @@ public class FileUploaderOptions {
   public static class FileUploaderOptionsBuilder {
     private String fieldLabel = "fileUploader.field.label";
     private Boolean allowMultipleFileUploads = false;
+    private Integer maxFileUploadsAllowed = 15;
     private String errorTitleMessageKey = "fileUploader.error.title";
     private String errorMessageKey = "fileUploader.error.content";
     private String rejectErrorMessageKey = "fileUploader.rejected.content";
