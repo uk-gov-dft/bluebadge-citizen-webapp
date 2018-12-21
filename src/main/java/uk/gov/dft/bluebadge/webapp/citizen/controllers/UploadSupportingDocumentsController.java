@@ -187,6 +187,16 @@ public class UploadSupportingDocumentsController implements StepController {
       sessionForm.setJourneyArtifacts(Lists.newArrayList());
     }
 
+    rejectIfShouldAttachADocument(formRequest, bindingResult, sessionForm);
+
+    if (bindingResult.hasErrors()) {
+      return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
+    }
+
+    return routeMaster.redirectToOnSuccess(formRequest, journey);
+  }
+
+  private void rejectIfShouldAttachADocument(@ModelAttribute("formRequest") @Valid UploadSupportingDocumentsForm formRequest, BindingResult bindingResult, UploadSupportingDocumentsForm sessionForm) {
     if (formRequest.getHasDocuments() != null
         && formRequest.getHasDocuments().booleanValue()
         && sessionForm.getJourneyArtifacts().isEmpty()) {
@@ -195,12 +205,6 @@ public class UploadSupportingDocumentsController implements StepController {
           "NotNull.uploadSupportingDocuments.document",
           "Supporting documents is required if you answer yes");
     }
-
-    if (bindingResult.hasErrors()) {
-      return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
-    }
-
-    return routeMaster.redirectToOnSuccess(formRequest, journey);
   }
 
   @Override
