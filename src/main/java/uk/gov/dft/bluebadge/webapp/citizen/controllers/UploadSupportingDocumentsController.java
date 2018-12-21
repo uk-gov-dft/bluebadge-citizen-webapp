@@ -1,7 +1,15 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_PDF_MIME_TYPES;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,15 +32,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.UploadSupportingDocumentsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.UnsupportedMimetypeException;
-
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_PDF_MIME_TYPES;
 
 @Controller
 @Slf4j
@@ -92,7 +91,7 @@ public class UploadSupportingDocumentsController implements StepController {
         .fieldName("document")
         .ajaxRequestUrl(AJAX_URL)
         .fieldLabel("uploadSupportingDocuments.fu.field.label")
-        .allowedFileTypes("image/jpeg,image/gif,image/png,application/pdf")
+        .allowedFileTypes(String.join(",", IMAGE_PDF_MIME_TYPES))
         .allowMultipleFileUploads(true)
         .rejectErrorMessageKey("uploadSupportingDocuments.fu.rejected.content")
         .build();
@@ -138,7 +137,8 @@ public class UploadSupportingDocumentsController implements StepController {
         (sessionForm != null && sessionForm.getJourneyArtifacts() != null
             ? sessionForm.getJourneyArtifacts().size()
             : 0);
-    long documentsSize = (documents != null ? documents.stream().filter(doc -> !doc.isEmpty()).count() : 0);
+    long documentsSize =
+        (documents != null ? documents.stream().filter(doc -> !doc.isEmpty()).count() : 0);
     return sessionFormDocumentsSize + documentsSize;
   }
 
