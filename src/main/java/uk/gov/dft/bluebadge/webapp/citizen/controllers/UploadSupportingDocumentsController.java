@@ -1,15 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_PDF_MIME_TYPES;
-
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +25,15 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.UploadSupportingDocumentsF
 import uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.UnsupportedMimetypeException;
 
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_PDF_MIME_TYPES;
+
 @Controller
 @Slf4j
 public class UploadSupportingDocumentsController implements StepController {
@@ -40,6 +41,7 @@ public class UploadSupportingDocumentsController implements StepController {
   public static final String TEMPLATE = "upload-supporting-documents";
   private static final String DOC_BYPASS_URL = "upload-supporting-documents-bypass";
   public static final String AJAX_URL = "/upload-supporting-documents-ajax";
+  private static final Integer MAX_NUMBER_SUPPORTING_DOCUMENTS = 15;
 
   private final RouteMaster routeMaster;
   private final ArtifactService artifactService;
@@ -110,8 +112,15 @@ public class UploadSupportingDocumentsController implements StepController {
         sessionForm.setJourneyArtifacts(new ArrayList<>());
       }
 
-      List<JourneyArtifact> journeyArtifacts =
-          artifactService.upload(documents, IMAGE_PDF_MIME_TYPES);
+      List<JourneyArtifact> journeyArtifacts = Lists.newArrayList();
+      if (countDocumentsAfterUploading(sessionForm, documents) <= MAX_NUMBER_SUPPORTING_DOCUMENTS) {
+        journeyArtifacts.addAll(artifactService.upload(documents, IMAGE_PDF_MIME_TYPES));
+      } else {
+        log.info(
+            "Uploading the given documents will reach more than the total number allowed: "
+                + MAX_NUMBER_SUPPORTING_DOCUMENTS
+                + ".");
+      }
       if (!journeyArtifacts.isEmpty()) {
         sessionForm.getJourneyArtifacts().addAll(journeyArtifacts);
         sessionForm.setHasDocuments(true);
@@ -121,6 +130,16 @@ public class UploadSupportingDocumentsController implements StepController {
       log.warn("Failed to upload document through ajax call.", e);
       return ImmutableMap.of("error", "Failed to upload");
     }
+  }
+
+  private long countDocumentsAfterUploading(
+      UploadSupportingDocumentsForm sessionForm, List<MultipartFile> documents) {
+    long sessionFormDocumentsSize =
+        (sessionForm != null && sessionForm.getJourneyArtifacts() != null
+            ? sessionForm.getJourneyArtifacts().size()
+            : 0);
+    long documentsSize = (documents != null ? documents.stream().filter(doc -> !doc.isEmpty()).count() : 0);
+    return sessionFormDocumentsSize + documentsSize;
   }
 
   @PostMapping(Mappings.URL_UPLOAD_SUPPORTING_DOCUMENTS)
@@ -141,26 +160,35 @@ public class UploadSupportingDocumentsController implements StepController {
       sessionForm.setHasDocuments(formRequest.getHasDocuments());
     }
 
-    if (sessionForm.getHasDocuments() != null && sessionForm.getHasDocuments().booleanValue() && documents != null && !documents.isEmpty()) {
-      try {
-        List<JourneyArtifact> newArtifacts =
-            artifactService.upload(documents, IMAGE_PDF_MIME_TYPES);
-        if (!newArtifacts.isEmpty()) {
-          sessionForm.setJourneyArtifacts(newArtifacts);
+    if (sessionForm.getHasDocuments() != null
+        && sessionForm.getHasDocuments().booleanValue()
+        && documents != null
+        && !documents.isEmpty()) {
+      if (countDocumentsAfterUploading(sessionForm, documents) <= MAX_NUMBER_SUPPORTING_DOCUMENTS) {
+        try {
+          List<JourneyArtifact> newArtifacts =
+              artifactService.upload(documents, IMAGE_PDF_MIME_TYPES);
+          if (!newArtifacts.isEmpty()) {
+            sessionForm.setJourneyArtifacts(newArtifacts);
+          }
+        } catch (UnsupportedMimetypeException e) {
+          attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", true);
+          return "redirect:" + Mappings.URL_UPLOAD_SUPPORTING_DOCUMENTS;
+        } catch (Exception e) {
+          log.warn("Failed to upload document", e);
+          bindingResult.rejectValue("document", "", "Failed to upload document");
         }
-      } catch (UnsupportedMimetypeException e) {
-        attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", true);
+      } else {
+        attr.addFlashAttribute("MAX_NUMBER_SUPPORTING_DOCUMENTS_REACHED", true);
         return "redirect:" + Mappings.URL_UPLOAD_SUPPORTING_DOCUMENTS;
-      } catch (Exception e) {
-        log.warn("Failed to upload document", e);
-        bindingResult.rejectValue("document", "", "Failed to upload document");
       }
     }
     if (formRequest.getHasDocuments() == null || !formRequest.getHasDocuments()) {
       sessionForm.setJourneyArtifacts(Lists.newArrayList());
     }
 
-    if (formRequest.getHasDocuments() != null && formRequest.getHasDocuments().booleanValue()
+    if (formRequest.getHasDocuments() != null
+        && formRequest.getHasDocuments().booleanValue()
         && sessionForm.getJourneyArtifacts().isEmpty()) {
       bindingResult.rejectValue(
           "journeyArtifact",
