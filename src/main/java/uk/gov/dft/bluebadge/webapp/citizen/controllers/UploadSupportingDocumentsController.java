@@ -141,7 +141,7 @@ public class UploadSupportingDocumentsController implements StepController {
       sessionForm.setHasDocuments(formRequest.getHasDocuments());
     }
 
-    if (sessionForm.getHasDocuments().booleanValue() && documents != null && !documents.isEmpty()) {
+    if (sessionForm.getHasDocuments() != null && sessionForm.getHasDocuments().booleanValue() && documents != null && !documents.isEmpty()) {
       try {
         List<JourneyArtifact> newArtifacts =
             artifactService.upload(documents, IMAGE_PDF_MIME_TYPES);
@@ -160,7 +160,7 @@ public class UploadSupportingDocumentsController implements StepController {
       sessionForm.setJourneyArtifacts(Lists.newArrayList());
     }
 
-    if (formRequest.getHasDocuments().booleanValue()
+    if (formRequest.getHasDocuments() != null && formRequest.getHasDocuments().booleanValue()
         && sessionForm.getJourneyArtifacts().isEmpty()) {
       bindingResult.rejectValue(
           "journeyArtifact",
