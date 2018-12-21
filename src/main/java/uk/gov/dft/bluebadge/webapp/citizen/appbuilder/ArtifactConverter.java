@@ -17,7 +17,12 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Ar
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.*;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ArtifactForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveAddressForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveIdentityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProvidePhotoForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.UploadBenefitForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.UploadSupportingDocumentsForm;
 
 class ArtifactConverter {
   private static final EnumSet<EligibilityCodeField> BENEFIT_UPLOAD_ELIG_TYPES =
