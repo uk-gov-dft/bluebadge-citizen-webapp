@@ -91,7 +91,7 @@ public class UploadSupportingDocumentsController implements StepController {
         .fieldName("document")
         .ajaxRequestUrl(AJAX_URL)
         .fieldLabel("uploadSupportingDocuments.fu.field.label")
-        .maxFileUploadLimit(15)
+        .maxFileUploadLimit(MAX_NUMBER_SUPPORTING_DOCUMENTS)
         .allowedFileTypes(String.join(",", IMAGE_PDF_MIME_TYPES))
         .allowMultipleFileUploads(true)
         .rejectErrorMessageKey("uploadSupportingDocuments.fu.rejected.content")
@@ -197,7 +197,10 @@ public class UploadSupportingDocumentsController implements StepController {
     return routeMaster.redirectToOnSuccess(formRequest, journey);
   }
 
-  private void rejectIfShouldAttachADocument(@ModelAttribute("formRequest") @Valid UploadSupportingDocumentsForm formRequest, BindingResult bindingResult, UploadSupportingDocumentsForm sessionForm) {
+  private void rejectIfShouldAttachADocument(
+      @ModelAttribute("formRequest") @Valid UploadSupportingDocumentsForm formRequest,
+      BindingResult bindingResult,
+      UploadSupportingDocumentsForm sessionForm) {
     if (formRequest.getHasDocuments() != null
         && formRequest.getHasDocuments().booleanValue()
         && sessionForm.getJourneyArtifacts().isEmpty()) {
