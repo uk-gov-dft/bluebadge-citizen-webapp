@@ -122,6 +122,7 @@ export default class FileUploader {
 		if(validFiles.length !== files.length) {
 			this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
 			this.makeScreenAnnouncement(this.$allowMultipleFileUploads ? this.$ANNOUNCEMENTS.rejectedFiles : this.$ANNOUNCEMENTS.rejectedFile);
+			this.$fileInput.value = '';
 			this.fireLifeCycleEvent('uploadRejected');
 		} else {
 			this.beginFileUpload(validFiles);
@@ -155,7 +156,8 @@ export default class FileUploader {
 				} else {
 					this.fireLifeCycleEvent('uploadError', resp, files);
 				}
-            	this.$fileInput.value = '';
+				
+				this.$fileInput.value = '';
 				this.$container.classList.remove(this.$DROPAREA_STATE.LOADING);
 				this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
 			}
