@@ -40,6 +40,7 @@ public class UploadSupportingDocumentsController implements StepController {
   public static final String TEMPLATE = "upload-supporting-documents";
   private static final String DOC_BYPASS_URL = "upload-supporting-documents-bypass";
   public static final String AJAX_URL = "/upload-supporting-documents-ajax";
+  private static final Integer MAX_NUMBER_SUPPORTING_DOCUMENTS = 15;
 
   private final RouteMaster routeMaster;
   private final ArtifactService artifactService;
@@ -91,7 +92,7 @@ public class UploadSupportingDocumentsController implements StepController {
         .ajaxRequestUrl(AJAX_URL)
         .fieldLabel("uploadSupportingDocuments.fu.field.label")
         .maxFileUploadLimit(15)
-        .allowedFileTypes("image/jpeg,image/gif,image/png,application/pdf")
+        .allowedFileTypes(String.join(",", IMAGE_PDF_MIME_TYPES))
         .allowMultipleFileUploads(true)
         .rejectErrorMessageKey("uploadSupportingDocuments.fu.rejected.content")
         .build();
@@ -111,9 +112,16 @@ public class UploadSupportingDocumentsController implements StepController {
         sessionForm.setJourneyArtifacts(new ArrayList<>());
       }
 
-      List<JourneyArtifact> journeyArtifacts =
-          artifactService.upload(documents, IMAGE_PDF_MIME_TYPES);
-      if (!journeyArtifacts.isEmpty()) {
+      List<JourneyArtifact> journeyArtifacts = Lists.newArrayList();
+      if (countDocumentsAfterUploading(sessionForm, documents) <= MAX_NUMBER_SUPPORTING_DOCUMENTS) {
+        journeyArtifacts.addAll(artifactService.upload(documents, IMAGE_PDF_MIME_TYPES));
+      } else {
+        log.info(
+            "Uploading the given documents will reach more than the total number allowed: "
+                + MAX_NUMBER_SUPPORTING_DOCUMENTS
+                + ".");
+      }
+      if (!journeyArtifacts.isEmpty() && sessionForm != null) {
         sessionForm.getJourneyArtifacts().addAll(journeyArtifacts);
         sessionForm.setHasDocuments(true);
       }
@@ -122,6 +130,17 @@ public class UploadSupportingDocumentsController implements StepController {
       log.warn("Failed to upload document through ajax call.", e);
       return ImmutableMap.of("error", "Failed to upload");
     }
+  }
+
+  private long countDocumentsAfterUploading(
+      UploadSupportingDocumentsForm sessionForm, List<MultipartFile> documents) {
+    long sessionFormDocumentsSize =
+        (sessionForm != null && sessionForm.getJourneyArtifacts() != null
+            ? sessionForm.getJourneyArtifacts().size()
+            : 0);
+    long documentsSize =
+        (documents != null ? documents.stream().filter(doc -> !doc.isEmpty()).count() : 0);
+    return sessionFormDocumentsSize + documentsSize;
   }
 
   @PostMapping(Mappings.URL_UPLOAD_SUPPORTING_DOCUMENTS)
@@ -146,24 +165,39 @@ public class UploadSupportingDocumentsController implements StepController {
         && sessionForm.getHasDocuments().booleanValue()
         && documents != null
         && !documents.isEmpty()) {
-      try {
-        List<JourneyArtifact> newArtifacts =
-            artifactService.upload(documents, IMAGE_PDF_MIME_TYPES);
-        if (!newArtifacts.isEmpty()) {
-          sessionForm.setJourneyArtifacts(newArtifacts);
+      if (countDocumentsAfterUploading(sessionForm, documents) <= MAX_NUMBER_SUPPORTING_DOCUMENTS) {
+        try {
+          List<JourneyArtifact> newArtifacts =
+              artifactService.upload(documents, IMAGE_PDF_MIME_TYPES);
+          if (!newArtifacts.isEmpty()) {
+            sessionForm.setJourneyArtifacts(newArtifacts);
+          }
+        } catch (UnsupportedMimetypeException e) {
+          attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", true);
+          return "redirect:" + Mappings.URL_UPLOAD_SUPPORTING_DOCUMENTS;
+        } catch (Exception e) {
+          log.warn("Failed to upload document", e);
+          bindingResult.rejectValue("document", "", "Failed to upload document");
         }
-      } catch (UnsupportedMimetypeException e) {
-        attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", true);
+      } else {
+        attr.addFlashAttribute("MAX_NUMBER_SUPPORTING_DOCUMENTS_REACHED", true);
         return "redirect:" + Mappings.URL_UPLOAD_SUPPORTING_DOCUMENTS;
-      } catch (Exception e) {
-        log.warn("Failed to upload document", e);
-        bindingResult.rejectValue("document", "", "Failed to upload document");
       }
     }
     if (formRequest.getHasDocuments() == null || !formRequest.getHasDocuments()) {
       sessionForm.setJourneyArtifacts(Lists.newArrayList());
     }
 
+    rejectIfShouldAttachADocument(formRequest, bindingResult, sessionForm);
+
+    if (bindingResult.hasErrors()) {
+      return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
+    }
+
+    return routeMaster.redirectToOnSuccess(formRequest, journey);
+  }
+
+  private void rejectIfShouldAttachADocument(@ModelAttribute("formRequest") @Valid UploadSupportingDocumentsForm formRequest, BindingResult bindingResult, UploadSupportingDocumentsForm sessionForm) {
     if (formRequest.getHasDocuments() != null
         && formRequest.getHasDocuments().booleanValue()
         && sessionForm.getJourneyArtifacts().isEmpty()) {
@@ -172,12 +206,6 @@ public class UploadSupportingDocumentsController implements StepController {
           "NotNull.uploadSupportingDocuments.document",
           "Supporting documents is required if you answer yes");
     }
-
-    if (bindingResult.hasErrors()) {
-      return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
-    }
-
-    return routeMaster.redirectToOnSuccess(formRequest, journey);
   }
 
   @Override

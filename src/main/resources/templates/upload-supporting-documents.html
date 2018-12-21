@@ -16,6 +16,10 @@
                 <div th:replace="~{ fragments/errors :: govuk-error-summary-static('fileUploader.error.title', 'uploadSupportingDocuments.fu.rejected.content') }"></div>
             </div>
 
+            <div th:if="${MAX_NUMBER_SUPPORTING_DOCUMENTS_REACHED}">
+                <div th:replace="~{ fragments/errors :: govuk-error-summary-static('fileUploader.error.title', 'uploadSupportingDocuments.fu.rejected.content.maxnumberoffiles') }"></div>
+            </div>
+
             <h1 class="govuk-heading-l" th:text="#{uploadSupportingDocuments.title}"></h1>
 
             <p class="govuk-body" th:text="#{${JOURNEY.who} + uploadSupportingDocuments.content.p1}"></p>
