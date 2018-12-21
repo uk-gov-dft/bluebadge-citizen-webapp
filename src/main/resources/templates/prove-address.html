@@ -4,7 +4,7 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/master.html}">
 <head>
-    <title th:text="#{${JOURNEY.who} + proveAddress.title}"></title>
+    <title th:text="(${errorSummary}? #{common.title.error} : '')  + #{${JOURNEY.who} + 'proveAddress.title'}"></title>
 </head>
 <body>
 
