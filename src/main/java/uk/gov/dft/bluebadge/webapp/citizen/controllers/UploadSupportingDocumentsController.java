@@ -90,6 +90,7 @@ public class UploadSupportingDocumentsController implements StepController {
         .fieldName("document")
         .ajaxRequestUrl(AJAX_URL)
         .fieldLabel("uploadSupportingDocuments.fu.field.label")
+        .maxFileUploadLimit(15)
         .allowedFileTypes("image/jpeg,image/gif,image/png,application/pdf")
         .allowMultipleFileUploads(true)
         .rejectErrorMessageKey("uploadSupportingDocuments.fu.rejected.content")
@@ -141,7 +142,10 @@ public class UploadSupportingDocumentsController implements StepController {
       sessionForm.setHasDocuments(formRequest.getHasDocuments());
     }
 
-    if (sessionForm.getHasDocuments() != null && sessionForm.getHasDocuments().booleanValue() && documents != null && !documents.isEmpty()) {
+    if (sessionForm.getHasDocuments() != null
+        && sessionForm.getHasDocuments().booleanValue()
+        && documents != null
+        && !documents.isEmpty()) {
       try {
         List<JourneyArtifact> newArtifacts =
             artifactService.upload(documents, IMAGE_PDF_MIME_TYPES);
@@ -160,7 +164,8 @@ public class UploadSupportingDocumentsController implements StepController {
       sessionForm.setJourneyArtifacts(Lists.newArrayList());
     }
 
-    if (formRequest.getHasDocuments() != null && formRequest.getHasDocuments().booleanValue()
+    if (formRequest.getHasDocuments() != null
+        && formRequest.getHasDocuments().booleanValue()
         && sessionForm.getJourneyArtifacts().isEmpty()) {
       bindingResult.rejectValue(
           "journeyArtifact",

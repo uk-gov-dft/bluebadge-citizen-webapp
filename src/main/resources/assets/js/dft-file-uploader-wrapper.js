@@ -29,11 +29,13 @@ export default class DFT_FileUploader {
 		this.$errorSummaryBody = this.getChildElement('-error-summary__body');
 		this.$showOnSuccessElements = Array.from(document.querySelectorAll('[data-file-uploader-show-on-success]'));
 		this.$addMore = this.getChildElement('__add-file-btn');
-
+		
 		this.$generalErrorMessage = this.getDataAttrValue('upload-error-message') || 'File could not be uploaded';
 		this.$uploadRejectErrorMessage = this.getDataAttrValue('upload-reject-error-message') || "File uploaded was of incorrect format or file size has exceeded the limit";
 
 		this.$endPoint = this.getDataAttrValue('ajax-request-url');
+		this.$maxFileUploadLimit = this.getDataAttrValue('max-file-upload-limit');
+		this.$currentFileCount = this.getDataAttrValue('current-file-count');
 
 		this.$state = {
 			preview: this.$classPrefix + '--preview',
@@ -49,12 +51,13 @@ export default class DFT_FileUploader {
 			el: this.$input,
 			container: document.getElementsByClassName('dft-fu-file-uploader').item(0),
 			uploadPath: this.$endPoint,
+			maxFileUploadLimit: this.$maxFileUploadLimit,
+			totalFilesUploaded: this.$currentFileCount,
 
 			// Life cycle methods
 			beforeUpload: this.beforeUpload.bind(this),
 			uploaded: this.uploaded.bind(this),
 			uploadError: this.uploadError.bind(this),
-			uploadRejected: this.uploadRejected.bind(this),
 		}
 
 		this.$fu = new FileUploader(this.$options);
@@ -101,17 +104,22 @@ export default class DFT_FileUploader {
 		this.$showOnSuccessElements.forEach(el => el.classList.add('show'));
 	}
 	
-	uploadError() {
-		this.handleError(this.$generalErrorMessage);
-	}
-
-	uploadRejected() {
-		this.handleError(this.$uploadRejectErrorMessage);
+	uploadError(errorCode) {
+		switch(errorCode) {
+			case 'INVALID_FILES_UPLOADED':
+				this.handleError(this.$uploadRejectErrorMessage);
+				break;
+			case 'MAX_FILE_UPLOAD_LIMIT_EXCEEDED':
+				this.handleError(this.$uploadRejectErrorMessage);
+				break;
+			default:
+				this.handleError(this.$generalErrorMessage);
+				break;
+		}
 	}
 
 	handleError(errorMessage) {
 		this.$errorSummaryBody.innerText = errorMessage;
-		this.$dftFuContainer.classList.remove(this.$state.preview);
 		this.$dftFuContainer.classList.add(this.$state.error);
 		this.$showOnSuccessElements.forEach(el => el.classList.remove('show'));
 	}
@@ -160,6 +168,7 @@ export default class DFT_FileUploader {
 
   clearUploadHistory(flag) {
 	  this.$options.uploadPath = `${this.$endPoint}?clear=${flag}`;
+	  this.$fu.$totalFilesUploaded = 0;
   }
 
 }

@@ -11,6 +11,8 @@
      th:classappend="*{not #lists.isEmpty(journeyArtifacts)} ? dft-fu--preview"
      th:data-ajax-request-url="${options.ajaxRequestUrl}"
      th:data-upload-error-message="#{${options.errorMessageKey}}"
+     th:data-max-file-upload-limit="${options.maxFileUploadLimit}"
+     th:data-current-file-count="*{not #lists.isEmpty(journeyArtifacts)}? *{journeyArtifacts.size()}"
      th:data-upload-reject-error-message="#{${options.rejectErrorMessageKey}}">
 
     <div class="govuk-error-summary dft-fu-error-summary"
