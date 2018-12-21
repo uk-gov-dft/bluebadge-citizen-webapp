@@ -120,7 +120,7 @@ public class UploadSupportingDocumentsController implements StepController {
                 + MAX_NUMBER_SUPPORTING_DOCUMENTS
                 + ".");
       }
-      if (!journeyArtifacts.isEmpty()) {
+      if (!journeyArtifacts.isEmpty() && sessionForm != null) {
         sessionForm.getJourneyArtifacts().addAll(journeyArtifacts);
         sessionForm.setHasDocuments(true);
       }
