@@ -53,8 +53,8 @@ export default class DFT_FileUploader {
 			el: this.$input,
 			container: document.getElementsByClassName('dft-fu-file-uploader').item(0),
 			uploadPath: this.$endPoint,
-			maxFileUploadLimit: this.$maxFileUploadLimit,
-			totalFilesUploaded: this.$currentFileCount,
+			maxFileUploadLimit: this.$maxFileUploadLimit * 1,
+			totalFilesUploaded: this.$currentFileCount * 1,
 
 			// Life cycle methods
 			beforeUpload: this.beforeUpload.bind(this),
@@ -112,8 +112,6 @@ export default class DFT_FileUploader {
 	uploadError(errorCode) {
 		switch(errorCode) {
 			case 'INVALID_FILES_UPLOADED':
-				this.handleError(this.$uploadRejectErrorMessage);
-				break;
 			case 'MAX_FILE_UPLOAD_LIMIT_EXCEEDED':
 				this.handleError(this.$uploadRejectErrorMessage);
 				break;

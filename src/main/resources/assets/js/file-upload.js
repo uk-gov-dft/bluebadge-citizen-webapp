@@ -23,10 +23,9 @@ export default class FileUploader {
 		this.$uploadBtn;
 		this.$uploadIcon;
 		this.$resetBtn;
-		this.$addFileBtn;
 		this.$screenAnnouncer;
 
-		this.$totalFilesUploaded = parseInt(options.totalFilesUploaded) || 0;
+		this.$totalFilesUploaded = options.totalFilesUploaded || 0;
 		
 		this.$container = this.renderFileUploader(options.container);
 		this.$container.appendChild(this.renderDropArea());
@@ -65,11 +64,6 @@ export default class FileUploader {
 		this.$uploadIcon.addEventListener('click', this.uploadBtnClick);
 		this.$fileInput.addEventListener('change', event => this.selectFile(event.target.files), false);
 
-		// Only register this event if multiple file uploads is enabled
-		if(this.$allowMultipleFileUploads && this.$addFileBtn) {
-			this.$addFileBtn.addEventListener('click', this.uploadBtnClick);
-		}
-		
 		// If device is mobile or tablet then we do not want to 
 		// register drag and drop events
 		if(!this.$isMobile) {
@@ -160,13 +154,13 @@ export default class FileUploader {
 
 		xhr.addEventListener('readystatechange', (e) => {
 
-			if (xhr.readyState == 4 && xhr.status == 200) {
+			if (xhr.readyState === 4 && xhr.status === 200) {
 				const resp = JSON.parse(xhr.response);
 
 				if(resp && resp.success) {
 					this.makeScreenAnnouncement(this.$ANNOUNCEMENTS.filesUploaded);
 					this.fireLifeCycleEvent('uploaded', resp, files);
-					this.$totalFilesUploaded =+ parseInt(files.length);
+					this.$totalFilesUploaded = this.$totalFilesUploaded + files.length;
 					this.$screenAnnouncer.focus();
 				} else {
 					this.fireLifeCycleEvent('uploadError', 'REQUEST_UNSUCCESSFUL');
