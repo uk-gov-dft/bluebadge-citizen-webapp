@@ -26,6 +26,7 @@ export default class DFT_FileUploader {
 		this.$input = document.getElementsByClassName('dft-fu-file-upload').item(0);
 		this.$previewHolder = this.getChildElement('-preview__holder');
 		this.$resetButton = this.getChildElement('__reset-btn');
+		this.$errorSummary = document.getElementById('dft-fu-error-summary');
 		this.$errorSummaryBody = this.getChildElement('-error-summary__body');
 		this.$showOnSuccessElements = Array.from(document.querySelectorAll('[data-file-uploader-show-on-success]'));
 		this.$addMore = this.getChildElement('__add-file-btn');
@@ -40,6 +41,7 @@ export default class DFT_FileUploader {
 		this.$state = {
 			preview: this.$classPrefix + '--preview',
 			error: this.$classPrefix + '--error',
+			loading: this.$classPrefix + '--loading'
 		}
 
 		if (this.$resetButton) {
@@ -74,6 +76,10 @@ export default class DFT_FileUploader {
 	}
 	
 	beforeUpload(file, formData) {
+		this.$dftFuContainer.classList.remove(this.$state.error);
+		this.$dftFuContainer.classList.add(this.$state.loading);
+		this.$fu.makeScreenAnnouncement('Uploading files');
+
 		const csrfTokenField = document.querySelectorAll('input[name="_csrf"]');
 		if (csrfTokenField.length > 0) {
 			formData.append('_csrf', csrfTokenField.item(0).value);
@@ -87,12 +93,10 @@ export default class DFT_FileUploader {
 	uploaded(response) {
 
 		if (response.artifact.constructor === Array) {
-			
 			response.artifact.forEach(artifact => {
 				const previewItem = this.createFilePreview(artifact);
 				this.$previewHolder.appendChild(previewItem);
 			});
-
 		} else {
 			const previewItem = this.createFilePreview(response.artifact);
 			this.$previewHolder.appendChild(previewItem);
@@ -101,6 +105,7 @@ export default class DFT_FileUploader {
 		this.clearUploadHistory(false);
 		this.$dftFuContainer.classList.add(this.$state.preview);
 		this.$dftFuContainer.classList.remove(this.$state.error);
+		this.$dftFuContainer.classList.remove(this.$state.loading);
 		this.$showOnSuccessElements.forEach(el => el.classList.add('show'));
 	}
 	
@@ -121,7 +126,12 @@ export default class DFT_FileUploader {
 	handleError(errorMessage) {
 		this.$errorSummaryBody.innerText = errorMessage;
 		this.$dftFuContainer.classList.add(this.$state.error);
+		this.$dftFuContainer.classList.remove(this.$state.loading);
 		this.$showOnSuccessElements.forEach(el => el.classList.remove('show'));
+
+		if (this.$errorSummary) {
+			this.$errorSummary.focus();
+		}
 	}
 	
 	resetButtonClick(event) {
@@ -130,6 +140,7 @@ export default class DFT_FileUploader {
 		this.$previewHolder.innerHTML = '';
 		this.$dftFuContainer.classList.remove(this.$state.preview);
 		this.$dftFuContainer.classList.remove(this.$state.error);
+		this.$dftFuContainer.classList.remove(this.$state.loading);
 		this.$showOnSuccessElements.forEach(el => el.classList.remove('show'));
 	}
 
