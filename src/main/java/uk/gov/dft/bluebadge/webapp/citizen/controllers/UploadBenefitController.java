@@ -2,9 +2,11 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_MIME_TYPES;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_PDF_MIME_TYPES;
 
 import com.google.common.collect.ImmutableMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -26,28 +28,28 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.FileUploaderOptions;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProvidePhotoForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.UploadBenefitForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.UnsupportedMimetypeException;
 
 @Controller
 @Slf4j
-public class ProvidePhotoController implements StepController {
+public class UploadBenefitController implements StepController {
 
-  public static final String TEMPLATE = "provide-photo";
-  private static final String DOC_BYPASS_URL = "provide-photo-bypass";
-  public static final String PROVIDE_PHOTO_AJAX_URL = "/provide-photo-ajax";
+  public static final String TEMPLATE = "upload-benefit";
+  private static final String DOC_BYPASS_URL = "upload-benefit-bypass";
+  public static final String UPLOAD_BENEFIT_AJAX_URL = "/upload-benefit-ajax";
 
   private final RouteMaster routeMaster;
   private final ArtifactService artifactService;
 
   @Autowired
-  ProvidePhotoController(RouteMaster routeMaster, ArtifactService artifactService) {
+  UploadBenefitController(RouteMaster routeMaster, ArtifactService artifactService) {
     this.routeMaster = routeMaster;
     this.artifactService = artifactService;
   }
 
-  @GetMapping(Mappings.URL_PROVIDE_PHOTO)
+  @GetMapping(Mappings.URL_UPLOAD_BENEFIT)
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
@@ -55,15 +57,13 @@ public class ProvidePhotoController implements StepController {
     }
 
     if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
-      ProvidePhotoForm providePhotoForm = journey.getFormForStep(getStepDefinition());
-      if (null != providePhotoForm.getJourneyArtifact()) {
-        artifactService.createAccessibleLinks(providePhotoForm.getJourneyArtifact());
-      }
-      model.addAttribute(FORM_REQUEST, providePhotoForm);
+      UploadBenefitForm uploadBenefitForm = journey.getFormForStep(getStepDefinition());
+      uploadBenefitForm.getJourneyArtifacts().forEach(artifactService::createAccessibleLinks);
+      model.addAttribute(FORM_REQUEST, uploadBenefitForm);
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
-      model.addAttribute(FORM_REQUEST, ProvidePhotoForm.builder().build());
+      model.addAttribute(FORM_REQUEST, UploadBenefitForm.builder().build());
     }
 
     model.addAttribute("fileUploaderOptions", getFileUploaderOptions());
@@ -73,65 +73,85 @@ public class ProvidePhotoController implements StepController {
 
   @GetMapping(DOC_BYPASS_URL)
   public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
-    ProvidePhotoForm formRequest = ProvidePhotoForm.builder().build();
+    UploadBenefitForm formRequest = UploadBenefitForm.builder().build();
     journey.setFormForStep(formRequest);
     return routeMaster.redirectToOnSuccess(formRequest);
   }
 
-  private FileUploaderOptions getFileUploaderOptions() {
+  private static FileUploaderOptions getFileUploaderOptions() {
     return FileUploaderOptions.builder()
         .fieldName("document")
-        .ajaxRequestUrl(PROVIDE_PHOTO_AJAX_URL)
-        .fieldLabel("providePhoto.fu.field.label")
-        .allowedFileTypes("image/jpeg,image/gif,image/png")
-        .allowMultipleFileUploads(false)
-        .rejectErrorMessageKey("providePhoto.fu.rejected.content")
+        .ajaxRequestUrl(UPLOAD_BENEFIT_AJAX_URL)
+        .fieldLabel("proveIdentity.fu.field.label")
+        .allowedFileTypes(String.join(",", IMAGE_PDF_MIME_TYPES))
+        .allowMultipleFileUploads(true)
+        .maxFileUploadLimit(15)
+        .previewTitleMessageKey("fileUploader.multipleFile.preview.title")
+        .rejectErrorMessageKey("upload.benefit.fu.rejected.content")
+        .addFileMessageKey("upload.benefit.add.another")
         .build();
   }
 
-  @PostMapping(value = PROVIDE_PHOTO_AJAX_URL, produces = "application/json")
+  @PostMapping(value = UPLOAD_BENEFIT_AJAX_URL, produces = "application/json")
   @ResponseBody
   public Map<String, Object> submitAjax(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @RequestParam("document") MultipartFile document,
-      ProvidePhotoForm providePhotoForm) {
+      @RequestParam("document") List<MultipartFile> documents,
+      @RequestParam(name = "clear", defaultValue = "false") Boolean clearPreviousArtifacts,
+      UploadBenefitForm uploadBenefitForm) {
     try {
-      JourneyArtifact uploadedJourneyArtifact = artifactService.upload(document, IMAGE_MIME_TYPES);
-      providePhotoForm.setJourneyArtifact(uploadedJourneyArtifact);
-      journey.setFormForStep(providePhotoForm);
-      return ImmutableMap.of("success", "true", "artifact", uploadedJourneyArtifact);
+      UploadBenefitForm sessionForm = journey.getOrSetFormForStep(uploadBenefitForm);
+
+      if (clearPreviousArtifacts) {
+        sessionForm.setJourneyArtifacts(new ArrayList<>());
+      }
+
+      List<JourneyArtifact> journeyArtifacts =
+          artifactService.upload(documents, IMAGE_PDF_MIME_TYPES);
+      if (!journeyArtifacts.isEmpty()) {
+        sessionForm.getJourneyArtifacts().addAll(journeyArtifacts);
+      }
+
+      return ImmutableMap.of("success", "true", "artifact", journeyArtifacts);
     } catch (Exception e) {
       log.warn("Failed to upload document through ajax call.", e);
       return ImmutableMap.of("error", "Failed to upload");
     }
   }
 
-  @PostMapping(Mappings.URL_PROVIDE_PHOTO)
+  @PostMapping(Mappings.URL_UPLOAD_BENEFIT)
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @RequestParam("document") MultipartFile document,
-      @Valid @ModelAttribute("formRequest") ProvidePhotoForm formRequest,
+      @RequestParam("document") List<MultipartFile> documents,
+      @Valid @ModelAttribute("formRequest") UploadBenefitForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
-    if (!document.isEmpty()) {
+    UploadBenefitForm sessionForm = journey.getOrSetFormForStep(formRequest);
+
+    if (!documents.isEmpty()) {
       try {
-        JourneyArtifact uploadJourneyArtifact = artifactService.upload(document, IMAGE_MIME_TYPES);
-        formRequest.setJourneyArtifact(uploadJourneyArtifact);
-        journey.setFormForStep(formRequest);
+        List<JourneyArtifact> newArtifacts =
+            artifactService.upload(documents, IMAGE_PDF_MIME_TYPES);
+        if (!newArtifacts.isEmpty()) {
+          sessionForm.setJourneyArtifacts(newArtifacts);
+        }
       } catch (UnsupportedMimetypeException e) {
-        attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", Boolean.TRUE);
-        return "redirect:" + Mappings.URL_PROVIDE_PHOTO;
+        attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", true);
+        return "redirect:" + Mappings.URL_UPLOAD_BENEFIT;
       } catch (Exception e) {
         log.warn("Failed to upload document", e);
-        bindingResult.rejectValue("document", "", "Failed to upload document");
+        bindingResult.rejectValue("journeyArtifact", "", "Failed to upload document");
       }
     }
 
-    ProvidePhotoForm sessionForm = journey.getFormForStep(getStepDefinition());
-    if (null == sessionForm || null == sessionForm.getJourneyArtifact()) {
+    if (null == sessionForm
+        || null == sessionForm.getJourneyArtifacts()
+        || sessionForm.getJourneyArtifacts().isEmpty()) {
       bindingResult.rejectValue(
-          "journeyArtifact", "providePhoto.NotNull.photo", "Photo is required");
+          "journeyArtifact",
+          "NotNull.upload.benefit.document",
+          "Proof of benefit document is required");
     }
 
     if (bindingResult.hasErrors()) {
@@ -143,6 +163,6 @@ public class ProvidePhotoController implements StepController {
 
   @Override
   public StepDefinition getStepDefinition() {
-    return StepDefinition.PROVIDE_PHOTO;
+    return StepDefinition.UPLOAD_BENEFIT;
   }
 }

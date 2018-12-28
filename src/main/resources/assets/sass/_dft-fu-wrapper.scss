@@ -1,18 +1,31 @@
 .dft-fu {
 	margin-bottom: 30px;
 
+	&__loader {
+		display: none;
+	}
+
 	&__reset-btn {
 		display: none;
 	}
 }
 
-form.activated {
-	.dft-fu__reset-btn { 
-		display: block;
-	}
+.has-file-uploader {
+	&--activated {
+		.dft-fu--preview {
 
-	[data-file-uploader-show-on-success]:not(.show) {
-		display: none;
+			.dft-fu__reset-btn { 
+				display: block;
+			}
+
+			.dft-fu__add-file-btn {
+				display: block;
+			}
+		}
+
+		[data-file-uploader-show-on-success]:not(.show) {
+			display: none;
+		}
 	}
 }
 
@@ -39,6 +52,12 @@ form.activated {
 			}
 		}
 
+		&--loading {
+			.dft-fu__loader {
+				display: block;
+			}
+		}
+
 		&__reset-btn {
 			@include govuk-link-style-text;
 			@include govuk-link-common;
@@ -55,6 +74,7 @@ form.activated {
 
 		&__add-file-btn {
 			@extend .govuk-button;
+			display: none;
 			background-color: govuk-colour(blue);
 
 			&:active,

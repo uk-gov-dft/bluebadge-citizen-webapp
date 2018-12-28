@@ -22,7 +22,7 @@ class WalkingTimeFormTest {
     WalkingTimeForm walkingTimeForm =
         WalkingTimeForm.builder().walkingTime(WalkingLengthOfTimeCodeField.CANTWALK).build();
     Optional<StepDefinition> actual = walkingTimeForm.determineNextStep();
-    assertThat(actual.get()).isEqualTo(StepDefinition.TREATMENT_LIST);
+    assertThat(actual.get()).isEqualTo(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
   }
 
   @Test
