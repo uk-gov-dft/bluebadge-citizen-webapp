@@ -15,10 +15,10 @@ export default class FileUploader {
 		this.$classPrefix = 'govuk-file-uploader';
 
 		this.$options = options;
-		this.$options.maxFileSize = parseInt(options.maxFileSize) ||  10485760;
+		this.$options.maxFileSize = parseInt(options.maxFileSize) || 10485760;
 		this.$fileInput = options.el;
 		this.$allowMultipleFileUploads = this.$fileInput.multiple;
-		this.$maxFileUploadLimit  = parseInt(options.maxFileUploadLimit) || null;
+		this.$maxFileUploadLimit = parseInt(options.maxFileUploadLimit) || null;
 		this.$dropArea;
 		this.$uploadBtn;
 		this.$uploadIcon;

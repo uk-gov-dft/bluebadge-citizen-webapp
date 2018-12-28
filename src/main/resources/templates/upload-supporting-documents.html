@@ -6,7 +6,7 @@
 <head>
     <title th:text="#{uploadSupportingDocuments.title}"></title>
 </head>
-<body>
+<body th:classappend="supporting-documents-page">
 
 <main layout:fragment="content" th:classappend="has-file-uploader">
     <div class="govuk-grid-row">
