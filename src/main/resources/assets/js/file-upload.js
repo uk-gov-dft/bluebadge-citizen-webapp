@@ -62,7 +62,11 @@ export default class FileUploader {
 		
 		this.$uploadBtn.addEventListener('click', this.uploadBtnClick);
 		this.$uploadIcon.addEventListener('click', this.uploadBtnClick);
-		this.$fileInput.addEventListener('change', event => this.selectFile(event.target.files), false);
+		this.$fileInput.addEventListener('change', event => {
+			if(event.target.value !== '') {
+				this.selectFile(event.target.files)
+			}
+		}, false);
 
 		// If device is mobile or tablet then we do not want to 
 		// register drag and drop events
@@ -101,8 +105,11 @@ export default class FileUploader {
 	}
 
 	uploadBtnClick(event) {
-		event.preventDefault();
-		this.$fileInput.click();
+		if(event) {
+			event.preventDefault();
+			event.stopPropagation();
+			this.$fileInput.click();
+		}
 	}
 
 	resetFileSelection(event) {
