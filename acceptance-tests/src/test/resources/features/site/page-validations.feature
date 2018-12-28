@@ -23,6 +23,8 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate the mobility aids page for a "yourself" application for "YES"
     And   I validate walking time page for a "yourself" application for "FEWMIN"
     And   I validate where can you walk page for a "yourself" application
+    And   I validate the treatments page for a "yourself" application for "YES"
+
 
 
   Scenario: Page title and error message validation - someone else
@@ -45,6 +47,7 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate what makes walking difficult page for a "someone else" application for "BALANCE"
     And   I validate the mobility aids page for a "someone else" application for "NO"
     And   I validate walking time page for a "someone else" application for "CANTWALK"
+    And   I validate the treatments page for a "someone else" application for "NO"
 
 
   Scenario: Page title and error message validation - an organisation
