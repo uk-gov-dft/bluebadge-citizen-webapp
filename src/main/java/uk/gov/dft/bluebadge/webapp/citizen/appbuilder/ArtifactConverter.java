@@ -43,7 +43,7 @@ class ArtifactConverter {
     if (SUPPORT_DOCS_ELIG_TYPES.contains(journey.getEligibilityCode())) {
       UploadSupportingDocumentsForm form =
           journey.getFormForStep(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
-      convertArtifact(result, form, ArtifactType.SUPPORT_DOCS);
+      convertArtifact(result, form, ArtifactType.SUPPORT_DOC);
     }
 
     ProveIdentityForm proveIdentityForm = journey.getFormForStep(StepDefinition.PROVE_IDENTITY);

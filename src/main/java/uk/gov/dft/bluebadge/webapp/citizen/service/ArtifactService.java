@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
+import uk.gov.dft.bluebadge.webapp.citizen.client.common.ServiceException;
 import uk.gov.dft.bluebadge.webapp.citizen.config.S3Config;
 import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 
@@ -38,6 +39,9 @@ public class ArtifactService {
   private final S3Config s3Config;
   private final TransferManager transferManager;
 
+  public static final String UNSUPPORTED_FILE = "UNSUPPORTED_FILE";
+  public static final String MAX_UPLOAD_LIMIT_REACHED = "MAX_NUMBER_SUPPORTING_DOCUMENTS_REACHED";
+
   @Autowired
   public ArtifactService(TransferManager transferManager, AmazonS3 amazonS3, S3Config s3Config) {
     this.amazonS3 = amazonS3;
@@ -46,20 +50,21 @@ public class ArtifactService {
   }
 
   public List<JourneyArtifact> upload(
-      List<MultipartFile> multipartFiles, Set<String> acceptedMimeTypes)
-      throws IOException, InterruptedException {
+      List<MultipartFile> multipartFiles, Set<String> acceptedMimeTypes) throws ServiceException {
+
     List<JourneyArtifact> newArtifacts = new ArrayList<>();
+
     for (MultipartFile document : multipartFiles) {
       if (!document.isEmpty()) {
         JourneyArtifact uploadJourneyArtifact = upload(document, acceptedMimeTypes);
         newArtifacts.add(uploadJourneyArtifact);
       }
     }
+
     return newArtifacts;
   }
 
-  public JourneyArtifact upload(MultipartFile multipartFile, Set<String> acceptedMimeTypes)
-      throws IOException, InterruptedException {
+  public JourneyArtifact upload(MultipartFile multipartFile, Set<String> acceptedMimeTypes) {
     Assert.notNull(multipartFile, "Multipart file is null.");
 
     if (multipartFile.isEmpty()) {
@@ -73,24 +78,32 @@ public class ArtifactService {
 
     String keyName = UUID.randomUUID().toString() + "-" + multipartFile.getOriginalFilename();
 
-    keyName = URLEncoder.encode(keyName, ENCODING_CHAR_SET);
-    ObjectMetadata meta = new ObjectMetadata();
-    meta.setContentLength(multipartFile.getSize());
-    String mimetype = determineMimeType(multipartFile.getOriginalFilename(), acceptedMimeTypes);
-    meta.setContentType(mimetype);
-    Upload upload =
-        transferManager.upload(
-            s3Config.getS3Bucket(), keyName, multipartFile.getInputStream(), meta);
-    UploadResult uploadResult = upload.waitForUploadResult();
-    URL url = amazonS3.getUrl(uploadResult.getBucketName(), uploadResult.getKey());
-    URL signedS3Url = generateSignedS3Url(uploadResult.getKey());
+    JourneyArtifact.JourneyArtifactBuilder journeyArtifact = JourneyArtifact.builder();
 
-    return JourneyArtifact.builder()
-        .fileName(multipartFile.getOriginalFilename())
-        .type(determineFileType(mimetype))
-        .url(url)
-        .signedUrl(signedS3Url)
-        .build();
+    try {
+      keyName = URLEncoder.encode(keyName, ENCODING_CHAR_SET);
+      ObjectMetadata meta = new ObjectMetadata();
+      meta.setContentLength(multipartFile.getSize());
+      String mimetype = determineMimeType(multipartFile.getOriginalFilename(), acceptedMimeTypes);
+      meta.setContentType(mimetype);
+      Upload upload =
+          transferManager.upload(
+              s3Config.getS3Bucket(), keyName, multipartFile.getInputStream(), meta);
+      UploadResult uploadResult = upload.waitForUploadResult();
+      URL url = amazonS3.getUrl(uploadResult.getBucketName(), uploadResult.getKey());
+      URL signedS3Url = generateSignedS3Url(uploadResult.getKey());
+
+      journeyArtifact
+          .fileName(multipartFile.getOriginalFilename())
+          .type(determineFileType(mimetype))
+          .url(url)
+          .signedUrl(signedS3Url);
+
+    } catch (IOException | InterruptedException e) {
+      throw new ServiceException("File could not be uploaded to S3", e);
+    }
+
+    return journeyArtifact.build();
   }
 
   private static String determineMimeType(String filename, Set<String> acceptedMimeTypes) {
