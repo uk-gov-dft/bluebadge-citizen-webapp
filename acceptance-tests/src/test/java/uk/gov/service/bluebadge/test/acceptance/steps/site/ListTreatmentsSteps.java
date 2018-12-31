@@ -67,7 +67,7 @@ public class ListTreatmentsSteps extends AbstractSpringSteps {
 //            commonPage.selectRadioButton(ListTreatmentsPage.TREATMENT_YES_OPTION);
 //            // Needs to update this to use id or data-uipath
 //            commonPage.findPageElementById(ListTreatmentsPage.TREATMENT_YES_OPTION).click();
-//            addTreatmentsSteps.iCompleteAddTreatmentsPage();
+//            addTreatmentsSteps.iCompleteAddMedicationPage();
 //        } else {
 //            commonPage.selectRadioButton(ListTreatmentsPage.TREATMENT_NO_OPTION);
 //        }
