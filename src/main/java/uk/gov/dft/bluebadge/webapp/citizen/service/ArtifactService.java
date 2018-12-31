@@ -13,7 +13,9 @@ import com.google.common.collect.ImmutableSet;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
@@ -43,12 +45,25 @@ public class ArtifactService {
     this.transferManager = transferManager;
   }
 
+  public List<JourneyArtifact> upload(
+      List<MultipartFile> multipartFiles, Set<String> acceptedMimeTypes)
+      throws IOException, InterruptedException {
+    List<JourneyArtifact> newArtifacts = new ArrayList<>();
+    for (MultipartFile document : multipartFiles) {
+      if (!document.isEmpty()) {
+        JourneyArtifact uploadJourneyArtifact = upload(document, acceptedMimeTypes);
+        newArtifacts.add(uploadJourneyArtifact);
+      }
+    }
+    return newArtifacts;
+  }
+
   public JourneyArtifact upload(MultipartFile multipartFile, Set<String> acceptedMimeTypes)
       throws IOException, InterruptedException {
     Assert.notNull(multipartFile, "Multipart file is null.");
 
     if (multipartFile.isEmpty()) {
-      throw new IllegalArgumentException("Upload failed. JourneyArtifact is empty");
+      throw new IllegalArgumentException("Upload failed. MultipartFile is empty");
     }
 
     log.info(

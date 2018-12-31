@@ -30,8 +30,10 @@ public class Mappings {
   public static final String URL_ENTER_ADDRESS = "/enter-address";
   public static final String URL_EXISTING_BADGE = "/existing-badge";
   public static final String URL_PROVE_BENEFIT = "/prove-benefit";
+  public static final String URL_UPLOAD_BENEFIT = "/upload-benefit";
   public static final String URL_PROVE_IDENTITY = "/prove-identity";
   public static final String URL_PROVIDE_PHOTO = "/provide-photo";
+  public static final String URL_UPLOAD_SUPPORTING_DOCUMENTS = "/upload-supporting-documents";
 
   // organisation Journey routes
   public static final String URL_ORGANISATION_CARE = "/organisation-care";
@@ -101,6 +103,7 @@ public class Mappings {
           .put(StepDefinition.ELIGIBLE, URL_ELIGIBLE)
           .put(StepDefinition.MAY_BE_ELIGIBLE, URL_MAY_BE_ELIGIBLE)
           .put(StepDefinition.PROVE_BENEFIT, URL_PROVE_BENEFIT)
+          .put(StepDefinition.UPLOAD_BENEFIT, URL_UPLOAD_BENEFIT)
           .put(StepDefinition.PROVE_IDENTITY, URL_PROVE_IDENTITY)
           .put(StepDefinition.PROVIDE_PHOTO, URL_PROVIDE_PHOTO)
 
@@ -125,6 +128,7 @@ public class Mappings {
           .put(StepDefinition.WALKING_DIFFICULTY, URL_WALKING_DIFFICULTY)
           .put(StepDefinition.WHERE_CAN_YOU_WALK, URL_WHERE_CAN_YOU_WALK)
           .put(StepDefinition.WALKING_TIME, URL_WALKING_TIME)
+          .put(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS, URL_UPLOAD_SUPPORTING_DOCUMENTS)
           .put(StepDefinition.NOT_ELIGIBLE, URL_NOT_ELIGIBLE)
           .put(StepDefinition.EXISTING_BADGE, URL_EXISTING_BADGE)
           .put(StepDefinition.HEALTH_CONDITIONS, URL_HEALTH_CONDITIONS)
@@ -147,7 +151,7 @@ public class Mappings {
           .put(StepDefinition.MEDICATION_ADD, URL_MEDICATION_ADD)
           .put(StepDefinition.MEDICAL_EQUIPMENT, URL_MEDICAL_EQUIPMENT)
 
-          //organisation mappings
+          // organisation mappings
           .put(StepDefinition.ORGANISATION_CARE, URL_ORGANISATION_CARE)
           .put(StepDefinition.ORGANISATION_TRANSPORT, URL_ORGANISATION_TRANSPORT)
           .put(StepDefinition.ORGANISATION_MAY_BE_ELIGIBLE, URL_ORGANISATION_MAY_BE_ELIGIBLE)

@@ -19,6 +19,7 @@ Feature: DFT Blue badge Citizen app new application - CHILDBULK
     And   I complete address page
     And   I complete contact page for "yourself"
     And   I complete describe health conditions page
+    And   I complete upload "supporting documents page" with a "GIF" documents
     And   I complete medical equipment page
     And   I complete the healthcare professionals page for "YES"
     And   I complete "prove ID" page with no documents

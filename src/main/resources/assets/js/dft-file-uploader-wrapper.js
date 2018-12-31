@@ -17,22 +17,31 @@ export default class DFT_FileUploader {
 	init(container) {
 
 		this.$dftFuContainer = container;
-		// class is added if browser supports drag and drop.
-		this.$dftFuContainer.parentNode.classList.add('activated');
+		
+		const topLevel = document.getElementsByClassName('has-file-uploader');
+		if(topLevel.length > 0) {
+			topLevel.item(0).classList.add('has-file-uploader--activated');
+		}
 
 		this.$input = document.getElementsByClassName('dft-fu-file-upload').item(0);
 		this.$previewHolder = this.getChildElement('-preview__holder');
 		this.$resetButton = this.getChildElement('__reset-btn');
+		this.$errorSummary = document.getElementById('dft-fu-error-summary');
 		this.$errorSummaryBody = this.getChildElement('-error-summary__body');
 		this.$showOnSuccessElements = Array.from(document.querySelectorAll('[data-file-uploader-show-on-success]'));
 		this.$addMore = this.getChildElement('__add-file-btn');
-
+		
 		this.$generalErrorMessage = this.getDataAttrValue('upload-error-message') || 'File could not be uploaded';
 		this.$uploadRejectErrorMessage = this.getDataAttrValue('upload-reject-error-message') || "File uploaded was of incorrect format or file size has exceeded the limit";
+
+		this.$endPoint = this.getDataAttrValue('ajax-request-url');
+		this.$maxFileUploadLimit = this.getDataAttrValue('max-file-upload-limit');
+		this.$currentFileCount = this.getDataAttrValue('current-file-count');
 
 		this.$state = {
 			preview: this.$classPrefix + '--preview',
 			error: this.$classPrefix + '--error',
+			loading: this.$classPrefix + '--loading'
 		}
 
 		if (this.$resetButton) {
@@ -40,19 +49,20 @@ export default class DFT_FileUploader {
 			this.$resetButton.addEventListener('click', this.resetButtonClick);
 		}
 
-		const options = {
+		this.$options = {
 			el: this.$input,
 			container: document.getElementsByClassName('dft-fu-file-uploader').item(0),
-			uploadPath: this.getDataAttrValue('ajax-request-url'),
+			uploadPath: this.$endPoint,
+			maxFileUploadLimit: this.$maxFileUploadLimit * 1,
+			totalFilesUploaded: this.$currentFileCount * 1,
 
 			// Life cycle methods
 			beforeUpload: this.beforeUpload.bind(this),
 			uploaded: this.uploaded.bind(this),
 			uploadError: this.uploadError.bind(this),
-			uploadRejected: this.uploadRejected.bind(this),
 		}
 
-		this.$fu = new FileUploader(options);
+		this.$fu = new FileUploader(this.$options);
 
 		if (this.$addMore) {
 			this.$addMore.addEventListener('click', this.$fu.uploadBtnClick);
@@ -66,6 +76,10 @@ export default class DFT_FileUploader {
 	}
 	
 	beforeUpload(file, formData) {
+		this.$dftFuContainer.classList.remove(this.$state.error);
+		this.$dftFuContainer.classList.add(this.$state.loading);
+		this.$fu.makeScreenAnnouncement('Uploading files');
+
 		const csrfTokenField = document.querySelectorAll('input[name="_csrf"]');
 		if (csrfTokenField.length > 0) {
 			formData.append('_csrf', csrfTokenField.item(0).value);
@@ -77,35 +91,54 @@ export default class DFT_FileUploader {
 	}
 	
 	uploaded(response) {
-		if(response.success) {
+
+		if (response.artifact.constructor === Array) {
+			response.artifact.forEach(artifact => {
+				const previewItem = this.createFilePreview(artifact);
+				this.$previewHolder.appendChild(previewItem);
+			});
+		} else {
 			const previewItem = this.createFilePreview(response.artifact);
 			this.$previewHolder.appendChild(previewItem);
-			this.$dftFuContainer.classList.add(this.$state.preview);
-			this.$dftFuContainer.classList.remove(this.$state.error);
-			this.$showOnSuccessElements.forEach(el => el.classList.add('show'));
 		}
+
+		this.clearUploadHistory(false);
+		this.$dftFuContainer.classList.add(this.$state.preview);
+		this.$dftFuContainer.classList.remove(this.$state.error);
+		this.$dftFuContainer.classList.remove(this.$state.loading);
+		this.$showOnSuccessElements.forEach(el => el.classList.add('show'));
 	}
 	
-	uploadError() {
-		this.handleError(this.$generalErrorMessage);
-	}
-
-	uploadRejected() {
-		this.handleError(this.$uploadRejectErrorMessage);
+	uploadError(errorCode) {
+		switch(errorCode) {
+			case 'INVALID_FILES_UPLOADED':
+			case 'MAX_FILE_UPLOAD_LIMIT_EXCEEDED':
+				this.handleError(this.$uploadRejectErrorMessage);
+				break;
+			default:
+				this.handleError(this.$generalErrorMessage);
+				break;
+		}
 	}
 
 	handleError(errorMessage) {
 		this.$errorSummaryBody.innerText = errorMessage;
-		this.$dftFuContainer.classList.remove(this.$state.preview);
 		this.$dftFuContainer.classList.add(this.$state.error);
+		this.$dftFuContainer.classList.remove(this.$state.loading);
 		this.$showOnSuccessElements.forEach(el => el.classList.remove('show'));
+
+		if (this.$errorSummary) {
+			this.$errorSummary.focus();
+		}
 	}
 	
 	resetButtonClick(event) {
 		this.$fu.resetFileSelection(event);
+		this.clearUploadHistory(true);
 		this.$previewHolder.innerHTML = '';
 		this.$dftFuContainer.classList.remove(this.$state.preview);
 		this.$dftFuContainer.classList.remove(this.$state.error);
+		this.$dftFuContainer.classList.remove(this.$state.loading);
 		this.$showOnSuccessElements.forEach(el => el.classList.remove('show'));
 	}
 
@@ -140,6 +173,11 @@ export default class DFT_FileUploader {
 	supportsDragAndDrop(){
 		const div = document.createElement('div');
 		return ('draggable' in div) || ('ondragstart' in div && 'ondrop' in div);
+  }
+
+  clearUploadHistory(flag) {
+	  this.$options.uploadPath = `${this.$endPoint}?clear=${flag}`;
+	  this.$fu.$totalFilesUploaded = 0;
   }
 
 }

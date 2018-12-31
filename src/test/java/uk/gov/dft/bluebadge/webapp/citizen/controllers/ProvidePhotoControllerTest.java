@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_PDF_MIME_TYPES;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_MIME_TYPES;
 
 import java.net.URL;
 import lombok.SneakyThrows;
@@ -34,16 +34,16 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveIdentityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProvidePhotoForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService;
 
-public class ProveIdentityControllerTest {
+public class ProvidePhotoControllerTest {
 
   private MockMvc mockMvc;
 
   private Journey journey;
-  private static final String SUCCESS_URL = Mappings.URL_PROVIDE_PHOTO;
-  private static final String ERROR_URL = Mappings.URL_PROVE_IDENTITY + RouteMaster.ERROR_SUFFIX;
+  private static final String SUCCESS_URL = Mappings.URL_DECLARATIONS;
+  private static final String ERROR_URL = Mappings.URL_PROVIDE_PHOTO + RouteMaster.ERROR_SUFFIX;
   private ArtifactService artifactServiceMock;
   private URL signedUrl;
   private URL docUrl;
@@ -52,15 +52,15 @@ public class ProveIdentityControllerTest {
   @SneakyThrows
   public void setup() {
     artifactServiceMock = mock(ArtifactService.class);
-    ProveIdentityController controller =
-        new ProveIdentityController(new RouteMaster(), artifactServiceMock);
+    ProvidePhotoController controller =
+        new ProvidePhotoController(new RouteMaster(), artifactServiceMock);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
 
-    journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.PROVE_IDENTITY);
-    journey.setFormForStep(ProveIdentityForm.builder().build());
+    journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.PROVIDE_PHOTO);
+    journey.setFormForStep(ProvidePhotoForm.builder().build());
     docUrl = new URL("http://test");
     signedUrl = new URL("http://testSigned");
   }
@@ -68,10 +68,10 @@ public class ProveIdentityControllerTest {
   @Test
   public void show_ShouldDisplayTemplate() throws Exception {
     mockMvc
-        .perform(get("/prove-identity").sessionAttr("JOURNEY", journey))
+        .perform(get("/provide-photo").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
-        .andExpect(view().name("prove-identity"))
-        .andExpect(model().attribute("formRequest", ProveIdentityForm.builder().build()));
+        .andExpect(view().name("provide-photo"))
+        .andExpect(model().attribute("formRequest", ProvidePhotoForm.builder().build()));
   }
 
   @Test
@@ -82,8 +82,8 @@ public class ProveIdentityControllerTest {
             .type("image")
             .url(new URL("http://test"))
             .build();
-    ProveIdentityForm existingForm =
-        ProveIdentityForm.builder().journeyArtifact(journeyArtifact).build();
+    ProvidePhotoForm existingForm =
+        ProvidePhotoForm.builder().journeyArtifact(journeyArtifact).build();
     journey.setFormForStep(existingForm);
 
     doAnswer(
@@ -97,15 +97,15 @@ public class ProveIdentityControllerTest {
 
     MvcResult mvcResult =
         mockMvc
-            .perform(get("/prove-identity").sessionAttr("JOURNEY", journey))
+            .perform(get("/provide-photo").sessionAttr("JOURNEY", journey))
             .andExpect(status().isOk())
-            .andExpect(view().name("prove-identity"))
+            .andExpect(view().name("provide-photo"))
             .andExpect(model().attribute("formRequest", existingForm))
             .andReturn();
 
     verify(artifactServiceMock, times(1)).createAccessibleLinks(journeyArtifact);
-    ProveIdentityForm formRequest =
-        (ProveIdentityForm) mvcResult.getModelAndView().getModel().get("formRequest");
+    ProvidePhotoForm formRequest =
+        (ProvidePhotoForm) mvcResult.getModelAndView().getModel().get("formRequest");
     assertThat(formRequest.getJourneyArtifact()).isNotNull();
     assertThat(formRequest.getJourneyArtifact().getSignedUrl()).isEqualTo(signedUrl);
   }
@@ -113,7 +113,7 @@ public class ProveIdentityControllerTest {
   @Test
   public void onByPassLink_ShouldRedirectToSuccess() throws Exception {
     mockMvc
-        .perform(get("/prove-id-bypass").sessionAttr("JOURNEY", journey))
+        .perform(get("/provide-photo-bypass").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(SUCCESS_URL));
   }
@@ -135,7 +135,7 @@ public class ProveIdentityControllerTest {
 
     mockMvc
         .perform(
-            multipart("/prove-identity-ajax").file(mockMultifile).sessionAttr("JOURNEY", journey))
+            multipart("/provide-photo-ajax").file(mockMultifile).sessionAttr("JOURNEY", journey))
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(content().contentTypeCompatibleWith("application/json"))
@@ -143,7 +143,7 @@ public class ProveIdentityControllerTest {
         .andExpect(jsonPath("artifact.fileName").value("test.pdf"))
         .andExpect(jsonPath("artifact.url").value(docUrl.toString()))
         .andExpect(jsonPath("artifact.signedUrl").value(signedUrl.toString()));
-    ProveIdentityForm form = journey.getFormForStep(StepDefinition.PROVE_IDENTITY);
+    ProvidePhotoForm form = journey.getFormForStep(StepDefinition.PROVIDE_PHOTO);
     assertThat(form.getJourneyArtifact()).isSameAs(journeyArtifact);
   }
 
@@ -157,7 +157,7 @@ public class ProveIdentityControllerTest {
         new MockMultipartFile("document", "originalFile.jpg", "text/plain", testUpload.getBytes());
 
     mockMvc
-        .perform(multipart("/prove-identity-ajax").file(mockMultifile))
+        .perform(multipart("/provide-photo-ajax").file(mockMultifile))
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(content().contentTypeCompatibleWith("application/json"))
@@ -167,7 +167,7 @@ public class ProveIdentityControllerTest {
 
   @Test
   public void ajaxSubmit_givenNoDocument_thenBadRequest() throws Exception {
-    mockMvc.perform(multipart("/prove-identity-ajax")).andExpect(status().isBadRequest());
+    mockMvc.perform(multipart("/provide-photo-ajax")).andExpect(status().isBadRequest());
   }
 
   @Test
@@ -178,16 +178,16 @@ public class ProveIdentityControllerTest {
             .type("image")
             .url(new URL("http://test"))
             .build();
-    journey.setFormForStep(ProveIdentityForm.builder().journeyArtifact(journeyArtifact).build());
+    journey.setFormForStep(ProvidePhotoForm.builder().journeyArtifact(journeyArtifact).build());
     MockMultipartFile mockMultifile =
         new MockMultipartFile("document", "originalFile.jpg", "text/plain", (byte[]) null);
 
     mockMvc
-        .perform(multipart("/prove-identity").file(mockMultifile).sessionAttr("JOURNEY", journey))
+        .perform(multipart("/provide-photo").file(mockMultifile).sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(SUCCESS_URL));
 
-    ProveIdentityForm form = journey.getFormForStep(StepDefinition.PROVE_IDENTITY);
+    ProvidePhotoForm form = journey.getFormForStep(StepDefinition.PROVIDE_PHOTO);
     assertThat(form.getJourneyArtifact()).isSameAs(journeyArtifact);
   }
 
@@ -198,7 +198,7 @@ public class ProveIdentityControllerTest {
     URL testUrl = new URL("http://test");
     JourneyArtifact journeyArtifact =
         JourneyArtifact.builder().fileName("test.jpg").type("image").url(testUrl).build();
-    journey.setFormForStep(ProveIdentityForm.builder().journeyArtifact(journeyArtifact).build());
+    journey.setFormForStep(ProvidePhotoForm.builder().journeyArtifact(journeyArtifact).build());
     MockMultipartFile mockMultifile =
         new MockMultipartFile("document", "originalFile.jpg", "text/plain", "test".getBytes());
 
@@ -209,15 +209,14 @@ public class ProveIdentityControllerTest {
             .type("image")
             .url(replacementUrl)
             .build();
-    when(artifactServiceMock.upload(mockMultifile, IMAGE_PDF_MIME_TYPES))
-        .thenReturn(replacingArtifact);
+    when(artifactServiceMock.upload(mockMultifile, IMAGE_MIME_TYPES)).thenReturn(replacingArtifact);
 
     mockMvc
-        .perform(multipart("/prove-identity").file(mockMultifile).sessionAttr("JOURNEY", journey))
+        .perform(multipart("/provide-photo").file(mockMultifile).sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(SUCCESS_URL));
 
-    ProveIdentityForm form = journey.getFormForStep(StepDefinition.PROVE_IDENTITY);
+    ProvidePhotoForm form = journey.getFormForStep(StepDefinition.PROVIDE_PHOTO);
     JourneyArtifact sessionArtitfact = form.getJourneyArtifact();
     assertThat(sessionArtitfact).isNotSameAs(journeyArtifact);
     assertThat(sessionArtitfact.getUrl()).isEqualTo(replacementUrl);
@@ -239,15 +238,14 @@ public class ProveIdentityControllerTest {
             .type("image")
             .url(replacementUrl)
             .build();
-    when(artifactServiceMock.upload(mockMultifile, IMAGE_PDF_MIME_TYPES))
-        .thenReturn(replacingArtifact);
+    when(artifactServiceMock.upload(mockMultifile, IMAGE_MIME_TYPES)).thenReturn(replacingArtifact);
 
     mockMvc
-        .perform(multipart("/prove-identity").file(mockMultifile).sessionAttr("JOURNEY", journey))
+        .perform(multipart("/provide-photo").file(mockMultifile).sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(SUCCESS_URL));
 
-    ProveIdentityForm form = journey.getFormForStep(StepDefinition.PROVE_IDENTITY);
+    ProvidePhotoForm form = journey.getFormForStep(StepDefinition.PROVIDE_PHOTO);
     JourneyArtifact sessionArtitfact = form.getJourneyArtifact();
     assertThat(sessionArtitfact.getUrl()).isEqualTo(replacementUrl);
     assertThat(sessionArtitfact.getType()).isEqualTo("image");
@@ -256,7 +254,7 @@ public class ProveIdentityControllerTest {
 
   @Test
   public void submit_givenNoDocument_thenBadRequest() throws Exception {
-    mockMvc.perform(multipart("/prove-identity")).andExpect(status().isBadRequest());
+    mockMvc.perform(multipart("/provide-photo")).andExpect(status().isBadRequest());
   }
 
   @Test
@@ -265,11 +263,11 @@ public class ProveIdentityControllerTest {
     MockMultipartFile mockMultifile = new MockMultipartFile("document", "", "", (byte[]) null);
 
     mockMvc
-        .perform(multipart("/prove-identity").file(mockMultifile).sessionAttr("JOURNEY", journey))
+        .perform(multipart("/provide-photo").file(mockMultifile).sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(ERROR_URL));
 
-    ProveIdentityForm form = journey.getFormForStep(StepDefinition.PROVE_IDENTITY);
+    ProvidePhotoForm form = journey.getFormForStep(StepDefinition.PROVIDE_PHOTO);
     assertThat(form.getJourneyArtifact()).isNull();
   }
 }
