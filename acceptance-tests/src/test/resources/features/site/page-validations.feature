@@ -26,9 +26,10 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I complete upload "supporting documents page" with a "GIF" document
     And   I validate the treatments page for a "yourself" application for "YES"
     And   I validate the medication page for a "yourself" application for "YES"
+    And   I validate the healthcare professional page for a "yourself" application for "YES"
 
 #    Following page To be added for page validations
-    And   I complete the healthcare professionals page for "YES"
+    #And   I complete the healthcare professionals page for "YES"
     And   I complete "prove ID" page with a "PDF" document
     And   I complete "provide photo" page with a "JPG" document
     And   I complete declaration page
@@ -58,6 +59,7 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I complete upload "supporting documents page" with a "GIF" document
     And   I validate the treatments page for a "someone else" application for "NO"
     And   I validate the medication page for a "someone else" application for "YES"
+    And   I validate the healthcare professional page for a "someone else" application for "NO"
 
   Scenario: Page title and error message validation - an organisation
     Given I navigate to applicant page and validate for "an organisation"

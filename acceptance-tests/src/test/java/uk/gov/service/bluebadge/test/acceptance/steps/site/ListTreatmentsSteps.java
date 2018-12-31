@@ -1,13 +1,14 @@
 package uk.gov.service.bluebadge.test.acceptance.steps.site;
 
 import cucumber.api.java.en.And;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.ListTreatmentsPage;
 import uk.gov.service.bluebadge.test.acceptance.steps.AbstractSpringSteps;
 import uk.gov.service.bluebadge.test.acceptance.steps.CommonSteps;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ListTreatmentsSteps extends AbstractSpringSteps {
 
@@ -59,18 +60,5 @@ public class ListTreatmentsSteps extends AbstractSpringSteps {
     messages.add(ListTreatmentsPage.VALIDATION_MESSAGE_FOR_NO_OPTION);
     commonSteps.iVerifyMultipleValidationMessages(messages);
   }
-
-  //    @And("^I complete the treatments page for \"(YES|NO)\"$")
-  //    public void iCompleteTheTreatmentsPage(String option) {
-  //        if ("YES".equals(option)) {
-  //            commonPage.selectRadioButton(ListTreatmentsPage.TREATMENT_YES_OPTION);
-  //            // Needs to update this to use id or data-uipath
-  //            commonPage.findPageElementById(ListTreatmentsPage.TREATMENT_YES_OPTION).click();
-  //            addTreatmentsSteps.iCompleteAddMedicationPage();
-  //        } else {
-  //            commonPage.selectRadioButton(ListTreatmentsPage.TREATMENT_NO_OPTION);
-  //        }
-  //        commonSteps.iClickOnContinueButton();
-  //    }
 
 }
