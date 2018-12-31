@@ -1,6 +1,10 @@
 .dft-fu {
 	margin-bottom: 30px;
 
+	&__loader {
+		display: none;
+	}
+
 	&__reset-btn {
 		display: none;
 	}
@@ -44,6 +48,12 @@
 
 		&--error {
 			.dft-fu-error-summary {
+				display: block;
+			}
+		}
+
+		&--loading {
+			.dft-fu__loader {
 				display: block;
 			}
 		}

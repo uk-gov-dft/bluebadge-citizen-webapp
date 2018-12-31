@@ -40,40 +40,48 @@
 }
 
 .drop-area {
-	padding: 30px;
+	padding: 15px;
+	text-align: center;
 	border: 2px dashed rgba(govuk-colour(blue), .8);
+	
+	@include govuk-media-query($from: desktop) {
+		padding: 30px;
+		text-align: left;
+	}
 
 	&__icon {
-		width: 24%;
-		padding-right: 15px;
-		display: inline-block;
-		vertical-align: middle;
+		width: 60px;
+		height: 60px;
+		margin: 0 auto 10px;
+		display: block;
+
+		@include govuk-media-query($from: desktop) {
+			width: 105px;
+			height: 105px;
+			margin: 0 20px 0 0;
+			display: inline-block;
+			vertical-align: middle;
+		}
 	}
 
 	&__icon-wrapper {
 		padding: 15px;
 		line-height: 0;
 		border-radius: 50%;
-		vertical-align: top;
-		display: inline-block;
 		background-color: govuk-colour(blue);
 
-		@include govuk-media-query($from: tablet) {
-			padding: 20px;
+		@include govuk-media-query($from: desktop) {
+			vertical-align: top;
+			display: inline-block;
 		}
 
 		svg {
-			width: 35px;
-			height: 35px;
-
-			@include govuk-media-query($from: tablet) {
-				width: 55px;
-				height: 55px;
-			}
+			width: 30px;
+			height: 30px;
 
 			@include govuk-media-query($from: desktop) {
-				width: 73px;
-				height: 73px;
+				width: 70px;
+				height: 70px;
 			}
 
 			path {
@@ -83,13 +91,11 @@
 	}
 
 	&__instructions {
-		width: 70%;
-		display: inline-block;
-		vertical-align: middle;
-
-		@include govuk-media-query($until: desktop) {
+		
+		@include govuk-media-query($from: desktop) {
 			@include govuk-font(19, regular);
-			text-align: center;
+			display: inline-block;
+			vertical-align: middle;
 		}
 	}
 

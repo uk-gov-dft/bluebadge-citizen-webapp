@@ -85,6 +85,8 @@ public class UploadBenefitController implements StepController {
         .fieldLabel("proveIdentity.fu.field.label")
         .allowedFileTypes(String.join(",", IMAGE_PDF_MIME_TYPES))
         .allowMultipleFileUploads(true)
+        .maxFileUploadLimit(15)
+        .previewTitleMessageKey("fileUploader.multipleFile.preview.title")
         .rejectErrorMessageKey("upload.benefit.fu.rejected.content")
         .addFileMessageKey("upload.benefit.add.another")
         .build();

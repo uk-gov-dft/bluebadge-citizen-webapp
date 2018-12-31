@@ -15,15 +15,17 @@ export default class FileUploader {
 		this.$classPrefix = 'govuk-file-uploader';
 
 		this.$options = options;
-		this.$options.maxFileSize = parseInt(options.maxFileSize) ||  10485760;
+		this.$options.maxFileSize = parseInt(options.maxFileSize) || 10485760;
 		this.$fileInput = options.el;
 		this.$allowMultipleFileUploads = this.$fileInput.multiple;
+		this.$maxFileUploadLimit = parseInt(options.maxFileUploadLimit) || null;
 		this.$dropArea;
 		this.$uploadBtn;
 		this.$uploadIcon;
 		this.$resetBtn;
-		this.$addFileBtn;
 		this.$screenAnnouncer;
+
+		this.$totalFilesUploaded = options.totalFilesUploaded || 0;
 		
 		this.$container = this.renderFileUploader(options.container);
 		this.$container.appendChild(this.renderDropArea());
@@ -40,7 +42,8 @@ export default class FileUploader {
 			rejectedFile: 'File uploaded is too large or of the incorrect type',
 			rejectedFiles: 'Files uploaded are too large or of the incorrect type',
 			filesUploaded: 'Your files have been uploaded',
-			filesRemoved: 'Your files have been removed'
+			filesRemoved: 'Your files have been removed',
+			uploadLimitExceeded: 'You cannot upload more than ' + this.$maxFileUploads + ' files'
 		}
 
 		this.registerEvents();
@@ -59,13 +62,12 @@ export default class FileUploader {
 		
 		this.$uploadBtn.addEventListener('click', this.uploadBtnClick);
 		this.$uploadIcon.addEventListener('click', this.uploadBtnClick);
-		this.$fileInput.addEventListener('change', event => this.selectFile(event.target.files), false);
+		this.$fileInput.addEventListener('change', event => {
+			if(event.target.value !== '') {
+				this.selectFile(event.target.files)
+			}
+		}, false);
 
-		// Only register this event if multiple file uploads is enabled
-		if(this.$allowMultipleFileUploads && this.$addFileBtn) {
-			this.$addFileBtn.addEventListener('click', this.uploadBtnClick);
-		}
-		
 		// If device is mobile or tablet then we do not want to 
 		// register drag and drop events
 		if(!this.$isMobile) {
@@ -103,8 +105,11 @@ export default class FileUploader {
 	}
 
 	uploadBtnClick(event) {
-		event.preventDefault();
-		this.$fileInput.click();
+		if(event) {
+			event.preventDefault();
+			event.stopPropagation();
+			this.$fileInput.click();
+		}
 	}
 
 	resetFileSelection(event) {
@@ -117,15 +122,25 @@ export default class FileUploader {
 	}
 
 	selectFile(files) {
-		const validFiles = Array.from(files).filter(file => this.validateFile(file));
-
-		if(validFiles.length !== files.length) {
-			this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
-			this.makeScreenAnnouncement(this.$allowMultipleFileUploads ? this.$ANNOUNCEMENTS.rejectedFiles : this.$ANNOUNCEMENTS.rejectedFile);
-			this.$fileInput.value = '';
-			this.fireLifeCycleEvent('uploadRejected');
+		if (this.$maxFileUploadLimit !== null &&
+			files.length > this.$maxFileUploadLimit ||
+			this.$totalFilesUploaded >= this.$maxFileUploadLimit ||
+			this.$totalFilesUploaded + files.length > this.$maxFileUploadLimit) {
+				this.makeScreenAnnouncement(this.$ANNOUNCEMENTS.uploadLimitExceeded);
+				this.$fileInput.value = '';
+				this.fireLifeCycleEvent('uploadError', 'MAX_FILE_UPLOAD_LIMIT_EXCEEDED');
 		} else {
-			this.beginFileUpload(validFiles);
+
+			const validFiles = Array.from(files).filter(file => this.validateFile(file));
+
+			if(validFiles.length !== files.length) {
+				this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
+				this.makeScreenAnnouncement(this.$allowMultipleFileUploads ? this.$ANNOUNCEMENTS.rejectedFiles : this.$ANNOUNCEMENTS.rejectedFile);
+				this.$fileInput.value = '';
+				this.fireLifeCycleEvent('uploadError', 'INVALID_FILES_UPLOADED');
+			} else {
+				this.beginFileUpload(validFiles);
+			}
 		}
 	}
 
@@ -146,15 +161,16 @@ export default class FileUploader {
 
 		xhr.addEventListener('readystatechange', (e) => {
 
-			if (xhr.readyState == 4 && xhr.status == 200) {
+			if (xhr.readyState === 4 && xhr.status === 200) {
 				const resp = JSON.parse(xhr.response);
 
 				if(resp && resp.success) {
 					this.makeScreenAnnouncement(this.$ANNOUNCEMENTS.filesUploaded);
 					this.fireLifeCycleEvent('uploaded', resp, files);
+					this.$totalFilesUploaded = this.$totalFilesUploaded + files.length;
 					this.$screenAnnouncer.focus();
 				} else {
-					this.fireLifeCycleEvent('uploadError', resp, files);
+					this.fireLifeCycleEvent('uploadError', 'REQUEST_UNSUCCESSFUL');
 				}
 				
 				this.$fileInput.value = '';
