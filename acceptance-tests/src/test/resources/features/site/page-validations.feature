@@ -55,8 +55,9 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate what makes walking difficult page for a "someone else" application for "BALANCE"
     And   I validate the mobility aids page for a "someone else" application for "NO"
     And   I validate walking time page for a "someone else" application for "CANTWALK"
+    And   I complete upload "supporting documents page" with a "GIF" document
     And   I validate the treatments page for a "someone else" application for "NO"
-
+    And   I validate the medication page for a "someone else" application for "YES"
 
   Scenario: Page title and error message validation - an organisation
     Given I navigate to applicant page and validate for "an organisation"

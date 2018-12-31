@@ -1,14 +1,13 @@
 package uk.gov.service.bluebadge.test.acceptance.steps.site;
 
 import cucumber.api.java.en.And;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.WhereCanWalkPage;
 import uk.gov.service.bluebadge.test.acceptance.steps.AbstractSpringSteps;
 import uk.gov.service.bluebadge.test.acceptance.steps.CommonSteps;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class WhereCanWalkSteps extends AbstractSpringSteps {
 
@@ -32,25 +31,34 @@ public class WhereCanWalkSteps extends AbstractSpringSteps {
 
     //To validate am invalid place
     commonPage.findPageElementById(WhereCanWalkPage.WHERE_PLACE).click();
-    commonPage.findPageElementById(WhereCanWalkPage.WHERE_PLACE).sendKeys(WhereCanWalkPage.INVALID_PLACE);
+    commonPage
+        .findPageElementById(WhereCanWalkPage.WHERE_PLACE)
+        .sendKeys(WhereCanWalkPage.INVALID_PLACE);
     commonPage.findPageElementById(WhereCanWalkPage.WHERE_TIME).click();
-    commonPage.findPageElementById(WhereCanWalkPage.WHERE_TIME).sendKeys(WhereCanWalkPage.VALID_TIME);
+    commonPage
+        .findPageElementById(WhereCanWalkPage.WHERE_TIME)
+        .sendKeys(WhereCanWalkPage.VALID_TIME);
     commonSteps.iVerifyValidationMessage(WhereCanWalkPage.VALIDATION_MESSAGE_FOR_INVALID_PLACE);
 
     //To validate am invalid time
     commonPage.findPageElementById(WhereCanWalkPage.WHERE_PLACE).click();
     commonPage.findPageElementById(WhereCanWalkPage.WHERE_PLACE).clear();
-    commonPage.findPageElementById(WhereCanWalkPage.WHERE_PLACE).sendKeys(WhereCanWalkPage.VALID_PLACE);
+    commonPage
+        .findPageElementById(WhereCanWalkPage.WHERE_PLACE)
+        .sendKeys(WhereCanWalkPage.VALID_PLACE);
     commonPage.findPageElementById(WhereCanWalkPage.WHERE_TIME).click();
     commonPage.findPageElementById(WhereCanWalkPage.WHERE_TIME).clear();
-    commonPage.findPageElementById(WhereCanWalkPage.WHERE_TIME).sendKeys(WhereCanWalkPage.INVALID_TIME);
+    commonPage
+        .findPageElementById(WhereCanWalkPage.WHERE_TIME)
+        .sendKeys(WhereCanWalkPage.INVALID_TIME);
     commonSteps.iVerifyValidationMessage(WhereCanWalkPage.VALIDATION_MESSAGE_FOR_INVALID_TIME);
-
 
     //Enter valid values and move on
     commonPage.findPageElementById(WhereCanWalkPage.WHERE_TIME).click();
     commonPage.findPageElementById(WhereCanWalkPage.WHERE_TIME).clear();
-    commonPage.findPageElementById(WhereCanWalkPage.WHERE_TIME).sendKeys(WhereCanWalkPage.VALID_TIME);
+    commonPage
+        .findPageElementById(WhereCanWalkPage.WHERE_TIME)
+        .sendKeys(WhereCanWalkPage.VALID_TIME);
     commonSteps.iClickOnContinueButton();
   }
 

@@ -12,8 +12,7 @@ public class ListMedicationPage {
   public static final String TREATMENT_YES_OPTION = "hasMedication";
   public static final String TREATMENT_NO_OPTION = "hasMedicationno";
 
-  public static final String VALIDATION_MESSAGE_FOR_NO_OPTION =
-      "Select if medication is taken";
+  public static final String VALIDATION_MESSAGE_FOR_NO_OPTION = "Select if medication is taken";
 
-    public static final String ADD_FIRST_MEDICATION = "firstaddmedicationlink";
+  public static final String ADD_FIRST_MEDICATION = "firstaddmedicationlink";
 }
