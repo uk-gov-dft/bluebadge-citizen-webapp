@@ -122,7 +122,7 @@ public class ProvidePhotoController implements StepController {
         formRequest.setJourneyArtifact(uploadJourneyArtifact);
         journey.setFormForStep(formRequest);
       } catch (UnsupportedMimetypeException e) {
-        attr.addFlashAttribute(artifactService.UNSUPPORTED_FILE, Boolean.TRUE);
+        attr.addFlashAttribute(ArtifactService.UNSUPPORTED_FILE, Boolean.TRUE);
         return "redirect:" + Mappings.URL_PROVIDE_PHOTO;
       } catch (ServiceException e) {
         log.warn("Failed to upload document", e);

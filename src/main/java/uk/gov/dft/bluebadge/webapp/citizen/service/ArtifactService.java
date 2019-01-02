@@ -64,6 +64,7 @@ public class ArtifactService {
     return newArtifacts;
   }
 
+
   public JourneyArtifact upload(MultipartFile multipartFile, Set<String> acceptedMimeTypes) {
     Assert.notNull(multipartFile, "Multipart file is null.");
 
@@ -100,6 +101,7 @@ public class ArtifactService {
           .signedUrl(signedS3Url);
 
     } catch (IOException | InterruptedException e) {
+      Thread.currentThread().interrupt();
       throw new ServiceException("File could not be uploaded to S3", e);
     }
 
