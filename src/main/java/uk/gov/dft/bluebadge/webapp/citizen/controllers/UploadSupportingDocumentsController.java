@@ -39,10 +39,10 @@ public class UploadSupportingDocumentsController implements StepController {
 
   public static final String TEMPLATE = "upload-supporting-documents";
   private static final String DOC_BYPASS_URL = "upload-supporting-documents-bypass";
-  public static final String AJAX_URL = "/upload-supporting-documents-ajax";
+  private static final String AJAX_URL = "/upload-supporting-documents-ajax";
   private static final Integer MAX_NUMBER_SUPPORTING_DOCUMENTS = 15;
-  public static final String DOCUMENT = "document";
-  public static final String CLEAR = "clear";
+  private static final String DOCUMENT = "document";
+  private static final String CLEAR = "clear";
 
   private final RouteMaster routeMaster;
   private final ArtifactService artifactService;
@@ -155,15 +155,18 @@ public class UploadSupportingDocumentsController implements StepController {
 
     UploadSupportingDocumentsForm sessionForm = journey.getOrSetFormForStep(formRequest);
 
-    if (formRequest.hasDocuments()) {
+    if (formRequest.getHasDocuments() != null && !formRequest.getHasDocuments().booleanValue()) {
       sessionForm.setHasDocuments(Boolean.FALSE);
       sessionForm.setJourneyArtifacts(new ArrayList<>());
     }
-    if (!sessionForm.hasDocuments()) {
-      sessionForm.setHasDocuments(formRequest.hasDocuments());
+    if (sessionForm.getHasDocuments() == null) {
+      sessionForm.setHasDocuments(formRequest.getHasDocuments());
     }
 
-    if (sessionForm.hasDocuments() && documents != null && !documents.isEmpty()) {
+    if (sessionForm.getHasDocuments() != null
+        && sessionForm.getHasDocuments().booleanValue()
+        && documents != null
+        && !documents.isEmpty()) {
       if (countDocumentsAfterUploading(sessionForm, documents) <= MAX_NUMBER_SUPPORTING_DOCUMENTS) {
         try {
           List<JourneyArtifact> newArtifacts =
@@ -183,8 +186,7 @@ public class UploadSupportingDocumentsController implements StepController {
         return "redirect:" + Mappings.URL_UPLOAD_SUPPORTING_DOCUMENTS;
       }
     }
-
-    if (!formRequest.hasDocuments()) {
+    if (formRequest.getHasDocuments() == null || !formRequest.getHasDocuments()) {
       sessionForm.setJourneyArtifacts(Lists.newArrayList());
     }
 
@@ -201,7 +203,9 @@ public class UploadSupportingDocumentsController implements StepController {
       @ModelAttribute(FORM_REQUEST) @Valid UploadSupportingDocumentsForm formRequest,
       BindingResult bindingResult,
       UploadSupportingDocumentsForm sessionForm) {
-    if (formRequest.hasDocuments() && !sessionForm.hasArtifacts()) {
+    if (formRequest.getHasDocuments() != null
+        && formRequest.getHasDocuments().booleanValue()
+        && sessionForm.getJourneyArtifacts().isEmpty()) {
       bindingResult.rejectValue(
           "journeyArtifact",
           "NotNull.uploadSupportingDocuments.document",

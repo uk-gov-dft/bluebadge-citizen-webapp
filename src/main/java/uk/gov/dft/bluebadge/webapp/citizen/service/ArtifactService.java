@@ -64,7 +64,6 @@ public class ArtifactService {
     return newArtifacts;
   }
 
-
   public JourneyArtifact upload(MultipartFile multipartFile, Set<String> acceptedMimeTypes) {
     Assert.notNull(multipartFile, "Multipart file is null.");
 
@@ -79,8 +78,6 @@ public class ArtifactService {
 
     String keyName = UUID.randomUUID().toString() + "-" + multipartFile.getOriginalFilename();
 
-    JourneyArtifact.JourneyArtifactBuilder journeyArtifact = JourneyArtifact.builder();
-
     try {
       keyName = URLEncoder.encode(keyName, ENCODING_CHAR_SET);
       ObjectMetadata meta = new ObjectMetadata();
@@ -94,18 +91,17 @@ public class ArtifactService {
       URL url = amazonS3.getUrl(uploadResult.getBucketName(), uploadResult.getKey());
       URL signedS3Url = generateSignedS3Url(uploadResult.getKey());
 
-      journeyArtifact
+      return JourneyArtifact.builder()
           .fileName(multipartFile.getOriginalFilename())
           .type(determineFileType(mimetype))
           .url(url)
-          .signedUrl(signedS3Url);
+          .signedUrl(signedS3Url).build();
 
     } catch (IOException | InterruptedException e) {
       Thread.currentThread().interrupt();
       throw new ServiceException("File could not be uploaded to S3", e);
     }
 
-    return journeyArtifact.build();
   }
 
   private static String determineMimeType(String filename, Set<String> acceptedMimeTypes) {
