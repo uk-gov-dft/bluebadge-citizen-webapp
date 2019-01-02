@@ -22,11 +22,10 @@ export default class FileUploader {
 		this.$dropArea;
 		this.$uploadBtn;
 		this.$uploadIcon;
-		this.$resetBtn;
 		this.$screenAnnouncer;
 
 		this.$totalFilesUploaded = options.totalFilesUploaded || 0;
-		
+
 		this.$container = this.renderFileUploader(options.container);
 		this.$container.appendChild(this.renderDropArea());
 		this.$container.appendChild(this.$screenAnnouncer);
@@ -59,7 +58,7 @@ export default class FileUploader {
 		this.uploadBtnClick = this.uploadBtnClick.bind(this);
 		this.resetFileSelection = this.resetFileSelection.bind(this);
 		this.selectFile = this.selectFile.bind(this);
-		
+
 		this.$uploadBtn.addEventListener('click', this.uploadBtnClick);
 		this.$uploadIcon.addEventListener('click', this.uploadBtnClick);
 		this.$fileInput.addEventListener('change', event => {
@@ -163,11 +162,10 @@ export default class FileUploader {
 
 			if (xhr.readyState === 4 && xhr.status === 200) {
 				const resp = JSON.parse(xhr.response);
-
 				if(resp && resp.success) {
 					this.makeScreenAnnouncement(this.$ANNOUNCEMENTS.filesUploaded);
 					this.fireLifeCycleEvent('uploaded', resp, files);
-					this.$totalFilesUploaded = this.$totalFilesUploaded + files.length;
+					this.$totalFilesUploaded += files.length;
 					this.$screenAnnouncer.focus();
 				} else {
 					this.fireLifeCycleEvent('uploadError', 'REQUEST_UNSUCCESSFUL');
