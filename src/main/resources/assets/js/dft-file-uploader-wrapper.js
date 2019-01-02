@@ -177,7 +177,9 @@ export default class DFT_FileUploader {
 
   clearUploadHistory(flag) {
 	  this.$options.uploadPath = `${this.$endPoint}?clear=${flag}`;
-	  this.$fu.$totalFilesUploaded = 0;
+	  if (flag) {
+		  this.$fu.$totalFilesUploaded = 0;
+	  }
   }
 
 }
