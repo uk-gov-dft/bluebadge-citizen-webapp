@@ -76,6 +76,7 @@ export default class DFT_FileUploader {
 	}
 	
 	beforeUpload(file, formData) {
+		this.$dftFuContainer.classList.add('dft-fu--disabled');
 		this.$dftFuContainer.classList.remove(this.$state.error);
 		this.$dftFuContainer.classList.add(this.$state.loading);
 		this.$fu.makeScreenAnnouncement('Uploading files');
@@ -91,7 +92,7 @@ export default class DFT_FileUploader {
 	}
 	
 	uploaded(response) {
-
+		this.$dftFuContainer.classList.remove('dft-fu--disabled');
 		if (response.artifact.constructor === Array) {
 			response.artifact.forEach(artifact => {
 				const previewItem = this.createFilePreview(artifact);
