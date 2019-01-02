@@ -26,7 +26,7 @@ public class UploadSupportingDocumentsForm implements StepForm, ArtifactForm, Se
   private List<JourneyArtifact> journeyArtifacts = new ArrayList<>();
 
   public boolean hasDocuments() {
-    return null != hasDocuments && hasDocuments;
+    return (null != hasDocuments) && hasDocuments;
   }
 
   @Override
