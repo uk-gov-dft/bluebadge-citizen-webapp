@@ -38,7 +38,7 @@ public class SubmittedControllerTest {
     mockMvc
         .perform(get("/application-submitted").sessionAttr("JOURNEY", journey))
         .andExpect(view().name("application-end/submitted"))
-        .andExpect(model().attribute("mainMessage", "you.submittedPage.content.p1"))
+        .andExpect(model().attribute("localAuthority", journey.getLocalAuthority()))
         .andExpect(request().sessionAttribute("JOURNEY", Matchers.nullValue()));
   }
 
