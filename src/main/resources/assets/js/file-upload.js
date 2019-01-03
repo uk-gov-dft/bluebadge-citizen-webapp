@@ -160,9 +160,6 @@ export default class FileUploader {
 	}
 
 	validateFile(file) {
-		console.log('validateFile - file: ', file.name, file.type, '[' + this.$fileInput.accept + ']', file.size, this.$options.maxFileSize);
-		console.log('validateFile - file 2: ', file);
-
 		if(file.type === '' ||
 			this.$fileInput.accept.indexOf(file.type) < 0 ||
 			file.size > this.$options.maxFileSize) {
