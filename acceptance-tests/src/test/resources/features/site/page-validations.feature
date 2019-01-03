@@ -23,13 +23,12 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate the mobility aids page for a "yourself" application for "YES"
     And   I validate walking time page for a "yourself" application for "FEWMIN"
     And   I validate where can you walk page for a "yourself" application
-    And   I complete upload "supporting documents page" with a "GIF" document
+    And   I validate the supporting documents page for a "yourself" application for "YES"
     And   I validate the treatments page for a "yourself" application for "YES"
     And   I validate the medication page for a "yourself" application for "YES"
     And   I validate the healthcare professional page for a "yourself" application for "YES"
 
 #    Following page To be added for page validations
-    #And   I complete the healthcare professionals page for "YES"
     And   I complete "prove ID" page with a "PDF" document
     And   I complete "provide photo" page with a "JPG" document
     And   I complete declaration page
@@ -56,7 +55,8 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate what makes walking difficult page for a "someone else" application for "BALANCE"
     And   I validate the mobility aids page for a "someone else" application for "NO"
     And   I validate walking time page for a "someone else" application for "CANTWALK"
-    And   I complete upload "supporting documents page" with a "GIF" document
+    #And   I complete upload "supporting documents page" with a "GIF" document
+    And   I validate the supporting documents page for a "yourself" application for "NO"
     And   I validate the treatments page for a "someone else" application for "NO"
     And   I validate the medication page for a "someone else" application for "YES"
     And   I validate the healthcare professional page for a "someone else" application for "NO"
