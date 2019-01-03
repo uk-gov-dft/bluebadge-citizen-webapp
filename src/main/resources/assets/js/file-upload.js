@@ -63,7 +63,10 @@ export default class FileUploader {
 
 		this.$uploadBtn.addEventListener('click', this.uploadBtnClick);
 		this.$uploadIcon.addEventListener('click', this.uploadBtnClick);
-		this.$fileInput.addEventListener('change', event => {
+
+		// CHANGE event isn't always triggered but INPUT seem to be, so let's use INPUT instead
+		this.$fileInput.addEventListener('input', event => {
+			event.stopPropagation();
 			if(event.target.value !== '') {
 				this.selectFile(event.target.files)
 			}
