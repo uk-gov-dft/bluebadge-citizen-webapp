@@ -95,13 +95,13 @@ public class ArtifactService {
           .fileName(multipartFile.getOriginalFilename())
           .type(determineFileType(mimetype))
           .url(url)
-          .signedUrl(signedS3Url).build();
+          .signedUrl(signedS3Url)
+          .build();
 
     } catch (IOException | InterruptedException e) {
       Thread.currentThread().interrupt();
       throw new ServiceException("File could not be uploaded to S3", e);
     }
-
   }
 
   private static String determineMimeType(String filename, Set<String> acceptedMimeTypes) {
