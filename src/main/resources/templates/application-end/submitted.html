@@ -23,7 +23,7 @@
 
             <h2 class="govuk-heading-m govuk-!-margin-top-7" th:text="#{submittedPage.content.title}"></h2>
 
-            <p class="govuk-body" th:if="${journey.nationWales}">
+            <p class="govuk-body" th:if="${!journey.nationWales}">
                 <span th:remove="tag" th:text="#{'submittedPage.content.wales.payment.pretext'}"></span>
                 <span th:remove="tag" th:text="${journey.localAuthority.description}"></span>
                 <span th:remove="tag" th:text="#{${JOURNEY.who} + 'submittedPage.content.wales.payment.posttext'}"></span>
