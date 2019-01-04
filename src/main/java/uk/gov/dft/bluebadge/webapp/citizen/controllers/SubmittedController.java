@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.support.SessionStatus;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
@@ -35,11 +34,8 @@ public class SubmittedController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    model.addAttribute("localAuthority", journey.getLocalAuthority());
+    model.addAttribute("journey", journey);
 
-    if (journey.getNation().equals(Nation.WLS)) {
-      model.addAttribute("welshCouncil", true);
-    }
     sessionStatus.setComplete();
     return TEMPLATE_APPLICATION_SUBMITTED;
   }

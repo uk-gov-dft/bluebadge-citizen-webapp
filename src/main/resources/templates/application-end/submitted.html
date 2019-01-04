@@ -23,16 +23,16 @@
 
             <h2 class="govuk-heading-m govuk-!-margin-top-7" th:text="#{submittedPage.content.title}"></h2>
 
-            <p class="govuk-body" th:if="${welshCouncil}">
+            <p class="govuk-body" th:if="${journey.nationWales}">
                 <span th:remove="tag" th:text="#{'submittedPage.content.wales.payment.pretext'}"></span>
-                <span th:remove="tag" th:text="${localAuthority.description}"></span>
+                <span th:remove="tag" th:text="${journey.localAuthority.description}"></span>
                 <span th:remove="tag" th:text="#{${JOURNEY.who} + 'submittedPage.content.wales.payment.posttext'}"></span>
             </p>
 
             <p class="govuk-body">
                 <span th:remove="tag" th:text="#{${JOURNEY.who} + 'submittedPage.content.p1.pretext'}"></span>
-                <a th:href="${localAuthority.contactUrl}"
-                   th:text="${localAuthority.description}"></a>
+                <a th:href="${journey.localAuthority.contactUrl}"
+                   th:text="${journey.localAuthority.description}"></a>
                 <span th:remove="tag" th:text="#{${JOURNEY.who} + 'submittedPage.content.p1.posttext'}"></span>
             </p>
             <p class="govuk-body" th:text="#{submittedPage.content.p2}"></p>
@@ -46,8 +46,8 @@
             <h2 class="govuk-heading-m govuk-!-margin-top-5" th:text="#{submittedPage.content2.title}"></h2>
             <p class="govuk-body">
                 <span th:remove="tag" th:text="#{${JOURNEY.who} + 'submittedPage.content2.p1.pretext'}"></span>
-                <a th:href="${localAuthority.contactUrl}"
-                   th:text="#{'submittedPage.content2.p1.link.pretext'} + ' ' + ${localAuthority.description} + ' ' + #{'submittedPage.content2.p1.link.posttext'}"></a>
+                <a th:href="${journey.localAuthority.contactUrl}"
+                   th:text="#{'submittedPage.content2.p1.link.pretext'} + ' ' + ${journey.localAuthority.description} + ' ' + #{'submittedPage.content2.p1.link.posttext'}"></a>
             </p>
 
         </div>
