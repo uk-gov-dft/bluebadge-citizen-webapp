@@ -1,6 +1,11 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.ARMS;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.BLIND;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDBULK;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDVEHIC;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.DLA;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.PIP;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 
 import java.io.Serializable;
@@ -173,6 +178,39 @@ public class Journey implements Serializable {
       }
     }
     return null;
+  }
+
+  // Eligibility codes
+  public boolean isEligibilityCodePIP() {
+    return PIP == getEligibilityCode();
+  }
+
+  public boolean isEligibilityCodeDLA() {
+    return DLA == getEligibilityCode();
+  }
+
+  public boolean isEligibilityCodeBLIND() {
+    return BLIND == getEligibilityCode();
+  }
+
+  public boolean isEligibilityCodeCHILDBULK() {
+    return CHILDBULK == getEligibilityCode();
+  }
+
+  public boolean isEligibilityCodeCHILDVEHIC() {
+    return CHILDVEHIC == getEligibilityCode();
+  }
+
+  public boolean isRelatedDocumentProofNeeded() {
+    switch (getEligibilityCode()) {
+      case WALKD:
+      case ARMS:
+      case CHILDBULK:
+      case CHILDVEHIC:
+        return true;
+      default:
+        return false;
+    }
   }
 
   /**
