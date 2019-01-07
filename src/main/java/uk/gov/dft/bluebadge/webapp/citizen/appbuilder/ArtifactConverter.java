@@ -29,6 +29,8 @@ class ArtifactConverter {
       EnumSet.of(PIP, DLA);
   private static final EnumSet<EligibilityCodeField> SUPPORT_DOCS_ELIG_TYPES =
       EnumSet.of(WALKD, ARMS, CHILDBULK, CHILDVEHIC);
+  private static final EnumSet<EligibilityCodeField> PROVE_ADDRESS_ELIG_TYPES =
+      EnumSet.complementOf(EnumSet.of(CHILDBULK, CHILDVEHIC));
 
   private ArtifactConverter() {}
 
@@ -52,8 +54,10 @@ class ArtifactConverter {
     ProvidePhotoForm providePhotoForm = journey.getFormForStep(StepDefinition.PROVIDE_PHOTO);
     convertArtifact(result, providePhotoForm, ArtifactType.PHOTO);
 
-    ProveAddressForm proveAddressForm = journey.getFormForStep(StepDefinition.PROVE_ADDRESS);
-    convertArtifact(result, proveAddressForm, ArtifactType.PROOF_ADD);
+    if (PROVE_ADDRESS_ELIG_TYPES.contains(journey.getEligibilityCode())) {
+      ProveAddressForm proveAddressForm = journey.getFormForStep(StepDefinition.PROVE_ADDRESS);
+      convertArtifact(result, proveAddressForm, ArtifactType.PROOF_ADD);
+    }
 
     return result;
   }
