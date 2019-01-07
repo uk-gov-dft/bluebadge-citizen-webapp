@@ -102,7 +102,7 @@ public class ProvidePhotoController implements StepController {
       providePhotoForm.setJourneyArtifact(uploadedJourneyArtifact);
       journey.setFormForStep(providePhotoForm);
       return ImmutableMap.of("success", "true", "artifact", uploadedJourneyArtifact);
-    } catch (ServiceException e) {
+    } catch (Exception e) {
       log.warn("Failed to upload document through ajax call.", e);
       return ImmutableMap.of("error", "Failed to upload");
     }

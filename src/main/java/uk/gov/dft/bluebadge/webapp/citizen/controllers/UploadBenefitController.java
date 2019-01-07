@@ -116,7 +116,7 @@ public class UploadBenefitController implements StepController {
       }
 
       return ImmutableMap.of("success", "true", "artifact", journeyArtifacts);
-    } catch (ServiceException e) {
+    } catch (Exception e) {
       log.warn("Failed to upload document through ajax call.", e);
       return ImmutableMap.of("error", "Failed to upload");
     }

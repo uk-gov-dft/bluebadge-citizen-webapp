@@ -103,7 +103,7 @@ public class ProveIdentityController implements StepController {
       proveIdentityForm.setJourneyArtifact(uploadedJourneyArtifact);
       journey.setFormForStep(proveIdentityForm);
       return ImmutableMap.of("success", "true", "artifact", uploadedJourneyArtifact);
-    } catch (ServiceException e) {
+    } catch (Exception e) {
       log.warn("Failed to upload document through ajax call.", e);
       return ImmutableMap.of("error", "Failed to upload");
     }
