@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.PROVE_ADDRESS;
+
 import java.io.Serializable;
 import java.util.Optional;
 import lombok.Builder;
@@ -39,6 +41,6 @@ public class ProvidePhotoForm implements StepForm, ArtifactForm, Serializable {
       return Optional.of(StepDefinition.DECLARATIONS);
     }
 
-    return Optional.empty();
+    return Optional.of(PROVE_ADDRESS);
   }
 }
