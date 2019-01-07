@@ -25,7 +25,7 @@
 
             <p class="govuk-body" th:if="${!journey.nationWales}">
                 <span th:remove="tag" th:text="#{'submittedPage.content.wales.payment.pretext'}"></span>
-                <span th:remove="tag" th:text="${journey.localAuthority.description}"></span>
+                <a th:href="${journey.localAuthority.contactUrl}" th:text="${journey.localAuthority.description}"></a>
                 <span th:remove="tag" th:text="#{${JOURNEY.who} + 'submittedPage.content.wales.payment.posttext'}"></span>
             </p>
 
