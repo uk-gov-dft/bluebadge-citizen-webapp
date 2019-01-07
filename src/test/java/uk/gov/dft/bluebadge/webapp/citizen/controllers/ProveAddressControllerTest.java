@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -37,6 +38,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveAddressForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService;
+import uk.gov.dft.bluebadge.webapp.citizen.service.UnsupportedMimetypeException;
 
 public class ProveAddressControllerTest {
 
@@ -253,6 +255,28 @@ public class ProveAddressControllerTest {
     assertThat(sessionArtitfact.getUrl()).isEqualTo(replacementUrl);
     assertThat(sessionArtitfact.getType()).isEqualTo("image");
     assertThat(sessionArtitfact.getFileName()).isEqualTo("originalFile2.jpg");
+  }
+
+  @Test
+  public void
+      submit_whenSubmittedWithNewDocOfUnsupportedMimeType_thenShouldDisplayRedirectToWithError()
+          throws Exception {
+    MockMultipartFile mockMultifile =
+        new MockMultipartFile("document", "originalFile.jpg", "text/plain", "test".getBytes());
+
+    when(artifactServiceMock.upload(mockMultifile, IMAGE_PDF_MIME_TYPES))
+        .thenThrow(new UnsupportedMimetypeException("test"));
+
+    mockMvc
+        .perform(multipart("/prove-address").file(mockMultifile).sessionAttr("JOURNEY", journey))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/prove-address"))
+        .andExpect(flash().attribute(ArtifactService.UNSUPPORTED_FILE, true))
+    ;
+
+    ProveAddressForm form = journey.getFormForStep(StepDefinition.PROVE_ADDRESS);
+    assertThat(form).isNotNull();
+    assertThat(form.getJourneyArtifact()).isNull();
   }
 
   @Test

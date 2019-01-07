@@ -123,7 +123,7 @@ public class ProveAddressController implements StepController {
         formRequest.setJourneyArtifact(uploadJourneyArtifact);
         journey.setFormForStep(formRequest);
       } catch (UnsupportedMimetypeException e) {
-        attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", true);
+        attr.addFlashAttribute(ArtifactService.UNSUPPORTED_FILE, true);
         return "redirect:" + Mappings.URL_PROVE_ADDRESS;
       } catch (ServiceException e) {
         log.warn("Failed to upload document", e);
