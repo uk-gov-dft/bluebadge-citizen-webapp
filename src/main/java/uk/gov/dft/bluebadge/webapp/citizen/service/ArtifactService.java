@@ -50,7 +50,7 @@ public class ArtifactService {
   }
 
   public List<JourneyArtifact> upload(
-      List<MultipartFile> multipartFiles, Set<String> acceptedMimeTypes) throws ServiceException {
+      List<MultipartFile> multipartFiles, Set<String> acceptedMimeTypes) {
 
     List<JourneyArtifact> newArtifacts = new ArrayList<>();
 
