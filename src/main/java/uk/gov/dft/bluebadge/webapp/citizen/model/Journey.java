@@ -160,6 +160,10 @@ public class Journey implements Serializable {
     return null;
   }
 
+  public boolean isNationWales() {
+    return Nation.WLS == getNation();
+  }
+
   public EligibilityCodeField getEligibilityCode() {
     if (hasStepForm(StepDefinition.MAIN_REASON)) {
       MainReasonForm mainReasonForm = getFormForStep(StepDefinition.MAIN_REASON);
