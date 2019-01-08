@@ -34,7 +34,8 @@ public class SubmittedController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    model.addAttribute("mainMessage", journey.who + "submittedPage.content.p1");
+    model.addAttribute("journey", journey);
+
     sessionStatus.setComplete();
     return TEMPLATE_APPLICATION_SUBMITTED;
   }
