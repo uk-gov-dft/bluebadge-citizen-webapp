@@ -271,8 +271,7 @@ public class ProveAddressControllerTest {
         .perform(multipart("/prove-address").file(mockMultifile).sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/prove-address"))
-        .andExpect(flash().attribute(ArtifactService.UNSUPPORTED_FILE, true))
-    ;
+        .andExpect(flash().attribute(ArtifactService.UNSUPPORTED_FILE, true));
 
     ProveAddressForm form = journey.getFormForStep(StepDefinition.PROVE_ADDRESS);
     assertThat(form).isNotNull();
