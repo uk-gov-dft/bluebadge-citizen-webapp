@@ -18,7 +18,9 @@
                         <a class="govuk-footer__link" target="_blank" href="https://www.smartsurvey.co.uk/s/WJLXY/" th:text="#{footer.link.feedback}"></a>
                     </li>
                     <li class="govuk-footer__inline-list-item">
-                        <a id="footer-apply-in-welsh-link" class="govuk-footer__link" href="/apply-in-welsh" th:text="#{footer.link.applyInWelsh}"></a>
+                        <th:block th:with="nextLang = ${#locale.language} == 'cy' ? 'en' : 'cy'">
+                        <a id="footer-apply-in-welsh-link" class="govuk-footer__link" th:href="@{''(lang=${nextLang})}" th:text="#{footer.link.change.language}"></a>
+                        </th:block>
                     </li>
                 </ul>
 
