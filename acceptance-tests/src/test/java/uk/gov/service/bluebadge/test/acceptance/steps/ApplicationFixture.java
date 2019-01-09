@@ -166,15 +166,16 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
-  @And("^I complete \"(prove ID|provide photo|upload benefit)\" page with no documents")
+  @And(
+      "^I complete \"(prove ID|provide photo|upload benefit|prove address)\" page with no documents")
   public void iCompleteProveIDPageWithNoDocuments(String pageName) {
     commonPage.findPageElementById("cant-upload-text").click();
     commonPage.findPageElementById("continue-without-uploading").click();
   }
 
   @And(
-      "^I complete \"(prove ID|provide photo|upload benefit)\" page with a \"(JPG|GIF|PNG|PDF)\" document")
-  public void iCompleteProveIDPageWithADocument(String pageName, String fileType) {
+      "^I complete \"(prove ID|provide photo|upload benefit|prove address)\" page with a \"(JPG|GIF|PNG|PDF)\" document")
+  public void iCompleteFileUploadPageWithADocument(String pageName, String fileType) {
 
     String filename = "evidence_" + fileType + "." + fileType.toLowerCase();
 
@@ -199,7 +200,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   @And("^I complete upload \"supporting documents page\" with a \"(JPG|GIF|PNG|PDF)\" document")
   public void iCompleteUploadSupportingDocumentPageWithADocument(String fileType) {
     commonPage.selectRadioButton(Ids.UploadSupportingDocuments.UPLOAD_SUPPORTING_DOCUMENTS_YES);
-    iCompleteProveIDPageWithADocument("supporting doc", fileType);
+    iCompleteFileUploadPageWithADocument("supporting doc", fileType);
   }
 
   @And("^I complete declaration page$")
