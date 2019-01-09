@@ -110,6 +110,6 @@ public class FileHelper {
     WebElement input = (WebElement) jse.executeScript(JS_DROP_FILE, target, offsetX, offsetY);
     input.sendKeys(filePath.getAbsoluteFile().toString());
     wait.until(ExpectedConditions.stalenessOf(input));
-    wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//*[text()='This is your upload']"))));
+    wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.className("dft-fu-preview"))));
   }
 }
