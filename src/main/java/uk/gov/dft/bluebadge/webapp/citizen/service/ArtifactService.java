@@ -13,7 +13,9 @@ import com.google.common.collect.ImmutableSet;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +30,10 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 @Slf4j
 public class ArtifactService {
   public static final String ENCODING_CHAR_SET = "UTF-8";
-  private static final Set<String> ACCEPTED_MIME_TYPES =
-      ImmutableSet.of("image/jpeg", "image/gif", "image/png", "application/pdf");
+  public static final Set<String> IMAGE_MIME_TYPES =
+      ImmutableSet.of("image/jpeg", "image/gif", "image/png");
+  public static final Set<String> IMAGE_PDF_MIME_TYPES =
+      ImmutableSet.<String>builder().addAll(IMAGE_MIME_TYPES).add("application/pdf").build();
   private final AmazonS3 amazonS3;
   private final S3Config s3Config;
   private final TransferManager transferManager;
@@ -41,12 +45,25 @@ public class ArtifactService {
     this.transferManager = transferManager;
   }
 
-  public JourneyArtifact upload(MultipartFile multipartFile)
+  public List<JourneyArtifact> upload(
+      List<MultipartFile> multipartFiles, Set<String> acceptedMimeTypes)
+      throws IOException, InterruptedException {
+    List<JourneyArtifact> newArtifacts = new ArrayList<>();
+    for (MultipartFile document : multipartFiles) {
+      if (!document.isEmpty()) {
+        JourneyArtifact uploadJourneyArtifact = upload(document, acceptedMimeTypes);
+        newArtifacts.add(uploadJourneyArtifact);
+      }
+    }
+    return newArtifacts;
+  }
+
+  public JourneyArtifact upload(MultipartFile multipartFile, Set<String> acceptedMimeTypes)
       throws IOException, InterruptedException {
     Assert.notNull(multipartFile, "Multipart file is null.");
 
     if (multipartFile.isEmpty()) {
-      throw new IllegalArgumentException("Upload failed. JourneyArtifact is empty");
+      throw new IllegalArgumentException("Upload failed. MultipartFile is empty");
     }
 
     log.info(
@@ -59,7 +76,7 @@ public class ArtifactService {
     keyName = URLEncoder.encode(keyName, ENCODING_CHAR_SET);
     ObjectMetadata meta = new ObjectMetadata();
     meta.setContentLength(multipartFile.getSize());
-    String mimetype = determineMimeType(multipartFile.getOriginalFilename());
+    String mimetype = determineMimeType(multipartFile.getOriginalFilename(), acceptedMimeTypes);
     meta.setContentType(mimetype);
     Upload upload =
         transferManager.upload(
@@ -76,9 +93,9 @@ public class ArtifactService {
         .build();
   }
 
-  private static String determineMimeType(String filename) {
+  private static String determineMimeType(String filename, Set<String> acceptedMimeTypes) {
     String mimetype = Mimetypes.getInstance().getMimetype(filename);
-    if (!ACCEPTED_MIME_TYPES.contains(mimetype)) {
+    if (!acceptedMimeTypes.contains(mimetype)) {
       throw new UnsupportedMimetypeException(mimetype);
     }
     return mimetype;

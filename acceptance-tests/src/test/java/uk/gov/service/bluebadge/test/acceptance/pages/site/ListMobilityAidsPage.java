@@ -6,8 +6,8 @@ public class ListMobilityAidsPage {
   public static final String PAGE_TITLE = "Do you use mobility aids?";
   public static final String PAGE_TITLE_SOMEONE_ELSE = "Do they use mobility aids?";
 
-  public static final String HEADER = "Do you use any mobility aids?";
-  public static final String HEADER_SOMEONE_ELSE = "Do they use any mobility aids?";
+  public static final String HEADER = "Do you have help to get around?";
+  public static final String HEADER_SOMEONE_ELSE = "Do they have help to get around?";
 
   public static final String MOBILITY_AID_OPTION = "hasWalkingAid";
 

@@ -19,10 +19,12 @@ Feature: DFT Blue badge Citizen app new application - ARMS
     And   I complete address page
     And   I complete contact page for "yourself"
     And   I complete describe health conditions page
+    And   I complete upload "supporting documents page" with a "GIF" document
     And   I complete the how often do you drive page
     And   I complete the adapted vehicle page for "YES"
     And   I complete the difficulty with parking meters page
-    And   I complete prove ID page with no documents
+    And   I complete "prove ID" page with no documents
+    And   I complete "provide photo" page with no documents
     And   I complete declaration page
     Then  I should see .* page titled "Application submitted" with GOV.UK suffix
 

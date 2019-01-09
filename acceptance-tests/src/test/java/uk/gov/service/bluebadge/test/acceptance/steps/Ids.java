@@ -69,6 +69,11 @@ class Ids {
     static final String MEDICATION_FREQUENCY_TEXT = "frequency";
   }
 
+  class UploadSupportingDocuments {
+    static final String UPLOAD_SUPPORTING_DOCUMENTS_YES = "hasDocuments.yes";
+    static final String UPLOAD_SUPPORTING_DOCUMENTS_NO = "hasDocuments.no";
+  }
+
   class RegisteredCouncil {
     static final String HAS_REGISTERED = "hasRegistered";
     static final String HAS_PERMISSION = "hasPermission";

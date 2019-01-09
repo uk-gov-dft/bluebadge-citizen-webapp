@@ -6,56 +6,87 @@
 </head>
 <body>
 
-<div th:fragment="fileUploader(label, name)">
+<div class="dft-fu dft-fu--legacy"
+     th:fragment="fileUploader(name, options, headingLevel)"
+     th:classappend="*{not #lists.isEmpty(journeyArtifacts)} ? dft-fu--preview"
+     th:data-ajax-request-url="${options.ajaxRequestUrl}"
+     th:data-upload-error-message="#{${options.errorMessageKey}}"
+     th:data-max-file-upload-limit="${options.maxFileUploadLimit}"
+     th:data-current-file-count="*{not #lists.isEmpty(journeyArtifacts)}? *{journeyArtifacts.size()}"
+     th:data-upload-reject-error-message="#{${options.rejectErrorMessageKey}}">
 
-    <div class="govuk-error-summary file-uploader-error" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary"
-        th:classappend="${MAX_FILE_SIZE_EXCEEDED} ? 'file-uploader-error--active file-uploader-error--rejected'">
-        <h2 class="govuk-error-summary__title" id="error-summary-title" th:text="#{fileUploader.error.title}"></h2>
-        <div class="govuk-error-summary__body file-uploader-msg-error" th:text="#{fileUploader.error.content}"></div>
-        <div class="govuk-error-summary__body file-uploader-msg-rejected" th:text="#{fileUploader.rejected.content}"></div>
+    <div id="dft-fu-error-summary"
+         class="govuk-error-summary dft-fu-error-summary"
+         aria-labelledby="fu-error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+
+        <h2 id="fu-error-summary-title" class="govuk-error-summary__title" th:text="#{${options.errorTitleMessageKey}}"></h2>
+        <div class="govuk-error-summary__body dft-fu-error-summary__body"></div>
     </div>
 
-    <div id="proveIdentity-fileUploaderContainer"
-         th:data-label-mobile="#{fileUploader.label.mobile}"
-         th:data-label-desktop="#{fileUploader.label.desktop}"
-         th:data-label-multiFile-caption="#{fileUploader.label.multiFile.caption}"
-         th:data-preview-title="#{fileUploader.preview.title}"
-         th:data-preview-reset-button="#{fileUploader.preview.resetBtn}"
-         th:data-preview-addFile-button="#{fileUploader.preview.addFileBtn}"
-         th:data-loader-text="#{fileUploader.loaderText}"
-         th:class="'govuk-form-group' + (${#fields.hasErrors('journeyArtifact')} == true ? ' govuk-form-group--error' : '')"
-         th:classappend="*{journeyArtifact} ? file-uploader--preview-mode"
-    >
-        <div id="upload-preview-div" class="preview">
-            <h3 class="preview__heading" th:text="#{fileUploader.preview.title}"></h3>
-            <div id="preview-holder" class="preview__holder">
-                <span th:if="*{journeyArtifact}" th:remove="tag">
-                    <!-- image preview -->
-                    <div th:if="*{journeyArtifact.type == 'image'}" class="preview__item">
-                        <img th:src="*{journeyArtifact.signedUrl}" th:alt="*{journeyArtifact.fileName}" alt="file name maybe - see henry">
-                    </div>
+    <div class="dft-fu-preview">
+        <h1 th:if="${headingLevel == 'h1'}"
+            class="dft-fu-preview__heading"
+            th:classappend="${headingLevel == 'h1'}? dft-fu-preview__heading--l"
+            th:text="#{${options.previewTitleMessageKey}}"></h1>
 
-                    <!-- file preview TODO -->
-                    <div th:if="*{journeyArtifact.type != 'image'}" class="preview__item">
-                        <p>file name
-                            <span>(Preview unavailable)</span>
-                        </p>
-                    </div>
-                </span>
-            </div>
+        <h2 th:if="${headingLevel == 'h2'}"
+            class="dft-fu-preview__heading"
+            th:classappend="${headingLevel == 'h2'}? dft-fu-preview__heading--m"
+            th:text="#{${options.previewTitleMessageKey}}"></h2>
+
+        <h3 th:if="${headingLevel == 'h3'}"
+            class="dft-fu-preview__heading"
+            th:classappend="${headingLevel == 'h3'}? dft-fu-preview__heading--s"
+            th:text="#{${options.previewTitleMessageKey}}"></h3>
+
+        <div class="dft-fu-preview__holder">
+            <th:block th:each="artifact : *{journeyArtifacts}" th:remove="tag">
+                <div th:if="${artifact.type == 'image'}" class="dft-fu-preview__item">
+                    <img th:src="${artifact.signedUrl}"
+                         th:alt="${artifact.fileName}" alt="file name maybe">
+                </div>
+
+                <div th:if="${artifact.type != 'image'}" class="dft-fu-preview__item dft-fu-preview__item--unavailable">
+                    <span th:text="${artifact.fileName}" th:remove="tag"></span>
+                    <span th:text="#{fileUploader.preview.previewUnavailable}"></span>
+                </div>
+            </th:block>
         </div>
 
-        <button id="preview-reset-btn" class="preview__resetBtn" th:text="#{fileUploader.preview.resetBtn}">Use a different photo or scan</button>
+        <button class="dft-fu__add-file-btn"
+                th:if="${options.allowMultipleFileUploads}"
+                th:text="#{fileUploader.addMore}"></button>
 
-        <div class="js-hidden2">
-            <label class="govuk-label" th:for="${name}" th:text="${label}"></label>
-            <span class="govuk-error-message" id="documentId-error" th:errors="*{__${'journeyArtifact'}__}"></span>
-            <input class="govuk-file-upload"
-                   th:id="${name}"
-                   th:name="${name}"
-                   type="file"
-                   accept="image/jpeg,image/gif,image/png,application/pdf">
+        <p class="govuk-body dft-fu__loader" th:text="#{fileUploader.loaderText}"></p>
+
+        <button class="dft-fu__reset-btn"
+                th:text="#{${options.previewResetButtonMessageKey}}"></button>
+    </div>
+
+    <div class="govuk-form-group dft-fu-file-uploader"
+         th:data-label-mobile="#{${options.uploadButtonMobileMessageKey}}"
+         th:data-label-desktop="#{${options.uploadButtonDesktopMessageKey}}"
+         th:data-label-multiFile-caption="#{${options.multiFileCaptionMessageKey}}"
+         th:data-loader-text="#{${options.loadingMessageKey}}"
+         th:classappend="${#fields.hasErrors('journeyArtifact')} == true ? ' govuk-form-group--error' : ''">
+
+        <label class="govuk-label" th:for="${name}" th:text="#{${options.fieldLabel}}"></label>
+        <span class="govuk-error-message" th:errors="*{__${'journeyArtifact'}__}"></span>
+
+        <div th:if="*{not #lists.isEmpty(journeyArtifacts)}" class="dft-fu-existing-file-label govuk-!-margin-top-6">
+            <p class="govuk-body" th:text="#{fileUploader.nonJs.uploadHistory.label}"></p>
+
+            <ul class="govuk-list govuk-list--bullet">
+                <li th:each="artifact : *{journeyArtifacts}" th:text="${artifact.fileName}"></li>
+            </ul>
         </div>
+
+        <input type="file"
+               class="govuk-file-upload dft-fu-file-upload"
+               th:id="${name}"
+               th:name="${options.fieldName}"
+               th:multiple="${options.allowMultipleFileUploads}"
+               th:accept="${options.allowedFileTypes}">
     </div>
 </div>
 

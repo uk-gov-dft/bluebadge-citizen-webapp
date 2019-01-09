@@ -1,0 +1,44 @@
+.provide-photo-box-page {
+  .dft-fu-preview {
+    &__item {
+      img {
+			@include govuk-media-query($until: tablet) {
+				width: 50%;
+				height: auto;
+			}
+      }
+    }
+  }
+}
+
+.provide-photo-box {
+  @include govuk-clearfix;
+  position: relative;
+  margin-bottom: govuk-spacing(5);
+
+  &__image-wrapper,
+  &__text {
+    display: inline-block;
+    float: left;
+  }
+
+  &__image-wrapper {
+    margin-right: 20px;
+
+    @include govuk-media-query($until: desktop) {
+      float: none;
+      display: block;
+      margin-right: 0;
+      margin-bottom: govuk-spacing(3);
+    }
+  }
+
+  &__image {
+    width: 50%;
+    height: auto;
+
+    @include govuk-media-query($from: tablet) {
+      width: 175px;
+    }
+  }
+}

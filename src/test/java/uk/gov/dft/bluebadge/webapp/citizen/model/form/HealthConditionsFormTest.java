@@ -25,7 +25,7 @@ public class HealthConditionsFormTest {
     Optional<StepDefinition> nextStep = form.determineNextStep(journey);
 
     assertThat(nextStep).isNotEmpty();
-    assertThat(nextStep.get()).isEqualTo(StepDefinition.ARMS_HOW_OFTEN_DRIVE);
+    assertThat(nextStep.get()).isEqualTo(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
   }
 
   @Test
@@ -50,7 +50,7 @@ public class HealthConditionsFormTest {
     Optional<StepDefinition> nextStep = form.determineNextStep(journey);
 
     assertThat(nextStep).isNotEmpty();
-    assertThat(nextStep.get()).isEqualTo(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST);
+    assertThat(nextStep.get()).isEqualTo(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
   }
 
   @Test
@@ -63,7 +63,7 @@ public class HealthConditionsFormTest {
     Optional<StepDefinition> nextStep = form.determineNextStep(journey);
 
     assertThat(nextStep).isNotEmpty();
-    assertThat(nextStep.get()).isEqualTo(StepDefinition.MEDICAL_EQUIPMENT);
+    assertThat(nextStep.get()).isEqualTo(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
   }
 
   @Test

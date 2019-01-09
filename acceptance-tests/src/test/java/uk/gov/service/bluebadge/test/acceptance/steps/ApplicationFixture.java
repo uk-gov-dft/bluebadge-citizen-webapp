@@ -166,20 +166,19 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
-  @And("^I complete prove ID page with no documents")
-  public void iCompleteProveIDPageWithNoDocuments() {
+  @And("^I complete \"(prove ID|provide photo|upload benefit)\" page with no documents")
+  public void iCompleteProveIDPageWithNoDocuments(String pageName) {
     commonPage.findPageElementById("cant-upload-text").click();
     commonPage.findPageElementById("continue-without-uploading").click();
   }
 
-  @And("^I complete prove ID page with a \"(JPG|GIF|PNG|PDF)\" document")
-  public void iCompleteProveIDPageWithADocument(String fileType) {
+  @And(
+      "^I complete \"(prove ID|provide photo|upload benefit)\" page with a \"(JPG|GIF|PNG|PDF)\" document")
+  public void iCompleteProveIDPageWithADocument(String pageName, String fileType) {
 
     String filename = "evidence_" + fileType + "." + fileType.toLowerCase();
 
-    WebElement droparea =
-        commonPage.findElementWithCSSSelector(
-            "#proveIdentity-fileUploaderContainer > div.drop-area");
+    WebElement droparea = commonPage.findPageElementById("document-droparea");
 
     String file_path = "";
     if (System.getProperty("user.dir").endsWith("acceptance-tests")) {
@@ -195,7 +194,12 @@ public class ApplicationFixture extends AbstractSpringSteps {
     FileHelper.dropFile(new File(file_path), droparea, 0, 0);
 
     commonPage.pressContinueOnFileUploadPage();
+  }
 
+  @And("^I complete upload \"supporting documents page\" with a \"(JPG|GIF|PNG|PDF)\" document")
+  public void iCompleteUploadSupportingDocumentPageWithADocument(String fileType) {
+    commonPage.selectRadioButton(Ids.UploadSupportingDocuments.UPLOAD_SUPPORTING_DOCUMENTS_YES);
+    iCompleteProveIDPageWithADocument("supporting doc", fileType);
   }
 
   @And("^I complete declaration page$")

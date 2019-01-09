@@ -19,8 +19,10 @@ Feature: DFT Blue badge Citizen app new application - CHILDVEHIC
     And   I complete address page
     And   I complete contact page for "yourself"
     And   I complete describe health conditions page
+    And   I complete upload "supporting documents page" with a "GIF" document
     And   I complete the healthcare professionals page for "YES"
-    And   I complete prove ID page with no documents
+    And   I complete "prove ID" page with no documents
+    And   I complete "provide photo" page with no documents
     And   I complete declaration page
     Then  I should see page titled "Application submitted" with GOV.UK suffix
 
@@ -62,6 +64,8 @@ Feature: DFT Blue badge Citizen app new application - CHILDVEHIC
     And   I complete address page
     And   I complete contact page for "yourself"
     And   I complete prove benefit page for "yes"
-    And   I complete prove ID page with no documents
+    And   I complete "upload benefit" page with no documents
+    And   I complete "prove ID" page with no documents
+    And   I complete "provide photo" page with no documents
     And   I complete declaration page
     Then  I should see page titled "Application submitted" with GOV.UK suffix

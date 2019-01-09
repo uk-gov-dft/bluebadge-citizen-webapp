@@ -16,6 +16,8 @@
 *.iws
 *.iml
 *.ipr
+*.sublime-project
+*.sublime-workspace
 
 ### NetBeans ###
 /nbproject/private/

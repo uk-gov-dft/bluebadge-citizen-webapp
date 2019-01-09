@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.BLIND;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.DLA;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.PIP;
 
@@ -39,16 +40,19 @@ public class ContactFormTest {
   public void submit_shouldSkipHealthConditionsStep(String input) {
 
     Journey journey = JourneyFixture.getDefaultJourney();
+    EligibilityCodeField benefitType = EligibilityCodeField.valueOf(input);
     ReceiveBenefitsForm benefitsForm =
-        ReceiveBenefitsForm.builder().benefitType(EligibilityCodeField.valueOf(input)).build();
+        ReceiveBenefitsForm.builder().benefitType(benefitType).build();
     journey.setFormForStep(benefitsForm);
     ContactDetailsForm contactForm = ContactDetailsForm.builder().build();
 
     assertTrue(contactForm.determineNextStep(journey).isPresent());
-    if (EnumSet.of(PIP, DLA).contains(EligibilityCodeField.valueOf(input))) {
-      assertEquals(contactForm.determineNextStep(journey).get(), StepDefinition.PROVE_BENEFIT);
+    if (EnumSet.of(PIP, DLA).contains(benefitType)) {
+      assertEquals(StepDefinition.PROVE_BENEFIT, contactForm.determineNextStep(journey).get());
+    } else if (BLIND == benefitType) {
+      assertEquals(StepDefinition.REGISTERED, contactForm.determineNextStep(journey).get());
     } else {
-      assertEquals(contactForm.determineNextStep(journey).get(), StepDefinition.DECLARATIONS);
+      assertEquals(StepDefinition.PROVE_IDENTITY, contactForm.determineNextStep(journey).get());
     }
   }
 
@@ -68,6 +72,6 @@ public class ContactFormTest {
     ContactDetailsForm contactForm = ContactDetailsForm.builder().build();
 
     assertTrue(contactForm.determineNextStep(journey).isPresent());
-    assertEquals(contactForm.determineNextStep(journey).get(), StepDefinition.HEALTH_CONDITIONS);
+    assertEquals(StepDefinition.HEALTH_CONDITIONS, contactForm.determineNextStep(journey).get());
   }
 }

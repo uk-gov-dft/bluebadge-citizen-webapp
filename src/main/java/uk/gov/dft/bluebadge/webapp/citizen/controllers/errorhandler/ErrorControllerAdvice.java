@@ -47,7 +47,7 @@ public class ErrorControllerAdvice {
     log.info("Handling MaxUploadSizeExceededException");
 
     if (null != request.getAttribute("javax.servlet.error.request_uri")) {
-      attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", "true");
+      attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", Boolean.TRUE);
       String uri = (String) request.getAttribute("javax.servlet.error.request_uri");
       return REDIRECT + uri;
     }

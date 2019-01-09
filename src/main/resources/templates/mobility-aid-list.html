@@ -21,7 +21,7 @@
                             <h1 class="govuk-fieldset__heading" th:text="#{${JOURNEY.who} + 'mobility.aid.list.body.title'}"></h1>
                         </legend>
 
-                        <span id="mobility-aids-hint" class="govuk-hint" th:text="#{mobility.aids.title.hint}"></span>
+                        <span id="mobility-aids-hint" class="govuk-hint" th:text="#{${JOURNEY.who} + mobility.aids.title.hint}"></span>
 
                         <span class="govuk-error-message"
                               data-uipath="hasWalkingAid.error"
@@ -52,7 +52,7 @@
 
                                     <tbody class="govuk-table__body" data-uipath="table.body">
                                     <tr class="govuk-table__row" th:each="aid, iStat : *{mobilityAids}">
-                                        <td class="govuk-table__cell" th:text="${aid.aidTypeDescription}"></td>
+                                        <td class="govuk-table__cell" th:text="${aid.aidType}"></td>
                                         <td class="govuk-table__cell" th:text="${aid.usage}"></td>
                                         <td class="govuk-table__cell govuk-table__cell--numeric">
                                             <a th:href="@{/list-mobility-aids/remove(uuid=${aid.id})}"

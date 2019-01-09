@@ -66,6 +66,15 @@ public class Journey implements Serializable {
     return (T) forms.get(step);
   }
 
+  public synchronized <T extends StepForm> T getOrSetFormForStep(T form) {
+    T formForStep = getFormForStep(form.getAssociatedStep());
+    if (formForStep == null) {
+      setFormForStep(form);
+      formForStep = form;
+    }
+    return formForStep;
+  }
+
   private void cleanUpSteps(Set<StepDefinition> alreadyCleaned, Set<StepDefinition> steps) {
 
     if (null == steps) {

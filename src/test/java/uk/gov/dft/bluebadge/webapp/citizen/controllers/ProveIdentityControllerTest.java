@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_PDF_MIME_TYPES;
 
 import java.net.URL;
 import lombok.SneakyThrows;
@@ -25,6 +26,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.multipart.MultipartFile;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
@@ -40,7 +42,7 @@ public class ProveIdentityControllerTest {
   private MockMvc mockMvc;
 
   private Journey journey;
-  private static final String SUCCESS_URL = Mappings.URL_DECLARATIONS;
+  private static final String SUCCESS_URL = Mappings.URL_PROVIDE_PHOTO;
   private static final String ERROR_URL = Mappings.URL_PROVE_IDENTITY + RouteMaster.ERROR_SUFFIX;
   private ArtifactService artifactServiceMock;
   private URL signedUrl;
@@ -58,6 +60,7 @@ public class ProveIdentityControllerTest {
             .build();
 
     journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.PROVE_IDENTITY);
+    journey.setFormForStep(ProveIdentityForm.builder().build());
     docUrl = new URL("http://test");
     signedUrl = new URL("http://testSigned");
   }
@@ -124,7 +127,7 @@ public class ProveIdentityControllerTest {
             .signedUrl(signedUrl)
             .type("file")
             .build();
-    when(artifactServiceMock.upload(any())).thenReturn(journeyArtifact);
+    when(artifactServiceMock.upload(any(MultipartFile.class), any())).thenReturn(journeyArtifact);
 
     String testUpload = "Some thing to upload";
     MockMultipartFile mockMultifile =
@@ -146,7 +149,8 @@ public class ProveIdentityControllerTest {
 
   @Test
   public void ajaxSubmit_givenFailedUpload_thenErrorResponse() throws Exception {
-    when(artifactServiceMock.upload(any())).thenThrow(new RuntimeException("Test"));
+    when(artifactServiceMock.upload(any(MultipartFile.class), any()))
+        .thenThrow(new RuntimeException("Test"));
 
     String testUpload = "Some thing to upload";
     MockMultipartFile mockMultifile =
@@ -205,7 +209,8 @@ public class ProveIdentityControllerTest {
             .type("image")
             .url(replacementUrl)
             .build();
-    when(artifactServiceMock.upload(mockMultifile)).thenReturn(replacingArtifact);
+    when(artifactServiceMock.upload(mockMultifile, IMAGE_PDF_MIME_TYPES))
+        .thenReturn(replacingArtifact);
 
     mockMvc
         .perform(multipart("/prove-identity").file(mockMultifile).sessionAttr("JOURNEY", journey))
@@ -234,7 +239,8 @@ public class ProveIdentityControllerTest {
             .type("image")
             .url(replacementUrl)
             .build();
-    when(artifactServiceMock.upload(mockMultifile)).thenReturn(replacingArtifact);
+    when(artifactServiceMock.upload(mockMultifile, IMAGE_PDF_MIME_TYPES))
+        .thenReturn(replacingArtifact);
 
     mockMvc
         .perform(multipart("/prove-identity").file(mockMultifile).sessionAttr("JOURNEY", journey))
