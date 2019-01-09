@@ -7,7 +7,7 @@ public class AddHealthcareProfessionalPage {
   public static final String PAGE_TITLE_SOMEONE_ELSE = "Add healthcare professional";
 
   public static final String NAME = "healthcareProfessionalName";
-  public static final String Location = "healthcareProfessionalLocation";
+  public static final String LOCATION = "healthcareProfessionalLocation";
 
   public static final String HC_PROFESSIONAL_ADD_BUTTON = "button.continue";
 

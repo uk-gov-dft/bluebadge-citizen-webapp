@@ -17,10 +17,10 @@ public class ListTreatmentsSteps extends AbstractSpringSteps {
   private AddTreatmentsSteps addTreatmentsSteps;
 
   @Autowired
-  public ListTreatmentsSteps(CommonPage commonPage, CommonSteps commonSteps) {
+  public ListTreatmentsSteps(CommonPage commonPage, CommonSteps commonSteps, AddTreatmentsSteps addTreatmentsSteps) {
     this.commonPage = commonPage;
     this.commonSteps = commonSteps;
-    this.addTreatmentsSteps = new AddTreatmentsSteps(commonPage, commonSteps);
+    this.addTreatmentsSteps = addTreatmentsSteps;
   }
 
   @And(

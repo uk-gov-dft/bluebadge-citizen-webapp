@@ -49,9 +49,9 @@ public class AddHealthcareProfessionalSteps extends AbstractSpringSteps {
     commonPage
         .findPageElementById(AddHealthcareProfessionalPage.NAME)
         .sendKeys(AddHealthcareProfessionalPage.INVALID_TEXT);
-    commonPage.findPageElementById(AddHealthcareProfessionalPage.Location).click();
+    commonPage.findPageElementById(AddHealthcareProfessionalPage.LOCATION).click();
     commonPage
-        .findPageElementById(AddHealthcareProfessionalPage.Location)
+        .findPageElementById(AddHealthcareProfessionalPage.LOCATION)
         .sendKeys(AddHealthcareProfessionalPage.VALID_LOCATION);
     commonSteps.iVerifyValidationMessage(
         AddHealthcareProfessionalPage.VALIDATION_MESSAGE_FOR_INVALID_NAME);
@@ -62,9 +62,9 @@ public class AddHealthcareProfessionalSteps extends AbstractSpringSteps {
     commonPage
         .findPageElementById(AddHealthcareProfessionalPage.NAME)
         .sendKeys(AddHealthcareProfessionalPage.VALID_NAME);
-    commonPage.findPageElementById(AddHealthcareProfessionalPage.Location).click();
+    commonPage.findPageElementById(AddHealthcareProfessionalPage.LOCATION).click();
     commonPage
-        .findPageElementById(AddHealthcareProfessionalPage.Location)
+        .findPageElementById(AddHealthcareProfessionalPage.LOCATION)
         .sendKeys(AddHealthcareProfessionalPage.INVALID_TEXT);
     commonSteps.iVerifyValidationMessage(
         AddHealthcareProfessionalPage.VALIDATION_MESSAGE_FOR_INVALID_LOCATION);
@@ -75,7 +75,7 @@ public class AddHealthcareProfessionalSteps extends AbstractSpringSteps {
     commonPage.clearAndSendKeys(
         AddHealthcareProfessionalPage.NAME, AddHealthcareProfessionalPage.VALID_NAME);
     commonPage.clearAndSendKeys(
-        AddHealthcareProfessionalPage.Location, AddHealthcareProfessionalPage.VALID_LOCATION);
+        AddHealthcareProfessionalPage.LOCATION, AddHealthcareProfessionalPage.VALID_LOCATION);
     commonSteps.iClickOnAddButtonOnChildPage(
         AddHealthcareProfessionalPage.HC_PROFESSIONAL_ADD_BUTTON);
   }
