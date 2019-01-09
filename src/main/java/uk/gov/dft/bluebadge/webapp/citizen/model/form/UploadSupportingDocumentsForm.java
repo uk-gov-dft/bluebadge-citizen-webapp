@@ -25,6 +25,10 @@ public class UploadSupportingDocumentsForm implements StepForm, ArtifactForm, Se
 
   private List<JourneyArtifact> journeyArtifacts = new ArrayList<>();
 
+  public boolean hasDocuments() {
+    return (null != hasDocuments) && hasDocuments;
+  }
+
   @Override
   public StepDefinition getAssociatedStep() {
     return StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS;
