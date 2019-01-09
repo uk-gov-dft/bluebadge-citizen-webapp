@@ -67,5 +67,6 @@ Feature: DFT Blue badge Citizen app new application - CHILDVEHIC
     And   I complete "upload benefit" page with no documents
     And   I complete "prove ID" page with no documents
     And   I complete "provide photo" page with no documents
+    And   I complete "prove address" page with a "PDF" document
     And   I complete declaration page
     Then  I should see page titled "Application submitted" with GOV.UK suffix

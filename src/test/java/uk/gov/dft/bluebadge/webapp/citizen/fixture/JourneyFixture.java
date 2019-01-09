@@ -34,37 +34,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 import uk.gov.dft.bluebadge.webapp.citizen.model.component.CompoundDate;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.EligibleForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ExistingBadgeForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalAddForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalListForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.MayBeEligibleForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.MedicalEquipmentForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.OrganisationMayBeEligibleForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveBenefitForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveIdentityForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProvidePhotoForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.UploadBenefitForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.UploadSupportingDocumentsForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.*;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.CompensationSchemeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.DisabilityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.MentalDisorderForm;
@@ -209,6 +179,12 @@ public class JourneyFixture {
   private static UploadSupportingDocumentsForm getUploadSupportingDocumentsForm() {
     return UploadSupportingDocumentsForm.builder()
         .journeyArtifacts(Lists.newArrayList(buildJourneyArtifact("http://s3/supportingDocument")))
+        .build();
+  }
+
+  private static ProveAddressForm getProveAddressForm() {
+    return ProveAddressForm.builder()
+        .journeyArtifact(buildJourneyArtifact("http://s3/proveAddress"))
         .build();
   }
 
@@ -542,6 +518,10 @@ public class JourneyFixture {
     journey.setFormForStep(
         ProvidePhotoForm.builder()
             .journeyArtifact(buildJourneyArtifact("http://s3/photoLink"))
+            .build());
+    journey.setFormForStep(
+        ProveAddressForm.builder()
+            .journeyArtifact(buildJourneyArtifact("http://s3/proveAddress"))
             .build());
     journey.setFormForStep(DeclarationForm.builder().agreed(Boolean.TRUE).build());
     return journey;
