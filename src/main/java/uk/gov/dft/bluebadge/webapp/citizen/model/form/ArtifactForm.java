@@ -15,4 +15,8 @@ public interface ArtifactForm {
         ? Collections.emptyList()
         : ImmutableList.of(getJourneyArtifact());
   }
+
+  default Boolean hasArtifacts() {
+    return null != getJourneyArtifacts() && !getJourneyArtifacts().isEmpty();
+  }
 }

@@ -28,6 +28,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.client.common.ServiceException;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
@@ -150,7 +151,7 @@ public class ProveIdentityControllerTest {
   @Test
   public void ajaxSubmit_givenFailedUpload_thenErrorResponse() throws Exception {
     when(artifactServiceMock.upload(any(MultipartFile.class), any()))
-        .thenThrow(new RuntimeException("Test"));
+        .thenThrow(new ServiceException("Test"));
 
     String testUpload = "Some thing to upload";
     MockMultipartFile mockMultifile =

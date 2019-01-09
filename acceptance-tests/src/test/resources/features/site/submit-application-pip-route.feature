@@ -21,6 +21,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete "upload benefit" page with a "GIF" document
     And   I complete "prove ID" page with a "GIF" document
     And   I complete "provide photo" page with a "GIF" document
+    And   I complete "prove address" page with a "GIF" document
     And   I complete declaration page
     Then  I should see page titled "Application submitted" with GOV.UK suffix
 
