@@ -72,6 +72,13 @@ export default class FileUploader {
 			}
 		}, false);
 
+		this.$fileInput.addEventListener('change', event => {
+			event.stopPropagation();
+			if(event.target.value !== '') {
+				this.selectFile(event.target.files)
+			}
+		}, false);
+
 		// If device is mobile or tablet then we do not want to 
 		// register drag and drop events
 		if(!this.$isMobile) {
