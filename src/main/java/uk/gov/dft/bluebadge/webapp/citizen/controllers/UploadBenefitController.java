@@ -103,19 +103,19 @@ public class UploadBenefitController implements StepController {
       @RequestParam(name = CLEAR, defaultValue = "false") Boolean clearPreviousArtifacts,
       UploadBenefitForm uploadBenefitForm) {
     try {
-      UploadBenefitForm sessionForm = journey.getOrSetFormForStep(uploadBenefitForm);
+      UploadBenefitForm sessionUploadBenefitForm = journey.getOrSetFormForStep(uploadBenefitForm);
 
       if (clearPreviousArtifacts) {
-        sessionForm.setJourneyArtifacts(new ArrayList<>());
+        sessionUploadBenefitForm.setJourneyArtifacts(new ArrayList<>());
       }
 
-      List<JourneyArtifact> journeyArtifacts =
+      List<JourneyArtifact> newJourneyArtifacts =
           artifactService.upload(documents, IMAGE_PDF_MIME_TYPES);
-      if (!journeyArtifacts.isEmpty()) {
-        sessionForm.getJourneyArtifacts().addAll(journeyArtifacts);
+      if (!newJourneyArtifacts.isEmpty()) {
+        sessionUploadBenefitForm.getJourneyArtifacts().addAll(newJourneyArtifacts);
       }
 
-      return ImmutableMap.of("success", "true", "artifact", journeyArtifacts);
+      return ImmutableMap.of("success", "true", "artifact", newJourneyArtifacts);
     } catch (Exception e) {
       log.warn("Failed to upload document through ajax call.", e);
       return ImmutableMap.of("error", "Failed to upload");

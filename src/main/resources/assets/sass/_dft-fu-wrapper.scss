@@ -28,8 +28,11 @@
 			}
 		}
 
-		[data-file-uploader-show-on-success]:not(.show) {
-			display: none;
+		[data-file-uploader-show-on-success],
+		[data-file-uploader-show-if-has-artifacts] {
+			&:not(.show) {
+				display: none;
+			}
 		}
 	}
 }
