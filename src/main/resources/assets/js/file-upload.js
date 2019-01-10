@@ -188,9 +188,9 @@ export default class FileUploader {
 				const resp = JSON.parse(xhr.response);
 				if(resp && resp.success) {
 					this.makeScreenAnnouncement(this.$ANNOUNCEMENTS.filesUploaded);
-					this.fireLifeCycleEvent('uploaded', resp, files);
 					this.$totalFilesUploaded += files.length;
 					this.hasActiveUpload = false;
+					this.fireLifeCycleEvent('uploaded', resp, files);
 					this.$screenAnnouncer.focus();
 				} else {
 					this.fireLifeCycleEvent('uploadError', 'REQUEST_UNSUCCESSFUL');
