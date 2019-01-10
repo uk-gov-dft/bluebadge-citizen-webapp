@@ -11,7 +11,7 @@
 <main layout:fragment="content" th:classappend="has-file-uploader">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <div th:if="${MAX_FILE_SIZE_EXCEEDED}">
+            <div th:if="${UNSUPPORTED_FILE} or ${MAX_FILE_SIZE_EXCEEDED}">
                 <div th:replace="~{ fragments/errors :: govuk-error-summary-static('fileUploader.error.title', 'upload.benefit.fu.rejected.content') }"></div>
             </div>
 
