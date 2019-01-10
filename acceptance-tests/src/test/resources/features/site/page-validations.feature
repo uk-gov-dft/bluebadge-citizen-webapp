@@ -31,6 +31,7 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
 #    Following page To be added for page validations
     And   I complete "prove ID" page with a "PDF" document
     And   I complete "provide photo" page with a "JPG" document
+    And   I complete "prove address" page with a "PNG" document
     And   I complete declaration page
     Then  I should see page titled "Application submitted" with GOV.UK suffix
 
