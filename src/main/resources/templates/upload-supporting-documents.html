@@ -27,7 +27,7 @@
             <p class="govuk-body" th:text="#{uploadSupportingDocuments.content.p2}"></p>
 
 
-            <form th:action="@{/upload-supporting-documents}" th:object="${formRequest}" method="post" enctype="multipart/form-data" novalidate>
+            <form th:action="@{/upload-supporting-documents}" th:object="${formRequest}" method="post" enctype="multipart/form-data" novalidate id="supporting-docs-form">
 
                 <div th:class="${#fields.hasErrors('hasDocuments')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
                     <fieldset class="govuk-fieldset">

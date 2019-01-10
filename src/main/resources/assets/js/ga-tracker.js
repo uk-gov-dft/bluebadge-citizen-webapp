@@ -1,5 +1,6 @@
-const EVENT_DETAULTS = {
+const EVENT_DEFAULTS = {
 	link_action: 'click',
+	alt_link_action: 'alternative click',
 	link_category: 'Internal link',
 	page_action: 'view',
 	page_category: 'page',
@@ -17,8 +18,8 @@ const initLinkTracking = (elements) => {
 		const el = elements[i];
 		el.addEventListener('click', (event) => {
 			const label = el.getAttribute('data-ga-track-link') || event.target.href;
-			const action = el.getAttribute('data-ga-track-link-action') || EVENT_DETAULTS.link_action;
-			const category = el.getAttribute('data-ga-track-link-category') || EVENT_DETAULTS.link_category;
+			const action = el.getAttribute('data-ga-track-link-action') || EVENT_DEFAULTS.link_action;
+			const category = el.getAttribute('data-ga-track-link-category') || EVENT_DEFAULTS.link_category;
 			GAEvent(action, category, label);
 		});
 	}
@@ -26,9 +27,24 @@ const initLinkTracking = (elements) => {
 
 const initPageTracking = (page) => {
 	const label = page.getAttribute('data-ga-track-page') || document.title;
-	const action = page.getAttribute('data-a-track-page-action') || EVENT_DETAULTS.page_action;
-	const category = page.getAttribute('data-ga-track-page-category') || EVENT_DETAULTS.page_category;
+	const action = page.getAttribute('data-a-track-page-action') || EVENT_DEFAULTS.page_action;
+	const category = page.getAttribute('data-ga-track-page-category') || EVENT_DEFAULTS.page_category;
 	GAEvent(action, category, label);
+};
+
+// On the supporting documents page we track 'Continue' only if the user selected 'NO'
+const initSupportingDocsTracking = () => {
+    const $supportingDocsForm = document.querySelector('#supporting-docs-form');
+    if ($supportingDocsForm) {
+		const $supportingDocsContinueBtn = $supportingDocsForm.querySelector('button[type=\'submit\']');
+		$supportingDocsContinueBtn.addEventListener('click', () => {
+			const $checkedHasDocumentsRadioItem = $supportingDocsForm.querySelector('input[name=\'hasDocuments\']:checked');
+
+			if ($checkedHasDocumentsRadioItem && $checkedHasDocumentsRadioItem.value === 'false') {
+				GAEvent(EVENT_DEFAULTS.alt_link_action, EVENT_DEFAULTS.link_category, 'no supporting documents to provide');
+			}
+		});
+	}
 };
 
 export default () => {
@@ -42,4 +58,6 @@ export default () => {
 	if (htmlEl.length > 0 && window.gtag) {
 		initPageTracking(htmlEl[0]);
 	}
+
+    initSupportingDocsTracking();
 };
