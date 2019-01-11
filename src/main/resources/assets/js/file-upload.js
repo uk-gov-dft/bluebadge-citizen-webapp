@@ -22,16 +22,17 @@ export default class FileUploader {
 		this.$dropArea;
 		this.$uploadBtn;
 		this.$uploadIcon;
-		this.$resetBtn;
 		this.$screenAnnouncer;
+		this.hasActiveUpload;
 
 		this.$totalFilesUploaded = options.totalFilesUploaded || 0;
-		
+
 		this.$container = this.renderFileUploader(options.container);
 		this.$container.appendChild(this.renderDropArea());
 		this.$container.appendChild(this.$screenAnnouncer);
 
-		this.$imageMimeTypes = 'image/jpeg, image/gif, image/png';
+		this.$imageMimeTypes
+			= 'image/jpeg, image/gif, image/png';
 
 		this.$DROPAREA_STATE = {
 			LOADING: this.$classPrefix + '--loading',
@@ -59,10 +60,20 @@ export default class FileUploader {
 		this.uploadBtnClick = this.uploadBtnClick.bind(this);
 		this.resetFileSelection = this.resetFileSelection.bind(this);
 		this.selectFile = this.selectFile.bind(this);
-		
+
 		this.$uploadBtn.addEventListener('click', this.uploadBtnClick);
 		this.$uploadIcon.addEventListener('click', this.uploadBtnClick);
+
+		// CHANGE event isn't always triggered but INPUT seem to be, so let's use INPUT instead
+		this.$fileInput.addEventListener('input', event => {
+			event.stopPropagation();
+			if(event.target.value !== '') {
+				this.selectFile(event.target.files)
+			}
+		}, false);
+
 		this.$fileInput.addEventListener('change', event => {
+			event.stopPropagation();
 			if(event.target.value !== '') {
 				this.selectFile(event.target.files)
 			}
@@ -71,7 +82,11 @@ export default class FileUploader {
 		// If device is mobile or tablet then we do not want to 
 		// register drag and drop events
 		if(!this.$isMobile) {
-			this.$dropArea.addEventListener('drop', event => this.selectFile(event.dataTransfer.files));
+			this.$dropArea.addEventListener('drop', event => {
+				if (!this.hasActiveUpload) {
+					this.selectFile(event.dataTransfer.files);
+				}
+			});
 			
 			['dragenter', 'dragover', 'dragleave', 'drop', document.body].forEach(eventName => {
 				this.$dropArea.addEventListener(eventName, event => {
@@ -108,7 +123,10 @@ export default class FileUploader {
 		if(event) {
 			event.preventDefault();
 			event.stopPropagation();
-			this.$fileInput.click();
+
+			if (!this.hasActiveUpload) {
+				this.$fileInput.click();
+			}
 		}
 	}
 
@@ -122,6 +140,10 @@ export default class FileUploader {
 	}
 
 	selectFile(files) {
+		if (this.hasActiveUpload) {
+			return null;
+		}
+
 		if (this.$maxFileUploadLimit !== null &&
 			files.length > this.$maxFileUploadLimit ||
 			this.$totalFilesUploaded >= this.$maxFileUploadLimit ||
@@ -158,16 +180,17 @@ export default class FileUploader {
 		const xhr = new XMLHttpRequest();
 		xhr.open('POST', this.$options.uploadPath, true);
 		this.$container.classList.add(this.$DROPAREA_STATE.LOADING);
+		this.hasActiveUpload = true;
 
 		xhr.addEventListener('readystatechange', (e) => {
 
 			if (xhr.readyState === 4 && xhr.status === 200) {
 				const resp = JSON.parse(xhr.response);
-
 				if(resp && resp.success) {
 					this.makeScreenAnnouncement(this.$ANNOUNCEMENTS.filesUploaded);
+					this.$totalFilesUploaded += files.length;
+					this.hasActiveUpload = false;
 					this.fireLifeCycleEvent('uploaded', resp, files);
-					this.$totalFilesUploaded = this.$totalFilesUploaded + files.length;
 					this.$screenAnnouncer.focus();
 				} else {
 					this.fireLifeCycleEvent('uploadError', 'REQUEST_UNSUCCESSFUL');
