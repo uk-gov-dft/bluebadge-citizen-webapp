@@ -1,6 +1,8 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
+import com.google.common.collect.ImmutableList;
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -11,7 +13,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Ho
 
 @Data
 @EqualsAndHashCode
-public class MobilityAidAddForm implements Serializable {
+public class MobilityAidAddForm implements BaseForm, Serializable {
 
   @NotBlank
   @Size(max = 100)
@@ -24,4 +26,9 @@ public class MobilityAidAddForm implements Serializable {
   @NotNull private HowProvidedCodeField howProvidedCodeField;
 
   private String id = UUID.randomUUID().toString();
+
+  @Override
+  public List<String> getFieldOrder() {
+    return ImmutableList.of("aidType", "usage", "howProvidedCodeField");
+  }
 }

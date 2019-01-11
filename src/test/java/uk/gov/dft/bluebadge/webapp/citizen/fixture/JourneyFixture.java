@@ -448,7 +448,7 @@ public class JourneyFixture {
     // Eligibility specific section
     if (WALKD == eligibility) {
       journey.setFormForStep(getWhatMakesWalkingDifficultForm());
-      if (StepDefinition.WHAT_WALKING_DIFFICULTIES == stepTo) return journey;
+      if (StepDefinition.WHAT_MAKES_WALKING_DIFFICULT == stepTo) return journey;
       journey.setFormForStep(getMobilityAidListForm());
       if (StepDefinition.MOBILITY_AID_LIST == stepTo) return journey;
       journey.setFormForStep(getWalkingTimeForm());

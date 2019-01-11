@@ -2,8 +2,9 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey;
 
 import java.util.Optional;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.BaseForm;
 
-public interface StepForm {
+public interface StepForm extends BaseForm {
 
   StepDefinition getAssociatedStep();
 

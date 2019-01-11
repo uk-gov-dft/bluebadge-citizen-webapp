@@ -34,18 +34,18 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
 
-public class WhatWalkingDifficultiesControllerTest {
+public class WhatMakesWalkingDifficultControllerTest {
 
   private MockMvc mockMvc;
   private Journey journey;
 
   private static final String ERROR_URL =
-      Mappings.URL_WHAT_WALKING_DIFFICULT + RouteMaster.ERROR_SUFFIX;
+      Mappings.URL_WHAT_MAKES_WALKING_DIFFICULT + RouteMaster.ERROR_SUFFIX;
 
   @Before
   public void setup() {
-    WhatWalkingDifficultiesController controller =
-        new WhatWalkingDifficultiesController(new RouteMaster());
+    WhatMakesWalkingDifficultController controller =
+        new WhatMakesWalkingDifficultController(new RouteMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -53,7 +53,7 @@ public class WhatWalkingDifficultiesControllerTest {
 
     journey =
         JourneyFixture.getDefaultJourneyToStep(
-            StepDefinition.WHAT_WALKING_DIFFICULTIES, WALKD, ENG);
+            StepDefinition.WHAT_MAKES_WALKING_DIFFICULT, WALKD, ENG);
   }
 
   @Test
@@ -62,7 +62,7 @@ public class WhatWalkingDifficultiesControllerTest {
     mockMvc
         .perform(get("/what-makes-walking-difficult").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
-        .andExpect(view().name("walking/what-walking-difficult"))
+        .andExpect(view().name("walking/what-makes-walking-difficult"))
         .andExpect(
             model().attribute("formRequest", JourneyFixture.getWhatMakesWalkingDifficultForm()))
         .andExpect(model().attributeExists("walkingDifficulties"));
@@ -123,7 +123,7 @@ public class WhatWalkingDifficultiesControllerTest {
     Journey wales =
         new JourneyBuilder()
             .inWales()
-            .toStep(StepDefinition.WHAT_WALKING_DIFFICULTIES)
+            .toStep(StepDefinition.WHAT_MAKES_WALKING_DIFFICULT)
             .withEligibility(WALKD)
             .build();
 
@@ -159,7 +159,7 @@ public class WhatWalkingDifficultiesControllerTest {
     mockMvc
         .perform(get("/what-makes-walking-difficult").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
-        .andExpect(view().name("walking/what-walking-difficult"))
+        .andExpect(view().name("walking/what-makes-walking-difficult"))
         .andExpect(model().attribute("formRequest", form));
   }
 

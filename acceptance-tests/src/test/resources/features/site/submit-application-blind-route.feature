@@ -80,6 +80,6 @@ Feature: DFT Blue badge Citizen app new application - BLIND
     And   I complete receive benefit page for "AFRFCS"
     And   I complete lump sum of the AFRFCS Scheme page for "NO"
     And   I complete main reason page for "BLIND"
-    Then  I should see "They are" eligible page
+    Then  I should see "They're" eligible page
 
 
