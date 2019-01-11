@@ -1,6 +1,11 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.ARMS;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.BLIND;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDBULK;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDVEHIC;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.DLA;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.PIP;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 
 import java.io.Serializable;
@@ -31,6 +36,7 @@ public class Journey implements Serializable {
 
   public static final String JOURNEY_SESSION_KEY = "JOURNEY";
   public static final String FORM_REQUEST = "formRequest";
+  public static final String SEPARATOR = "\n- - - - - - - - - - - - - - - - -\n";
 
   private Map<StepDefinition, StepForm> forms = new HashMap<>();
   public String who;
@@ -63,6 +69,15 @@ public class Journey implements Serializable {
   @SuppressWarnings("unchecked")
   public <T> T getFormForStep(StepDefinition step) {
     return (T) forms.get(step);
+  }
+
+  public synchronized <T extends StepForm> T getOrSetFormForStep(T form) {
+    T formForStep = getFormForStep(form.getAssociatedStep());
+    if (formForStep == null) {
+      setFormForStep(form);
+      formForStep = form;
+    }
+    return formForStep;
   }
 
   private void cleanUpSteps(Set<StepDefinition> alreadyCleaned, Set<StepDefinition> steps) {
@@ -119,6 +134,13 @@ public class Journey implements Serializable {
     return null;
   }
 
+  public Boolean isLocalAuthorityActive() {
+    return !getLocalAuthority()
+        .getLocalAuthorityMetaData()
+        .map(LocalAuthorityRefData.LocalAuthorityMetaData::getDifferentServiceSignpostUrl)
+        .isPresent();
+  }
+
   private boolean hasMobilityAid() {
     if (hasStepForm(StepDefinition.MOBILITY_AID_LIST)) {
       MobilityAidListForm mobilityAidListForm = getFormForStep(StepDefinition.MOBILITY_AID_LIST);
@@ -143,6 +165,10 @@ public class Journey implements Serializable {
     return null;
   }
 
+  public boolean isNationWales() {
+    return Nation.WLS == getNation();
+  }
+
   public EligibilityCodeField getEligibilityCode() {
     if (hasStepForm(StepDefinition.MAIN_REASON)) {
       MainReasonForm mainReasonForm = getFormForStep(StepDefinition.MAIN_REASON);
@@ -158,32 +184,84 @@ public class Journey implements Serializable {
     return null;
   }
 
+  // Eligibility codes
+  public boolean isEligibilityCodePIP() {
+    return PIP == getEligibilityCode();
+  }
+
+  public boolean isEligibilityCodeDLA() {
+    return DLA == getEligibilityCode();
+  }
+
+  public boolean isEligibilityCodeBLIND() {
+    return BLIND == getEligibilityCode();
+  }
+
+  public boolean isEligibilityCodeCHILDBULK() {
+    return CHILDBULK == getEligibilityCode();
+  }
+
+  public boolean isEligibilityCodeCHILDVEHIC() {
+    return CHILDVEHIC == getEligibilityCode();
+  }
+
+  public boolean isRelatedDocumentProofNeeded() {
+    switch (getEligibilityCode()) {
+      case WALKD:
+      case ARMS:
+      case CHILDBULK:
+      case CHILDVEHIC:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  /**
+   * Returns a built string whilst this data is not currently stored is separate fields.
+   *
+   * @return String aggregated string of conditions
+   */
   public String getDescriptionOfCondition() {
-    HealthConditionsForm healthConditionsForm = getFormForStep(StepDefinition.HEALTH_CONDITIONS);
-    WhereCanYouWalkForm whereCanYouWalkForm = getFormForStep(StepDefinition.WHERE_CAN_YOU_WALK);
-    ArmsDifficultyParkingMetersForm difficultyParkingMetersForm =
-        getFormForStep(StepDefinition.ARMS_DIFFICULTY_PARKING_METER);
 
     StringBuilder descriptionOfCondition = new StringBuilder();
+
+    boolean hasWalkingEligibilityText =
+        (WALKD == getEligibilityCode()) && hasStepForm(StepDefinition.WHERE_CAN_YOU_WALK);
+    boolean hasArmsEligibilityText =
+        (ARMS == getEligibilityCode()) && hasStepForm(StepDefinition.ARMS_DIFFICULTY_PARKING_METER);
+
+    HealthConditionsForm healthConditionsForm = getFormForStep(StepDefinition.HEALTH_CONDITIONS);
     if (healthConditionsForm != null && healthConditionsForm.getDescriptionOfConditions() != null) {
+
+      if (hasWalkingEligibilityText || hasArmsEligibilityText) {
+        descriptionOfCondition.append("Description of conditions:\n");
+      }
+
       descriptionOfCondition.append(healthConditionsForm.getDescriptionOfConditions());
     }
 
-    if (WALKD == getEligibilityCode() && whereCanYouWalkForm != null) {
+    if (hasWalkingEligibilityText) {
+      WhereCanYouWalkForm whereCanYouWalkForm = getFormForStep(StepDefinition.WHERE_CAN_YOU_WALK);
       descriptionOfCondition
-          .append(" - Able to walk to: ")
+          .append(SEPARATOR)
+          .append("Able to walk to and from:\n")
           .append(whereCanYouWalkForm.getDestinationToHome())
-          .append(" - How long: ")
+          .append(SEPARATOR)
+          .append("How long it takes:\n")
           .append(whereCanYouWalkForm.getTimeToDestination());
-    } else if (ARMS == getEligibilityCode() && difficultyParkingMetersForm != null) {
+    }
+
+    if (hasArmsEligibilityText) {
+      ArmsDifficultyParkingMetersForm difficultyParkingMetersForm =
+          getFormForStep(StepDefinition.ARMS_DIFFICULTY_PARKING_METER);
+
       descriptionOfCondition
-          .append(" - Description of difficulties using a parking meter: ")
+          .append(SEPARATOR)
+          .append("Description of difficulties using a parking meter:\n")
           .append(difficultyParkingMetersForm.getParkingMetersDifficultyDescription());
     }
 
-    if (descriptionOfCondition.length() == 0) {
-      descriptionOfCondition.append("Dummy condition");
-    }
     return descriptionOfCondition.toString();
   }
 }

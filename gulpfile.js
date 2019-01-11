@@ -22,7 +22,7 @@ const PATH = {
 	sourceAssets: {
 		sass: `${BASE_PATH}/assets/sass/**/*.scss`,
 		js: `${BASE_PATH}/assets/js/main.js`,
-		images: `${BASE_PATH}/assets/images`,
+		images: `${BASE_PATH}/assets/images/**/*.*`,
 		govuk_assets: './node_modules/govuk-frontend/assets/**/*',
 		html5_shiv: './node_modules/html5shiv/dist/html5shiv.min.js',
 	},
@@ -30,7 +30,7 @@ const PATH = {
 	compiledAssets: {
 		css: `${BASE_PATH}/static/css`,
 		js: `${BASE_PATH}/static/js`,
-		images: `${BASE_PATH}/static`,
+		images: `${BASE_PATH}/static/images`,
 		govuk_assets: `${BASE_PATH}/static/govuk`,
 	},
 };
@@ -133,7 +133,7 @@ gulp.task('js', ['clean:js', 'html5-shiv'], () => {
 
 gulp.task('default', ['sass', 'js', 'images', 'govuk-assets']);
 
-gulp.task('watch', ['sass-lint', 'sass', 'js-lint', 'js', 'images', 'govuk-assets'], () => {
+gulp.task('watch', ['sass', 'js', 'images', 'govuk-assets'], () => {
 	gulp.watch(PATH.sourceAssets.sass, ['sass']);
-	gulp.watch(PATH.sourceAssets.js, ['js']);
+	gulp.watch(`${BASE_PATH}/assets/js/*.js`, ['js']);
 });

@@ -32,7 +32,7 @@ Feature: The 'Apply for a Blue Badge' link in the citizen app header should
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Man"
     And   I complete NI number page
-    Then  I should see the page titled "Enter your address - GOV.UK Apply for a Blue Badge"
+    Then  I should see the page titled "What's your address? - GOV.UK Apply for a Blue Badge"
     When  I click on "Apply for a Blue Badge" link
     Then  I should see the page titled "Who are you applying for?" with GOV.UK suffix
     And   I should see the "yourself" option button is selected in the Who are you applying for page

@@ -35,15 +35,15 @@ public class HealthConditionsForm implements StepForm, Serializable {
       return Optional.of(StepDefinition.WHAT_WALKING_DIFFICULTIES);
     }
     if (journey.getEligibilityCode() == CHILDVEHIC) {
-      return Optional.of(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST);
+      return Optional.of(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
     }
     if (journey.getEligibilityCode() == ARMS) {
-      return Optional.of(StepDefinition.ARMS_HOW_OFTEN_DRIVE);
+      return Optional.of(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
     }
     if (journey.getEligibilityCode() == CHILDBULK) {
-      return Optional.of(StepDefinition.MEDICAL_EQUIPMENT);
+      return Optional.of(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
     }
-    return Optional.of(StepDefinition.DECLARATIONS);
+    return Optional.of(StepDefinition.PROVE_IDENTITY);
   }
 
   @Override

@@ -9,7 +9,9 @@ public enum HowProvidedCodeField {
 
   PRIVATE("PRIVATE"),
 
-  SOCIAL("SOCIAL");
+  SOCIAL("SOCIAL"),
+
+  PERSON("PERSON");
 
   private String value;
 

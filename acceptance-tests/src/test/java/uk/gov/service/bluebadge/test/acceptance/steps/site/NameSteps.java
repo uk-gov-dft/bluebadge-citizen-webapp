@@ -20,7 +20,7 @@ public class NameSteps extends AbstractSpringSteps {
     this.commonSteps = commonSteps;
   }
 
-  @And("^I validate name page for a \"([^\"]*)\" application$")
+  @And("^I validate name page for a \"(yourself|someone else)\" application$")
   public void iValidateNamePageForAApplication(String applicant) {
     verifyPageContent(applicant);
     //To validate when no data in entered and Continue button is clicked
@@ -55,7 +55,7 @@ public class NameSteps extends AbstractSpringSteps {
 
     commonSteps.iShouldSeeTheCorrectURL(NamePage.PAGE_URL);
 
-    if ("you".equals(applicant.toLowerCase()) | "self".equals(applicant.toLowerCase())) {
+    if ("yourself".equals(applicant.toLowerCase())) {
       commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(NamePage.PAGE_TITLE_YOURSELF);
       commonSteps.iShouldSeeTheHeading(NamePage.PAGE_TITLE_YOURSELF);
     } else {

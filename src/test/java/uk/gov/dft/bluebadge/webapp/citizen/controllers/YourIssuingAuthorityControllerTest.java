@@ -16,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
@@ -48,12 +49,12 @@ public class YourIssuingAuthorityControllerTest {
 
   @Test
   public void show_whenFirstvisit() throws Exception {
-
+    Journey journey = new JourneyBuilder().toStep(StepDefinition.CHOOSE_COUNCIL).build();
+    LocalAuthorityRefData localAuthorityRefData = new LocalAuthorityRefData();
+    localAuthorityRefData.setShortCode("WARCC");
+    journey.setLocalAuthority(localAuthorityRefData);
     mockMvc
-        .perform(
-            get(Mappings.URL_YOUR_ISSUING_AUTHORITY)
-                .sessionAttr(
-                    "JOURNEY", new JourneyBuilder().toStep(StepDefinition.CHOOSE_COUNCIL).build()))
+        .perform(get(Mappings.URL_YOUR_ISSUING_AUTHORITY).sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("issuing-authority"))
         .andExpect(model().attribute("formRequest", JourneyFixture.getYourIssuingAuthorityForm()));

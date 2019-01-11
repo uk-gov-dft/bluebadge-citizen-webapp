@@ -6,11 +6,9 @@
 
    * Radios
 
-   @label       - String: Label for form input field
    @name        - String: Name for the form input field. This same name is used
                   for id and attaching label to the input field.
-   @hint        - String:
-   @options     - (List | TreeMap| Map) ReferenceData: List of radio options
+   @options     - RadioOptionsGroup: List of radio options
 
    -------------------------------------------------------------------------------- */
 
@@ -33,8 +31,8 @@
                 th:text="#{${radioGroup.getTitleKey()}}" th:remove="tag"></div>
          </legend>
 
-         <span class="govuk-hint" th:if="${radioGroup.getHintKey()}" 
-         		 th:id="${name} + '-hint'" 
+         <span class="govuk-hint" th:if="${radioGroup.getHintKey()}"
+         		 th:id="${name} + '-hint'"
             		 th:data-uipath="${name} + '.hint'"
           		 th:text="#{${radioGroup.getHintKey()}}">
          </span>
@@ -81,6 +79,84 @@
       </fieldset>
 
    </div>
+
+   /* ------------------------------------------------------------------------------
+
+   * Radios
+
+   @name        - String: Name for the form input field. This same name is used
+   @options     - RadioOptionsGroup: List of radio options
+
+   -------------------------------------------------------------------------------- */
+
+   <div  th:fragment="govuk-radios-small-legend(name, radioGroup)"
+         th:class="${#fields.hasErrors(name)} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+
+      <fieldset class="govuk-fieldset"
+                th:aria-describedby="${radioGroup.getHintKey()} ? ${name} + '-hint' : null">
+
+         <legend class="govuk-fieldset__legend govuk-fieldset__legend--s"
+                 th:if="${radioGroup.getTitleKey() != null && radioGroup.titleIsH1}">
+            <h1 class="govuk-fieldset__heading"
+                th:data-uipath="${name} + '.label'"
+                th:text="#{${radioGroup.getTitleKey()}}"></h1>
+         </legend>
+
+         <legend class="govuk-fieldset__legend govuk-fieldset__legend--s"
+                 th:if="${radioGroup.getTitleKey() != null && !radioGroup.titleIsH1}">
+            <div th:data-uipath="${name} + '.label'"
+                 th:text="#{${radioGroup.getTitleKey()}}" th:remove="tag"></div>
+         </legend>
+
+         <span class="govuk-hint" th:if="${radioGroup.getHintKey()}"
+               th:id="${name} + '-hint'"
+               th:data-uipath="${name} + '.hint'"
+               th:text="#{${radioGroup.getHintKey()}}">
+         </span>
+
+         <span class="govuk-error-message"
+               th:data-uipath="${name} + '.error'"
+               th:if="${#fields.hasErrors(name)}"
+               th:errors="*{__${name}__}"></span>
+
+         <div class="govuk-radios__item"
+              th:with="shortCode=${option.getShortCode()}"
+              th:each="option, iter : ${radioGroup.getOptions()}"
+              th:data-uipath="${name} + '.radio-options'">
+
+            <div th:remove="tag" th:if="${iter.index == 0}">
+               <input th:id="${name}"
+                      class="govuk-radios__input"
+                      th:data-uipath="${name} + '.option.' + ${shortCode}"
+                      type="radio"
+                      th:value="${shortCode}"
+                      th:field="*{__${name}__}">
+
+               <label class="govuk-label govuk-radios__label"
+                      th:data-uipath="${name} + '.label.' + ${shortCode}"
+                      th:for="${name}"
+                      th:text="#{${option.getMessageKey()}}"></label>
+            </div>
+
+            <div th:remove="tag" th:unless="${iter.index == 0}">
+               <input th:id="${name} + '.' + ${shortCode}"
+                      class="govuk-radios__input"
+                      th:data-uipath="${name} + '.option.' + ${shortCode}"
+                      type="radio"
+                      th:value="${shortCode}"
+                      th:field="*{__${name}__}">
+
+               <label class="govuk-label govuk-radios__label"
+                      th:data-uipath="${name} + '.label.' + ${shortCode}"
+                      th:for="${name} + '.' + ${shortCode}"
+                      th:text="#{${option.getMessageKey()}}"></label>
+            </div>
+         </div>
+
+      </fieldset>
+
+   </div>
+
 
 </body>
 </html>

@@ -27,7 +27,7 @@
 
                         <span class="govuk-hint"
                               th:text="#{${JOURNEY.who} + 'treatment.list.body.hint'}"
-                              th:data-uipath="treatment.list.body.hint">Have had treatments hint.</span>
+                              th:data-uipath="treatment.list.body.hint"></span>
 
                         <div class="govuk-radios" data-module="radios">
 
@@ -66,11 +66,11 @@
 
                                 <p class="govuk-body" th:if="${#lists.isEmpty(formRequest.treatments)}">
                                     <a id="firstaddtreatmentlink" href="/add-treatment"
-                                       th:text="#{first.treatment.add.link.text}"> Add first treatment link</a>
+                                       th:text="#{first.treatment.add.link.text}"></a>
                                 </p>
                                 <p class="govuk-body" th:if="${not #lists.isEmpty(formRequest.treatments)}">
                                     <a id="addtreatmentlink" href="/add-treatment"
-                                       th:text="#{treatment.add.link.text}"> Add another treatment link</a>
+                                       th:text="#{treatment.add.link.text}"></a>
                                 </p>
                             </div>
 

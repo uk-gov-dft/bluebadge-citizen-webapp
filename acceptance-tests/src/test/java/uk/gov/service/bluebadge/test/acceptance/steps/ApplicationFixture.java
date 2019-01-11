@@ -1,41 +1,25 @@
 package uk.gov.service.bluebadge.test.acceptance.steps;
 
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.EMAIL_ADDRESS;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.FULL_NAME;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.PRIMARY_CONTACT_NUMBER;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Contact.SECONDARY_CONTACT_NUMBER;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.HAS_RECEIVED_DLA;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.MAIN_REASON_LIST;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.NEVER_RECEIVED_DLA;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.PLACE_CAN_WALK;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.TIME_TO_DESTINATION;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_MONTH;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_YEAR;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.*;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.*;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_FEMALE;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_UNSPECIFIED;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_ADD_CONFIRM_BUTTON;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_ADD_PROVIDED_CODE_PRESCRIBE;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_ADD_USAGE;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Walkd.MOBILITY_AID_TYPE_WHEELCHAIR;
 
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
+import java.io.File;
 import java.util.Calendar;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.AlreadyHaveBlueBadgePage;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.ApplicantPage;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.BenifitsPage;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.ChooseCouncilPage;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.*;
+import uk.gov.service.bluebadge.test.acceptance.steps.site.ContactDetailsSteps;
+import uk.gov.service.bluebadge.test.acceptance.util.FileHelper;
 
 public class ApplicationFixture extends AbstractSpringSteps {
 
   private CommonPage commonPage;
-  private ApplicantPage applicantPage;
-  private ChooseCouncilPage chooseCouncilPage;
+  private ContactDetailsSteps contactDetailsSteps;
 
   @Autowired
   public ApplicationFixture(CommonPage commonPage) {
@@ -50,11 +34,11 @@ public class ApplicationFixture extends AbstractSpringSteps {
   public void iCompleteApplicantPage(String myselfOrOther) {
     commonPage.openByPageName("applicant");
     if (myselfOrOther.equalsIgnoreCase("yourself")) {
-      commonPage.selectRadioButton(applicantPage.APPLICANT_TYPE_OPTION_LIST);
+      commonPage.selectRadioButton(ApplicantPage.APPLICANT_TYPE_OPTION_LIST);
     } else if (myselfOrOther.equalsIgnoreCase("someone else")) {
-      commonPage.selectRadioButton(applicantPage.APPLICANT_TYPE_SOMELSE_OPTION);
+      commonPage.selectRadioButton(ApplicantPage.APPLICANT_TYPE_SOMELSE_OPTION);
     } else if (myselfOrOther.equalsIgnoreCase("organisation")) {
-      commonPage.selectRadioButton(applicantPage.APPLICANT_TYPE_ORG_OPTION);
+      commonPage.selectRadioButton(ApplicantPage.APPLICANT_TYPE_ORG_OPTION);
     }
     pressContinue();
   }
@@ -66,17 +50,26 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("I complete select council page for \"(england|wales|scotland)\"")
   public void iCompleteSelectCouncilPage(String country) {
-    iCompleteSelectCouncilPage(country, chooseCouncilPage.COUNCIL_INPUT);
+    iCompleteSelectCouncilPage(country, ChooseCouncilPage.COUNCIL_INPUT);
+  }
+
+  @And("I complete select council page for different service signpost")
+  public void iCompleteSelectCouncilPageForDifferentServiceSignpost() {
+    String council = "Runnymede";
+    String fullCouncil = "Runnymede borough council";
+    commonPage.findPageElementById(ChooseCouncilPage.COUNCIL_INPUT).sendKeys(council);
+    commonPage.selectFromAutoCompleteList(ChooseCouncilPage.COUNCIL_INPUT, fullCouncil);
+    pressContinue();
   }
 
   @And("^I complete registered council page for \"(england|wales|scotland)\"$")
-  public void iCompleteRegisteredCouncilPage(String country) throws Throwable {
-    iCompleteSelectCouncilPage(country, "registeredCouncil");
+  public void iCompleteRegisteredCouncilPage(String country) {
+    iCompleteSelectCouncilPage(country, ChooseCouncilPage.REGISTERED_COUNCIL_INPUT);
   }
 
   private void iCompleteSelectCouncilPage(String country, String inputId) {
-    String council = "Worcester";
-    String fullCouncil = "Worcester city council";
+    String council = "Blackpool";
+    String fullCouncil = "Blackpool borough council";
     if ("scotland".equalsIgnoreCase(country)) {
       council = "Aberdeenshire";
       fullCouncil = "Aberdeenshire council";
@@ -117,7 +110,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("I complete main reason page for \"(TERMILL|CHILDBULK|CHILDVEHIC|WALKD|ARMS|BLIND|NONE)\"")
   public void iCompleteMainReasonPageFor(String benefit) {
-    if ("TERMILL".equals(benefit)) {
+    if ("BLIND".equals(benefit)) {
       commonPage.selectRadioButton(MAIN_REASON_LIST);
     } else {
       commonPage.selectRadioButton(MAIN_REASON_LIST + "." + benefit);
@@ -168,9 +161,54 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete describe health conditions page$")
-  public void iCompleteDescribeHealthConditionsPage() throws Throwable {
+  public void iCompleteDescribeHealthConditionsPage() {
     clearAndSendKeys("descriptionOfConditions", "Sample health condition");
     pressContinue();
+  }
+
+  @And(
+      "^I complete \"(prove ID|provide photo|upload benefit|prove address)\" page with no documents")
+  public void iCompleteProveIDPageWithNoDocuments(String pageName) {
+    commonPage.findPageElementById("cant-upload-text").click();
+    commonPage.findPageElementById("continue-without-uploading").click();
+  }
+
+  @And(
+      "^I complete \"(prove ID|provide photo|upload benefit|prove address)\" page with a \"(JPG|GIF|PNG|PDF|INVALID)\" document")
+  public void iCompleteFileUploadPageWithADocument(String pageName, String fileType) {
+
+    String filename = "";
+    if (fileType.equalsIgnoreCase("INVALID")) {
+      filename = "evidence_INVALID.docx";
+    } else {
+      filename = "evidence_" + fileType + "." + fileType.toLowerCase();
+    }
+
+    WebElement droparea = commonPage.findPageElementById("document-droparea");
+
+    String file_path = "";
+    if (System.getProperty("user.dir").endsWith("acceptance-tests")) {
+      file_path = System.getProperty("user.dir") + "/src/test/resources/attachments/" + filename;
+    } else {
+      file_path =
+          System.getProperty("user.dir")
+              + "/acceptance-tests/src/test/resources/attachments/"
+              + filename;
+    }
+
+    // drop the file
+    FileHelper.dropFile(new File(file_path), droparea, 0, 0);
+
+    if (!fileType.equalsIgnoreCase("INVALID")) {
+
+      commonPage.pressContinueOnFileUploadPage();
+    }
+  }
+
+  @And("^I complete upload \"supporting documents page\" with a \"(JPG|GIF|PNG|PDF)\" document")
+  public void iCompleteUploadSupportingDocumentPageWithADocument(String fileType) {
+    commonPage.selectRadioButton(Ids.UploadSupportingDocuments.UPLOAD_SUPPORTING_DOCUMENTS_YES);
+    iCompleteFileUploadPageWithADocument("supporting doc", fileType);
   }
 
   @And("^I complete declaration page$")
@@ -189,16 +227,6 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
-  @And("^I complete what makes walking difficult page for \"(HELP|PLAN|PAIN|DANGEROUS|NONE)\"$")
-  public void iCompleteWhatMakesWalkingDifficultPageFor(String difficulty) {
-    if (difficulty.equals("HELP")) {
-      commonPage.selectRadioButton(Ids.EleCheck.WALKING_DIFFICULTY_LIST);
-    } else {
-      commonPage.selectRadioButton(Ids.EleCheck.WALKING_DIFFICULTY_LIST + "." + difficulty);
-    }
-    pressContinue();
-  }
-
   @And("^I complete dla allowance page for \"(YES|NO)\"$")
   public void iCompleteDlaAllowancePageFor(String option) {
     if ("YES".equals(option)) commonPage.selectRadioButton(HAS_RECEIVED_DLA);
@@ -206,21 +234,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
-  @And("I complete contact page for \"(yourself|someone else)\"")
-  public void iCompleteContactPage(String myselfOrOther) {
-    if ("someone else".equalsIgnoreCase(myselfOrOther)) {
-      clearAndSendKeys(FULL_NAME, "Some Contact");
-    }
-
-    clearAndSendKeys(PRIMARY_CONTACT_NUMBER, "01270848484");
-    clearAndSendKeys(SECONDARY_CONTACT_NUMBER, "01270848400");
-    clearAndSendKeys(EMAIL_ADDRESS, "some@contact.com");
-
-    pressContinue();
-  }
-
   @And("^I complete address page$")
-  public void iCompleteAddressPage() throws Throwable {
+  public void iCompleteAddressPage() {
     clearAndSendKeys("buildingAndStreet", "120");
     clearAndSendKeys("optionalAddress", "London Road");
     clearAndSendKeys("townOrCity", "Manchester");
@@ -230,7 +245,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete NI number page$")
-  public void iCompleteNINumberPage() throws Throwable {
+  public void iCompleteNINumberPage() {
     clearAndSendKeys(Ids.Person.NI, "ab 12 34 56 A");
     pressContinue();
   }
@@ -243,7 +258,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete the walking time page with option \"(CANTWALK|LESSMIN|FEWMIN|MORETEN)\"$")
-  public void iCompleteTheWalkingTimePage(String option) throws Throwable {
+  public void iCompleteTheWalkingTimePage(String option) {
     if ("CANTWALK".equals(option)) {
       commonPage.selectRadioButton(Ids.Walkd.WALKING_TIME);
     } else {
@@ -253,7 +268,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete where can you walk page$")
-  public void iCompleteWhereCanYouWalkPage() throws Throwable {
+  public void iCompleteWhereCanYouWalkPage() {
     clearAndSendKeys(PLACE_CAN_WALK, "to the Post office on the High Street");
     clearAndSendKeys(TIME_TO_DESTINATION, "10 minutes");
     pressContinue();
@@ -297,32 +312,15 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
-  @And("^I complete the what makes walking difficult page$")
-  public void iCompleteTheWhatMakesWalkingDifficultPage() throws Throwable {
-    commonPage.selectRadioButton(Ids.EleCheck.WHAT_WALKING_DIFFICULTY_LIST);
-    pressContinue();
-  }
-
-  @And(
-      "^I complete the what makes walking difficult page for \"(PAIN|BREATH|BALANCE|LONGTIME|DANGER|STRUGGLE|SOMELSE)\"$")
-  public void iCompleteTheWhatMakesWalkingDifficultPageFor(String difficulty) throws Throwable {
-    if ("PAIN".equals(difficulty)) {
-      commonPage.selectRadioButton(Ids.EleCheck.WHAT_WALKING_DIFFICULTY_LIST);
-    } else {
-      commonPage.selectRadioButton(Ids.EleCheck.WHAT_WALKING_DIFFICULTY_LIST + difficulty);
-    }
-    pressContinue();
-  }
-
   @And("^I complete medical equipment page$")
-  public void iCompleteMedicalEquipmentPage() throws Throwable {
+  public void iCompleteMedicalEquipmentPage() {
     commonPage.selectRadioButton(Ids.EleCheck.MEDICAL_EQUIPMENT);
     pressContinue();
   }
 
   @And(
       "^I complete medical equipment page for \"(PUMP|VENT|SUCTION|PARENT|SYRINGE|OXYADMIN|OXYSAT|CAST|OTHER)\"$")
-  public void iCompleteMedicalEquipmentPage(String difficulty) throws Throwable {
+  public void iCompleteMedicalEquipmentPage(String difficulty) {
     if ("VENT".equals(difficulty)) {
       commonPage.selectRadioButton(Ids.EleCheck.MEDICAL_EQUIPMENT);
     } else {
@@ -338,22 +336,6 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   private void clickButtonById(String id) {
     commonPage.findPageElementById(id).click();
-  }
-
-  @And("^I complete the mobility aids page for \"(YES|NO)\"$")
-  public void iCompleteTheMobilityAidsPage(String option) {
-    if ("YES".equals(option)) {
-      commonPage.selectRadioButton(Ids.Walkd.MOBILITY_AID_OPTION);
-      // Needs to update this to use id or data-uipath
-      commonPage.findElementAddMobilityAid().click();
-      commonPage.selectRadioButton(MOBILITY_AID_TYPE_WHEELCHAIR);
-      clearAndSendKeys(MOBILITY_AID_ADD_USAGE, "All the time");
-      commonPage.selectRadioButton(MOBILITY_AID_ADD_PROVIDED_CODE_PRESCRIBE);
-      commonPage.findElementWithUiPath(MOBILITY_AID_ADD_CONFIRM_BUTTON).click();
-    } else {
-      commonPage.selectRadioButton(Ids.Walkd.MOBILITY_AID_OPTION + option.toLowerCase());
-    }
-    pressContinue();
   }
 
   @And("^I complete the treatments page for \"(YES|NO)\"$")
@@ -411,7 +393,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And("^I complete the already have a blue badge page for \"(YES|NO|YES BUT DON'T KNOW)\"$")
-  public void iCompleteTheAlreadyHaveABlueBadgePageFor(String opt) throws Throwable {
+  public void iCompleteTheAlreadyHaveABlueBadgePageFor(String opt) {
     if ("YES BUT DON'T KNOW".equals(opt)) {
       commonPage.selectRadioButton(AlreadyHaveBlueBadgePage.EXISTING_BADGE_OPTION);
       commonPage.findPageElementById(AlreadyHaveBlueBadgePage.BADGE_NUMBER_BYPASS_LINK).click();
@@ -452,12 +434,12 @@ public class ApplicationFixture extends AbstractSpringSteps {
     if ("YES".equals(option)) {
       clickButtonById(Ids.Eligibility.HEALTHCARE_PRO_ADD_FIRST_LINK);
       clearAndSendKeys(Ids.Eligibility.HEALTHCARE_PRO_ADD_DESCRIPTION, "Pro description");
-      clearAndSendKeys(Ids.Eligibility.HEALTHCARE_PRO_ADD_LOCATION, "Pro Location");
+      clearAndSendKeys(Ids.Eligibility.HEALTHCARE_PRO_ADD_LOCATION, "Pro LOCATION");
       clickButtonById(Ids.Eligibility.HEALTHCARE_PRO_ADD_CONFIRM_BUTTON);
       clickButtonById(Ids.Eligibility.HEALTHCARE_PRO_REMOVE_LINK_PREFIX + "1");
       clickButtonById(Ids.Eligibility.HEALTHCARE_PRO_ADD_FIRST_LINK);
       clearAndSendKeys(Ids.Eligibility.HEALTHCARE_PRO_ADD_DESCRIPTION, "Pro description");
-      clearAndSendKeys(Ids.Eligibility.HEALTHCARE_PRO_ADD_LOCATION, "Pro Location");
+      clearAndSendKeys(Ids.Eligibility.HEALTHCARE_PRO_ADD_LOCATION, "Pro LOCATION");
       clickButtonById(Ids.Eligibility.HEALTHCARE_PRO_ADD_CONFIRM_BUTTON);
     }
     pressContinue();

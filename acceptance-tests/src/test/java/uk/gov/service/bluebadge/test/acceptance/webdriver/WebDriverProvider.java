@@ -57,7 +57,7 @@ public class WebDriverProvider {
   /** This is the Key for BrowserStack account */
   private final String bStackBrowserKey;
 
-  /** Location that the web browser will be downloading content into. */
+  /** LOCATION that the web browser will be downloading content into. */
   private Path downloadDirectory;
 
   private WebDriver webDriver;
@@ -167,5 +167,9 @@ public class WebDriverProvider {
   public void dispose() {
     webDriver.quit();
     webDriver = null;
+  }
+
+  public void tearDownScenario() {
+    getWebDriver().manage().deleteAllCookies();
   }
 }

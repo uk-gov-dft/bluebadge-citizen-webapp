@@ -1,0 +1,122 @@
+.govuk-file-uploader {
+	&__announcer {
+		@include govuk-visually-hidden;
+	}
+
+	&__legacy {
+		display: none;
+	}
+
+	&--active {
+		.drop-area {
+			border-color: $govuk-focus-colour;
+		}
+
+		.drop-area__btn {
+			color: govuk-colour("black");
+			background-color: $govuk-focus-colour;
+			box-shadow: 0 2px 0 darken($govuk-focus-colour, 20%);
+
+			&:active,
+			&:focus,
+			&:hover {
+				color: govuk-colour("black");
+				background-color: $govuk-focus-colour;
+				box-shadow: 0 2px 0 darken($govuk-focus-colour, 20%);
+			}
+		}
+
+		.drop-area__btn,
+		.drop-area__icon-wrapper {
+			background-color: lighten($govuk-focus-colour, 10%);
+		}
+	}
+
+	&--loading {
+		.drop-area__loader {
+			display: block;
+		}
+	}
+}
+
+.drop-area {
+	padding: 15px;
+	text-align: center;
+	border: 2px dashed rgba(govuk-colour(blue), .8);
+	
+	@include govuk-media-query($from: desktop) {
+		padding: 30px;
+		text-align: left;
+	}
+
+	&__icon {
+		width: 60px;
+		height: 60px;
+		margin: 0 auto 10px;
+		display: block;
+
+		@include govuk-media-query($from: desktop) {
+			width: 105px;
+			height: 105px;
+			margin: 0 20px 0 0;
+			display: inline-block;
+			vertical-align: middle;
+		}
+	}
+
+	&__icon-wrapper {
+		padding: 15px;
+		line-height: 0;
+		border-radius: 50%;
+		background-color: govuk-colour(blue);
+
+		@include govuk-media-query($from: desktop) {
+			vertical-align: top;
+			display: inline-block;
+		}
+
+		svg {
+			width: 30px;
+			height: 30px;
+
+			@include govuk-media-query($from: desktop) {
+				width: 70px;
+				height: 70px;
+			}
+
+			path {
+				fill: #fff;
+			}
+		}
+	}
+
+	&__instructions {
+		
+		@include govuk-media-query($from: desktop) {
+			@include govuk-font(19, regular);
+			display: inline-block;
+			vertical-align: middle;
+		}
+	}
+
+	&__loader {
+		@include govuk-font(19, regular);
+		display: none;
+	}
+
+	&__caption {
+		margin: 0;
+	}
+
+	&__btn {
+		@extend .govuk-button;
+		margin-bottom: 10px;
+		background-color: govuk-colour(blue);
+
+		&:active,
+		&:focus,
+		&:hover {
+			background-color: govuk-colour(blue);
+		}
+	}
+}

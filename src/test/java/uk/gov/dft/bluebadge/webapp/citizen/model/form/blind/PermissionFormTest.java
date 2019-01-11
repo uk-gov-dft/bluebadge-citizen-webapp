@@ -17,6 +17,6 @@ public class PermissionFormTest {
   @Test
   public void determineNextStep_whenHasPermissionIsNo_thenMainReason() {
     PermissionForm form = PermissionForm.builder().hasPermission(false).build();
-    assertThat(form.determineNextStep()).isEqualTo(Optional.of(StepDefinition.DECLARATIONS));
+    assertThat(form.determineNextStep()).isEqualTo(Optional.of(StepDefinition.PROVE_IDENTITY));
   }
 }

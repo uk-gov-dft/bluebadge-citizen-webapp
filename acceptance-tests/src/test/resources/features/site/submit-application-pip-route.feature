@@ -18,6 +18,10 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete address page
     And   I complete contact page for "yourself"
     And   I complete prove benefit page for "yes"
+    And   I complete "upload benefit" page with a "GIF" document
+    And   I complete "prove ID" page with a "GIF" document
+    And   I complete "provide photo" page with a "GIF" document
+    And   I complete "prove address" page with a "GIF" document
     And   I complete declaration page
     Then  I should see page titled "Application submitted" with GOV.UK suffix
 
@@ -100,7 +104,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete dla allowance page for "YES"
     Then  I should see "They are" eligible page
 
-    
+
   Scenario: Create a successful new application for myself - Scotland - less than 8 points (moving) - less than 12 points (planning) - DLA No
     Given I complete applicant page for "yourself"
     And   I complete select council page for "scotland"
@@ -113,7 +117,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete main reason page for "WALKD"
     And   I complete what makes walking difficult page for "HELP"
     Then  I should see "You may be" eligible page
-    
+
   Scenario: Create a successful new application for someone else - Scotland - less than 8 points (moving) - less 12 points (planning) - DLA Yes
     Given I complete applicant page for "someone else"
     And   I complete select council page for "scotland"

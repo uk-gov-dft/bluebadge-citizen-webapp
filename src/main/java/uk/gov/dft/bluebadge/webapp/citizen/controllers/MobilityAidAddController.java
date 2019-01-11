@@ -6,7 +6,6 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_
 
 import java.util.ArrayList;
 import javax.validation.Valid;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -67,6 +66,7 @@ public class MobilityAidAddController implements StepController {
             .addOption(HowProvidedCodeField.PRESCRIBE, "mobilityaid.howprovided.option.prescribed")
             .addOption(HowProvidedCodeField.PRIVATE, "mobilityaid.howprovided.option.private")
             .addOption(HowProvidedCodeField.SOCIAL, "mobilityaid.howprovided.option.social")
+            .addOption(HowProvidedCodeField.PERSON, "mobilityaid.howprovided.option.person")
             .build());
     return TEMPLATE;
   }
@@ -77,14 +77,6 @@ public class MobilityAidAddController implements StepController {
       @Valid @ModelAttribute(FORM_REQUEST) MobilityAidAddForm mobilityAidAddForm,
       BindingResult bindingResult,
       RedirectAttributes attr) {
-
-    if (MobilityAidAddForm.AidType.WALKING_AID == mobilityAidAddForm.getAidType()) {
-      if (StringUtils.isEmpty(mobilityAidAddForm.getCustomAidName())) {
-        bindingResult.rejectValue("customAidName", "NotBlank");
-      } else if (StringUtils.length(mobilityAidAddForm.getCustomAidName()) > 100) {
-        bindingResult.rejectValue("customAidName", "Size");
-      }
-    }
 
     if (bindingResult.hasErrors()) {
       return routeMaster.redirectToOnBindingError(this, mobilityAidAddForm, bindingResult, attr);

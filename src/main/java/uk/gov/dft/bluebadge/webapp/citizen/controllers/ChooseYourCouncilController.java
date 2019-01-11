@@ -75,7 +75,7 @@ public class ChooseYourCouncilController implements StepController {
         referenceDataService.lookupLocalAuthorityFromCouncilCode(
             formRequest.getCouncilShortCode()));
     journey.setFormForStep(formRequest);
-    return routeMaster.redirectToOnSuccess(formRequest);
+    return routeMaster.redirectToOnSuccess(formRequest, journey);
   }
 
   @Override

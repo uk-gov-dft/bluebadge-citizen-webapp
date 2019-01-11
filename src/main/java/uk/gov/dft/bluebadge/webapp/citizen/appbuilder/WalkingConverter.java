@@ -60,7 +60,7 @@ class WalkingConverter {
                       WalkingAid.builder()
                           .usage(i.getUsage())
                           .howProvidedCode(i.getHowProvidedCodeField())
-                          .description(i.getAidTypeDescription())
+                          .description(i.getAidType())
                           .build()));
       return walkingAids;
     }

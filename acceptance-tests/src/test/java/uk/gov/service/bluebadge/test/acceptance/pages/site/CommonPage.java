@@ -2,10 +2,7 @@ package uk.gov.service.bluebadge.test.acceptance.pages.site;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import uk.gov.service.bluebadge.test.acceptance.pages.PageHelper;
@@ -62,6 +59,10 @@ public class CommonPage {
   //Needs to delete this
   public WebElement findElementAddMobilityAid() {
     return helper.findElement(By.xpath("//*[@id=\"conditional-hasWalkingAid\"]/p/a"));
+  }
+
+  public WebElement findElementWithCSSSelector(String cssSeclector) {
+    return helper.findOptionalElement(By.cssSelector(cssSeclector));
   }
 
   public void selectLocalCouncil(String textToSelect) {
@@ -124,5 +125,18 @@ public class CommonPage {
 
   public String getPageURL() {
     return webDriverProvider.getWebDriver().getCurrentUrl();
+  }
+
+  public void clearAndSendKeys(String element, String value) {
+    findPageElementById(element).clear();
+    findPageElementById(element).sendKeys(value);
+  }
+
+  public void pressContinueOnFileUploadPage() {
+    WebElement element = null;
+    WebDriverWait wait = new WebDriverWait(getWebDriver(), 3000);
+    element =
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[text()='Continue']")));
+    element.click();
   }
 }

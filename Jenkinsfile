@@ -7,7 +7,7 @@ node {
       cleanWs()
       git(
            url: "${REPONAME}",
-           credentialsId: 'githubsshkey',
+           credentialsId: 'username***REMOVED***-github-automation-uk-gov-dft',
            branch: "${BRANCH_NAME}"
         )
      }
@@ -69,7 +69,7 @@ node {
                branch: "${BRANCH_NAME}"
             )
 
-            timeout(time: 10, unit: 'MINUTES') {
+            timeout(time: 20, unit: 'MINUTES') {
                 try {
                     sh 'echo $PATH && cd acceptance-tests && bash run-regression.sh'
                 }

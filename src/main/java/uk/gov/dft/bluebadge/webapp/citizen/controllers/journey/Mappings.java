@@ -22,6 +22,7 @@ public class Mappings {
   public static final String URL_APPLICATION_SUBMITTED = "/application-submitted";
   public static final String URL_CHOOSE_YOUR_COUNCIL = "/choose-council";
   public static final String URL_YOUR_ISSUING_AUTHORITY = "/your-issuing-authority";
+  public static final String URL_DIFFERENT_SERVICE_SIGNPOST = "/different-service-signpost";
   public static final String URL_DOB = "/date-of-birth";
   public static final String URL_CONTACT_DETAILS = "/contact-details";
   public static final String URL_GENDER = "/gender";
@@ -29,6 +30,11 @@ public class Mappings {
   public static final String URL_ENTER_ADDRESS = "/enter-address";
   public static final String URL_EXISTING_BADGE = "/existing-badge";
   public static final String URL_PROVE_BENEFIT = "/prove-benefit";
+  public static final String URL_UPLOAD_BENEFIT = "/upload-benefit";
+  public static final String URL_PROVE_IDENTITY = "/prove-identity";
+  public static final String URL_PROVE_ADDRESS = "/prove-address";
+  public static final String URL_PROVIDE_PHOTO = "/provide-photo";
+  public static final String URL_UPLOAD_SUPPORTING_DOCUMENTS = "/upload-supporting-documents";
 
   // organisation Journey routes
   public static final String URL_ORGANISATION_CARE = "/organisation-care";
@@ -98,6 +104,10 @@ public class Mappings {
           .put(StepDefinition.ELIGIBLE, URL_ELIGIBLE)
           .put(StepDefinition.MAY_BE_ELIGIBLE, URL_MAY_BE_ELIGIBLE)
           .put(StepDefinition.PROVE_BENEFIT, URL_PROVE_BENEFIT)
+          .put(StepDefinition.UPLOAD_BENEFIT, URL_UPLOAD_BENEFIT)
+          .put(StepDefinition.PROVE_IDENTITY, URL_PROVE_IDENTITY)
+          .put(StepDefinition.PROVIDE_PHOTO, URL_PROVIDE_PHOTO)
+          .put(StepDefinition.PROVE_ADDRESS, URL_PROVE_ADDRESS)
 
           // ARMS Journey Mappings
           .put(StepDefinition.ARMS_HOW_OFTEN_DRIVE, URL_ARMS_HOW_OFTEN_DRIVE)
@@ -120,12 +130,14 @@ public class Mappings {
           .put(StepDefinition.WALKING_DIFFICULTY, URL_WALKING_DIFFICULTY)
           .put(StepDefinition.WHERE_CAN_YOU_WALK, URL_WHERE_CAN_YOU_WALK)
           .put(StepDefinition.WALKING_TIME, URL_WALKING_TIME)
+          .put(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS, URL_UPLOAD_SUPPORTING_DOCUMENTS)
           .put(StepDefinition.NOT_ELIGIBLE, URL_NOT_ELIGIBLE)
           .put(StepDefinition.EXISTING_BADGE, URL_EXISTING_BADGE)
           .put(StepDefinition.HEALTH_CONDITIONS, URL_HEALTH_CONDITIONS)
           .put(StepDefinition.WHAT_WALKING_DIFFICULTIES, URL_WHAT_WALKING_DIFFICULT)
           .put(StepDefinition.CHOOSE_COUNCIL, URL_CHOOSE_YOUR_COUNCIL)
           .put(StepDefinition.YOUR_ISSUING_AUTHORITY, URL_YOUR_ISSUING_AUTHORITY)
+          .put(StepDefinition.DIFFERENT_SERVICE_SIGNPOST, URL_DIFFERENT_SERVICE_SIGNPOST)
           .put(StepDefinition.REGISTERED, URL_REGISTERED)
           .put(StepDefinition.PERMISSION, URL_PERMISSION)
           .put(StepDefinition.REGISTERED_COUNCIL, URL_REGISTERED_COUNCIL)
@@ -141,7 +153,7 @@ public class Mappings {
           .put(StepDefinition.MEDICATION_ADD, URL_MEDICATION_ADD)
           .put(StepDefinition.MEDICAL_EQUIPMENT, URL_MEDICAL_EQUIPMENT)
 
-          //organisation mappings
+          // organisation mappings
           .put(StepDefinition.ORGANISATION_CARE, URL_ORGANISATION_CARE)
           .put(StepDefinition.ORGANISATION_TRANSPORT, URL_ORGANISATION_TRANSPORT)
           .put(StepDefinition.ORGANISATION_MAY_BE_ELIGIBLE, URL_ORGANISATION_MAY_BE_ELIGIBLE)

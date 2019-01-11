@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "gulp -env=dev",
     "prod": "gulp -env=prod",
-    "start": "npm run prod"
+    "start": "npm run prod",
+    "dev:watch": "gulp watch -env=dev"
   },
   "dependencies": {
     "accessible-autocomplete": "^1.6.1",

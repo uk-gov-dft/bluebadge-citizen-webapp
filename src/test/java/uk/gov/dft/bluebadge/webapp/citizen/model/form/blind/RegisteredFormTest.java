@@ -17,6 +17,6 @@ public class RegisteredFormTest {
   @Test
   public void determineNextStep_whenHasRegisteredIsNo_thenMainReason() {
     RegisteredForm form = RegisteredForm.builder().hasRegistered(false).build();
-    assertThat(form.determineNextStep()).isEqualTo(Optional.of(StepDefinition.DECLARATIONS));
+    assertThat(form.determineNextStep()).isEqualTo(Optional.of(StepDefinition.PROVE_IDENTITY));
   }
 }

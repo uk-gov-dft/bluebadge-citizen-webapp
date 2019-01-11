@@ -20,6 +20,7 @@ blue-badge:
       requesttimeout: 6000
       contextpath: /uk-gov-dft/application-management-service/1.0.0
   env: ${bb_env:dev}
+  defaultDifferentServiceSignpostUrl: https://bluebadge.direct.gov.uk/bluebadge/why-are-you-here
 
 logging:
   level:
@@ -41,6 +42,10 @@ management:
       show-details: always
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
   devtools:
     restart:
       additional-exclude: sass/**,js/**
@@ -73,3 +78,7 @@ security:
 
 # Google Analytics Code
 GACode:  ${GACODE:UA-124760983-5}
+
+amazon:
+  s3bucket: uk-gov-dft-dev-applications-temp
+  signed-url-duration-ms: 60000

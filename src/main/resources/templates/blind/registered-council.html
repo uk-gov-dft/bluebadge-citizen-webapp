@@ -16,11 +16,12 @@
 
             <p class="govuk-body" th:text="#{${JOURNEY.who} + 'registeredCouncilPage.content.p1'}"></p>
 
-            <p class="govuk-body" th:text="#{${JOURNEY.who} + 'registeredCouncilPage.content.p2'}"></p>
-
             <form th:action="@{/registered-council}" method="post" th:object="${formRequest}" novalidate>
 
                 <div th:class="${#fields.hasErrors('registeredCouncil')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+
+                    <label id="registeredCouncil-label" class="govuk-label" for="registeredCouncil"
+                           th:text="#{${JOURNEY.who} + 'registeredCouncilPage.field.selectCouncil.label'}"></label>
 
                     <span class="govuk-error-message" data-uipath="registeredCouncil.error" th:errors="*{registeredCouncil}"></span>
 

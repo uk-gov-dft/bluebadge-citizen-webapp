@@ -36,5 +36,6 @@ public class LocalAuthorityRefData extends ReferenceData {
     private String issuingAuthorityName;
     private Nation nation;
     private String contactUrl;
+    private String differentServiceSignpostUrl;
   }
 }

@@ -38,7 +38,7 @@ public class WebDriverServiceProvider {
    * <p>For perfomance reasons, this method should be called once before the entire testing session
    * rather than before each test.
    */
-  public void initialise() {
+  private void initialise() {
     chromeDriverService =
         new ChromeDriverService.Builder()
             .usingAnyFreePort()

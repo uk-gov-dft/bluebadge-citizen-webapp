@@ -3,10 +3,32 @@ require('@babel/polyfill');
 import All from 'govuk-frontend/all';
 import AutoComplete from './autocomplete';
 import GAClickTracker from './ga-tracker';
+import DFT_FileUploader from './dft-file-uploader-wrapper';
+import preventDoubleSubmission from "./prevent-double-submission";
 
 All.initAll();
 
 GAClickTracker();
+
+window.onload = () => {
+    new DFT_FileUploader();
+
+    const forms = Array.from(document.querySelectorAll('[data-prevent-double-submission]'));
+    if(forms.length > 0) {
+        forms.forEach(form => preventDoubleSubmission(form));
+    }
+}
+
+const isBrowser_IE = () => {
+    const ua = window.navigator.userAgent;
+    const msie = ua.indexOf('MSIE ');
+
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+        return true;
+    }
+
+    return false;
+}
 
 const select_autocomplete = Array.from(document.getElementsByClassName('select_autocomplete'));
 
@@ -25,7 +47,8 @@ if (select_autocomplete.length > 0) {
                     }
 
                     const requestedOption = Array.from(select.options).find((option) => {
-                        return (option.innerText || option.textContent) === query;
+                        const optionValue = option.innerText && option.innerText.trim();
+                        return optionValue === query;
                     });
 
                     if (requestedOption) {
