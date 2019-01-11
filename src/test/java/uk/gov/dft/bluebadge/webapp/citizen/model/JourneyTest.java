@@ -3,7 +3,6 @@ package uk.gov.dft.bluebadge.webapp.citizen.model;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
-import org.springframework.util.StringUtils;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
@@ -99,12 +98,12 @@ public class JourneyTest {
 
   @Test
   public void
-  isLocalAuthorityActive_shouldReturnTrue_whenLocalAuthorityDoesHaveEmptyDifferentServiceSignpostUrl() {
+      isLocalAuthorityActive_shouldReturnTrue_whenLocalAuthorityDoesHaveEmptyDifferentServiceSignpostUrl() {
     Journey journey = new Journey();
     LocalAuthorityRefData localAuthority = new LocalAuthorityRefData();
     localAuthority.setShortCode("WARCC");
     LocalAuthorityRefData.LocalAuthorityMetaData localAuthorityMetaData =
-      new LocalAuthorityRefData.LocalAuthorityMetaData();
+        new LocalAuthorityRefData.LocalAuthorityMetaData();
     localAuthorityMetaData.setDifferentServiceSignpostUrl("");
     localAuthority.setLocalAuthorityMetaData(localAuthorityMetaData);
     journey.setLocalAuthority(localAuthority);
@@ -113,12 +112,12 @@ public class JourneyTest {
 
   @Test
   public void
-  isLocalAuthorityActive_shouldReturnTrue_whenLocalAuthorityDoesHaveEmptyWithSpacesDifferentServiceSignpostUrl() {
+      isLocalAuthorityActive_shouldReturnTrue_whenLocalAuthorityDoesHaveEmptyWithSpacesDifferentServiceSignpostUrl() {
     Journey journey = new Journey();
     LocalAuthorityRefData localAuthority = new LocalAuthorityRefData();
     localAuthority.setShortCode("WARCC");
     LocalAuthorityRefData.LocalAuthorityMetaData localAuthorityMetaData =
-      new LocalAuthorityRefData.LocalAuthorityMetaData();
+        new LocalAuthorityRefData.LocalAuthorityMetaData();
     localAuthorityMetaData.setDifferentServiceSignpostUrl("    ");
     localAuthority.setLocalAuthorityMetaData(localAuthorityMetaData);
     journey.setLocalAuthority(localAuthority);
