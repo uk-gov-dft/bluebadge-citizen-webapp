@@ -1,5 +1,6 @@
 .dft-fu {
 	margin-bottom: 30px;
+	position: relative;
 
 	&__loader {
 		display: none;
@@ -7,6 +8,10 @@
 
 	&__reset-btn {
 		display: none;
+	}
+
+	&--disabled {
+		opacity: 0.6;
 	}
 }
 
@@ -23,8 +28,11 @@
 			}
 		}
 
-		[data-file-uploader-show-on-success]:not(.show) {
-			display: none;
+		[data-file-uploader-show-on-success],
+		[data-file-uploader-show-if-has-artifacts] {
+			&:not(.show) {
+				display: none;
+			}
 		}
 	}
 }
@@ -100,6 +108,7 @@
 
 	&__holder {
 		margin-bottom: 10px;
+		@include govuk-clearfix;
 	}
 
 	&__item {
@@ -126,8 +135,9 @@
 
 	&__item--unavailable {
 		height: 160px;
-		margin: 0;
 		padding: 20px;
+		margin: 0 2px 2px 0;
+		float: left;
 		display: inline-block;
 		vertical-align: middle;
 		background-color: #eee;

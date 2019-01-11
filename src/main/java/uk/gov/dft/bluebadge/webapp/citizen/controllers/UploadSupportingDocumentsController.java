@@ -122,6 +122,8 @@ public class UploadSupportingDocumentsController implements StepController {
             "Uploading the given documents will reach more than the total number allowed: "
                 + MAX_NUMBER_SUPPORTING_DOCUMENTS
                 + ".");
+
+        return ImmutableMap.of("error", "upload limit exceeded");
       }
       if (!journeyArtifacts.isEmpty() && sessionForm != null) {
         sessionForm.getJourneyArtifacts().addAll(journeyArtifacts);
