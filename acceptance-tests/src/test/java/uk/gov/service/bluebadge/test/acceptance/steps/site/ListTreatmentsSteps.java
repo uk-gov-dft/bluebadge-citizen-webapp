@@ -17,7 +17,8 @@ public class ListTreatmentsSteps extends AbstractSpringSteps {
   private AddTreatmentsSteps addTreatmentsSteps;
 
   @Autowired
-  public ListTreatmentsSteps(CommonPage commonPage, CommonSteps commonSteps, AddTreatmentsSteps addTreatmentsSteps) {
+  public ListTreatmentsSteps(
+      CommonPage commonPage, CommonSteps commonSteps, AddTreatmentsSteps addTreatmentsSteps) {
     this.commonPage = commonPage;
     this.commonSteps = commonSteps;
     this.addTreatmentsSteps = addTreatmentsSteps;
