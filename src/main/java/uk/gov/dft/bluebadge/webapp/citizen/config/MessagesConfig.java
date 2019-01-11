@@ -24,7 +24,7 @@ public class MessagesConfig implements WebMvcConfigurer {
   public MessageSource messageSource() {
     final ReloadableResourceBundleMessageSource messageSource =
         new ReloadableResourceBundleMessageSource();
-    messageSource.setBasenames("classpath:messages", "classpath:fileUploaderMessages");
+    messageSource.setBasenames("classpath:messages");
     messageSource.setFallbackToSystemLocale(false);
     messageSource.setCacheSeconds(0);
     return messageSource;
