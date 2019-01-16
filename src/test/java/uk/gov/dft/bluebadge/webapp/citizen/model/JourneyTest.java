@@ -98,6 +98,34 @@ public class JourneyTest {
 
   @Test
   public void
+      isLocalAuthorityActive_shouldReturnTrue_whenLocalAuthorityDoesHaveEmptyDifferentServiceSignpostUrl() {
+    Journey journey = new Journey();
+    LocalAuthorityRefData localAuthority = new LocalAuthorityRefData();
+    localAuthority.setShortCode("WARCC");
+    LocalAuthorityRefData.LocalAuthorityMetaData localAuthorityMetaData =
+        new LocalAuthorityRefData.LocalAuthorityMetaData();
+    localAuthorityMetaData.setDifferentServiceSignpostUrl("");
+    localAuthority.setLocalAuthorityMetaData(localAuthorityMetaData);
+    journey.setLocalAuthority(localAuthority);
+    assertThat(journey.isLocalAuthorityActive()).isTrue();
+  }
+
+  @Test
+  public void
+      isLocalAuthorityActive_shouldReturnTrue_whenLocalAuthorityDoesHaveEmptyWithSpacesDifferentServiceSignpostUrl() {
+    Journey journey = new Journey();
+    LocalAuthorityRefData localAuthority = new LocalAuthorityRefData();
+    localAuthority.setShortCode("WARCC");
+    LocalAuthorityRefData.LocalAuthorityMetaData localAuthorityMetaData =
+        new LocalAuthorityRefData.LocalAuthorityMetaData();
+    localAuthorityMetaData.setDifferentServiceSignpostUrl("    ");
+    localAuthority.setLocalAuthorityMetaData(localAuthorityMetaData);
+    journey.setLocalAuthority(localAuthority);
+    assertThat(journey.isLocalAuthorityActive()).isTrue();
+  }
+
+  @Test
+  public void
       isLocalAuthorityActive_shouldReturnFalse_whenLocalAuthorityHasDifferentServiceSignpostUrl() {
     Journey journey = new Journey();
     LocalAuthorityRefData localAuthority = new LocalAuthorityRefData();

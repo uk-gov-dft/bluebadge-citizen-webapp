@@ -174,10 +174,15 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   @And(
-      "^I complete \"(prove ID|provide photo|upload benefit|prove address)\" page with a \"(JPG|GIF|PNG|PDF)\" document")
+      "^I complete \"(prove ID|provide photo|upload benefit|prove address)\" page with a \"(JPG|GIF|PNG|PDF|INVALID)\" document")
   public void iCompleteFileUploadPageWithADocument(String pageName, String fileType) {
 
-    String filename = "evidence_" + fileType + "." + fileType.toLowerCase();
+    String filename = "";
+    if (fileType.equalsIgnoreCase("INVALID")) {
+      filename = "evidence_INVALID.docx";
+    } else {
+      filename = "evidence_" + fileType + "." + fileType.toLowerCase();
+    }
 
     WebElement droparea = commonPage.findPageElementById("document-droparea");
 
@@ -194,7 +199,10 @@ public class ApplicationFixture extends AbstractSpringSteps {
     // drop the file
     FileHelper.dropFile(new File(file_path), droparea, 0, 0);
 
-    commonPage.pressContinueOnFileUploadPage();
+    if (!fileType.equalsIgnoreCase("INVALID")) {
+
+      commonPage.pressContinueOnFileUploadPage();
+    }
   }
 
   @And("^I complete upload \"supporting documents page\" with a \"(JPG|GIF|PNG|PDF)\" document")
@@ -426,12 +434,12 @@ public class ApplicationFixture extends AbstractSpringSteps {
     if ("YES".equals(option)) {
       clickButtonById(Ids.Eligibility.HEALTHCARE_PRO_ADD_FIRST_LINK);
       clearAndSendKeys(Ids.Eligibility.HEALTHCARE_PRO_ADD_DESCRIPTION, "Pro description");
-      clearAndSendKeys(Ids.Eligibility.HEALTHCARE_PRO_ADD_LOCATION, "Pro Location");
+      clearAndSendKeys(Ids.Eligibility.HEALTHCARE_PRO_ADD_LOCATION, "Pro LOCATION");
       clickButtonById(Ids.Eligibility.HEALTHCARE_PRO_ADD_CONFIRM_BUTTON);
       clickButtonById(Ids.Eligibility.HEALTHCARE_PRO_REMOVE_LINK_PREFIX + "1");
       clickButtonById(Ids.Eligibility.HEALTHCARE_PRO_ADD_FIRST_LINK);
       clearAndSendKeys(Ids.Eligibility.HEALTHCARE_PRO_ADD_DESCRIPTION, "Pro description");
-      clearAndSendKeys(Ids.Eligibility.HEALTHCARE_PRO_ADD_LOCATION, "Pro Location");
+      clearAndSendKeys(Ids.Eligibility.HEALTHCARE_PRO_ADD_LOCATION, "Pro LOCATION");
       clickButtonById(Ids.Eligibility.HEALTHCARE_PRO_ADD_CONFIRM_BUTTON);
     }
     pressContinue();

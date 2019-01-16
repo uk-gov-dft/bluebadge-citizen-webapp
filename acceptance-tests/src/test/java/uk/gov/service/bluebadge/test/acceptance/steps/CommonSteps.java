@@ -292,7 +292,7 @@ public class CommonSteps extends AbstractSpringSteps {
   }
 
   @Then(
-      "^I should see \"(You're|They are|You may be|They may be|You're not|They're not)\" eligible page$")
+      "^I should see \"(You're|They're|You may be|They may be|You're not|They're not)\" eligible page$")
   public void iShouldSeeEligiblePage(String who) {
     String page_title = who + " eligible for a Blue Badge - GOV.UK Apply for a Blue Badge";
 

@@ -11,24 +11,30 @@
 <body>
 
 <main layout:fragment="content">
-
     <section class="guidance-layout">
         <div class="govuk-!-width-three-quarters">
             <h1 class="govuk-heading-l"
                 th:text="#{${JOURNEY.who} + 'eligiblePage.title'}"></h1>
-
             <p class="govuk-body" th:text="#{eligiblePage.need.provide.text}"></p>
 
             <ul class="govuk-list govuk-list--bullet">
+                <li th:if="${JOURNEY.eligibilityCodePIP}" th:text="#{${JOURNEY.who} + 'eligiblePage.proof.document.pip'}"></li>
+                <li th:if="${JOURNEY.eligibilityCodeDLA}" th:text="#{${JOURNEY.who} + 'eligiblePage.proof.document.dla'}"></li>
+
                 <li th:text="#{${JOURNEY.who} + 'eligiblePage.proof.id'}"></li>
+                <li th:text="#{${JOURNEY.who} + 'eligiblePage.proof.address'}"></li>
+
+                <li th:if="${JOURNEY.relatedDocumentProofNeeded}" th:text="#{${JOURNEY.who} + 'eligiblePage.proof.document.any'}"></li>
             </ul>
+
             <p class="govuk-body"><a href="#submit_docs_id" th:text="#{eligiblePage.help.submitting.docs}"></a></p>
 
             <p class="govuk-body" th:text="#{eligiblePage.also.need.provide.text}"></p>
-
             <ul class="govuk-list govuk-list--bullet">
                 <li th:text="#{${JOURNEY.who} + 'eligiblePage.nino.text'}"></li>
                 <li th:text="#{eligiblePage.provide.contact.text}"></li>
+                <li th:text="#{${JOURNEY.who} + 'eligiblePage.provide.photo.text'}"></li>
+                <li th:if="${JOURNEY.eligibilityCodeBLIND}" th:text="#{${JOURNEY.who} + 'eligiblePage.proof.also.blind'}"></li>
             </ul>
 
             <a th:href="@{eligible/start}"
@@ -38,8 +44,7 @@
 
             <p class="govuk-body">
                 <span th:remove="tag" th:text="#{${JOURNEY.who} + 'eligiblePage.council.timeframe.text'}"></span>
-                <a th:href="${localAuthority.contactUrl}" th:text="${localAuthority.description}">
-                </a><span th:remove="tag" th:text="#{${JOURNEY.who} + 'eligiblePage.website.posttext'}"></span>
+                <a th:href="${localAuthority.contactUrl}" th:text="${localAuthority.description} + '.'"></a>
             </p>
 
             <h2 class="govuk-heading-m" th:text="#{eligiblePage.not.apply.online.text}"></h2>
@@ -51,8 +56,7 @@
             </p>
 
             <h2 id="submit_docs_id" class="govuk-heading-m" th:text="#{eligiblePage.submitting.docs}"></h2>
-            <p class="govuk-body" th:text="#{${JOURNEY.who} + 'eligiblePage.submitting.docs.para1'}"></p>
-            <p class="govuk-body" th:text="#{eligiblePage.submitting.docs.para2}"></p>
+            <p class="govuk-body" th:text="#{eligiblePage.submitting.docs.p1}"></p>
         </div>
     </section>
 
