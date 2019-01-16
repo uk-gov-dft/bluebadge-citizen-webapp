@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html
         xmlns:th="http://www.thymeleaf.org"
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -11,7 +11,7 @@
 <main layout:fragment="content" th:classappend="has-file-uploader">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <div th:if="${MAX_FILE_SIZE_EXCEEDED}">
+            <div th:if="${UNSUPPORTED_FILE} or ${MAX_FILE_SIZE_EXCEEDED}">
                 <div th:replace="~{ fragments/errors :: govuk-error-summary-static('fileUploader.error.title', 'upload.benefit.fu.rejected.content') }"></div>
             </div>
 
@@ -66,9 +66,9 @@
                 <div th:replace="~{ fragments/file-uploader :: fileUploader('journeyArtifact', ${fileUploaderOptions}, 'h2') }"></div>
 
                 <button type="submit"
-                        data-file-uploader-show-on-success
+                        data-file-uploader-show-if-has-artifacts
                         class="govuk-button"
-                        th:classappend="*{not #lists.isEmpty(journeyArtifacts)} ? show"
+                        th:classappend="*{not #lists.isEmpty(journeyArtifacts)} ? 'show'"
                         data-uipath="button.continue"
                         th:text="#{btn.label.continue}"></button>
             </form>

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import uk.gov.dft.bluebadge.webapp.citizen.client.common.ServiceException;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
@@ -37,6 +38,7 @@ public class ProveIdentityController implements StepController {
   public static final String TEMPLATE = "prove-identity";
   private static final String DOC_BYPASS_URL = "prove-id-bypass";
   public static final String PROVE_IDENTITY_AJAX_URL = "/prove-identity-ajax";
+  public static final String DOCUMENT = "document";
 
   private final RouteMaster routeMaster;
   private final ArtifactService artifactService;
@@ -80,10 +82,10 @@ public class ProveIdentityController implements StepController {
 
   private FileUploaderOptions getFileUploaderOptions() {
     return FileUploaderOptions.builder()
-        .fieldName("document")
+        .fieldName(DOCUMENT)
         .ajaxRequestUrl(PROVE_IDENTITY_AJAX_URL)
         .fieldLabel("proveIdentity.fu.field.label")
-        .allowedFileTypes("image/jpeg,image/gif,image/png,application/pdf")
+        .allowedFileTypes(String.join(",", IMAGE_PDF_MIME_TYPES))
         .allowMultipleFileUploads(false)
         .rejectErrorMessageKey("proveIdentity.fu.rejected.content")
         .build();
@@ -93,7 +95,7 @@ public class ProveIdentityController implements StepController {
   @ResponseBody
   public Map<String, Object> submitAjax(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @RequestParam("document") MultipartFile document,
+      @RequestParam(DOCUMENT) MultipartFile document,
       ProveIdentityForm proveIdentityForm) {
     try {
       JourneyArtifact uploadedJourneyArtifact =
@@ -110,8 +112,8 @@ public class ProveIdentityController implements StepController {
   @PostMapping(Mappings.URL_PROVE_IDENTITY)
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @RequestParam("document") MultipartFile document,
-      @Valid @ModelAttribute("formRequest") ProveIdentityForm formRequest,
+      @RequestParam(DOCUMENT) MultipartFile document,
+      @Valid @ModelAttribute(FORM_REQUEST) ProveIdentityForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
@@ -122,18 +124,17 @@ public class ProveIdentityController implements StepController {
         formRequest.setJourneyArtifact(uploadJourneyArtifact);
         journey.setFormForStep(formRequest);
       } catch (UnsupportedMimetypeException e) {
-        attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", true);
+        attr.addFlashAttribute(ArtifactService.UNSUPPORTED_FILE, true);
         return "redirect:" + Mappings.URL_PROVE_IDENTITY;
-      } catch (Exception e) {
+      } catch (ServiceException e) {
         log.warn("Failed to upload document", e);
-        bindingResult.rejectValue("journeyArtifact", "", "Failed to upload document");
+        bindingResult.rejectValue("journeyArtifact", "");
       }
     }
 
     ProveIdentityForm sessionForm = journey.getFormForStep(getStepDefinition());
-    if (null == sessionForm || null == sessionForm.getJourneyArtifact()) {
-      bindingResult.rejectValue(
-          "journeyArtifact", "NotNull.document", "Prove of identity is required");
+    if (null == sessionForm || !sessionForm.hasArtifacts()) {
+      bindingResult.rejectValue("journeyArtifact", "NotNull.document");
     }
 
     if (bindingResult.hasErrors()) {

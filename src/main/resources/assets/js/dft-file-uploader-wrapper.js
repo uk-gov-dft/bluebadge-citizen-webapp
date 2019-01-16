@@ -29,6 +29,7 @@ export default class DFT_FileUploader {
 		this.$errorSummary = document.getElementById('dft-fu-error-summary');
 		this.$errorSummaryBody = this.getChildElement('-error-summary__body');
 		this.$showOnSuccessElements = Array.from(document.querySelectorAll('[data-file-uploader-show-on-success]'));
+		this.$showIfHasArtifactsElements = Array.from(document.querySelectorAll('[data-file-uploader-show-if-has-artifacts]'));
 		this.$addMore = this.getChildElement('__add-file-btn');
 		
 		this.$generalErrorMessage = this.getDataAttrValue('upload-error-message') || 'File could not be uploaded';
@@ -76,6 +77,7 @@ export default class DFT_FileUploader {
 	}
 	
 	beforeUpload(file, formData) {
+		this.$dftFuContainer.classList.add('dft-fu--disabled');
 		this.$dftFuContainer.classList.remove(this.$state.error);
 		this.$dftFuContainer.classList.add(this.$state.loading);
 		this.$fu.makeScreenAnnouncement('Uploading files');
@@ -91,7 +93,7 @@ export default class DFT_FileUploader {
 	}
 	
 	uploaded(response) {
-
+		this.$dftFuContainer.classList.remove('dft-fu--disabled');
 		if (response.artifact.constructor === Array) {
 			response.artifact.forEach(artifact => {
 				const previewItem = this.createFilePreview(artifact);
@@ -107,8 +109,9 @@ export default class DFT_FileUploader {
 		this.$dftFuContainer.classList.remove(this.$state.error);
 		this.$dftFuContainer.classList.remove(this.$state.loading);
 		this.$showOnSuccessElements.forEach(el => el.classList.add('show'));
+		this.updateIfHasArtifactElements();
 	}
-	
+
 	uploadError(errorCode) {
 		switch(errorCode) {
 			case 'INVALID_FILES_UPLOADED':
@@ -126,11 +129,23 @@ export default class DFT_FileUploader {
 		this.$dftFuContainer.classList.add(this.$state.error);
 		this.$dftFuContainer.classList.remove(this.$state.loading);
 		this.$showOnSuccessElements.forEach(el => el.classList.remove('show'));
+		this.updateIfHasArtifactElements();
 
 		if (this.$errorSummary) {
 			this.$errorSummary.focus();
 		}
 	}
+
+	updateIfHasArtifactElements() {
+		this.$showIfHasArtifactsElements.forEach(el => {
+			if(this.$fu.$totalFilesUploaded > 0) {
+				el.classList.add('show');
+			} else {
+				el.classList.remove('show');
+			}
+		});
+	}
+
 	
 	resetButtonClick(event) {
 		this.$fu.resetFileSelection(event);
@@ -140,6 +155,7 @@ export default class DFT_FileUploader {
 		this.$dftFuContainer.classList.remove(this.$state.error);
 		this.$dftFuContainer.classList.remove(this.$state.loading);
 		this.$showOnSuccessElements.forEach(el => el.classList.remove('show'));
+		this.updateIfHasArtifactElements();
 	}
 
 	createFilePreview(response) {
@@ -177,7 +193,9 @@ export default class DFT_FileUploader {
 
   clearUploadHistory(flag) {
 	  this.$options.uploadPath = `${this.$endPoint}?clear=${flag}`;
-	  this.$fu.$totalFilesUploaded = 0;
+	  if (flag) {
+		  this.$fu.$totalFilesUploaded = 0;
+	  }
   }
 
 }

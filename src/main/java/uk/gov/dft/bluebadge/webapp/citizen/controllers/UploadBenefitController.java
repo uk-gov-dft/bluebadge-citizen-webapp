@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import uk.gov.dft.bluebadge.webapp.citizen.client.common.ServiceException;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
@@ -39,6 +40,8 @@ public class UploadBenefitController implements StepController {
   public static final String TEMPLATE = "upload-benefit";
   private static final String DOC_BYPASS_URL = "upload-benefit-bypass";
   public static final String UPLOAD_BENEFIT_AJAX_URL = "/upload-benefit-ajax";
+  public static final String DOCUMENT = "document";
+  public static final String CLEAR = "clear";
 
   private final RouteMaster routeMaster;
   private final ArtifactService artifactService;
@@ -80,7 +83,7 @@ public class UploadBenefitController implements StepController {
 
   private static FileUploaderOptions getFileUploaderOptions() {
     return FileUploaderOptions.builder()
-        .fieldName("document")
+        .fieldName(DOCUMENT)
         .ajaxRequestUrl(UPLOAD_BENEFIT_AJAX_URL)
         .fieldLabel("proveIdentity.fu.field.label")
         .allowedFileTypes(String.join(",", IMAGE_PDF_MIME_TYPES))
@@ -96,23 +99,23 @@ public class UploadBenefitController implements StepController {
   @ResponseBody
   public Map<String, Object> submitAjax(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @RequestParam("document") List<MultipartFile> documents,
-      @RequestParam(name = "clear", defaultValue = "false") Boolean clearPreviousArtifacts,
+      @RequestParam(DOCUMENT) List<MultipartFile> documents,
+      @RequestParam(name = CLEAR, defaultValue = "false") Boolean clearPreviousArtifacts,
       UploadBenefitForm uploadBenefitForm) {
     try {
-      UploadBenefitForm sessionForm = journey.getOrSetFormForStep(uploadBenefitForm);
+      UploadBenefitForm sessionUploadBenefitForm = journey.getOrSetFormForStep(uploadBenefitForm);
 
       if (clearPreviousArtifacts) {
-        sessionForm.setJourneyArtifacts(new ArrayList<>());
+        sessionUploadBenefitForm.setJourneyArtifacts(new ArrayList<>());
       }
 
-      List<JourneyArtifact> journeyArtifacts =
+      List<JourneyArtifact> newJourneyArtifacts =
           artifactService.upload(documents, IMAGE_PDF_MIME_TYPES);
-      if (!journeyArtifacts.isEmpty()) {
-        sessionForm.getJourneyArtifacts().addAll(journeyArtifacts);
+      if (!newJourneyArtifacts.isEmpty()) {
+        sessionUploadBenefitForm.getJourneyArtifacts().addAll(newJourneyArtifacts);
       }
 
-      return ImmutableMap.of("success", "true", "artifact", journeyArtifacts);
+      return ImmutableMap.of("success", "true", "artifact", newJourneyArtifacts);
     } catch (Exception e) {
       log.warn("Failed to upload document through ajax call.", e);
       return ImmutableMap.of("error", "Failed to upload");
@@ -122,8 +125,8 @@ public class UploadBenefitController implements StepController {
   @PostMapping(Mappings.URL_UPLOAD_BENEFIT)
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @RequestParam("document") List<MultipartFile> documents,
-      @Valid @ModelAttribute("formRequest") UploadBenefitForm formRequest,
+      @RequestParam(DOCUMENT) List<MultipartFile> documents,
+      @Valid @ModelAttribute(FORM_REQUEST) UploadBenefitForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
@@ -137,21 +140,16 @@ public class UploadBenefitController implements StepController {
           sessionForm.setJourneyArtifacts(newArtifacts);
         }
       } catch (UnsupportedMimetypeException e) {
-        attr.addFlashAttribute("MAX_FILE_SIZE_EXCEEDED", true);
+        attr.addFlashAttribute(ArtifactService.UNSUPPORTED_FILE, true);
         return "redirect:" + Mappings.URL_UPLOAD_BENEFIT;
-      } catch (Exception e) {
+      } catch (ServiceException e) {
         log.warn("Failed to upload document", e);
-        bindingResult.rejectValue("journeyArtifact", "", "Failed to upload document");
+        bindingResult.rejectValue("journeyArtifact", "Empty.journeyArtifact");
       }
     }
 
-    if (null == sessionForm
-        || null == sessionForm.getJourneyArtifacts()
-        || sessionForm.getJourneyArtifacts().isEmpty()) {
-      bindingResult.rejectValue(
-          "journeyArtifact",
-          "NotNull.upload.benefit.document",
-          "Proof of benefit document is required");
+    if (null == sessionForm || !sessionForm.hasArtifacts()) {
+      bindingResult.rejectValue("journeyArtifact", "NotNull.upload.benefit.document");
     }
 
     if (bindingResult.hasErrors()) {
