@@ -40,7 +40,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   private void pressContinue() {
     WebElement aContinueBtn = commonPage.findElementWithText("Continue");
-    if(null == aContinueBtn){
+    if (null == aContinueBtn) {
       aContinueBtn = commonPage.findElementWithText("Parhau");
     }
     assertNotNull("Cannot find the continue button.", aContinueBtn);
