@@ -1,5 +1,6 @@
 package uk.gov.service.bluebadge.test.acceptance.steps.site;
 
+import com.google.common.collect.Lists;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import java.time.LocalDate;
@@ -43,6 +44,8 @@ public class ApplicationSteps extends AbstractSpringSteps {
     commonSteps.iShouldSeeTheHeading(ApplicantPage.PAGE_HEADING);
     commonSteps.iClickOnContinueButton();
     commonSteps.andIshouldSeeErrorSummaryBox();
+    commonSteps.iShouldSeeErrorSummaryBoxWithValidationMessagesInOrder(
+        Lists.newArrayList(ApplicantPage.VALIDATION_MESSAGE_FOR_NO_OPTION));
     commonSteps.iShouldSeeTextOnPage(ApplicantPage.VALIDATION_MESSAGE_FOR_NO_OPTION);
 
     commonPage.selectRadioButton(journeyOption);

@@ -37,7 +37,7 @@ public class HealthConditionsFormTest {
     Optional<StepDefinition> nextStep = form.determineNextStep(journey);
 
     assertThat(nextStep).isNotEmpty();
-    assertThat(nextStep.get()).isEqualTo(StepDefinition.WHAT_WALKING_DIFFICULTIES);
+    assertThat(nextStep.get()).isEqualTo(StepDefinition.WHAT_MAKES_WALKING_DIFFICULT);
   }
 
   @Test

@@ -46,7 +46,7 @@ Feature: DFT Blue badge Citizen app new application - DLA
     And   I complete the already have a blue badge page for "YES"
     And   I complete receive benefit page for "DLA"
     And   I complete has mobility component page for "YES"
-    Then  I should see "They are" eligible page
+    Then  I should see "They're" eligible page
 
   Scenario: Create a successful new application for someone else - DLA route - No
     Given I complete applicant page for "someone else"

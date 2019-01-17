@@ -28,4 +28,4 @@ Feature: DFT Blue badge Citizen app new application - WPMS or not listed benifit
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "NO"
     And   I complete receive benefit page for "WPMS"
-    Then  I should see "They are" eligible page
+    Then  I should see "They're" eligible page

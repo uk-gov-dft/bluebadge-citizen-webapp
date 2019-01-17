@@ -44,10 +44,10 @@ public class ContactDetailsSteps extends AbstractSpringSteps {
 
   private void validateMandatoryFields(String applicant) {
     List<String> messages = new ArrayList<>();
-    messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_EMPTY_PHONE_NUMBER);
     if ("someone else".equals(applicant)) {
       messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_CONTACT_FULL_NAME);
     }
+    messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_EMPTY_PHONE_NUMBER);
 
     commonSteps.iVerifyMultipleValidationMessages(messages);
   }
@@ -56,16 +56,16 @@ public class ContactDetailsSteps extends AbstractSpringSteps {
     List<String> messages = new ArrayList<>();
     commonPage.clearAndSendKeys(ContactDetailsPage.PRIMARY_CONTACT_NUMBER, "020 12212123 000");
     commonPage.clearAndSendKeys(ContactDetailsPage.SECONDARY_CONTACT_NUMBER, "078 13345456 000");
-    commonPage.clearAndSendKeys(ContactDetailsPage.EMAIL_ADDRESS, "test@testmail.com");
+    commonPage.clearAndSendKeys(ContactDetailsPage.EMAIL_ADDRESS, "test testmail.com");
+
+    if ("someone else".equals(applicant.toLowerCase())) {
+      commonPage.clearAndSendKeys(ContactDetailsPage.FULL_NAME, "");
+      messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_INVALID_FULLNAME);
+    }
 
     messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_INVALID_MAIN_PHONE_NUMBER);
     messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_INVALID_ALTERNATIVE_PHONE_NUMBER);
-    messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_INVALID_ALTERNATIVE_PHONE_NUMBER);
-
-    if ("someone else".equals(applicant.toLowerCase())) {
-      commonPage.clearAndSendKeys(ContactDetailsPage.FULL_NAME, "£$%^&* Invalid Name");
-      //messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_INVALID_FULLNAME);
-    }
+    messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_INVALID_EMAIL);
 
     commonSteps.iVerifyMultipleValidationMessages(messages);
     commonSteps.iClickOnContinueButton();

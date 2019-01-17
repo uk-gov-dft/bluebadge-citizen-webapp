@@ -34,20 +34,14 @@ variable which comes from Thymleaf / Spring integration.
          th:text="#{${errorSummary.description}}"
          class="govuk-error-summary__body" />
 
-    <div th:if="${#fields.hasErrors('formRequest.*')}" class="govuk-c-error-summary__body">
-
-        <ul class="govuk-list govuk-error-summary__list">
-
+    <div th:if="${#fields.hasErrors('formRequest.*')}" class="govuk-c-error-summary__body" th:with="sortedDetailedErrors=${#ca.sortDetailedErrors(#fields.detailedErrors('formRequest.*'), fieldsOrder)}">
+        <ul class="govuk-list govuk-error-summary__list" data-uipath="error-summary-list">
             <li th:if="${!err.isGlobal()}"
-                th:each="err : ${#fields.detailedErrors('formRequest.*')}"
+                th:each="err : ${sortedDetailedErrors}"
                 th:data-uipath="${err.fieldName} + '.summary-error'">
-
                 <a th:href="'#' + ${err.fieldName}" th:text="${err.message}"/>
-
             </li>
-
         </ul>
-
     </div>
 
 </div>

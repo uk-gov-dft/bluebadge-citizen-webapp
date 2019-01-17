@@ -3,7 +3,9 @@ package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.validation.ValidationPatterns.EMPTY_OR_EMAIL;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.validation.ValidationPatterns.EMPTY_OR_PHONE_NUMBER;
 
+import com.google.common.collect.ImmutableList;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Optional;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -68,5 +70,11 @@ public class ContactDetailsForm implements StepForm, Serializable {
   @Override
   public boolean preserveStep(Journey journey) {
     return true;
+  }
+
+  @Override
+  public List<String> getFieldOrder() {
+    return ImmutableList.of(
+        "fullName", "primaryPhoneNumber", "secondaryPhoneNumber", "emailAddress");
   }
 }

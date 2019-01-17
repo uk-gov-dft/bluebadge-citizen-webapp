@@ -27,15 +27,15 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
 
 @Controller
-@RequestMapping(Mappings.URL_WHAT_WALKING_DIFFICULT)
-public class WhatWalkingDifficultiesController implements StepController {
+@RequestMapping(Mappings.URL_WHAT_MAKES_WALKING_DIFFICULT)
+public class WhatMakesWalkingDifficultController implements StepController {
 
-  private static final String TEMPLATE = "walking/what-walking-difficult";
+  private static final String TEMPLATE = "walking/what-makes-walking-difficult";
 
   private final RouteMaster routeMaster;
 
   @Autowired
-  WhatWalkingDifficultiesController(RouteMaster routeMaster) {
+  WhatMakesWalkingDifficultController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 
@@ -81,7 +81,7 @@ public class WhatWalkingDifficultiesController implements StepController {
 
   @Override
   public StepDefinition getStepDefinition() {
-    return StepDefinition.WHAT_WALKING_DIFFICULTIES;
+    return StepDefinition.WHAT_MAKES_WALKING_DIFFICULT;
   }
 
   @ModelAttribute("walkingDifficulties")

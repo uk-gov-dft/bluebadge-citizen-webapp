@@ -35,10 +35,10 @@ public class AddMedicationSteps extends AbstractSpringSteps {
 
   private void validateMandatoryFields() {
     List<String> messages = new ArrayList<>();
-    messages.add(AddMedicationPage.VALIDATION_MESSAGE_FOR_EMPTY_DOSAGE);
-    messages.add(AddMedicationPage.VALIDATION_MESSAGE_FOR_EMPTY_FREQUENCY);
     messages.add(AddMedicationPage.VALIDATION_MESSAGE_FOR_EMPTY_NAME);
     messages.add(AddMedicationPage.VALIDATION_MESSAGE_FOR_EMPTY_PRESCRIBED);
+    messages.add(AddMedicationPage.VALIDATION_MESSAGE_FOR_EMPTY_DOSAGE);
+    messages.add(AddMedicationPage.VALIDATION_MESSAGE_FOR_EMPTY_FREQUENCY);
     commonSteps.iVerifyMultipleValidationMessagesInChildPages(
         messages, AddMedicationPage.MEDICATION_ADD_BUTTON);
   }

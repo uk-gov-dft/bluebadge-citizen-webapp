@@ -23,7 +23,7 @@ class WalkingConverter {
 
     WalkingTimeForm walkingTimeForm = journey.getFormForStep(StepDefinition.WALKING_TIME);
     WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm =
-        journey.getFormForStep(StepDefinition.WHAT_WALKING_DIFFICULTIES);
+        journey.getFormForStep(StepDefinition.WHAT_MAKES_WALKING_DIFFICULT);
     MobilityAidListForm mobilityAidListForm =
         journey.getFormForStep(StepDefinition.MOBILITY_AID_LIST);
     TreatmentListForm treatmentListForm = journey.getFormForStep(StepDefinition.TREATMENT_LIST);
