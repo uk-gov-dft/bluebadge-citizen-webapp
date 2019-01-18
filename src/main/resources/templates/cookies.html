@@ -26,7 +26,7 @@
 
             <p class="govuk-body">
                 <span th:text="#{cookiesPage.content.p4.phraseOne}" th:remove="tag"></span>
-                <a th:text="#{cookiesPage.content.p4.link}" target="_blank" href="https://ico.org.uk/your-data-matters/online/cookies/"></a>
+                <a th:text="#{cookiesPage.content.p4.link} + ' ' + #{common.link.opens-in-new-tab} + '.'" target="_blank" href="https://ico.org.uk/your-data-matters/online/cookies/"></a>
             </p>
 
             <table class="govuk-table">
