@@ -22,7 +22,9 @@ public class PastCompoundDateValidator
 
     // Attempt to parse and compare
     try {
-      return compoundDate.getLocalDate().isBefore(LocalDate.now());
+      // "compoundDate.getYear().length() > 4" is added to avoid having two validations (this and ValidCompoundDate happening at the same time).
+      return compoundDate.getYear().length() > 4
+          || compoundDate.getLocalDate().isBefore(LocalDate.now());
     } catch (Exception e) {
       return true; // If part of the date is invalid then we cannot test
     }

@@ -2,7 +2,9 @@ package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.model.validation.ValidationPatterns.PERSON_NAME;
 
+import com.google.common.collect.ImmutableList;
 import java.io.Serializable;
+import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -43,5 +45,10 @@ public class ApplicantNameForm implements StepForm, Serializable {
   @Override
   public boolean preserveStep(Journey journey) {
     return true;
+  }
+
+  @Override
+  public List<String> getFieldOrder() {
+    return ImmutableList.of("fullName", "hasBirthName", "birthName");
   }
 }

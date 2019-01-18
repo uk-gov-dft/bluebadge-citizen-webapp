@@ -73,7 +73,7 @@ public class Mappings {
   public static final String URL_MEDICAL_EQUIPMENT = "/medical-equipment";
 
   // Walking difficulties route
-  public static final String URL_WHAT_WALKING_DIFFICULT = "/what-makes-walking-difficult";
+  public static final String URL_WHAT_MAKES_WALKING_DIFFICULT = "/what-makes-walking-difficult";
   public static final String URL_WHERE_CAN_YOU_WALK = "/where-can-you-walk";
   public static final String URL_WALKING_TIME = "/walking-time";
 
@@ -134,7 +134,7 @@ public class Mappings {
           .put(StepDefinition.NOT_ELIGIBLE, URL_NOT_ELIGIBLE)
           .put(StepDefinition.EXISTING_BADGE, URL_EXISTING_BADGE)
           .put(StepDefinition.HEALTH_CONDITIONS, URL_HEALTH_CONDITIONS)
-          .put(StepDefinition.WHAT_WALKING_DIFFICULTIES, URL_WHAT_WALKING_DIFFICULT)
+          .put(StepDefinition.WHAT_MAKES_WALKING_DIFFICULT, URL_WHAT_MAKES_WALKING_DIFFICULT)
           .put(StepDefinition.CHOOSE_COUNCIL, URL_CHOOSE_YOUR_COUNCIL)
           .put(StepDefinition.YOUR_ISSUING_AUTHORITY, URL_YOUR_ISSUING_AUTHORITY)
           .put(StepDefinition.DIFFERENT_SERVICE_SIGNPOST, URL_DIFFERENT_SERVICE_SIGNPOST)

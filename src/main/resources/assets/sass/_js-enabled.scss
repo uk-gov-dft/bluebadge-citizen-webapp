@@ -1,0 +1,9 @@
+.js-enabled {
+	.hidden-by-default {
+		display: none;
+
+		&.show {
+			display: block;
+		}
+	}
+}

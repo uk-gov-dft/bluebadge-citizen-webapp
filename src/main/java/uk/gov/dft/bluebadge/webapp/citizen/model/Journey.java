@@ -135,10 +135,12 @@ public class Journey implements Serializable {
   }
 
   public Boolean isLocalAuthorityActive() {
-    return !getLocalAuthority()
+    return getLocalAuthority()
         .getLocalAuthorityMetaData()
         .map(LocalAuthorityRefData.LocalAuthorityMetaData::getDifferentServiceSignpostUrl)
-        .isPresent();
+        .map(String::trim)
+        .map(String::isEmpty)
+        .orElse(true);
   }
 
   private boolean hasMobilityAid() {

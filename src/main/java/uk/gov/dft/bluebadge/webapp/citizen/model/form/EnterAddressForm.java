@@ -1,6 +1,8 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
+import com.google.common.collect.ImmutableList;
 import java.io.Serializable;
+import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -40,5 +42,10 @@ public class EnterAddressForm implements StepForm, Serializable {
   @Override
   public boolean preserveStep(Journey journey) {
     return true;
+  }
+
+  @Override
+  public List<String> getFieldOrder() {
+    return ImmutableList.of("buildingAndStreet", "optionalAddress", "townOrCity", "postcode");
   }
 }

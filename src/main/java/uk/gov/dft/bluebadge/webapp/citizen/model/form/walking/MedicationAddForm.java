@@ -1,16 +1,19 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form.walking;
 
+import com.google.common.collect.ImmutableList;
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.BaseForm;
 
 @Data
 @EqualsAndHashCode
-public class MedicationAddForm implements Serializable {
+public class MedicationAddForm implements BaseForm, Serializable {
 
   @Size(max = 100, message = "{Size.medication.name}")
   @NotBlank(message = "{NotBlank.medication.name}")
@@ -38,5 +41,10 @@ public class MedicationAddForm implements Serializable {
     if ("yes".equals(prescribed)) return true;
     if ("no".equals(prescribed)) return false;
     return null;
+  }
+
+  @Override
+  public List<String> getFieldOrder() {
+    return ImmutableList.of("name", "prescribed", "dosage", "frequency");
   }
 }
