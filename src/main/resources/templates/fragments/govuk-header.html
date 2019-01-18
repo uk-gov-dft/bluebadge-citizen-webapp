@@ -35,7 +35,10 @@
 	            <strong class="govuk-tag govuk-phase-banner__content__tag" th:text="#{phaseBanner.title}"></strong>
 	            <span class="govuk-phase-banner__text">
 	                <span th:text="#{phaseBanner.text.phraseOne}" th:remove="tag"></span>
-	                <a class="govuk-link" th:text="#{phaseBanner.link}" data-uipath="feedback.link" target="_blank" href="https://www.smartsurvey.co.uk/s/WJLXY/">feedback</a>
+	                <a class="govuk-link" data-uipath="feedback.link" target="_blank" href="https://www.smartsurvey.co.uk/s/WJLXY/">
+                        [[#{phaseBanner.link}]]
+                        <span th:text="' ' + #{common.link.opens-in-new-tab}" class="govuk-visually-hidden"></span>
+                    </a>
 	                <span th:text="#{phaseBanner.text.phraseTwo}" th:remove="tag"></span>
 	            </span>
             </span>
