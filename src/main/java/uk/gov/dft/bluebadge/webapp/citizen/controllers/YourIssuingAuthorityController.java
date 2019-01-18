@@ -1,11 +1,10 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +17,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataService;
+
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Slf4j
 @Controller
@@ -45,15 +46,13 @@ public class YourIssuingAuthorityController implements StepController {
     if (!model.containsAttribute("formRequest")) {
       // Lookup local authority from council and populate model.
       ChooseYourCouncilForm councilForm = journey.getFormForStep(StepDefinition.CHOOSE_COUNCIL);
-      if (null == councilForm) {
-        log.error("Got to issuing authority GET, without local council step being completed.");
-      } else {
+      Assert.notNull(
+          councilForm, "Got to issuing authority GET, without local council step being completed.");
 
-        YourIssuingAuthorityForm form =
-            populateFormFromCouncilCode(councilForm.getCouncilShortCode());
-        if (null != form) {
-          model.addAttribute("formRequest", form);
-        }
+      YourIssuingAuthorityForm form =
+          populateFormFromCouncilCode(councilForm.getCouncilShortCode());
+      if (null != form) {
+        model.addAttribute("formRequest", form);
       }
     }
 
