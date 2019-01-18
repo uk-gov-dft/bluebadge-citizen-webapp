@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.config;
 
+import com.google.common.collect.Sets;
 import java.util.Set;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import nz.net.ultraq.thymeleaf.decorators.strategies.GroupingStrategy;
@@ -10,6 +11,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.dialect.SpringStandardDialect;
 import org.thymeleaf.spring5.processor.SpringInputCheckboxFieldTagProcessor;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.thdialect.CitizenApplicationDialect;
 import uk.gov.dft.bluebadge.webapp.citizen.thymeleaf.processor.CustomSpringInputCheckboxFieldTagProcessor;
 
 @Configuration
@@ -22,6 +24,8 @@ public class TemplateEngineAndResolverConfig {
     result.setTemplateResolver(templateResolver);
     result.setEnableSpringELCompiler(true);
     result.addDialect(new LayoutDialect(new GroupingStrategy()));
+    result.setAdditionalDialects(Sets.newHashSet(new CitizenApplicationDialect()));
+
     return result;
   }
 

@@ -49,7 +49,6 @@ public class EnterAddressSteps extends AbstractSpringSteps {
     messages.add(EnterAddressPage.VALIDATION_MESSAGE_FOR_EMPTY_BUILDING_AND_STREET);
     messages.add(EnterAddressPage.VALIDATION_MESSAGE_FOR_EMPTY_TOWN_CITY);
     messages.add(EnterAddressPage.VALIDATION_MESSAGE_FOR_EMPTY_POSTCODE);
-    commonSteps.iVerifyMultipleValidationMessages(messages);
   }
 
   private void validateLengthLimitBuildingAndStreet(String applicant) {

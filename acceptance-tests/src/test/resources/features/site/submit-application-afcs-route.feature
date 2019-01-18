@@ -54,7 +54,7 @@ Feature: DFT Blue badge Citizen app new application - AFCS
     And   I complete receive benefit page for "AFRFCS"
     And   I complete lump sum of the AFRFCS Scheme page for "YES"
     And   I complete have permanent disability page for "YES"
-    Then  I should see "They are" eligible page
+    Then  I should see "They're" eligible page
 
 
   Scenario: Create a successful new application for myself - England - Yes lump sum - No disability
@@ -100,7 +100,7 @@ Feature: DFT Blue badge Citizen app new application - AFCS
     And   I complete receive benefit page for "AFRFCS"
     And   I complete lump sum of the AFRFCS Scheme page for "NO"
     And   I complete has mental disorder page for "YES"
-    Then  I should see "They are" eligible page
+    Then  I should see "They're" eligible page
 
 
   Scenario: Create a successful new application for myself - Wales - No lump sum - No MentalDisorder
