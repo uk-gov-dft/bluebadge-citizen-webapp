@@ -58,8 +58,10 @@
                                             <td class="govuk-table__cell" th:text="${medication.dosage}"></td>
 
                                             <td class="govuk-table__cell govuk-table__cell--numeric">
-                                                <a th:href="@{/list-medication/remove(uuid=${medication.id})}"
-                                                   th:text="#{remove.this}"></a>
+                                                <a th:href="@{/list-medication/remove(uuid=${medication.id})}">
+                                                    [[#{remove.prefix}]]
+                                                    <span class="govuk-visually-hidden" th:text="${medication.name}"></span>
+                                                </a>
                                             </td>
                                         </tr>
                                     </tbody>

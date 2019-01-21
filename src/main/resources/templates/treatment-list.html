@@ -57,8 +57,10 @@
                                         <td class="govuk-table__cell" th:text="${treatment.treatmentDescription}"></td>
                                         <td class="govuk-table__cell" th:text="${treatment.treatmentWhen}"></td>
                                         <td class="govuk-table__cell govuk-table__cell--numeric">
-                                            <a th:href="@{/list-treatments/remove(uuid=${treatment.id})}"
-                                               th:text="#{remove.this}" th:id="'treatment.remove.link.' + ${iStat.count}"></a>
+                                            <a th:href="@{/list-treatments/remove(uuid=${treatment.id})}" th:id="'treatment.remove.link.' + ${iStat.count}">
+                                                [[#{remove.prefix}]]
+                                                <span class="govuk-visually-hidden" th:text="${treatment.treatmentDescription}"></span>
+                                            </a>
                                         </td>
                                     </tr>
                                     </tbody>
