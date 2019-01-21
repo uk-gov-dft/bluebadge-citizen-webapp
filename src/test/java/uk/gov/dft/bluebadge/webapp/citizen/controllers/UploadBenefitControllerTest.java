@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -22,6 +23,8 @@ import static uk.gov.dft.bluebadge.webapp.citizen.service.ArtifactService.IMAGE_
 import com.google.common.collect.Lists;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.SneakyThrows;
 import org.junit.Before;
@@ -316,11 +319,70 @@ public class UploadBenefitControllerTest {
     assertThat(sessionArtitfact.getFileName()).isEqualTo("originalFile2.jpg");
   }
 
+  @Test
+  public void submit_moreThanMAXLIMITfiles_thenShouldDisplayErrors() throws Exception {
+    List<String> fileNames =
+        Arrays.asList(
+            "test1.jpg",
+            "test2.jpg",
+            "test3.jpg",
+            "test4.jpg",
+            "test5.jpg",
+            "test6.jpg",
+            "test7.jpg",
+            "test8.jpg",
+            "test9.jpg",
+            "test10.jpg",
+            "test11.jpg",
+            "test12.jpg",
+            "test13.jpg",
+            "test14.jpg",
+            "test15.jpg",
+            "test16.jpg");
+    List<MockMultipartFile> uploads = prepareMultipartFiles(fileNames);
+
+    mockMvc
+        .perform(
+            multipart("/upload-benefit")
+                .file(uploads.get(0))
+                .file(uploads.get(1))
+                .file(uploads.get(2))
+                .file(uploads.get(3))
+                .file(uploads.get(4))
+                .file(uploads.get(5))
+                .file(uploads.get(6))
+                .file(uploads.get(7))
+                .file(uploads.get(8))
+                .file(uploads.get(9))
+                .file(uploads.get(10))
+                .file(uploads.get(11))
+                .file(uploads.get(12))
+                .file(uploads.get(13))
+                .file(uploads.get(14))
+                .file(uploads.get(15))
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(flash().attribute("MAX_NUMBER_SUPPORTING_DOCUMENTS_REACHED", true))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl(Mappings.URL_UPLOAD_BENEFIT));
+  }
+
   private JourneyArtifact addArtifactToJourney(String fileName) throws MalformedURLException {
     JourneyArtifact journeyArtifact = testArtifactBuilder().fileName(fileName).build();
     journey.setFormForStep(
         UploadBenefitForm.builder().journeyArtifacts(Lists.newArrayList(journeyArtifact)).build());
     return journeyArtifact;
+  }
+
+  private List<MockMultipartFile> prepareMultipartFiles(List<String> fileNames) {
+    List<MockMultipartFile> files = new ArrayList<>();
+    int i = 0;
+    for (String fileName : fileNames) {
+      MockMultipartFile mockMultifile =
+          new MockMultipartFile("document", fileName, "text/plain", fileName.getBytes());
+      files.add(mockMultifile);
+    }
+
+    return files;
   }
 
   @Test

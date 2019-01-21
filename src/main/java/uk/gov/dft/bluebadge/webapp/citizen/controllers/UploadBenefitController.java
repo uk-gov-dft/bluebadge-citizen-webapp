@@ -133,28 +133,26 @@ public class UploadBenefitController implements StepController {
 
     UploadBenefitForm sessionForm = journey.getOrSetFormForStep(formRequest);
 
-    if (!documents.isEmpty()
-        && countDocumentsAfterUploading(sessionForm, documents)
-            <= MAX_NUMBER_SUPPORTING_DOCUMENTS) {
-      try {
-        List<JourneyArtifact> newArtifacts =
-            artifactService.upload(documents, IMAGE_PDF_MIME_TYPES);
-        if (!newArtifacts.isEmpty()) {
-          sessionForm.setJourneyArtifacts(newArtifacts);
+    if (!documents.isEmpty()) {
+      if (countDocumentsAfterUploading(sessionForm, documents) <= MAX_NUMBER_SUPPORTING_DOCUMENTS) {
+        try {
+          List<JourneyArtifact> newArtifacts =
+              artifactService.upload(documents, IMAGE_PDF_MIME_TYPES);
+          if (!newArtifacts.isEmpty()) {
+            sessionForm.setJourneyArtifacts(newArtifacts);
+          }
+        } catch (UnsupportedMimetypeException e) {
+          attr.addFlashAttribute(ArtifactService.UNSUPPORTED_FILE, true);
+          return "redirect:" + Mappings.URL_UPLOAD_BENEFIT;
+        } catch (ServiceException e) {
+          log.warn("Failed to upload document", e);
+          bindingResult.rejectValue("journeyArtifact", "Empty.journeyArtifact");
         }
-      } catch (UnsupportedMimetypeException e) {
-        attr.addFlashAttribute(ArtifactService.UNSUPPORTED_FILE, true);
-        return "redirect:" + Mappings.URL_UPLOAD_BENEFIT;
-      } catch (ServiceException e) {
-        log.warn("Failed to upload document", e);
-        bindingResult.rejectValue("journeyArtifact", "Empty.journeyArtifact");
-      }
-    } else {
+      } else {
         attr.addFlashAttribute(ArtifactService.MAX_UPLOAD_LIMIT_REACHED, true);
         return "redirect:" + Mappings.URL_UPLOAD_BENEFIT;
       }
-
-
+    }
     if (null == sessionForm || !sessionForm.hasArtifacts()) {
       bindingResult.rejectValue("journeyArtifact", "NotNull.upload.benefit.document");
     }
