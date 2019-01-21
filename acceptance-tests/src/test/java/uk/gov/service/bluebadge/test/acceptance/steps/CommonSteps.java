@@ -120,7 +120,7 @@ public class CommonSteps extends AbstractSpringSteps {
     assertThat(
         "I should see page titled.",
         commonPage.getDocumentTitle(),
-        is(pageTitle + " - GOV.UK Apply for a Blue Badge"));
+        is(pageTitle + " - Apply for a Blue Badge - GOV.UK"));
   }
 
   @Then("^I should see the content \"([^\"]*)\"$")
@@ -316,10 +316,10 @@ public class CommonSteps extends AbstractSpringSteps {
   @Then(
       "^I should see \"(You're|They're|You may be|They may be|You're not|They're not)\" eligible page$")
   public void iShouldSeeEligiblePage(String who) {
-    String page_title = who + " eligible for a Blue Badge - GOV.UK Apply for a Blue Badge";
+    String page_title = who + " eligible for a Blue Badge - Apply for a Blue Badge - GOV.UK";
 
     if (who.equals("You're not") || who.equals("They're not")) {
-      page_title = who + " eligible - GOV.UK Apply for a Blue Badge";
+      page_title = who + " eligible - Apply for a Blue Badge - GOV.UK";
     }
 
     assertThat("I should see page titled.", commonPage.getDocumentTitle(), is(page_title));
