@@ -9,6 +9,8 @@ blue-badge:
       host: applications-service
 
 spring:
+  main:
+    banner-mode: "off"
   redis:
     host: redis
 
