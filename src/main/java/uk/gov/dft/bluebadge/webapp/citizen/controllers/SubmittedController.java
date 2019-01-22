@@ -14,15 +14,18 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 @Controller
-public class SubmittedController implements StepController {
+public class SubmittedController extends BaseFinalStepController implements StepController {
 
   private static final String TEMPLATE_APPLICATION_SUBMITTED = "application-end/submitted";
 
-  private final RouteMaster routeMaster;
-
   @Autowired
   SubmittedController(RouteMaster routeMaster) {
-    this.routeMaster = routeMaster;
+    super(routeMaster);
+  }
+
+  @Override
+  protected String getTemplate() {
+    return TEMPLATE_APPLICATION_SUBMITTED;
   }
 
   @GetMapping(URL_APPLICATION_SUBMITTED)
@@ -30,14 +33,7 @@ public class SubmittedController implements StepController {
       SessionStatus sessionStatus,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       Model model) {
-    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
-    }
-
-    model.addAttribute("journey", journey);
-
-    sessionStatus.setComplete();
-    return TEMPLATE_APPLICATION_SUBMITTED;
+    return super.show(journey, model, sessionStatus);
   }
 
   @Override
