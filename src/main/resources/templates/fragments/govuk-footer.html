@@ -15,10 +15,7 @@
                         <a class="govuk-footer__link" href="/privacy-notice" th:text="#{footer.link.privacy}"></a>
                     </li>
                     <li class="govuk-footer__inline-list-item">
-                        <a class="govuk-footer__link" target="_blank" href="https://www.smartsurvey.co.uk/s/WJLXY/">
-                            [[#{footer.link.feedback}]]
-                            <span th:text="' ' + #{common.link.opens-in-new-tab}" class="govuk-visually-hidden"></span>
-                        </a>
+                        <a class="govuk-footer__link" target="_blank" href="https://www.smartsurvey.co.uk/s/WJLXY/">[[#{footer.link.feedback}]]<span th:text="' ' + #{common.link.opens-in-new-tab}" class="govuk-visually-hidden"></span></a>
                     </li>
                     <li class="govuk-footer__inline-list-item">
                         <th:block th:with="nextLang = ${#locale.language} == 'cy' ? 'en' : 'cy'">

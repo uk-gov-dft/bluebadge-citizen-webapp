@@ -328,7 +328,7 @@ public class CommonSteps extends AbstractSpringSteps {
   @Then("^I can see feedback link$")
   public void iCanSeeFeedbackLink() {
     assertTrue(
-        FEEDBACK_URL.equals(commonPage.findElementWithText("feedback").getAttribute("href")));
+        FEEDBACK_URL.equals(commonPage.findElementWithText("Feedback").getAttribute("href")));
   }
 
   @And("^I can see the continue button with link to external welsh site$")
