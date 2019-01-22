@@ -1,7 +1,15 @@
 package uk.gov.service.bluebadge.test.acceptance.steps;
 
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.*;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.*;
+import static org.junit.Assert.assertNotNull;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.HAS_RECEIVED_DLA;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.MAIN_REASON_LIST;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.NEVER_RECEIVED_DLA;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.PLACE_CAN_WALK;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.TIME_TO_DESTINATION;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_MONTH;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.DOB_YEAR;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_FEMALE;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.Person.GENDER_UNSPECIFIED;
 
@@ -12,7 +20,11 @@ import java.util.Calendar;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
-import uk.gov.service.bluebadge.test.acceptance.pages.site.*;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.AlreadyHaveBlueBadgePage;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.ApplicantPage;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.BenifitsPage;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.ChooseCouncilPage;
+import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
 import uk.gov.service.bluebadge.test.acceptance.steps.site.ContactDetailsSteps;
 import uk.gov.service.bluebadge.test.acceptance.util.FileHelper;
 
@@ -27,7 +39,12 @@ public class ApplicationFixture extends AbstractSpringSteps {
   }
 
   private void pressContinue() {
-    commonPage.findElementWithText("Continue").click();
+    WebElement aContinueBtn = commonPage.findElementWithText("Continue");
+    if (null == aContinueBtn) {
+      aContinueBtn = commonPage.findElementWithText("Parhau");
+    }
+    assertNotNull("Cannot find the continue button.", aContinueBtn);
+    aContinueBtn.click();
   }
 
   @Given("I complete applicant page for \"(yourself|someone else|organisation)\"")
