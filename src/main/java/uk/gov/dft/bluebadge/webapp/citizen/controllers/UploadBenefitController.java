@@ -123,7 +123,6 @@ public class UploadBenefitController implements StepController {
   }
 
   @PostMapping(Mappings.URL_UPLOAD_BENEFIT)
-  @SuppressWarnings("squid:S2259")
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @RequestParam(DOCUMENT) List<MultipartFile> documents,
