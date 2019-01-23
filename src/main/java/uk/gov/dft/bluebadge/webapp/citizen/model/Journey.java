@@ -219,6 +219,19 @@ public class Journey implements Serializable {
     }
   }
 
+  public boolean isAutomaticEligibilityType() {
+    switch (getEligibilityCode()) {
+      case PIP:
+      case DLA:
+      case WPMS:
+      case AFRFCS:
+      case BLIND:
+        return true;
+      default:
+        return false;
+    }
+  }
+
   /**
    * Returns a built string whilst this data is not currently stored is separate fields.
    *

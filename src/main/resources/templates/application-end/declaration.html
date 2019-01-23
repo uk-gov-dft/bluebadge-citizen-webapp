@@ -18,10 +18,19 @@
 
             <ul class="govuk-list govuk-list--bullet">
                 <li th:text="#{${JOURNEY.who} + 'declarationPage.content.ul.one'}"></li>
+                <li th:if="${JOURNEY.who == 'oth'}" th:text="#{${JOURNEY.who} + 'declarationPage.content.ul.extra'}"></li>
                 <li th:text="#{${JOURNEY.who} + 'declarationPage.content.ul.two'}"></li>
                 <li th:text="#{${JOURNEY.who} + 'declarationPage.content.ul.three'}"></li>
-                <li th:text="#{${JOURNEY.who} + 'declarationPage.content.ul.four'}"></li>
-                <li th:text="#{${JOURNEY.who} + 'declarationPage.content.ul.five'}"></li>
+                <li th:text="#{${JOURNEY.who} + 'declarationPage.content.ul.four'(${localAuthority.description})}"></li>
+            </ul>
+
+            <p class="govuk-body" th:text="#{${JOURNEY.who} + 'declarationPage.content.p2'(${localAuthority.description})}"></p>
+
+            <ul class="govuk-list govuk-list--bullet">
+                <li th:text="#{${JOURNEY.who} + 'declarationPage.content.ul.five'}"></li>                
+               	<li th:if="${! JOURNEY.automaticEligibilityType}" th:text="#{${JOURNEY.who} + 'declarationPage.content.ul.six'}"></li>
+                <li th:text="#{${JOURNEY.who} + 'declarationPage.content.ul.seven'}"></li>
+                <li th:text="#{${JOURNEY.who} + 'declarationPage.content.ul.eight'}"></li>
             </ul>
 
             <form data-prevent-double-submission th:action="@{/apply-for-a-blue-badge/declaration}" th:object="${formRequest}" method="post" novalidate>
