@@ -45,6 +45,7 @@ public class DeclarationSubmitController implements StepController {
     if (!model.containsAttribute("formRequest")) {
       model.addAttribute("formRequest", DeclarationForm.builder().build());
     }
+    model.addAttribute("localAuthority", journey.getLocalAuthority());
 
     return TEMPLATE_DECLARATION;
   }
