@@ -13,6 +13,11 @@ spring:
     banner-mode: "off"
   redis:
     host: redis
-
+  resources:
+    static-locations: classpath:/static/
+    cache:
+      cachecontrol:
+        no-store: false
+        max-age: 315360000
 amazon:
   s3bucket: ${bb_application_tmp_bucket:uk-gov-dft-dev-applications-temp}
