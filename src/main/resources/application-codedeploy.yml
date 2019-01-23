@@ -23,6 +23,8 @@ server:
 GACode:  ${GACODE:UA-124760983-5}
 
 spring:
+  main:
+    banner-mode: "off"
   redis:
     host:
     cluster:
