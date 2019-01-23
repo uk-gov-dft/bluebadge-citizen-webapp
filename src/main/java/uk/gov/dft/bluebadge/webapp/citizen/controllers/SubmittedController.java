@@ -12,6 +12,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 
 @Controller
 public class SubmittedController extends BaseFinalStepController implements StepController {
@@ -33,6 +34,10 @@ public class SubmittedController extends BaseFinalStepController implements Step
       SessionStatus sessionStatus,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       Model model) {
+    if (null != journey && null != journey.getFormForStep(StepDefinition.CONTACT_DETAILS)) {
+      ContactDetailsForm contactForm = journey.getFormForStep(StepDefinition.CONTACT_DETAILS);
+      model.addAttribute("contactEmail", contactForm.getEmailAddress());
+    }
     return super.show(journey, model, sessionStatus);
   }
 

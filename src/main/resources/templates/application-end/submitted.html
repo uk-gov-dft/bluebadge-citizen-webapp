@@ -23,6 +23,9 @@
 
             <h2 class="govuk-heading-m govuk-!-margin-top-7" th:text="#{submittedPage.content.title}"></h2>
 
+            <p class="govuk-body" th:if="${contactEmail}" th:text="#{submittedPage.email.sent(${contactEmail})}">
+            </p>
+
             <p class="govuk-body" th:if="${!JOURNEY.nationWales}">
                 <span th:remove="tag" th:text="#{'submittedPage.content.wales.payment.pretext'}"></span>
                 <a th:href="${JOURNEY.localAuthority.contactUrl}" th:text="${JOURNEY.localAuthority.description}"></a>

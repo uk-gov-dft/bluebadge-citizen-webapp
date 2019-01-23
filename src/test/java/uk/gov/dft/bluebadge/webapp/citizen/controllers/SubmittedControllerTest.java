@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture.Values.EMAIL_ADDRESS;
 
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -39,6 +40,7 @@ public class SubmittedControllerTest {
         .perform(get("/application-submitted").sessionAttr("JOURNEY", journey))
         .andExpect(view().name("application-end/submitted"))
         .andExpect(model().attribute("JOURNEY", journey))
+        .andExpect(model().attribute("contactEmail", EMAIL_ADDRESS))
         .andExpect(request().sessionAttribute("JOURNEY", Matchers.nullValue()));
   }
 
