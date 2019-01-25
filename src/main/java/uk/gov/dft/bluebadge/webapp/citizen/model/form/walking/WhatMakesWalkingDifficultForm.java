@@ -29,7 +29,7 @@ public class WhatMakesWalkingDifficultForm implements StepForm, Serializable {
 
   @Override
   public StepDefinition getAssociatedStep() {
-    return StepDefinition.WHAT_WALKING_DIFFICULTIES;
+    return StepDefinition.WHAT_MAKES_WALKING_DIFFICULT;
   }
 
   @Override

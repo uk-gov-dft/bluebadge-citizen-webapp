@@ -32,7 +32,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete the already have a blue badge page for "NO"
     And   I complete receive benefit page for "PIP"
     And   I complete moving around points page for "12"
-    Then  I should see "They are" eligible page
+    Then  I should see "They're" eligible page
 
 
   Scenario: Create a successful new application for myself - England - less than 8 points
@@ -78,7 +78,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete receive benefit page for "PIP"
     And   I complete moving around points page for "4"
     And   I complete planning points page for "12"
-    Then  I should see "They are" eligible page
+    Then  I should see "They're" eligible page
 
 
   Scenario: Create a successful new application for myself - Scotland - less than 8 points (moving) - less than 12 points (planning) - DLA Yes
@@ -102,7 +102,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete moving around points page for "4"
     And   I complete planning points page for "8"
     And   I complete dla allowance page for "YES"
-    Then  I should see "They are" eligible page
+    Then  I should see "They're" eligible page
 
 
   Scenario: Create a successful new application for myself - Scotland - less than 8 points (moving) - less than 12 points (planning) - DLA No
@@ -150,7 +150,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete receive benefit page for "PIP"
     And   I complete moving around points page for "4"
     And   I complete planning points page for "12"
-    Then  I should see "They are" eligible page
+    Then  I should see "They're" eligible page
 
 
   Scenario: Create a successful new application for myself - Wales - less than 8 points (moving) - less than 12 points (planning)

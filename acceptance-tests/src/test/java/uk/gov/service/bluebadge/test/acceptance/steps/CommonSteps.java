@@ -1,12 +1,21 @@
 package uk.gov.service.bluebadge.test.acceptance.steps;
 
 import static java.util.stream.Collectors.toList;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.*;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.APPLY_IN_WELSH_EXTERNAL_URL;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.FEEDBACK_URL;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.GOOGLE_ANALYTICS_TAG;
 
+import com.google.common.collect.Lists;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -15,6 +24,7 @@ import cucumber.api.java.en.When;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.hamcrest.Matcher;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -247,6 +257,18 @@ public class CommonSteps extends AbstractSpringSteps {
     assertNotNull(errorSummaryBox);
   }
 
+  @And("^I should see error summary box with validation messages in order \"([^\"]*)\" \"$")
+  public void iShouldSeeErrorSummaryBoxWithValidationMessagesInOrder(List<String> messages) {
+    List<String> errorSummaryItems =
+        commonPage
+            .findElementWithUiPath("error-summary-list")
+            .findElements(By.xpath("li/a"))
+            .stream()
+            .map(WebElement::getText)
+            .collect(Collectors.toList());
+    assertThat(errorSummaryItems, is(messages));
+  }
+
   @And("^I should see \"([^\"]*)\" text on the page$")
   public void iShouldSeeTextOnPage(String content) {
     assertTrue(commonPage.getPageContent().contains(content));
@@ -339,6 +361,7 @@ public class CommonSteps extends AbstractSpringSteps {
   public void iVerifyValidationMessage(String message) {
     this.iClickOnContinueButton();
     this.andIshouldSeeErrorSummaryBox();
+    this.iShouldSeeErrorSummaryBoxWithValidationMessagesInOrder(Lists.newArrayList(message));
     this.iShouldSeeTextOnPage(message);
   }
 
@@ -347,6 +370,7 @@ public class CommonSteps extends AbstractSpringSteps {
 
     this.iClickOnContinueButton();
     this.andIshouldSeeErrorSummaryBox();
+    this.iShouldSeeErrorSummaryBoxWithValidationMessagesInOrder(messages);
 
     for (String message : messages) {
       this.iShouldSeeTextOnPage(message);
@@ -358,6 +382,7 @@ public class CommonSteps extends AbstractSpringSteps {
 
     this.iClickOnAddButtonOnChildPage(element);
     this.andIshouldSeeErrorSummaryBox();
+    this.iShouldSeeErrorSummaryBoxWithValidationMessagesInOrder(messages);
 
     for (String message : messages) {
       this.iShouldSeeTextOnPage(message);
