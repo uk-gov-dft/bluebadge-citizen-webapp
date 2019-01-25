@@ -15,7 +15,7 @@
     <div th:fragment="govuk-datecomponent-h1(label, hint, date)"
          th:class="${#fields.hasErrors(date)} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
 
-        <fieldset class="govuk-fieldset" th:aria-describedby="${hint} ? ${date} + '-hint'" role="group">
+        <fieldset class="govuk-fieldset" th:aria-describedby="${hint} ? ${date} + '-hint'">
 
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l" th:if="${label}">
                 <h1 th:text="${label}" class="govuk-fieldset__heading" />
@@ -37,7 +37,7 @@
          th:class="${#fields.hasErrors(date)} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
 
         <fieldset class="govuk-fieldset"
-                  th:aria-describedby="${hint} ? ${date} + '-hint'" role="group">
+                  th:aria-describedby="${hint} ? ${date} + '-hint'">
 
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m"
                     th:if="${label}"
