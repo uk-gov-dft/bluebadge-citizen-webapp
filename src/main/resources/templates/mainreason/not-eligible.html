@@ -18,7 +18,7 @@
         <p class="govuk-body">
             <span th:remove="tag"
                   th:text="#{${JOURNEY.who} + 'notEligiblePage.council.contact.pretext'}"></span>
-            <a th:href="${localAuthority.contactUrl}" th:text="#{notEligiblePage.council.contact.intext} + ' ' + ${localAuthority.description} + '.'"></a>
+            <a th:href="${JOURNEY.localAuthority.contactUrl}" th:text="#{notEligiblePage.council.contact.intext} + ' ' + ${JOURNEY.localeAwareLocalAuthority.description} + '.'"></a>
         </p>
     </section>
 

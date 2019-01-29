@@ -1,9 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-
-import java.util.List;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,13 +10,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataGroupEnum;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalCouncilRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.LocaleAwareRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataService;
+
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 @RequestMapping(Mappings.URL_CHOOSE_YOUR_COUNCIL)
@@ -53,8 +56,12 @@ public class ChooseYourCouncilController implements StepController {
       model.addAttribute(FORM_REQUEST, ChooseYourCouncilForm.builder().build());
     }
 
-    List<ReferenceData> councils =
-        referenceDataService.retrieveReferenceDataList(RefDataGroupEnum.COUNCIL);
+    List<LocaleAwareRefData<LocalCouncilRefData>> councils = new ArrayList<>();
+    referenceDataService
+        .retrieveReferenceDataList(RefDataGroupEnum.COUNCIL)
+        .forEach(
+            c -> councils.add(new LocaleAwareRefData<>((LocalCouncilRefData) c)));
+
     model.addAttribute("councils", councils);
 
     return TEMPLATE;

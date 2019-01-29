@@ -23,8 +23,6 @@ public abstract class BaseFinalStepController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    model.addAttribute("localAuthority", journey.getLocalAuthority());
-
     sessionStatus.setComplete();
     return getTemplate();
   }

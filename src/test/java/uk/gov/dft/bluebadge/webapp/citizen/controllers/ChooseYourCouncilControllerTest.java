@@ -1,14 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import java.util.List;
 import org.assertj.core.util.Lists;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +19,16 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataService;
 
+import java.util.List;
+
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 public class ChooseYourCouncilControllerTest {
 
   private static final String COUNCIL_SHORT_CODE = "test test";
@@ -39,8 +40,6 @@ public class ChooseYourCouncilControllerTest {
 
   Journey journey;
 
-  private LocalCouncilRefData localCouncilRefData1;
-  private LocalCouncilRefData localCouncilRefData2;
   private List<ReferenceData> councils;
 
   @Before
@@ -57,7 +56,7 @@ public class ChooseYourCouncilControllerTest {
     LocalCouncilRefData.LocalCouncilMetaData localCouncilMetaData1 =
         new LocalCouncilRefData.LocalCouncilMetaData();
     localCouncilMetaData1.setIssuingAuthorityShortCode("WARCC");
-    localCouncilRefData1 = new LocalCouncilRefData();
+    LocalCouncilRefData localCouncilRefData1 = new LocalCouncilRefData();
     localCouncilRefData1.setDescription("Description");
     localCouncilRefData1.setDisplayOrder(1);
     localCouncilRefData1.setLocalCouncilMetaData(localCouncilMetaData1);
@@ -65,7 +64,7 @@ public class ChooseYourCouncilControllerTest {
     LocalCouncilRefData.LocalCouncilMetaData localCouncilMetaData2 =
         new LocalCouncilRefData.LocalCouncilMetaData();
     localCouncilMetaData2.setIssuingAuthorityShortCode("KENTCC");
-    localCouncilRefData2 = new LocalCouncilRefData();
+    LocalCouncilRefData localCouncilRefData2 = new LocalCouncilRefData();
     localCouncilRefData2.setDescription("Description");
     localCouncilRefData2.setDisplayOrder(1);
     localCouncilRefData2.setLocalCouncilMetaData(localCouncilMetaData2);
@@ -85,7 +84,7 @@ public class ChooseYourCouncilControllerTest {
         .andExpect(status().isOk())
         .andExpect(view().name("choose-council"))
         .andExpect(model().attribute("formRequest", formRequest))
-        .andExpect(model().attribute("councils", councils));
+        .andExpect(model().attributeExists("councils"));
   }
 
   @Test
@@ -99,7 +98,7 @@ public class ChooseYourCouncilControllerTest {
         .andExpect(status().isOk())
         .andExpect(view().name("choose-council"))
         .andExpect(model().attribute("formRequest", JourneyFixture.getChooseYourCouncilForm()))
-        .andExpect(model().attribute("councils", councils));
+        .andExpect(model().attributeExists("councils"));
   }
 
   @Test

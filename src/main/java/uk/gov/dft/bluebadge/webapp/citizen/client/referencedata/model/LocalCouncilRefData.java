@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class LocalCouncilRefData extends ReferenceData {
+public class LocalCouncilRefData extends ReferenceData implements WelshSupport {
   @JsonProperty("metaData")
   private LocalCouncilMetaData localCouncilMetaData;
 
@@ -24,8 +24,17 @@ public class LocalCouncilRefData extends ReferenceData {
     return Optional.ofNullable(localCouncilMetaData);
   }
 
+  @Override
+  public String getDescriptionWelsh() {
+    if(getLocalCouncilMetaData().isPresent()){
+      return getLocalCouncilMetaData().get().welshDescription;
+    }
+    return null;
+  }
+
   @Data
   public static class LocalCouncilMetaData implements Serializable {
     private String issuingAuthorityShortCode;
+    private String welshDescription;
   }
 }

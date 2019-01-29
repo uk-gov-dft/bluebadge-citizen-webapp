@@ -59,11 +59,7 @@ public class DifferentServiceSignpostControllerTest {
     mockMvc
         .perform(get("/different-service-signpost").sessionAttr("JOURNEY", journeyMock))
         .andExpect(status().isOk())
-        .andExpect(view().name("different-service-signpost"))
-        .andExpect(model().attribute("localAuthority", localAuthorityRefData))
-        .andExpect(
-            model()
-                .attribute("differentServiceSignpostUrl", DEFAULT_DIFFERENT_SERVICE_SIGNPOST_URL));
+        .andExpect(view().name("different-service-signpost"));
   }
 
   @Test

@@ -156,6 +156,10 @@ public class Journey implements Serializable {
     return localAuthority;
   }
 
+  public LocaleAwareRefData<LocalAuthorityRefData> getLocaleAwareLocalAuthority(){
+    return new LocaleAwareRefData<>(getLocalAuthority());
+  }
+
   public void setLocalAuthority(LocalAuthorityRefData localAuthority) {
     this.localAuthority = localAuthority;
   }

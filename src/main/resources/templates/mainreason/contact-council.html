@@ -12,13 +12,13 @@
     <section class="guidance-layout">
         <h1 class="govuk-heading-l">
             <span th:remove="tag" th:text="#{contactCouncilPage.content.title.prefix}"></span>
-            <span th:remove="tag" th:text="${localAuthority.description}"></span>
+            <span th:remove="tag" th:text="${JOURNEY.localeAwareLocalAuthority.description}"></span>
         </h1>
 
         <p class="govuk-body">
             <span th:remove="tag"
                   th:text="#{${JOURNEY.who} + 'contactCouncilPage.you.should.contact.prefix.text'}"></span>
-            <a th:href="${localAuthority.contactUrl}" th:text="' ' + #{contactCouncilPage.council.contact.intext} + ' ' + ${localAuthority.description}"></a>
+            <a th:href="${JOURNEY.localAuthority.contactUrl}" th:text="' ' + #{contactCouncilPage.council.contact.intext} + ' ' + ${JOURNEY.localeAwareLocalAuthority.description}"></a>
             <span th:remove="tag" th:text="#{${JOURNEY.who} + 'contactCouncilPage.you.should.contact.suffix.text'}"></span>
 
         </p>
