@@ -13,14 +13,14 @@
         <h1 class="govuk-heading-l"
             th:text="#{'organisationMayBeEligible.page.title'}"></h1>
 
-        <p class="govuk-body" th:text="#{organisationMayBeEligible.page.paragraph1(${localAuthority.description})}"></p>
+        <p class="govuk-body" th:text="#{organisationMayBeEligible.page.paragraph1(${JOURNEY.localeAwareLocalAuthority.description})}"></p>
 
-       	<p class="govuk-body" th:text="#{organisationMayBeEligible.page.paragraph2(${localAuthority.description})}"></p>
+       	<p class="govuk-body" th:text="#{organisationMayBeEligible.page.paragraph2(${JOURNEY.localeAwareLocalAuthority.description})}"></p>
 
  		<p class="govuk-body">
 		    <span th:text="#{organisationMayBeEligible.page.paragraph3}" th:remove="tag"></span>
 		    <a data-ga-track-link data-ga-track-link-category="Outbound link"
-		    	   th:href="${localAuthority.contactUrl}" th:text="#{organisationMayBeEligible.page.paragraph3.link(${localAuthority.description})}"></a>
+		    	   th:href="${localAuthority.contactUrl}" th:text="#{organisationMayBeEligible.page.paragraph3.link(${JOURNEY.localeAwareLocalAuthority.description})}"></a>
 		</p>
       </section>
 

@@ -14,6 +14,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.LocaleAwareRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataService;
@@ -60,15 +61,13 @@ public class YourIssuingAuthorityController implements StepController {
   }
 
   YourIssuingAuthorityForm populateFormFromCouncilCode(String councilCode) {
-    LocalAuthorityRefData localAuthorityRefData =
-        referenceDataService.lookupLocalAuthorityFromCouncilCode(councilCode);
-    if (null != localAuthorityRefData) {
-      return YourIssuingAuthorityForm.builder()
-          .localAuthorityDescription(localAuthorityRefData.getDescription())
-          .localAuthorityShortCode(localAuthorityRefData.getShortCode())
-          .build();
-    }
-    return null;
+    LocaleAwareRefData<LocalAuthorityRefData> localAuthorityRefData =
+        new LocaleAwareRefData<>(
+            referenceDataService.lookupLocalAuthorityFromCouncilCode(councilCode));
+    return YourIssuingAuthorityForm.builder()
+        .localAuthorityDescription(localAuthorityRefData.getDescription())
+        .localAuthorityShortCode(localAuthorityRefData.getShortCode())
+        .build();
   }
 
   @PostMapping

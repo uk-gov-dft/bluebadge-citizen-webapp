@@ -21,10 +21,10 @@
                 <li th:if="${! JOURNEY.applicantYourself}" th:text="#{${JOURNEY.who} + 'declarationPage.content.ul.extra'}"></li>
                 <li th:text="#{${JOURNEY.who} + 'declarationPage.content.ul.two'}"></li>
                 <li th:text="#{${JOURNEY.who} + 'declarationPage.content.ul.three'}"></li>
-                <li th:text="#{${JOURNEY.who} + 'declarationPage.content.ul.four'(${localAuthority.description})}"></li>
+                <li th:text="#{${JOURNEY.who} + 'declarationPage.content.ul.four'(${JOURNEY.localeAwareLocalAuthority.description})}"></li>
             </ul>
 
-            <p class="govuk-body" th:text="#{${JOURNEY.who} + 'declarationPage.content.p2'(${localAuthority.description})}"></p>
+            <p class="govuk-body" th:text="#{${JOURNEY.who} + 'declarationPage.content.p2'(${JOURNEY.localeAwareLocalAuthority.description})}"></p>
 
             <ul class="govuk-list govuk-list--bullet">
                 <li th:text="#{${JOURNEY.who} + 'declarationPage.content.ul.five'}"></li>                
