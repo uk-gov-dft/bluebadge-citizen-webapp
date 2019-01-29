@@ -23,7 +23,7 @@
 
             <p class="govuk-body govuk-!-margin-top-7" th:if="!${#strings.isEmpty(contactEmail)}">
                 <span th:remove="tag" th:text="#{submittedPage.email.sent}"></span>
-                <span class="govuk-!-font-weight-bold" th:text="${contactEmail}></span><span th:remove="tag">.</span>
+                <span class="govuk-!-font-weight-bold" th:text="${contactEmail}"></span><span th:remove="tag">.</span>
             </p>
 
             <h2 class="govuk-heading-m" th:text="#{submittedPage.content.title}"></h2>
