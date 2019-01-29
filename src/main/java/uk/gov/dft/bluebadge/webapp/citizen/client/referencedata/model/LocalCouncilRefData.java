@@ -26,7 +26,7 @@ public class LocalCouncilRefData extends ReferenceData implements WelshSupport {
 
   @Override
   public String getDescriptionWelsh() {
-    if(getLocalCouncilMetaData().isPresent()){
+    if (getLocalCouncilMetaData().isPresent()) {
       return getLocalCouncilMetaData().get().welshDescription;
     }
     return null;

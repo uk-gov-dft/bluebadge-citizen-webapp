@@ -15,7 +15,8 @@ public class LocaleAwareRefData<T extends WelshSupport> {
 
   public String getDescription() {
     if ("cy".equals(LocaleContextHolder.getLocale().getLanguage())
-        && null != refData && null != refData.getDescriptionWelsh()) {
+        && null != refData
+        && null != refData.getDescriptionWelsh()) {
       return refData.getDescriptionWelsh();
     }
     return null != refData ? refData.getDescription() : null;

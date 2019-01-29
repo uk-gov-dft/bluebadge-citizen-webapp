@@ -1,5 +1,10 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+
+import java.util.ArrayList;
+import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,12 +23,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.LocaleAwareRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataService;
-
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 @RequestMapping(Mappings.URL_CHOOSE_YOUR_COUNCIL)
@@ -59,8 +58,7 @@ public class ChooseYourCouncilController implements StepController {
     List<LocaleAwareRefData<LocalCouncilRefData>> councils = new ArrayList<>();
     referenceDataService
         .retrieveReferenceDataList(RefDataGroupEnum.COUNCIL)
-        .forEach(
-            c -> councils.add(new LocaleAwareRefData<>((LocalCouncilRefData) c)));
+        .forEach(c -> councils.add(new LocaleAwareRefData<>((LocalCouncilRefData) c)));
 
     model.addAttribute("councils", councils);
 
