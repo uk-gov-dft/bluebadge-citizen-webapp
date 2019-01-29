@@ -1,5 +1,11 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.organisation;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
@@ -20,12 +26,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @Slf4j
 @TestInstance(Lifecycle.PER_CLASS)

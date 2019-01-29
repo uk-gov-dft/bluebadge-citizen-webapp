@@ -21,10 +21,9 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 public class DifferentServiceSignpostControllerTest {
 
-  public static final String DEFAULT_DIFFERENT_SERVICE_SIGNPOST_URL =
+  private static final String DEFAULT_DIFFERENT_SERVICE_SIGNPOST_URL =
       "https://bluebadge.direct.gov.uk/bluebadge/why-are-you-here";
   private MockMvc mockMvc;
-  private LocalAuthorityRefData localAuthorityRefData;
 
   @Mock private RouteMaster routeMasterMock;
   @Mock private Journey journeyMock;
@@ -42,7 +41,7 @@ public class DifferentServiceSignpostControllerTest {
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
 
-    localAuthorityRefData = new LocalAuthorityRefData();
+    LocalAuthorityRefData localAuthorityRefData = new LocalAuthorityRefData();
     localAuthorityRefData.setShortCode("WARCC");
     LocalAuthorityRefData.LocalAuthorityMetaData localAuthorityMetaData =
         new LocalAuthorityRefData.LocalAuthorityMetaData();
@@ -59,7 +58,10 @@ public class DifferentServiceSignpostControllerTest {
     mockMvc
         .perform(get("/different-service-signpost").sessionAttr("JOURNEY", journeyMock))
         .andExpect(status().isOk())
-        .andExpect(view().name("different-service-signpost"));
+        .andExpect(view().name("different-service-signpost"))
+        .andExpect(
+            model()
+                .attribute("differentServiceSignpostUrl", DEFAULT_DIFFERENT_SERVICE_SIGNPOST_URL));
   }
 
   @Test

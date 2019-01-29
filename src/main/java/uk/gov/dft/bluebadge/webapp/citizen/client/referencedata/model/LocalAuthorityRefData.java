@@ -32,7 +32,7 @@ public class LocalAuthorityRefData extends ReferenceData implements WelshSupport
 
   @Override
   public String getDescriptionWelsh() {
-    if(getLocalAuthorityMetaData().isPresent()){
+    if (getLocalAuthorityMetaData().isPresent()) {
       return getLocalAuthorityMetaData().get().welshDescription;
     }
     return null;

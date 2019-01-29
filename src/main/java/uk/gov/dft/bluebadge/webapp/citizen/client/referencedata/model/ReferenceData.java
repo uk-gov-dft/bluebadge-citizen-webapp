@@ -2,17 +2,17 @@ package uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import lombok.Data;
-
 import java.io.Serializable;
 import java.util.Map;
+import lombok.Data;
 
 @Data
 @JsonTypeInfo(
-    defaultImpl = ReferenceData.class,
-    use = JsonTypeInfo.Id.NAME,
-    property = "groupShortCode",
-    visible = true)
+  defaultImpl = ReferenceData.class,
+  use = JsonTypeInfo.Id.NAME,
+  property = "groupShortCode",
+  visible = true
+)
 @JsonSubTypes({
   @JsonSubTypes.Type(value = LocalAuthorityRefData.class, name = "LA"),
   @JsonSubTypes.Type(value = LocalCouncilRefData.class, name = "LC")

@@ -1,13 +1,12 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
-import org.junit.Test;
-import org.springframework.context.i18n.LocaleContextHolder;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.HashMap;
 import java.util.Locale;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.Test;
+import org.springframework.context.i18n.LocaleContextHolder;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 
 public class LocaleAwareRefDataTest {
 
@@ -45,5 +44,4 @@ public class LocaleAwareRefDataTest {
     LocaleContextHolder.setLocale(english);
     assertThat(testme.getDescription()).isEqualTo("English");
   }
-
 }
