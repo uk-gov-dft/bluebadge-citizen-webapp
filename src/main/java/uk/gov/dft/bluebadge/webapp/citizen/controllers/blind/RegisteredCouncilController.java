@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers.blind;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataGroupEnum;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalCouncilRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.StepController;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.LocaleAwareRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.blind.RegisteredCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataService;
@@ -61,8 +64,11 @@ public class RegisteredCouncilController implements StepController {
         new RadioOptionsGroup(journey.who + "registeredCouncilPage.title").withYesNoOptions();
     model.addAttribute("radioOptions", radioOptions);
 
-    List<ReferenceData> councils =
-        referenceDataService.retrieveReferenceDataList(RefDataGroupEnum.COUNCIL);
+    List<LocaleAwareRefData<LocalCouncilRefData>> councils = new ArrayList<>();
+    referenceDataService
+        .retrieveReferenceDataList(RefDataGroupEnum.COUNCIL)
+        .forEach(c -> councils.add(new LocaleAwareRefData<>((LocalCouncilRefData) c)));
+
     model.addAttribute("councils", councils);
 
     return TEMPLATE;
