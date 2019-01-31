@@ -10,7 +10,6 @@ import lombok.Data;
 @JsonTypeInfo(
   defaultImpl = ReferenceData.class,
   use = JsonTypeInfo.Id.NAME,
-  include = JsonTypeInfo.As.PROPERTY,
   property = "groupShortCode",
   visible = true
 )

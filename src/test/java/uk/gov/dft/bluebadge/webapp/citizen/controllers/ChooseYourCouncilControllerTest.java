@@ -39,8 +39,6 @@ public class ChooseYourCouncilControllerTest {
 
   Journey journey;
 
-  private LocalCouncilRefData localCouncilRefData1;
-  private LocalCouncilRefData localCouncilRefData2;
   private List<ReferenceData> councils;
 
   @Before
@@ -57,7 +55,7 @@ public class ChooseYourCouncilControllerTest {
     LocalCouncilRefData.LocalCouncilMetaData localCouncilMetaData1 =
         new LocalCouncilRefData.LocalCouncilMetaData();
     localCouncilMetaData1.setIssuingAuthorityShortCode("WARCC");
-    localCouncilRefData1 = new LocalCouncilRefData();
+    LocalCouncilRefData localCouncilRefData1 = new LocalCouncilRefData();
     localCouncilRefData1.setDescription("Description");
     localCouncilRefData1.setDisplayOrder(1);
     localCouncilRefData1.setLocalCouncilMetaData(localCouncilMetaData1);
@@ -65,7 +63,7 @@ public class ChooseYourCouncilControllerTest {
     LocalCouncilRefData.LocalCouncilMetaData localCouncilMetaData2 =
         new LocalCouncilRefData.LocalCouncilMetaData();
     localCouncilMetaData2.setIssuingAuthorityShortCode("KENTCC");
-    localCouncilRefData2 = new LocalCouncilRefData();
+    LocalCouncilRefData localCouncilRefData2 = new LocalCouncilRefData();
     localCouncilRefData2.setDescription("Description");
     localCouncilRefData2.setDisplayOrder(1);
     localCouncilRefData2.setLocalCouncilMetaData(localCouncilMetaData2);
@@ -85,7 +83,7 @@ public class ChooseYourCouncilControllerTest {
         .andExpect(status().isOk())
         .andExpect(view().name("choose-council"))
         .andExpect(model().attribute("formRequest", formRequest))
-        .andExpect(model().attribute("councils", councils));
+        .andExpect(model().attributeExists("councils"));
   }
 
   @Test
@@ -99,7 +97,7 @@ public class ChooseYourCouncilControllerTest {
         .andExpect(status().isOk())
         .andExpect(view().name("choose-council"))
         .andExpect(model().attribute("formRequest", JourneyFixture.getChooseYourCouncilForm()))
-        .andExpect(model().attribute("councils", councils));
+        .andExpect(model().attributeExists("councils"));
   }
 
   @Test

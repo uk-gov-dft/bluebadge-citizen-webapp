@@ -51,15 +51,15 @@
 
                 <p class="govuk-body">
                     <span th:remove="tag" th:text="#{${JOURNEY.who} + 'eligiblePage.council.timeframe.text'}"></span>
-                    <a th:href="${localAuthority.contactUrl}" th:text="${localAuthority.description}">
+                    <a th:href="${JOURNEY.localAuthority.contactUrl}" th:text="${JOURNEY.localeAwareLocalAuthority.description}">
                     </a><span th:remove="tag" th:text="#{${JOURNEY.who} + 'eligiblePage.website.posttext'}"></span>
                 </p>
 
                 <h2 class="govuk-heading-m" th:text="#{eligiblePage.not.apply.online.text}">Don’t want to apply online?</h2>
                 <p class="govuk-body">
                     <span th:remove="tag" th:text="#{eligiblePage.council.contact.pretext}">Website:</span>
-                    <a th:href="${localAuthority.contactUrl}"
-                       th:text="${localAuthority.description} + #{eligiblePage.council.contact.posttext}">
+                    <a th:href="${JOURNEY.localAuthority.contactUrl}"
+                       th:text="${JOURNEY.localeAwareLocalAuthority.description} + #{eligiblePage.council.contact.posttext}">
                         www.leedscitycouncil.gov.uk</a>
                 </p>
 
