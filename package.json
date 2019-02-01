@@ -12,10 +12,10 @@
     "dev:watch": "gulp watch -env=dev"
   },
   "dependencies": {
+    "@babel/polyfill": "^7.0.0",
     "accessible-autocomplete": "^1.6.1",
     "babel-core": "^6.26.3",
-    "govuk-frontend": "1.1.1",
-    "@babel/polyfill": "^7.0.0"
+    "govuk-frontend": "^2.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",

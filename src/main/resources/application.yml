@@ -45,18 +45,25 @@ spring:
   servlet:
     multipart:
       max-file-size: 10MB
-      max-request-size: 10MB
-  devtools:
-    restart:
-      additional-exclude: sass/**,js/**
-      poll-interval: 10
-      quiet-period: 5
+      max-request-size: 150MB
   session:
     store-type: redis
     redis:
       namespace: spring:session:citizen
   redis:
     host: localhost
+  devtools:
+    restart:
+      additional-exclude: sass/**,js/**
+      poll-interval: 10
+      quiet-period: 5
+  resources:
+    chain:
+      enabled: true
+      strategy:
+        content:
+          enabled: true
+          paths: /js/**,/css/**
 
 server:
   port: 8780

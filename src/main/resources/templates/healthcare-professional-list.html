@@ -63,9 +63,10 @@
                                         <td class="govuk-table__cell"
                                             th:text="${professional.healthcareProfessionalLocation}"></td>
                                         <td class="govuk-table__cell govuk-table__cell--numeric">
-                                            <a th:href="@{/list-healthcare-professionals/remove(uuid=${professional.id})}"
-                                               th:text="#{remove.this}"
-                                               th:id="'healthcare.professional.remove.link.' + ${iStat.count}"></a>
+                                            <a th:href="@{/list-healthcare-professionals/remove(uuid=${professional.id})}" th:id="'healthcare.professional.remove.link.' + ${iStat.count}">
+                                                [[#{remove.prefix}]]
+                                                <span class="govuk-visually-hidden" th:text="${professional.healthcareProfessionalName}"></span>
+                                            </a>
                                         </td>
                                     </tr>
                                     </tbody>

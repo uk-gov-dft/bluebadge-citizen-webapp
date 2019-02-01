@@ -55,8 +55,10 @@
                                         <td class="govuk-table__cell" th:text="${aid.aidType}"></td>
                                         <td class="govuk-table__cell" th:text="${aid.usage}"></td>
                                         <td class="govuk-table__cell govuk-table__cell--numeric">
-                                            <a th:href="@{/list-mobility-aids/remove(uuid=${aid.id})}"
-                                               th:text="#{remove.this}" th:id="'mobility.aid.remove.link.' + ${iStat.count}"></a>
+                                            <a th:href="@{/list-mobility-aids/remove(uuid=${aid.id})}" th:id="'mobility.aid.remove.link.' + ${iStat.count}">
+                                                [[#{remove.prefix}]]
+                                                <span class="govuk-visually-hidden" th:text="${aid.aidType}"></span>
+                                            </a>
                                         </td>
                                     </tr>
                                     </tbody>
