@@ -8,6 +8,9 @@ import org.springframework.web.bind.support.SessionStatus;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
+// Following to be removed.  Is for unused parameter model in method show.
+// Added for build on release day.
+@SuppressWarnings("squid:S1172")
 public abstract class BaseFinalStepController implements StepController {
   protected final RouteMaster routeMaster;
 
