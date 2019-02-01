@@ -17,20 +17,6 @@
 
             <p class="govuk-body" th:text="#{${JOURNEY.who} + 'chooseCouncilPage.content.p1'}"></p>
 
-            <p class="govuk-body">
-                <span th:remove="tag"
-                      th:text="#{${JOURNEY.who} + 'chooseCouncilPage.content.p2.phrase1'}"></span>
-
-                <a data-ga-track-link
-                   data-ga-track-link-category="Outbound link"
-                   data-ga-track-link-action="direct govuk click"
-                   href="https://bluebadge.direct.gov.uk/bluebadge/why-are-you-here"
-                   th:text="#{${JOURNEY.who} + 'chooseCouncilPage.content.p2.phrase2'}"></a>
-
-                <span th:remove="tag"
-                      th:text="#{${JOURNEY.who} + 'chooseCouncilPage.content.p2.phrase3'}"></span>
-            </p>
-
             <form th:action="@{/choose-council}" method="post" th:object="${formRequest}" novalidate>
 
                 <div th:class="${#fields.hasErrors('councilShortCode')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">

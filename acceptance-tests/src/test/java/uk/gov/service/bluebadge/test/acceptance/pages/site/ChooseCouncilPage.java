@@ -19,8 +19,6 @@ public class ChooseCouncilPage {
   public static final String PAGE_LABEL_1_SOMEONE_ELSE =
       "They cannot get a Blue Badge if they live outside of the UK.";
 
-  public static final String PAGE_LABEL_2 =
-      "You'll need to apply through direct.gov if your council isn't listed.";
   public static final String PAGE_LABEL_3 = "Start typing and select your council";
   public static final String DO_NOT_KNOW_COUNCIL_LINK_TEXT = "You don't know their local council";
   public static final String DO_NOT_KNOW_COUNCIL_LINK =
