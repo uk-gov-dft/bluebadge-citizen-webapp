@@ -1,11 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-
-import com.google.common.collect.Lists;
-import java.util.List;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomBooleanEditor;
 import org.springframework.stereotype.Controller;
@@ -22,9 +16,13 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
+
+import javax.validation.Valid;
+
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 @Controller
 @RequestMapping(Mappings.URL_HIGHER_RATE_MOBILITY)
@@ -80,16 +78,8 @@ public class HigherRateMobilityController implements StepController {
   }
 
   private void setupModel(Model model, Journey journey) {
-    model.addAttribute("options", getOptions(journey));
-  }
-
-  private RadioOptionsGroup getOptions(Journey journey) {
-    RadioOption yes = new RadioOption("true", "radio.label.yes");
-    RadioOption no = new RadioOption("false", "radio.label.no");
-
-    List<RadioOption> options = Lists.newArrayList(yes, no);
-
-    return new RadioOptionsGroup(journey.who + "higherRateMobilityPage.content.title", options);
+    model.addAttribute(
+            "options", new RadioOptionsGroup(journey.who + "higherRateMobilityPage.content.title").withYesNoOptions(3));
   }
 
   @InitBinder

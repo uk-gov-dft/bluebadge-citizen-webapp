@@ -1,9 +1,10 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
 import com.google.common.collect.Lists;
+import lombok.Data;
+
 import java.util.ArrayList;
 import java.util.List;
-import lombok.Data;
 
 @Data
 public class RadioOptionsGroup {
@@ -28,8 +29,16 @@ public class RadioOptionsGroup {
   }
 
   public RadioOptionsGroup withYesNoOptions() {
-    RadioOption yes = new RadioOption("yes", "radio.option.yes");
-    RadioOption no = new RadioOption("no", "radio.option.no");
+    return withYesNoOptions(null);
+  }
+
+  public RadioOptionsGroup withYesNoOptions(Integer type) {
+    String yesMessageKey = type != null ?  "radio.option.yes" + type.toString() : "radio.option.yes";
+    String noMessageKey = type != null ?  "radio.option.no" + type.toString() : "radio.option.no";
+
+    RadioOption yes = new RadioOption("true", yesMessageKey);
+    RadioOption no = new RadioOption("false", noMessageKey);
+
     options = Lists.newArrayList(yes, no);
     return this;
   }
@@ -78,10 +87,17 @@ public class RadioOptionsGroup {
       options.add(new RadioOption(value, messageKey));
       return this;
     }
-
     public Builder withYesNoOptions() {
-      options.add(new RadioOption("yes", "radio.option.yes"));
-      options.add(new RadioOption("no", "radio.option.no"));
+      return withYesNoOptions(null);
+    }
+
+    public Builder withYesNoOptions(Integer type) {
+      String yesMessageKey = type != null ?  "radio.option.yes" + type.toString() : "radio.option.yes";
+      String noMessageKey = type != null ?  "radio.option.no" + type.toString() : "radio.option.no";
+
+      options.add(new RadioOption("true", yesMessageKey));
+      options.add(new RadioOption("false", noMessageKey));
+
       return this;
     }
 

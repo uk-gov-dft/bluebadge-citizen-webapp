@@ -80,7 +80,7 @@ public class OrganisationTransportController implements StepController {
   }
 
   private void setupModel(Model model) {
-    model.addAttribute(
-        "options", new RadioOptionsGroup("organisationTransport.page.title").withYesNoOptions());
+      model.addAttribute(
+        "options", new RadioOptionsGroup("organisationTransport.page.title").withYesNoOptions(4));
   }
 }
