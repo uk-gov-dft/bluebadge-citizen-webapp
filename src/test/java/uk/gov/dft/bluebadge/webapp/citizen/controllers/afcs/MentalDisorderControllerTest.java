@@ -47,7 +47,7 @@ public class MentalDisorderControllerTest {
   @Test
   public void show_ShouldDisplayDisabilityTemplate_WithRadioOptions() throws Exception {
     RadioOptionsGroup options =
-        new RadioOptionsGroup("oth.afcs.mentalDisorderPage.title").withYesNoOptions();
+        new RadioOptionsGroup("oth.afcs.mentalDisorderPage.title").withYesNoOptions(3);
 
     mockMvc
         .perform(get("/permanent-mental-disorder").sessionAttr("JOURNEY", journey))

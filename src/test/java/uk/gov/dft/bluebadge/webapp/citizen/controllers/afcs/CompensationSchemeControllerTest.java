@@ -41,7 +41,7 @@ public class CompensationSchemeControllerTest {
   @Test
   public void show_ShouldDisplayCompensationScheme_WithRadioOptions() throws Exception {
     RadioOptionsGroup options =
-        new RadioOptionsGroup("oth.afcs.compensationSchemePage.title").withYesNoOptions();
+        new RadioOptionsGroup("oth.afcs.compensationSchemePage.title").withYesNoOptions(3);
 
     mockMvc
         .perform(get("/lump-sum").sessionAttr("JOURNEY", journey))

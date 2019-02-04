@@ -41,7 +41,7 @@ public class DisabilityControllerTest {
   @Test
   public void show_ShouldDisplayDisabilityTemplate_WithRadioOptions() throws Exception {
     RadioOptionsGroup options =
-        new RadioOptionsGroup("oth.afcs.disabilityPage.title").withYesNoOptions();
+        new RadioOptionsGroup("oth.afcs.disabilityPage.title").withYesNoOptions(3);
 
     DisabilityForm form = DisabilityForm.builder().hasDisability(Boolean.TRUE).build();
 
