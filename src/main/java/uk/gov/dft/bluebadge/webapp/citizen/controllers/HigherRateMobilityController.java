@@ -81,9 +81,4 @@ public class HigherRateMobilityController implements StepController {
     model.addAttribute(
             "options", new RadioOptionsGroup(journey.who + "higherRateMobilityPage.content.title").withYesNoOptions(3));
   }
-
-  @InitBinder
-  public void dataBinding(WebDataBinder binder) {
-    binder.registerCustomEditor(Boolean.class, new CustomBooleanEditor("true", "false", true));
-  }
 }
