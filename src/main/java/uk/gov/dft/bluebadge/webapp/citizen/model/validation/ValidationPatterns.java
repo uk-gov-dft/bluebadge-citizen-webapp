@@ -4,8 +4,8 @@ public class ValidationPatterns {
 
   private ValidationPatterns() {}
 
-  public static final String EMAIL = "^\\S+\\@\\S+";
-  public static final String EMPTY_OR_EMAIL = "^$|.+\\@.+";
+  public static final String EMAIL = "^\\S+\\@\\S+$";
+  public static final String EMPTY_OR_EMAIL = "^$|" + EMAIL;
 
   public static final String PERSON_NAME = "^[\\p{L} \\.'\\-]*$";
 
