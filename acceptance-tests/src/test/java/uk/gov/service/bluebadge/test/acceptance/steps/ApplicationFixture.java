@@ -428,14 +428,14 @@ public class ApplicationFixture extends AbstractSpringSteps {
   @And("^I complete does organisation care for \"(YES|NO)\"$")
   public void iCompleteOrganisationCaresPage(String option) {
     if ("YES".equals(option)) commonPage.selectRadioButton(Ids.EleCheck.ORGANISATION_CARES);
-    else commonPage.selectRadioButton(Ids.EleCheck.ORGANISATION_CARES + "." + "no");
+    else commonPage.selectRadioButton(Ids.EleCheck.ORGANISATION_CARES + "." + "false");
     pressContinue();
   }
 
   @And("^I complete does organisation transport for \"(YES|NO)\"$")
   public void iCompleteOrganisationTransportsPage(String option) {
     if ("YES".equals(option)) commonPage.selectRadioButton(Ids.EleCheck.ORGANISATION_TRANSPORTS);
-    else commonPage.selectRadioButton(Ids.EleCheck.ORGANISATION_TRANSPORTS + "." + "no");
+    else commonPage.selectRadioButton(Ids.EleCheck.ORGANISATION_TRANSPORTS + "." + "false");
     pressContinue();
   }
 

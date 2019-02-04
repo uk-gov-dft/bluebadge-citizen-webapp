@@ -37,7 +37,7 @@ public class NameSteps extends AbstractSpringSteps {
     //To validate Empty Birth Name
     commonPage.findElementWithUiPath("fullName.field").clear();
     commonPage.findElementWithUiPath("fullName.field").sendKeys("Walking Applicant");
-    commonPage.findPageElementById(NamePage.NAME_BIRTH_NAME_OPTIONS + "." + "yes").click();
+    commonPage.findPageElementById(NamePage.NAME_BIRTH_NAME_OPTIONS + "." + "true").click();
     commonSteps.iVerifyValidationMessage(NamePage.VALIDATION_MESSAGE_FOR_EMPTY_BIRTH_NAME);
 
     //To validate an invalid Birth Name
