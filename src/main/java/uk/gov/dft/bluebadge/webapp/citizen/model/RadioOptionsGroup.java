@@ -36,8 +36,8 @@ public class RadioOptionsGroup {
     String yesMessageKey = type != null ?  "radio.option.yes" + type.toString() : "radio.option.yes";
     String noMessageKey = type != null ?  "radio.option.no" + type.toString() : "radio.option.no";
 
-    RadioOption yes = new RadioOption("true", yesMessageKey);
-    RadioOption no = new RadioOption("false", noMessageKey);
+    RadioOption yes = new RadioOption("yes", yesMessageKey);
+    RadioOption no = new RadioOption("no", noMessageKey);
 
     options = Lists.newArrayList(yes, no);
     return this;
@@ -95,8 +95,8 @@ public class RadioOptionsGroup {
       String yesMessageKey = type != null ?  "radio.option.yes" + type.toString() : "radio.option.yes";
       String noMessageKey = type != null ?  "radio.option.no" + type.toString() : "radio.option.no";
 
-      options.add(new RadioOption("true", yesMessageKey));
-      options.add(new RadioOption("false", noMessageKey));
+      options.add(new RadioOption("yes", yesMessageKey));
+      options.add(new RadioOption("no", noMessageKey));
 
       return this;
     }
