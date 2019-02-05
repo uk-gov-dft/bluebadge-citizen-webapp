@@ -2,7 +2,6 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers.afcs;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
-import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -53,7 +52,7 @@ public class CompensationSchemeController implements StepController {
 
     RadioOptionsGroup radioOptions =
         new RadioOptionsGroup(journey.who + "afcs.compensationSchemePage.title")
-            .withYesNoOptions(Optional.of(YesNoType.IAM));
+            .withYesNoOptions(YesNoType.IAM);
 
     model.addAttribute("radioOptions", radioOptions);
 

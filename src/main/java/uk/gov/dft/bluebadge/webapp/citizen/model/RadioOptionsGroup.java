@@ -3,8 +3,8 @@ package uk.gov.dft.bluebadge.webapp.citizen.model;
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import lombok.Data;
+import org.springframework.util.Assert;
 
 @Data
 public class RadioOptionsGroup {
@@ -29,16 +29,13 @@ public class RadioOptionsGroup {
   }
 
   public RadioOptionsGroup withYesNoOptions() {
-    return withYesNoOptions(Optional.empty());
+    return withYesNoOptions(YesNoType.DEFAULT);
   }
 
-  public RadioOptionsGroup withYesNoOptions(Optional<YesNoType> typeMaybe) {
-    String yesMessageKey =
-        typeMaybe
-            .map(type -> "radio.option.yes.".concat(type.toString()))
-            .orElse("radio.option.yes");
-    String noMessageKey =
-        typeMaybe.map(type -> "radio.option.no.".concat(type.toString())).orElse("radio.option.no");
+  public RadioOptionsGroup withYesNoOptions(YesNoType type) {
+    Assert.notNull(type, "type should not be null");
+    String yesMessageKey = "radio.option.yes.".concat(type.toString());
+    String noMessageKey = "radio.option.no.".concat(type.toString());
 
     RadioOption yes = new RadioOption("yes", yesMessageKey);
     RadioOption no = new RadioOption("no", noMessageKey);
@@ -93,18 +90,13 @@ public class RadioOptionsGroup {
     }
 
     public Builder withYesNoOptions() {
-      return withYesNoOptions(Optional.empty());
+      return withYesNoOptions(YesNoType.DEFAULT);
     }
 
-    public Builder withYesNoOptions(Optional<YesNoType> typeMaybe) {
-      String yesMessageKey =
-          typeMaybe
-              .map(type -> "radio.option.yes.".concat(type.toString()))
-              .orElse("radio.option.yes");
-      String noMessageKey =
-          typeMaybe
-              .map(type -> "radio.option.no.".concat(type.toString()))
-              .orElse("radio.option.no");
+    public Builder withYesNoOptions(YesNoType type) {
+      Assert.notNull(type, "type should not be null");
+      String yesMessageKey = "radio.option.yes.".concat(type.toString());
+      String noMessageKey = "radio.option.no.".concat(type.toString());
 
       options.add(new RadioOption("yes", yesMessageKey));
       options.add(new RadioOption("no", noMessageKey));

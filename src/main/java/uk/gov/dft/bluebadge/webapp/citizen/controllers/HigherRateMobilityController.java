@@ -3,7 +3,6 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
-import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -79,6 +78,6 @@ public class HigherRateMobilityController implements StepController {
     model.addAttribute(
         "options",
         new RadioOptionsGroup(journey.who + "higherRateMobilityPage.content.title")
-            .withYesNoOptions(Optional.of(YesNoType.IAM)));
+            .withYesNoOptions(YesNoType.IAM));
   }
 }
