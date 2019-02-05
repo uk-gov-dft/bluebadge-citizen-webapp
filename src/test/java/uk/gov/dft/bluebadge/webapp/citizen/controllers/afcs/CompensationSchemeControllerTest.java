@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.AFCS_COMPENSATION_SCHEME;
 
+import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,8 +21,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.YesNoType;
-
-import java.util.Optional;
 
 public class CompensationSchemeControllerTest {
 
@@ -44,7 +43,8 @@ public class CompensationSchemeControllerTest {
   @Test
   public void show_ShouldDisplayCompensationScheme_WithRadioOptions() throws Exception {
     RadioOptionsGroup options =
-        new RadioOptionsGroup("oth.afcs.compensationSchemePage.title").withYesNoOptions(Optional.of(YesNoType.IAM));
+        new RadioOptionsGroup("oth.afcs.compensationSchemePage.title")
+            .withYesNoOptions(Optional.of(YesNoType.IAM));
 
     mockMvc
         .perform(get("/lump-sum").sessionAttr("JOURNEY", journey))

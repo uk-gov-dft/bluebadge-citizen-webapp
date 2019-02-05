@@ -3,6 +3,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers.organisation;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
+import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,8 +22,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.YesNoType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.organisation.OrganisationCareForm;
-
-import java.util.Optional;
 
 @Controller
 @RequestMapping(Mappings.URL_ORGANISATION_CARE)
@@ -84,7 +83,8 @@ public class OrganisationCareController implements StepController {
 
   private void setupModel(Model model) {
     RadioOptionsGroup group =
-        new RadioOptionsGroup("organisationCare.page.title").withYesNoOptions(Optional.of(YesNoType.ITIS));
+        new RadioOptionsGroup("organisationCare.page.title")
+            .withYesNoOptions(Optional.of(YesNoType.ITIS));
     group.setHintKey("organisationCare.page.title.hint");
 
     model.addAttribute("options", group);

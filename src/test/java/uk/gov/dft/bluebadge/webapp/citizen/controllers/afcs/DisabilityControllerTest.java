@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.AFRFCS;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.AFCS_DISABILITY;
 
+import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,8 +22,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.YesNoType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.DisabilityForm;
-
-import java.util.Optional;
 
 public class DisabilityControllerTest {
 
@@ -44,7 +43,8 @@ public class DisabilityControllerTest {
   @Test
   public void show_ShouldDisplayDisabilityTemplate_WithRadioOptions() throws Exception {
     RadioOptionsGroup options =
-        new RadioOptionsGroup("oth.afcs.disabilityPage.title").withYesNoOptions(Optional.of(YesNoType.IAM));
+        new RadioOptionsGroup("oth.afcs.disabilityPage.title")
+            .withYesNoOptions(Optional.of(YesNoType.IAM));
 
     DisabilityForm form = DisabilityForm.builder().hasDisability(Boolean.TRUE).build();
 

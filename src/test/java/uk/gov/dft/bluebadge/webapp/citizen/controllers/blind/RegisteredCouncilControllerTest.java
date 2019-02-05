@@ -70,8 +70,7 @@ public class RegisteredCouncilControllerTest {
         .perform(get("/registered-council").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("blind/registered-council"))
-        .andExpect(model().attribute("formRequest", emptyForm))
-        .andExpect(model().attribute("radioOptions", options));
+        .andExpect(model().attribute("formRequest", emptyForm));
   }
 
   @Test
@@ -96,8 +95,7 @@ public class RegisteredCouncilControllerTest {
         .perform(get("/registered-council").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("blind/registered-council"))
-        .andExpect(model().attribute("formRequest", form))
-        .andExpect(model().attribute("radioOptions", options));
+        .andExpect(model().attribute("formRequest", form));
   }
 
   @Test

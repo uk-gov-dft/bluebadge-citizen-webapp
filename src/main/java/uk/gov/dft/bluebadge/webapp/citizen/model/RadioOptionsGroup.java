@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import lombok.Data;
 
 @Data
@@ -34,8 +33,12 @@ public class RadioOptionsGroup {
   }
 
   public RadioOptionsGroup withYesNoOptions(Optional<YesNoType> typeMaybe) {
-    String yesMessageKey = typeMaybe.map(type -> "radio.option.yes.".concat(type.toString())).orElse("radio.option.yes");
-    String noMessageKey = typeMaybe.map(type -> "radio.option.no.".concat(type.toString())).orElse("radio.option.no");
+    String yesMessageKey =
+        typeMaybe
+            .map(type -> "radio.option.yes.".concat(type.toString()))
+            .orElse("radio.option.yes");
+    String noMessageKey =
+        typeMaybe.map(type -> "radio.option.no.".concat(type.toString())).orElse("radio.option.no");
 
     RadioOption yes = new RadioOption("yes", yesMessageKey);
     RadioOption no = new RadioOption("no", noMessageKey);
@@ -94,8 +97,14 @@ public class RadioOptionsGroup {
     }
 
     public Builder withYesNoOptions(Optional<YesNoType> typeMaybe) {
-      String yesMessageKey = typeMaybe.map(type -> "radio.option.yes.".concat(type.toString())).orElse("radio.option.yes");
-      String noMessageKey = typeMaybe.map(type -> "radio.option.no.".concat(type.toString())).orElse("radio.option.no");
+      String yesMessageKey =
+          typeMaybe
+              .map(type -> "radio.option.yes.".concat(type.toString()))
+              .orElse("radio.option.yes");
+      String noMessageKey =
+          typeMaybe
+              .map(type -> "radio.option.no.".concat(type.toString()))
+              .orElse("radio.option.no");
 
       options.add(new RadioOption("yes", yesMessageKey));
       options.add(new RadioOption("no", noMessageKey));

@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,8 +23,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.YesNoType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.CompensationSchemeForm;
-
-import java.util.Optional;
 
 public class MentalDisorderControllerTest {
 
@@ -50,7 +49,8 @@ public class MentalDisorderControllerTest {
   @Test
   public void show_ShouldDisplayDisabilityTemplate_WithRadioOptions() throws Exception {
     RadioOptionsGroup options =
-        new RadioOptionsGroup("oth.afcs.mentalDisorderPage.title").withYesNoOptions(Optional.of(YesNoType.IAM));
+        new RadioOptionsGroup("oth.afcs.mentalDisorderPage.title")
+            .withYesNoOptions(Optional.of(YesNoType.IAM));
 
     mockMvc
         .perform(get("/permanent-mental-disorder").sessionAttr("JOURNEY", journey))

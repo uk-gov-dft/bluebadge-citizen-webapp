@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers.afcs;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
+import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,8 +21,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.YesNoType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.DisabilityForm;
-
-import java.util.Optional;
 
 @Controller
 @RequestMapping(Mappings.URL_AFCS_DISABILITY)
@@ -53,7 +52,8 @@ public class DisabilityController implements StepController {
     }
 
     RadioOptionsGroup radioOptions =
-        new RadioOptionsGroup(journey.who + "afcs.disabilityPage.title").withYesNoOptions(Optional.of(YesNoType.IAM));
+        new RadioOptionsGroup(journey.who + "afcs.disabilityPage.title")
+            .withYesNoOptions(Optional.of(YesNoType.IAM));
 
     model.addAttribute("radioOptions", radioOptions);
 
