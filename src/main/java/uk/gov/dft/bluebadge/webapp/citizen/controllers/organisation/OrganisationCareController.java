@@ -19,7 +19,10 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
+import uk.gov.dft.bluebadge.webapp.citizen.model.YesNoType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.organisation.OrganisationCareForm;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping(Mappings.URL_ORGANISATION_CARE)
@@ -81,7 +84,7 @@ public class OrganisationCareController implements StepController {
 
   private void setupModel(Model model) {
     RadioOptionsGroup group =
-        new RadioOptionsGroup("organisationCare.page.title").withYesNoOptions(4);
+        new RadioOptionsGroup("organisationCare.page.title").withYesNoOptions(Optional.of(YesNoType.ITIS));
     group.setHintKey("organisationCare.page.title.hint");
 
     model.addAttribute("options", group);

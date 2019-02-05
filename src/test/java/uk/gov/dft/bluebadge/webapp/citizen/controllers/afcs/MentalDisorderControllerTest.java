@@ -20,7 +20,10 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
+import uk.gov.dft.bluebadge.webapp.citizen.model.YesNoType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.CompensationSchemeForm;
+
+import java.util.Optional;
 
 public class MentalDisorderControllerTest {
 
@@ -47,7 +50,7 @@ public class MentalDisorderControllerTest {
   @Test
   public void show_ShouldDisplayDisabilityTemplate_WithRadioOptions() throws Exception {
     RadioOptionsGroup options =
-        new RadioOptionsGroup("oth.afcs.mentalDisorderPage.title").withYesNoOptions(3);
+        new RadioOptionsGroup("oth.afcs.mentalDisorderPage.title").withYesNoOptions(Optional.of(YesNoType.IAM));
 
     mockMvc
         .perform(get("/permanent-mental-disorder").sessionAttr("JOURNEY", journey))

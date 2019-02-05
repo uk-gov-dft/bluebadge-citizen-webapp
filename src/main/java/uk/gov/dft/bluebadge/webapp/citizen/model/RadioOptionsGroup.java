@@ -1,10 +1,11 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
 import com.google.common.collect.Lists;
-import lombok.Data;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import lombok.Data;
 
 @Data
 public class RadioOptionsGroup {
@@ -29,12 +30,12 @@ public class RadioOptionsGroup {
   }
 
   public RadioOptionsGroup withYesNoOptions() {
-    return withYesNoOptions(null);
+    return withYesNoOptions(Optional.empty());
   }
 
-  public RadioOptionsGroup withYesNoOptions(Integer type) {
-    String yesMessageKey = type != null ?  "radio.option.yes" + type.toString() : "radio.option.yes";
-    String noMessageKey = type != null ?  "radio.option.no" + type.toString() : "radio.option.no";
+  public RadioOptionsGroup withYesNoOptions(Optional<YesNoType> typeMaybe) {
+    String yesMessageKey = typeMaybe.map(type -> "radio.option.yes.".concat(type.toString())).orElse("radio.option.yes");
+    String noMessageKey = typeMaybe.map(type -> "radio.option.no.".concat(type.toString())).orElse("radio.option.no");
 
     RadioOption yes = new RadioOption("yes", yesMessageKey);
     RadioOption no = new RadioOption("no", noMessageKey);
@@ -87,13 +88,14 @@ public class RadioOptionsGroup {
       options.add(new RadioOption(value, messageKey));
       return this;
     }
+
     public Builder withYesNoOptions() {
-      return withYesNoOptions(null);
+      return withYesNoOptions(Optional.empty());
     }
 
-    public Builder withYesNoOptions(Integer type) {
-      String yesMessageKey = type != null ?  "radio.option.yes" + type.toString() : "radio.option.yes";
-      String noMessageKey = type != null ?  "radio.option.no" + type.toString() : "radio.option.no";
+    public Builder withYesNoOptions(Optional<YesNoType> typeMaybe) {
+      String yesMessageKey = typeMaybe.map(type -> "radio.option.yes.".concat(type.toString())).orElse("radio.option.yes");
+      String noMessageKey = typeMaybe.map(type -> "radio.option.no.".concat(type.toString())).orElse("radio.option.no");
 
       options.add(new RadioOption("yes", yesMessageKey));
       options.add(new RadioOption("no", noMessageKey));

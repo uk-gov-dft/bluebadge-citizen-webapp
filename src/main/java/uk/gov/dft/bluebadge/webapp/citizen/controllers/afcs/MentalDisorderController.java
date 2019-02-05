@@ -18,7 +18,10 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
+import uk.gov.dft.bluebadge.webapp.citizen.model.YesNoType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.MentalDisorderForm;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping(Mappings.URL_AFCS_MENTAL_DISORDER)
@@ -50,7 +53,7 @@ public class MentalDisorderController implements StepController {
     }
 
     RadioOptionsGroup radioOptions =
-        new RadioOptionsGroup(journey.who + "afcs.mentalDisorderPage.title").withYesNoOptions(3);
+        new RadioOptionsGroup(journey.who + "afcs.mentalDisorderPage.title").withYesNoOptions(Optional.of(YesNoType.IAM));
 
     model.addAttribute("radioOptions", radioOptions);
 
