@@ -65,7 +65,7 @@ public class JourneyTest {
         .isEqualTo(journey.getFormForStep(StepDefinition.YOUR_ISSUING_AUTHORITY));
 
     // An unchanged council will leave your authority unchanged.
-    LocalAuthorityRefData origAuthority = JourneyFixture.getLocalAuthorityRefData(Nation.ENG);
+    LocalAuthorityRefData origAuthority = JourneyFixture.getLocalAuthorityRefData(Nation.ENG, true);
     YourIssuingAuthorityForm newForm =
         YourIssuingAuthorityForm.builder()
             .localAuthorityShortCode(origAuthority.getShortCode())
@@ -83,6 +83,33 @@ public class JourneyTest {
     // Changing choose form will trigger authority cleanup.
     journey.setFormForStep(ChooseYourCouncilForm.builder().councilShortCode("ABCD").build());
     assertThat(journey.hasStepForm(StepDefinition.YOUR_ISSUING_AUTHORITY)).isFalse();
+  }
+
+  @Test
+  public void
+      setFormForStep_shouldSetPaymentsEnabledPrefixToPaymentsNotEnabled_WhenPassingYourIssuingAuthorityFormAndLocalAuthorityHasNotPaymentsEnabled() {
+    Journey journey = new JourneyBuilder().inEngland().build();
+    LocalAuthorityRefData origAuthority = JourneyFixture.getLocalAuthorityRefData(Nation.ENG, true);
+    journey.setLocalAuthority(origAuthority);
+
+    YourIssuingAuthorityForm form = journey.getFormForStep(StepDefinition.YOUR_ISSUING_AUTHORITY);
+
+    journey.setFormForStep(form);
+    assertThat(journey.paymentsEnabledPrefix).isEqualTo("paymentsEnabled.");
+  }
+
+  @Test
+  public void
+      setFormForStep_shouldSetPaymentsNotEnabledPrefixToPaymentsEnabled_WhenPassingYourIssuingAuthorityFormAndLocalAuthorityHasPaymentsNotEnabled() {
+    Journey journey = new JourneyBuilder().inEngland().build();
+    LocalAuthorityRefData origAuthority =
+        JourneyFixture.getLocalAuthorityRefData(Nation.ENG, false);
+    journey.setLocalAuthority(origAuthority);
+
+    YourIssuingAuthorityForm form = journey.getFormForStep(StepDefinition.YOUR_ISSUING_AUTHORITY);
+
+    journey.setFormForStep(form);
+    assertThat(journey.paymentsEnabledPrefix).isEqualTo("paymentsNotEnabled.");
   }
 
   @Test

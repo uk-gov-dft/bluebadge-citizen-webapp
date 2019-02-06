@@ -42,6 +42,7 @@ public class Journey implements Serializable {
   public String who;
   public String ageGroup;
   public String walkingAid;
+  public String paymentsEnabledPrefix;
 
   private LocalAuthorityRefData localAuthority;
 
@@ -59,6 +60,8 @@ public class Journey implements Serializable {
       ageGroup = isApplicantYoung() ? "young." : "adult.";
     } else if (form.getAssociatedStep() == StepDefinition.MOBILITY_AID_LIST) {
       walkingAid = hasMobilityAid() ? "withWalkingAid." : "withoutWalkingAid.";
+    } else if (form.getAssociatedStep() == StepDefinition.YOUR_ISSUING_AUTHORITY) {
+      paymentsEnabledPrefix = isPaymentsEnabled() ? "paymentsEnabled." : "paymentsNotEnabled.";
     }
 
     if (doCleanUp) {
@@ -169,6 +172,13 @@ public class Journey implements Serializable {
       return localAuthority.getNation();
     }
     return null;
+  }
+
+  public boolean isPaymentsEnabled() {
+    if (null != localAuthority) {
+      return localAuthority.getPaymentsEnabled();
+    }
+    return false;
   }
 
   public boolean isNationWales() {

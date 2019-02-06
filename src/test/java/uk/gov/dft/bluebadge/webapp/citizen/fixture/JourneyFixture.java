@@ -17,6 +17,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nat
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -256,12 +257,15 @@ public class JourneyFixture {
         .build();
   }
 
-  public static LocalAuthorityRefData getLocalAuthorityRefData(Nation nation) {
+  public static LocalAuthorityRefData getLocalAuthorityRefData(
+      Nation nation, boolean paymentsEnabled) {
     LocalAuthorityRefData localAuthorityRefData = new LocalAuthorityRefData();
     localAuthorityRefData.setShortCode(Values.LA_SHORT_CODE);
     LocalAuthorityRefData.LocalAuthorityMetaData meta =
         new LocalAuthorityRefData.LocalAuthorityMetaData();
     meta.setNation(nation);
+    meta.setPaymentsEnabled(paymentsEnabled);
+    meta.setBadgeCost(new BigDecimal("10.00"));
     localAuthorityRefData.setLocalAuthorityMetaData(meta);
     return localAuthorityRefData;
   }
@@ -329,7 +333,7 @@ public class JourneyFixture {
     journey.setFormForStep(getChooseYourCouncilForm());
     if (StepDefinition.CHOOSE_COUNCIL == stepTo) return journey;
     journey.setFormForStep(getYourIssuingAuthorityForm());
-    journey.setLocalAuthority(getLocalAuthorityRefData(options.getNation()));
+    journey.setLocalAuthority(getLocalAuthorityRefData(options.getNation(), false));
     if (StepDefinition.YOUR_ISSUING_AUTHORITY == stepTo) return journey;
     // Branch off to org journey.
     if (applicantType == ApplicantType.ORGANISATION) {

@@ -24,7 +24,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 @RequestMapping(Mappings.URL_DECLARATIONS)
 public class DeclarationSubmitController implements StepController {
 
-  private static final String TEMPLATE_DECLARATION = "application-end/declaration";
+  private static final String TEMPLATE = "application-end/declaration";
 
   private final ApplicationManagementService appService;
   private final RouteMaster routeMaster;
@@ -36,7 +36,7 @@ public class DeclarationSubmitController implements StepController {
   }
 
   @GetMapping
-  public String showDeclaration(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+  public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
@@ -46,11 +46,11 @@ public class DeclarationSubmitController implements StepController {
       model.addAttribute("formRequest", DeclarationForm.builder().build());
     }
 
-    return TEMPLATE_DECLARATION;
+    return TEMPLATE;
   }
 
   @PostMapping
-  public String submitDeclaration(
+  public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute("formRequest") DeclarationForm declarationForm,
       BindingResult bindingResult,
