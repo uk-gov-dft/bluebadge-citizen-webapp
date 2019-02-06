@@ -11,7 +11,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class LocalAuthorityRefData extends ReferenceData {
+public class LocalAuthorityRefData extends ReferenceData implements WelshSupport {
 
   @JsonProperty("metaData")
   private LocalAuthorityMetaData localAuthorityMetaData = null;
@@ -30,6 +30,14 @@ public class LocalAuthorityRefData extends ReferenceData {
     return Optional.ofNullable(localAuthorityMetaData);
   }
 
+  @Override
+  public String getDescriptionWelsh() {
+    if (getLocalAuthorityMetaData().isPresent()) {
+      return getLocalAuthorityMetaData().get().welshDescription;
+    }
+    return null;
+  }
+
   @Data
   public static class LocalAuthorityMetaData implements Serializable {
     private String issuingAuthorityShortCode;
@@ -37,5 +45,6 @@ public class LocalAuthorityRefData extends ReferenceData {
     private Nation nation;
     private String contactUrl;
     private String differentServiceSignpostUrl;
+    private String welshDescription;
   }
 }

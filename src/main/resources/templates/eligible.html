@@ -44,15 +44,15 @@
 
             <p class="govuk-body">
                 <span th:remove="tag" th:text="#{${JOURNEY.who} + 'eligiblePage.council.timeframe.text'}"></span>
-                <a th:href="${localAuthority.contactUrl}" th:text="${localAuthority.description} + '.'"></a>
+                <a th:href="${JOURNEY.localAuthority.contactUrl}" th:text="${JOURNEY.localeAwareLocalAuthority.description} + '.'"></a>
             </p>
 
             <h2 class="govuk-heading-m" th:text="#{eligiblePage.not.apply.online.text}"></h2>
 
             <p class="govuk-body">
             <span th:remove="tag" th:text="#{eligiblePage.council.contact.pretext}"></span>
-                <a th:href="${localAuthority.contactUrl}"
-                   th:text="${localAuthority.description} + #{eligiblePage.council.contact.posttext}"></a>
+                <a th:href="${JOURNEY.localAuthority.contactUrl}"
+                   th:text="${JOURNEY.localeAwareLocalAuthority.description} + #{eligiblePage.council.contact.posttext}"></a>
             </p>
 
             <h2 id="submit_docs_id" class="govuk-heading-m" th:text="#{eligiblePage.submitting.docs}"></h2>

@@ -22,11 +22,9 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
-import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 @Slf4j
@@ -71,10 +69,7 @@ class OrganisationMayBeEligibleControllerTest {
         .perform(get("/organisation-may-be-eligible").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("organisation/organisation-may-be-eligible"))
-        .andExpect(model().attribute("formRequest", Matchers.nullValue()))
-        .andExpect(
-            model()
-                .attribute("localAuthority", JourneyFixture.getLocalAuthorityRefData(Nation.ENG)));
+        .andExpect(model().attribute("formRequest", Matchers.nullValue()));
   }
 
   @Test

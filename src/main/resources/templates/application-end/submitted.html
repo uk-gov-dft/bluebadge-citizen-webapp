@@ -21,18 +21,23 @@
                 </div> -->
             </div>
 
-            <h2 class="govuk-heading-m govuk-!-margin-top-7" th:text="#{submittedPage.content.title}"></h2>
+            <p class="govuk-body govuk-!-margin-top-7" th:if="!${#strings.isEmpty(contactEmail)}">
+                <span th:remove="tag" th:text="#{submittedPage.email.sent}"></span>
+                <span class="govuk-!-font-weight-bold" th:text="${contactEmail}"></span><span th:remove="tag">.</span>
+            </p>
+
+            <h2 class="govuk-heading-m" th:text="#{submittedPage.content.title}"></h2>
 
             <p class="govuk-body" th:if="${!JOURNEY.nationWales}">
                 <span th:remove="tag" th:text="#{'submittedPage.content.wales.payment.pretext'}"></span>
-                <a th:href="${JOURNEY.localAuthority.contactUrl}" th:text="${JOURNEY.localAuthority.description}"></a>
+                <a th:href="${JOURNEY.localAuthority.contactUrl}" th:text="${JOURNEY.localeAwareLocalAuthority.description}"></a>
                 <span th:remove="tag" th:text="#{${JOURNEY.who} + 'submittedPage.content.wales.payment.posttext'}"></span>
             </p>
 
             <p class="govuk-body">
                 <span th:remove="tag" th:text="#{${JOURNEY.who} + 'submittedPage.content.p1.pretext'}"></span>
                 <a th:href="${JOURNEY.localAuthority.contactUrl}"
-                   th:text="${JOURNEY.localAuthority.description}"></a>
+                   th:text="${JOURNEY.localeAwareLocalAuthority.description}"></a>
                 <span th:remove="tag" th:text="#{${JOURNEY.who} + 'submittedPage.content.p1.posttext'}"></span>
             </p>
             <p class="govuk-body" th:text="#{submittedPage.content.p2}"></p>
@@ -47,7 +52,7 @@
             <p class="govuk-body">
                 <span th:remove="tag" th:text="#{${JOURNEY.who} + 'submittedPage.content2.p1.pretext'}"></span>
                 <a th:href="${JOURNEY.localAuthority.contactUrl}"
-                   th:text="' ' + ${JOURNEY.localAuthority.description} + ' ' + #{'submittedPage.content2.p1.link.posttext'}"></a>
+                   th:text="' ' + ${JOURNEY.localeAwareLocalAuthority.description} + ' ' + #{'submittedPage.content2.p1.link.posttext'}"></a>
             </p>
 
         </div>

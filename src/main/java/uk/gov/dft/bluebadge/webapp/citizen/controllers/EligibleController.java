@@ -34,8 +34,6 @@ public class EligibleController implements StepController {
       return routeMaster.backToCompletedPrevious();
     }
 
-    model.addAttribute("localAuthority", journey.getLocalAuthority());
-
     return TEMPLATE;
   }
 

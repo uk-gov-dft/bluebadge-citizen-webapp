@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.LocaleAwareRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataService;
@@ -45,15 +47,13 @@ public class YourIssuingAuthorityController implements StepController {
     if (!model.containsAttribute("formRequest")) {
       // Lookup local authority from council and populate model.
       ChooseYourCouncilForm councilForm = journey.getFormForStep(StepDefinition.CHOOSE_COUNCIL);
-      if (null == councilForm) {
-        log.error("Got to issuing authority GET, without local council step being completed.");
-      } else {
+      Assert.notNull(
+          councilForm, "Got to issuing authority GET, without local council step being completed.");
 
-        YourIssuingAuthorityForm form =
-            populateFormFromCouncilCode(councilForm.getCouncilShortCode());
-        if (null != form) {
-          model.addAttribute("formRequest", form);
-        }
+      YourIssuingAuthorityForm form =
+          populateFormFromCouncilCode(councilForm.getCouncilShortCode());
+      if (null != form) {
+        model.addAttribute("formRequest", form);
       }
     }
 
@@ -61,15 +61,13 @@ public class YourIssuingAuthorityController implements StepController {
   }
 
   YourIssuingAuthorityForm populateFormFromCouncilCode(String councilCode) {
-    LocalAuthorityRefData localAuthorityRefData =
-        referenceDataService.lookupLocalAuthorityFromCouncilCode(councilCode);
-    if (null != localAuthorityRefData) {
-      return YourIssuingAuthorityForm.builder()
-          .localAuthorityDescription(localAuthorityRefData.getDescription())
-          .localAuthorityShortCode(localAuthorityRefData.getShortCode())
-          .build();
-    }
-    return null;
+    LocaleAwareRefData<LocalAuthorityRefData> localAuthorityRefData =
+        new LocaleAwareRefData<>(
+            referenceDataService.lookupLocalAuthorityFromCouncilCode(councilCode));
+    return YourIssuingAuthorityForm.builder()
+        .localAuthorityDescription(localAuthorityRefData.getDescription())
+        .localAuthorityShortCode(localAuthorityRefData.getShortCode())
+        .build();
   }
 
   @PostMapping

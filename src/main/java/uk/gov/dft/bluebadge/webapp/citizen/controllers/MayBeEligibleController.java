@@ -36,7 +36,6 @@ public class MayBeEligibleController implements StepController {
     }
 
     model.addAttribute("isWalkD", EligibilityCodeField.WALKD == journey.getEligibilityCode());
-    model.addAttribute("localAuthority", journey.getLocalAuthority());
 
     return TEMPLATE;
   }
