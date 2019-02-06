@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
+import org.springframework.util.Assert;
 
 @Data
 public class RadioOptionsGroup {
@@ -28,8 +29,17 @@ public class RadioOptionsGroup {
   }
 
   public RadioOptionsGroup withYesNoOptions() {
-    RadioOption yes = new RadioOption("yes", "radio.option.yes");
-    RadioOption no = new RadioOption("no", "radio.option.no");
+    return withYesNoOptions(YesNoType.DEFAULT);
+  }
+
+  public RadioOptionsGroup withYesNoOptions(YesNoType type) {
+    Assert.notNull(type, "type should not be null");
+    String yesMessageKey = "radio.option.yes.".concat(type.toString());
+    String noMessageKey = "radio.option.no.".concat(type.toString());
+
+    RadioOption yes = new RadioOption("yes", yesMessageKey);
+    RadioOption no = new RadioOption("no", noMessageKey);
+
     options = Lists.newArrayList(yes, no);
     return this;
   }
@@ -80,8 +90,17 @@ public class RadioOptionsGroup {
     }
 
     public Builder withYesNoOptions() {
-      options.add(new RadioOption("yes", "radio.option.yes"));
-      options.add(new RadioOption("no", "radio.option.no"));
+      return withYesNoOptions(YesNoType.DEFAULT);
+    }
+
+    public Builder withYesNoOptions(YesNoType type) {
+      Assert.notNull(type, "type should not be null");
+      String yesMessageKey = "radio.option.yes.".concat(type.toString());
+      String noMessageKey = "radio.option.no.".concat(type.toString());
+
+      options.add(new RadioOption("yes", yesMessageKey));
+      options.add(new RadioOption("no", noMessageKey));
+
       return this;
     }
 

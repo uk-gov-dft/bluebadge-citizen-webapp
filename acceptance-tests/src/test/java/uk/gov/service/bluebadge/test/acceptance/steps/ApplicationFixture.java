@@ -325,7 +325,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
   public void iCompleteHasMobilityComponentPage(String option) {
     if ("YES".equals(option))
       commonPage.selectRadioButton(Ids.EleCheck.AWARDED_HIGHER_RATE_MOBILITY);
-    else commonPage.selectRadioButton(Ids.EleCheck.AWARDED_HIGHER_RATE_MOBILITY + "." + "false");
+    else commonPage.selectRadioButton(Ids.EleCheck.AWARDED_HIGHER_RATE_MOBILITY + "." + "no");
     pressContinue();
   }
 
