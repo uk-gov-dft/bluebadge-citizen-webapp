@@ -183,19 +183,22 @@ export default class FileUploader {
 		this.hasActiveUpload = true;
 
 		xhr.addEventListener('readystatechange', (e) => {
-
 			if (xhr.readyState === 4 && xhr.status === 200) {
-				const resp = JSON.parse(xhr.response);
-				if(resp && resp.success) {
-					this.makeScreenAnnouncement(this.$ANNOUNCEMENTS.filesUploaded);
-					this.$totalFilesUploaded += files.length;
+				try {
+					const resp = JSON.parse(xhr.response);
+					if(resp && resp.success) {
+						this.makeScreenAnnouncement(this.$ANNOUNCEMENTS.filesUploaded);
+						this.$totalFilesUploaded += files.length;
+						this.hasActiveUpload = false;
+						this.fireLifeCycleEvent('uploaded', resp, files);
+						this.$screenAnnouncer.focus();
+					} else {
+						this.fireLifeCycleEvent('uploadError', 'REQUEST_UNSUCCESSFUL');
+					}
+				} catch (exception) {
 					this.hasActiveUpload = false;
-					this.fireLifeCycleEvent('uploaded', resp, files);
-					this.$screenAnnouncer.focus();
-				} else {
 					this.fireLifeCycleEvent('uploadError', 'REQUEST_UNSUCCESSFUL');
 				}
-				
 				this.$fileInput.value = '';
 				this.$container.classList.remove(this.$DROPAREA_STATE.LOADING);
 				this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
