@@ -25,7 +25,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationSubmitForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
 class DeclarationSubmitControllerTest {
@@ -50,7 +50,7 @@ class DeclarationSubmitControllerTest {
   @Test
   void showDeclaration_ShouldDisplayDeclarationTemplate() throws Exception {
 
-    DeclarationForm formRequest = DeclarationForm.builder().build();
+    DeclarationSubmitForm formRequest = DeclarationSubmitForm.builder().build();
 
     mockMvc
         .perform(get("/apply-for-a-blue-badge/declaration").sessionAttr("JOURNEY", journey))

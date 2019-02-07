@@ -9,14 +9,18 @@ import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.m
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.NewPaymentResponse;
+import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentStatusResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
@@ -45,6 +49,30 @@ public class Journey implements Serializable {
   public String paymentsEnabledPrefix;
 
   private LocalAuthorityRefData localAuthority;
+
+  private UUID paymentJourneyUuid;
+  private PaymentStatusResponse paymentStatusResponse;
+  private NewPaymentResponse newPaymentResponse;
+
+  public UUID getPaymentJourneyUuid() {
+    return this.paymentJourneyUuid;
+  }
+
+  public void setNewPaymentResponse(NewPaymentResponse newPaymentResponse) {
+    this.newPaymentResponse = newPaymentResponse;
+  }
+
+  public void setPaymentJourneyUuid(UUID paymentJourneyUuid) {
+    this.paymentJourneyUuid = paymentJourneyUuid;
+  }
+
+  public PaymentStatusResponse getPaymentStatusResponse() {
+    return this.paymentStatusResponse;
+  }
+
+  public void setPaymentStatusResponse(PaymentStatusResponse paymentStatusResponse) {
+    this.paymentStatusResponse = paymentStatusResponse;
+  }
 
   public void setFormForStep(StepForm form) {
     // If changing values in a form may need to invalidate later forms in the journey
@@ -170,6 +198,13 @@ public class Journey implements Serializable {
   public Nation getNation() {
     if (null != localAuthority) {
       return localAuthority.getNation();
+    }
+    return null;
+  }
+
+  public BigDecimal getBadgeCost() {
+    if (null != localAuthority) {
+      return localAuthority.getBadgeCost();
     }
     return null;
   }

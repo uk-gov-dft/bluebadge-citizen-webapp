@@ -527,7 +527,7 @@ public class JourneyFixture {
         ProveAddressForm.builder()
             .journeyArtifact(buildJourneyArtifact("http://s3/proveAddress"))
             .build());
-    journey.setFormForStep(DeclarationForm.builder().agreed(Boolean.TRUE).build());
+    journey.setFormForStep(DeclarationSubmitForm.builder().agreed(Boolean.TRUE).build());
     return journey;
   }
 

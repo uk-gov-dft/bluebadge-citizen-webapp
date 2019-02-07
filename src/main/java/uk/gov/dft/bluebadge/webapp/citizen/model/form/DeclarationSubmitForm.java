@@ -1,6 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
 import java.io.Serializable;
+import java.util.Optional;
 import javax.validation.constraints.AssertTrue;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +13,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 @Builder
 @Data
 @EqualsAndHashCode
-public class DeclarationForm implements StepForm, Serializable {
+public class DeclarationSubmitForm implements StepForm, Serializable {
 
   @AssertTrue(message = "{declarationPage.validation.declaration}")
   private Boolean agreed;
@@ -20,6 +21,15 @@ public class DeclarationForm implements StepForm, Serializable {
   @Override
   public StepDefinition getAssociatedStep() {
     return StepDefinition.DECLARATIONS;
+  }
+
+  @Override
+  public Optional<StepDefinition> determineNextStep(Journey journey) {
+    if (journey.isPaymentsEnabled()) {
+      return Optional.of(StepDefinition.PAY_FOR_THE_BLUE_BADGE);
+    } else {
+      return Optional.of(StepDefinition.SUBMITTED);
+    }
   }
 
   @Override
