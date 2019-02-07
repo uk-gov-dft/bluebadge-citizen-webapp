@@ -176,15 +176,19 @@ export default class FileUploader {
 		return file;
    }
 
-  handleUploadFailure() {
-    this.hasActiveUpload = false;
-    this.fireLifeCycleEvent('uploadError', 'REQUEST_UNSUCCESSFUL');
-  }
-
   resetView() {
     this.$fileInput.value = '';
     this.$container.classList.remove(this.$DROPAREA_STATE.LOADING);
     this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
+  }
+  
+  handleUploadFailure(errorDetail) {
+    this.hasActiveUpload = false;
+    this.fireLifeCycleEvent('uploadError', 'REQUEST_UNSUCCESSFUL');
+
+    if (typeof console !== 'undefined') {
+      console.warn('[FileUploader] - handleUploadFailure() - STATUS: ', errorDetail);
+    }
   }
 
 	beginFileUpload(files) {
@@ -208,14 +212,14 @@ export default class FileUploader {
 						this.fireLifeCycleEvent('uploaded', resp, files);
 						this.$screenAnnouncer.focus();
 					} else {
-						this.handleUploadFailure();
+						this.handleUploadFailure('FAILED_TO_UPLOAD');
 					}
 				} catch (exception) {
-          this.handleUploadFailure();
+          this.handleUploadFailure('NON_JSON');
 				}
         this.resetView();
 			} else {
-        this.handleUploadFailure();
+        this.handleUploadFailure(xhr.status);
         this.resetView();
       }
 		});
