@@ -176,6 +176,17 @@ export default class FileUploader {
 		return file;
    }
 
+  handleUploadFailure() {
+    this.hasActiveUpload = false;
+    this.fireLifeCycleEvent('uploadError', 'REQUEST_UNSUCCESSFUL');
+  }
+
+  resetView() {
+    this.$fileInput.value = '';
+    this.$container.classList.remove(this.$DROPAREA_STATE.LOADING);
+    this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
+  }
+
 	beginFileUpload(files) {
 		const xhr = new XMLHttpRequest();
 		xhr.open('POST', this.$options.uploadPath, true);
@@ -183,7 +194,11 @@ export default class FileUploader {
 		this.hasActiveUpload = true;
 
 		xhr.addEventListener('readystatechange', (e) => {
-			if (xhr.readyState === 4 && xhr.status === 200) {
+			if (xhr.readyState !== 4) {
+        return;
+      }
+
+      if (xhr.status === 200) {
 				try {
 					const resp = JSON.parse(xhr.response);
 					if(resp && resp.success) {
@@ -193,16 +208,16 @@ export default class FileUploader {
 						this.fireLifeCycleEvent('uploaded', resp, files);
 						this.$screenAnnouncer.focus();
 					} else {
-						this.fireLifeCycleEvent('uploadError', 'REQUEST_UNSUCCESSFUL');
+						this.handleUploadFailure();
 					}
 				} catch (exception) {
-					this.hasActiveUpload = false;
-					this.fireLifeCycleEvent('uploadError', 'REQUEST_UNSUCCESSFUL');
+          this.handleUploadFailure();
 				}
-				this.$fileInput.value = '';
-				this.$container.classList.remove(this.$DROPAREA_STATE.LOADING);
-				this.$container.classList.remove(this.$DROPAREA_STATE.ACTIVE);
-			}
+        this.resetView();
+			} else {
+        this.handleUploadFailure();
+        this.resetView();
+      }
 		});
 
 		const formData = new FormData();
