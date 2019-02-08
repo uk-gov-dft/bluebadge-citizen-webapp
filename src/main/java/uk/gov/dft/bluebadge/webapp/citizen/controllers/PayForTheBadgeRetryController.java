@@ -3,45 +3,46 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
+import com.google.common.collect.Lists;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.NewPaymentResponse;
-import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.PayForTheBlueBadgeForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
+import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PayForTheBadgeRetryForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.PaymentService;
 
 @Controller
-@RequestMapping(Mappings.URL_PAY_FOR_THE_BLUE_BADGE)
-public class PayForTheBlueBadgeController implements StepController {
+@RequestMapping(Mappings.URL_PAY_FOR_THE_BADGE_RETRY)
+public class PayForTheBadgeRetryController extends PayForTheBadgeBaseController {
 
-  private static final String TEMPLATE = "pay-for-the-blue-badge";
-
-  private final PaymentService paymentService;
+  private static final String TEMPLATE = "pay-for-the-badge-retry";
 
   private final RouteMaster routeMaster;
 
   @Autowired
-  PayForTheBlueBadgeController(PaymentService paymentService, RouteMaster routeMaster) {
+  PayForTheBadgeRetryController(
+      PaymentService paymentService, MessageSource messageSource, RouteMaster routeMaster) {
+    super(paymentService, messageSource);
     this.routeMaster = routeMaster;
-    this.paymentService = paymentService;
   }
 
   @GetMapping
   public String show(
       Model model,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @ModelAttribute(FORM_REQUEST) PayForTheBlueBadgeForm formRequest) {
+      @ModelAttribute(FORM_REQUEST) PayForTheBadgeRetryForm formRequest) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
@@ -52,7 +53,7 @@ public class PayForTheBlueBadgeController implements StepController {
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
-      model.addAttribute(FORM_REQUEST, PayForTheBlueBadgeForm.builder().build());
+      model.addAttribute(FORM_REQUEST, PayForTheBadgeRetryForm.builder().build());
     }
 
     return TEMPLATE;
@@ -61,21 +62,11 @@ public class PayForTheBlueBadgeController implements StepController {
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute(FORM_REQUEST) PayForTheBlueBadgeForm formRequest) {
+      @Valid @ModelAttribute(FORM_REQUEST) PayForTheBadgeRetryForm formRequest) {
 
-    if (formRequest.getPayNow()) {
-      String language = journey.getNation().equals(Nation.WLS) ? "cy" : null;
-      // TODO: The payment message should be english or welsh
-      String returnUrl =
-          ServletUriComponentsBuilder.fromCurrentContextPath()
-              .path(Mappings.URL_PAY_FOR_THE_BLUE_BADGE_RETURN)
-              .toUriString();
-      NewPaymentResponse response =
-          paymentService.createPayment(
-              journey.getLocalAuthority().getShortCode(), returnUrl, "payment message", language);
-
+    if ("yes".equalsIgnoreCase(formRequest.getRetry())) {
+      NewPaymentResponse response = createPayment(journey);
       journey.setNewPaymentResponse(response);
-      journey.setPaymentJourneyUuid(response.getPaymentJourneyUuid());
       journey.setFormForStep(formRequest);
       return "redirect:" + response.getNextUrl();
     } else {
@@ -84,8 +75,16 @@ public class PayForTheBlueBadgeController implements StepController {
     }
   }
 
+  @ModelAttribute("retryOptions")
+  RadioOptionsGroup getRetryOptions() {
+    RadioOption yes = new RadioOption("yes", "payForTheBlueBadgeRetryPage.retry.option.yes");
+    RadioOption no = new RadioOption("no", "payForTheBlueBadgeRetryPage.retry.option.no");
+
+    return new RadioOptionsGroup("payForTheBlueBadgeRetryPage.title", Lists.newArrayList(yes, no));
+  }
+
   @Override
   public StepDefinition getStepDefinition() {
-    return StepDefinition.PAY_FOR_THE_BLUE_BADGE;
+    return StepDefinition.PAY_FOR_THE_BADGE;
   }
 }

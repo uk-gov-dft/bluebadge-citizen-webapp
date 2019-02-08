@@ -18,17 +18,20 @@ public class PayForTheBlueBadgeReturnForm implements StepForm, Serializable {
 
   @Override
   public StepDefinition getAssociatedStep() {
-    return StepDefinition.PAY_FOR_THE_BLUE_BADGE_RETURN;
+    return StepDefinition.PAY_FOR_THE_BADGE_RETURN;
   }
 
   @Override
   public Optional<StepDefinition> determineNextStep(Journey journey) {
-    if (journey.getPaymentStatusResponse().getStatus().equals("success")) {
+    if (journey.isPaymentSuccessful()) {
       return Optional.of(StepDefinition.SUBMITTED);
     } else {
-      // TODO: Complete the message
-      log.error("There was an error in the payment");
-      return Optional.of(StepDefinition.PAY_FOR_THE_BLUE_BADGE_RETRY);
+      log.error(
+          "Payment failed. Status code [], reference [], journey uuid []",
+          journey.getPaymentStatus(),
+          journey.getPaymentReference(),
+          journey.getPaymentJourneyUuid());
+      return Optional.of(StepDefinition.PAY_FOR_THE_BADGE_RETRY);
     }
   }
 

@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
+import java.io.Serializable;
+import java.util.Optional;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -7,29 +9,23 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
-import java.io.Serializable;
-import java.util.Optional;
-
 @Data
 @Builder
 @EqualsAndHashCode
-public class PayForTheBlueBadgeRetryForm implements StepForm, Serializable {
+public class PayForTheBadgeForm implements StepForm, Serializable {
 
-  private Boolean retry;
+  private Boolean payNow;
 
   @Override
   public StepDefinition getAssociatedStep() {
-    return StepDefinition.PAY_FOR_THE_BLUE_BADGE_RETRY;
+    return StepDefinition.PAY_FOR_THE_BADGE;
   }
 
   @Override
   public Optional<StepDefinition> determineNextStep(Journey journey) {
-    //Assert.isTrue(!payNow, "payNow should be false at this point");
-    if (!retry) {
-      return Optional.of(StepDefinition.SUBMITTED);
-    } else {
-      return Optional.of(StepDefinition.PAY_FOR_THE_BLUE_BADGE_RETURN); // TODO: review, this is a hack
-    }
+    // This is not the only posible transition. In the controller we redirect directly to a URL
+    // prior to this logic in certain circumstances.
+    return Optional.of(StepDefinition.SUBMITTED);
   }
 
   @Override

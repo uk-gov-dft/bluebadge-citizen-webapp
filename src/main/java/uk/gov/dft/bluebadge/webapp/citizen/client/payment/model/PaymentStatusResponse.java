@@ -2,20 +2,16 @@ package uk.gov.dft.bluebadge.webapp.citizen.client.payment.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.collect.ImmutableMap;
-
 import java.io.Serializable;
 import java.util.Map;
-import java.util.UUID;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class PaymentStatusResponse extends CommonResponse implements Serializable {
 
   @JsonIgnore
@@ -33,7 +29,6 @@ public class PaymentStatusResponse extends CommonResponse implements Serializabl
     return (String) data.get("reference");
   }
 
-
   @JsonProperty("data")
   Map<String, String> data;
 
@@ -43,5 +38,5 @@ public class PaymentStatusResponse extends CommonResponse implements Serializabl
 
   Map<String, String> getData() {
     return data;
-    }
+  }
 }

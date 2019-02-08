@@ -443,10 +443,11 @@ public class JourneyFixture {
 
     if (PIP == eligibility || DLA == eligibility) {
       journey.setFormForStep(ProveBenefitForm.builder().hasProof(Boolean.TRUE).build());
-      journey.setFormForStep(
-          UploadBenefitForm.builder()
-              .journeyArtifacts(ImmutableList.of(buildJourneyArtifact("http://s3/benefitLink")))
-              .build());
+      if (StepDefinition.UPLOAD_BENEFIT == stepTo)
+        journey.setFormForStep(
+            UploadBenefitForm.builder()
+                .journeyArtifacts(ImmutableList.of(buildJourneyArtifact("http://s3/benefitLink")))
+                .build());
     }
 
     // Eligibility specific section
@@ -527,7 +528,18 @@ public class JourneyFixture {
         ProveAddressForm.builder()
             .journeyArtifact(buildJourneyArtifact("http://s3/proveAddress"))
             .build());
+
     journey.setFormForStep(DeclarationSubmitForm.builder().agreed(Boolean.TRUE).build());
+
+    if (StepDefinition.PAY_FOR_THE_BADGE == stepTo) return journey;
+    /*Map<String, String> data = new HashMap<>();
+    data.put("paymentJourneyUuid", "");
+    data.put("status", "");
+    data.put("reference", "");
+    journey.get
+    journey.setPaymentStatusResponse(PaymentStatusResponse.builder().data());*/
+    journey.setFormForStep(PayForTheBadgeForm.builder().payNow(true).build());
+
     return journey;
   }
 

@@ -1,21 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.ARMS;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.BLIND;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDBULK;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDVEHIC;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.DLA;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.PIP;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
-
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.NewPaymentResponse;
@@ -34,6 +18,23 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.arms.ArmsDifficultyParkingMetersForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
+
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.ARMS;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.BLIND;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDBULK;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDVEHIC;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.DLA;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.PIP;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
+
 @Slf4j
 public class Journey implements Serializable {
 
@@ -49,28 +50,33 @@ public class Journey implements Serializable {
 
   private LocalAuthorityRefData localAuthority;
 
-  private String paymentJourneyUuid;
-  private PaymentStatusResponse paymentStatusResponse;
   private NewPaymentResponse newPaymentResponse;
 
-  public String getPaymentJourneyUuid() {
-    return this.paymentJourneyUuid;
-  }
+  private PaymentStatusResponse paymentStatusResponse;
 
   public void setNewPaymentResponse(NewPaymentResponse newPaymentResponse) {
     this.newPaymentResponse = newPaymentResponse;
   }
 
-  public void setPaymentJourneyUuid(String paymentJourneyUuid) {
-    this.paymentJourneyUuid = paymentJourneyUuid;
-  }
-
-  public PaymentStatusResponse getPaymentStatusResponse() {
-    return this.paymentStatusResponse;
-  }
-
   public void setPaymentStatusResponse(PaymentStatusResponse paymentStatusResponse) {
     this.paymentStatusResponse = paymentStatusResponse;
+  }
+
+  public String getPaymentJourneyUuid() {
+    return newPaymentResponse != null ? newPaymentResponse.getPaymentJourneyUuid() : null;
+  }
+
+  public String getPaymentReference() {
+    return paymentStatusResponse != null ? paymentStatusResponse.getReference() : null;
+  }
+
+  public String getPaymentStatus() {
+    return paymentStatusResponse != null ? paymentStatusResponse.getStatus() : null;
+  }
+
+  public boolean isPaymentSuccessful() {
+    return paymentStatusResponse != null
+      && "success".equalsIgnoreCase(paymentStatusResponse.getStatus());
   }
 
   public void setFormForStep(StepForm form) {
@@ -116,8 +122,7 @@ public class Journey implements Serializable {
       return;
     }
 
-    steps
-        .stream()
+    steps.stream()
         .filter(((Predicate<StepDefinition>) alreadyCleaned::contains).negate())
         .forEach(
             stepDefinition -> {
@@ -213,11 +218,6 @@ public class Journey implements Serializable {
       return localAuthority.getPaymentsEnabled();
     }
     return false;
-  }
-
-  public boolean isPaymentSuccessful() {
-    return (paymentStatusResponse != null
-        && "created".equalsIgnoreCase(paymentStatusResponse.getStatus()));
   }
 
   public boolean isNationWales() {

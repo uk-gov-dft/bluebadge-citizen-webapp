@@ -18,9 +18,9 @@ public class Mappings {
   public static final String URL_MAY_BE_ELIGIBLE = "/may-be-eligible";
   public static final String URL_HEALTH_CONDITIONS = "/health-conditions";
   public static final String URL_DECLARATIONS = "/apply-for-a-blue-badge/declaration";
-  public static final String URL_PAY_FOR_THE_BLUE_BADGE = "/pay-for-the-blue-badge";
-  public static final String URL_PAY_FOR_THE_BLUE_BADGE_RETRY = "/pay-for-the-blue-badge-retry";
-  public static final String URL_PAY_FOR_THE_BLUE_BADGE_RETURN = "/pay-for-the-blue-badge-return";
+  public static final String URL_PAY_FOR_THE_BADGE = "/pay-for-the-badge";
+  public static final String URL_PAY_FOR_THE_BADGE_RETRY = "/pay-for-the-badge-retry";
+  public static final String URL_PAY_FOR_THE_BADGE_RETURN = "/pay-for-the-badge-return";
   public static final String URL_APPLICATION_SUBMITTED = "/application-submitted";
   public static final String URL_CHOOSE_YOUR_COUNCIL = "/choose-council";
   public static final String URL_YOUR_ISSUING_AUTHORITY = "/your-issuing-authority";
@@ -144,8 +144,9 @@ public class Mappings {
           .put(StepDefinition.PERMISSION, URL_PERMISSION)
           .put(StepDefinition.REGISTERED_COUNCIL, URL_REGISTERED_COUNCIL)
           .put(StepDefinition.DECLARATIONS, URL_DECLARATIONS)
-          .put(StepDefinition.PAY_FOR_THE_BLUE_BADGE_RETURN, URL_PAY_FOR_THE_BLUE_BADGE_RETURN)
-          .put(StepDefinition.PAY_FOR_THE_BLUE_BADGE, URL_PAY_FOR_THE_BLUE_BADGE)
+          .put(StepDefinition.PAY_FOR_THE_BADGE_RETURN, URL_PAY_FOR_THE_BADGE_RETURN)
+          .put(StepDefinition.PAY_FOR_THE_BADGE_RETRY, URL_PAY_FOR_THE_BADGE_RETRY)
+          .put(StepDefinition.PAY_FOR_THE_BADGE, URL_PAY_FOR_THE_BADGE)
           .put(StepDefinition.SUBMITTED, URL_APPLICATION_SUBMITTED)
           .put(StepDefinition.MOBILITY_AID_LIST, URL_MOBILITY_AID_LIST)
           .put(StepDefinition.MOBILITY_AID_ADD, URL_MOBILITY_AID_ADD)
