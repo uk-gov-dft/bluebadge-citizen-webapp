@@ -1,15 +1,18 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey;
 
+import lombok.Getter;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.Getter;
 
 @Getter
 public enum StepDefinition {
   SUBMITTED(),
-  PAY_FOR_THE_BLUE_BADGE(),
-  PAY_FOR_THE_BLUE_BADGE_RETURN(SUBMITTED, PAY_FOR_THE_BLUE_BADGE),
+  // PAY_FOR_THE_BLUE_BADGE(SUBMITTED, PAY_FOR_THE_BLUE_BADGE_RETURN),
+  PAY_FOR_THE_BLUE_BADGE(SUBMITTED),
+  PAY_FOR_THE_BLUE_BADGE_RETRY(SUBMITTED),
+  PAY_FOR_THE_BLUE_BADGE_RETURN(SUBMITTED, PAY_FOR_THE_BLUE_BADGE_RETRY),
   DECLARATIONS(PAY_FOR_THE_BLUE_BADGE, SUBMITTED),
   PROVE_ADDRESS(DECLARATIONS),
   PROVIDE_PHOTO(PROVE_ADDRESS, DECLARATIONS),

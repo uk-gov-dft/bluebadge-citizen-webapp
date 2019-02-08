@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import java.util.function.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
@@ -50,11 +49,11 @@ public class Journey implements Serializable {
 
   private LocalAuthorityRefData localAuthority;
 
-  private UUID paymentJourneyUuid;
+  private String paymentJourneyUuid;
   private PaymentStatusResponse paymentStatusResponse;
   private NewPaymentResponse newPaymentResponse;
 
-  public UUID getPaymentJourneyUuid() {
+  public String getPaymentJourneyUuid() {
     return this.paymentJourneyUuid;
   }
 
@@ -62,7 +61,7 @@ public class Journey implements Serializable {
     this.newPaymentResponse = newPaymentResponse;
   }
 
-  public void setPaymentJourneyUuid(UUID paymentJourneyUuid) {
+  public void setPaymentJourneyUuid(String paymentJourneyUuid) {
     this.paymentJourneyUuid = paymentJourneyUuid;
   }
 
@@ -214,6 +213,11 @@ public class Journey implements Serializable {
       return localAuthority.getPaymentsEnabled();
     }
     return false;
+  }
+
+  public boolean isPaymentSuccessful() {
+    return (paymentStatusResponse != null
+        && "created".equalsIgnoreCase(paymentStatusResponse.getStatus()));
   }
 
   public boolean isNationWales() {

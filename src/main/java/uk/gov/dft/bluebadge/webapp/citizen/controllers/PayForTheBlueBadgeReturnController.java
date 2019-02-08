@@ -5,6 +5,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,9 +17,12 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationSubmitForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PayForTheBlueBadgeReturnForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.PaymentService;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping(Mappings.URL_PAY_FOR_THE_BLUE_BADGE_RETURN)
@@ -46,19 +50,29 @@ public class PayForTheBlueBadgeReturnController implements StepController {
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute(FORM_REQUEST) PayForTheBlueBadgeReturnForm formRequest) {
 
-    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
+    /*if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
-    }
+    }*/
 
-    PaymentStatusResponse paymentStatusResponse =
-        paymentService.retrievePaymentStatus(journey.getPaymentJourneyUuid().toString());
-    journey.setPaymentStatusResponse(paymentStatusResponse);
+    // This is considered to be external to the states of the application, and this is the state
+    // that
+    // adapts the external state transition back to our blue beta state transition.
+    // TODO: Check if there is a payment in progress
+    try {
+      PaymentStatusResponse paymentStatusResponse =
+          paymentService.retrievePaymentStatus(journey.getPaymentJourneyUuid().toString());
+      journey.setPaymentStatusResponse(paymentStatusResponse);
 
-    // TODO: find out success value
-    if (paymentStatusResponse.getStatus().equals("created")) {
-      applicationService.create(JourneyToApplicationConverter.convert(journey));
+      // TODO: find out success value
+      if (paymentStatusResponse.getStatus().equals("success")) {
+        // Retry if in progress
+        applicationService.create(JourneyToApplicationConverter.convert(journey));
+      }
+      return routeMaster.redirectToOnSuccess(formRequest, journey);
+    } catch (HttpMessageConversionException ex) {
+      ex.printStackTrace();
+      return null;
     }
-    return routeMaster.redirectToOnSuccess(formRequest, journey);
   }
 
   @Override

@@ -1,9 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,20 +15,26 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PayForTheBlueBadgeForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PayForTheBlueBadgeRetryForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.PaymentService;
 
-@Controller
-@RequestMapping(Mappings.URL_PAY_FOR_THE_BLUE_BADGE)
-public class PayForTheBlueBadgeController implements StepController {
+import javax.validation.Valid;
 
-  private static final String TEMPLATE = "pay-for-the-blue-badge";
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+
+@Controller
+@RequestMapping(Mappings.URL_PAY_FOR_THE_BLUE_BADGE_RETRY)
+public class PayForTheBlueBadgeRetryController implements StepController {
+
+  private static final String TEMPLATE = "pay-for-the-blue-badge-retry";
 
   private final PaymentService paymentService;
 
   private final RouteMaster routeMaster;
 
   @Autowired
-  PayForTheBlueBadgeController(PaymentService paymentService, RouteMaster routeMaster) {
+  PayForTheBlueBadgeRetryController(PaymentService paymentService, RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
     this.paymentService = paymentService;
   }
@@ -41,18 +43,19 @@ public class PayForTheBlueBadgeController implements StepController {
   public String show(
       Model model,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @ModelAttribute(FORM_REQUEST) PayForTheBlueBadgeForm formRequest) {
+      @ModelAttribute(FORM_REQUEST) PayForTheBlueBadgeRetryForm formRequest) {
 
+    /*
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
-    }
+    }*/
 
     if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
       model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
-      model.addAttribute(FORM_REQUEST, PayForTheBlueBadgeForm.builder().build());
+      model.addAttribute(FORM_REQUEST, PayForTheBlueBadgeRetryForm.builder().build());
     }
 
     return TEMPLATE;
@@ -61,9 +64,9 @@ public class PayForTheBlueBadgeController implements StepController {
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute(FORM_REQUEST) PayForTheBlueBadgeForm formRequest) {
+      @Valid @ModelAttribute(FORM_REQUEST) PayForTheBlueBadgeRetryForm formRequest) {
 
-    if (formRequest.getPayNow()) {
+    if (formRequest.getRetry()) {
       String language = journey.getNation().equals(Nation.WLS) ? "cy" : null;
       // TODO: The payment message should be english or welsh
       String returnUrl =

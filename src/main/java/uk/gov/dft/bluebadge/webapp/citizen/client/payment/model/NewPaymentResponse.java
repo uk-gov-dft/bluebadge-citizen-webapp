@@ -2,24 +2,30 @@ package uk.gov.dft.bluebadge.webapp.citizen.client.payment.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.collect.ImmutableMap;
+import java.io.Serializable;
 import java.util.Map;
-import java.util.UUID;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NonNull;
 import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
 
-@Builder
-@Getter
-@EqualsAndHashCode
-public class NewPaymentResponse extends CommonResponse {
-  @JsonIgnore @NonNull private UUID paymentJourneyUuid;
-  @JsonIgnore @NonNull private String nextUrl;
+public class NewPaymentResponse extends CommonResponse implements Serializable {
+
+  @JsonIgnore
+  public String getPaymentJourneyUuid() {
+    return (String) data.get("paymentJourneyUuid");
+  }
+
+  @JsonIgnore
+  public String getNextUrl() {
+    return (String) data.get("nextUrl");
+  }
 
   @JsonProperty("data")
-  Map<String, String> getData() {
-    return ImmutableMap.of("paymentJourneyUuid", paymentJourneyUuid.toString(), "nextUrl", nextUrl);
+  Map<String, String> data;
+
+  public Map<String, String> getData() {
+    return data;
+  }
+
+  public void setData(Map<String, String> data) {
+    this.data = data;
   }
 }
