@@ -14,14 +14,17 @@
 
             <h1 class="govuk-heading-l" th:text="#{payForTheBlueBadgePage.title}"></h1>
 
-            <p class="govuk-body" th:text="#{${JOURNEY.who} + 'payForTheBlueBadgePage.content.p1'(${JOURNEY.badgeCost})}"></p>
-            <p class="govuk-body" th:text="#{${JOURNEY.who} + 'payForTheBlueBadgePage.content.p2'(${JOURNEY.localeAwareLocalAuthority.description})}"></p>
+            <p class="govuk-body"
+               th:text="#{${JOURNEY.who} + 'payForTheBlueBadgePage.content.p1'(${JOURNEY.badgeCost})}"></p>
+            <p class="govuk-body"
+               th:text="#{${JOURNEY.who} + 'payForTheBlueBadgePage.content.p2'(${JOURNEY.localeAwareLocalAuthority.description})}"></p>
 
             <form th:action="@{/pay-for-the-badge}" th:object="${formRequest}" method="post" novalidate>
 
                 <input type="hidden" name="payNow" id="payNow" value="true"/>
 
-                <button type="submit" class="govuk-button" data-uipath="button.payonlinenow" th:text="#{payForTheBlueBadgePage.paynow.button.label}"></button>
+                <button type="submit" class="govuk-button" data-uipath="button.payonlinenow"
+                        th:text="#{payForTheBlueBadgePage.paynow.button.label}"></button>
 
             </form>
 
@@ -29,10 +32,10 @@
 
                 <input type="hidden" name="payNow" id="payNow" value="false"/>
 
-                <button type="submit" class="govuk-button" data-uipath="button.paylater" th:text="#{payForTheBlueBadgePage.paylater.link.label}"></button>
-
             </form>
 
+            <a th:href="@{/pay-for-the-badge-by-pass}" class="govuk-body" data-uipath="link.paylater"
+               th:text="#{payForTheBlueBadgePage.paylater.link.label}"></a>
         </div>
     </div>
 </main>

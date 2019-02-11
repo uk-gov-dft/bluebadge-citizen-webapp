@@ -14,8 +14,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 @EqualsAndHashCode
 public class PayForTheBadgeForm implements StepForm, Serializable {
 
-  private Boolean payNow;
-
   @Override
   public StepDefinition getAssociatedStep() {
     return StepDefinition.PAY_FOR_THE_BADGE;

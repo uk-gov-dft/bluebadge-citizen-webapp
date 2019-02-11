@@ -17,7 +17,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.PayForTheBlueBadgeReturnForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PayForTheBadgeReturnForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.PaymentService;
 
@@ -45,14 +45,15 @@ public class PayForTheBadgeReturnController implements StepController {
   public String show(
       Model model,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute(FORM_REQUEST) PayForTheBlueBadgeReturnForm formRequest) {
+      @Valid @ModelAttribute(FORM_REQUEST) PayForTheBadgeReturnForm formRequest) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
     if (journey.getPaymentJourneyUuid() == null) {
-      return Mappings.URL_PAY_FOR_THE_BADGE_RETRY;
+      //      return Mappings.URL_PAY_FOR_THE_BADGE_RETRY;
+      return "redirect:" + Mappings.URL_PAY_FOR_THE_BADGE;
     }
     PaymentStatusResponse paymentStatusResponse =
         paymentService.retrievePaymentStatus(journey.getPaymentJourneyUuid());

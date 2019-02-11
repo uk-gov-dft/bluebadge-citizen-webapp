@@ -17,4 +17,5 @@ class JourneyBuildOptions {
   private CompoundDate dob;
   private ApplicantType applicantType;
   private Boolean orgDoesCare;
+  private boolean paymentsEnable;
 }

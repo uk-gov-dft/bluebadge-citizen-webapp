@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings.URL_PAY_FOR_THE_BADGE_BYPASS;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.NewPaymentResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
@@ -21,7 +23,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.PayForTheBadgeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.PaymentService;
 
 @Controller
-@RequestMapping(Mappings.URL_PAY_FOR_THE_BADGE)
+@RequestMapping
 public class PayForTheBadgeController extends PayForTheBadgeBaseController {
 
   private static final String TEMPLATE = "pay-for-the-badge";
@@ -35,7 +37,7 @@ public class PayForTheBadgeController extends PayForTheBadgeBaseController {
     this.routeMaster = routeMaster;
   }
 
-  @GetMapping
+  @GetMapping(Mappings.URL_PAY_FOR_THE_BADGE)
   public String show(
       Model model,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
@@ -56,20 +58,21 @@ public class PayForTheBadgeController extends PayForTheBadgeBaseController {
     return TEMPLATE;
   }
 
-  @PostMapping
+  @PostMapping(Mappings.URL_PAY_FOR_THE_BADGE)
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute(FORM_REQUEST) PayForTheBadgeForm formRequest) {
+    NewPaymentResponse response = createPayment(journey);
+    journey.setNewPaymentResponse(response);
+    journey.setFormForStep(formRequest);
+    return "redirect:" + response.getNextUrl();
+  }
 
-    if (formRequest.getPayNow()) {
-      NewPaymentResponse response = createPayment(journey);
-      journey.setNewPaymentResponse(response);
-      journey.setFormForStep(formRequest);
-      return "redirect:" + response.getNextUrl();
-    } else {
-      journey.setFormForStep(formRequest);
-      return routeMaster.redirectToOnSuccess(formRequest, journey);
-    }
+  @GetMapping(URL_PAY_FOR_THE_BADGE_BYPASS)
+  public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+    PayForTheBadgeForm formRequest = PayForTheBadgeForm.builder().build();
+    journey.setFormForStep(formRequest);
+    return routeMaster.redirectToOnSuccess(formRequest);
   }
 
   @Override

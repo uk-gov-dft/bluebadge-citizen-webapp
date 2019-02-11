@@ -35,7 +35,39 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 import uk.gov.dft.bluebadge.webapp.citizen.model.component.CompoundDate;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.*;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationSubmitForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.EligibleForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ExistingBadgeForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalAddForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalListForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.HigherRateMobilityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.MayBeEligibleForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.MedicalEquipmentForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.OrganisationMayBeEligibleForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PayForTheBadgeForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveAddressForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveBenefitForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveIdentityForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProvidePhotoForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.UploadBenefitForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.UploadSupportingDocumentsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.WhereCanYouWalkForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.CompensationSchemeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.DisabilityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.MentalDisorderForm;
@@ -285,16 +317,24 @@ public class JourneyFixture {
   }
 
   public static Journey getDefaultJourneyToStep(StepDefinition step) {
-    return getDefaultJourneyToStep(step, EligibilityCodeField.PIP);
+    return getDefaultJourneyToStep(step, EligibilityCodeField.PIP, false);
   }
 
   public static Journey getDefaultJourneyToStep(
       StepDefinition step, EligibilityCodeField eligibility) {
-    return getDefaultJourneyToStep(step, eligibility, SCO);
+    return getDefaultJourneyToStep(step, eligibility, SCO, false);
   }
 
   public static Journey getDefaultJourneyToStep(
-      StepDefinition step, EligibilityCodeField eligibility, Nation nation) {
+      StepDefinition step, EligibilityCodeField eligibility, boolean paymentsEnable) {
+    return getDefaultJourneyToStep(step, eligibility, SCO, paymentsEnable);
+  }
+
+  public static Journey getDefaultJourneyToStep(
+      StepDefinition step,
+      EligibilityCodeField eligibility,
+      Nation nation,
+      boolean paymentsEnable) {
     return getDefaultJourneyToStepWithOptions(
         JourneyBuildOptions.builder()
             .applicantType(Values.APPLICANT_TYPE)
@@ -302,6 +342,7 @@ public class JourneyFixture {
             .step(step)
             .eligibility(eligibility)
             .nation(nation)
+            .paymentsEnable(paymentsEnable)
             .build());
   }
 
@@ -333,7 +374,8 @@ public class JourneyFixture {
     journey.setFormForStep(getChooseYourCouncilForm());
     if (StepDefinition.CHOOSE_COUNCIL == stepTo) return journey;
     journey.setFormForStep(getYourIssuingAuthorityForm());
-    journey.setLocalAuthority(getLocalAuthorityRefData(options.getNation(), false));
+    journey.setLocalAuthority(
+        getLocalAuthorityRefData(options.getNation(), options.isPaymentsEnable()));
     if (StepDefinition.YOUR_ISSUING_AUTHORITY == stepTo) return journey;
     // Branch off to org journey.
     if (applicantType == ApplicantType.ORGANISATION) {
@@ -443,11 +485,11 @@ public class JourneyFixture {
 
     if (PIP == eligibility || DLA == eligibility) {
       journey.setFormForStep(ProveBenefitForm.builder().hasProof(Boolean.TRUE).build());
-      if (StepDefinition.UPLOAD_BENEFIT == stepTo)
-        journey.setFormForStep(
-            UploadBenefitForm.builder()
-                .journeyArtifacts(ImmutableList.of(buildJourneyArtifact("http://s3/benefitLink")))
-                .build());
+      if (StepDefinition.UPLOAD_BENEFIT == stepTo) return journey;
+      journey.setFormForStep(
+          UploadBenefitForm.builder()
+              .journeyArtifacts(ImmutableList.of(buildJourneyArtifact("http://s3/benefitLink")))
+              .build());
     }
 
     // Eligibility specific section
@@ -538,7 +580,7 @@ public class JourneyFixture {
     data.put("reference", "");
     journey.get
     journey.setPaymentStatusResponse(PaymentStatusResponse.builder().data());*/
-    journey.setFormForStep(PayForTheBadgeForm.builder().payNow(true).build());
+    journey.setFormForStep(PayForTheBadgeForm.builder().build());
 
     return journey;
   }

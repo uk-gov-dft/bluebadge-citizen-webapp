@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -20,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
@@ -32,14 +34,14 @@ class DeclarationSubmitControllerTest {
 
   private MockMvc mockMvc;
 
-  @Mock ApplicationManagementService appService;
+  @Mock ApplicationManagementService appServiceMock;
   Journey journey;
 
   @BeforeEach
   void setup() {
     MockitoAnnotations.initMocks(this);
     DeclarationSubmitController controller =
-        new DeclarationSubmitController(appService, new RouteMaster());
+        new DeclarationSubmitController(appServiceMock, new RouteMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -89,7 +91,25 @@ class DeclarationSubmitControllerTest {
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(Mappings.URL_APPLICATION_SUBMITTED));
 
-    verify(appService, times(1)).create(any());
+    verify(appServiceMock, times(1)).create(any());
+  }
+
+  @Test
+  void
+      submitDeclaration_ShouldDisplayApplicationSubmittedTemplateAndNotCreateApplication_WhenDeclarationIsAgreedAndPaymentsAreEnabled()
+          throws Exception {
+
+    mockMvc
+        .perform(
+            post("/apply-for-a-blue-badge/declaration")
+                .param("agreed", "true")
+                .sessionAttr(
+                    "JOURNEY",
+                    JourneyFixture.getDefaultJourneyToStep(null, EligibilityCodeField.PIP, true)))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl(Mappings.URL_PAY_FOR_THE_BADGE));
+
+    verify(appServiceMock, never()).create(any());
   }
 
   @Test
@@ -105,7 +125,7 @@ class DeclarationSubmitControllerTest {
         .andExpect(redirectedUrl(Mappings.URL_APPLICATION_SUBMITTED));
 
     ArgumentCaptor<Application> captor = ArgumentCaptor.forClass(Application.class);
-    verify(appService, times(1)).create(captor.capture());
+    verify(appServiceMock, times(1)).create(captor.capture());
 
     assertThat(captor).isNotNull();
     assertThat(captor.getValue()).isNotNull();

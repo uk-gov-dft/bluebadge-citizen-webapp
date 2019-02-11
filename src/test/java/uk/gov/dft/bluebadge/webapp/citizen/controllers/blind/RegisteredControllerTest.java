@@ -38,7 +38,7 @@ public class RegisteredControllerTest {
 
     journey =
         JourneyFixture.getDefaultJourneyToStep(
-            StepDefinition.CONTACT_DETAILS, EligibilityCodeField.BLIND, Nation.ENG);
+            StepDefinition.CONTACT_DETAILS, EligibilityCodeField.BLIND, Nation.ENG, false);
   }
 
   @Test

@@ -19,6 +19,7 @@ public class Mappings {
   public static final String URL_HEALTH_CONDITIONS = "/health-conditions";
   public static final String URL_DECLARATIONS = "/apply-for-a-blue-badge/declaration";
   public static final String URL_PAY_FOR_THE_BADGE = "/pay-for-the-badge";
+  public static final String URL_PAY_FOR_THE_BADGE_BYPASS = "/pay-for-the-badge-by-pass";
   public static final String URL_PAY_FOR_THE_BADGE_RETRY = "/pay-for-the-badge-retry";
   public static final String URL_PAY_FOR_THE_BADGE_RETURN = "/pay-for-the-badge-return";
   public static final String URL_APPLICATION_SUBMITTED = "/application-submitted";
