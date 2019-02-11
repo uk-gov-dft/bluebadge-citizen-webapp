@@ -113,6 +113,8 @@ export default class DFT_FileUploader {
 	}
 
 	uploadError(errorCode) {
+		this.$dftFuContainer.classList.remove('dft-fu--disabled');
+		this.$dftFuContainer.classList.remove(this.$state.loading);
 		switch(errorCode) {
 			case 'INVALID_FILES_UPLOADED':
 			case 'MAX_FILE_UPLOAD_LIMIT_EXCEEDED':
