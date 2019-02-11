@@ -18,6 +18,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
+import uk.gov.dft.bluebadge.webapp.citizen.model.YesNoType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.afcs.DisabilityForm;
 
 @Controller
@@ -50,7 +51,8 @@ public class DisabilityController implements StepController {
     }
 
     RadioOptionsGroup radioOptions =
-        new RadioOptionsGroup(journey.who + "afcs.disabilityPage.title").withYesNoOptions();
+        new RadioOptionsGroup(journey.who + "afcs.disabilityPage.title")
+            .withYesNoOptions(YesNoType.IAM);
 
     model.addAttribute("radioOptions", radioOptions);
 

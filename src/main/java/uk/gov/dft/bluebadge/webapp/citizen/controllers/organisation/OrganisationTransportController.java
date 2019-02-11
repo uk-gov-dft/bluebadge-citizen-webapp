@@ -19,6 +19,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
+import uk.gov.dft.bluebadge.webapp.citizen.model.YesNoType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.organisation.OrganisationTransportForm;
 
 @Controller
@@ -81,6 +82,7 @@ public class OrganisationTransportController implements StepController {
 
   private void setupModel(Model model) {
     model.addAttribute(
-        "options", new RadioOptionsGroup("organisationTransport.page.title").withYesNoOptions());
+        "options",
+        new RadioOptionsGroup("organisationTransport.page.title").withYesNoOptions(YesNoType.ITIS));
   }
 }
