@@ -13,7 +13,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 @Data
 @Builder
 @EqualsAndHashCode
-public class HigherRateMobilityForm implements StepForm, Serializable {
+public class HigherRateMobilityForm implements Serializable, StepForm {
 
   @NotNull(message = "{NotBlank.awardedHigherRateMobility}")
   private Boolean awardedHigherRateMobility;

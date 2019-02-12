@@ -19,6 +19,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
+import uk.gov.dft.bluebadge.webapp.citizen.model.YesNoType;
 
 public class CompensationSchemeControllerTest {
 
@@ -41,7 +42,8 @@ public class CompensationSchemeControllerTest {
   @Test
   public void show_ShouldDisplayCompensationScheme_WithRadioOptions() throws Exception {
     RadioOptionsGroup options =
-        new RadioOptionsGroup("oth.afcs.compensationSchemePage.title").withYesNoOptions();
+        new RadioOptionsGroup("oth.afcs.compensationSchemePage.title")
+            .withYesNoOptions(YesNoType.IAM);
 
     mockMvc
         .perform(get("/lump-sum").sessionAttr("JOURNEY", journey))
