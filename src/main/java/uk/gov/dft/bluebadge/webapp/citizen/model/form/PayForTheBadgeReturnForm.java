@@ -31,7 +31,7 @@ public class PayForTheBadgeReturnForm implements StepForm, Serializable {
           journey.getPaymentStatus(),
           journey.getPaymentReference(),
           journey.getPaymentJourneyUuid());
-      return Optional.of(StepDefinition.PAY_FOR_THE_BADGE_RETRY);
+      return Optional.of(StepDefinition.PAY_FOR_THE_BADGE);
     }
   }
 

@@ -133,7 +133,6 @@ public class PayForTheBadgeReturnControllerTest {
     journey.setFormForStep(PayForTheBadgeForm.builder().build());
 
     when(paymentServiceMock.retrievePaymentStatus(PAYMENT_JOURNEY_UUID))
-        .thenReturn(CREATED_PAYMENT_STATUS_RESPONSE)
         .thenReturn(SUCCESS_PAYMENT_STATUS_RESPONSE);
 
     mockMvc
@@ -152,61 +151,12 @@ public class PayForTheBadgeReturnControllerTest {
     journey.setFormForStep(PayForTheBadgeForm.builder().build());
 
     when(paymentServiceMock.retrievePaymentStatus(PAYMENT_JOURNEY_UUID))
-        .thenReturn(CREATED_PAYMENT_STATUS_RESPONSE)
-        .thenReturn(CREATED_PAYMENT_STATUS_RESPONSE)
-        .thenReturn(CREATED_PAYMENT_STATUS_RESPONSE)
-        .thenReturn(CREATED_PAYMENT_STATUS_RESPONSE)
         .thenReturn(FAILED_PAYMENT_STATUS_RESPONSE);
 
     mockMvc
         .perform(get("/pay-for-the-badge-return").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/pay-for-the-badge-retry"));
+        .andExpect(redirectedUrl("/pay-for-the-badge"));
     verify(applicationManagementServiceMock, never()).create(any());
   }
-
-  /*
-  @Test
-  public void show_ShouldDisplayPayForTheBlueBadgeTemplate() throws Exception {
-
-    mockMvc
-        .perform(get("/pay-for-the-badge").sessionAttr("JOURNEY", journey))
-        .andExpect(status().isOk())
-        .andExpect(view().name("pay-for-the-badge"))
-        .andExpect(model().attribute("formRequest", formRequest));
-  }
-
-  @Test
-  public void show_givenNoSession_ShouldRedirectBackToStart() throws Exception {
-
-    mockMvc
-        .perform(get("/pay-for-the-badge"))
-        .andExpect(status().isFound())
-        .andExpect(redirectedUrl(Mappings.URL_ROOT));
-  }
-
-  @Test
-  public void submit_shouldRedirectToApplicationSubmitted_WhenPayLater() throws Exception {
-    mockMvc
-        .perform(get("/pay-for-the-badge-by-pass").sessionAttr("JOURNEY", journey))
-        .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/application-submitted"));
-  }
-
-  @Test
-  public void submit_shouldRedirectToNextUrl_WhenPayNow() throws Exception {
-    Map<String, String> data = new HashMap<>();
-    data.put("paymentJourneyUuid", PAYMENT_JOURNEY_UUID);
-    data.put("nextUrl", NEXT_URL);
-    NewPaymentResponse newPaymentResponse = NewPaymentResponse.builder().data(data).build();
-    when(paymentServiceMock.createPayment(
-            eq("ABERD"), eq(URL_PAY_FOR_THE_BADGE_RETURN), eq(MESSAGE), isNull()))
-        .thenReturn(newPaymentResponse);
-    mockMvc
-        .perform(post("/pay-for-the-badge").sessionAttr("JOURNEY", journey))
-        .andExpect(status().isFound())
-        .andExpect(redirectedUrl(NEXT_URL));
-    verify(paymentServiceMock).createPayment(any(), eq(URL_PAY_FOR_THE_BADGE_RETURN), any(), any());
-    assertThat(journey.getPaymentJourneyUuid()).isEqualTo(PAYMENT_JOURNEY_UUID);
-  }*/
 }

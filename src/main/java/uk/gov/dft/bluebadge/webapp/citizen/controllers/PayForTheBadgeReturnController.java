@@ -4,7 +4,6 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import javax.validation.Valid;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,22 +51,11 @@ public class PayForTheBadgeReturnController implements StepController {
     }
 
     if (journey.getPaymentJourneyUuid() == null) {
-      //      return Mappings.URL_PAY_FOR_THE_BADGE_RETRY;
       return "redirect:" + Mappings.URL_PAY_FOR_THE_BADGE;
     }
     PaymentStatusResponse paymentStatusResponse =
         paymentService.retrievePaymentStatus(journey.getPaymentJourneyUuid());
     journey.setPaymentStatusResponse(paymentStatusResponse);
-    while (StringUtils.containsAny(journey.getPaymentStatus(), "created", "started", "submitted")) {
-      try {
-        Thread.sleep(1000); // TODO: Is there a better way to do this?
-        paymentStatusResponse =
-            paymentService.retrievePaymentStatus(journey.getPaymentJourneyUuid());
-        journey.setPaymentStatusResponse(paymentStatusResponse);
-      } catch (InterruptedException ex) {
-        Thread.currentThread().interrupt();
-      }
-    }
 
     if (journey.isPaymentSuccessful()) {
       applicationService.create(JourneyToApplicationConverter.convert(journey));
