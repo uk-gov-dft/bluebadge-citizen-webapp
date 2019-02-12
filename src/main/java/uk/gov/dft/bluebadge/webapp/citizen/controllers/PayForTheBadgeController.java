@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import uk.gov.dft.bluebadge.webapp.citizen.appbuilder.JourneyToApplicationConverter;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.NewPaymentResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PayForTheBadgeForm;
+import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.PaymentService;
 
 @Controller
@@ -28,12 +30,18 @@ public class PayForTheBadgeController extends PayForTheBadgeBaseController {
 
   private static final String TEMPLATE = "pay-for-the-badge";
 
+  private final ApplicationManagementService applicationService;
+
   private final RouteMaster routeMaster;
 
   @Autowired
   PayForTheBadgeController(
-      PaymentService paymentService, RouteMaster routeMaster, MessageSource messageSource) {
+      PaymentService paymentService,
+      ApplicationManagementService applicationService,
+      RouteMaster routeMaster,
+      MessageSource messageSource) {
     super(paymentService, messageSource);
+    this.applicationService = applicationService;
     this.routeMaster = routeMaster;
   }
 
@@ -70,6 +78,7 @@ public class PayForTheBadgeController extends PayForTheBadgeBaseController {
 
   @GetMapping(URL_PAY_FOR_THE_BADGE_BYPASS)
   public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+    applicationService.create(JourneyToApplicationConverter.convert(journey));
     PayForTheBadgeForm formRequest = PayForTheBadgeForm.builder().build();
     journey.setFormForStep(formRequest);
     return routeMaster.redirectToOnSuccess(formRequest);

@@ -34,14 +34,14 @@ class DeclarationSubmitControllerTest {
 
   private MockMvc mockMvc;
 
-  @Mock ApplicationManagementService appServiceMock;
+  @Mock ApplicationManagementService applicationServiceMock;
   Journey journey;
 
   @BeforeEach
   void setup() {
     MockitoAnnotations.initMocks(this);
     DeclarationSubmitController controller =
-        new DeclarationSubmitController(appServiceMock, new RouteMaster());
+        new DeclarationSubmitController(applicationServiceMock, new RouteMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -50,7 +50,7 @@ class DeclarationSubmitControllerTest {
   }
 
   @Test
-  void showDeclaration_ShouldDisplayDeclarationTemplate() throws Exception {
+  void show_ShouldDisplayDeclarationTemplate() throws Exception {
 
     DeclarationSubmitForm formRequest = DeclarationSubmitForm.builder().build();
 
@@ -62,7 +62,7 @@ class DeclarationSubmitControllerTest {
   }
 
   @Test
-  void showDeclaration_givenNoSession_ShouldRedirectBackToStart() throws Exception {
+  void show_givenNoSession_ShouldRedirectBackToStart() throws Exception {
 
     mockMvc
         .perform(get("/apply-for-a-blue-badge/declaration"))
@@ -71,7 +71,7 @@ class DeclarationSubmitControllerTest {
   }
 
   @Test
-  void showDeclaration_givenInvalidState_ShouldRedirectBackToStart() throws Exception {
+  void show_givenInvalidState_ShouldRedirectBackToStart() throws Exception {
 
     mockMvc
         .perform(get("/apply-for-a-blue-badge/declaration"))
@@ -80,8 +80,7 @@ class DeclarationSubmitControllerTest {
   }
 
   @Test
-  void submitDeclaration_ShouldDisplayApplicationSubmittedTemplate_WhenDeclarationIsAgreed()
-      throws Exception {
+  void submit_ShouldDisplayApplicationSubmittedTemplate_WhenDeclarationIsAgreed() throws Exception {
 
     mockMvc
         .perform(
@@ -91,12 +90,12 @@ class DeclarationSubmitControllerTest {
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(Mappings.URL_APPLICATION_SUBMITTED));
 
-    verify(appServiceMock, times(1)).create(any());
+    verify(applicationServiceMock, times(1)).create(any());
   }
 
   @Test
   void
-      submitDeclaration_ShouldDisplayApplicationSubmittedTemplateAndNotCreateApplication_WhenDeclarationIsAgreedAndPaymentsAreEnabled()
+      submit_ShouldDisplayApplicationSubmittedTemplateAndNotCreateApplication_WhenDeclarationIsAgreedAndPaymentsAreEnabled()
           throws Exception {
 
     mockMvc
@@ -109,12 +108,11 @@ class DeclarationSubmitControllerTest {
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(Mappings.URL_PAY_FOR_THE_BADGE));
 
-    verify(appServiceMock, never()).create(any());
+    verify(applicationServiceMock, never()).create(any());
   }
 
   @Test
-  void submitDeclaration_shouldSendFormDataWithinApplication_WhenDeclarationIsAgreed()
-      throws Exception {
+  void submit_shouldSendFormDataWithinApplication_WhenDeclarationIsAgreed() throws Exception {
 
     mockMvc
         .perform(
@@ -125,7 +123,7 @@ class DeclarationSubmitControllerTest {
         .andExpect(redirectedUrl(Mappings.URL_APPLICATION_SUBMITTED));
 
     ArgumentCaptor<Application> captor = ArgumentCaptor.forClass(Application.class);
-    verify(appServiceMock, times(1)).create(captor.capture());
+    verify(applicationServiceMock, times(1)).create(captor.capture());
 
     assertThat(captor).isNotNull();
     assertThat(captor.getValue()).isNotNull();
@@ -133,7 +131,7 @@ class DeclarationSubmitControllerTest {
   }
 
   @Test
-  void submitDeclaration_ShouldThrowValidationError_WhenDeclarationIsNotAgreed() throws Exception {
+  void submit_ShouldThrowValidationError_WhenDeclarationIsNotAgreed() throws Exception {
     mockMvc
         .perform(post("/apply-for-a-blue-badge/declaration").param("agreed", "false"))
         .andExpect(status().is3xxRedirection())

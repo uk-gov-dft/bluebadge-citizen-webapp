@@ -31,6 +31,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PayForTheBadgeForm;
+import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.PaymentService;
 
 public class PayForTheBadgeControllerTest {
@@ -42,6 +43,7 @@ public class PayForTheBadgeControllerTest {
   private static final String MESSAGE = "My message";
 
   private MockMvc mockMvc;
+  @Mock private ApplicationManagementService applicationServiceMock;
   @Mock private PaymentService paymentServiceMock;
   @Mock private MessageSource messageSourceMock;
 
@@ -52,7 +54,8 @@ public class PayForTheBadgeControllerTest {
     MockitoAnnotations.initMocks(this);
 
     PayForTheBadgeController controller =
-        new PayForTheBadgeController(paymentServiceMock, new RouteMaster(), messageSourceMock);
+        new PayForTheBadgeController(
+            paymentServiceMock, applicationServiceMock, new RouteMaster(), messageSourceMock);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -92,6 +95,7 @@ public class PayForTheBadgeControllerTest {
         .perform(get("/pay-for-the-badge-by-pass").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/application-submitted"));
+    verify(applicationServiceMock).create(any());
   }
 
   @Test

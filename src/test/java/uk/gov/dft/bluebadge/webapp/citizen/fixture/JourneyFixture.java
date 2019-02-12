@@ -574,12 +574,6 @@ public class JourneyFixture {
     journey.setFormForStep(DeclarationSubmitForm.builder().agreed(Boolean.TRUE).build());
 
     if (StepDefinition.PAY_FOR_THE_BADGE == stepTo) return journey;
-    /*Map<String, String> data = new HashMap<>();
-    data.put("paymentJourneyUuid", "");
-    data.put("status", "");
-    data.put("reference", "");
-    journey.get
-    journey.setPaymentStatusResponse(PaymentStatusResponse.builder().data());*/
     journey.setFormForStep(PayForTheBadgeForm.builder().build());
 
     return journey;

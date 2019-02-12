@@ -26,7 +26,7 @@
                 <span class="govuk-!-font-weight-bold" th:text="${contactEmail}"></span><span th:remove="tag">.</span>
             </p>
 
-            <p class="govuk-body" th:if="${JOURNEY.paymentSuccessful}" th:text="#{submittedPage.content.paymentdone.pretext(${JOURNEY.badgeCost})}"/>
+            <p class="govuk-body" data-uipath="p.paymentSuccessfulText" th:if="${JOURNEY.paymentSuccessful}" th:text="#{submittedPage.content.paymentdone.pretext(${JOURNEY.badgeCost})}"/>
 
             <h2 class="govuk-heading-m" th:text="#{submittedPage.content.title}"></h2>
 
