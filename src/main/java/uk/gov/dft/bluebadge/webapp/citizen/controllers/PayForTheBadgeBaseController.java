@@ -11,6 +11,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.service.PaymentService;
 
+@SuppressWarnings({"squid:S1192", "squid:S106"})
 public abstract class PayForTheBadgeBaseController implements StepController {
   protected MessageSource messageSource;
 
