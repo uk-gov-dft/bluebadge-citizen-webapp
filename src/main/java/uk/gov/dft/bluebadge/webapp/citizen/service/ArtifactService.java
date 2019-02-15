@@ -38,15 +38,21 @@ public class ArtifactService {
   private final AmazonS3 amazonS3;
   private final S3Config s3Config;
   private final TransferManager transferManager;
+  private final FileCheckerService fileCheckerService;
 
   public static final String UNSUPPORTED_FILE = "UNSUPPORTED_FILE";
   public static final String MAX_UPLOAD_LIMIT_REACHED = "MAX_NUMBER_SUPPORTING_DOCUMENTS_REACHED";
 
   @Autowired
-  public ArtifactService(TransferManager transferManager, AmazonS3 amazonS3, S3Config s3Config) {
+  public ArtifactService(
+      TransferManager transferManager,
+      AmazonS3 amazonS3,
+      S3Config s3Config,
+      FileCheckerService fileCheckerService) {
     this.amazonS3 = amazonS3;
     this.s3Config = s3Config;
     this.transferManager = transferManager;
+    this.fileCheckerService = fileCheckerService;
   }
 
   public List<JourneyArtifact> upload(
@@ -79,10 +85,14 @@ public class ArtifactService {
     String keyName = UUID.randomUUID().toString() + "-" + multipartFile.getOriginalFilename();
 
     try {
+      String mimetype = determineMimeType(multipartFile.getOriginalFilename(), acceptedMimeTypes);
+      if (!fileCheckerService.isValidFile(mimetype, multipartFile.getInputStream())) {
+        throw new UnsupportedMimetypeException("Invalid file for given mime type.");
+      }
+
       keyName = URLEncoder.encode(keyName, ENCODING_CHAR_SET);
       ObjectMetadata meta = new ObjectMetadata();
       meta.setContentLength(multipartFile.getSize());
-      String mimetype = determineMimeType(multipartFile.getOriginalFilename(), acceptedMimeTypes);
       meta.setContentType(mimetype);
       Upload upload =
           transferManager.upload(
