@@ -22,7 +22,7 @@ export default (options) => {
         });
 
         const regexes = query.trim().split(/\s+/).map((word) => {
-            const pattern = '\\b' + word.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+            const pattern = '\\b' + word.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
             return new RegExp(pattern, 'i');
         });
 
