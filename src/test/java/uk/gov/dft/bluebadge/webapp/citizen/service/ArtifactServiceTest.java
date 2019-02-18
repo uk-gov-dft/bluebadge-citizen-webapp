@@ -3,6 +3,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -36,6 +37,7 @@ class ArtifactServiceTest {
 
   @Mock AmazonS3 amazonS3Mock;
   @Mock TransferManager transferManagerMock;
+  @Mock FileCheckerService fileCheckerServiceMock;
   private URL s3ObjectURL;
   private URL s3SignedUrl;
   private URL validS3ObjectUrl;
@@ -47,7 +49,8 @@ class ArtifactServiceTest {
     S3Config s3Config = new S3Config();
     s3Config.setS3Bucket("test_bucket");
     s3Config.setSignedUrlDurationMs(URL_DURATION_MS);
-    artifactService = new ArtifactService(transferManagerMock, amazonS3Mock, s3Config);
+    artifactService =
+        new ArtifactService(transferManagerMock, amazonS3Mock, s3Config, fileCheckerServiceMock);
 
     s3ObjectURL = new URL("http://test");
     s3SignedUrl = new URL("http://testSigned");
@@ -125,6 +128,24 @@ class ArtifactServiceTest {
     verify(transferManagerMock, never()).upload(any(), any(), any(), any());
   }
 
+  @Test
+  void upload_invalidFile() throws Exception {
+    setupMocksForUpload("resultBucket", "resultKey");
+    when(fileCheckerServiceMock.isValidFile(anyString(), any())).thenReturn(false);
+
+    String testUpload = "Some thing to upload";
+    MultipartFile multipartFile =
+        new MockMultipartFile("testFile", "originalFile.pdf", "", testUpload.getBytes());
+
+    try {
+      artifactService.upload(multipartFile, IMAGE_PDF_MIME_TYPES);
+      fail("no exception thrown");
+    } catch (UnsupportedMimetypeException e) {
+    }
+
+    verify(transferManagerMock, never()).upload(any(), any(), any(), any());
+  }
+
   @SneakyThrows
   private void setupMocksForUpload(String bucket, String key) {
     Upload uploadMock = mock(Upload.class);
@@ -136,6 +157,8 @@ class ArtifactServiceTest {
 
     when(amazonS3Mock.getUrl(bucket, key)).thenReturn(s3ObjectURL);
     when(amazonS3Mock.generatePresignedUrl(any())).thenReturn(s3SignedUrl);
+
+    when(fileCheckerServiceMock.isValidFile(anyString(), any())).thenReturn(true);
   }
 
   @Test

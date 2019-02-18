@@ -34,12 +34,18 @@ const isBrowser_IE = () => {
 }
 
 const select_autocomplete = Array.from(document.getElementsByClassName('select_autocomplete'));
+const NO_RESULTS_TEXT_EN = 'No results found';
+const NO_RESULTS_TEXT_CY = 'Dim canlyniad ar gael';
+const noResultsText = document.querySelector('html').getAttribute('lang') === 'cy' ? NO_RESULTS_TEXT_CY : NO_RESULTS_TEXT_EN;
 
 if (select_autocomplete.length > 0) {
+    
     select_autocomplete.forEach(select => {
             AutoComplete({
                 defaultValue: '',
                 autoselect: true,
+                tNoResults: () => noResultsText,
+                tStatusNoResults: () => noResultsText + '.',
                 selectElement: select,
                 onConfirm: (query) => {
                     const input = document.getElementById(select.id.replace('-select', ''));
