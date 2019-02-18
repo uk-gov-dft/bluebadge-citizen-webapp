@@ -12,6 +12,7 @@ import org.springframework.security.oauth2.client.token.grant.client.ClientCrede
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import uk.gov.dft.bluebadge.common.api.common.ServiceConfiguration;
+import uk.gov.dft.bluebadge.common.logging.LoggingAspect;
 import uk.gov.dft.bluebadge.webapp.citizen.client.CommonResponseErrorHandler;
 
 @Configuration
@@ -72,5 +73,10 @@ public class ApiConfig {
         new DefaultUriBuilderFactory(apiConfig.getUrlPrefix()));
     oAuth2RestTemplate.setErrorHandler(commonResponseErrorHandler());
     return oAuth2RestTemplate;
+  }
+
+  @Bean
+  LoggingAspect getControllerLoggingAspect() {
+    return new LoggingAspect();
   }
 }
