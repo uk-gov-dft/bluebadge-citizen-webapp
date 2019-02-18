@@ -422,7 +422,6 @@ public class CommonSteps extends AbstractSpringSteps {
 
   @And("^I verify that the HTML \"locale\" is set to \"([^\"]*)\"$")
   public void iVerifyTheCorrectLocaleSetInTheSourceCode(String locale) {
-    assertThat(commonPage
-            .getHTMLTag().getAttribute("lang"), is(locale));
+    assertThat(commonPage.getHTMLTag().getAttribute("lang"), is(locale));
   }
 }
