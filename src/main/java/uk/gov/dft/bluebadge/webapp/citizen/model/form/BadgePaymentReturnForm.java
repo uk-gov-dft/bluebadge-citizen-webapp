@@ -14,11 +14,11 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 @Data
 @Builder
 @EqualsAndHashCode
-public class PayForTheBadgeReturnForm implements StepForm, Serializable {
+public class BadgePaymentReturnForm implements StepForm, Serializable {
 
   @Override
   public StepDefinition getAssociatedStep() {
-    return StepDefinition.PAY_FOR_THE_BADGE_RETURN;
+    return StepDefinition.BADGE_PAYMENT_RETURN;
   }
 
   @Override
@@ -26,12 +26,12 @@ public class PayForTheBadgeReturnForm implements StepForm, Serializable {
     if (journey.isPaymentSuccessful()) {
       return Optional.of(StepDefinition.SUBMITTED);
     } else {
-      log.error(
-          "Payment failed. Status code [], reference [], journey uuid []",
+      log.info(
+          "Payment was not successful. Status code [{}], reference [{}], journey uuid [{}]",
           journey.getPaymentStatus(),
           journey.getPaymentReference(),
           journey.getPaymentJourneyUuid());
-      return Optional.of(StepDefinition.PAY_FOR_THE_BADGE);
+      return Optional.of(StepDefinition.BADGE_PAYMENT);
     }
   }
 

@@ -87,33 +87,6 @@ public class JourneyTest {
 
   @Test
   public void
-      setFormForStep_shouldSetPaymentsEnabledPrefixToPaymentsNotEnabled_WhenPassingYourIssuingAuthorityFormAndLocalAuthorityHasNotPaymentsEnabled() {
-    Journey journey = new JourneyBuilder().inEngland().build();
-    LocalAuthorityRefData origAuthority = JourneyFixture.getLocalAuthorityRefData(Nation.ENG, true);
-    journey.setLocalAuthority(origAuthority);
-
-    YourIssuingAuthorityForm form = journey.getFormForStep(StepDefinition.YOUR_ISSUING_AUTHORITY);
-
-    journey.setFormForStep(form);
-    assertThat(journey.paymentsEnabledPrefix).isEqualTo("paymentsEnabled.");
-  }
-
-  @Test
-  public void
-      setFormForStep_shouldSetPaymentsNotEnabledPrefixToPaymentsEnabled_WhenPassingYourIssuingAuthorityFormAndLocalAuthorityHasPaymentsNotEnabled() {
-    Journey journey = new JourneyBuilder().inEngland().build();
-    LocalAuthorityRefData origAuthority =
-        JourneyFixture.getLocalAuthorityRefData(Nation.ENG, false);
-    journey.setLocalAuthority(origAuthority);
-
-    YourIssuingAuthorityForm form = journey.getFormForStep(StepDefinition.YOUR_ISSUING_AUTHORITY);
-
-    journey.setFormForStep(form);
-    assertThat(journey.paymentsEnabledPrefix).isEqualTo("paymentsNotEnabled.");
-  }
-
-  @Test
-  public void
       isLocalAuthorityActive_shouldReturnTrue_whenLocalAuthorityDoesNotHaveDifferentServiceSignpostUrl() {
     Journey journey = new Journey();
     LocalAuthorityRefData localAuthority = new LocalAuthorityRefData();

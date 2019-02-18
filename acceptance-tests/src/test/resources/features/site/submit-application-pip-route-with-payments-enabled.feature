@@ -26,7 +26,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete "prove address" page with a "GIF" document
     And   I complete declaration page
     Then  I should see page titled "Pay for the Blue Badge" with GOV.UK suffix
-    And   I complete pay for blue badge page with submit application and pay later
+    And   I complete badge payment page with submit application and pay later
     Then  I should see page titled "Application submitted" with GOV.UK suffix
     And   I cannot see labelled element "p.paymentSuccessfulText"
 
@@ -52,7 +52,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete "prove address" page with a "GIF" document
     And   I complete declaration page
     Then  I should see page titled "Pay for the Blue Badge" with GOV.UK suffix
-    And   I complete pay for blue badge page with pay online now
+    And   I complete badge payment page with pay online now
     Then  I should see page titled "Enter card details"
     And   I should see payment description "Blue Badge issue fee"
     And   I should see badge cost "£40.00"
@@ -88,7 +88,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     Then  I should see page titled "Pay for the Blue Badge" with GOV.UK suffix
     And   I change language
     Then  I should see page titled in Welsh "Talu am y Bathodyn Glas" with GOV.UK suffix
-    And   I complete pay for blue badge page with pay online now
+    And   I complete badge payment page with pay online now
     Then  I should see page titled "Rhowch fanylion y cerdyn"
     And   I should see payment description "Ffi am Bathodyn Glas"
     And   I should see badge cost "£40.00"
@@ -122,7 +122,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete "prove address" page with a "GIF" document
     And   I complete declaration page
     Then  I should see page titled "Pay for the Blue Badge" with GOV.UK suffix
-    And   I complete pay for blue badge page with pay online now
+    And   I complete badge payment page with pay online now
     Then  I should see page titled "Enter card details"
     And   I should see payment description "Blue Badge issue fee"
     And   I should see badge cost "£40.00"
@@ -130,7 +130,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     Then  I should see page titled "Your payment has been cancelled - GOV.UK Pay"
     When  I click on button with id "return-url"
     Then  I should see page titled "Pay for the Blue Badge" with GOV.UK suffix
-    And   I complete pay for blue badge page with pay online now
+    And   I complete badge payment page with pay online now
     Then  I should see page titled "Enter card details"
     And   I should see payment description "Blue Badge issue fee"
     And   I should see badge cost "£40.00"
@@ -142,7 +142,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
     Then  I should see page titled "Your payment has been cancelled - GOV.UK Pay"
     When  I click on button with id "return-url"
     Then  I should see page titled "Pay for the Blue Badge" with GOV.UK suffix
-    And   I complete pay for blue badge page with pay online now
+    And   I complete badge payment page with pay online now
     Then  I should see page titled "Enter card details"
     And   I should see payment description "Blue Badge issue fee"
     And   I should see badge cost "£40.00"

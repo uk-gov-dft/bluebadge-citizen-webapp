@@ -18,7 +18,6 @@ import java.util.Set;
 import java.util.function.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.NewPaymentResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentStatusResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
@@ -45,16 +44,15 @@ public class Journey implements Serializable {
   public String who;
   public String ageGroup;
   public String walkingAid;
-  public String paymentsEnabledPrefix;
 
   private LocalAuthorityRefData localAuthority;
 
-  private NewPaymentResponse newPaymentResponse;
+  private String paymentJourneyUuid;
 
   private PaymentStatusResponse paymentStatusResponse;
 
-  public void setNewPaymentResponse(NewPaymentResponse newPaymentResponse) {
-    this.newPaymentResponse = newPaymentResponse;
+  public void setPaymentJourneyUuid(final String paymentJourneyUuid) {
+    this.paymentJourneyUuid = paymentJourneyUuid;
   }
 
   public void setPaymentStatusResponse(PaymentStatusResponse paymentStatusResponse) {
@@ -62,7 +60,7 @@ public class Journey implements Serializable {
   }
 
   public String getPaymentJourneyUuid() {
-    return newPaymentResponse != null ? newPaymentResponse.getPaymentJourneyUuid() : null;
+    return paymentJourneyUuid;
   }
 
   public String getPaymentReference() {
@@ -92,8 +90,6 @@ public class Journey implements Serializable {
       ageGroup = isApplicantYoung() ? "young." : "adult.";
     } else if (form.getAssociatedStep() == StepDefinition.MOBILITY_AID_LIST) {
       walkingAid = hasMobilityAid() ? "withWalkingAid." : "withoutWalkingAid.";
-    } else if (form.getAssociatedStep() == StepDefinition.YOUR_ISSUING_AUTHORITY) {
-      paymentsEnabledPrefix = isPaymentsEnabled() ? "paymentsEnabled." : "paymentsNotEnabled.";
     }
 
     if (doCleanUp) {

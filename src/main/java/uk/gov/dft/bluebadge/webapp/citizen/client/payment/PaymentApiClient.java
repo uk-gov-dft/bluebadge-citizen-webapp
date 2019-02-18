@@ -7,8 +7,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.NewPaymentRequest;
-import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.NewPaymentResponse;
+import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentRequest;
+import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentStatusResponse;
 
 @Slf4j
@@ -26,19 +26,19 @@ public class PaymentApiClient {
   /**
    * Create payment.
    *
-   * @param newPaymentRequest
-   * @return NewPaymentResponse with paymentJourneyUuid and url to redirect to.
+   * @param paymentRequest
+   * @return PaymentResponse with paymentJourneyUuid and url to redirect to.
    */
-  public NewPaymentResponse createPayment(final NewPaymentRequest newPaymentRequest) {
+  public PaymentResponse createPayment(final PaymentRequest paymentRequest) {
     log.debug("Create payment.");
 
-    HttpEntity<NewPaymentRequest> request = new HttpEntity<>(newPaymentRequest);
+    HttpEntity<PaymentRequest> request = new HttpEntity<>(paymentRequest);
 
     return restTemplate
         .postForEntity(
             UriComponentsBuilder.newInstance().path("/payments").toUriString(),
             request,
-            NewPaymentResponse.class)
+            PaymentResponse.class)
         .getBody();
   }
 
@@ -49,7 +49,7 @@ public class PaymentApiClient {
    * @return PaymentStatusResponse
    */
   public PaymentStatusResponse retrievePaymentStatus(String paymentJourneyUuid) {
-    log.debug("retrieve payment status.");
+    log.debug("Retrieve payment status.");
 
     return restTemplate
         .getForEntity(

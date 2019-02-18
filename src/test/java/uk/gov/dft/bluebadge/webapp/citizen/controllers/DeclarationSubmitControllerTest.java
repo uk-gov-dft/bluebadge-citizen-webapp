@@ -106,7 +106,7 @@ class DeclarationSubmitControllerTest {
                     "JOURNEY",
                     JourneyFixture.getDefaultJourneyToStep(null, EligibilityCodeField.PIP, true)))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(Mappings.URL_PAY_FOR_THE_BADGE));
+        .andExpect(redirectedUrl(Mappings.URL_BADGE_PAYMENT));
 
     verify(applicationServiceMock, never()).create(any());
   }

@@ -38,6 +38,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.component.CompoundDate;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.BadgePaymentForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
@@ -56,7 +57,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.OrganisationMayBeEligibleForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.PayForTheBadgeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveAddressForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveBenefitForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveIdentityForm;
@@ -573,8 +573,8 @@ public class JourneyFixture {
 
     journey.setFormForStep(DeclarationSubmitForm.builder().agreed(Boolean.TRUE).build());
 
-    if (StepDefinition.PAY_FOR_THE_BADGE == stepTo) return journey;
-    journey.setFormForStep(PayForTheBadgeForm.builder().build());
+    if (StepDefinition.BADGE_PAYMENT == stepTo) return journey;
+    journey.setFormForStep(BadgePaymentForm.builder().build());
 
     return journey;
   }

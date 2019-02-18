@@ -4,7 +4,7 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/master.html}">
 <head>
-    <title th:text="(${errorSummary}? #{common.title.error} : '')  + #{payForTheBlueBadgeRetryPage.title}"></title>
+    <title th:text="(${errorSummary}? #{common.title.error} : '')  + #{badgePaymentRetryPage.title}"></title>
 </head>
 <body>
 
@@ -12,7 +12,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-            <form th:action="@{/pay-for-the-badge-retry}" th:object="${formRequest}" method="post" novalidate>
+            <form th:action="@{/badge-payment-retry}" th:object="${formRequest}" method="post" novalidate>
 
                 <div th:replace="~{ fragments/govuk-radios :: govuk-radios('retry', ${retryOptions}) }"></div>
 

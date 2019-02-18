@@ -14,16 +14,16 @@ import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewPaymentResponse extends CommonResponse implements Serializable {
+public class PaymentResponse extends CommonResponse implements Serializable {
 
   @JsonIgnore
   public String getPaymentJourneyUuid() {
-    return (String) data.get("paymentJourneyUuid");
+    return data.get("paymentJourneyUuid");
   }
 
   @JsonIgnore
   public String getNextUrl() {
-    return (String) data.get("nextUrl");
+    return data.get("nextUrl");
   }
 
   @JsonProperty("data")

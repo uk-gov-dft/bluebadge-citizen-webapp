@@ -16,17 +16,17 @@ public class PaymentStatusResponse extends CommonResponse implements Serializabl
 
   @JsonIgnore
   public String getPaymentJourneyUuid() {
-    return (String) data.get("paymentJourneyUuid");
+    return data.get("paymentJourneyUuid");
   }
 
   @JsonIgnore
   public String getStatus() {
-    return (String) data.get("status");
+    return data.get("status");
   }
 
   @JsonIgnore
   public String getReference() {
-    return (String) data.get("reference");
+    return data.get("reference");
   }
 
   @JsonProperty("data")

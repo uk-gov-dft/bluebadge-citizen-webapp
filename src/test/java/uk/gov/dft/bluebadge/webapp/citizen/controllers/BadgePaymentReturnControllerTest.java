@@ -17,18 +17,18 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.NewPaymentResponse;
+import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentStatusResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.PayForTheBadgeForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.PayForTheBadgeReturnForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.BadgePaymentForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.BadgePaymentReturnForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.PaymentService;
 
-public class PayForTheBadgeReturnControllerTest {
+public class BadgePaymentReturnControllerTest {
 
   private static final String NEXT_URL = "http://localhost/next-url";
   private static final String PAYMENT_JOURNEY_UUID = "journeypay1";
@@ -37,8 +37,8 @@ public class PayForTheBadgeReturnControllerTest {
   private static final String PAYMENT_STATUS_FAILED = "failed";
   private static final String PAYMENT_REFERENCE = "payref1010";
 
-  NewPaymentResponse NEW_PAYMENT_RESPONSE =
-      NewPaymentResponse.builder()
+  PaymentResponse PAYMENT_RESPONSE =
+      PaymentResponse.builder()
           .data(
               new HashMap<String, String>() {
                 {
@@ -86,14 +86,14 @@ public class PayForTheBadgeReturnControllerTest {
   @Mock private PaymentService paymentServiceMock;
 
   private Journey journey;
-  private PayForTheBadgeReturnForm formRequest;
+  private BadgePaymentReturnForm formRequest;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
 
-    PayForTheBadgeReturnController controller =
-        new PayForTheBadgeReturnController(
+    BadgePaymentReturnController controller =
+        new BadgePaymentReturnController(
             applicationManagementServiceMock, paymentServiceMock, new RouteMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
@@ -101,8 +101,8 @@ public class PayForTheBadgeReturnControllerTest {
             .build();
     journey =
         JourneyFixture.getDefaultJourneyToStep(
-            StepDefinition.PAY_FOR_THE_BADGE, EligibilityCodeField.DLA, true);
-    formRequest = PayForTheBadgeReturnForm.builder().build();
+            StepDefinition.BADGE_PAYMENT, EligibilityCodeField.DLA, true);
+    formRequest = BadgePaymentReturnForm.builder().build();
   }
 
   @Test
@@ -110,18 +110,18 @@ public class PayForTheBadgeReturnControllerTest {
     journey =
         JourneyFixture.getDefaultJourneyToStep(StepDefinition.NINO, EligibilityCodeField.DLA, true);
     mockMvc
-        .perform(get("/pay-for-the-badge-return").sessionAttr("JOURNEY", journey))
+        .perform(get("/badge-payment-return").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/"));
   }
 
   @Test
-  public void show_shouldRedirectToPayForTheBadge_whenThereIsNoPaymentJourneyUuidInJourney()
+  public void show_shouldRedirectToBadgePayment_whenThereIsNoPaymentJourneyUuidInJourney()
       throws Exception {
     mockMvc
-        .perform(get("/pay-for-the-badge-return").sessionAttr("JOURNEY", journey))
+        .perform(get("/badge-payment-return").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/pay-for-the-badge"));
+        .andExpect(redirectedUrl("/badge-payment"));
   }
 
   @Test
@@ -129,14 +129,14 @@ public class PayForTheBadgeReturnControllerTest {
       show_shouldRedirectToApplicationSubmittedAndCreateApplication_whenPaymentIsSuccessful()
           throws Exception {
 
-    journey.setNewPaymentResponse(NEW_PAYMENT_RESPONSE);
-    journey.setFormForStep(PayForTheBadgeForm.builder().build());
+    journey.setPaymentJourneyUuid(PAYMENT_JOURNEY_UUID);
+    journey.setFormForStep(BadgePaymentForm.builder().build());
 
     when(paymentServiceMock.retrievePaymentStatus(PAYMENT_JOURNEY_UUID))
         .thenReturn(SUCCESS_PAYMENT_STATUS_RESPONSE);
 
     mockMvc
-        .perform(get("/pay-for-the-badge-return").sessionAttr("JOURNEY", journey))
+        .perform(get("/badge-payment-return").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/application-submitted"));
     verify(applicationManagementServiceMock).create(any());
@@ -147,16 +147,16 @@ public class PayForTheBadgeReturnControllerTest {
       show_shouldRedirectToApplicationSubmittedAndCreateApplication_whenPaymentIsNotSuccessful()
           throws Exception {
 
-    journey.setNewPaymentResponse(NEW_PAYMENT_RESPONSE);
-    journey.setFormForStep(PayForTheBadgeForm.builder().build());
+    journey.setPaymentJourneyUuid(PAYMENT_JOURNEY_UUID);
+    journey.setFormForStep(BadgePaymentForm.builder().build());
 
     when(paymentServiceMock.retrievePaymentStatus(PAYMENT_JOURNEY_UUID))
         .thenReturn(FAILED_PAYMENT_STATUS_RESPONSE);
 
     mockMvc
-        .perform(get("/pay-for-the-badge-return").sessionAttr("JOURNEY", journey))
+        .perform(get("/badge-payment-return").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/pay-for-the-badge"));
+        .andExpect(redirectedUrl("/badge-payment"));
     verify(applicationManagementServiceMock, never()).create(any());
   }
 }

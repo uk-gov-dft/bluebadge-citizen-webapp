@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="(${errorSummary}? #{common.title.error} : '')  + #{badgePaymentPage.title}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l" th:text="#{badgePaymentPage.title}"></h1>
+
+            <p class="govuk-body"
+               th:text="#{${JOURNEY.who} + 'badgePaymentPage.content.p1'(${JOURNEY.badgeCost})}"></p>
+            <p class="govuk-body"
+               th:text="#{${JOURNEY.who} + 'badgePaymentPage.content.p2'(${JOURNEY.localeAwareLocalAuthority.description})}"></p>
+
+            <form th:action="@{/badge-payment}" th:object="${formRequest}" method="post" novalidate>
+
+                <input type="hidden" name="payNow" id="payNow" value="true"/>
+
+                <button type="submit" class="govuk-button" data-uipath="button.payonlinenow"
+                        th:text="#{badgePaymentPage.paynow.button.label}"></button>
+
+            </form>
+
+            <form th:action="@{/badge-payment}" th:object="${formRequest}" method="post" novalidate>
+
+                <input type="hidden" name="payNow" id="payNow" value="false"/>
+
+            </form>
+
+            <a th:href="@{/badge-payment-by-pass}" class="govuk-body" data-uipath="link.paylater"
+               th:text="#{badgePaymentPage.paylater.link.label}"></a>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

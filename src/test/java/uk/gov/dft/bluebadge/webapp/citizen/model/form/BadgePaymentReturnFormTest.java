@@ -11,7 +11,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 @SuppressWarnings("OptionalGetWithoutIsPresent")
-public class PayForTheBadgeReturnFormTest {
+public class BadgePaymentReturnFormTest {
 
   private static final String PAYMENT_JOURNEY_UUID = "journeypay1";
   private static final String PAYMENT_STATUS_SUCCESS = "success";
@@ -44,10 +44,10 @@ public class PayForTheBadgeReturnFormTest {
 
   @Test
   public void determineNextStep_shouldReturnSubmitted_whenPaymentWasSuccessful() {
-    PayForTheBadgeReturnForm form = PayForTheBadgeReturnForm.builder().build();
+    BadgePaymentReturnForm form = BadgePaymentReturnForm.builder().build();
     Journey journey =
         JourneyFixture.getDefaultJourneyToStep(
-            StepDefinition.PAY_FOR_THE_BADGE, EligibilityCodeField.PIP, true);
+            StepDefinition.BADGE_PAYMENT, EligibilityCodeField.PIP, true);
 
     journey.setPaymentStatusResponse(SUCCESS_PAYMENT_STATUS_RESPONSE);
 
@@ -57,14 +57,14 @@ public class PayForTheBadgeReturnFormTest {
 
   @Test
   public void determineNextStep_shouldReturnSubmitted_whenPaymentWasNotSuccessful() {
-    PayForTheBadgeReturnForm form = PayForTheBadgeReturnForm.builder().build();
+    BadgePaymentReturnForm form = BadgePaymentReturnForm.builder().build();
     Journey journey =
         JourneyFixture.getDefaultJourneyToStep(
-            StepDefinition.PAY_FOR_THE_BADGE, EligibilityCodeField.PIP, true);
+            StepDefinition.BADGE_PAYMENT, EligibilityCodeField.PIP, true);
 
     journey.setPaymentStatusResponse(FAILED_PAYMENT_STATUS_RESPONSE);
 
     assertThat(form.determineNextStep(journey)).isNotEmpty();
-    assertThat(form.determineNextStep(journey).get()).isEqualTo(StepDefinition.PAY_FOR_THE_BADGE);
+    assertThat(form.determineNextStep(journey).get()).isEqualTo(StepDefinition.BADGE_PAYMENT);
   }
 }

@@ -1,17 +1,23 @@
 package uk.gov.dft.bluebadge.webapp.citizen.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.PaymentApiClient;
-import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.NewPaymentRequest;
-import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.NewPaymentResponse;
+import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentRequest;
+import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentStatusResponse;
 
 public class PaymentServiceTest {
@@ -24,20 +30,28 @@ public class PaymentServiceTest {
   private static final String PAYMENT_REFERENCE = "payRef1";
 
   @Mock private PaymentApiClient clientMock;
+  @Mock private MessageSource messageSourceMock;
 
   private PaymentService paymentService;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    paymentService = new PaymentService(clientMock);
+    paymentService = new PaymentService(clientMock, messageSourceMock);
+
+    when(messageSourceMock.getMessage(
+            eq("badgePaymentPage.api.createPayment.paymentMessage"), isNull(), any()))
+        .thenReturn(MESSAGE);
+
+    Locale english = new Locale("en");
+    LocaleContextHolder.setLocale(english);
   }
 
   @Test
   public void createPayment_shouldWork() {
-    NewPaymentRequest newPaymentRequest =
-        NewPaymentRequest.builder()
-            .language(LANGUAGE)
+    PaymentRequest paymentRequest =
+        PaymentRequest.builder()
+            .language(null)
             .laShortCode(LA_SHORT_CODE)
             .paymentMessage(MESSAGE)
             .returnUrl(NEXT_URL)
@@ -46,12 +60,11 @@ public class PaymentServiceTest {
     Map<String, String> data = new HashMap<>();
     data.put("paymentJourneyUuid", PAYMENT_JOURNEY_UUID);
     data.put("nextUrl", NEXT_URL);
-    NewPaymentResponse newPaymentResponse = NewPaymentResponse.builder().data(data).build();
+    PaymentResponse paymentResponse = PaymentResponse.builder().data(data).build();
 
-    when(clientMock.createPayment(newPaymentRequest)).thenReturn(newPaymentResponse);
+    when(clientMock.createPayment(paymentRequest)).thenReturn(paymentResponse);
 
-    assertThat(paymentService.createPayment(LA_SHORT_CODE, NEXT_URL, MESSAGE, LANGUAGE))
-        .isEqualTo(newPaymentResponse);
+    assertThat(paymentService.createPayment(LA_SHORT_CODE, NEXT_URL)).isEqualTo(paymentResponse);
   }
 
   @Test

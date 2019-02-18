@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class NewPaymentRequest {
+public class PaymentRequest {
   @NotBlank private String laShortCode;
   @NotBlank private String returnUrl;
   @NotBlank private String paymentMessage;

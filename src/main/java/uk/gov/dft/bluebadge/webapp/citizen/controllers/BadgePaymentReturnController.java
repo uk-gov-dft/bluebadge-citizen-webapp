@@ -16,13 +16,13 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.PayForTheBadgeReturnForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.BadgePaymentReturnForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.PaymentService;
 
 @Controller
-@RequestMapping(Mappings.URL_PAY_FOR_THE_BADGE_RETURN)
-public class PayForTheBadgeReturnController implements StepController {
+@RequestMapping(Mappings.URL_BADGE_PAYMENT_RETURN)
+public class BadgePaymentReturnController implements StepController {
 
   private final ApplicationManagementService applicationService;
 
@@ -31,7 +31,7 @@ public class PayForTheBadgeReturnController implements StepController {
   private final RouteMaster routeMaster;
 
   @Autowired
-  PayForTheBadgeReturnController(
+  BadgePaymentReturnController(
       ApplicationManagementService applicationService,
       PaymentService paymentService,
       RouteMaster routeMaster) {
@@ -44,14 +44,14 @@ public class PayForTheBadgeReturnController implements StepController {
   public String show(
       Model model,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute(FORM_REQUEST) PayForTheBadgeReturnForm formRequest) {
+      @Valid @ModelAttribute(FORM_REQUEST) BadgePaymentReturnForm formRequest) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
     if (journey.getPaymentJourneyUuid() == null) {
-      return "redirect:" + Mappings.URL_PAY_FOR_THE_BADGE;
+      return "redirect:" + Mappings.URL_BADGE_PAYMENT;
     }
     PaymentStatusResponse paymentStatusResponse =
         paymentService.retrievePaymentStatus(journey.getPaymentJourneyUuid());
@@ -65,6 +65,6 @@ public class PayForTheBadgeReturnController implements StepController {
 
   @Override
   public StepDefinition getStepDefinition() {
-    return StepDefinition.PAY_FOR_THE_BADGE_RETURN;
+    return StepDefinition.BADGE_PAYMENT_RETURN;
   }
 }

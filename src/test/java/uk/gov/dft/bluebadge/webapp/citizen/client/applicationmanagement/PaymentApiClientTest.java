@@ -18,8 +18,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import uk.gov.dft.bluebadge.webapp.citizen.client.CommonResponseErrorHandler;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.PaymentApiClient;
-import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.NewPaymentRequest;
-import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.NewPaymentResponse;
+import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentRequest;
+import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentStatusResponse;
 
 public class PaymentApiClientTest {
@@ -43,8 +43,8 @@ public class PaymentApiClientTest {
 
   @Test
   public void createPayment_shouldWork() throws Exception {
-    NewPaymentRequest request =
-        NewPaymentRequest.builder()
+    PaymentRequest request =
+        PaymentRequest.builder()
             .language(null)
             .laShortCode("ABERD")
             .paymentMessage("payment message")
@@ -54,7 +54,7 @@ public class PaymentApiClientTest {
     data.put("paymentJourneyUuid", PAYMENT_JOURNEY_UUID);
     data.put("nextUrl", "http://localhost/next-url");
 
-    NewPaymentResponse response = NewPaymentResponse.builder().data(data).build();
+    PaymentResponse response = PaymentResponse.builder().data(data).build();
     String jsonResponse = objectMapper.writeValueAsString(response);
 
     mockServer

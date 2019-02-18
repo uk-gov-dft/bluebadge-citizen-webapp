@@ -23,7 +23,7 @@ public class EnterCardDetailsSteps extends AbstractSpringSteps {
   }
 
   @And("I complete enter cards details page and press continue")
-  public void iCompletePayForBlueBadgePageWithPayOnlineNow() {
+  public void iCompleteBadgePaymentPageWithPayOnlineNow() {
     commonPage
         .findPageElementById(EnterCardDetailsPage.CARD_NUMBER_ID)
         .sendKeys("4444333322221111");
@@ -48,7 +48,7 @@ public class EnterCardDetailsSteps extends AbstractSpringSteps {
   }
 
   @And("I don't complete enter cards details page and press cancel payment")
-  public void iCompletePayForBlueBadgePageWithSubmitApplicationAndPayLater() {
+  public void iCompleteBadgePaymentPageWithSubmitApplicationAndPayLater() {
     commonPage.findPageElementById(EnterCardDetailsPage.CANCEL_PAYMENT_LINK_ID).click();
   }
 
