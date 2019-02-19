@@ -1,6 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.model.validation.ValidationPatterns.PERSON_NAME;
+import static uk.gov.dft.bluebadge.common.util.ValidationPattern.EMPTY_OR_PERSON_NAME;
 
 import com.google.common.collect.ImmutableList;
 import java.io.Serializable;
@@ -22,7 +22,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 @EqualsAndHashCode
 public class ApplicantNameForm implements StepForm, Serializable {
   @NotBlank(message = "{field.fullName.NotBlank}")
-  @Pattern(regexp = PERSON_NAME)
+  @Pattern(regexp = EMPTY_OR_PERSON_NAME)
   @Size(max = 100)
   private String fullName;
 
@@ -30,7 +30,7 @@ public class ApplicantNameForm implements StepForm, Serializable {
   private Boolean hasBirthName;
 
   @Size(max = 100)
-  @Pattern(regexp = PERSON_NAME)
+  @Pattern(regexp = EMPTY_OR_PERSON_NAME)
   private String birthName;
 
   public Boolean isBirthNameValid() {
