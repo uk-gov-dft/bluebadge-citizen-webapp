@@ -48,8 +48,9 @@ public class DeclarationSubmitController implements StepController {
     model.addAttribute(
         "submitButtonMessage",
         journey.isPaymentsEnabled()
-            ? "declarationPage.submit.button.label"
-            : "declarationPage.continue.button.label");
+            ? "declarationPage.continue.button.label"
+            : "declarationPage.submit.button.label"
+    );
 
     return TEMPLATE;
   }
