@@ -27,7 +27,7 @@
             <p class="govuk-body" th:text="#{${JOURNEY.who} + 'declarationPage.content.p2'(${JOURNEY.localeAwareLocalAuthority.description})}"></p>
 
             <ul class="govuk-list govuk-list--bullet">
-                <li th:text="#{${JOURNEY.who} + 'declarationPage.content.ul.five'}"></li>                
+                <li th:text="#{${JOURNEY.who} + 'declarationPage.content.ul.five'}"></li>
                	<li th:if="${! JOURNEY.automaticEligibilityType}" th:text="#{${JOURNEY.who} + 'declarationPage.content.ul.six'}"></li>
                 <li th:text="#{${JOURNEY.who} + 'declarationPage.content.ul.seven'}"></li>
                 <li th:text="#{${JOURNEY.who} + 'declarationPage.content.ul.eight'}"></li>
@@ -47,7 +47,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="govuk-button" data-uipath="button.continue" th:text="#{declarationPage.submit.button.label}"></button>
+                <button type="submit" class="govuk-button" data-uipath="button.continue" th:text="#{${submitButtonMessage}}"></button>
             </form>
 
         </div>

@@ -65,7 +65,7 @@ public class JourneyTest {
         .isEqualTo(journey.getFormForStep(StepDefinition.YOUR_ISSUING_AUTHORITY));
 
     // An unchanged council will leave your authority unchanged.
-    LocalAuthorityRefData origAuthority = JourneyFixture.getLocalAuthorityRefData(Nation.ENG);
+    LocalAuthorityRefData origAuthority = JourneyFixture.getLocalAuthorityRefData(Nation.ENG, true);
     YourIssuingAuthorityForm newForm =
         YourIssuingAuthorityForm.builder()
             .localAuthorityShortCode(origAuthority.getShortCode())

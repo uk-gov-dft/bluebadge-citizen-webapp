@@ -42,7 +42,7 @@ public class RouteMasterTest {
   }
 
   @Test(expected = IllegalStateException.class)
-  public void redirectOnSuccessWithForm_whenMultiple_thenExcpetion() {
+  public void redirectOnSuccessWithForm_whenMultiple_thenException() {
     StepForm testForm =
         new StepForm() {
           @Override

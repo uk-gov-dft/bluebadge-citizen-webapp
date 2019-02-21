@@ -11,6 +11,11 @@ blue-badge:
       host: application-service.${bb_env}.${url}
       port: 443
       scheme: https
+  paymentservice:
+    servicehost:
+      host: payment-service.${bb_env}.${url}
+      port: 443
+      scheme: https
 
 management:
   server:
@@ -18,7 +23,7 @@ management:
 
 server:
   port: ${bb_port:-8080}
-  
+
 # Google Analytics Code
 GACode:  ${GACODE:UA-124760983-5}
 
