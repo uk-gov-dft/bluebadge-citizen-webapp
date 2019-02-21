@@ -5,7 +5,7 @@ export default (form) => {
 	}
 
 	let isSubmitted = false;
-	const button = form.getElementsByTagName("button");
+	const button = form.getElementsByTagName('button');
 	
 	form.addEventListener('submit', event => {
 		event.preventDefault();

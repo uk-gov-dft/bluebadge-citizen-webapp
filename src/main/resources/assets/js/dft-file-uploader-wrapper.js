@@ -33,7 +33,7 @@ export default class DFT_FileUploader {
 		this.$addMore = this.getChildElement('__add-file-btn');
 		
 		this.$generalErrorMessage = this.getDataAttrValue('upload-error-message') || 'File could not be uploaded';
-		this.$uploadRejectErrorMessage = this.getDataAttrValue('upload-reject-error-message') || "File uploaded was of incorrect format or file size has exceeded the limit";
+		this.$uploadRejectErrorMessage = this.getDataAttrValue('upload-reject-error-message') || 'File uploaded was of incorrect format or file size has exceeded the limit';
 
 		this.$endPoint = this.getDataAttrValue('ajax-request-url');
 		this.$maxFileUploadLimit = this.getDataAttrValue('max-file-upload-limit');
