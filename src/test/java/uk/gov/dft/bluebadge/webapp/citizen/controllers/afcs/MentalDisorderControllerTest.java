@@ -39,7 +39,7 @@ public class MentalDisorderControllerTest {
 
     journey =
         JourneyFixture.getDefaultJourneyToStep(
-            StepDefinition.AFCS_MENTAL_DISORDER, EligibilityCodeField.AFRFCS, Nation.WLS);
+            StepDefinition.AFCS_MENTAL_DISORDER, EligibilityCodeField.AFRFCS, Nation.WLS, false);
 
     CompensationSchemeForm form = journey.getFormForStep(StepDefinition.AFCS_COMPENSATION_SCHEME);
     form.setHasReceivedCompensation(Boolean.FALSE);

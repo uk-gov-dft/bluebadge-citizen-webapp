@@ -14,10 +14,14 @@ public class JourneyToApplicationConverter {
   public static Application convert(Journey journey) {
     ExistingBadgeForm existingBadgeForm = journey.getFormForStep(StepDefinition.EXISTING_BADGE);
 
+    boolean paymentTaken = journey.isPaymentSuccessful();
+    String paymentReference = (paymentTaken ? journey.getPaymentReference() : null);
+
     return Application.builder()
         .applicationTypeCode(ApplicationTypeCodeField.NEW)
         .localAuthorityCode(journey.getLocalAuthority().getShortCode())
-        .paymentTaken(false)
+        .paymentTaken(paymentTaken)
+        .paymentReference(paymentReference)
         .existingBadgeNumber(getExistingBadgeNumber(existingBadgeForm))
         .party(PartyConverter.convert(journey))
         .eligibility(EligibilityConverter.convert(journey))

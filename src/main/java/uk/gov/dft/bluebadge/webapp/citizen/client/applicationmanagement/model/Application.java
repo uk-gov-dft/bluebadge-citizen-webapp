@@ -13,6 +13,7 @@ public class Application {
   private ApplicationTypeCodeField applicationTypeCode;
   private String localAuthorityCode;
   private Boolean paymentTaken;
+  private String paymentReference;
   private OffsetDateTime submissionDate;
   private String existingBadgeNumber;
   private Party party;

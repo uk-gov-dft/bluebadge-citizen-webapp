@@ -57,7 +57,7 @@ public class RegisteredCouncilControllerTest {
 
     journey =
         JourneyFixture.getDefaultJourneyToStep(
-            StepDefinition.PERMISSION, EligibilityCodeField.BLIND, Nation.ENG);
+            StepDefinition.PERMISSION, EligibilityCodeField.BLIND, Nation.ENG, false);
   }
 
   @Test

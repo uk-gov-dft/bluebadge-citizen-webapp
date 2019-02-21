@@ -98,6 +98,11 @@ public class CommonSteps extends AbstractSpringSteps {
     commonPage.findElementWithText(linkTitle).click();
   }
 
+  @When("^I click on button with id \"([^\"]+)\"$")
+  public void whenIClickOnButtonById(String buttonId) {
+    commonPage.findPageElementById(buttonId).click();
+  }
+
   @Then("^I (?:can )?see \"([^\"]+)\" (?:link|button|image)$")
   public void thenISeeLink(String linkTitle) {
     assertNotNull("Can see element", commonPage.findElementWithTitle(linkTitle));
@@ -108,6 +113,12 @@ public class CommonSteps extends AbstractSpringSteps {
     assertNotNull(
         "Can see element with data-uipath: " + uiPath, commonPage.findElementWithUiPath(uiPath));
     assertThat(commonPage.findElementWithUiPath(uiPath).getText(), containsString(content));
+  }
+
+  @Then("^I cannot see labelled element \"([^\"]+)\"$")
+  public void thenICannotSeeElementWithUiPath(String uiPath) {
+    assertNull(
+        "Cannot see element with data-uipath: " + uiPath, commonPage.findElementWithUiPath(uiPath));
   }
 
   @Then("^I should see (?:.* )?page titled \"([^\"]+)\"$")
@@ -121,6 +132,14 @@ public class CommonSteps extends AbstractSpringSteps {
         "I should see page titled.",
         commonPage.getDocumentTitle(),
         is(pageTitle + " - Apply for a Blue Badge - GOV.UK"));
+  }
+
+  @Then("^I should see (?:.* )?page titled in Welsh \"([^\"]+)\" with GOV.UK suffix")
+  public void thenIShouldSeePageTitledWithGovUkSuffixInWelsh(String pageTitle) {
+    assertThat(
+        "I should see page titled.",
+        commonPage.getDocumentTitle(),
+        is(pageTitle + " - Gwneud cais am Fathodyn Glas - GOV.UK"));
   }
 
   @Then("^I should see the content \"([^\"]*)\"$")
@@ -423,5 +442,10 @@ public class CommonSteps extends AbstractSpringSteps {
   @And("^I verify that the HTML \"locale\" is set to \"([^\"]*)\"$")
   public void iVerifyTheCorrectLocaleSetInTheSourceCode(String locale) {
     assertThat(commonPage.getHTMLTag().getAttribute("lang"), is(locale));
+  }
+
+  @And("^I change language$")
+  public void iChangeLanguage() {
+    commonPage.findPageElementById("change-language-link").click();
   }
 }

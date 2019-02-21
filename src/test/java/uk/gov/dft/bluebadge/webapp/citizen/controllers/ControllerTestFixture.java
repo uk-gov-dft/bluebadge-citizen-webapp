@@ -40,7 +40,7 @@ public abstract class ControllerTestFixture<T> {
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
-    journey = JourneyFixture.getDefaultJourneyToStep(getStep(), getEligibilityType());
+    journey = JourneyFixture.getDefaultJourneyToStep(getStep(), getEligibilityType(), false);
   }
 
   public static ResultMatcher formRequestFlashAttributeHasFieldErrorCode(
