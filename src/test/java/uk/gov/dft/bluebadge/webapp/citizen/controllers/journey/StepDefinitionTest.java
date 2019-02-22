@@ -1,6 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.BADGE_PAYMENT_RETURN;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.HOME;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.MEDICATION_ADD;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.MOBILITY_AID_ADD;
@@ -31,6 +32,7 @@ public class StepDefinitionTest {
             MOBILITY_AID_ADD,
             TREATMENT_ADD,
             MEDICATION_ADD,
+            BADGE_PAYMENT_RETURN,
             StepDefinition.HEALTHCARE_PROFESSIONALS_ADD);
   }
 }

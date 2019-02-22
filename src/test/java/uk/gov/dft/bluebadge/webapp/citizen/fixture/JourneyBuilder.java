@@ -94,6 +94,7 @@ public class JourneyBuilder {
             .dob(dob)
             .applicantType(applicantType)
             .orgDoesCare(orgDoesCare)
+            .paymentsEnable(false)
             .build());
   }
 }

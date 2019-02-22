@@ -80,7 +80,7 @@ public class UploadSupportingDocumentsControllerTest {
 
     journey =
         JourneyFixture.getDefaultJourneyToStep(
-            StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS, EligibilityCodeField.WALKD);
+            StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS, EligibilityCodeField.WALKD, false);
     journey.setFormForStep(form);
     docUrl = new URL("http://test");
     signedUrl = new URL("http://testSigned");
