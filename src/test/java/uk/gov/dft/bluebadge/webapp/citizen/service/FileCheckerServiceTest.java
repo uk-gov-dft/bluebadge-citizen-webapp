@@ -39,6 +39,20 @@ class FileCheckerServiceTest {
 
   @Test
   @SneakyThrows
+  void isValidFile_validPdfReadonlyEncrypted() {
+    ClassPathResource r = new ClassPathResource("testFiles/pdf-readonly-encrypted.pdf");
+    assertThat(fileCheckerService.isValidFile("application/pdf", r.getInputStream())).isTrue();
+  }
+
+  @Test
+  @SneakyThrows
+  void isValidFile_invalidPdfProtected() {
+    ClassPathResource r = new ClassPathResource("testFiles/pdf***REMOVED***-protected.pdf");
+    assertThat(fileCheckerService.isValidFile("application/pdf", r.getInputStream())).isFalse();
+  }
+
+  @Test
+  @SneakyThrows
   void isValidFile_invalidJpg() {
     ClassPathResource r = new ClassPathResource("testFiles/fake_image.jpg");
     assertThat(fileCheckerService.isValidFile("image/jpeg", r.getInputStream())).isFalse();

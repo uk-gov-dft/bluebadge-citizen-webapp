@@ -46,9 +46,7 @@ public class FileCheckerService {
 
   private boolean isPdfValid(InputStream inputStream) {
     try (PDDocument pdDocument = PDDocument.load(inputStream)) {
-      if (!pdDocument.isEncrypted()) {
-        return true;
-      }
+      return true;
     } catch (IOException e) {
       log.info("Failed to read file: {}", e.toString());
     }
