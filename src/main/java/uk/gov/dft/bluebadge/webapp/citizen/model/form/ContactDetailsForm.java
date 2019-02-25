@@ -1,6 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
-import static uk.gov.dft.bluebadge.common.util.ValidationPattern.EMPTY_OR_EMAIL;
 import static uk.gov.dft.bluebadge.common.util.ValidationPattern.EMPTY_OR_PHONE_NUMBER;
 
 import com.google.common.collect.ImmutableList;
