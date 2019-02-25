@@ -40,6 +40,8 @@ public class ContactDetailsForm implements StepForm, Serializable {
   @Pattern(regexp = EMPTY_OR_EMAIL, message = "{Invalid.emailAddress}")
   private String emailAddress;
 
+  private Boolean continueWithoutEmailAddress;
+
   @Override
   public StepDefinition getAssociatedStep() {
     return StepDefinition.CONTACT_DETAILS;
@@ -75,6 +77,6 @@ public class ContactDetailsForm implements StepForm, Serializable {
   @Override
   public List<String> getFieldOrder() {
     return ImmutableList.of(
-        "fullName", "primaryPhoneNumber", "secondaryPhoneNumber", "emailAddress");
+        "fullName", "emailAddress", "primaryPhoneNumber", "secondaryPhoneNumber");
   }
 }
