@@ -64,6 +64,14 @@ public class ContactDetailsController implements StepController {
       bindingResult.rejectValue("fullName", "Invalid.contact.fullName");
     }
 
+    if (!contactDetailsForm.getContinueWithoutEmailAddress()) {
+      String emailPattern = "^\\S+\\@\\S+$";
+
+      if (!contactDetailsForm.getEmailAddress().matches(emailPattern)) {
+        bindingResult.rejectValue("emailAddress", "Invalid.emailAddress");
+      }
+    }
+
     if (bindingResult.hasErrors()) {
       return routeMaster.redirectToOnBindingError(this, contactDetailsForm, bindingResult, attr);
     }

@@ -37,7 +37,6 @@ public class ContactDetailsForm implements StepForm, Serializable {
   private String secondaryPhoneNumber;
 
   @Size(max = 100, message = "Size.emailAddress")
-  @Pattern(regexp = EMPTY_OR_EMAIL, message = "{Invalid.emailAddress}")
   private String emailAddress;
 
   private Boolean continueWithoutEmailAddress;
