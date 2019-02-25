@@ -30,7 +30,7 @@ public class SubmittedController extends BaseFinalStepController implements Step
   }
 
   @GetMapping(URL_APPLICATION_SUBMITTED)
-  public String showSubmitted(
+  public String show(
       SessionStatus sessionStatus,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       Model model) {

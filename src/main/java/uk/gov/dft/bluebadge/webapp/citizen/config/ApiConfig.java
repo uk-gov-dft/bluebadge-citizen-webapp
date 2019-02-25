@@ -62,6 +62,20 @@ public class ApiConfig {
     return createOAuthRestTemplate(resourceDetails, applicationManagementServiceApiConfig);
   }
 
+  @Validated
+  @ConfigurationProperties("blue-badge.paymentservice.servicehost")
+  @Bean
+  public ServiceConfiguration paymentServiceApiConfig() {
+    return new ServiceConfiguration();
+  }
+
+  @Bean("paymentServiceRestTemplate")
+  OAuth2RestTemplate paymentServiceRestTemplate(
+      ClientCredentialsResourceDetails resourceDetails,
+      ServiceConfiguration paymentServiceApiConfig) {
+    return createOAuthRestTemplate(resourceDetails, paymentServiceApiConfig);
+  }
+
   private OAuth2RestTemplate createOAuthRestTemplate(
       ClientCredentialsResourceDetails resourceDetails, ServiceConfiguration apiConfig) {
     OAuth2RestTemplate oAuth2RestTemplate =

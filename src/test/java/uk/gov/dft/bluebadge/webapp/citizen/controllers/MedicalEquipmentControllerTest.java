@@ -43,7 +43,8 @@ public class MedicalEquipmentControllerTest {
             .build();
 
     journey =
-        JourneyFixture.getDefaultJourneyToStep(StepDefinition.MEDICAL_EQUIPMENT, CHILDBULK, ENG);
+        JourneyFixture.getDefaultJourneyToStep(
+            StepDefinition.MEDICAL_EQUIPMENT, CHILDBULK, ENG, false);
   }
 
   @Test

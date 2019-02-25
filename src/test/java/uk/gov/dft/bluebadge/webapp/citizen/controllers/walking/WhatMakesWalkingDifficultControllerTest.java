@@ -53,7 +53,7 @@ public class WhatMakesWalkingDifficultControllerTest {
 
     journey =
         JourneyFixture.getDefaultJourneyToStep(
-            StepDefinition.WHAT_MAKES_WALKING_DIFFICULT, WALKD, ENG);
+            StepDefinition.WHAT_MAKES_WALKING_DIFFICULT, WALKD, ENG, false);
   }
 
   @Test

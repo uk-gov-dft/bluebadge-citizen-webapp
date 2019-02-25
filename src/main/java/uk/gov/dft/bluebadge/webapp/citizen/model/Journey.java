@@ -9,6 +9,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.m
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,6 +18,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentStatusResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
@@ -44,6 +46,35 @@ public class Journey implements Serializable {
   public String walkingAid;
 
   private LocalAuthorityRefData localAuthority;
+
+  private String paymentJourneyUuid;
+
+  private PaymentStatusResponse paymentStatusResponse;
+
+  public void setPaymentJourneyUuid(final String paymentJourneyUuid) {
+    this.paymentJourneyUuid = paymentJourneyUuid;
+  }
+
+  public void setPaymentStatusResponse(PaymentStatusResponse paymentStatusResponse) {
+    this.paymentStatusResponse = paymentStatusResponse;
+  }
+
+  public String getPaymentJourneyUuid() {
+    return paymentJourneyUuid;
+  }
+
+  public String getPaymentReference() {
+    return paymentStatusResponse != null ? paymentStatusResponse.getReference() : null;
+  }
+
+  public String getPaymentStatus() {
+    return paymentStatusResponse != null ? paymentStatusResponse.getStatus() : null;
+  }
+
+  public boolean isPaymentSuccessful() {
+    return paymentStatusResponse != null
+        && "success".equalsIgnoreCase(paymentStatusResponse.getStatus());
+  }
 
   public void setFormForStep(StepForm form) {
     // If changing values in a form may need to invalidate later forms in the journey
@@ -169,6 +200,20 @@ public class Journey implements Serializable {
       return localAuthority.getNation();
     }
     return null;
+  }
+
+  public BigDecimal getBadgeCost() {
+    if (null != localAuthority) {
+      return localAuthority.getBadgeCost();
+    }
+    return null;
+  }
+
+  public boolean isPaymentsEnabled() {
+    if (null != localAuthority) {
+      return localAuthority.getPaymentsEnabled();
+    }
+    return false;
   }
 
   public boolean isNationWales() {

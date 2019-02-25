@@ -42,7 +42,7 @@
 .drop-area {
 	padding: 15px;
 	text-align: center;
-	border: 2px dashed rgba(govuk-colour(blue), .8);
+	border: 2px dashed rgba(govuk-colour("blue"), .8);
 	
 	@include govuk-media-query($from: desktop) {
 		padding: 30px;
@@ -68,7 +68,7 @@
 		padding: 15px;
 		line-height: 0;
 		border-radius: 50%;
-		background-color: govuk-colour(blue);
+		background-color: govuk-colour("blue");
 
 		@include govuk-media-query($from: desktop) {
 			vertical-align: top;
@@ -111,12 +111,12 @@
 	&__btn {
 		@extend .govuk-button;
 		margin-bottom: 10px;
-		background-color: govuk-colour(blue);
+		background-color: govuk-colour("blue");
 
 		&:active,
 		&:focus,
 		&:hover {
-			background-color: govuk-colour(blue);
+			background-color: govuk-colour("blue");
 		}
 	}
 }

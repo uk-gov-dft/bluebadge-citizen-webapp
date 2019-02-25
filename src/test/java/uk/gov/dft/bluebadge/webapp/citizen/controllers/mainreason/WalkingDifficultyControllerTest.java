@@ -43,7 +43,7 @@ public class WalkingDifficultyControllerTest {
   public void show_ShouldDisplayWalkingDifficultyTemplate_WithEngNation() throws Exception {
     Journey journey =
         JourneyFixture.getDefaultJourneyToStep(
-            StepDefinition.WALKING_DIFFICULTY, EligibilityCodeField.WALKD, Nation.ENG);
+            StepDefinition.WALKING_DIFFICULTY, EligibilityCodeField.WALKD, Nation.ENG, false);
 
     RadioOptionsGroup options =
         new RadioOptionsGroup.Builder()
@@ -68,7 +68,7 @@ public class WalkingDifficultyControllerTest {
 
     Journey journey =
         JourneyFixture.getDefaultJourneyToStep(
-            StepDefinition.WALKING_DIFFICULTY, EligibilityCodeField.WALKD, Nation.SCO);
+            StepDefinition.WALKING_DIFFICULTY, EligibilityCodeField.WALKD, Nation.SCO, false);
 
     RadioOptionsGroup options =
         new RadioOptionsGroup.Builder()
@@ -103,7 +103,7 @@ public class WalkingDifficultyControllerTest {
 
     Journey journey =
         JourneyFixture.getDefaultJourneyToStep(
-            StepDefinition.WALKING_DIFFICULTY, EligibilityCodeField.WALKD, Nation.ENG);
+            StepDefinition.WALKING_DIFFICULTY, EligibilityCodeField.WALKD, Nation.ENG, false);
 
     mockMvc
         .perform(
@@ -119,7 +119,7 @@ public class WalkingDifficultyControllerTest {
       throws Exception {
     Journey journey =
         JourneyFixture.getDefaultJourneyToStep(
-            StepDefinition.WALKING_DIFFICULTY, EligibilityCodeField.WALKD, Nation.ENG);
+            StepDefinition.WALKING_DIFFICULTY, EligibilityCodeField.WALKD, Nation.ENG, false);
     mockMvc
         .perform(post("/walking-difficulty").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
