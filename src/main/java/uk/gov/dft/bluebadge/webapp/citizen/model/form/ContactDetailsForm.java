@@ -38,7 +38,7 @@ public class ContactDetailsForm implements StepForm, Serializable {
   @Size(max = 100, message = "Size.emailAddress")
   private String emailAddress;
 
-  private Boolean continueWithoutEmailAddress;
+  private Boolean ignoreEmailAddress;
 
   @Override
   public StepDefinition getAssociatedStep() {

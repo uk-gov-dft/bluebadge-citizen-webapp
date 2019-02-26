@@ -23,5 +23,7 @@ public class GeneralConfig {
   }
 
   @Bean
-  public JwtMdcFilter getJwtMdcFilter() { return new JwtMdcFilter(); }
+  public JwtMdcFilter getJwtMdcFilter() {
+    return new JwtMdcFilter();
+  }
 }
