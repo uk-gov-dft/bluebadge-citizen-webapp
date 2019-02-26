@@ -26,12 +26,14 @@
                 <span class="govuk-!-font-weight-bold" th:text="${contactEmail}"></span><span th:remove="tag">.</span>
             </p>
 
+            <p class="govuk-body" data-uipath="p.paymentSuccessfulText" th:if="${JOURNEY.paymentSuccessful}" th:text="#{submittedPage.content.paymentdone.pretext(${JOURNEY.badgeCost})}"/>
+
             <h2 class="govuk-heading-m" th:text="#{submittedPage.content.title}"></h2>
 
-            <p class="govuk-body" th:if="${!JOURNEY.nationWales}">
-                <span th:remove="tag" th:text="#{'submittedPage.content.wales.payment.pretext'}"></span>
+            <p class="govuk-body" th:if="${!JOURNEY.nationWales && !JOURNEY.paymentSuccessful}">
+                <span th:remove="tag" th:text="#{'submittedPage.content.notwales.payment.pretext'}"></span>
                 <a th:href="${JOURNEY.localAuthority.contactUrl}" th:text="${JOURNEY.localeAwareLocalAuthority.description}"></a>
-                <span th:remove="tag" th:text="#{${JOURNEY.who} + 'submittedPage.content.wales.payment.posttext'}"></span>
+                <span th:remove="tag" th:text="#{${JOURNEY.who} + 'submittedPage.content.notwales.payment.posttext'}"></span>
             </p>
 
             <p class="govuk-body">

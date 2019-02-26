@@ -5,7 +5,7 @@ import AutoComplete from './autocomplete';
 import GAClickTracker from './ga-tracker';
 import DFT_FileUploader from './dft-file-uploader-wrapper';
 import UploadSupportingDocs from './upload-supporting-documents';
-import preventDoubleSubmission from "./prevent-double-submission";
+import preventDoubleSubmission from './prevent-double-submission';
 
 All.initAll();
 

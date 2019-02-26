@@ -17,14 +17,14 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationSubmitForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
 @Controller
 @RequestMapping(Mappings.URL_DECLARATIONS)
 public class DeclarationSubmitController implements StepController {
 
-  private static final String TEMPLATE_DECLARATION = "application-end/declaration";
+  private static final String TEMPLATE = "application-end/declaration";
 
   private final ApplicationManagementService appService;
   private final RouteMaster routeMaster;
@@ -36,33 +36,40 @@ public class DeclarationSubmitController implements StepController {
   }
 
   @GetMapping
-  public String showDeclaration(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+  public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
     if (!model.containsAttribute("formRequest")) {
-      model.addAttribute("formRequest", DeclarationForm.builder().build());
+      model.addAttribute("formRequest", DeclarationSubmitForm.builder().build());
     }
+    model.addAttribute(
+        "submitButtonMessage",
+        journey.isPaymentsEnabled()
+            ? "declarationPage.continue.button.label"
+            : "declarationPage.submit.button.label"
+    );
 
-    return TEMPLATE_DECLARATION;
+    return TEMPLATE;
   }
 
   @PostMapping
-  public String submitDeclaration(
+  public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute("formRequest") DeclarationForm declarationForm,
+      @Valid @ModelAttribute("formRequest") DeclarationSubmitForm form,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
     if (bindingResult.hasErrors()) {
-      return routeMaster.redirectToOnBindingError(this, declarationForm, bindingResult, attr);
+      return routeMaster.redirectToOnBindingError(this, form, bindingResult, attr);
     }
-
-    appService.create(JourneyToApplicationConverter.convert(journey));
-    journey.setFormForStep(declarationForm);
-    return routeMaster.redirectToOnSuccess(declarationForm);
+    if (!journey.isPaymentsEnabled()) {
+      appService.create(JourneyToApplicationConverter.convert(journey));
+    }
+    journey.setFormForStep(form);
+    return routeMaster.redirectToOnSuccess(form, journey);
   }
 
   @Override

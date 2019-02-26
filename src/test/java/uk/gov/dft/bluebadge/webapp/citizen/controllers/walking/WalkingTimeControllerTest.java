@@ -40,7 +40,7 @@ public class WalkingTimeControllerTest {
 
     journey =
         JourneyFixture.getDefaultJourneyToStep(
-            StepDefinition.WALKING_TIME, EligibilityCodeField.WALKD);
+            StepDefinition.WALKING_TIME, EligibilityCodeField.WALKD, false);
   }
 
   @Test

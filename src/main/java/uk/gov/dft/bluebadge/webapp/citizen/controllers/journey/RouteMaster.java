@@ -87,6 +87,10 @@ public class RouteMaster {
         return isValidState(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST, journey);
       case MEDICATION_ADD:
         return isValidState(StepDefinition.MEDICATION_LIST, journey);
+      case BADGE_PAYMENT_RETURN:
+        return isValidState(StepDefinition.BADGE_PAYMENT, journey);
+      case BADGE_PAYMENT_RETRY:
+        return isValidState(StepDefinition.BADGE_PAYMENT, journey);
       case HOME:
         return true;
       default:

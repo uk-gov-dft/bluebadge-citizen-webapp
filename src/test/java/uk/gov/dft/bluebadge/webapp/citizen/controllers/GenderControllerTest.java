@@ -44,7 +44,8 @@ public class GenderControllerTest {
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
     journey =
-        JourneyFixture.getDefaultJourneyToStep(StepDefinition.GENDER, EligibilityCodeField.DLA);
+        JourneyFixture.getDefaultJourneyToStep(
+            StepDefinition.GENDER, EligibilityCodeField.DLA, false);
   }
 
   @Test
