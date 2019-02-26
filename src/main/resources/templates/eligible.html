@@ -56,7 +56,12 @@
             </p>
 
             <h2 id="submit_docs_id" class="govuk-heading-m" th:text="#{eligiblePage.submitting.docs}"></h2>
-            <p class="govuk-body" th:text="#{eligiblePage.submitting.docs.p1}"></p>
+            <p class="govuk-body">
+                <span th:text="#{eligiblePage.submitting.docs.p1.pre}"/>
+                <a th:href="${JOURNEY.localAuthority.contactUrl}" th:text="#{'eligiblePage.submitting.docs.link'(${JOURNEY.localeAwareLocalAuthority.description})}"></a>
+                <span th:text="#{${JOURNEY.who} + 'eligiblePage.submitting.docs.p1.post'}"/>
+            </p>
+
         </div>
     </section>
 
