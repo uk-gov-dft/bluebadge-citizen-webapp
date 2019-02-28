@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import uk.gov.dft.bluebadge.common.util.ValidationPattern;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
@@ -65,7 +66,7 @@ public class ContactDetailsController implements StepController {
     }
 
     if (!contactDetailsForm.getIgnoreEmailAddress()) {
-      String emailPattern = "^\\S+\\@\\S+$";
+      String emailPattern = ValidationPattern.EMAIL;
 
       if (!contactDetailsForm.getEmailAddress().matches(emailPattern)) {
         bindingResult.rejectValue("emailAddress", "Invalid.emailAddress");
