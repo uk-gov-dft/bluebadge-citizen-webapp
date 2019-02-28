@@ -51,7 +51,7 @@ public class BadgePaymentReturnController implements StepController {
     }
 
     if (journey.getPaymentJourneyUuid() == null) {
-      return "redirect:" + Mappings.URL_BADGE_PAYMENT;
+      return "redirect:" + Mappings.URL_BADGE_PAYMENT_RETRY;
     }
     PaymentStatusResponse paymentStatusResponse =
         paymentService.retrievePaymentStatus(journey.getPaymentJourneyUuid());

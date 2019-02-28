@@ -65,6 +65,6 @@ public class BadgePaymentReturnFormTest {
     journey.setPaymentStatusResponse(FAILED_PAYMENT_STATUS_RESPONSE);
 
     assertThat(form.determineNextStep(journey)).isNotEmpty();
-    assertThat(form.determineNextStep(journey).get()).isEqualTo(StepDefinition.BADGE_PAYMENT);
+    assertThat(form.determineNextStep(journey).get()).isEqualTo(StepDefinition.BADGE_PAYMENT_RETRY);
   }
 }
