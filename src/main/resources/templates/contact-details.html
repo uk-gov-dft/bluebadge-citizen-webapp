@@ -21,6 +21,25 @@
                     <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.fullName.field.label}, 'fullName', #{contact.fullName.field.hint}, 'text', null)}"></div>
                 </div>
 
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.emailAddress.field.label}, 'emailAddress', #{${JOURNEY.who} + contact.emailAddress.field.hint}, 'text', null)}"></div>
+                <details class="govuk-details">
+                    <summary class="govuk-details__summary">
+                        <span class="govuk-details__summary-text" id="emailAddressDetails" th:text="#{contact.emailAddress.field.continue.title}"></span>
+                    </summary>
+
+                    <div class="govuk-details__text">
+                        <p class="govuk-heading-s" th:text="#{${JOURNEY.who} + contact.emailAddress.field.continue.heading}"></p>
+
+                        <div class="govuk-checkboxes">
+                            <div class="govuk-checkboxes__item">
+                                <input class="govuk-checkboxes__input" th:field="*{ignoreEmailAddress}" id="ignoreEmailAddress" data-uipath="emailAddress.option" type="checkbox">
+                                <label class="govuk-label govuk-checkboxes__label" for="ignoreEmailAddress"
+                                       th:text="#{contact.emailAddress.field.continue.content}"></label>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+
                 <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.primaryPhoneNumber.field.label}, 'primaryPhoneNumber', #{contact.primaryPhoneNumber.field.hint}, 'text', 'govuk-input--width-20')}"></div>
                 <details class="govuk-details">
                     <summary class="govuk-details__summary">
@@ -34,8 +53,6 @@
 
 
                 <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.secondaryPhoneNumber.field.label}, 'secondaryPhoneNumber', null, 'text', 'govuk-input--width-20')}"></div>
-
-                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{contact.emailAddress.field.label}, 'emailAddress', #{contact.emailAddress.field.hint}, 'text', 'govuk-!-width-three-quarters')}"></div>
 
                 <button type="submit" class="govuk-button" data-uipath="button.continue" th:text="#{btn.label.continue}"></button>
 

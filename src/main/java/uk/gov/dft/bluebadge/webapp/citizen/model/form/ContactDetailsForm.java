@@ -1,6 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
-import static uk.gov.dft.bluebadge.common.util.ValidationPattern.EMPTY_OR_EMAIL;
 import static uk.gov.dft.bluebadge.common.util.ValidationPattern.EMPTY_OR_PHONE_NUMBER;
 
 import com.google.common.collect.ImmutableList;
@@ -37,8 +36,9 @@ public class ContactDetailsForm implements StepForm, Serializable {
   private String secondaryPhoneNumber;
 
   @Size(max = 100, message = "Size.emailAddress")
-  @Pattern(regexp = EMPTY_OR_EMAIL, message = "{Invalid.emailAddress}")
   private String emailAddress;
+
+  private Boolean ignoreEmailAddress;
 
   @Override
   public StepDefinition getAssociatedStep() {
@@ -75,6 +75,6 @@ public class ContactDetailsForm implements StepForm, Serializable {
   @Override
   public List<String> getFieldOrder() {
     return ImmutableList.of(
-        "fullName", "primaryPhoneNumber", "secondaryPhoneNumber", "emailAddress");
+        "fullName", "emailAddress", "primaryPhoneNumber", "secondaryPhoneNumber");
   }
 }

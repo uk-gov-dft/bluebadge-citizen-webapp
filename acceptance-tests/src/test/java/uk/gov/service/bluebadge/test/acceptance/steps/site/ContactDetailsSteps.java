@@ -47,6 +47,7 @@ public class ContactDetailsSteps extends AbstractSpringSteps {
     if ("someone else".equals(applicant)) {
       messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_CONTACT_FULL_NAME);
     }
+    messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_INVALID_EMAIL);
     messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_EMPTY_PHONE_NUMBER);
 
     commonSteps.iVerifyMultipleValidationMessages(messages);
@@ -63,9 +64,9 @@ public class ContactDetailsSteps extends AbstractSpringSteps {
       messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_INVALID_FULLNAME);
     }
 
+    messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_INVALID_EMAIL);
     messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_INVALID_MAIN_PHONE_NUMBER);
     messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_INVALID_ALTERNATIVE_PHONE_NUMBER);
-    messages.add(ContactDetailsPage.VALIDATION_MESSAGE_FOR_INVALID_EMAIL);
 
     commonSteps.iVerifyMultipleValidationMessages(messages);
     commonSteps.iClickOnContinueButton();
