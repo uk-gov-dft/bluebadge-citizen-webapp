@@ -1,5 +1,19 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import java.util.HashMap;
+import java.util.Map;
 import lombok.SneakyThrows;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,25 +29,9 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.BadgePaymentForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.NotPaidForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.PaymentService;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 public class NotPaidControllerTest {
 
@@ -112,11 +110,11 @@ public class NotPaidControllerTest {
   @SneakyThrows
   public void submit_shouldDisplayNotPaidTemplate_whenCreatePaymentReturnsNull() {
     when(paymentServiceMock.createPayment(eq("ABERD"), eq(URL_BADGE_PAYMENT_RETURN)))
-      .thenReturn(null);
+        .thenReturn(null);
     mockMvc
-      .perform(post("/not-paid").sessionAttr("JOURNEY", journey).param("retry", "yes"))
-      .andExpect(status().isOk())
-      .andExpect(view().name("not-paid"));
+        .perform(post("/not-paid").sessionAttr("JOURNEY", journey).param("retry", "yes"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("not-paid"));
     verify(paymentServiceMock).createPayment(any(), eq(URL_BADGE_PAYMENT_RETURN));
     assertThat(journey.getPaymentJourneyUuid()).isEqualTo(null);
   }
