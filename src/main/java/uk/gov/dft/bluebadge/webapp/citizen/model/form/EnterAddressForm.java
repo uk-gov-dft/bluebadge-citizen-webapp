@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
+import static uk.gov.dft.bluebadge.common.util.ValidationPattern.EMPTY_OR_POSTCODE_CASE_INSENSITIVE;
+
 import com.google.common.collect.ImmutableList;
 import java.io.Serializable;
 import java.util.List;
@@ -12,7 +14,6 @@ import lombok.EqualsAndHashCode;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.validation.ValidationPatterns;
 
 @Data
 @Builder
@@ -31,7 +32,7 @@ public class EnterAddressForm implements StepForm, Serializable {
   private String townOrCity;
 
   @NotBlank
-  @Pattern(regexp = ValidationPatterns.EMPTY_OR_POSTCODE_CASE_INSENSITIVE)
+  @Pattern(regexp = EMPTY_OR_POSTCODE_CASE_INSENSITIVE)
   private String postcode;
 
   @Override

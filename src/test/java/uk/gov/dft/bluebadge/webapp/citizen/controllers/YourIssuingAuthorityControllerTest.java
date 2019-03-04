@@ -40,7 +40,7 @@ public class YourIssuingAuthorityControllerTest {
         new YourIssuingAuthorityController(new RouteMaster(), mockReferenceDataService);
     journey = new JourneyBuilder().toStep(StepDefinition.YOUR_ISSUING_AUTHORITY).build();
     when(mockReferenceDataService.lookupLocalAuthorityFromCouncilCode(anyString()))
-        .thenReturn(JourneyFixture.getLocalAuthorityRefData(Nation.ENG));
+        .thenReturn(JourneyFixture.getLocalAuthorityRefData(Nation.ENG, false));
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())

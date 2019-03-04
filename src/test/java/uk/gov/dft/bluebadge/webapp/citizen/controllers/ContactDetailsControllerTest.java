@@ -71,6 +71,7 @@ public class ContactDetailsControllerTest {
             post(URL_CONTACT_DETAILS)
                 .param("fullName", "") // empty - invalid
                 .param("primaryPhoneNumber", "01270161666")
+                .param("ignoreEmailAddress", "true")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl(ERROR_URL))
@@ -89,6 +90,7 @@ public class ContactDetailsControllerTest {
             post(URL_CONTACT_DETAILS)
                 .param("fullName", "") // empty - valid
                 .param("primaryPhoneNumber", "01270161666")
+                .param("ignoreEmailAddress", "true")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl(SUCCESS_URL))
@@ -105,6 +107,7 @@ public class ContactDetailsControllerTest {
             post(URL_CONTACT_DETAILS)
                 .param("fullName", "") // empty - valid
                 .param("primaryPhoneNumber", "")
+                .param("ignoreEmailAddress", "true")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl(ERROR_URL))
@@ -123,6 +126,7 @@ public class ContactDetailsControllerTest {
             post(URL_CONTACT_DETAILS)
                 .param("fullName", "") // empty - valid
                 .param("primaryPhoneNumber", "afaf123")
+                .param("ignoreEmailAddress", "true")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl(ERROR_URL))
@@ -142,6 +146,7 @@ public class ContactDetailsControllerTest {
                 .param("fullName", "") // empty - valid
                 .param("primaryPhoneNumber", "01270646261")
                 .param("secondaryPhoneNumber", "afaf123")
+                .param("ignoreEmailAddress", "true")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl(ERROR_URL))
@@ -160,13 +165,32 @@ public class ContactDetailsControllerTest {
             post(URL_CONTACT_DETAILS)
                 .param("fullName", "") // empty - valid
                 .param("primaryPhoneNumber", "01270646261")
+                .param("ignoreEmailAddress", "false")
                 .param("emailAddress", "abc.com")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl(ERROR_URL))
         .andExpect(
             ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
-                "emailAddress", "Pattern"));
+                "emailAddress", "Invalid.emailAddress"));
+  }
+
+  @Test
+  public void submit_givenYouApply_InvalidEmailAddressButContinueWithout() throws Exception {
+
+    journey = new JourneyBuilder().forYou().withEligibility(EligibilityCodeField.WPMS).build();
+
+    mockMvc
+        .perform(
+            post(URL_CONTACT_DETAILS)
+                .param("fullName", "") // empty - valid
+                .param("primaryPhoneNumber", "01270646261")
+                .param("ignoreEmailAddress", "true")
+                .param("emailAddress", "abc.com")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(SUCCESS_URL))
+        .andExpect(model().attributeDoesNotExist("emailAddress"));
   }
 
   @Test
@@ -179,6 +203,7 @@ public class ContactDetailsControllerTest {
             post(URL_CONTACT_DETAILS)
                 .param("fullName", "") // empty - valid
                 .param("primaryPhoneNumber", "01270646261")
+                .param("ignoreEmailAddress", "false")
                 .param("emailAddress", "a@bc.com")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().is3xxRedirection())

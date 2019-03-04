@@ -17,7 +17,6 @@ const uglify = require('gulp-uglify-es').default;
 
 
 const BASE_PATH = './src/main/resources';
-
 const PATH = {
 	sourceAssets: {
 		sass: `${BASE_PATH}/assets/sass/**/*.scss`,
@@ -99,7 +98,7 @@ gulp.task('sass-lint', () => {
 });
 
 // Compiles SASS code to CSS.
-gulp.task('sass', ['clean:css'], () => {
+gulp.task('sass', ['clean:css', 'sass-lint'], () => {
 	gulp.src(PATH.sourceAssets.sass)
 		.pipe(gulpIf(isDev, sourcemaps.init()))
 		.pipe(sass({
@@ -119,8 +118,7 @@ gulp.task('js-lint', () => {
 		.pipe(eslint.failAfterError());
 });
 
-
-gulp.task('js', ['clean:js', 'html5-shiv'], () => {
+gulp.task('js', ['clean:js', 'js-lint', 'html5-shiv'], () => {
 	gulp.src(PATH.sourceAssets.js)
 		.pipe(gulpIf(isDev, sourcemaps.init({ loadMaps: true })))
 		.pipe(rollup(rollupInputOptions, rollupOutputOptions))
@@ -131,9 +129,9 @@ gulp.task('js', ['clean:js', 'html5-shiv'], () => {
 		.pipe(gulp.dest(PATH.compiledAssets.js));
 });
 
-gulp.task('default', ['sass', 'js', 'images', 'govuk-assets']);
-
-gulp.task('watch', ['sass', 'js', 'images', 'govuk-assets'], () => {
-	gulp.watch(PATH.sourceAssets.sass, ['sass']);
-	gulp.watch(`${BASE_PATH}/assets/js/*.js`, ['js']);
+gulp.task('default', ['sass', 'js', 'images', 'govuk-assets'], () => {
+  if (isDev) {
+    gulp.watch(PATH.sourceAssets.sass, ['sass']);
+    gulp.watch(PATH.sourceAssets.js, ['js']);
+  }
 });

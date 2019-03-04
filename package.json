@@ -8,8 +8,7 @@
   "scripts": {
     "dev": "gulp -env=dev",
     "prod": "gulp -env=prod",
-    "start": "npm run prod",
-    "dev:watch": "gulp watch -env=dev"
+    "start": "npm run prod"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",

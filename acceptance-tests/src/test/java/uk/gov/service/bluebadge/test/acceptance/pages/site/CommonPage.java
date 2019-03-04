@@ -119,6 +119,10 @@ public class CommonPage {
     return getWebDriver().findElement(By.tagName("h1")).getText();
   }
 
+  public WebElement getHTMLTag() {
+    return getWebDriver().findElement(By.tagName("html"));
+  }
+
   public PageHelper getHelper() {
     return helper;
   }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import uk.gov.dft.bluebadge.common.util.ValidationPattern;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
@@ -62,6 +63,14 @@ public class ContactDetailsController implements StepController {
     // Validation context sensitive to journey
     if (contactDetailsForm.isFullnameInvalid(journey)) {
       bindingResult.rejectValue("fullName", "Invalid.contact.fullName");
+    }
+
+    if (!contactDetailsForm.getIgnoreEmailAddress()) {
+      String emailPattern = ValidationPattern.EMAIL;
+
+      if (!contactDetailsForm.getEmailAddress().matches(emailPattern)) {
+        bindingResult.rejectValue("emailAddress", "Invalid.emailAddress");
+      }
     }
 
     if (bindingResult.hasErrors()) {

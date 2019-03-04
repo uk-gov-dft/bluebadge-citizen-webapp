@@ -35,6 +35,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.UnsupportedMimetypeException;
 
 @Controller
 @Slf4j
+@SuppressWarnings({"squid:S3776"})
 public class UploadSupportingDocumentsController implements StepController {
 
   public static final String TEMPLATE = "upload-supporting-documents";

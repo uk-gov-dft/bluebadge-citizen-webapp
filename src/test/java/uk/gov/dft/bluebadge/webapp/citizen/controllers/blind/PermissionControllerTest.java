@@ -38,7 +38,7 @@ public class PermissionControllerTest {
 
     journey =
         JourneyFixture.getDefaultJourneyToStep(
-            StepDefinition.REGISTERED, EligibilityCodeField.BLIND, Nation.ENG);
+            StepDefinition.REGISTERED, EligibilityCodeField.BLIND, Nation.ENG, false);
   }
 
   @Test

@@ -26,7 +26,7 @@ public class NinoControllerTest {
 
   private Journey journey;
   private static final String NINO = "NS123456A";
-  private static final String INVALID_NINO = "NS123456";
+  private static final String INVALID_NINO = "NS12345";
 
   private static final String SUCCESS_URL = Mappings.URL_ENTER_ADDRESS;
   private static final String ERROR_URL = Mappings.URL_NINO + RouteMaster.ERROR_SUFFIX;
