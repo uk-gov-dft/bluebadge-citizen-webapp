@@ -26,7 +26,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.NotPaidForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.PaymentService;
 
-@Slf4j
 @Controller
 @RequestMapping(Mappings.URL_NOT_PAID)
 public class NotPaidController implements StepController {
@@ -74,9 +73,7 @@ public class NotPaidController implements StepController {
       @Valid @ModelAttribute(FORM_REQUEST) NotPaidForm formRequest) {
 
     if ("yes".equalsIgnoreCase(formRequest.getRetry())) {
-      PaymentResponse response = null;
-      response = createPayment(journey);
-
+      PaymentResponse response = createPayment(journey);
       journey.setPaymentJourneyUuid(response != null ? response.getPaymentJourneyUuid() : null);
       journey.setFormForStep(formRequest);
       if (response == null) {

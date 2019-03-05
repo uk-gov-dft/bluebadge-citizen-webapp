@@ -25,7 +25,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.BadgePaymentForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.PaymentService;
 
-@Slf4j
 @Controller
 @RequestMapping
 public class BadgePaymentController implements StepController {
