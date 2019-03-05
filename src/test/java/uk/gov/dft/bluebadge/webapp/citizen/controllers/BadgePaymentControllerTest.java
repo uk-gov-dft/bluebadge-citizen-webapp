@@ -104,4 +104,20 @@ public class BadgePaymentControllerTest {
     verify(paymentServiceMock).createPayment(any(), eq(URL_BADGE_PAYMENT_RETURN));
     assertThat(journey.getPaymentJourneyUuid()).isEqualTo(PAYMENT_JOURNEY_UUID);
   }
+
+  @Test
+  public void submit_shouldRedirectToNotPaid_WhenPaymentIsNotSuccessful() throws Exception {
+    Map<String, String> data = new HashMap<>();
+    data.put("paymentJourneyUuid", PAYMENT_JOURNEY_UUID);
+    data.put("nextUrl", NEXT_URL);
+    PaymentResponse paymentResponse = PaymentResponse.builder().data(data).build();
+    when(paymentServiceMock.createPayment(eq("ABERD"), eq(URL_BADGE_PAYMENT_RETURN)))
+        .thenReturn(null);
+    mockMvc
+        .perform(post("/badge-payment").sessionAttr("JOURNEY", journey))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/not-paid"));
+    verify(paymentServiceMock).createPayment(any(), eq(URL_BADGE_PAYMENT_RETURN));
+    assertThat(journey.getPaymentJourneyUuid()).isNull();
+  }
 }

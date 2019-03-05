@@ -5,6 +5,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import javax.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +25,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.BadgePaymentForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.PaymentService;
 
+@Slf4j
 @Controller
 @RequestMapping
 public class BadgePaymentController implements StepController {
@@ -70,11 +72,13 @@ public class BadgePaymentController implements StepController {
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute(FORM_REQUEST) BadgePaymentForm formRequest) {
-    PaymentResponse response = createPayment(journey);
+    PaymentResponse response = null;
+    response = createPayment(journey);
+
     journey.setPaymentJourneyUuid(response != null ? response.getPaymentJourneyUuid() : null);
     journey.setFormForStep(formRequest);
     if (response == null) {
-      return TEMPLATE;
+      return "redirect:" + Mappings.URL_NOT_PAID;
     } else {
       return "redirect:" + response.getNextUrl();
     }

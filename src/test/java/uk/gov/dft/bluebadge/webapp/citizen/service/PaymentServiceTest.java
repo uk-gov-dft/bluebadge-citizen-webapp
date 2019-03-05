@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.web.client.RestClientException;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.PaymentApiClient;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentRequest;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentResponse;
@@ -48,7 +50,7 @@ public class PaymentServiceTest {
   }
 
   @Test
-  public void createPayment_shouldWork() {
+  public void createPayment_shouldReturnResponse_whenSuccessul() {
     PaymentRequest paymentRequest =
         PaymentRequest.builder()
             .language(null)
@@ -65,6 +67,28 @@ public class PaymentServiceTest {
     when(clientMock.createPayment(paymentRequest)).thenReturn(paymentResponse);
 
     assertThat(paymentService.createPayment(LA_SHORT_CODE, NEXT_URL)).isEqualTo(paymentResponse);
+  }
+
+  @Test
+  public void createPayment_shouldReturnNull_whenClientThrowsException() {
+    PaymentRequest paymentRequest =
+        PaymentRequest.builder()
+            .language(null)
+            .laShortCode(LA_SHORT_CODE)
+            .paymentMessage(MESSAGE)
+            .returnUrl(NEXT_URL)
+            .build();
+
+    Map<String, String> data = new HashMap<>();
+    data.put("paymentJourneyUuid", PAYMENT_JOURNEY_UUID);
+    data.put("nextUrl", NEXT_URL);
+    PaymentResponse paymentResponse = PaymentResponse.builder().data(data).build();
+
+    when(clientMock.createPayment(paymentRequest))
+        .thenThrow(new RestClientException("Rest client exception"));
+
+    assertThat(paymentService.createPayment(LA_SHORT_CODE, NEXT_URL)).isNull();
+    verify(clientMock).createPayment(paymentRequest);
   }
 
   @Test
