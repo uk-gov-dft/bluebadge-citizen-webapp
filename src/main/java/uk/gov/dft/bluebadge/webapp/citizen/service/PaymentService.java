@@ -39,8 +39,7 @@ public class PaymentService {
               .language(language)
               .build();
 
-      PaymentResponse paymentResponse = client.createPayment(request);
-      return paymentResponse;
+      return client.createPayment(request);
     } catch (RestClientException ex) {
       log.error("Exception creating payment for la [{}]: [{}]", laShortCode, ex);
       return null;
