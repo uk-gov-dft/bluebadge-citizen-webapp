@@ -47,6 +47,12 @@
                 <a th:href="${JOURNEY.localAuthority.contactUrl}" th:text="${JOURNEY.localeAwareLocalAuthority.description} + '.'"></a>
             </p>
 
+            <p class="govuk-body" th:if="${JOURNEY.paymentsEnabled}" th:text="#{${JOURNEY.who} + 'eligiblePage.paymentsEnabled.content.p2'(${JOURNEY.localeAwareLocalAuthority.description}, ${JOURNEY.badgeCost})}">
+            </p>
+
+            <p class="govuk-body" th:unless="${JOURNEY.paymentsEnabled}" th:text="#{${JOURNEY.nation} + '.eligiblePage.paymentsNotEnabled.content.p2'(${JOURNEY.localeAwareLocalAuthority.description})}">
+            </p>
+
             <h2 class="govuk-heading-m" th:text="#{eligiblePage.not.apply.online.text}"></h2>
 
             <p class="govuk-body">
