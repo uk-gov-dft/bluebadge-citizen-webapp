@@ -121,7 +121,7 @@ public class BadgePaymentReturnControllerTest {
     mockMvc
         .perform(get("/badge-payment-return").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/badge-payment"));
+        .andExpect(redirectedUrl("/not-paid"));
   }
 
   @Test
@@ -156,7 +156,7 @@ public class BadgePaymentReturnControllerTest {
     mockMvc
         .perform(get("/badge-payment-return").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/badge-payment"));
+        .andExpect(redirectedUrl("/not-paid"));
     verify(applicationManagementServiceMock, never()).create(any());
   }
 }

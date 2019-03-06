@@ -5,6 +5,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_
 
 import com.google.common.collect.Lists;
 import javax.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,22 +22,22 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.BadgePaymentRetryForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.NotPaidForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.PaymentService;
 
 @Controller
-@RequestMapping(Mappings.URL_BADGE_PAYMENT_RETRY)
-public class BadgePaymentRetryController implements StepController {
+@RequestMapping(Mappings.URL_NOT_PAID)
+public class NotPaidController implements StepController {
 
-  private static final String TEMPLATE = "badge-payment-retry";
+  private static final String TEMPLATE = "not-paid";
 
   private final RouteMaster routeMaster;
   private final PaymentService paymentService;
   private final ApplicationManagementService applicationService;
 
   @Autowired
-  BadgePaymentRetryController(
+  NotPaidController(
       PaymentService paymentService,
       ApplicationManagementService applicationService,
       RouteMaster routeMaster) {
@@ -49,7 +50,7 @@ public class BadgePaymentRetryController implements StepController {
   public String show(
       Model model,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @ModelAttribute(FORM_REQUEST) BadgePaymentRetryForm formRequest) {
+      @ModelAttribute(FORM_REQUEST) NotPaidForm formRequest) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
@@ -60,7 +61,7 @@ public class BadgePaymentRetryController implements StepController {
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
-      model.addAttribute(FORM_REQUEST, BadgePaymentRetryForm.builder().build());
+      model.addAttribute(FORM_REQUEST, NotPaidForm.builder().build());
     }
 
     return TEMPLATE;
@@ -69,14 +70,14 @@ public class BadgePaymentRetryController implements StepController {
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute(FORM_REQUEST) BadgePaymentRetryForm formRequest) {
+      @Valid @ModelAttribute(FORM_REQUEST) NotPaidForm formRequest) {
 
     if ("yes".equalsIgnoreCase(formRequest.getRetry())) {
       PaymentResponse response = createPayment(journey);
       journey.setPaymentJourneyUuid(response != null ? response.getPaymentJourneyUuid() : null);
       journey.setFormForStep(formRequest);
       if (response == null) {
-        return TEMPLATE;
+        return "redirect:" + Mappings.URL_NOT_PAID;
       } else {
         return "redirect:" + response.getNextUrl();
       }
@@ -89,15 +90,14 @@ public class BadgePaymentRetryController implements StepController {
 
   @ModelAttribute("retryOptions")
   RadioOptionsGroup getRetryOptions() {
-    RadioOption yes = new RadioOption("yes", "badgePaymentRetryPage.retry.option.yes");
-    RadioOption no = new RadioOption("no", "badgePaymentRetryPage.retry.option.no");
-
-    return new RadioOptionsGroup("badgePaymentRetryPage.title", Lists.newArrayList(yes, no));
+    RadioOption yes = new RadioOption("yes", "notPaidPage.retry.option.yes");
+    RadioOption no = new RadioOption("no", "notPaidPage.retry.option.no");
+    return new RadioOptionsGroup("notPaidPage.content.title", Lists.newArrayList(yes, no));
   }
 
   @Override
   public StepDefinition getStepDefinition() {
-    return StepDefinition.BADGE_PAYMENT;
+    return StepDefinition.NOT_PAID;
   }
 
   private PaymentResponse createPayment(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
