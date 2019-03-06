@@ -55,6 +55,12 @@
                     </a><span th:remove="tag" th:text="#{${JOURNEY.who} + 'eligiblePage.website.posttext'}"></span>
                 </p>
 
+                <p class="govuk-body" th:if="${JOURNEY.paymentsEnabled}" th:text="#{${JOURNEY.who} + 'eligiblePage.paymentsEnabled.content.p2'(${JOURNEY.localeAwareLocalAuthority.description}, ${JOURNEY.badgeCost})}">
+                </p>
+
+                <p class="govuk-body" th:unless="${JOURNEY.paymentsEnabled}" th:text="#{${JOURNEY.nation} + '.eligiblePage.paymentsNotEnabled.content.p2'(${JOURNEY.localeAwareLocalAuthority.description})}">
+                </p>
+
                 <h2 class="govuk-heading-m" th:text="#{eligiblePage.not.apply.online.text}">Don’t want to apply online?</h2>
                 <p class="govuk-body">
                     <span th:remove="tag" th:text="#{eligiblePage.council.contact.pretext}">Website:</span>

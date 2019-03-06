@@ -21,13 +21,16 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.SneakyThrows;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.GenderCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HowProvidedCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingLengthOfTimeCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentStatusResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
@@ -39,6 +42,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.BadgePaymentForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.BadgePaymentReturnForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
@@ -56,6 +60,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.MedicalEquipmentForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.NotPaidForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.OrganisationMayBeEligibleForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveAddressForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveBenefitForm;
@@ -573,8 +578,36 @@ public class JourneyFixture {
 
     journey.setFormForStep(DeclarationSubmitForm.builder().agreed(Boolean.TRUE).build());
 
-    if (StepDefinition.BADGE_PAYMENT == stepTo) return journey;
-    journey.setFormForStep(BadgePaymentForm.builder().build());
+    if (options.isPaymentsEnable()) {
+      if (StepDefinition.BADGE_PAYMENT == stepTo) return journey;
+      journey.setFormForStep(BadgePaymentForm.builder().build());
+      journey.setPaymentJourneyUuid("paymentJourneyUuid1");
+      if (StepDefinition.BADGE_PAYMENT_RETURN == stepTo) return journey;
+      journey.setFormForStep(BadgePaymentReturnForm.builder().build());
+      Map<String, String> data;
+      if (StepDefinition.NOT_PAID == stepTo) {
+        data =
+            new HashMap<String, String>() {
+              {
+                put("paymentJourneyUuid", "paymentJourneyUuid1");
+                put("status", "failed");
+                put("reference", "paymentReference1");
+              }
+            };
+        journey.setPaymentStatusResponse(PaymentStatusResponse.builder().data(data).build());
+        journey.setFormForStep(NotPaidForm.builder().retry("no").build());
+      } else {
+        data =
+            new HashMap<String, String>() {
+              {
+                put("paymentJourneyUuid", "paymentJourneyUuid1");
+                put("status", "success");
+                put("reference", "paymentReference1");
+              }
+            };
+        journey.setPaymentStatusResponse(PaymentStatusResponse.builder().data(data).build());
+      }
+    }
 
     return journey;
   }
