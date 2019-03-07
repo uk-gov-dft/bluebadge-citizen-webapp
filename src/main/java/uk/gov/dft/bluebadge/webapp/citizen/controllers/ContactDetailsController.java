@@ -71,6 +71,8 @@ public class ContactDetailsController implements StepController {
       if (!contactDetailsForm.getEmailAddress().matches(emailPattern)) {
         bindingResult.rejectValue("emailAddress", "Invalid.emailAddress");
       }
+    } else {
+      contactDetailsForm.setEmailAddress(null);
     }
 
     if (bindingResult.hasErrors()) {

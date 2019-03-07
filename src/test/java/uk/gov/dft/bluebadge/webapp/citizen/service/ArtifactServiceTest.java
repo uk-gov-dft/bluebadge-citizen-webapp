@@ -32,8 +32,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.config.S3Config;
 import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 
 class ArtifactServiceTest {
-  public static final int URL_DURATION_MS = 60000;
-  ArtifactService artifactService;
+  private static final int URL_DURATION_MS = 60000;
+  private ArtifactService artifactService;
 
   @Mock AmazonS3 amazonS3Mock;
   @Mock TransferManager transferManagerMock;
@@ -44,7 +44,7 @@ class ArtifactServiceTest {
 
   @BeforeEach
   @SneakyThrows
-  public void setup() {
+  void setup() {
     initMocks(this);
     S3Config s3Config = new S3Config();
     s3Config.setS3Bucket("test_bucket");
@@ -60,7 +60,7 @@ class ArtifactServiceTest {
   }
 
   @Test
-  void upload() throws Exception {
+  void upload() {
     setupMocksForUpload("resultBucket", "resultKey");
 
     String testUpload = "Some thing to upload";
@@ -86,7 +86,7 @@ class ArtifactServiceTest {
   }
 
   @Test
-  void upload_pdfUpload() throws Exception {
+  void upload_pdfUpload() {
     setupMocksForUpload("resultBucket", "resultKey");
 
     String testUpload = "Some thing to upload";
@@ -112,7 +112,7 @@ class ArtifactServiceTest {
   }
 
   @Test
-  void upload_invalidMimeType() throws Exception {
+  void upload_invalidMimeType() {
     setupMocksForUpload("resultBucket", "resultKey");
 
     String testUpload = "Some thing to upload";
@@ -123,13 +123,14 @@ class ArtifactServiceTest {
       artifactService.upload(multipartFile, IMAGE_PDF_MIME_TYPES);
       fail("no exception thrown");
     } catch (UnsupportedMimetypeException e) {
+      // No op
     }
 
     verify(transferManagerMock, never()).upload(any(), any(), any(), any());
   }
 
   @Test
-  void upload_invalidFile() throws Exception {
+  void upload_invalidFile() {
     setupMocksForUpload("resultBucket", "resultKey");
     when(fileCheckerServiceMock.isValidFile(anyString(), any())).thenReturn(false);
 
@@ -141,6 +142,7 @@ class ArtifactServiceTest {
       artifactService.upload(multipartFile, IMAGE_PDF_MIME_TYPES);
       fail("no exception thrown");
     } catch (UnsupportedMimetypeException e) {
+      // No op
     }
 
     verify(transferManagerMock, never()).upload(any(), any(), any(), any());
