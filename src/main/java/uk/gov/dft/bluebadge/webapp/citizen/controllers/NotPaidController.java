@@ -5,7 +5,6 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_
 
 import com.google.common.collect.Lists;
 import javax.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -79,6 +79,7 @@ public class Mappings {
   public static final String URL_WHAT_MAKES_WALKING_DIFFICULT = "/what-makes-walking-difficult";
   public static final String URL_WHERE_CAN_YOU_WALK = "/where-can-you-walk";
   public static final String URL_WALKING_TIME = "/walking-time";
+  public static final String URL_BREATHLESS = "/breathless";
 
   // Blind
   public static final String URL_REGISTERED = "/registered";
@@ -133,6 +134,7 @@ public class Mappings {
           .put(StepDefinition.WALKING_DIFFICULTY, URL_WALKING_DIFFICULTY)
           .put(StepDefinition.WHERE_CAN_YOU_WALK, URL_WHERE_CAN_YOU_WALK)
           .put(StepDefinition.WALKING_TIME, URL_WALKING_TIME)
+          .put(StepDefinition.BREATHLESSNESS, URL_BREATHLESS)
           .put(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS, URL_UPLOAD_SUPPORTING_DOCUMENTS)
           .put(StepDefinition.NOT_ELIGIBLE, URL_NOT_ELIGIBLE)
           .put(StepDefinition.EXISTING_BADGE, URL_EXISTING_BADGE)

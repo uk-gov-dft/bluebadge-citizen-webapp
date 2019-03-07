@@ -16,4 +16,5 @@ public class WalkingDifficulty {
   private WalkingSpeedCodeField walkingSpeedCode;
   private List<Treatment> treatments;
   private List<Medication> medications;
+  private List<Breathlessness> breathlessness;
 }

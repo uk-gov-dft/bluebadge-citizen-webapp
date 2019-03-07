@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="(${errorSummary}? #{common.title.error} : '')  + #{${JOURNEY.who} + 'breathlessnessPage.title'}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form th:action="@{/breathless}" th:object="${formRequest}" method="post" novalidate>
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h1 class="govuk-fieldset__heading" th:text="#{${JOURNEY.who} + 'breathlessnessPage.title'}"></h1>
+                    </legend>
+
+                    <span class="govuk-hint" th:text="#{breathlessnessPage.hint}"></span>
+
+                    <div class="govuk-form-group" th:class="${#fields.hasErrors('breathlessnessTypes')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+
+                        <span class="govuk-error-message"
+                              data-uipath="breathlessnessTypes.error"
+                              th:errors="*{breathlessnessTypes}"></span>
+
+                        <div id="breathlessness-type-list" class="govuk-checkboxes" data-module="checkboxes" >
+                            <div th:remove="tag" th:each="checkboxOption, iterStat: ${breathlessnessTypes.options}"
+                                 th:with="lastControl=${checkboxOption.shortCode} +'-conditional'">
+
+                                <div class="govuk-checkboxes__item" th:if="${iterStat.index == 0}">
+                                    <input class="govuk-checkboxes__input"
+                                           type="checkbox"
+                                           th:field="*{breathlessnessTypes}"
+                                           id="breathlessnessTypes"
+                                           th:name="breathlessnessTypes"
+                                           th:value="${checkboxOption.shortCode}"
+                                           th:attr="data-aria-controls=${lastControl}">
+                                    <label class="govuk-label govuk-checkboxes__label"
+                                           for="breathlessnessTypes"
+                                           th:text="#{${checkboxOption.messageKey}}"></label>
+                                </div>
+
+                                <div class="govuk-checkboxes__item" th:unless="${iterStat.index == 0}">
+                                    <input class="govuk-checkboxes__input"
+                                           type="checkbox"
+                                           th:field="*{breathlessnessTypes}"
+                                           th:id="'breathlessnessTypes' + ${checkboxOption.shortCode}"
+                                           th:name="breathlessnessTypes"
+                                           th:value="${checkboxOption.shortCode}"
+                                           th:attr="data-aria-controls=${lastControl}">
+                                    <label class="govuk-label govuk-checkboxes__label"
+                                           th:for="'breathlessnessTypes' + ${checkboxOption.shortCode}"
+                                           th:text="#{${checkboxOption.messageKey}}"></label>
+                                </div>
+
+                                <div th:if="${iterStat.last}" class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden"
+                                     th:id="${lastControl}">
+
+                                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{breathlessnessPage.select.option.OTHER.hint}, 'otherBreathlessnessDescription', null, 'text', null)}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <button type="submit"
+                        class="govuk-button"
+                        data-uipath="button.continue"
+                        th:text="#{btn.label.continue}"></button>
+            </form>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
