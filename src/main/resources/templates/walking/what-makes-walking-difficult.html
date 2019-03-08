@@ -26,7 +26,7 @@
 
                         <div id="walking-difficulties-list" class="govuk-checkboxes" data-module="checkboxes" >
                             <div th:remove="tag" th:each="checkboxOption, iterStat: ${walkingDifficulties.options}"
-                                 th:with="lastControl=${checkboxOption.shortCode} +'-conditional'">
+                                 th:with="conditionalControl=${checkboxOption.shortCode} +'-conditional'">
 
                                 <div class="govuk-checkboxes__item" th:if="${iterStat.index == 0}">
                                     <input class="govuk-checkboxes__input"
@@ -35,7 +35,7 @@
                                            id="whatWalkingDifficulties"
                                            th:name="whatWalkingDifficulties"
                                            th:value="${checkboxOption.shortCode}"
-                                           th:attr="data-aria-controls=${lastControl}">
+                                           th:attr="data-aria-controls=${conditionalControl}">
                                     <label class="govuk-label govuk-checkboxes__label"
                                            for="whatWalkingDifficulties"
                                            th:text="#{${checkboxOption.messageKey}}"></label>
@@ -48,14 +48,19 @@
                                            th:id="'whatWalkingDifficulties' + ${checkboxOption.shortCode}"
                                            th:name="whatWalkingDifficulties"
                                            th:value="${checkboxOption.shortCode}"
-                                           th:attr="data-aria-controls=${lastControl}">
+                                           th:attr="data-aria-controls=${conditionalControl}">
                                     <label class="govuk-label govuk-checkboxes__label"
                                            th:for="'whatWalkingDifficulties' + ${checkboxOption.shortCode}"
                                            th:text="#{${checkboxOption.messageKey}}"></label>
                                 </div>
 
-                                <div th:if="${iterStat.last}" class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden"
-                                     th:id="${lastControl}">
+                                <div th:if="${iterStat.index == 1}" class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden"
+                                     th:id="${conditionalControl}">
+                                    <span class="govuk-body-m" th:text="#{${JOURNEY.who} + 'whatMakesWalkingDifficult.select.option.breathless.hint'}"></span>
+                                </div>
+
+                                <div th:if="${iterStat.index == 6}" class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden"
+                                     th:id="${conditionalControl}">
 
                                     <div th:replace="~{ fragments/govuk-input :: govuk-input(#{whatMakesWalkingDifficult.select.somethingelse.desc}, 'somethingElseDescription', null, 'text', null)}"></div>
                                 </div>
