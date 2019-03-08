@@ -25,14 +25,14 @@ public class BreathlessnessForm implements StepForm, Serializable {
 
   @NotBlank(
     groups = OtherGroup.class,
-    message = "{NotBlank.breathlessnessPage.otherBreathlessnessDescription}"
+    message = "{NotBlank.breathlessnessOtherDescription}"
   )
   @Size(
     max = 100,
     groups = OtherGroup.class,
-    message = "{Size.breathlessnessPage.otherBreathlessnessDescription}"
+    message = "{Size.breathlessnessOtherDescription}"
   )
-  String otherBreathlessnessDescription;
+  String breathlessnessOtherDescription;
 
   @Override
   public StepDefinition getAssociatedStep() {

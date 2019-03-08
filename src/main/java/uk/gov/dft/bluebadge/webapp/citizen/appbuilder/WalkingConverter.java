@@ -2,6 +2,9 @@ package uk.gov.dft.bluebadge.webapp.citizen.appbuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Breathlessness;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.BreathlessnessCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Medication;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Treatment;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingAid;
@@ -11,6 +14,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.BreathlessnessForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WalkingTimeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
@@ -28,6 +32,7 @@ class WalkingConverter {
         journey.getFormForStep(StepDefinition.MOBILITY_AID_LIST);
     TreatmentListForm treatmentListForm = journey.getFormForStep(StepDefinition.TREATMENT_LIST);
     MedicationListForm medicationListForm = journey.getFormForStep(StepDefinition.MEDICATION_LIST);
+    BreathlessnessForm breathlessnessForm = journey.getFormForStep(StepDefinition.BREATHLESSNESS);
 
     return WalkingDifficulty.builder()
         .walkingLengthOfTimeCode(walkingTimeForm.getWalkingTime())
@@ -36,6 +41,7 @@ class WalkingConverter {
         .walkingAids(getWalkingAids(mobilityAidListForm))
         .treatments(getTreatments(treatmentListForm))
         .medications(getMedications(medicationListForm))
+            .breathlessness(getBreathlessness(breathlessnessForm))
         .build();
   }
 
@@ -103,6 +109,20 @@ class WalkingConverter {
                           .frequency(i.getFrequency())
                           .build()));
       return medications;
+    }
+    return null;
+  }
+
+  @SuppressWarnings("squid:S1168")
+  static Breathlessness getBreathlessness(BreathlessnessForm breathlessnessForm) {
+
+    if (null != breathlessnessForm) {
+      Breathlessness breathlessness = Breathlessness.builder()
+              .typeCodes(breathlessnessForm.getBreathlessnessTypes())
+              .otherDescription(breathlessnessForm.getBreathlessnessOtherDescription())
+              .build();
+
+      return breathlessness;
     }
     return null;
   }
