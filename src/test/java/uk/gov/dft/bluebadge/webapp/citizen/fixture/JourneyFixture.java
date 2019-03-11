@@ -112,17 +112,16 @@ public class JourneyFixture {
     static final WalkingLengthOfTimeCodeField WALKING_TIME = WalkingLengthOfTimeCodeField.LESSMIN;
     static final List<WalkingDifficultyTypeCodeField> WHAT_MAKES_WALKING_DIFFICULT =
         Lists.newArrayList(
-            WalkingDifficultyTypeCodeField.PAIN, WalkingDifficultyTypeCodeField.BREATH,
-                WalkingDifficultyTypeCodeField.SOMELSE);
-    static final List<WalkingDifficultyTypeCodeField> WHAT_MAKES_WALKING_DIFFICULT_WITHOUT_SOMETHING_ELSE =
-            Lists.newArrayList(
-                    WalkingDifficultyTypeCodeField.PAIN);
+            WalkingDifficultyTypeCodeField.PAIN,
+            WalkingDifficultyTypeCodeField.BREATH,
+            WalkingDifficultyTypeCodeField.SOMELSE);
+    static final List<WalkingDifficultyTypeCodeField>
+        WHAT_MAKES_WALKING_DIFFICULT_WITHOUT_SOMETHING_ELSE =
+            Lists.newArrayList(WalkingDifficultyTypeCodeField.PAIN);
     static final List<BreathlessnessCodeField> BREATHLESSNESS_TYPES =
-            Lists.newArrayList(
-                    BreathlessnessCodeField.UPHILL, BreathlessnessCodeField.OTHER);
+        Lists.newArrayList(BreathlessnessCodeField.UPHILL, BreathlessnessCodeField.OTHER);
     static final List<BreathlessnessCodeField> BREATHLESSNESS_TYPE =
-            Lists.newArrayList(
-                    BreathlessnessCodeField.UPHILL);
+        Lists.newArrayList(BreathlessnessCodeField.UPHILL);
     public static final String BIRTH_NAME = "Birth";
     public static final String FULL_NAME = "Full";
     public static final GenderCodeField GENDER = GenderCodeField.FEMALE;
@@ -220,23 +219,22 @@ public class JourneyFixture {
         .build();
   }
 
-  public static WhatMakesWalkingDifficultForm getWhatMakesWalkingDifficultFormWithoutSomethingElse() {
+  public static WhatMakesWalkingDifficultForm
+      getWhatMakesWalkingDifficultFormWithoutSomethingElse() {
     return WhatMakesWalkingDifficultForm.builder()
-            .whatWalkingDifficulties(Values.WHAT_MAKES_WALKING_DIFFICULT_WITHOUT_SOMETHING_ELSE)
-            .build();
+        .whatWalkingDifficulties(Values.WHAT_MAKES_WALKING_DIFFICULT_WITHOUT_SOMETHING_ELSE)
+        .build();
   }
 
   public static BreathlessnessForm getBreathlessnessForm() {
     return BreathlessnessForm.builder()
-            .breathlessnessTypes(Values.BREATHLESSNESS_TYPES)
-            .breathlessnessOtherDescription(Values.BREATHLESSNESS_OTHER_DESC)
-            .build();
+        .breathlessnessTypes(Values.BREATHLESSNESS_TYPES)
+        .breathlessnessOtherDescription(Values.BREATHLESSNESS_OTHER_DESC)
+        .build();
   }
 
   public static BreathlessnessForm getBreathlessnessFormWithoutOther() {
-    return BreathlessnessForm.builder()
-            .breathlessnessTypes(Values.BREATHLESSNESS_TYPE)
-            .build();
+    return BreathlessnessForm.builder().breathlessnessTypes(Values.BREATHLESSNESS_TYPE).build();
   }
 
   private static WhereCanYouWalkForm getWhereCanYouWalkForm() {

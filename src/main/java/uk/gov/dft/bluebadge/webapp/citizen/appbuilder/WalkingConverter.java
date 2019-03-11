@@ -2,9 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.appbuilder;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Breathlessness;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.BreathlessnessCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Medication;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Treatment;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingAid;
@@ -41,7 +39,7 @@ class WalkingConverter {
         .walkingAids(getWalkingAids(mobilityAidListForm))
         .treatments(getTreatments(treatmentListForm))
         .medications(getMedications(medicationListForm))
-            .breathlessness(getBreathlessness(breathlessnessForm))
+        .breathlessness(getBreathlessness(breathlessnessForm))
         .build();
   }
 
@@ -117,7 +115,8 @@ class WalkingConverter {
   static Breathlessness getBreathlessness(BreathlessnessForm breathlessnessForm) {
 
     if (null != breathlessnessForm) {
-      Breathlessness breathlessness = Breathlessness.builder()
+      Breathlessness breathlessness =
+          Breathlessness.builder()
               .typeCodes(breathlessnessForm.getBreathlessnessTypes())
               .otherDescription(breathlessnessForm.getBreathlessnessOtherDescription())
               .build();

@@ -23,15 +23,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 public class BreathlessnessForm implements StepForm, Serializable {
   @NotEmpty List<BreathlessnessCodeField> breathlessnessTypes;
 
-  @NotBlank(
-    groups = OtherGroup.class,
-    message = "{NotBlank.breathlessnessOtherDescription}"
-  )
-  @Size(
-    max = 100,
-    groups = OtherGroup.class,
-    message = "{Size.breathlessnessOtherDescription}"
-  )
+  @NotBlank(groups = OtherGroup.class, message = "{NotBlank.breathlessnessOtherDescription}")
+  @Size(max = 100, groups = OtherGroup.class, message = "{Size.breathlessnessOtherDescription}")
   String breathlessnessOtherDescription;
 
   @Override

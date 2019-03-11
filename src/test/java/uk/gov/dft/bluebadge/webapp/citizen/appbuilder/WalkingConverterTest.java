@@ -4,8 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 
 import com.google.common.collect.Lists;
-
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import org.junit.Test;
@@ -23,16 +21,17 @@ import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.BreathlessnessForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
 
 public class WalkingConverterTest {
 
-  private static final Breathlessness BREATHLESSNESS_RESULTS = Breathlessness.builder()
-          .typeCodes(Lists.newArrayList(BreathlessnessCodeField.UPHILL, BreathlessnessCodeField.OTHER))
+  private static final Breathlessness BREATHLESSNESS_RESULTS =
+      Breathlessness.builder()
+          .typeCodes(
+              Lists.newArrayList(BreathlessnessCodeField.UPHILL, BreathlessnessCodeField.OTHER))
           .otherDescription("Some description of breathlessness")
-            .build();
+          .build();
 
   @Test
   public void convert() {
@@ -49,8 +48,7 @@ public class WalkingConverterTest {
     Journey journey = new JourneyBuilder().withEligibility(WALKD).build();
     journey.setFormForStep(JourneyFixture.getBreathlessnessForm());
 
-    WalkingDifficulty result =
-            WalkingConverter.convert(journey);
+    WalkingDifficulty result = WalkingConverter.convert(journey);
     // Detail covered in other tests.
     assertThat(result.getBreathlessness()).isEqualTo(BREATHLESSNESS_RESULTS);
   }
@@ -111,7 +109,7 @@ public class WalkingConverterTest {
   @Test
   public void getBreathlessness_withOtherDescription() {
     Breathlessness result =
-            WalkingConverter.getBreathlessness(JourneyFixture.getBreathlessnessForm());
+        WalkingConverter.getBreathlessness(JourneyFixture.getBreathlessnessForm());
     assertThat(result).isEqualTo(BREATHLESSNESS_RESULTS);
   }
 
