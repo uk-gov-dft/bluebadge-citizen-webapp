@@ -186,6 +186,19 @@ public class WhatMakesWalkingDifficultControllerTest {
   }
 
   @Test
+  public void submit_showRedirectToNextStepInJourney_whenBreathlessnessIsSelected() throws Exception {
+
+    mockMvc
+            .perform(
+                    post("/what-makes-walking-difficult")
+                            .param("whatWalkingDifficulties", "PAIN, BREATH")
+                            .contentType("application/x-www-form-urlencoded")
+                            .sessionAttr("JOURNEY", journey))
+            .andExpect(status().isFound())
+            .andExpect(redirectedUrl(Mappings.URL_BREATHLESS));
+  }
+
+  @Test
   public void submit_whenBlankFormSubmitted_thenShouldRedirectToShowWithValidationErrors()
       throws Exception {
     WhatMakesWalkingDifficultForm form = WhatMakesWalkingDifficultForm.builder().build();

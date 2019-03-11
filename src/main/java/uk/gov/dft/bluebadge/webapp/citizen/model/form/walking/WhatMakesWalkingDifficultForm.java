@@ -34,7 +34,7 @@ public class WhatMakesWalkingDifficultForm implements StepForm, Serializable {
   }
 
   @Override
-  public Optional<StepDefinition> determineNextStep(Journey journey) {
+  public Optional<StepDefinition> determineNextStep() {
     if (whatWalkingDifficulties.contains(WalkingDifficultyTypeCodeField.BREATH)) {
       return Optional.of(StepDefinition.BREATHLESSNESS);
     }
