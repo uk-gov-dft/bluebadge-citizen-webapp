@@ -11,13 +11,13 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 @Data
 @Builder
 @EqualsAndHashCode
-public class BadgePaymentRetryForm implements StepForm, Serializable {
+public class NotPaidForm implements StepForm, Serializable {
 
   private String retry;
 
   @Override
   public StepDefinition getAssociatedStep() {
-    return StepDefinition.BADGE_PAYMENT_RETRY;
+    return StepDefinition.NOT_PAID;
   }
 
   @Override

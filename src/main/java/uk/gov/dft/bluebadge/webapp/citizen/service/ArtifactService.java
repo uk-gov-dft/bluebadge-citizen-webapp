@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -30,7 +31,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 @Service
 @Slf4j
 public class ArtifactService {
-  public static final String ENCODING_CHAR_SET = "UTF-8";
+  private static final String ENCODING_CHAR_SET = "UTF-8";
   public static final Set<String> IMAGE_MIME_TYPES =
       ImmutableSet.of("image/jpeg", "image/gif", "image/png");
   public static final Set<String> IMAGE_PDF_MIME_TYPES =
@@ -82,7 +83,11 @@ public class ArtifactService {
         multipartFile.getOriginalFilename(),
         multipartFile.getSize());
 
-    String keyName = UUID.randomUUID().toString() + "-" + multipartFile.getOriginalFilename();
+    // Name unimportant apart from uniqueness.  Leave some chars of original name for debug/test, but limit length.
+    String keyName =
+        UUID.randomUUID().toString()
+            + "-"
+            + StringUtils.right(multipartFile.getOriginalFilename(), 100);
 
     try {
       String mimetype = determineMimeType(multipartFile.getOriginalFilename(), acceptedMimeTypes);
