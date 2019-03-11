@@ -12,4 +12,6 @@ public class WhatMakesWalkingDifficultiesPage {
 
   public static final String VALIDATION_MESSAGE_FOR_NO_OPTION =
       "Select at least one walking difficulty";
+
+  public static final String VALIDATION_MESSAGE_FOR_NO_OTHER_DESCRIPTION = "Enter a description";
 }
