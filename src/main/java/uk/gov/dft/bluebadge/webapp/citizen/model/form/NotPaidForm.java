@@ -1,6 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
 import java.io.Serializable;
+import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,6 +14,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 @EqualsAndHashCode
 public class NotPaidForm implements StepForm, Serializable {
 
+  @NotNull
   private String retry;
 
   @Override
