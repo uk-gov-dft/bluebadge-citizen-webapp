@@ -11,6 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture.formRequestFlashAttributeCount;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +40,7 @@ public class NotPaidControllerTest {
   private static final String URL_BADGE_PAYMENT_RETURN = "http://localhost/badge-payment-return";
   private static final String NEXT_URL = "http://localhost/next-url";
   private static final String PAYMENT_JOURNEY_UUID = "journeypay1";
+  private static final String ERROR_URL = Mappings.URL_NOT_PAID + RouteMaster.ERROR_SUFFIX;
 
   private MockMvc mockMvc;
   @Mock private ApplicationManagementService applicationServiceMock;
@@ -108,7 +111,7 @@ public class NotPaidControllerTest {
 
   @Test
   @SneakyThrows
-  public void submit_shouldDisplayNotPaidTemplate_whenPaymentIsUnsuccessul() {
+  public void submit_shouldDisplayNotPaidTemplate_whenPaymentIsUnsuccessful() {
     when(paymentServiceMock.createPayment(eq("ABERD"), eq(URL_BADGE_PAYMENT_RETURN)))
         .thenReturn(null);
     mockMvc
@@ -117,5 +120,16 @@ public class NotPaidControllerTest {
         .andExpect(redirectedUrl("/not-paid"));
     verify(paymentServiceMock).createPayment(any(), eq(URL_BADGE_PAYMENT_RETURN));
     assertThat(journey.getPaymentJourneyUuid()).isNull();
+  }
+
+  @Test
+  public void submit_whenPaymentQuestionNotAnswered_ThenShouldDisplayValidationError() throws Exception {
+
+    mockMvc
+        .perform(post("/not-paid").sessionAttr("JOURNEY", journey))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl(ERROR_URL))
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("retry", "NotNull"))
+        .andExpect(formRequestFlashAttributeCount(1));
   }
 }

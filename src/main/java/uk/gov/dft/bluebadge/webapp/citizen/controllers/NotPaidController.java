@@ -8,10 +8,12 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.appbuilder.JourneyToApplicationConverter;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentResponse;
@@ -48,15 +50,16 @@ public class NotPaidController implements StepController {
   @GetMapping
   public String show(
       Model model,
-      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @ModelAttribute(FORM_REQUEST) NotPaidForm formRequest) {
+      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
     }
 
     if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
-      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
+      NotPaidForm formRequest = journey.getFormForStep(getStepDefinition());
+      formRequest.setRetry(null);
+      model.addAttribute(FORM_REQUEST, formRequest);
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -69,7 +72,13 @@ public class NotPaidController implements StepController {
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute(FORM_REQUEST) NotPaidForm formRequest) {
+      @Valid @ModelAttribute(FORM_REQUEST) NotPaidForm formRequest,
+      BindingResult bindingResult,
+      RedirectAttributes attr) {
+
+    if (bindingResult.hasErrors()) {
+      return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
+    }
 
     if ("yes".equalsIgnoreCase(formRequest.getRetry())) {
       PaymentResponse response = createPayment(journey);
