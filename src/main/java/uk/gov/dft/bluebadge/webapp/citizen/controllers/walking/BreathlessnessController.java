@@ -98,13 +98,16 @@ public class BreathlessnessController implements StepController {
             BreathlessnessCodeField.KEEPUP.name(), "breathlessnessPage.select.option.KEEPUP"));
     options.add(
         new RadioOption(
-            BreathlessnessCodeField.OWNPACE.name(), "breathlessnessPage.select.option.OWNPACE"));
+            BreathlessnessCodeField.OWNPACE.name(),
+            journey.who + "breathlessnessPage.select.option.OWNPACE"));
     options.add(
         new RadioOption(
-            BreathlessnessCodeField.DRESSED.name(), "breathlessnessPage.select.option.DRESSED"));
+            BreathlessnessCodeField.DRESSED.name(),
+            journey.who + "breathlessnessPage.select.option.DRESSED"));
     options.add(
         new RadioOption(
-            BreathlessnessCodeField.OTHER.name(), "breathlessnessPage.select.option.OTHER"));
+            BreathlessnessCodeField.OTHER.name(),
+            journey.who + "breathlessnessPage.select.option.OTHER"));
 
     return new RadioOptionsGroup("breathlessnessPage.select.title", options);
   }

@@ -24,7 +24,7 @@ public class BreathlessnessForm implements StepForm, Serializable {
   @NotEmpty List<BreathlessnessCodeField> breathlessnessTypes;
 
   @NotBlank(groups = OtherGroup.class, message = "{NotBlank.breathlessnessOtherDescription}")
-  @Size(max = 100, groups = OtherGroup.class, message = "{Size.breathlessnessOtherDescription}")
+  @Size(max = 255, groups = OtherGroup.class, message = "{Size.breathlessnessOtherDescription}")
   String breathlessnessOtherDescription;
 
   @Override
