@@ -6,6 +6,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefini
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.NINO;
 
 import org.springframework.util.StringUtils;
+import uk.gov.dft.bluebadge.common.util.ValidationPattern;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Person;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
@@ -31,8 +32,8 @@ class PersonConverter {
       }
     }
     return Person.builder()
-        .badgeHolderName(applicantNameForm.getFullName())
-        .nameAtBirth(applicantNameForm.getBirthName())
+        .badgeHolderName(ValidationPattern.replaceUnapprovedApostrophes(applicantNameForm.getFullName()))
+        .nameAtBirth(ValidationPattern.replaceUnapprovedApostrophes(applicantNameForm.getBirthName()))
         .dob(birthForm.getDateOfBirth().getLocalDate())
         .genderCode(genderForm.getGender())
         .nino(nino)
