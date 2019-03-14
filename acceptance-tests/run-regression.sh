@@ -37,6 +37,7 @@ saveLogs() {
    docker-compose logs > ../logs.txt
 }
 
+$(aws ecr get-login --no-include-email --region eu-west-2)
 
 set -a
 
