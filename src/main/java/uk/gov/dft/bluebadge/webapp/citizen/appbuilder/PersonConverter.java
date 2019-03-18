@@ -31,9 +31,12 @@ class PersonConverter {
         nino = nino.replaceAll("\\s+", "").toUpperCase();
       }
     }
+
     return Person.builder()
-        .badgeHolderName(ValidationPattern.replaceUnapprovedApostrophes(applicantNameForm.getFullName()))
-        .nameAtBirth(ValidationPattern.replaceUnapprovedApostrophes(applicantNameForm.getBirthName()))
+        .badgeHolderName(
+            ValidationPattern.replaceUnapprovedApostrophes(applicantNameForm.getFullName()))
+        .nameAtBirth(
+            ValidationPattern.replaceUnapprovedApostrophes(applicantNameForm.getBirthName()))
         .dob(birthForm.getDateOfBirth().getLocalDate())
         .genderCode(genderForm.getGender())
         .nino(nino)

@@ -15,15 +15,18 @@ public class ClientApiException extends RuntimeException {
     return commonResponse;
   }
 
-  private static String extractMessage(CommonResponse cr){
-    if(null == cr || null == cr.getError() || null == cr.getError().getErrors()){
+  private static String extractMessage(CommonResponse cr) {
+    if (null == cr || null == cr.getError() || null == cr.getError().getErrors()) {
       return null;
     }
 
     String result = null == cr.getError().getMessage() ? "" : cr.getError().getMessage() + ": ";
-    result = cr.getError().getErrors().stream()
-        .map(e -> e.getMessage())
-        .collect(Collectors.joining(", ", result, ""));
+    result =
+        cr.getError()
+            .getErrors()
+            .stream()
+            .map(e -> e.getMessage())
+            .collect(Collectors.joining(", ", result, ""));
     return result;
   }
 }

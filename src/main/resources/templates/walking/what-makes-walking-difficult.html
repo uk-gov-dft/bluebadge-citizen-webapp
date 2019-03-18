@@ -54,14 +54,13 @@
                                            th:text="#{${checkboxOption.messageKey}}"></label>
                                 </div>
 
-                                <div th:if="${iterStat.index == 1}" class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden"
+                                <div th:if="${checkboxOption.shortCode == 'BREATH'}" class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden"
                                      th:id="${optionalElId}">
                                     <span class="govuk-body-m" th:text="#{${JOURNEY.who} + 'whatMakesWalkingDifficult.select.option.breathless.hint'}"></span>
                                 </div>
 
-                                <div th:if="${iterStat.index == 6}" class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden"
+                                <div th:if="${checkboxOption.shortCode == 'SOMELSE'}" class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden"
                                      th:id="${optionalElId}">
-
                                     <div th:replace="~{ fragments/govuk-input :: govuk-input(#{whatMakesWalkingDifficult.select.somethingelse.desc}, 'somethingElseDescription', null, 'text', null)}"></div>
                                 </div>
                             </div>
