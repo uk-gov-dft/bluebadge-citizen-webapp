@@ -23,10 +23,35 @@ node {
             sh 'bash -c "source /etc/profile && (npm list gulp@3.9.1 -g || npm install -g gulp@3.9.1) && npm install && npm run prod"'
             sh './gradlew --no-daemon --profile --configure-on-demand clean build bootJar artifactoryPublish artifactoryDeploy'
             sh 'mv build/reports/profile/profile-*.html build/reports/profile/index.html'
+            sh 'ls -la build/libs'
+            stash includes: 'build/**/*', name: 'build'
         }
         finally {
             junit '**/TEST*.xml'
         }
+    }
+
+    stage ('DockerPublish') {
+      node('Functional') {
+        git(
+           url: "${REPONAME}",
+           credentialsId: 'dft-buildbot-valtech',
+           branch: "${BRANCH_NAME}"
+        )
+
+        unstash 'build'
+
+        sh 'ls -la'
+
+        withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_TOKEN')]) {
+          sh '''
+            ls -la build/libs
+            curl -s -o docker-publish.sh -H "Authorization: token ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.v3.raw' -O -L https://raw.githubusercontent.com/uk-gov-dft/shell-scripts/master/docker-publish.sh
+            ls -la
+            bash docker-publish.sh
+          '''
+        }
+      }
     }
 
     stage ('OWASP Dependency Check') {
@@ -70,12 +95,23 @@ node {
             )
 
             timeout(time: 20, unit: 'MINUTES') {
-                try {
-                    sh 'echo $PATH && cd acceptance-tests && bash run-regression.sh'
-                }
-                finally {
-                    archiveArtifacts allowEmptyArchive: true, artifacts: '**/docker.log'
-                    junit '**/TEST*.xml'
+                withEnv(["BASE_SELENIUM_URL=http://localhost:8780"]) {
+                  withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_TOKEN')]) {
+                    try {
+                        sh '''
+                          echo " Base Selenium URL is $BASE_SELENIUM_URL"
+                          cd acceptance-tests
+                          curl -s -o run-regression-script.sh -H "Authorization: token ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.v3.raw' -O -L https://raw.githubusercontent.com/uk-gov-dft/shell-scripts/master/run-regression.sh
+
+                          chmod +x run-regression-script.sh
+                          ./run-regression-script.sh
+                        '''
+                    }
+                    finally {
+                        archiveArtifacts allowEmptyArchive: true, artifacts: '**/docker.log'
+                        junit '**/TEST*.xml'
+                    }
+                  }
                 }
             }
         }
