@@ -6,6 +6,7 @@ import GAClickTracker from './ga-tracker';
 import DFT_FileUploader from './dft-file-uploader-wrapper';
 import UploadSupportingDocs from './upload-supporting-documents';
 import preventDoubleSubmission from './prevent-double-submission';
+import preventDoubleLinkClick from './prevent-double-link-click';
 
 All.initAll();
 
@@ -19,6 +20,10 @@ window.onload = () => {
     const forms = Array.from(document.querySelectorAll('[data-prevent-double-submission]'));
     if(forms.length > 0) {
         forms.forEach(form => preventDoubleSubmission(form));
+    }
+    const links = Array.from(document.querySelectorAll('[data-prevent-double-link-click]'));
+    if(links.length > 0) {
+        links.forEach(link => preventDoubleLinkClick(link));
     }
 }
 
