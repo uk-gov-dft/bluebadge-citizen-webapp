@@ -85,6 +85,7 @@ task outputComputedVersion {
 group = 'uk.gov.dft.bluebadge.webapp.citizen'
 version = getTheVersion()
 sourceCompatibility = 1.8
+archivesBaseName = 'citizen-webapp'
 
 repositories {
     mavenCentral()
@@ -97,7 +98,7 @@ publishing {
     publications {
         project_webapp(MavenPublication) {
             from components.java
-            artifactId "citizen-webapp"
+            artifactId "${archivesBaseName}"
         }
     }
 }
