@@ -50,3 +50,4 @@ src/main/resources/static/govuk/*
 VERSION-computed
 
 *.log
+run-regression-script.sh

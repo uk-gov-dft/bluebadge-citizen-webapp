@@ -77,8 +77,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("I complete select council page for different service signpost")
   public void iCompleteSelectCouncilPageForDifferentServiceSignpost() {
-    String council = "Runnymede";
-    String fullCouncil = "Runnymede borough council";
+    String council = "Aberdeen";
+    String fullCouncil = "Aberdeen city council";
     commonPage.findPageElementById(ChooseCouncilPage.COUNCIL_INPUT).sendKeys(council);
     commonPage.selectFromAutoCompleteList(ChooseCouncilPage.COUNCIL_INPUT, fullCouncil);
     pressContinue();
