@@ -48,3 +48,5 @@ src/main/resources/static/images/*
 src/main/resources/static/govuk/*
 
 VERSION-computed
+
+*.log
