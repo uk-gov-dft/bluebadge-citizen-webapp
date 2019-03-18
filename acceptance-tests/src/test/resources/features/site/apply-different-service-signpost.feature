@@ -8,4 +8,4 @@ Feature: Dft BlueBadge Display Different service signpost page
   Scenario: Display different service signpost page
     Given I complete applicant page for "yourself"
     And I complete select council page for different service signpost
-    Then I should see page titled "Surrey county council uses a different service" with GOV.UK suffix
+    Then I should see page titled "Aberdeen city council uses a different service" with GOV.UK suffix
