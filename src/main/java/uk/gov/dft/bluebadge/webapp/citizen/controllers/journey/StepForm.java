@@ -8,10 +8,6 @@ public interface StepForm extends BaseForm {
 
   StepDefinition getAssociatedStep();
 
-  default Optional<StepDefinition> determineNextStep() {
-    return Optional.empty();
-  }
-
   default Optional<StepDefinition> determineNextStep(Journey journey) {
     return Optional.empty();
   }

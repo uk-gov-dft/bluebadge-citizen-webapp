@@ -24,7 +24,7 @@ public class PermissionForm implements Serializable, StepForm {
   }
 
   @Override
-  public Optional<StepDefinition> determineNextStep() {
+  public Optional<StepDefinition> determineNextStep(Journey journey) {
     if (hasPermission) {
       return Optional.of(StepDefinition.REGISTERED_COUNCIL);
     }

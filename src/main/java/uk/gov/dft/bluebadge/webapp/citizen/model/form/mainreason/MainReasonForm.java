@@ -22,7 +22,7 @@ public class MainReasonForm implements StepForm, Serializable {
   }
 
   @Override
-  public Optional<StepDefinition> determineNextStep() {
+  public Optional<StepDefinition> determineNextStep(Journey journey) {
     switch (mainReasonOption) {
       case TERMILL:
         return Optional.of(StepDefinition.CONTACT_COUNCIL);

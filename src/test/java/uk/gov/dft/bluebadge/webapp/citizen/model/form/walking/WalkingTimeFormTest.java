@@ -21,7 +21,7 @@ class WalkingTimeFormTest {
   void determineNextStep_whenCantWalk() {
     WalkingTimeForm walkingTimeForm =
         WalkingTimeForm.builder().walkingTime(WalkingLengthOfTimeCodeField.CANTWALK).build();
-    Optional<StepDefinition> actual = walkingTimeForm.determineNextStep();
+    Optional<StepDefinition> actual = walkingTimeForm.determineNextStep(null);
     assertThat(actual.get()).isEqualTo(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
   }
 
@@ -34,7 +34,7 @@ class WalkingTimeFormTest {
     for (WalkingLengthOfTimeCodeField walkingTimeType : otherTypes) {
       WalkingTimeForm walkingTimeForm =
           WalkingTimeForm.builder().walkingTime(walkingTimeType).build();
-      Optional<StepDefinition> actual = walkingTimeForm.determineNextStep();
+      Optional<StepDefinition> actual = walkingTimeForm.determineNextStep(null);
       assertThat(actual.get()).isEqualTo(StepDefinition.WHERE_CAN_YOU_WALK);
     }
   }

@@ -30,7 +30,7 @@ public class ReceiveBenefitsForm implements StepForm, Serializable {
   }
 
   @Override
-  public Optional<StepDefinition> determineNextStep() {
+  public Optional<StepDefinition> determineNextStep(Journey journey) {
     switch (benefitType) {
       case DLA:
         return Optional.of(HIGHER_RATE_MOBILITY);

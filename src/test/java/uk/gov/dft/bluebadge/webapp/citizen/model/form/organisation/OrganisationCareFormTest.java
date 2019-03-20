@@ -27,8 +27,8 @@ public class OrganisationCareFormTest {
   public void determineNextStep_whenYes() {
     OrganisationCareForm form = OrganisationCareForm.builder().doesCare(true).build();
 
-    assertThat(form.determineNextStep()).isNotEmpty();
-    assertThat(form.determineNextStep().get()).isEqualTo(StepDefinition.ORGANISATION_TRANSPORT);
+    assertThat(form.determineNextStep(null)).isNotEmpty();
+    assertThat(form.determineNextStep(null).get()).isEqualTo(StepDefinition.ORGANISATION_TRANSPORT);
   }
 
   @Test
@@ -36,7 +36,7 @@ public class OrganisationCareFormTest {
   public void determineNextStep_whenNo() {
     OrganisationCareForm form = OrganisationCareForm.builder().doesCare(false).build();
 
-    assertThat(form.determineNextStep()).isNotEmpty();
-    assertThat(form.determineNextStep().get()).isEqualTo(StepDefinition.ORGANISATION_NOT_ELIGIBLE);
+    assertThat(form.determineNextStep(null)).isNotEmpty();
+    assertThat(form.determineNextStep(null).get()).isEqualTo(StepDefinition.ORGANISATION_NOT_ELIGIBLE);
   }
 }

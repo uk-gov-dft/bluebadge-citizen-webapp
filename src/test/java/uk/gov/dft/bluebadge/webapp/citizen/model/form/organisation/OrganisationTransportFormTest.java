@@ -28,8 +28,8 @@ public class OrganisationTransportFormTest {
     OrganisationTransportForm form =
         OrganisationTransportForm.builder().doesTransport(true).build();
 
-    assertThat(form.determineNextStep()).isNotEmpty();
-    assertThat(form.determineNextStep().get())
+    assertThat(form.determineNextStep(null)).isNotEmpty();
+    assertThat(form.determineNextStep(null).get())
         .isEqualTo(StepDefinition.ORGANISATION_MAY_BE_ELIGIBLE);
   }
 
@@ -39,7 +39,7 @@ public class OrganisationTransportFormTest {
     OrganisationTransportForm form =
         OrganisationTransportForm.builder().doesTransport(false).build();
 
-    assertThat(form.determineNextStep()).isNotEmpty();
-    assertThat(form.determineNextStep().get()).isEqualTo(StepDefinition.ORGANISATION_NOT_ELIGIBLE);
+    assertThat(form.determineNextStep(null)).isNotEmpty();
+    assertThat(form.determineNextStep(null).get()).isEqualTo(StepDefinition.ORGANISATION_NOT_ELIGIBLE);
   }
 }

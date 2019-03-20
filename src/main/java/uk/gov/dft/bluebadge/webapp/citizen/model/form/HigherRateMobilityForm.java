@@ -24,7 +24,7 @@ public class HigherRateMobilityForm implements Serializable, StepForm {
   }
 
   @Override
-  public Optional<StepDefinition> determineNextStep() {
+  public Optional<StepDefinition> determineNextStep(Journey journey) {
     if (awardedHigherRateMobility) {
       return Optional.of(StepDefinition.ELIGIBLE);
     } else {

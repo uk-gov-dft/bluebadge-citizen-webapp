@@ -27,10 +27,7 @@ public class RouteMaster {
 
   private StepDefinition getNextStep(StepForm form, Journey journey) {
     StepDefinition currentStep = form.getAssociatedStep();
-    Optional<StepDefinition> nextStep = form.determineNextStep();
-    if (!nextStep.isPresent()) {
-      nextStep = form.determineNextStep(journey);
-    }
+    Optional<StepDefinition> nextStep = form.determineNextStep(journey);
     if (!nextStep.isPresent()) {
       nextStep = Optional.of(form.getAssociatedStep().getDefaultNext());
     }

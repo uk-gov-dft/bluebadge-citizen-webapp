@@ -11,12 +11,12 @@ public class PermissionFormTest {
   @Test
   public void determineNextStep_whenHasPermissionIsYes_thenEligible() {
     PermissionForm form = PermissionForm.builder().hasPermission(true).build();
-    assertThat(form.determineNextStep()).isEqualTo(Optional.of(StepDefinition.REGISTERED_COUNCIL));
+    assertThat(form.determineNextStep(null)).isEqualTo(Optional.of(StepDefinition.REGISTERED_COUNCIL));
   }
 
   @Test
   public void determineNextStep_whenHasPermissionIsNo_thenMainReason() {
     PermissionForm form = PermissionForm.builder().hasPermission(false).build();
-    assertThat(form.determineNextStep()).isEqualTo(Optional.of(StepDefinition.PROVE_IDENTITY));
+    assertThat(form.determineNextStep(null)).isEqualTo(Optional.of(StepDefinition.PROVE_IDENTITY));
   }
 }

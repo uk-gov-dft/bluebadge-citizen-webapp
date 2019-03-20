@@ -27,7 +27,7 @@ public class WalkingTimeForm implements StepForm, Serializable {
   }
 
   @Override
-  public Optional<StepDefinition> determineNextStep() {
+  public Optional<StepDefinition> determineNextStep(Journey journey) {
     if (CANTWALK == walkingTime) {
       return Optional.of(UPLOAD_SUPPORTING_DOCUMENTS);
     }

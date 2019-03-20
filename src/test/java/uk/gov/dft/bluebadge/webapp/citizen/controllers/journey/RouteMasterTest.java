@@ -69,7 +69,7 @@ public class RouteMasterTest {
           }
 
           @Override
-          public Optional<StepDefinition> determineNextStep() {
+          public Optional<StepDefinition> determineNextStep(Journey j) {
             return Optional.of(ELIGIBLE);
           }
 
@@ -93,7 +93,7 @@ public class RouteMasterTest {
           }
 
           @Override
-          public Optional<StepDefinition> determineNextStep() {
+          public Optional<StepDefinition> determineNextStep(Journey j) {
             return Optional.of(DECLARATIONS);
           }
 

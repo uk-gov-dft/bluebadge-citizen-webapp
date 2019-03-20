@@ -24,7 +24,7 @@ public class RegisteredForm implements Serializable, StepForm {
   }
 
   @Override
-  public Optional<StepDefinition> determineNextStep() {
+  public Optional<StepDefinition> determineNextStep(Journey journey) {
     if (hasRegistered) {
       return Optional.of(StepDefinition.PERMISSION);
     }
