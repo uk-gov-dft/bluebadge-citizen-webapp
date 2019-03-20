@@ -72,7 +72,7 @@ public class PipMovingAroundController implements StepController {
 
     List<RadioOption> options = Lists.newArrayList(points12, points10, points8, points4, points0);
 
-    String title = journey.who + "pipMovingAroundPage.content.title";
+    String title = journey.getWho() + "pipMovingAroundPage.content.title";
     return new RadioOptionsGroup(title, options);
   }
 

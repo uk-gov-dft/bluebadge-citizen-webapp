@@ -77,7 +77,7 @@ public class HigherRateMobilityController implements StepController {
   private void setupModel(Model model, Journey journey) {
     model.addAttribute(
         "options",
-        new RadioOptionsGroup(journey.who + "higherRateMobilityPage.content.title")
+        new RadioOptionsGroup(journey.getWho() + "higherRateMobilityPage.content.title")
             .withYesNoOptions(YesNoType.PAST));
   }
 }

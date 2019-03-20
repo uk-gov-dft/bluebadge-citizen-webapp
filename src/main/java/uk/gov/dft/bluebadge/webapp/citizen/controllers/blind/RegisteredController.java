@@ -50,7 +50,7 @@ public class RegisteredController implements StepController {
     }
 
     RadioOptionsGroup radioOptions =
-        new RadioOptionsGroup(journey.who + "registeredPage.title").withYesNoOptions();
+        new RadioOptionsGroup(journey.getWho() + "registeredPage.title").withYesNoOptions();
 
     model.addAttribute("radioOptions", radioOptions);
 

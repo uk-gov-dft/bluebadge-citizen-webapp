@@ -51,7 +51,7 @@ public class MentalDisorderController implements StepController {
     }
 
     RadioOptionsGroup radioOptions =
-        new RadioOptionsGroup(journey.who + "afcs.mentalDisorderPage.title")
+        new RadioOptionsGroup(journey.getWho() + "afcs.mentalDisorderPage.title")
             .withYesNoOptions(YesNoType.IAM);
 
     model.addAttribute("radioOptions", radioOptions);

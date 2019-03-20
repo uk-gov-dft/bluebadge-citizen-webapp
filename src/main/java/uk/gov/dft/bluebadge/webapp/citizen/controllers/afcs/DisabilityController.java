@@ -51,7 +51,7 @@ public class DisabilityController implements StepController {
     }
 
     RadioOptionsGroup radioOptions =
-        new RadioOptionsGroup(journey.who + "afcs.disabilityPage.title")
+        new RadioOptionsGroup(journey.getWho() + "afcs.disabilityPage.title")
             .withYesNoOptions(YesNoType.IAM);
 
     model.addAttribute("radioOptions", radioOptions);
