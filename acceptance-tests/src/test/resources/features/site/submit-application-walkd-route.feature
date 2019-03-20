@@ -186,7 +186,7 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete main reason page for "WALKD"
     And   I complete what makes walking difficult page for "NONE"
     Then  I should see "They're not" eligible page
-
+#
   Scenario: Walking application for yourself and "UPHILL" breathlessness selected - check screen flow
     Given I complete applicant page for "yourself"
     And   I complete select council page for "wales"
