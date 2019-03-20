@@ -32,6 +32,7 @@ spring:
     banner-mode: "off"
   redis:
     host:
+    ssl: true
     cluster:
       nodes: redis.elasticache-citizen.${asg}.${bb_env}.${url}:6379
   resources:
