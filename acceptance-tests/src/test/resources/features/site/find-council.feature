@@ -15,37 +15,58 @@ Feature: DFT Blue badge Citizen app - find council
     When  I complete your local authority page
     Then  I should see the page titled "Do you already have a Blue Badge?" with GOV.UK suffix
 
-  Scenario: Find your council - yourself - english - find council, then change using choose your council in several scenarios including navigating back with browser
+  Scenario: Find your council - yourself - english - find council - change council several times in different ways
     Given I complete applicant page for "yourself"
-    Then  I should see the page titled "Find your local council" with GOV.UK suffix
+    Then I should see the page titled "Find your local council" with GOV.UK suffix
     When I complete find council page for "yourself" and select a postcode in "england"
-    Then  I should see the page titled "Your issuing authority" with GOV.UK suffix
-    Then  I can see labelled element "localAuthority" with content "Blackpool borough council"
+    Then I should see the page titled "Your issuing authority" with GOV.UK suffix
+    Then I can see labelled element "localAuthority" with content "Blackpool borough council"
 
     When I can click "thatsNotMyLocalCouncilLink" button
     Then I should see the page titled "Choose your local council" with GOV.UK suffix
     When I complete select council page for "scotland"
-    Then  I should see the page titled "Your issuing authority" with GOV.UK suffix
-    Then  I can see labelled element "localAuthority" with content "Aberdeenshire council"
-    When  I complete your local authority page
-    Then  I should see the page titled "Do you already have a Blue Badge?" with GOV.UK suffix
+    Then I should see the page titled "Your issuing authority" with GOV.UK suffix
+    Then I can see labelled element "localAuthority" with content "Aberdeenshire council"
+    When I complete your local authority page
+    Then I should see the page titled "Do you already have a Blue Badge?" with GOV.UK suffix
 
-    When  I go back in the browser
-    Then  I can see labelled element "localAuthority" with content "Aberdeenshire council"
+    When I go back in the browser
+    Then I can see labelled element "localAuthority" with content "Aberdeenshire council"
     When I can click "thatsNotMyLocalCouncilLink" button
     Then I should see the page titled "Choose your local council" with GOV.UK suffix
     When I complete select council page for "wales"
-    Then  I should see the page titled "Your issuing authority" with GOV.UK suffix
-    Then  I can see labelled element "localAuthority" with content "Isle of Anglesey county council"
-    When  I complete your local authority page
-    Then  I should see the page titled "Do you already have a Blue Badge?" with GOV.UK suffix
+    Then I should see the page titled "Your issuing authority" with GOV.UK suffix
+    Then I can see labelled element "localAuthority" with content "Isle of Anglesey county council"
+    When I complete your local authority page
+    Then I should see the page titled "Do you already have a Blue Badge?" with GOV.UK suffix
 
-    When  I go back in the browser
-    Then  I can see labelled element "localAuthority" with content "Isle of Anglesey county council"
-    When  I go back in the browser
+    When I go back in the browser
+    Then I can see labelled element "localAuthority" with content "Isle of Anglesey county council"
+    When I go back in the browser
     Then I should see the page titled "Choose your local council" with GOV.UK suffix
     When I complete select council page for "england"
-    Then  I should see the page titled "Your issuing authority" with GOV.UK suffix
-    Then  I can see labelled element "localAuthority" with content "Blackpool borough council"
-    When  I complete your local authority page
-    Then  I should see the page titled "Do you already have a Blue Badge?" with GOV.UK suffix
+    Then I should see the page titled "Your issuing authority" with GOV.UK suffix
+    Then I can see labelled element "localAuthority" with content "Blackpool borough council"
+    When I complete your local authority page
+    Then I should see the page titled "Do you already have a Blue Badge?" with GOV.UK suffix
+
+  Scenario: Find your council - yourself - english - la using third party - find council - change council several times in different ways
+    Given I complete applicant page for "yourself"
+    Then I should see the page titled "Find your local council" with GOV.UK suffix
+    When I complete find council page for "yourself" and la using third party and select a postcode in "england"
+    Then I should see page titled "London borough of Southwark uses a different service" with GOV.UK suffix
+
+    When I can click "thatsNotMyLocalCouncilLink" button
+    Then I should see the page titled "Choose your local council" with GOV.UK suffix
+    When I complete select council page for different service signpost for "scotland"
+    Then I should see page titled "City of Edinburgh council uses a different service" with GOV.UK suffix
+
+    When I can click "thatsNotMyLocalCouncilLink" button
+    Then I should see the page titled "Choose your local council" with GOV.UK suffix
+    When I complete select council page for different service signpost for "wales"
+    Then I should see page titled "City of Cardiff council uses a different service" with GOV.UK suffix
+
+    When I go back in the browser
+    Then I should see the page titled "Choose your local council" with GOV.UK suffix
+    When I complete select council page for different service signpost for "england"
+    Then I should see page titled "London borough of Southwark uses a different service" with GOV.UK suffix

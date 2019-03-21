@@ -59,8 +59,7 @@ public class WalkingTimeControllerTest {
     mockMvc
         .perform(get("/walking-time").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
-        .andExpect(model().attributeExists("walkingTimeOptions"))
-        .andReturn();
+        .andExpect(model().attributeExists("walkingTimeOptions"));
   }
 
   @Test

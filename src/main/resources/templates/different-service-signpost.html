@@ -17,7 +17,12 @@
             <p class="govuk-body" th:text="#{differentServiceSignpostPage.content.p1(${JOURNEY.localeAwareLocalAuthority.description})}"/>
 
             <p class="govuk-body">
-                <a th:href="${differentServiceSignpostUrl}" th:text="#{${JOURNEY.who} + 'differentServiceSignpostPage.content.link'}"/>
+               <a th:href="@{/different-service-signpost-continue}" th:text="#{${JOURNEY.who} + 'differentServiceSignpostPage.content.link'}" data-uipath="continue"/>
+            </p>
+
+            <p class="govuk-body">
+                <a th:href="@{/different-service-signpost-choose-council}"
+                   th:text="#{${JOURNEY.who} + 'differentServiceSignpostPage.link.thatsNotMyCouncil'}" data-uipath="thatsNotMyLocalCouncilLink"></a>
             </p>
         </div>
     </div>

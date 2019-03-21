@@ -30,6 +30,10 @@ public class Mappings {
   public static final String URL_YOUR_ISSUING_AUTHORITY_CHOOSE_COUNCIL =
       "/your-issuing-authority-choose-council";
   public static final String URL_DIFFERENT_SERVICE_SIGNPOST = "/different-service-signpost";
+  public static final String URL_DIFFERENT_SERVICE_SIGNPOST_CONTINUE =
+      "/different-service-signpost-continue";
+  public static final String URL_DIFFERENT_SERVICE_SIGNPOST_CHOOSE_COUNCIL =
+      "/different-service-signpost-choose-council";
   public static final String URL_DOB = "/date-of-birth";
   public static final String URL_CONTACT_DETAILS = "/contact-details";
   public static final String URL_GENDER = "/gender";
