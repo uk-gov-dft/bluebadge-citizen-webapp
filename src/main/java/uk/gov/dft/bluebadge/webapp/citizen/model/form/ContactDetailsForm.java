@@ -50,24 +50,6 @@ public class ContactDetailsForm implements StepForm, Serializable {
   }
 
   @Override
-  public Optional<StepDefinition> determineNextStep(Journey journey) {
-    EligibilityCodeField benefitType = journey.getEligibilityCode();
-    switch (benefitType) {
-      case DLA:
-      case PIP:
-        return Optional.of(StepDefinition.PROVE_BENEFIT);
-      case WPMS:
-        return Optional.of(StepDefinition.PROVE_IDENTITY);
-      case AFRFCS:
-        return Optional.of(StepDefinition.PROVE_IDENTITY);
-      case BLIND:
-        return Optional.of(StepDefinition.REGISTERED);
-      default:
-        return Optional.of(StepDefinition.HEALTH_CONDITIONS);
-    }
-  }
-
-  @Override
   public boolean preserveStep(Journey journey) {
     return true;
   }

@@ -27,20 +27,4 @@ public class ProvidePhotoForm implements StepForm, ArtifactForm, Serializable {
   public boolean preserveStep(Journey journey) {
     return true;
   }
-
-  /**
-   * If the eligibility is any of the child based codes then skip the next PROVE_ADDRESS step
-   *
-   * @param journey
-   * @return
-   */
-  @Override
-  public Optional<StepDefinition> determineNextStep(Journey journey) {
-    if (journey.getEligibilityCode() == EligibilityCodeField.CHILDBULK
-        || journey.getEligibilityCode() == EligibilityCodeField.CHILDVEHIC) {
-      return Optional.of(StepDefinition.DECLARATIONS);
-    }
-
-    return Optional.of(PROVE_ADDRESS);
-  }
 }

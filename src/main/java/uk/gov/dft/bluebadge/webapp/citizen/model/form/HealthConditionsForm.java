@@ -30,23 +30,6 @@ public class HealthConditionsForm implements StepForm, Serializable {
   }
 
   @Override
-  public Optional<StepDefinition> determineNextStep(Journey journey) {
-    if (EligibilityCodeField.WALKD.equals(journey.getEligibilityCode())) {
-      return Optional.of(StepDefinition.WHAT_MAKES_WALKING_DIFFICULT);
-    }
-    if (journey.getEligibilityCode() == CHILDVEHIC) {
-      return Optional.of(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
-    }
-    if (journey.getEligibilityCode() == ARMS) {
-      return Optional.of(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
-    }
-    if (journey.getEligibilityCode() == CHILDBULK) {
-      return Optional.of(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
-    }
-    return Optional.of(StepDefinition.PROVE_IDENTITY);
-  }
-
-  @Override
   public boolean preserveStep(Journey journey) {
     return false;
   }

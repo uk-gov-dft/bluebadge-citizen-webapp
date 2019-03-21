@@ -46,23 +46,6 @@ public class UploadSupportingDocumentsForm implements StepForm, ArtifactForm, Se
     journeyArtifacts.add(journeyArtifact);
   }
 
-  @Override
-  public Optional<StepDefinition> determineNextStep(Journey journey) {
-    if (EligibilityCodeField.WALKD.equals(journey.getEligibilityCode())) {
-      return Optional.of(StepDefinition.TREATMENT_LIST);
-    }
-    if (journey.getEligibilityCode() == CHILDVEHIC) {
-      return Optional.of(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST);
-    }
-    if (journey.getEligibilityCode() == ARMS) {
-      return Optional.of(StepDefinition.ARMS_HOW_OFTEN_DRIVE);
-    }
-    if (journey.getEligibilityCode() == CHILDBULK) {
-      return Optional.of(StepDefinition.MEDICAL_EQUIPMENT);
-    }
-    throw new IllegalStateException("Failed to determine next step for current step:" + this);
-  }
-
   public static class UploadSupportingDocumentsFormBuilder {
     private List<JourneyArtifact> journeyArtifacts = new ArrayList<>();
   }

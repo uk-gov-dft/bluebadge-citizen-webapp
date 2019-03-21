@@ -30,22 +30,6 @@ public class ReceiveBenefitsForm implements StepForm, Serializable {
   }
 
   @Override
-  public Optional<StepDefinition> determineNextStep(Journey journey) {
-    switch (benefitType) {
-      case DLA:
-        return Optional.of(HIGHER_RATE_MOBILITY);
-      case WPMS:
-        return Optional.of(ELIGIBLE);
-      case AFRFCS:
-        return Optional.of(AFCS_COMPENSATION_SCHEME);
-      case PIP:
-        return Optional.of(PIP_MOVING_AROUND);
-      default:
-        return Optional.of(MAIN_REASON);
-    }
-  }
-
-  @Override
   public boolean preserveStep(Journey journey) {
     return false;
   }
