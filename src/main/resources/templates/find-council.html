@@ -21,7 +21,7 @@
 
                 <div th:class="${#fields.hasErrors('postcode')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
 
-                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + 'findCouncilPage.postcode.field.label'}, 'postcode', #{findCouncilPage.postcode.field.hint}, 'text', 40)}"></div>
+                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + 'findCouncilPage.postcode.field.label'}, 'postcode', #{findCouncilPage.postcode.field.hint}, 'text',  'govuk-input--width-10')}"></div>
 
                 </div>
 

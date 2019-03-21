@@ -54,14 +54,20 @@ public class DifferentServiceSignpostController implements StepController {
   public String redirectToThirdParty(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, SessionStatus sessionStatus) {
     String url = getDifferentServiceSignpostUrl(journey);
-    sessionStatus.setComplete();
+    if (sessionStatus != null) {
+      sessionStatus.setComplete();
+    }
     return "redirect:" + url;
   }
 
   @GetMapping(URL_DIFFERENT_SERVICE_SIGNPOST_CHOOSE_COUNCIL)
   public String redirectToChooseCouncil(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
-    FindYourCouncilForm findYourCouncilForm = journey.getFormForStep(StepDefinition.FIND_COUNCIL);
-    findYourCouncilForm.setPostcode("");
+    if (journey != null) {
+      FindYourCouncilForm findYourCouncilForm = journey.getFormForStep(StepDefinition.FIND_COUNCIL);
+      if (findYourCouncilForm != null) {
+        findYourCouncilForm.setPostcode("");
+      }
+    }
     return "redirect:" + Mappings.URL_CHOOSE_YOUR_COUNCIL;
   }
 
@@ -71,8 +77,11 @@ public class DifferentServiceSignpostController implements StepController {
   }
 
   private String getDifferentServiceSignpostUrl(Journey journey) {
+
     Optional<LocalAuthorityRefData.LocalAuthorityMetaData> localAuthorityMetadata =
-        journey.getLocalAuthority().getLocalAuthorityMetaData();
+        (journey != null && journey.getLocalAuthority() != null)
+            ? journey.getLocalAuthority().getLocalAuthorityMetaData()
+            : Optional.empty();
     Optional<String> differentServiceSignpostUrl =
         localAuthorityMetadata.map(
             LocalAuthorityRefData.LocalAuthorityMetaData::getDifferentServiceSignpostUrl);

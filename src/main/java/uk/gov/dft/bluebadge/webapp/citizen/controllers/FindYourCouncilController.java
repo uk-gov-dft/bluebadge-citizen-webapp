@@ -58,7 +58,9 @@ public class FindYourCouncilController implements StepController {
   @GetMapping(Mappings.URL_FIND_YOUR_COUNCIL_BYPASS)
   public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     FindYourCouncilForm formRequest = FindYourCouncilForm.builder().build();
-    journey.setFormForStep(formRequest);
+    if (journey != null) {
+      journey.setFormForStep(formRequest);
+    }
     return routeMaster.redirectToOnSuccess(formRequest);
   }
 
@@ -78,7 +80,8 @@ public class FindYourCouncilController implements StepController {
           referenceDataService.retrieveLAByPostcode(formRequest.getPostcode());
       journey.setLocalAuthority(localAuthority);
       journey.setFormForStep(formRequest);
-      // We populate this form because we skip it but still want to keep the linearility of state transations to make implementation easier.
+      // We populate this form because we skip it but still want to keep the linearility of state
+      // transations to make implementation easier.
       ChooseYourCouncilForm chooseYourCouncilFormRequest =
           ChooseYourCouncilForm.builder().councilShortCode(localAuthority.getShortCode()).build();
       journey.setFormForStep(chooseYourCouncilFormRequest);

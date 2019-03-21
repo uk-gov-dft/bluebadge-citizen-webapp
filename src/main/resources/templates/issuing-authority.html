@@ -27,7 +27,11 @@
             </form>
 
             <p class="govuk-body">
-                <a th:href="@{/your-issuing-authority-choose-council}"
+                <a data-ga-track-link
+                   data-ga-track-link-category="Internal link"
+                   data-ga-track-link-action="alternative click"
+                   data-ga-track-link-label="this is not my council"
+                   th:href="@{/your-issuing-authority-choose-council}"
                    th:text="#{${JOURNEY.who} + 'issuingAuthorityPage.link.thatsNotMyCouncil'}" data-uipath="thatsNotMyLocalCouncilLink"></a>
             </p>
 
