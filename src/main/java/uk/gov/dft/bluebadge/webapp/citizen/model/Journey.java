@@ -124,11 +124,11 @@ public class Journey implements Serializable {
             stepDefinition -> {
               if (hasStepForm(stepDefinition)) {
                 StepForm f = getFormForStep(stepDefinition);
-                cleanUpSteps(alreadyCleaned, f.getAssociatedStep().getNext());
                 if (!f.preserveStep(this)) {
                   forms.remove(stepDefinition);
                 }
                 alreadyCleaned.add(stepDefinition);
+                cleanUpSteps(alreadyCleaned, f.getAssociatedStep().getNext());
               }
             });
   }

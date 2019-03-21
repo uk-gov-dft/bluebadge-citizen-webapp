@@ -23,8 +23,12 @@ public class Mappings {
   public static final String URL_NOT_PAID = "/not-paid";
   public static final String URL_BADGE_PAYMENT_RETURN = "/badge-payment-return";
   public static final String URL_APPLICATION_SUBMITTED = "/application-submitted";
+  public static final String URL_FIND_YOUR_COUNCIL = "/find-council";
+  public static final String URL_FIND_YOUR_COUNCIL_BYPASS = "/find-council-by-pass";
   public static final String URL_CHOOSE_YOUR_COUNCIL = "/choose-council";
   public static final String URL_YOUR_ISSUING_AUTHORITY = "/your-issuing-authority";
+  public static final String URL_YOUR_ISSUING_AUTHORITY_CHOOSE_COUNCIL =
+      "/your-issuing-authority-choose-council";
   public static final String URL_DIFFERENT_SERVICE_SIGNPOST = "/different-service-signpost";
   public static final String URL_DOB = "/date-of-birth";
   public static final String URL_CONTACT_DETAILS = "/contact-details";
@@ -138,6 +142,7 @@ public class Mappings {
           .put(StepDefinition.EXISTING_BADGE, URL_EXISTING_BADGE)
           .put(StepDefinition.HEALTH_CONDITIONS, URL_HEALTH_CONDITIONS)
           .put(StepDefinition.WHAT_MAKES_WALKING_DIFFICULT, URL_WHAT_MAKES_WALKING_DIFFICULT)
+          .put(StepDefinition.FIND_COUNCIL, URL_FIND_YOUR_COUNCIL)
           .put(StepDefinition.CHOOSE_COUNCIL, URL_CHOOSE_YOUR_COUNCIL)
           .put(StepDefinition.YOUR_ISSUING_AUTHORITY, URL_YOUR_ISSUING_AUTHORITY)
           .put(StepDefinition.DIFFERENT_SERVICE_SIGNPOST, URL_DIFFERENT_SERVICE_SIGNPOST)

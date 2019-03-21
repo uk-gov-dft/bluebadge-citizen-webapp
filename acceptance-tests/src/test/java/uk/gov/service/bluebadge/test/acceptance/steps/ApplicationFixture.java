@@ -1,6 +1,7 @@
 package uk.gov.service.bluebadge.test.acceptance.steps;
 
 import static org.junit.Assert.assertNotNull;
+import static uk.gov.service.bluebadge.test.acceptance.pages.site.FindCouncilPage.CHOOSE_YOUR_COUNCIL_LINK;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.HAS_RECEIVED_DLA;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.MAIN_REASON_LIST;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.NEVER_RECEIVED_DLA;
@@ -58,6 +59,11 @@ public class ApplicationFixture extends AbstractSpringSteps {
       commonPage.selectRadioButton(ApplicantPage.APPLICANT_TYPE_ORG_OPTION);
     }
     pressContinue();
+  }
+
+  @And("I skip find council page")
+  public void iSkipFindCouncilPage() {
+    commonPage.findElementWithUiPath(CHOOSE_YOUR_COUNCIL_LINK).click();
   }
 
   @And("^I complete select council page$")

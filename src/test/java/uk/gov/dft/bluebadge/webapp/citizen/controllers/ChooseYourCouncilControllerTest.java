@@ -77,7 +77,7 @@ public class ChooseYourCouncilControllerTest {
         .thenReturn(councils);
     ChooseYourCouncilForm formRequest = ChooseYourCouncilForm.builder().build();
 
-    Journey shortJourney = JourneyFixture.getDefaultJourneyToStep(StepDefinition.APPLICANT_TYPE);
+    Journey shortJourney = JourneyFixture.getDefaultJourneyToStep(StepDefinition.FIND_COUNCIL);
     mockMvc
         .perform(get(Mappings.URL_CHOOSE_YOUR_COUNCIL).sessionAttr("JOURNEY", shortJourney))
         .andExpect(status().isOk())

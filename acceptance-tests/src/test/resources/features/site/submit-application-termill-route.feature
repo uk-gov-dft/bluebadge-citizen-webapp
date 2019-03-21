@@ -4,6 +4,7 @@ Feature: DFT Blue badge Citizen app new application - TERMILL
 
   Scenario: Terminal Illness application for yourself
     Given I complete applicant page for "yourself"
+    And   I skip find council page
     And   I complete select council page
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "NO"
@@ -13,6 +14,7 @@ Feature: DFT Blue badge Citizen app new application - TERMILL
 
   Scenario: Terminal Illness application for someone else
     Given I complete applicant page for "someone else"
+    And   I skip find council page
     And   I complete select council page
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES BUT DON'T KNOW"
@@ -22,6 +24,7 @@ Feature: DFT Blue badge Citizen app new application - TERMILL
 
   Scenario: No main reason myself
     Given I complete applicant page for "yourself"
+    And   I skip find council page
     And   I complete select council page
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "NO"
@@ -31,6 +34,7 @@ Feature: DFT Blue badge Citizen app new application - TERMILL
 
   Scenario: No main reason someone else
     Given I complete applicant page for "someone else"
+    And   I skip find council page
     And   I complete select council page
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"

@@ -15,7 +15,7 @@
             <h1 class="govuk-heading-l" th:text="#{${JOURNEY.who} + 'issuingAuthorityPage.title'}"></h1>
 
             <p class="govuk-body">
-                <strong th:text="${formRequest.localAuthorityDescription}"></strong>
+                <strong th:text="${formRequest.localAuthorityDescription}" data-uipath="localAuthority"></strong>
                 <span th:remove="tag"
                       th:text="#{${JOURNEY.who} + 'issuingAuthorityPage.content.p1'}"></span>
             </p>
@@ -25,6 +25,11 @@
                 <input type="hidden" th:field="*{localAuthorityDescription}">
                 <button type="submit" class="govuk-button" data-uipath="button.continue" th:text="#{btn.label.continue}"></button>
             </form>
+
+            <p class="govuk-body">
+                <a th:href="@{/your-issuing-authority-choose-council}"
+                   th:text="#{${JOURNEY.who} + 'issuingAuthorityPage.link.thatsNotMyCouncil'}" data-uipath="thatsNotMyLocalCouncilLink"></a>
+            </p>
 
         </div>
     </div>

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.web.context.WebApplicationContext;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataDomainEnum;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataGroupEnum;
@@ -91,5 +92,10 @@ public class ReferenceDataService {
   public LocalAuthorityRefData retrieveLocalAuthority(String localAuthorityShortCode) {
     init();
     return localAuthorityMap.get(localAuthorityShortCode);
+  }
+
+  public LocalAuthorityRefData retrieveLAByPostcode(String postcode) {
+    Assert.notNull(postcode, "retrieveLAByPostcode - postcode must be set");
+    return (LocalAuthorityRefData) referenceDataApiClient.retrieveLAByPostcode(postcode);
   }
 }

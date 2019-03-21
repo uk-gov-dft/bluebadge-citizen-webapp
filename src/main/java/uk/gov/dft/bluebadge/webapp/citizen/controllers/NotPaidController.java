@@ -48,9 +48,7 @@ public class NotPaidController implements StepController {
   }
 
   @GetMapping
-  public String show(
-      Model model,
-      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+  public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
