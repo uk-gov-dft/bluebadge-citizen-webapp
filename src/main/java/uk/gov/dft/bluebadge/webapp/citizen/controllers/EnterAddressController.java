@@ -34,10 +34,7 @@ public class EnterAddressController implements StepController {
   }
 
   @GetMapping
-  public String show(
-      Model model,
-      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @ModelAttribute(FORM_REQUEST) EnterAddressForm formRequest) {
+  public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious();
@@ -48,12 +45,12 @@ public class EnterAddressController implements StepController {
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
-      model.addAttribute(FORM_REQUEST, EnterAddressForm.builder().build());
-    }
-
-    FindYourCouncilForm findYourCouncilForm = journey.getFormForStep(StepDefinition.FIND_COUNCIL);
-    if (findYourCouncilForm != null) {
-      formRequest.setPostcode(findYourCouncilForm.getPostcode());
+      FindYourCouncilForm findYourCouncilForm = journey.getFormForStep(StepDefinition.FIND_COUNCIL);
+      model.addAttribute(
+          FORM_REQUEST,
+          EnterAddressForm.builder()
+              .postcode(findYourCouncilForm != null ? findYourCouncilForm.getPostcode() : null)
+              .build());
     }
 
     return TEMPLATE;
