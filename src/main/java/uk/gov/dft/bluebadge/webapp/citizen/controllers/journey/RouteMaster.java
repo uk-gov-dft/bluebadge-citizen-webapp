@@ -112,7 +112,7 @@ public class RouteMaster {
       }
       // Break in the journey, expected only if a guard question has been changed
       // and an attempt to navigate past it happened.
-      if (!journey.hasStepForm(currentLoopStep)){
+      if (!journey.hasStepForm(currentLoopStep)) {
         return false;
       }
 

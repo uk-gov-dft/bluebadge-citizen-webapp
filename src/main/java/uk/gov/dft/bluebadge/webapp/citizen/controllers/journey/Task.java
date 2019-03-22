@@ -60,8 +60,7 @@ public enum Task {
       ARMS_HOW_OFTEN_DRIVE,
       ARMS_DRIVE_ADAPTED_VEHICLE,
       ARMS_DIFFICULTY_PARKING_METER),
-  DESC_CONDITION_CHILD(
-      "Describe your condition", HEALTH_CONDITIONS, MOBILITY_AID_LIST),
+  DESC_CONDITION_CHILD("Describe your condition", HEALTH_CONDITIONS, MOBILITY_AID_LIST),
   DESC_WALKING_ABILITY(
       "Describe walking ability",
       HEALTH_CONDITIONS,
@@ -71,8 +70,7 @@ public enum Task {
       WHERE_CAN_YOU_WALK),
   SUPPORTING_DOCS("Add supporting documents", UPLOAD_SUPPORTING_DOCUMENTS),
   LIST_MEDICAL_EQUIP("List medical equipment", MEDICAL_EQUIPMENT),
-  LIST_HEALTH_PROFS(
-      "List healthcare professionals", HEALTHCARE_PROFESSIONAL_LIST),
+  LIST_HEALTH_PROFS("List healthcare professionals", HEALTHCARE_PROFESSIONAL_LIST),
   LIST_MEDICATION("List medication", MEDICATION_LIST),
   LIST_TREATMENTS("List treatments", TREATMENT_LIST),
   DECLARATION("Read Declaration", DECLARATIONS),
