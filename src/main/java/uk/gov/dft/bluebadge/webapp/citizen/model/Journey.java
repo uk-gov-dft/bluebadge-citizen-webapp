@@ -7,7 +7,6 @@ import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.m
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.DLA;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.PIP;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
-import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.JourneyDefinition.J_PRE_APPLICATION;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -20,10 +19,7 @@ import java.util.function.Predicate;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.WebApplicationContext;
+
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentStatusResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
@@ -42,26 +38,18 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.arms.ArmsDifficultyParking
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
 
 @Slf4j
-@Component
-@Scope( // TODO Will need to change how this is tidied up
-    value = WebApplicationContext.SCOPE_SESSION,
-    proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Journey implements Serializable {
 
   public static final String JOURNEY_SESSION_KEY = "JOURNEY";
   public static final String FORM_REQUEST = "formRequest";
   public static final String SEPARATOR = "\n- - - - - - - - - - - - - - - - -\n";
 
-  @Getter @Setter
-  private JourneyDefinition journeyDefinition = J_PRE_APPLICATION;
+  @Getter @Setter private JourneyDefinition journeyDefinition = null;
 
   private Map<StepDefinition, StepForm> forms = new HashMap<>();
-  @Getter
-  private String who;
-  @Getter
-  private String ageGroup;
-  @Getter
-  private String walkingAid;
+  @Getter private String who;
+  @Getter private String ageGroup;
+  @Getter private String walkingAid;
 
   private LocalAuthorityRefData localAuthority;
 
@@ -109,6 +97,10 @@ public class Journey implements Serializable {
     } else if (form.getAssociatedStep() == StepDefinition.MOBILITY_AID_LIST) {
       walkingAid = hasMobilityAid() ? "withWalkingAid." : "withoutWalkingAid.";
     }
+
+    JourneyDefinition jd = JourneyDefinition.findForEligibilityCode(getEligibilityCode());
+    log.info("Changing application journey from {} to {}", this.journeyDefinition, jd);
+    this.setJourneyDefinition(jd);
 
     if (doCleanUp) {
       cleanUpSteps(new HashSet<>(), form.getAssociatedStep().getNext());

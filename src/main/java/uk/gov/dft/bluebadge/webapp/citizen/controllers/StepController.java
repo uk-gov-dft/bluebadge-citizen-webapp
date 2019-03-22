@@ -11,7 +11,18 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.BaseForm;
 
 @SessionAttributes(Journey.JOURNEY_SESSION_KEY)
 public interface StepController {
+
   StepDefinition getStepDefinition();
+
+  /**
+   * Binds journey domain object into the session
+   *
+   * @return
+   */
+  @ModelAttribute(Journey.JOURNEY_SESSION_KEY)
+  default Journey getJourney() {
+    return new Journey();
+  }
 
   @ModelAttribute("fieldsOrder")
   default List<String> getFieldsOrder(Model model) {
