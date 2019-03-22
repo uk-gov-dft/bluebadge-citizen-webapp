@@ -74,7 +74,7 @@ public enum Task {
   LIST_MEDICATION("List medication", MEDICATION_LIST),
   LIST_TREATMENTS("List treatments", TREATMENT_LIST),
   DECLARATION("Read Declaration", DECLARATIONS),
-  SUBMIT_AND_PAY("List treatments", BADGE_PAYMENT, NOT_PAID, BADGE_PAYMENT_RETURN);
+  SUBMIT_AND_PAY("List treatments", new SubmitAndPayTask(), BADGE_PAYMENT, NOT_PAID, BADGE_PAYMENT_RETURN, SUBMITTED);
 
   @Getter private final String titleCode;
   @Getter private final TaskConfig taskConfig;

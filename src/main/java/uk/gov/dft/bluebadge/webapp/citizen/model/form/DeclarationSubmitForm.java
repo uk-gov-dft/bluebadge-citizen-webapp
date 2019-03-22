@@ -24,15 +24,6 @@ public class DeclarationSubmitForm implements StepForm, Serializable {
   }
 
   @Override
-  public Optional<StepDefinition> determineNextStep(Journey journey) {
-    if (journey.isPaymentsEnabled()) {
-      return Optional.of(StepDefinition.BADGE_PAYMENT);
-    } else {
-      return Optional.of(StepDefinition.SUBMITTED);
-    }
-  }
-
-  @Override
   public boolean preserveStep(Journey journey) {
     return false;
   }

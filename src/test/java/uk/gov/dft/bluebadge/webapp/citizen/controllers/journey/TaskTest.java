@@ -1,6 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,6 +39,12 @@ class TaskTest {
             .filter(s -> !allTaskSteps.contains(s))
             .collect(Collectors.toSet());
 
-    assertThat(orpahned).containsOnly(StepDefinition.SUBMITTED, StepDefinition.TASK_LIST);
+    assertThat(orpahned).containsOnly(
+        MEDICATION_ADD,
+        HEALTHCARE_PROFESSIONALS_ADD,
+        TREATMENT_ADD,
+        MOBILITY_AID_ADD,
+        TASK_LIST
+    );
   }
 }
