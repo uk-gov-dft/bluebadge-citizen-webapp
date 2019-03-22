@@ -101,8 +101,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
       council = "Southwark";
       fullCouncil = "London borough of Southwark";
       if ("scotland".equalsIgnoreCase(country)) {
-        council = "Edinburgh";
-        fullCouncil = "City of Edinburgh council";
+        council = "Stirling";
+        fullCouncil = "Stirling council";
       } else if ("wales".equalsIgnoreCase(country)) {
         council = "Cardiff";
         fullCouncil = "City of Cardiff council";

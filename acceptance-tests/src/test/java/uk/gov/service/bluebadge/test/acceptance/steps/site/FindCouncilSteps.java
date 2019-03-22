@@ -58,7 +58,7 @@ public class FindCouncilSteps extends AbstractSpringSteps {
     if (usingThirdParty) {
       String postcode = "SE1 2QH"; // London borough of Southwark
       if ("scotland".equalsIgnoreCase(country)) {
-        postcode = "EH8 8BG"; // City of Edinburgh council
+        postcode = "FK8 2ET"; // City of Edinburgh council
       } else if ("wales".equalsIgnoreCase(country)) {
         postcode = "CF10 4UW"; // City of Cardiff council
       }

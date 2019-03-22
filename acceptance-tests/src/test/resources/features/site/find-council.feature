@@ -59,7 +59,7 @@ Feature: DFT Blue badge Citizen app - find council
     When I can click "thatsNotMyLocalCouncilLink" button
     Then I should see the page titled "Choose your local council" with GOV.UK suffix
     When I complete select council page for different service signpost for "scotland"
-    Then I should see page titled "City of Edinburgh council uses a different service" with GOV.UK suffix
+    Then I should see page titled "Stirling council uses a different service" with GOV.UK suffix
 
     When I can click "thatsNotMyLocalCouncilLink" button
     Then I should see the page titled "Choose your local council" with GOV.UK suffix
