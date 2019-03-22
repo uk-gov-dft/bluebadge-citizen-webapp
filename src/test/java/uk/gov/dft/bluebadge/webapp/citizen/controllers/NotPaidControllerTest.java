@@ -123,7 +123,8 @@ public class NotPaidControllerTest {
   }
 
   @Test
-  public void submit_whenPaymentQuestionNotAnswered_ThenShouldDisplayValidationError() throws Exception {
+  public void submit_whenPaymentQuestionNotAnswered_ThenShouldDisplayValidationError()
+      throws Exception {
 
     mockMvc
         .perform(post("/not-paid").sessionAttr("JOURNEY", journey))

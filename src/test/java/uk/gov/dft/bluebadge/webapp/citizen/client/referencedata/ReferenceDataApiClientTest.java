@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import lombok.SneakyThrows;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpMethod;
@@ -23,11 +24,14 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceDataResponse;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.SingleReferenceDataResponse;
 
 public class ReferenceDataApiClientTest {
   public static final String TEST_URI = "http://justtesting:8787/test/";
 
   private static final String BASE_ENDPOINT = TEST_URI + "reference-data";
+
+  private static final String POSTCODE = "AA11AA";
 
   private ReferenceDataApiClient client;
 
@@ -64,5 +68,28 @@ public class ReferenceDataApiClientTest {
 
     List<ReferenceData> result = client.retrieveReferenceData(CITIZEN);
     assertThat(result).isEqualTo(referenceData);
+  }
+
+  @Test
+  @SneakyThrows
+  public void retrieveLAByPostcode_shouldReturnLA() {
+    ReferenceData la = new ReferenceData();
+    la.setShortCode("ABERD");
+    la.setDescription("Aberdeenshire");
+    SingleReferenceDataResponse response = SingleReferenceDataResponse.builder().data(la).build();
+    response.setData(la);
+    String responseBody = objectMapper.writeValueAsString(response);
+
+    mockServer
+        .expect(once(), requestTo(BASE_ENDPOINT + "/postcode/" + POSTCODE))
+        .andExpect(method(HttpMethod.GET))
+        .andRespond(withSuccess(responseBody, MediaType.APPLICATION_JSON));
+
+    assertThat(client.retrieveLAByPostcode(POSTCODE)).isEqualTo(la);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void retrieveLAByPostcode_shouldThrowIllegalArgumentException_whenPostcodeIsNull() {
+    client.retrieveLAByPostcode(null);
   }
 }

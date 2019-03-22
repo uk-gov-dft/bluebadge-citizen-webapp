@@ -11,6 +11,6 @@ Feature: Apply for a blue badge in Welsh feature
     And     I verify that the HTML "locale" is set to "cy"
     Then    I should see the page titled "Ar ran pwy ydych chi'n gwneud cais? - Gwneud cais am Fathodyn Glas - GOV.UK"
     Given   I complete applicant page for "yourself"
-    Then    I should see the page titled "Dewiswch eich cyngor lleol - Gwneud cais am Fathodyn Glas - GOV.UK"
+    Then    I should see the page titled "Dod o hyd i'ch cyngor lleol - Gwneud cais am Fathodyn Glas - GOV.UK"
     And     I can click on "English"
-    Then    I should see the page titled "Choose your local council - Apply for a Blue Badge - GOV.UK"
+    Then    I should see the page titled "Find your local council - Apply for a Blue Badge - GOV.UK"

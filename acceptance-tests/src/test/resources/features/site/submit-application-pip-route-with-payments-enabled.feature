@@ -6,6 +6,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
 
   Scenario: Create a successful new application for myself with payments enable and submit application and pay later
     Given I complete applicant page for "yourself"
+    And   I skip find council page
     And   I complete select council page with payments enable for "england"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"
@@ -32,6 +33,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
 
   Scenario: Create a successful new application for myself with payments enable and pay now
     Given I complete applicant page for "yourself"
+    And   I skip find council page
     And   I complete select council page with payments enable for "england"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"
@@ -66,6 +68,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
 
   Scenario: Create a successful new application for myself with payments enable and pay now - payment in welsh
     Given I complete applicant page for "yourself"
+    And   I skip find council page
     And   I complete select council page with payments enable for "england"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"
@@ -102,6 +105,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
 
   Scenario: Create a successful new application for myself with payments enable and pay later with cancellation of payment and then in not paid page decide to submit later
     Given I complete applicant page for "yourself"
+    And   I skip find council page
     And   I complete select council page with payments enable for "england"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"
@@ -150,6 +154,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
 
   Scenario: Create a successful new application for myself with payments enable and pay now with cancellation of payment twice before paying successfully
     Given I complete applicant page for "yourself"
+    And   I skip find council page
     And   I complete select council page with payments enable for "england"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"

@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings.URL_DIFFERENT_SERVICE_SIGNPOST_CHOOSE_COUNCIL;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings.URL_DIFFERENT_SERVICE_SIGNPOST_CONTINUE;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import java.util.Optional;
@@ -10,50 +12,69 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.support.SessionStatus;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.FindYourCouncilForm;
 
 @Slf4j
 @Controller
-@RequestMapping(Mappings.URL_DIFFERENT_SERVICE_SIGNPOST)
-public class DifferentServiceSignpostController extends BaseFinalStepController {
+public class DifferentServiceSignpostController implements StepController {
   private static final String TEMPLATE = "different-service-signpost";
 
   private String defaultDifferentServiceSignpostUrl;
+  private final RouteMaster routeMaster;
 
   @Autowired
   DifferentServiceSignpostController(
       RouteMaster routeMaster,
       @Value("blue-badge.defaultDifferentServiceSignpostUrl")
           String defaultDifferentServiceSignpostUrl) {
-    super(routeMaster);
+    this.routeMaster = routeMaster;
     this.defaultDifferentServiceSignpostUrl = defaultDifferentServiceSignpostUrl;
   }
 
-  @Override
-  @GetMapping
+  @GetMapping(Mappings.URL_DIFFERENT_SERVICE_SIGNPOST)
   public String show(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       Model model,
       SessionStatus sessionStatus) {
 
-    String template = super.show(journey, model, sessionStatus);
-    if (!template.startsWith("redirect")) {
-      Optional<LocalAuthorityRefData.LocalAuthorityMetaData> localAuthorityMetadata =
-          journey.getLocalAuthority().getLocalAuthorityMetaData();
-      Optional<String> differentServiceSignpostUrl =
-          localAuthorityMetadata.map(
-              LocalAuthorityRefData.LocalAuthorityMetaData::getDifferentServiceSignpostUrl);
-      model.addAttribute(
-          "differentServiceSignpostUrl",
-          differentServiceSignpostUrl.orElse(defaultDifferentServiceSignpostUrl));
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
+      return routeMaster.backToCompletedPrevious();
     }
-    return template;
+
+    return TEMPLATE;
+  }
+
+  @GetMapping(URL_DIFFERENT_SERVICE_SIGNPOST_CONTINUE)
+  public String redirectToThirdParty(
+      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, SessionStatus sessionStatus) {
+    String url = getDifferentServiceSignpostUrl(journey);
+    if (sessionStatus != null) {
+      sessionStatus.setComplete();
+    }
+    return "redirect:" + url;
+  }
+
+  @GetMapping(URL_DIFFERENT_SERVICE_SIGNPOST_CHOOSE_COUNCIL)
+  public String redirectToChooseCouncil(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+    if (journey != null) {
+      FindYourCouncilForm findYourCouncilForm = journey.getFormForStep(StepDefinition.FIND_COUNCIL);
+      ChooseYourCouncilForm chooseYourCouncilForm =
+        journey.getFormForStep(StepDefinition.CHOOSE_COUNCIL);
+      if (findYourCouncilForm != null) {
+        findYourCouncilForm.setPostcode("");
+      }
+      if (chooseYourCouncilForm != null) {
+        chooseYourCouncilForm.setCouncilShortCode("");
+      }
+    }
+    return "redirect:" + Mappings.URL_CHOOSE_YOUR_COUNCIL;
   }
 
   @Override
@@ -61,8 +82,15 @@ public class DifferentServiceSignpostController extends BaseFinalStepController 
     return StepDefinition.DIFFERENT_SERVICE_SIGNPOST;
   }
 
-  @Override
-  protected String getTemplate() {
-    return TEMPLATE;
+  private String getDifferentServiceSignpostUrl(Journey journey) {
+
+    Optional<LocalAuthorityRefData.LocalAuthorityMetaData> localAuthorityMetadata =
+        (journey != null && journey.getLocalAuthority() != null)
+            ? journey.getLocalAuthority().getLocalAuthorityMetaData()
+            : Optional.empty();
+    Optional<String> differentServiceSignpostUrl =
+        localAuthorityMetadata.map(
+            LocalAuthorityRefData.LocalAuthorityMetaData::getDifferentServiceSignpostUrl);
+    return differentServiceSignpostUrl.orElse(defaultDifferentServiceSignpostUrl);
   }
 }
