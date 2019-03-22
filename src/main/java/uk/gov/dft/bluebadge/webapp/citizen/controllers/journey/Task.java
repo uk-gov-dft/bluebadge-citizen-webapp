@@ -126,4 +126,7 @@ public enum Task {
   // Hit back after final step and then no session attribute.
   // Mix and matching the journey session type is not a good idea. Move all to session proxy
   // Session proxy fails to de-serialise on re-boot. Different CGLIB class
+
+  // Some steps where determining the step within the next task. Can't have this. The task needs
+  // logic to determine it's starting step. Can be used to skip the task
 }
