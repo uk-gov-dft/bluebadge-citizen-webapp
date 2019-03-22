@@ -1,6 +1,9 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.SUBMITTED;
+
 import java.io.Serializable;
+import java.util.Optional;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,5 +24,10 @@ public class BadgePaymentForm implements StepForm, Serializable {
   @Override
   public boolean preserveStep(Journey journey) {
     return true;
+  }
+
+  @Override
+  public Optional<StepDefinition> determineNextStep(Journey journey) {
+    return Optional.of(SUBMITTED);
   }
 }

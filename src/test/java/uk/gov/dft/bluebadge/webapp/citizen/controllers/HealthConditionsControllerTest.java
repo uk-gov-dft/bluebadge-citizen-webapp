@@ -63,9 +63,9 @@ public class HealthConditionsControllerTest {
         .perform(
             post("/health-conditions")
                 .param("descriptionOfConditions", "test test")
-                .sessionAttr("JOURNEY", new Journey()))
+                .sessionAttr("JOURNEY", journey))
         .andExpect(status().is3xxRedirection())
-        .andExpect(redirectedUrl(Mappings.URL_PROVE_IDENTITY));
+        .andExpect(redirectedUrl(Mappings.URL_WHAT_MAKES_WALKING_DIFFICULT));
   }
 
   @Test

@@ -23,18 +23,16 @@ public enum JourneyDefinition {
       SUPPORTING_DOCS,
       PROVE_ID,
       PROVIDE_PHOTO,
-      PROVE_ADDRESS
-      ),
+      PROVE_ADDRESS),
   J_CHILDBULK(
       PERSONAL_DETAILS,
       DESC_CONDITION_CHILD,
+      SUPPORTING_DOCS,
       LIST_MEDICAL_EQUIP,
       LIST_HEALTH_PROFS,
-      SUPPORTING_DOCS,
       PROVE_ID,
       PROVIDE_PHOTO,
-      PROVE_ADDRESS
-      ),
+      PROVE_ADDRESS),
   J_CHILDVEHIC(
       PERSONAL_DETAILS,
       DESC_CONDITION_CHILD,
@@ -42,9 +40,7 @@ public enum JourneyDefinition {
       LIST_HEALTH_PROFS,
       PROVE_ID,
       PROVIDE_PHOTO,
-      PROVE_ADDRESS
-
-  ),
+      PROVE_ADDRESS),
   J_WALKD(
       PERSONAL_DETAILS,
       DESC_WALKING_ABILITY,
@@ -54,8 +50,7 @@ public enum JourneyDefinition {
       LIST_HEALTH_PROFS,
       PROVE_ID,
       PROVIDE_PHOTO,
-      PROVE_ADDRESS
-      );
+      PROVE_ADDRESS);
 
   @Getter private List<Task> tasks;
 

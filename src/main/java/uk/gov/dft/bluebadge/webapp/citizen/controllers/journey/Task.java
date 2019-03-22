@@ -60,7 +60,7 @@ public enum Task {
       ARMS_HOW_OFTEN_DRIVE,
       ARMS_DRIVE_ADAPTED_VEHICLE,
       ARMS_DIFFICULTY_PARKING_METER),
-  DESC_CONDITION_CHILD("Describe your condition", HEALTH_CONDITIONS, MOBILITY_AID_LIST),
+  DESC_CONDITION_CHILD("Describe your condition", HEALTH_CONDITIONS),
   DESC_WALKING_ABILITY(
       "Describe walking ability",
       HEALTH_CONDITIONS,

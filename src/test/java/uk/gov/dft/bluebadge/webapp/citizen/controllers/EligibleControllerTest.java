@@ -65,7 +65,10 @@ public class EligibleControllerTest {
   public void startApplication_ShouldRedirectToNextPage() {
 
     mockMvc
-        .perform(get("/eligible/start"))
+        .perform(
+            get("/eligible/start")
+                .sessionAttr(
+                    "JOURNEY", JourneyFixture.getDefaultJourneyToStep(StepDefinition.ELIGIBLE)))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(Mappings.URL_APPLICANT_NAME));
   }
