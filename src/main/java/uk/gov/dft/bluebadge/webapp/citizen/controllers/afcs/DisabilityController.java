@@ -71,7 +71,7 @@ public class DisabilityController implements StepController {
     }
 
     journey.setFormForStep(disabilityForm);
-    return routeMaster.redirectToOnSuccess(disabilityForm);
+    return routeMaster.redirectToOnSuccess(disabilityForm, journey);
   }
 
   @Override

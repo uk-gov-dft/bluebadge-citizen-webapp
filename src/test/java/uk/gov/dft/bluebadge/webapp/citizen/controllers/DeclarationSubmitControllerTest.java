@@ -26,6 +26,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationSubmitForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
@@ -41,7 +42,7 @@ class DeclarationSubmitControllerTest {
   void setup() {
     MockitoAnnotations.initMocks(this);
     DeclarationSubmitController controller =
-        new DeclarationSubmitController(applicationServiceMock, new RouteMaster());
+        new DeclarationSubmitController(applicationServiceMock, RouteMasterFixture.routeMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())

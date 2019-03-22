@@ -38,7 +38,7 @@ public class EligibleController implements StepController {
   @GetMapping("/start")
   public String startApplication(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     journey.setFormForStep(new EligibleForm());
-    return routeMaster.redirectToOnSuccess(new EligibleForm());
+    return routeMaster.redirectToOnSuccess(new EligibleForm(), journey);
   }
 
   @Override

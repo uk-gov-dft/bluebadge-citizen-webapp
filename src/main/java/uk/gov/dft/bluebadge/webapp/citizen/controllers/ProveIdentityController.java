@@ -77,7 +77,7 @@ public class ProveIdentityController implements StepController {
   public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     ProveIdentityForm formRequest = ProveIdentityForm.builder().build();
     journey.setFormForStep(formRequest);
-    return routeMaster.redirectToOnSuccess(formRequest);
+    return routeMaster.redirectToOnSuccess(formRequest, journey);
   }
 
   private FileUploaderOptions getFileUploaderOptions() {

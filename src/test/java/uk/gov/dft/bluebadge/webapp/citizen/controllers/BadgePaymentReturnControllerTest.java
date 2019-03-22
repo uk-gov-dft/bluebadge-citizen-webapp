@@ -19,9 +19,10 @@ import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentStatusResponse;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.BadgePaymentForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.BadgePaymentReturnForm;
@@ -94,7 +95,7 @@ public class BadgePaymentReturnControllerTest {
 
     BadgePaymentReturnController controller =
         new BadgePaymentReturnController(
-            applicationManagementServiceMock, paymentServiceMock, new RouteMaster());
+            applicationManagementServiceMock, paymentServiceMock, RouteMasterFixture.routeMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())

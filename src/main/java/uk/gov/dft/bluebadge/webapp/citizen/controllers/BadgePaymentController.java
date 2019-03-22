@@ -5,7 +5,6 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import javax.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -88,7 +87,7 @@ public class BadgePaymentController implements StepController {
     applicationService.create(JourneyToApplicationConverter.convert(journey));
     BadgePaymentForm formRequest = BadgePaymentForm.builder().build();
     journey.setFormForStep(formRequest);
-    return routeMaster.redirectToOnSuccess(formRequest);
+    return routeMaster.redirectToOnSuccess(formRequest, journey);
   }
 
   private PaymentResponse createPayment(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {

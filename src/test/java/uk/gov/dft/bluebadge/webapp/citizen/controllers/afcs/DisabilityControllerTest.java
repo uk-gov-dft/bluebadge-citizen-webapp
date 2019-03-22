@@ -17,6 +17,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.YesNoType;
@@ -29,7 +30,7 @@ public class DisabilityControllerTest {
 
   @Before
   public void setup() {
-    DisabilityController controller = new DisabilityController(new RouteMaster());
+    DisabilityController controller = new DisabilityController(RouteMasterFixture.routeMaster());
 
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)

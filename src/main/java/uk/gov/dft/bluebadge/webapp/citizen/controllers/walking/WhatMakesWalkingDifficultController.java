@@ -76,7 +76,7 @@ public class WhatMakesWalkingDifficultController implements StepController {
 
     journey.setFormForStep(whatMakesWalkingDifficultForm);
 
-    return routeMaster.redirectToOnSuccess(whatMakesWalkingDifficultForm);
+    return routeMaster.redirectToOnSuccess(whatMakesWalkingDifficultForm, journey);
   }
 
   @Override

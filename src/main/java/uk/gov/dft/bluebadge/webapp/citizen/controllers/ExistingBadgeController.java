@@ -54,7 +54,7 @@ public class ExistingBadgeController implements StepController {
   public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     ExistingBadgeForm formRequest = ExistingBadgeForm.builder().hasExistingBadge(true).build();
     journey.setFormForStep(formRequest);
-    return routeMaster.redirectToOnSuccess(formRequest);
+    return routeMaster.redirectToOnSuccess(formRequest, journey);
   }
 
   @PostMapping(Mappings.URL_EXISTING_BADGE)
@@ -80,7 +80,7 @@ public class ExistingBadgeController implements StepController {
 
     journey.setFormForStep(formRequest);
 
-    return routeMaster.redirectToOnSuccess(formRequest);
+    return routeMaster.redirectToOnSuccess(formRequest, journey);
   }
 
   @Override

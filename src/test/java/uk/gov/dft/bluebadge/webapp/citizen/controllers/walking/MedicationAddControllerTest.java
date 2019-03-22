@@ -10,8 +10,9 @@ import org.junit.Before;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
+
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm;
 
@@ -19,7 +20,7 @@ public class MedicationAddControllerTest extends ControllerTestFixture<Medicatio
 
   @Before
   public void setup() {
-    super.setup(new MedicationAddController(new RouteMaster()));
+    super.setup(new MedicationAddController(RouteMasterFixture.routeMaster()));
     journey.setFormForStep(MedicationListForm.builder().medications(new ArrayList<>()).build());
   }
 

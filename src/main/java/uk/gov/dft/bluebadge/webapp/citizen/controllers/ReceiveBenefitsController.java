@@ -83,7 +83,7 @@ public class ReceiveBenefitsController implements StepController {
     }
 
     journey.setFormForStep(receiveBenefitsForm);
-    return routeMaster.redirectToOnSuccess(receiveBenefitsForm);
+    return routeMaster.redirectToOnSuccess(receiveBenefitsForm, journey);
   }
 
   @Override

@@ -73,7 +73,7 @@ public class WalkingDifficultyController implements StepController {
 
     journey.setFormForStep(walkingDifficultyForm);
 
-    return routeMaster.redirectToOnSuccess(walkingDifficultyForm);
+    return routeMaster.redirectToOnSuccess(walkingDifficultyForm, journey);
   }
 
   @Override

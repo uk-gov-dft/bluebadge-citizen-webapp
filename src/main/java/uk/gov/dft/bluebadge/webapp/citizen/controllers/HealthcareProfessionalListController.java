@@ -91,7 +91,7 @@ public class HealthcareProfessionalListController implements StepController {
 
     // Don't overwrite healthcareProfessionals in journey
     // as it is not bound to inputs in ui form and always null on submit
-    return routeMaster.redirectToOnSuccess(healthcareProfessionalListForm);
+    return routeMaster.redirectToOnSuccess(healthcareProfessionalListForm, journey);
   }
 
   @GetMapping(value = URL_REMOVE_PART)

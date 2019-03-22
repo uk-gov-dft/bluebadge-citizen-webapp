@@ -15,10 +15,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 
 public class EligibleControllerTest {
 
@@ -26,7 +26,7 @@ public class EligibleControllerTest {
 
   @Before
   public void setup() {
-    EligibleController controller = new EligibleController(new RouteMaster());
+    EligibleController controller = new EligibleController(RouteMasterFixture.routeMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())

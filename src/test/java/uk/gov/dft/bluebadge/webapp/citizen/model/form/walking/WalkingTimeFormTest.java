@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingLengthOfTimeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 
 class WalkingTimeFormTest {
 
@@ -41,11 +42,11 @@ class WalkingTimeFormTest {
 
   @Test
   public void routeMaster_validSteps() {
-    RouteMaster routeMaster = new RouteMaster();
+    RouteMaster routeMaster = RouteMasterFixture.routeMaster();
 
     WalkingTimeForm walkingTimeForm =
         WalkingTimeForm.builder().walkingTime(WalkingLengthOfTimeCodeField.CANTWALK).build();
-    routeMaster.redirectToOnSuccess(walkingTimeForm);
+    routeMaster.redirectToOnSuccess(walkingTimeForm, null);
 
     EnumSet<WalkingLengthOfTimeCodeField> otherTypes =
         EnumSet.complementOf(EnumSet.of(WalkingLengthOfTimeCodeField.CANTWALK));
@@ -53,7 +54,7 @@ class WalkingTimeFormTest {
 
     for (WalkingLengthOfTimeCodeField walkingTimeType : otherTypes) {
       walkingTimeForm = WalkingTimeForm.builder().walkingTime(walkingTimeType).build();
-      routeMaster.redirectToOnSuccess(walkingTimeForm);
+      routeMaster.redirectToOnSuccess(walkingTimeForm, null);
     }
   }
 }

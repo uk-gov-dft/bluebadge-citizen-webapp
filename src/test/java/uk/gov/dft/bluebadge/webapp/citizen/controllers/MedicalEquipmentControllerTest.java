@@ -24,6 +24,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MedicalEquipmentForm;
 
@@ -36,7 +37,8 @@ public class MedicalEquipmentControllerTest {
 
   @Before
   public void setup() {
-    MedicalEquipmentController controller = new MedicalEquipmentController(new RouteMaster());
+    MedicalEquipmentController controller =
+        new MedicalEquipmentController(RouteMasterFixture.routeMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())

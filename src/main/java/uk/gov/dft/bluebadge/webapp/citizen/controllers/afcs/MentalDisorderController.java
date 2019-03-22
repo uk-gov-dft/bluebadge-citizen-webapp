@@ -72,7 +72,7 @@ public class MentalDisorderController implements StepController {
     }
 
     journey.setFormForStep(permanentMentalDisorderForm);
-    return routeMaster.redirectToOnSuccess(permanentMentalDisorderForm);
+    return routeMaster.redirectToOnSuccess(permanentMentalDisorderForm, journey);
   }
 
   @Override

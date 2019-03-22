@@ -73,7 +73,7 @@ public class WalkingTimeController implements StepController {
 
     journey.setFormForStep(walkingTimeForm);
 
-    return routeMaster.redirectToOnSuccess(walkingTimeForm);
+    return routeMaster.redirectToOnSuccess(walkingTimeForm, journey);
   }
 
   @Override

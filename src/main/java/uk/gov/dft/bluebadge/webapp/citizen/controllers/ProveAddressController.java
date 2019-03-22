@@ -76,7 +76,7 @@ public class ProveAddressController implements StepController {
   public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     ProveAddressForm formRequest = ProveAddressForm.builder().build();
     journey.setFormForStep(formRequest);
-    return routeMaster.redirectToOnSuccess(formRequest);
+    return routeMaster.redirectToOnSuccess(formRequest, journey);
   }
 
   private FileUploaderOptions getFileUploaderOptions() {

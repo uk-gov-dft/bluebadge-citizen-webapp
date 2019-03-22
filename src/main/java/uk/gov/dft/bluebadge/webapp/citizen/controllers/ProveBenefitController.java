@@ -75,7 +75,7 @@ public class ProveBenefitController implements StepController {
 
     journey.setFormForStep(proveBenefitForm);
 
-    return routeMaster.redirectToOnSuccess(proveBenefitForm);
+    return routeMaster.redirectToOnSuccess(proveBenefitForm, journey);
   }
 
   @Override

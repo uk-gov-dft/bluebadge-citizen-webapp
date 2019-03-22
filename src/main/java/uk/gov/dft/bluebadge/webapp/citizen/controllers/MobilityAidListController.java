@@ -86,7 +86,7 @@ public class MobilityAidListController implements StepController {
     // Don't overwrite mobility/AidList in journey
     // as it is not bound to inputs in ui form and always null on submit
 
-    return routeMaster.redirectToOnSuccess(mobilityAidListForm);
+    return routeMaster.redirectToOnSuccess(mobilityAidListForm, journey);
   }
 
   @GetMapping(value = URL_REMOVE_PART)

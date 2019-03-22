@@ -43,7 +43,7 @@ public class MayBeEligibleController implements StepController {
   @GetMapping("/start")
   public String startApplication(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     journey.setFormForStep(new MayBeEligibleForm());
-    return routeMaster.redirectToOnSuccess(new MayBeEligibleForm());
+    return routeMaster.redirectToOnSuccess(new MayBeEligibleForm(), journey);
   }
 
   @Override

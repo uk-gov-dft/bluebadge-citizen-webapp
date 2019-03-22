@@ -1,6 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.APPLICANT_TYPE;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.DECLARATIONS;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.ELIGIBLE;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.HOME;
@@ -11,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 
@@ -19,7 +21,7 @@ public class RouteMasterTest {
 
   @Before
   public void setup() {
-    routeMaster = new RouteMaster();
+    routeMaster = RouteMasterFixture.routeMaster();
   }
 
   @Test
@@ -28,7 +30,7 @@ public class RouteMasterTest {
         new StepForm() {
           @Override
           public StepDefinition getAssociatedStep() {
-            return HOME;
+            return APPLICANT_TYPE;
           }
 
           @Override
@@ -37,8 +39,8 @@ public class RouteMasterTest {
           }
         };
 
-    assertThat(routeMaster.redirectToOnSuccess(testForm))
-        .isEqualTo("redirect:" + Mappings.URL_APPLICANT_TYPE);
+    assertThat(routeMaster.redirectToOnSuccess(testForm, new Journey()))
+        .isEqualTo("redirect:" + Mappings.URL_CHOOSE_YOUR_COUNCIL);
   }
 
   @Test(expected = IllegalStateException.class)
@@ -56,7 +58,7 @@ public class RouteMasterTest {
           }
         };
 
-    routeMaster.redirectToOnSuccess(testForm);
+    routeMaster.redirectToOnSuccess(testForm, new Journey());
   }
 
   @Test
@@ -79,7 +81,7 @@ public class RouteMasterTest {
           }
         };
 
-    assertThat(routeMaster.redirectToOnSuccess(testForm))
+    assertThat(routeMaster.redirectToOnSuccess(testForm, new Journey()))
         .isEqualTo("redirect:" + Mappings.URL_ELIGIBLE);
   }
 
@@ -103,7 +105,7 @@ public class RouteMasterTest {
           }
         };
 
-    routeMaster.redirectToOnSuccess(testForm);
+    routeMaster.redirectToOnSuccess(testForm, new Journey());
   }
 
   @Test

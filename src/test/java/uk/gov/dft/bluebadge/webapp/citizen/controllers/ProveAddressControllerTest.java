@@ -34,6 +34,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveAddressForm;
@@ -56,7 +57,7 @@ public class ProveAddressControllerTest {
   public void setup() {
     artifactServiceMock = mock(ArtifactService.class);
     ProveAddressController controller =
-        new ProveAddressController(new RouteMaster(), artifactServiceMock);
+        new ProveAddressController(RouteMasterFixture.routeMaster(), artifactServiceMock);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())

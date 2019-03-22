@@ -14,8 +14,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 @EqualsAndHashCode
 public class NotPaidForm implements StepForm, Serializable {
 
-  @NotNull
-  private String retry;
+  @NotNull private String retry;
 
   @Override
   public StepDefinition getAssociatedStep() {

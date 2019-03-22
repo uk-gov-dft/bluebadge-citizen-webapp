@@ -80,7 +80,7 @@ public class UploadBenefitController implements StepController {
   public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     UploadBenefitForm formRequest = UploadBenefitForm.builder().build();
     journey.setFormForStep(formRequest);
-    return routeMaster.redirectToOnSuccess(formRequest);
+    return routeMaster.redirectToOnSuccess(formRequest, journey);
   }
 
   private static FileUploaderOptions getFileUploaderOptions() {

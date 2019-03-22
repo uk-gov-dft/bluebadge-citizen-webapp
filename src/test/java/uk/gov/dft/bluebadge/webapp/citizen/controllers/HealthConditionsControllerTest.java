@@ -18,6 +18,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 public class HealthConditionsControllerTest {
@@ -28,7 +29,8 @@ public class HealthConditionsControllerTest {
 
   @Before
   public void setup() {
-    HealthConditionsController controller = new HealthConditionsController(new RouteMaster());
+    HealthConditionsController controller =
+        new HealthConditionsController(RouteMasterFixture.routeMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())

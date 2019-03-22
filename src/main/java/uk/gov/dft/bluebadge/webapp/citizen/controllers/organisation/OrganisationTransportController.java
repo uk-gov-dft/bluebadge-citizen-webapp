@@ -69,7 +69,7 @@ public class OrganisationTransportController implements StepController {
 
     journey.setFormForStep(formRequest);
 
-    return routeMaster.redirectToOnSuccess(formRequest);
+    return routeMaster.redirectToOnSuccess(formRequest, journey);
   }
 
   private void attachForm(Model model, Journey journey) {

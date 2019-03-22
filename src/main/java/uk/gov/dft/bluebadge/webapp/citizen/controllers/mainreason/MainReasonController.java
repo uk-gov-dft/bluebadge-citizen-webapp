@@ -96,7 +96,7 @@ public class MainReasonController implements StepController {
 
     journey.setFormForStep(mainReasonForm);
 
-    return routeMaster.redirectToOnSuccess(mainReasonForm);
+    return routeMaster.redirectToOnSuccess(mainReasonForm, journey);
   }
 
   @Override

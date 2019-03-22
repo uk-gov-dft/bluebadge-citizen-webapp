@@ -24,7 +24,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
 
 @Controller
 @RequestMapping(Mappings.URL_APPLICANT_TYPE)
-public class ApplicantController extends AbstractStepController {
+public class ApplicantController implements StepController {
   private static final String TEMPLATE_APPLICANT = "applicant";
   private final RouteMaster routeMaster;
 
@@ -33,7 +33,7 @@ public class ApplicantController extends AbstractStepController {
   }
 
   @GetMapping
-  public String show(Model model) {
+  public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
     if (!model.containsAttribute(FORM_REQUEST)
         && journey.hasStepForm(StepDefinition.APPLICANT_TYPE)) {
@@ -65,6 +65,7 @@ public class ApplicantController extends AbstractStepController {
 
   @PostMapping
   public String submit(
+      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute(FORM_REQUEST) ApplicantForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
@@ -74,7 +75,7 @@ public class ApplicantController extends AbstractStepController {
     }
 
     journey.setFormForStep(formRequest);
-    return routeMaster.redirectToOnSuccess(formRequest);
+    return routeMaster.redirectToOnSuccess(formRequest, journey);
   }
 
   @Override

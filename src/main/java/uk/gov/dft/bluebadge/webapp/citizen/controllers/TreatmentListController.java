@@ -82,7 +82,7 @@ public class TreatmentListController implements StepController {
     // Don't overwrite treatmentList in journey
     // as it is not bound to inputs in ui form and always null on submit
 
-    return routeMaster.redirectToOnSuccess(treatmentListForm);
+    return routeMaster.redirectToOnSuccess(treatmentListForm, journey);
   }
 
   @GetMapping(value = URL_REMOVE_PART)

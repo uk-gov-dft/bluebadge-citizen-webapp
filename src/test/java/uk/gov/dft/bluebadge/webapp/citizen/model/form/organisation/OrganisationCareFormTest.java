@@ -37,6 +37,7 @@ public class OrganisationCareFormTest {
     OrganisationCareForm form = OrganisationCareForm.builder().doesCare(false).build();
 
     assertThat(form.determineNextStep(null)).isNotEmpty();
-    assertThat(form.determineNextStep(null).get()).isEqualTo(StepDefinition.ORGANISATION_NOT_ELIGIBLE);
+    assertThat(form.determineNextStep(null).get())
+        .isEqualTo(StepDefinition.ORGANISATION_NOT_ELIGIBLE);
   }
 }

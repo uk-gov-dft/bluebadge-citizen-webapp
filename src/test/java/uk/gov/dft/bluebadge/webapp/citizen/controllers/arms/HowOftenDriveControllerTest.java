@@ -17,6 +17,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 public class HowOftenDriveControllerTest {
@@ -28,7 +29,8 @@ public class HowOftenDriveControllerTest {
 
   @Before
   public void setup() {
-    HowOftenDriveController controller = new HowOftenDriveController(new RouteMaster());
+    HowOftenDriveController controller =
+        new HowOftenDriveController(RouteMasterFixture.routeMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())

@@ -18,6 +18,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 public class NinoControllerTest {
@@ -33,7 +34,7 @@ public class NinoControllerTest {
 
   @Before
   public void setup() {
-    NinoController controller = new NinoController(new RouteMaster());
+    NinoController controller = new NinoController(RouteMasterFixture.routeMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -55,7 +56,7 @@ public class NinoControllerTest {
   @Test
   public void submit_GivenAValidForm_thenShouldDisplayRedirectToSuccess() throws Exception {
     mockMvc
-        .perform(post("/nino").param("nino", NINO))
+        .perform(post("/nino").param("nino", NINO).sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(SUCCESS_URL));
   }

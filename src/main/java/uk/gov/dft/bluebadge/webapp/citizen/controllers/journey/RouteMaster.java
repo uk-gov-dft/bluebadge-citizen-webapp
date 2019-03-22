@@ -1,6 +1,5 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey;
 
-import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
@@ -13,11 +12,13 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 @Slf4j
 public class RouteMaster {
 
+  private final JourneyMaster journeyMaster;
+
   private static final String REDIRECT = "redirect:";
   public static final String ERROR_SUFFIX = "#error";
 
-  public String redirectToOnSuccess(StepForm form) {
-    return redirectToOnSuccess(form, null);
+  public RouteMaster(JourneyMaster journeyMaster) {
+    this.journeyMaster = journeyMaster;
   }
 
   public String redirectToOnSuccess(StepForm form, Journey journey) {
@@ -27,16 +28,8 @@ public class RouteMaster {
 
   private StepDefinition getNextStep(StepForm form, Journey journey) {
     StepDefinition currentStep = form.getAssociatedStep();
-    Optional<StepDefinition> nextStep = form.determineNextStep(journey);
-    if (!nextStep.isPresent()) {
-      nextStep = Optional.of(form.getAssociatedStep().getDefaultNext());
-    }
-
-    if (!currentStep.getNext().contains(nextStep.get())) {
-      throw new IllegalStateException(
-          "Next step '" + nextStep + "', not associated with the current one:" + currentStep);
-    }
-    return nextStep.get();
+    return form.determineNextStep(journey)
+        .orElseGet(() -> journeyMaster.determineNextStep(journey, currentStep));
   }
 
   public String startingPoint() {
@@ -119,18 +112,25 @@ public class RouteMaster {
       }
       // Break in the journey, expected only if a guard question has been changed
       // and an attempt to navigate past it happened.
-      if (!journey.hasStepForm(currentLoopStep)) return false;
+      if (!journey.hasStepForm(currentLoopStep)){
+        return false;
+      }
 
       StepDefinition nextStep;
-      if (currentLoopStep.getNext().isEmpty()) {
-        // Got to end of journey and did not hit step being validated.
-        // So the url requested is for a step invalid in this journey.
+
+      StepForm currentLoopForm = journey.getFormForStep(currentLoopStep);
+      nextStep = getNextStep(currentLoopForm, journey);
+      if (null == nextStep) {
         return false;
-      } else {
-        // Get next step.
-        StepForm currentLoopForm = journey.getFormForStep(currentLoopStep);
-        nextStep = getNextStep(currentLoopForm, journey);
       }
+
+      //      if (currentLoopStep.getNext().isEmpty()) {
+      //        // Got to end of journey and did not hit step being validated.
+      //        // So the url requested is for a step invalid in this journey.
+      //        return false;
+      //      } else {
+      //        // Get next step.
+      //      }
 
       currentLoopStep = nextStep;
     }

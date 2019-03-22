@@ -54,7 +54,7 @@ public class NinoController implements StepController {
   public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     NinoForm formRequest = NinoForm.builder().build();
     journey.setFormForStep(formRequest);
-    return routeMaster.redirectToOnSuccess(formRequest);
+    return routeMaster.redirectToOnSuccess(formRequest, journey);
   }
 
   @PostMapping(Mappings.URL_NINO)
@@ -70,7 +70,7 @@ public class NinoController implements StepController {
 
     journey.setFormForStep(ninoForm);
 
-    return routeMaster.redirectToOnSuccess(ninoForm);
+    return routeMaster.redirectToOnSuccess(ninoForm, journey);
   }
 
   @Override

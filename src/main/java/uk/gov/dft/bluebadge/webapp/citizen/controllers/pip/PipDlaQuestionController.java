@@ -84,7 +84,7 @@ public class PipDlaQuestionController implements StepController {
     }
 
     journey.setFormForStep(pipDlaQuestionForm);
-    return routeMaster.redirectToOnSuccess(pipDlaQuestionForm);
+    return routeMaster.redirectToOnSuccess(pipDlaQuestionForm, journey);
   }
 
   @Override

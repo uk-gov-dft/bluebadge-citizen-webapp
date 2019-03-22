@@ -72,7 +72,7 @@ public class ApplicantNameController implements StepController {
     }
 
     journey.setFormForStep(applicantNameForm);
-    return routeMaster.redirectToOnSuccess(applicantNameForm);
+    return routeMaster.redirectToOnSuccess(applicantNameForm, journey);
   }
 
   @Override

@@ -36,7 +36,8 @@ public class MainReasonFormTest {
             e -> {
               MainReasonForm form = MainReasonForm.builder().mainReasonOption(e).build();
               assertThat(form.determineNextStep(null)).isNotEmpty();
-              assertThat(form.determineNextStep(null).get()).isEqualTo(StepDefinition.MAY_BE_ELIGIBLE);
+              assertThat(form.determineNextStep(null).get())
+                  .isEqualTo(StepDefinition.MAY_BE_ELIGIBLE);
             });
   }
 

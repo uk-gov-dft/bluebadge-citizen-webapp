@@ -82,7 +82,7 @@ public class MedicationListController implements StepController {
     // Don't overwrite medications in journey
     // as it is not bound to inputs in ui form and always null on submit
 
-    return routeMaster.redirectToOnSuccess(medicationListForm);
+    return routeMaster.redirectToOnSuccess(medicationListForm, journey);
   }
 
   @GetMapping(value = "/remove")

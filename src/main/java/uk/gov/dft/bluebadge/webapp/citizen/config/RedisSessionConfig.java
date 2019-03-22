@@ -16,7 +16,7 @@ public class RedisSessionConfig {
   }
 
   @Bean
-  public CookieSerializer cookieSerializer(){
+  public CookieSerializer cookieSerializer() {
     DefaultCookieSerializer cookieSerializer = new DefaultCookieSerializer();
     cookieSerializer.setSameSite(null);
     return cookieSerializer;
