@@ -23,7 +23,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.FindYourCouncilForm;
 
 @Slf4j
 @Controller
-@SuppressWarnings({"common-java:DuplicatedBlocks"})
 public class DifferentServiceSignpostController implements StepController {
   private static final String TEMPLATE = "different-service-signpost";
 
@@ -66,11 +65,11 @@ public class DifferentServiceSignpostController implements StepController {
   public String redirectToChooseCouncil(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     if (journey != null) {
       FindYourCouncilForm findYourCouncilForm = journey.getFormForStep(StepDefinition.FIND_COUNCIL);
+      ChooseYourCouncilForm chooseYourCouncilForm =
+        journey.getFormForStep(StepDefinition.CHOOSE_COUNCIL);
       if (findYourCouncilForm != null) {
         findYourCouncilForm.setPostcode("");
       }
-      ChooseYourCouncilForm chooseYourCouncilForm =
-          journey.getFormForStep(StepDefinition.CHOOSE_COUNCIL);
       if (chooseYourCouncilForm != null) {
         chooseYourCouncilForm.setCouncilShortCode("");
       }
