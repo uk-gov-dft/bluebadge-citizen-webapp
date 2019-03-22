@@ -26,6 +26,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataSe
 @Slf4j
 @Controller
 @RequestMapping
+@SuppressWarnings("{common-java:DuplicatedBlocks}")
 public class YourIssuingAuthorityController implements StepController {
   private static final String TEMPLATE = "issuing-authority";
 
@@ -92,7 +93,6 @@ public class YourIssuingAuthorityController implements StepController {
   }
 
   @GetMapping(URL_YOUR_ISSUING_AUTHORITY_CHOOSE_COUNCIL)
-  @SuppressWarnings("{common-java:DuplicatedBlocks}")
   public String redirectToChooseCouncil(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     if (journey != null) {
       FindYourCouncilForm findYourCouncilForm = journey.getFormForStep(StepDefinition.FIND_COUNCIL);
