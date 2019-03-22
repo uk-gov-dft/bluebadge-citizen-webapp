@@ -5,7 +5,7 @@ Feature: Dft BlueBadge Display Different service signpost page
   I want to be able to select my local council
   So that I can apply for a Blue Badge
 
-  Scenario: Display different service signpost page when skipping find council by postcode
+  Scenario: Display different service signpost page
     Given I complete applicant page for "yourself"
     And   I skip find council page
     And I complete select council page for different service signpost for "england"
