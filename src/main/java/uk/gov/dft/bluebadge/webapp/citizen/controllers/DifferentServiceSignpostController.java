@@ -62,6 +62,7 @@ public class DifferentServiceSignpostController implements StepController {
   }
 
   @GetMapping(URL_DIFFERENT_SERVICE_SIGNPOST_CHOOSE_COUNCIL)
+  @SuppressWarnings("{common-java:DuplicatedBlocks}")
   public String redirectToChooseCouncil(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     if (journey != null) {
       FindYourCouncilForm findYourCouncilForm = journey.getFormForStep(StepDefinition.FIND_COUNCIL);
