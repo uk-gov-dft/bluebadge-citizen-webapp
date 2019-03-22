@@ -26,7 +26,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataSe
 @Slf4j
 @Controller
 @RequestMapping
-@SuppressWarnings("{common-java:DuplicatedBlocks}")
+@SuppressWarnings({"common-java:DuplicatedBlocks"})
 public class YourIssuingAuthorityController implements StepController {
   private static final String TEMPLATE = "issuing-authority";
 

@@ -23,7 +23,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.FindYourCouncilForm;
 
 @Slf4j
 @Controller
-@SuppressWarnings("{common-java:DuplicatedBlocks}")
+@SuppressWarnings({"common-java:DuplicatedBlocks"})
 public class DifferentServiceSignpostController implements StepController {
   private static final String TEMPLATE = "different-service-signpost";
 
