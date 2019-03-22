@@ -18,6 +18,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.FindYourCouncilForm;
 
 @Slf4j
@@ -66,6 +67,11 @@ public class DifferentServiceSignpostController implements StepController {
       FindYourCouncilForm findYourCouncilForm = journey.getFormForStep(StepDefinition.FIND_COUNCIL);
       if (findYourCouncilForm != null) {
         findYourCouncilForm.setPostcode("");
+      }
+      ChooseYourCouncilForm chooseYourCouncilForm =
+          journey.getFormForStep(StepDefinition.CHOOSE_COUNCIL);
+      if (chooseYourCouncilForm != null) {
+        chooseYourCouncilForm.setCouncilShortCode("");
       }
     }
     return "redirect:" + Mappings.URL_CHOOSE_YOUR_COUNCIL;

@@ -95,7 +95,14 @@ public class YourIssuingAuthorityController implements StepController {
   public String redirectToChooseCouncil(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     if (journey != null) {
       FindYourCouncilForm findYourCouncilForm = journey.getFormForStep(StepDefinition.FIND_COUNCIL);
-      findYourCouncilForm.setPostcode("");
+      if (findYourCouncilForm != null) {
+        findYourCouncilForm.setPostcode("");
+      }
+      ChooseYourCouncilForm chooseYourCouncilForm =
+          journey.getFormForStep(StepDefinition.CHOOSE_COUNCIL);
+      if (chooseYourCouncilForm != null) {
+        chooseYourCouncilForm.setCouncilShortCode("");
+      }
     }
     return "redirect:" + Mappings.URL_CHOOSE_YOUR_COUNCIL;
   }
