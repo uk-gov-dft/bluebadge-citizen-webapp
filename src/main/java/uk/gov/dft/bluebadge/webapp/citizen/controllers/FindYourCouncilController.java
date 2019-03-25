@@ -61,7 +61,7 @@ public class FindYourCouncilController implements StepController {
     if (journey != null) {
       journey.setFormForStep(formRequest);
     }
-    return routeMaster.redirectToOnSuccess(formRequest);
+    return routeMaster.redirectToOnSuccess(formRequest, journey);
   }
 
   @PostMapping(Mappings.URL_FIND_YOUR_COUNCIL)

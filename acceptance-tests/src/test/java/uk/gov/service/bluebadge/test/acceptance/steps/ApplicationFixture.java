@@ -63,7 +63,9 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("I skip find council page")
   public void iSkipFindCouncilPage() {
-    commonPage.findElementWithUiPath(CHOOSE_YOUR_COUNCIL_LINK).click();
+    WebElement elementWithUiPath = commonPage.findElementWithUiPath(CHOOSE_YOUR_COUNCIL_LINK);
+    assertNotNull("Failed to find UI element: "+ CHOOSE_YOUR_COUNCIL_LINK + ", on page: " + commonPage.getDocumentTitle(), elementWithUiPath);
+    elementWithUiPath.click();
   }
 
   @And("^I complete select council page$")
