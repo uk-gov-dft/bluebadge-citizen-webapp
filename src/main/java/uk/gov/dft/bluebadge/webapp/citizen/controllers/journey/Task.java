@@ -13,6 +13,7 @@ public enum Task {
       new CheckEligibilityTask(),
       HOME,
       APPLICANT_TYPE,
+      FIND_COUNCIL,
       CHOOSE_COUNCIL,
       DIFFERENT_SERVICE_SIGNPOST,
       YOUR_ISSUING_AUTHORITY,
