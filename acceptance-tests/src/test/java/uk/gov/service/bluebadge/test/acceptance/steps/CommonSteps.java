@@ -244,7 +244,7 @@ public class CommonSteps extends AbstractSpringSteps {
     assertThat("Incorrect page title", commonPage.getH1Tag(), getMatcherForText(title));
   }
 
-  @When("^I click on Start now button$")
+  @When("^I click on Start now button$") // TODO Click not done??
   public void iClickOnStartNowButton() {
     commonPage.findPageElementById("get-started");
   }

@@ -113,6 +113,7 @@ public class CommonPage {
   }
 
   public void selectRadioButton(String elementId) {
+    findPageElementById(elementId);
     JavascriptExecutor js = (JavascriptExecutor) webDriverProvider.getWebDriver();
     js.executeScript("window.document.getElementById('" + elementId + "').click()");
   }
