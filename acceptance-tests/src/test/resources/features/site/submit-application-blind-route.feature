@@ -23,7 +23,6 @@ Feature: DFT Blue badge Citizen app new application - BLIND
     And   I complete registered council page for "england"
     And   I complete "prove ID" page with no documents
     And   I complete "provide photo" page with no documents
-    And   I complete "prove address" page with a "JPG" document
     And   I complete declaration page
     Then  I should see page titled "Application submitted" with GOV.UK suffix
 
@@ -47,7 +46,6 @@ Feature: DFT Blue badge Citizen app new application - BLIND
     And   I complete permission page for "no"
     And   I complete "prove ID" page with no documents
     And   I complete "provide photo" page with no documents
-    And   I complete "prove address" page with a "GIF" document
     And   I complete declaration page
     Then  I should see page titled "Application submitted" with GOV.UK suffix
 
@@ -70,7 +68,6 @@ Feature: DFT Blue badge Citizen app new application - BLIND
     And   I complete registered page for "no"
     And   I complete "prove ID" page with no documents
     And   I complete "provide photo" page with no documents
-    And   I complete "prove address" page with a "JPG" document
     And   I complete declaration page
     Then  I should see page titled "Application submitted" with GOV.UK suffix
 
