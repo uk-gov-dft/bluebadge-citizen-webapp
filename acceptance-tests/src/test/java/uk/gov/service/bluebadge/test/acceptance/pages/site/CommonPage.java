@@ -1,5 +1,8 @@
 package uk.gov.service.bluebadge.test.acceptance.pages.site;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.openqa.selenium.*;
@@ -109,8 +112,14 @@ public class CommonPage {
     return helper.findElement(By.id(elementId));
   }
 
-  public void selectRadioButton(String elementId) {
+  public String titleOrNull(){
+    WebElement titleElement = getWebDriver().findElement(By.tagName("title"));
+    return titleElement == null ? null : titleElement.getText();
+  }
 
+  public void selectRadioButton(String elementId) {
+    assertNotNull("Element " + elementId + " not found on current page. title:" + titleOrNull(),
+        findPageElementById(elementId));
     JavascriptExecutor js = (JavascriptExecutor) webDriverProvider.getWebDriver();
     js.executeScript("window.document.getElementById('" + elementId + "').click()");
   }
