@@ -24,8 +24,8 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate walking time page for a "yourself" application for "FEWMIN"
     And   I validate where can you walk page for a "yourself" application
     And   I validate the supporting documents page for a "yourself" application for "YES"
-    And   I validate the treatments page for a "yourself" application for "YES"
     And   I validate the medication page for a "yourself" application for "YES"
+    And   I validate the treatments page for a "yourself" application for "YES"
     And   I validate the healthcare professional page for a "yourself" application for "YES"
 
 #    Following page To be added for page validations
@@ -58,8 +58,8 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate walking time page for a "yourself" application for "FEWMIN"
     And   I validate where can you walk page for a "yourself" application
     And   I validate the supporting documents page for a "yourself" application for "YES"
-    And   I validate the treatments page for a "yourself" application for "YES"
     And   I validate the medication page for a "yourself" application for "YES"
+    And   I validate the treatments page for a "yourself" application for "YES"
     And   I validate the healthcare professional page for a "yourself" application for "YES"
 
 #    Following page To be added for page validations
@@ -93,8 +93,8 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate walking time page for a "someone else" application for "CANTWALK"
     #And   I complete upload "supporting documents page" with a "GIF" document
     And   I validate the supporting documents page for a "yourself" application for "NO"
-    And   I validate the treatments page for a "someone else" application for "NO"
     And   I validate the medication page for a "someone else" application for "YES"
+    And   I validate the treatments page for a "someone else" application for "NO"
     And   I validate the healthcare professional page for a "someone else" application for "NO"
 
   Scenario: Page title and error message validation - someone else - with choose council
@@ -120,8 +120,8 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate walking time page for a "someone else" application for "CANTWALK"
     #And   I complete upload "supporting documents page" with a "GIF" document
     And   I validate the supporting documents page for a "yourself" application for "NO"
-    And   I validate the treatments page for a "someone else" application for "NO"
     And   I validate the medication page for a "someone else" application for "YES"
+    And   I validate the treatments page for a "someone else" application for "NO"
     And   I validate the healthcare professional page for a "someone else" application for "NO"
 
 
