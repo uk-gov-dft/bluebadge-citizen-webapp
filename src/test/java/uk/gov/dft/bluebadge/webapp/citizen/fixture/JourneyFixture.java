@@ -51,6 +51,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationSubmitForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.EligibleForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ExistingBadgeForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.FindYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.GenderForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalAddForm;
@@ -406,6 +407,8 @@ public class JourneyFixture {
     // Preamble section
     journey.setFormForStep(getApplicantForm(applicantType));
     if (StepDefinition.APPLICANT_TYPE == stepTo) return journey;
+    journey.setFormForStep(getFindYourCouncilForm());
+    if (StepDefinition.FIND_COUNCIL == stepTo) return journey;
     journey.setFormForStep(getChooseYourCouncilForm());
     if (StepDefinition.CHOOSE_COUNCIL == stepTo) return journey;
     journey.setFormForStep(getYourIssuingAuthorityForm());
@@ -665,6 +668,10 @@ public class JourneyFixture {
         .equipment(Arrays.asList(PUMP, OTHER))
         .otherDescription("another medical equipment")
         .build();
+  }
+
+  public static FindYourCouncilForm getFindYourCouncilForm() {
+    return FindYourCouncilForm.builder().postcode(null).build();
   }
 
   public static ChooseYourCouncilForm getChooseYourCouncilForm() {

@@ -4,6 +4,7 @@ Feature: DFT Blue badge Citizen app new application - AFCS
 
   Scenario: Create a successful new application for myself - England - No lump sum
     Given I complete applicant page for "yourself"
+    And   I skip find council page
     And   I complete select council page for "england"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES BUT DON'T KNOW"
@@ -15,6 +16,7 @@ Feature: DFT Blue badge Citizen app new application - AFCS
 
   Scenario: Create a successful new application for someone else - England - No lump sum
     Given I complete applicant page for "someone else"
+    And   I skip find council page
     And   I complete select council page for "england"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "NO"
@@ -26,6 +28,7 @@ Feature: DFT Blue badge Citizen app new application - AFCS
 
   Scenario: Create a successful new application for myself - England - Yes lump sum - Yes disability
     Given I complete applicant page for "yourself"
+    And   I skip find council page
     And   I complete select council page for "england"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"
@@ -48,6 +51,7 @@ Feature: DFT Blue badge Citizen app new application - AFCS
 
   Scenario: Create a successful new application for someone else - England - Yes lump sum - Yes disability
     Given I complete applicant page for "someone else"
+    And   I skip find council page
     And   I complete select council page for "england"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "NO"
@@ -59,6 +63,7 @@ Feature: DFT Blue badge Citizen app new application - AFCS
 
   Scenario: Create a successful new application for myself - England - Yes lump sum - No disability
     Given I complete applicant page for "yourself"
+    And   I skip find council page
     And   I complete select council page for "england"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"
@@ -71,6 +76,7 @@ Feature: DFT Blue badge Citizen app new application - AFCS
 
   Scenario: Create a successful new application for someone else - England - Yes lump sum - No disability
     Given I complete applicant page for "someone else"
+    And   I skip find council page
     And   I complete select council page for "england"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "NO"
@@ -83,6 +89,7 @@ Feature: DFT Blue badge Citizen app new application - AFCS
 
   Scenario: Create a successful new application for myself - Wales - No lump sum - Yes MentalDisorder
     Given I complete applicant page for "yourself"
+    And   I skip find council page
     And   I complete select council page for "wales"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"
@@ -94,6 +101,7 @@ Feature: DFT Blue badge Citizen app new application - AFCS
 
   Scenario: Create a successful new application for someone else - Wales - No lump sum - Yes MentalDisorder
     Given I complete applicant page for "someone else"
+    And   I skip find council page
     And   I complete select council page for "wales"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "NO"
@@ -105,6 +113,7 @@ Feature: DFT Blue badge Citizen app new application - AFCS
 
   Scenario: Create a successful new application for myself - Wales - No lump sum - No MentalDisorder
     Given I complete applicant page for "yourself"
+    And   I skip find council page
     And   I complete select council page for "wales"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "NO"
@@ -117,6 +126,7 @@ Feature: DFT Blue badge Citizen app new application - AFCS
 
   Scenario: Create a successful new application for someone else - Wales - No lump sum - No MentalDisorder
     Given I complete applicant page for "someone else"
+    And   I skip find council page
     And   I complete select council page for "wales"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"

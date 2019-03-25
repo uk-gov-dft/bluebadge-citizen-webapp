@@ -1,6 +1,7 @@
 package uk.gov.service.bluebadge.test.acceptance.steps;
 
 import static org.junit.Assert.assertNotNull;
+import static uk.gov.service.bluebadge.test.acceptance.pages.site.FindCouncilPage.CHOOSE_YOUR_COUNCIL_LINK;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.HAS_RECEIVED_DLA;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.MAIN_REASON_LIST;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.NEVER_RECEIVED_DLA;
@@ -60,6 +61,11 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
+  @And("I skip find council page")
+  public void iSkipFindCouncilPage() {
+    commonPage.findElementWithUiPath(CHOOSE_YOUR_COUNCIL_LINK).click();
+  }
+
   @And("^I complete select council page$")
   public void iCompleteSelectCouncilPage() {
     iCompleteSelectCouncilPage("england");
@@ -67,50 +73,59 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("I complete select council page for \"(england|wales|scotland)\"")
   public void iCompleteSelectCouncilPage(String country) {
-    iCompleteSelectCouncilPage(country, ChooseCouncilPage.COUNCIL_INPUT, false);
+    iCompleteSelectCouncilPage(country, ChooseCouncilPage.COUNCIL_INPUT, false, false);
   }
 
   @And("I complete select council page with payments enable for \"(england|wales|scotland)\"")
   public void iCompleteSelectCouncilPageWithPaymentsEnable(String country) {
-    iCompleteSelectCouncilPage(country, ChooseCouncilPage.COUNCIL_INPUT, true);
+    iCompleteSelectCouncilPage(country, ChooseCouncilPage.COUNCIL_INPUT, true, false);
   }
 
-  @And("I complete select council page for different service signpost")
-  public void iCompleteSelectCouncilPageForDifferentServiceSignpost() {
-    String council = "Aberdeen";
-    String fullCouncil = "Aberdeen city council";
-    commonPage.findPageElementById(ChooseCouncilPage.COUNCIL_INPUT).sendKeys(council);
-    commonPage.selectFromAutoCompleteList(ChooseCouncilPage.COUNCIL_INPUT, fullCouncil);
-    pressContinue();
+  @And(
+      "I complete select council page for different service signpost for \"(england|wales|scotland)\"")
+  public void iCompleteSelectCouncilPageForDifferentServiceSignpost(String country) {
+    iCompleteSelectCouncilPage(country, ChooseCouncilPage.COUNCIL_INPUT, false, true);
   }
 
   @And("^I complete registered council page for \"(england|wales|scotland)\"$")
   public void iCompleteRegisteredCouncilPage(String country) {
-    iCompleteSelectCouncilPage(country, ChooseCouncilPage.REGISTERED_COUNCIL_INPUT, false);
+    iCompleteSelectCouncilPage(country, ChooseCouncilPage.REGISTERED_COUNCIL_INPUT, false, false);
   }
 
-  private void iCompleteSelectCouncilPage(String country, String inputId, boolean paymentsEnable) {
+  private void iCompleteSelectCouncilPage(
+      String country, String inputId, boolean paymentsEnable, boolean usingDifferentService) {
     String council = "Blackpool";
     String fullCouncil = "Blackpool borough council";
 
-    if (paymentsEnable) {
-      council = "Birmingham";
-      fullCouncil = "Birmingham city council";
+    if (usingDifferentService) {
+      council = "Southwark";
+      fullCouncil = "London borough of Southwark";
       if ("scotland".equalsIgnoreCase(country)) {
-        council = "Aberdeenshire";
-        fullCouncil = "Aberdeenshire council";
+        council = "Stirling";
+        fullCouncil = "Stirling council";
       } else if ("wales".equalsIgnoreCase(country)) {
-        council = "Anglesey";
-        fullCouncil = "Isle of Anglesey county council";
+        council = "Cardiff";
+        fullCouncil = "City of Cardiff council";
       }
-
     } else {
-      if ("scotland".equalsIgnoreCase(country)) {
-        council = "Aberdeenshire";
-        fullCouncil = "Aberdeenshire council";
-      } else if ("wales".equalsIgnoreCase(country)) {
-        council = "Anglesey";
-        fullCouncil = "Isle of Anglesey county council";
+      if (paymentsEnable) {
+        council = "Birmingham";
+        fullCouncil = "Birmingham city council";
+        if ("scotland".equalsIgnoreCase(country)) {
+          council = "Aberdeenshire";
+          fullCouncil = "Aberdeenshire council";
+        } else if ("wales".equalsIgnoreCase(country)) {
+          council = "Anglesey";
+          fullCouncil = "Isle of Anglesey county council";
+        }
+      } else {
+        if ("scotland".equalsIgnoreCase(country)) {
+          council = "Aberdeenshire";
+          fullCouncil = "Aberdeenshire council";
+        } else if ("wales".equalsIgnoreCase(country)) {
+          council = "Anglesey";
+          fullCouncil = "Isle of Anglesey county council";
+        }
       }
     }
     commonPage.findPageElementById(inputId).sendKeys(council);

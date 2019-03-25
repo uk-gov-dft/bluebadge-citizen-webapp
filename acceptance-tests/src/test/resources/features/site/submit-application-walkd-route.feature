@@ -4,6 +4,7 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
 
   Scenario: Walking application for yourself and need help selected full application
     Given I complete applicant page for "yourself"
+    And   I skip find council page
     And   I complete select council page for "england"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"
@@ -36,6 +37,7 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
 
   Scenario: Walking application for yourself, where the applicant can't walk - full application
     Given I complete applicant page for "yourself"
+    And   I skip find council page
     And   I complete select council page for "england"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"
@@ -67,6 +69,7 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
 
   Scenario: Walking application for someone else need help selected full application, and council in England
     Given I complete applicant page for "someone else"
+    And   I skip find council page
     And   I complete select council page for "england"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "NO"
@@ -98,6 +101,7 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
 
   Scenario: Walking application for yourself, need help selected full application, and council in Scotland
     Given I complete applicant page for "yourself"
+    And   I skip find council page
     And   I complete select council page for "scotland"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"
@@ -129,6 +133,7 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
 
   Scenario: Walking application for yourself, need help selected full application, and council in Wales
     Given I complete applicant page for "yourself"
+    And   I skip find council page
     And   I complete select council page for "wales"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES BUT DON'T KNOW"

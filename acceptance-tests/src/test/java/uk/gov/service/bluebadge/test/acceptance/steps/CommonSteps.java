@@ -11,6 +11,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static uk.gov.service.bluebadge.test.acceptance.pages.site.FindCouncilPage.CHOOSE_YOUR_COUNCIL_LINK;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.APPLY_IN_WELSH_EXTERNAL_URL;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.FEEDBACK_URL;
 import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.GOOGLE_ANALYTICS_TAG;
@@ -49,6 +50,7 @@ public class CommonSteps extends AbstractSpringSteps {
       "I complete application up to the Main Reason page for \"(yourself|someone else)\" in \"(england|scotland|wales)\"")
   public void givenICompleteApplicationUpToTheMainReasonPageInCountry(
       String myselfOrOther, String country) {
+
     // default to england
     String council = "Blackpool";
     String fullCouncil = "Blackpool borough council";
@@ -68,6 +70,8 @@ public class CommonSteps extends AbstractSpringSteps {
       andICanClickOnElementUiPath("applicantType.label.SOMEONE_ELSE");
     }
     whenIClickOn("Continue");
+    // find council page
+    andICanClickOnElementUiPath(CHOOSE_YOUR_COUNCIL_LINK);
     // Council page
     whenItypeTextForFieldUiPath(council, "councilShortCode");
     iSelectFromAutosuggestCouncilList(fullCouncil);
@@ -447,5 +451,10 @@ public class CommonSteps extends AbstractSpringSteps {
   @And("^I change language$")
   public void iChangeLanguage() {
     commonPage.findPageElementById("change-language-link").click();
+  }
+
+  @And("^I go back in the browser$")
+  public void iGoBackInTheBrowser() {
+    commonPage.goBackInBrowser();
   }
 }
