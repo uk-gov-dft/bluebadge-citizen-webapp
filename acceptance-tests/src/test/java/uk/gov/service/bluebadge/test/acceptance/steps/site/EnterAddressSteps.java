@@ -45,6 +45,7 @@ public class EnterAddressSteps extends AbstractSpringSteps {
   }
 
   private void validateMandotaryFields(String applicant) {
+    commonPage.findPageElementById("postcode").clear();
 
     messages.add(EnterAddressPage.VALIDATION_MESSAGE_FOR_EMPTY_BUILDING_AND_STREET);
     messages.add(EnterAddressPage.VALIDATION_MESSAGE_FOR_EMPTY_TOWN_CITY);
@@ -57,6 +58,7 @@ public class EnterAddressSteps extends AbstractSpringSteps {
         .findPageElementById("buildingAndStreet")
         .sendKeys(EnterAddressPage.GREATER_THAN_100_CHARACTERS);
     commonPage.findPageElementById("townOrCity").sendKeys(EnterAddressPage.VALID_TOWN);
+    commonPage.findPageElementById("postcode").clear();
     commonPage.findPageElementById("postcode").sendKeys(EnterAddressPage.VALID_POSTCODE);
     commonSteps.iVerifyValidationMessage(
         EnterAddressPage.VALIDATION_MESSAGE_FOR_GT100_BUILDING_AND_STREET);
@@ -65,6 +67,7 @@ public class EnterAddressSteps extends AbstractSpringSteps {
   private void validateLengthLimitTownAndCity(String applicant) {
     commonPage.clearAndSendKeys("buildingAndStreet", EnterAddressPage.VALID_BUILDING_STREET);
     commonPage.clearAndSendKeys("townOrCity", EnterAddressPage.GREATER_THAN_100_CHARACTERS);
+    commonPage.findPageElementById("postcode").clear();
     commonPage.clearAndSendKeys("postcode", EnterAddressPage.VALID_POSTCODE);
 
     commonSteps.iVerifyValidationMessage(EnterAddressPage.VALIDATION_MESSAGE_FOR_GT100_TOWN_CITY);
@@ -73,6 +76,7 @@ public class EnterAddressSteps extends AbstractSpringSteps {
   private void validateInvalidPostcode(String applicant) {
     commonPage.clearAndSendKeys("buildingAndStreet", EnterAddressPage.VALID_BUILDING_STREET);
     commonPage.clearAndSendKeys("townOrCity", EnterAddressPage.VALID_TOWN);
+    commonPage.findPageElementById("postcode").clear();
     commonPage.clearAndSendKeys("postcode", EnterAddressPage.INVALID_POSTCODE);
 
     commonSteps.iVerifyValidationMessage(EnterAddressPage.VALIDATION_MESSAGE_FOR_INVALID_POSTCODE);
@@ -81,6 +85,7 @@ public class EnterAddressSteps extends AbstractSpringSteps {
   private void enterValidValuesAndContinue(String applicant) {
     commonPage.clearAndSendKeys("buildingAndStreet", EnterAddressPage.VALID_BUILDING_STREET);
     commonPage.clearAndSendKeys("townOrCity", EnterAddressPage.VALID_TOWN);
+    commonPage.findPageElementById("postcode").clear();
     commonPage.clearAndSendKeys("postcode", EnterAddressPage.VALID_POSTCODE);
 
     commonSteps.iClickOnContinueButton();

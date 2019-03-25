@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey;
 
+import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -91,13 +92,21 @@ public enum StepDefinition {
   RECEIVE_BENEFITS(
       ELIGIBLE, MAIN_REASON, PIP_MOVING_AROUND, AFCS_COMPENSATION_SCHEME, HIGHER_RATE_MOBILITY),
   EXISTING_BADGE(),
-  YOUR_ISSUING_AUTHORITY(EXISTING_BADGE, ORGANISATION_CARE),
+  YOUR_ISSUING_AUTHORITY(),
   DIFFERENT_SERVICE_SIGNPOST(),
   CHOOSE_COUNCIL(YOUR_ISSUING_AUTHORITY, DIFFERENT_SERVICE_SIGNPOST),
+  FIND_COUNCIL(CHOOSE_COUNCIL, YOUR_ISSUING_AUTHORITY, DIFFERENT_SERVICE_SIGNPOST),
   APPLICANT_TYPE(),
   HOME(APPLICANT_TYPE);
 
   private Set<StepDefinition> next;
+
+  // To handle problem of illegal forward references
+  static {
+    YOUR_ISSUING_AUTHORITY.next =
+        ImmutableSet.of(EXISTING_BADGE, ORGANISATION_CARE, CHOOSE_COUNCIL);
+    DIFFERENT_SERVICE_SIGNPOST.next = ImmutableSet.of(CHOOSE_COUNCIL);
+  }
 
   StepDefinition(StepDefinition... whereNext) {
     next = Stream.of(whereNext).collect(Collectors.toSet());

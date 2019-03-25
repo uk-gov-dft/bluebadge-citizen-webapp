@@ -4,6 +4,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
 
   Scenario: Create a successful new application for myself - England - 8 or more points
     Given I complete applicant page for "yourself"
+    And   I skip find council page
     And   I complete select council page for "england"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"
@@ -27,6 +28,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
 
   Scenario: Create a successful new application for someone else - England - 8 or more points
     Given I complete applicant page for "someone else"
+    And   I skip find council page
     And   I complete select council page for "england"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "NO"
@@ -37,6 +39,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
 
   Scenario: Create a successful new application for myself - England - less than 8 points
     Given I complete applicant page for "yourself"
+    And   I skip find council page
     And   I complete select council page for "england"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES BUT DON'T KNOW"
@@ -49,6 +52,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
 
   Scenario: Create a successful new application for someone else - England - than 8 points
     Given I complete applicant page for "someone else"
+    And   I skip find council page
     And   I complete select council page for "england"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES BUT DON'T KNOW"
@@ -61,6 +65,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
 
   Scenario: Create a successful new application for myself - Scotland - less than 8 points (moving) - 12 points (planning)
     Given I complete applicant page for "yourself"
+    And   I skip find council page
     And   I complete select council page for "scotland"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"
@@ -72,6 +77,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
 
   Scenario: Create a successful new application for someone else - Scotland - less than 8 points (moving) - 12 points (planning)
     Given I complete applicant page for "someone else"
+    And   I skip find council page
     And   I complete select council page for "scotland"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"
@@ -83,6 +89,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
 
   Scenario: Create a successful new application for myself - Scotland - less than 8 points (moving) - less than 12 points (planning) - DLA Yes
     Given I complete applicant page for "yourself"
+    And   I skip find council page
     And   I complete select council page for "scotland"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"
@@ -95,6 +102,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
 
   Scenario: Create a successful new application for someone else - Scotland - less than 8 points (moving) - less 12 points (planning)b - DLA Yes - (with validation messages)
     Given I complete applicant page for "someone else"
+    And   I skip find council page
     And   I complete select council page for "scotland"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"
@@ -107,6 +115,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
 
   Scenario: Create a successful new application for myself - Scotland - less than 8 points (moving) - less than 12 points (planning) - DLA No
     Given I complete applicant page for "yourself"
+    And   I skip find council page
     And   I complete select council page for "scotland"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"
@@ -120,6 +129,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
 
   Scenario: Create a successful new application for someone else - Scotland - less than 8 points (moving) - less 12 points (planning) - DLA Yes
     Given I complete applicant page for "someone else"
+    And   I skip find council page
     And   I complete select council page for "scotland"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"
@@ -133,6 +143,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
 
   Scenario: Create a successful new application for myself - Wales - less than 8 points (moving) - 12 points (planning)
     Given I complete applicant page for "yourself"
+    And   I skip find council page
     And   I complete select council page for "wales"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"
@@ -144,6 +155,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
 
   Scenario: Create a successful new application for someone else - Wales - less than 8 points (moving) - 12 points (planning)
     Given I complete applicant page for "someone else"
+    And   I skip find council page
     And   I complete select council page for "wales"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"
@@ -155,6 +167,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
 
   Scenario: Create a successful new application for myself - Wales - less than 8 points (moving) - less than 12 points (planning)
     Given I complete applicant page for "yourself"
+    And   I skip find council page
     And   I complete select council page for "wales"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"
@@ -167,6 +180,7 @@ Feature: DFT Blue badge Citizen app new application - PIP
 
   Scenario: Create a successful new application for someone else - Wales - less than 8 points (moving) - less than 12 points (planning)
     Given I complete applicant page for "someone else"
+    And   I skip find council page
     And   I complete select council page for "wales"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"

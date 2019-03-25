@@ -110,4 +110,18 @@ public class ReferenceDataServiceTest {
     localAuthorityRefData = referenceDataService.lookupLocalAuthorityFromCouncilCode("SPE");
     assertThat(localAuthorityRefData).isNull();
   }
+
+  @Test
+  public void retrieveLAByPostcode_ShouldReturnLocalAuthority() {
+    ReferenceData la = new LocalAuthorityRefData();
+    la.setShortCode("ABERD");
+    la.setDescription("Aberdeenshire");
+    when(mockApiClient.retrieveLAByPostcode("AA11AA")).thenReturn(la);
+    assertThat(referenceDataService.retrieveLAByPostcode("AA11AA")).isEqualTo(la);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void retrieveLAByPostcode_shouldThrowIllegalArgumentException_whenPostcodeIsNull() {
+    referenceDataService.retrieveLAByPostcode(null);
+  }
 }

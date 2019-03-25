@@ -146,4 +146,8 @@ public class CommonPage {
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[text()='Continue']")));
     element.click();
   }
+
+  public void goBackInBrowser() {
+    webDriverProvider.getWebDriver().navigate().back();
+  }
 }

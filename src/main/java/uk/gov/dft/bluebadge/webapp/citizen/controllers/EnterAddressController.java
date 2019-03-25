@@ -18,6 +18,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.FindYourCouncilForm;
 
 @Controller
 @RequestMapping(Mappings.URL_ENTER_ADDRESS)
@@ -44,7 +45,12 @@ public class EnterAddressController implements StepController {
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
-      model.addAttribute(FORM_REQUEST, EnterAddressForm.builder().build());
+      FindYourCouncilForm findYourCouncilForm = journey.getFormForStep(StepDefinition.FIND_COUNCIL);
+      model.addAttribute(
+          FORM_REQUEST,
+          EnterAddressForm.builder()
+              .postcode(findYourCouncilForm != null ? findYourCouncilForm.getPostcode() : null)
+              .build());
     }
 
     return TEMPLATE;

@@ -15,7 +15,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 @EqualsAndHashCode
 public class ChooseYourCouncilForm implements StepForm, Serializable {
 
-  @NotBlank(message = "{councilShortCode.NotBank}")
+  @NotBlank(message = "{NotBlank.councilShortCode}")
   private String councilShortCode;
 
   @Override

@@ -4,6 +4,7 @@ Feature: DFT Blue badge Citizen app new application - WPMS or not listed benifit
 
   Scenario: Create a successful new application for myself - WPMS route
     Given I complete applicant page for "yourself"
+    And   I skip find council page
     And   I complete select council page for "england"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "YES"
@@ -24,6 +25,7 @@ Feature: DFT Blue badge Citizen app new application - WPMS or not listed benifit
 
   Scenario: Create a successful new application for someone else - WPMS route
     Given I complete applicant page for "someone else"
+    And   I skip find council page
     And   I complete select council page for "england"
     And   I complete your local authority page
     And   I complete the already have a blue badge page for "NO"
