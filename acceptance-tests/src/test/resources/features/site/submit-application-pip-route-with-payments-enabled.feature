@@ -23,8 +23,8 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete prove benefit page for "yes"
     And   I complete "upload benefit" page with a "GIF" document
     And   I complete "prove ID" page with a "GIF" document
-    And   I complete "provide photo" page with a "GIF" document
     And   I complete "prove address" page with a "GIF" document
+    And   I complete "provide photo" page with a "GIF" document
     And   I complete declaration page
     Then  I should see page titled "Pay for the Blue Badge" with GOV.UK suffix
     And   I complete badge payment page with submit application and pay later
@@ -50,8 +50,8 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete prove benefit page for "yes"
     And   I complete "upload benefit" page with a "GIF" document
     And   I complete "prove ID" page with a "GIF" document
-    And   I complete "provide photo" page with a "GIF" document
     And   I complete "prove address" page with a "GIF" document
+    And   I complete "provide photo" page with a "GIF" document
     And   I complete declaration page
     Then  I should see page titled "Pay for the Blue Badge" with GOV.UK suffix
     And   I complete badge payment page with pay online now
@@ -85,8 +85,8 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete prove benefit page for "yes"
     And   I complete "upload benefit" page with a "GIF" document
     And   I complete "prove ID" page with a "GIF" document
-    And   I complete "provide photo" page with a "GIF" document
     And   I complete "prove address" page with a "GIF" document
+    And   I complete "provide photo" page with a "GIF" document
     And   I complete declaration page
     Then  I should see page titled "Pay for the Blue Badge" with GOV.UK suffix
     And   I change language
@@ -122,8 +122,8 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete prove benefit page for "yes"
     And   I complete "upload benefit" page with a "GIF" document
     And   I complete "prove ID" page with a "GIF" document
-    And   I complete "provide photo" page with a "GIF" document
     And   I complete "prove address" page with a "GIF" document
+    And   I complete "provide photo" page with a "GIF" document
     And   I complete declaration page
     Then  I should see page titled "Pay for the Blue Badge" with GOV.UK suffix
     And   I complete badge payment page with pay online now
@@ -171,8 +171,8 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete prove benefit page for "yes"
     And   I complete "upload benefit" page with a "GIF" document
     And   I complete "prove ID" page with a "GIF" document
-    And   I complete "provide photo" page with a "GIF" document
     And   I complete "prove address" page with a "GIF" document
+    And   I complete "provide photo" page with a "GIF" document
     And   I complete declaration page
     Then  I should see page titled "Pay for the Blue Badge" with GOV.UK suffix
     And   I complete badge payment page with pay online now

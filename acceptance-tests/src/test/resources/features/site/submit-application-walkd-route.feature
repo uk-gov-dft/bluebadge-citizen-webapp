@@ -26,12 +26,12 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete the walking time page with option "LESSMIN"
     And   I complete where can you walk page
     And   I complete upload "supporting documents page" with a "GIF" document
-    And   I complete the treatments page for "YES"
     And   I complete the medications page for "YES"
+    And   I complete the treatments page for "YES"
     And   I complete the healthcare professionals page for "YES"
     And   I complete "prove ID" page with a "PNG" document
-    And   I complete "provide photo" page with a "PNG" document
     And   I complete "prove address" page with a "JPG" document
+    And   I complete "provide photo" page with a "PNG" document
     And   I complete declaration page
     Then  I should see page titled "Application submitted" with GOV.UK suffix
 
@@ -58,12 +58,12 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete the mobility aids page for "NO"
     And   I complete the walking time page with option "CANTWALK"
     And   I complete upload "supporting documents page" with a "GIF" document
-    And   I complete the treatments page for "YES"
     And   I complete the medications page for "YES"
+    And   I complete the treatments page for "YES"
     And   I complete the healthcare professionals page for "YES"
     And   I complete "prove ID" page with a "PDF" document
-    And   I complete "provide photo" page with a "JPG" document
     And   I complete "prove address" page with a "PDF" document
+    And   I complete "provide photo" page with a "JPG" document
     And   I complete declaration page
     Then  I should see page titled "Application submitted" with GOV.UK suffix
 
@@ -90,8 +90,8 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete the walking time page with option "LESSMIN"
     And   I complete where can you walk page
     And   I complete upload "supporting documents page" with a "GIF" document
-    And   I complete the treatments page for "YES"
     And   I complete the medications page for "YES"
+    And   I complete the treatments page for "YES"
     And   I complete the healthcare professionals page for "YES"
     And   I complete "prove ID" page with no documents
     And   I complete "provide photo" page with no documents
@@ -121,8 +121,8 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete the mobility aids page for "YES"
     And   I complete the walking time page with option "CANTWALK"
     And   I complete upload "supporting documents page" with a "GIF" document
-    And   I complete the treatments page for "YES"
     And   I complete the medications page for "YES"
+    And   I complete the treatments page for "YES"
     And   I complete the healthcare professionals page for "YES"
     And   I complete "prove ID" page with no documents
     And   I complete "provide photo" page with no documents
@@ -155,12 +155,12 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete the walking time page with option "LESSMIN"
     And   I complete where can you walk page
     And   I complete upload "supporting documents page" with a "GIF" document
-    And   I complete the treatments page for "NO"
     And   I complete the medications page for "YES"
+    And   I complete the treatments page for "NO"
     And   I complete the healthcare professionals page for "YES"
     And   I complete "prove ID" page with no documents
-    And   I complete "provide photo" page with no documents
     And   I complete "prove address" page with a "PNG" document
+    And   I complete "provide photo" page with no documents
     And   I complete declaration page
     Then  I should see page titled "Application submitted" with GOV.UK suffix
 

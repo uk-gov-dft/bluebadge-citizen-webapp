@@ -54,7 +54,7 @@ class ArtifactConverter {
     ProvidePhotoForm providePhotoForm = journey.getFormForStep(StepDefinition.PROVIDE_PHOTO);
     convertArtifact(result, providePhotoForm, ArtifactType.PHOTO);
 
-    if (PROVE_ADDRESS_ELIG_TYPES.contains(journey.getEligibilityCode())) {
+    if (PROVE_ADDRESS_ELIG_TYPES.contains(journey.getEligibilityCode()) && !journey.isApplicantYoung()) {
       ProveAddressForm proveAddressForm = journey.getFormForStep(StepDefinition.PROVE_ADDRESS);
       convertArtifact(result, proveAddressForm, ArtifactType.PROOF_ADD);
     }

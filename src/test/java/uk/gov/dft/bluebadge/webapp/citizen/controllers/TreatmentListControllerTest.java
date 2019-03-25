@@ -13,7 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
-
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
@@ -22,7 +21,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
 
 public class TreatmentListControllerTest extends ControllerTestFixture<TreatmentListController> {
 
-  private static final String SUCCESS_URL = Mappings.URL_MEDICATION_LIST;
+  private static final String SUCCESS_URL = Mappings.URL_HEALTHCARE_PROFESSIONALS_LIST;
 
   @Before
   public void setup() {

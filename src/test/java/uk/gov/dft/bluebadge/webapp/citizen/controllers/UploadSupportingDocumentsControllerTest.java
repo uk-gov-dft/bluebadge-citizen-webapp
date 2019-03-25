@@ -47,7 +47,7 @@ public class UploadSupportingDocumentsControllerTest {
   private MockMvc mockMvc;
 
   private Journey journey;
-  private static final String SUCCESS_URL = Mappings.URL_TREATMENT_LIST;
+  private static final String SUCCESS_URL = Mappings.URL_MEDICATION_LIST;
   private static final String ERROR_URL =
       Mappings.URL_UPLOAD_SUPPORTING_DOCUMENTS + RouteMaster.ERROR_SUFFIX;
   private ArtifactService artifactServiceMock;

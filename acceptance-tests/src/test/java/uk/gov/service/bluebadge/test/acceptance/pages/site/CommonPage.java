@@ -65,6 +65,7 @@ public class CommonPage {
 
     return optionalElement;
   }
+
   public WebElement findElementWithUiPath(String uiPath) {
     return helper.findOptionalElement(By.xpath("//*[@data-uipath='" + uiPath + "']"));
   }
