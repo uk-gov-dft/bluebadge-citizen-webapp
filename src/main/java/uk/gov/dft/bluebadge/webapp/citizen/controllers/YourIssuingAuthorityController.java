@@ -96,7 +96,7 @@ public class YourIssuingAuthorityController implements StepController {
   public String redirectToChooseCouncil(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     if (journey != null) {
       ChooseYourCouncilForm chooseYourCouncilForm =
-        journey.getFormForStep(StepDefinition.CHOOSE_COUNCIL);
+          journey.getFormForStep(StepDefinition.CHOOSE_COUNCIL);
       if (chooseYourCouncilForm != null) {
         chooseYourCouncilForm.setCouncilShortCode("");
       }

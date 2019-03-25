@@ -36,7 +36,6 @@ public class JourneyTest {
     assertThat(journey.hasStepForm(StepDefinition.HEALTH_CONDITIONS)).isTrue();
     assertThat(journey.hasStepForm(StepDefinition.WHERE_CAN_YOU_WALK)).isTrue();
 
-
     // TODO This is broken Not setting the journey def. And fails below
     journey.setFormForStep(
         ReceiveBenefitsForm.builder().benefitType(EligibilityCodeField.PIP).build());
@@ -44,14 +43,14 @@ public class JourneyTest {
     // Other forms stay
     assertThat(journey.hasStepForm(StepDefinition.YOUR_ISSUING_AUTHORITY)).isTrue();
     assertThat(journey.hasStepForm(StepDefinition.CONTACT_DETAILS)).isTrue();
-//    assertThat(journey.hasStepForm(StepDefinition.WHERE_CAN_YOU_WALK)).isFalse();
-//    assertThat(journey.hasStepForm(StepDefinition.WALKING_DIFFICULTY)).isFalse();
-//    assertThat(journey.hasStepForm(StepDefinition.WALKING_TIME)).isFalse();
-//    assertThat(journey.hasStepForm(StepDefinition.MOBILITY_AID_LIST)).isFalse();
-//    assertThat(journey.hasStepForm(StepDefinition.TREATMENT_LIST)).isFalse();
-//    assertThat(journey.hasStepForm(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST)).isFalse();
-//    assertThat(journey.hasStepForm(StepDefinition.HEALTH_CONDITIONS)).isFalse();
-//    assertThat(journey.hasStepForm(StepDefinition.WHERE_CAN_YOU_WALK)).isFalse();
+    //    assertThat(journey.hasStepForm(StepDefinition.WHERE_CAN_YOU_WALK)).isFalse();
+    //    assertThat(journey.hasStepForm(StepDefinition.WALKING_DIFFICULTY)).isFalse();
+    //    assertThat(journey.hasStepForm(StepDefinition.WALKING_TIME)).isFalse();
+    //    assertThat(journey.hasStepForm(StepDefinition.MOBILITY_AID_LIST)).isFalse();
+    //    assertThat(journey.hasStepForm(StepDefinition.TREATMENT_LIST)).isFalse();
+    //    assertThat(journey.hasStepForm(StepDefinition.HEALTHCARE_PROFESSIONAL_LIST)).isFalse();
+    //    assertThat(journey.hasStepForm(StepDefinition.HEALTH_CONDITIONS)).isFalse();
+    //    assertThat(journey.hasStepForm(StepDefinition.WHERE_CAN_YOU_WALK)).isFalse();
   }
 
   @Test

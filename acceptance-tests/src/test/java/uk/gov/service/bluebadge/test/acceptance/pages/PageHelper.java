@@ -45,7 +45,12 @@ public class PageHelper {
                 return isEmpty(elements) ? null : elements;
               });
     } catch (TimeoutException exception) {
-      throw new RuntimeException("Failed to find element matching '" + bySelector + "', on page with title:'" + getWebDriver().getTitle() + "'",
+      throw new RuntimeException(
+          "Failed to find element matching '"
+              + bySelector
+              + "', on page with title:'"
+              + getWebDriver().getTitle()
+              + "'",
           exception);
     }
   }

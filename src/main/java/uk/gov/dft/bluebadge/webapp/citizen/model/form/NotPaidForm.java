@@ -31,7 +31,7 @@ public class NotPaidForm implements StepForm, Serializable {
 
   @Override
   public Optional<StepDefinition> determineNextStep(Journey journey) {
-    if(!"no".equals(retry)){
+    if (!"no".equals(retry)) {
       log.warn("NotPaidForm retry value is {}, but must be 'no' to determine next step.", retry);
     }
     return Optional.of(StepDefinition.SUBMITTED);

@@ -40,7 +40,7 @@ public class RouteMasterTest {
         };
 
     assertThat(routeMaster.redirectToOnSuccess(testForm, new Journey()))
-        .isEqualTo("redirect:" + Mappings.URL_CHOOSE_YOUR_COUNCIL);
+        .isEqualTo("redirect:" + Mappings.URL_FIND_YOUR_COUNCIL);
   }
 
   @Test(expected = IllegalStateException.class)
@@ -86,7 +86,7 @@ public class RouteMasterTest {
   }
 
   @Test(expected = IllegalStateException.class)
-  @Ignore // Route master to throw an exception proves a config error.
+  @Ignore // TODO Route master to throw an exception proves a config error.
   public void redirectOnSuccessWithForm_whenMultipleAndFormDeterminesInvalid_thenException() {
     StepForm testForm =
         new StepForm() {

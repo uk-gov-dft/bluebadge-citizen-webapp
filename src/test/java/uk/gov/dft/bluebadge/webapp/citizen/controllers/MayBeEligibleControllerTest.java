@@ -15,7 +15,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
-
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
@@ -68,9 +67,11 @@ public class MayBeEligibleControllerTest {
   public void startApplication_ShouldRedirectToNextPage() {
 
     mockMvc
-        .perform(get("/may-be-eligible/start")
-            .sessionAttr(
-                "JOURNEY", JourneyFixture.getDefaultJourneyToStep(StepDefinition.MAY_BE_ELIGIBLE)))
+        .perform(
+            get("/may-be-eligible/start")
+                .sessionAttr(
+                    "JOURNEY",
+                    JourneyFixture.getDefaultJourneyToStep(StepDefinition.MAY_BE_ELIGIBLE)))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(Mappings.URL_APPLICANT_NAME));
   }

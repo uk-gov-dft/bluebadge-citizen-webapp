@@ -39,12 +39,12 @@ class TaskTest {
             .filter(s -> !allTaskSteps.contains(s))
             .collect(Collectors.toSet());
 
-    assertThat(orpahned).containsOnly(
-        MEDICATION_ADD,
-        HEALTHCARE_PROFESSIONALS_ADD,
-        TREATMENT_ADD,
-        MOBILITY_AID_ADD,
-        TASK_LIST
-    );
+    assertThat(orpahned)
+        .containsOnly(
+            MEDICATION_ADD,
+            HEALTHCARE_PROFESSIONALS_ADD,
+            TREATMENT_ADD,
+            MOBILITY_AID_ADD,
+            TASK_LIST);
   }
 }
