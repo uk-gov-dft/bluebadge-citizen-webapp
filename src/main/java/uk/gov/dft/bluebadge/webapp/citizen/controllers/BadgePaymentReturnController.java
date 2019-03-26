@@ -57,7 +57,7 @@ public class BadgePaymentReturnController implements StepController {
         paymentService.retrievePaymentStatus(journey.getPaymentJourneyUuid());
     journey.setPaymentStatusResponse(paymentStatusResponse);
 
-    if (journey.isPaymentSuccessful()) {
+    if (journey.isPaymentSuccessful() || journey.isPaymentStatusUnknown()) {
       applicationService.create(JourneyToApplicationConverter.convert(journey));
     }
     return routeMaster.redirectToOnSuccess(formRequest, journey);

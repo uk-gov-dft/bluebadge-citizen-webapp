@@ -25,6 +25,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.BadgePaymentForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
@@ -74,6 +75,16 @@ public class Journey implements Serializable {
   public boolean isPaymentSuccessful() {
     return paymentStatusResponse != null
         && "success".equalsIgnoreCase(paymentStatusResponse.getStatus());
+  }
+
+  public boolean isPaymentStatusUnknown() {
+    return paymentStatusResponse != null
+        && "unknown".equalsIgnoreCase(paymentStatusResponse.getStatus());
+  }
+
+  public boolean isChosenToPay() {
+    BadgePaymentForm form = (BadgePaymentForm) getFormForStep(StepDefinition.BADGE_PAYMENT);
+    return (form != null ? form.isPayNow() : false);
   }
 
   public void setFormForStep(StepForm form) {

@@ -115,14 +115,16 @@ public class CommonSteps extends AbstractSpringSteps {
   @Then("^I (?:can )?see labelled element \"([^\"]+)\" with content \"([^\"]+)\"$")
   public void thenISeeElementWithUiPathAndContent(String uiPath, String content) {
     assertNotNull(
-        "Can see element with data-uipath: " + uiPath, commonPage.findElementWithUiPath(uiPath));
+        "I should see element with data-uipath: " + uiPath,
+        commonPage.findElementWithUiPath(uiPath));
     assertThat(commonPage.findElementWithUiPath(uiPath).getText(), containsString(content));
   }
 
   @Then("^I cannot see labelled element \"([^\"]+)\"$")
   public void thenICannotSeeElementWithUiPath(String uiPath) {
     assertNull(
-        "Cannot see element with data-uipath: " + uiPath, commonPage.findElementWithUiPath(uiPath));
+        "I should not see element with data-uipath: " + uiPath,
+        commonPage.findElementWithUiPath(uiPath));
   }
 
   @Then("^I should see (?:.* )?page titled \"([^\"]+)\"$")

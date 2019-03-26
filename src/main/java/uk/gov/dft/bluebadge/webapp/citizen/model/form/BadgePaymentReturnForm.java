@@ -23,7 +23,7 @@ public class BadgePaymentReturnForm implements StepForm, Serializable {
 
   @Override
   public Optional<StepDefinition> determineNextStep(Journey journey) {
-    if (journey.isPaymentSuccessful()) {
+    if (journey.isPaymentSuccessful() || journey.isPaymentStatusUnknown()) {
       return Optional.of(StepDefinition.SUBMITTED);
     } else {
       log.info(

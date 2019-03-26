@@ -26,26 +26,27 @@
                 <span class="govuk-!-font-weight-bold" th:text="${contactEmail}"></span><span th:remove="tag">.</span>
             </p>
 
-            <p class="govuk-body" data-uipath="p.paymentSuccessfulText" th:if="${JOURNEY.paymentSuccessful}" th:text="#{submittedPage.content.paymentdone.pretext(${JOURNEY.badgeCost})}"/>
+            <p class="govuk-body" data-uipath="p.paymentSuccessfulText" th:if="${JOURNEY.paymentSuccessful}"
+               th:text="#{submittedPage.content.paymentdone(${JOURNEY.badgeCost})}"/>
 
             <h2 class="govuk-heading-m" th:text="#{submittedPage.content.title}"></h2>
 
-            <p class="govuk-body" th:if="${!JOURNEY.nationWales && !JOURNEY.paymentSuccessful}">
-                <span th:remove="tag" th:text="#{'submittedPage.content.notwales.payment.pretext'}"></span>
-                <a th:href="${JOURNEY.localAuthority.contactUrl}" th:text="${JOURNEY.localeAwareLocalAuthority.description}"></a>
-                <span th:remove="tag" th:text="#{${JOURNEY.who} + 'submittedPage.content.notwales.payment.posttext'}"></span>
+            <p class="govuk-body" data-uipath="p.paymentsNotEnabled"
+               th:if="${!JOURNEY.nationWales && !JOURNEY.paymentsEnabled}" th:text="#{${JOURNEY.who} + 'submittedPage.content.notwales.paymentNotEnabled'(${JOURNEY.localeAwareLocalAuthority.description})}">
             </p>
 
-            <p class="govuk-body">
-                <span th:remove="tag" th:text="#{${JOURNEY.who} + 'submittedPage.content.p1.pretext'}"></span>
-                <a th:href="${JOURNEY.localAuthority.contactUrl}"
-                   th:text="${JOURNEY.localeAwareLocalAuthority.description}"></a>
-                <span th:remove="tag" th:text="#{${JOURNEY.who} + 'submittedPage.content.p1.posttext'}"></span>
+            <p class="govuk-body" data-uipath="p.paymentsEnabledButPaymentNotSuccessful"
+               th:if="${!JOURNEY.nationWales && JOURNEY.paymentsEnabled && (!JOURNEY.chosenToPay || (!JOURNEY.paymentSuccessful && !JOURNEY.paymentStatusUnknown))}"
+               th:text="#{submittedPage.content.notwales.paymentEnabled.paymentNotSuccessful(${JOURNEY.localeAwareLocalAuthority.description})}">
             </p>
+
+            <p class="govuk-body" th:text="#{${JOURNEY.who} + 'submittedPage.content.p1'(${JOURNEY.localeAwareLocalAuthority.description})}"></p>
+
             <p class="govuk-body" th:text="#{submittedPage.content.p2}"></p>
 
             <p class="govuk-body">
-                <a data-uipath="feedback.link" href="https://www.gov.uk/done/apply-blue-badge" th:text="#{submittedPage.content.feedback.link}"></a>
+                <a data-uipath="feedback.link" href="https://www.gov.uk/done/apply-blue-badge"
+                   th:text="#{submittedPage.content.feedback.link}"></a>
                 <span th:remove="tag" th:text="#{submittedPage.content.feedback}"></span>
             </p>
             <p class="govuk-body" th:text="#{submittedPage.content.p3}"></p>

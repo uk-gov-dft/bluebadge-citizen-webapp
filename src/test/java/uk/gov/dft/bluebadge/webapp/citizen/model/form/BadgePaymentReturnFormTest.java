@@ -16,6 +16,7 @@ public class BadgePaymentReturnFormTest {
   private static final String PAYMENT_JOURNEY_UUID = "journeypay1";
   private static final String PAYMENT_STATUS_SUCCESS = "success";
   private static final String PAYMENT_STATUS_FAILED = "failed";
+  private static final String PAYMENT_STATUS_UNKNOWN = "unknown";
   private static final String PAYMENT_REFERENCE = "payref1010";
 
   PaymentStatusResponse SUCCESS_PAYMENT_STATUS_RESPONSE =
@@ -42,6 +43,18 @@ public class BadgePaymentReturnFormTest {
               })
           .build();
 
+  PaymentStatusResponse UNKNOWN_PAYMENT_STATUS_RESPONSE =
+      PaymentStatusResponse.builder()
+          .data(
+              new HashMap<String, String>() {
+                {
+                  put("paymentJourneyUuid", PAYMENT_JOURNEY_UUID);
+                  put("status", PAYMENT_STATUS_UNKNOWN);
+                  put("reference", null);
+                }
+              })
+          .build();
+
   @Test
   public void determineNextStep_shouldReturnSubmitted_whenPaymentWasSuccessful() {
     BadgePaymentReturnForm form = BadgePaymentReturnForm.builder().build();
@@ -56,7 +69,20 @@ public class BadgePaymentReturnFormTest {
   }
 
   @Test
-  public void determineNextStep_shouldReturnSubmitted_whenPaymentWasNotSuccessful() {
+  public void determineNextStep_shouldReturnSubmitted_whenPaymentStatusIsUnknown() {
+    BadgePaymentReturnForm form = BadgePaymentReturnForm.builder().build();
+    Journey journey =
+        JourneyFixture.getDefaultJourneyToStep(
+            StepDefinition.BADGE_PAYMENT, EligibilityCodeField.PIP, true);
+
+    journey.setPaymentStatusResponse(UNKNOWN_PAYMENT_STATUS_RESPONSE);
+
+    assertThat(form.determineNextStep(journey)).isNotEmpty();
+    assertThat(form.determineNextStep(journey).get()).isEqualTo(StepDefinition.SUBMITTED);
+  }
+
+  @Test
+  public void determineNextStep_shouldReturnNotPaid_whenPaymentHasFailed() {
     BadgePaymentReturnForm form = BadgePaymentReturnForm.builder().build();
     Journey journey =
         JourneyFixture.getDefaultJourneyToStep(
