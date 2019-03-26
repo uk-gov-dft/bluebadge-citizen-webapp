@@ -66,7 +66,7 @@ public class DifferentServiceSignpostController implements StepController {
     if (journey != null) {
       FindYourCouncilForm findYourCouncilForm = journey.getFormForStep(StepDefinition.FIND_COUNCIL);
       ChooseYourCouncilForm chooseYourCouncilForm =
-        journey.getFormForStep(StepDefinition.CHOOSE_COUNCIL);
+          journey.getFormForStep(StepDefinition.CHOOSE_COUNCIL);
       if (findYourCouncilForm != null) {
         findYourCouncilForm.setPostcode("");
       }
