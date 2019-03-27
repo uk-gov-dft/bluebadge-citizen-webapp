@@ -43,25 +43,6 @@ public class RouteMasterTest {
         .isEqualTo("redirect:" + Mappings.URL_FIND_YOUR_COUNCIL);
   }
 
-  @Test(expected = IllegalStateException.class)
-  @Ignore // No longer valid. As the task determines the next step.
-  public void redirectOnSuccessWithForm_whenMultiple_thenException() {
-    StepForm testForm =
-        new StepForm() {
-          @Override
-          public StepDefinition getAssociatedStep() {
-            return RECEIVE_BENEFITS;
-          }
-
-          @Override
-          public boolean preserveStep(Journey journey) {
-            return false;
-          }
-        };
-
-    routeMaster.redirectToOnSuccess(testForm, new Journey());
-  }
-
   @Test
   public void redirectOnSuccessWithForm_whenMultiple_thenFormDetermines() {
     StepForm testForm =
@@ -84,30 +65,6 @@ public class RouteMasterTest {
 
     assertThat(routeMaster.redirectToOnSuccess(testForm, new Journey()))
         .isEqualTo("redirect:" + Mappings.URL_ELIGIBLE);
-  }
-
-  @Test(expected = IllegalStateException.class)
-  @Ignore // TODO Route master to throw an exception proves a config error.
-  public void redirectOnSuccessWithForm_whenMultipleAndFormDeterminesInvalid_thenException() {
-    StepForm testForm =
-        new StepForm() {
-          @Override
-          public StepDefinition getAssociatedStep() {
-            return RECEIVE_BENEFITS;
-          }
-
-          @Override
-          public Optional<StepDefinition> determineNextStep(Journey j) {
-            return Optional.of(DECLARATIONS);
-          }
-
-          @Override
-          public boolean preserveStep(Journey journey) {
-            return false;
-          }
-        };
-
-    routeMaster.redirectToOnSuccess(testForm, new Journey());
   }
 
   @Test

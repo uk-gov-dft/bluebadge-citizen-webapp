@@ -40,9 +40,8 @@ public class JourneySpecification {
     StepDefinition result = task.getNextStep(journey, currentStep);
 
     if (null == result) {
-      if (task == preApplicationJourney) {
-        determineApplicationSection(journey);
-      }
+      // Completed task
+      determineApplicationSection(journey);
     }
 
     //    return result; //
