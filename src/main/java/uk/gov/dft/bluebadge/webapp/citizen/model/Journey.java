@@ -23,7 +23,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.El
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentStatusResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.JourneyDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.JourneySection;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
@@ -43,7 +43,7 @@ public class Journey implements Serializable {
   public static final String FORM_REQUEST = "formRequest";
   public static final String SEPARATOR = "\n- - - - - - - - - - - - - - - - -\n";
 
-  @Getter @Setter private JourneyDefinition journeyDefinition = null;
+  @Getter @Setter private JourneySection applicationJourneySection = null;
 
   private Map<StepDefinition, StepForm> forms = new HashMap<>();
   @Getter private String who;
@@ -96,10 +96,6 @@ public class Journey implements Serializable {
     } else if (form.getAssociatedStep() == StepDefinition.MOBILITY_AID_LIST) {
       walkingAid = hasMobilityAid() ? "withWalkingAid." : "withoutWalkingAid.";
     }
-
-    JourneyDefinition jd = JourneyDefinition.findForEligibilityCode(getEligibilityCode());
-    log.info("Changing application journey from {} to {}", this.journeyDefinition, jd);
-    this.setJourneyDefinition(jd);
 
     if (doCleanUp) {
       cleanUpSteps(new HashSet<>(), form.getAssociatedStep().getNext());

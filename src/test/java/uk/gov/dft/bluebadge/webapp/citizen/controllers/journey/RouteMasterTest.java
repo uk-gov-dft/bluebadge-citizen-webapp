@@ -44,6 +44,7 @@ public class RouteMasterTest {
   }
 
   @Test(expected = IllegalStateException.class)
+  @Ignore // No longer valid. As the task determines the next step.
   public void redirectOnSuccessWithForm_whenMultiple_thenException() {
     StepForm testForm =
         new StepForm() {

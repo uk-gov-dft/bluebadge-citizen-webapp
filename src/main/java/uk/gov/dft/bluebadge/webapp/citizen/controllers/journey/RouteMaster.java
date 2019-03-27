@@ -12,13 +12,13 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 @Slf4j
 public class RouteMaster {
 
-  private final JourneyMaster journeyMaster;
+  private final JourneySpecification journeySpecification;
 
   private static final String REDIRECT = "redirect:";
   public static final String ERROR_SUFFIX = "#error";
 
-  public RouteMaster(JourneyMaster journeyMaster) {
-    this.journeyMaster = journeyMaster;
+  public RouteMaster(JourneySpecification journeySpecification) {
+    this.journeySpecification = journeySpecification;
   }
 
   public String redirectToOnSuccess(StepForm form, Journey journey) {
@@ -29,14 +29,17 @@ public class RouteMaster {
   private StepDefinition getNextStep(StepForm form, Journey journey) {
     StepDefinition currentStep = form.getAssociatedStep();
     return form.determineNextStep(journey)
-        .orElseGet(() -> journeyMaster.determineNextStep(journey, currentStep));
+        .orElseGet(() -> journeySpecification.determineNextStep(journey, currentStep));
   }
 
   public String startingPoint() {
+    // TODO Change starting point logic
+    // preApplicationTask.getFirstStep()
     return REDIRECT + Mappings.getUrl(StepDefinition.HOME.getDefaultNext());
   }
 
   public String backToCompletedPrevious() {
+    // TODO Go to the Task List. Or first page if pre task not done
     return REDIRECT + Mappings.getUrl(StepDefinition.HOME);
   }
 
@@ -121,6 +124,8 @@ public class RouteMaster {
       StepForm currentLoopForm = journey.getFormForStep(currentLoopStep);
       nextStep = getNextStep(currentLoopForm, journey);
       if (null == nextStep) {
+        // Got to the end of the task without finding the step.
+        // Error!!
         return false;
       }
 
@@ -133,6 +138,66 @@ public class RouteMaster {
       //      }
 
       currentLoopStep = nextStep;
+    }
+  }
+
+  /**
+   * The step is valid, if it is within a task that is part of the current journey and that all the
+   * previous steps within the task have been complete.
+   *
+   * <p>And that the previous section is complete. For example, Pay step is invalid if the pre
+   * application and the application sections are incomplete.
+   *
+   * @param step
+   * @param journey
+   * @return
+   */
+  public boolean isValidStateInner(StepDefinition step, Journey journey) {
+
+    // if the previous sections are complete.
+
+    // TODO Get and set the application journey???
+    // Currently within the journey on Step form set. But need the journey spec
+
+    // TODO same logic to start with ....
+
+    try {
+      Task task = journeySpecification.determineTask(journey, step);
+      StepDefinition currentLoopStep = task.getFirstStep(journey);
+      int stepsWalked = 0;
+      while (true) {
+
+        if (currentLoopStep == step) {
+          // Got to step being validated in journey, so it is valid.
+          return true;
+        }
+
+        // Should not need next...but don't want an infinite loop.
+        if (stepsWalked++ > task.getSteps().size()) {
+          log.error(
+              "IsValidState journey walk got into infinite loop. Step being checked {}.", step);
+          throw new IllegalStateException();
+        }
+        // Break in the journey, expected only if a guard question has been changed
+        // and an attempt to navigate past it happened.
+        if (!journey.hasStepForm(currentLoopStep)) {
+          return false;
+        }
+
+        StepDefinition nextStep;
+
+        StepForm currentLoopForm = journey.getFormForStep(currentLoopStep);
+        nextStep = getNextStep(currentLoopForm, journey);
+        if (null == nextStep) {
+          // Got to the end of the task without finding the step.
+          // Error!!
+          return false;
+        }
+
+        currentLoopStep = nextStep;
+      }
+    } catch (IllegalStateException e) {
+      return false;
     }
   }
 }
