@@ -98,39 +98,61 @@ public class RouteMaster {
     StepForm form = journey.getFormForStep(StepDefinition.getFirstStep());
     if (null == form) return false;
 
-    StepDefinition currentLoopStep = form.getAssociatedStep();
-    int stepsWalked = 0;
-    // Walk the journey up to step being checked.
-    while (true) {
-
-      if (currentLoopStep == step) {
-        // Got to step being validated in journey, so it is valid.
-        return true;
-      }
-
-      // Should not need next...but don't want an infinite loop.
-      if (stepsWalked++ > StepDefinition.values().length) {
-        log.error("IsValidState journey walk got into infinite loop. Step being checked {}.", step);
-        throw new IllegalStateException();
-      }
-      // Break in the journey, expected only if a guard question has been changed
-      // and an attempt to navigate past it happened.
-      if (!journey.hasStepForm(currentLoopStep)) {
-        return false;
-      }
-
-      StepDefinition nextStep;
-
-      StepForm currentLoopForm = journey.getFormForStep(currentLoopStep);
-      nextStep = getNextStep(currentLoopForm, journey);
-      if (null == nextStep) {
-        // Got to the end of the task without finding the step.
-        // Error!!
-        return false;
-      }
-
-      currentLoopStep = nextStep;
-    }
+    return isValidStateInner(step, journey);
   }
 
+  /**
+   * The step is valid, if it is within a task that is part of the current journey and that all the
+   * previous steps within the task have been complete.
+   *
+   * <p>And that the previous section is complete. For example, Pay step is invalid if the pre
+   * application and the application sections are incomplete.
+   *
+   * @param step
+   * @param journey
+   * @return
+   */
+  public boolean isValidStateInner(StepDefinition step, Journey journey) {
+
+    // if the previous sections are complete.
+
+    try {
+      Task task = journeySpecification.determineTask(journey, step);
+      StepDefinition currentLoopStep = task.getFirstStep(journey);
+      int stepsWalked = 0;
+      while (true) {
+
+        if (currentLoopStep == step) {
+          // Got to step being validated in journey, so it is valid.
+          return true;
+        }
+
+        // Should not need next...but don't want an infinite loop.
+        if (stepsWalked++ > task.getSteps().size()) {
+          log.error(
+              "IsValidState journey walk got into infinite loop. Step being checked {}.", step);
+          throw new IllegalStateException();
+        }
+        // Break in the journey, expected only if a guard question has been changed
+        // and an attempt to navigate past it happened.
+        if (!journey.hasStepForm(currentLoopStep)) {
+          return false;
+        }
+
+        StepDefinition nextStep;
+
+        StepForm currentLoopForm = journey.getFormForStep(currentLoopStep);
+        nextStep = getNextStep(currentLoopForm, journey);
+        if (null == nextStep) {
+          // Got to the end of the task without finding the step.
+          // Error!!
+          return false;
+        }
+
+        currentLoopStep = nextStep;
+      }
+    } catch (IllegalStateException e) {
+      return false;
+    }
+  }
 }

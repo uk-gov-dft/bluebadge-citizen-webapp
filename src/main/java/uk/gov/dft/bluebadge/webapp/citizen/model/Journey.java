@@ -43,8 +43,6 @@ public class Journey implements Serializable {
   public static final String FORM_REQUEST = "formRequest";
   public static final String SEPARATOR = "\n- - - - - - - - - - - - - - - - -\n";
 
-  @Getter @Setter private JourneySection applicationJourneySection = null;
-
   private Map<StepDefinition, StepForm> forms = new HashMap<>();
   @Getter private String who;
   @Getter private String ageGroup;

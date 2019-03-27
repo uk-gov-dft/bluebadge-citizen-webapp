@@ -366,18 +366,7 @@ public class JourneyFixture {
     return journey;
   }
 
-  // TODO Team must be aware of this
-  static Journey getDefaultJourneyToStepWithOptions(JourneyBuildOptions options) {
-    Journey result = getDefaultJourneyToStepWithOptionsInner(options);
-    JourneySection journeySection =
-        RouteMasterFixture.fullJourneySpec()
-            .getEligibilityCodeToJourneyMap()
-            .get(result.getEligibilityCode());
-    result.setApplicationJourneySection(journeySection);
-    return result;
-  }
-
-  private static Journey getDefaultJourneyToStepWithOptionsInner(JourneyBuildOptions options) {
+  private static Journey getDefaultJourneyToStepWithOptions(JourneyBuildOptions options) {
     StepDefinition stepTo = options.getStep();
     ApplicantType applicantType = options.getApplicantType();
     EligibilityCodeField eligibility = options.getEligibility();

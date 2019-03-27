@@ -23,7 +23,7 @@ public class JourneySpecification {
     ImmutableList.Builder<JourneySection> result =
         ImmutableList.<JourneySection>builder().add(preApplicationJourney);
 
-    JourneySection applicationJourney = journey.getApplicationJourneySection();
+    JourneySection applicationJourney = determineApplicationSection(journey);
     if (null != applicationJourney) {
       result.add(applicationJourney);
     }
@@ -54,7 +54,7 @@ public class JourneySpecification {
     return result;
   }
 
-  private void determineApplicationSection(Journey journey) {
+  private JourneySection determineApplicationSection(Journey journey) {
     EligibilityCodeField eligibilityCode = journey.getEligibilityCode();
     if (null != eligibilityCode) {
       JourneySection journeySection = eligibilityCodeToJourneyMap.get(eligibilityCode);
@@ -64,12 +64,9 @@ public class JourneySpecification {
             "No application journey found for Eligibility code:" + eligibilityCode);
       }
 
-      log.info(
-          "Changing application journey from {} to {}",
-          journey.getApplicationJourneySection(),
-          journeySection);
-      journey.setApplicationJourneySection(journeySection);
+      return journeySection;
     }
+    return null;
   }
 
   /** @throws IllegalStateException If step not part of the journey */

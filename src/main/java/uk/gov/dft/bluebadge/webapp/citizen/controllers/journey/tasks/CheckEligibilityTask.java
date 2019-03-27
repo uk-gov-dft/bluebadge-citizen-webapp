@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.APPLICANT_TYPE;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.ELIGIBLE;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.MAY_BE_ELIGIBLE;
 
@@ -21,6 +22,11 @@ public class CheckEligibilityTask implements Task {
   public CheckEligibilityTask(String titleCode, StepDefinition... steps) {
     this.titleCode = titleCode;
     this.steps = ImmutableList.copyOf(steps);
+  }
+
+  @Override
+  public StepDefinition getFirstStep(Journey journey) {
+    return APPLICANT_TYPE;
   }
 
   @Override
