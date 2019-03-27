@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.ToString;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 @ToString(of = "name")
 public class JourneySection {
@@ -31,5 +32,9 @@ public class JourneySection {
     } catch (IndexOutOfBoundsException e) {
       return null;
     }
+  }
+
+  public boolean isComplete(Journey journey) {
+    return getTasks().stream().allMatch(t -> t.isComplete(journey));
   }
 }

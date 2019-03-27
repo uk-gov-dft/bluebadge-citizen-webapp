@@ -7,11 +7,15 @@ import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefini
 import com.google.common.collect.ImmutableList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Task;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
+@EqualsAndHashCode
 public class CheckEligibilityTask implements Task {
   private static final EnumSet<StepDefinition> END_OF_TASK_STEPS =
       EnumSet.of(ELIGIBLE, MAY_BE_ELIGIBLE);
@@ -37,8 +41,16 @@ public class CheckEligibilityTask implements Task {
 
     // TODO Terminatorary steps. (signpost, org etc...)
 
+    StepForm formForStep = journey.getFormForStep(current);
+
     try {
-      return steps.get(steps.indexOf(current) + 1);
+      if (null == formForStep) {
+        // if null then first step of the task.
+        return steps.get(steps.indexOf(current) + 1);
+      } else {
+        Optional<StepDefinition> stepDefinition = formForStep.determineNextStep(journey);
+        return stepDefinition.orElseGet(() -> steps.get(steps.indexOf(current) + 1));
+      }
     } catch (IndexOutOfBoundsException e) {
       // End of steps for this task
       return null;

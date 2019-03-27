@@ -33,7 +33,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Wa
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentStatusResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.JourneySection;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
@@ -366,7 +365,7 @@ public class JourneyFixture {
     return journey;
   }
 
-  private static Journey getDefaultJourneyToStepWithOptions(JourneyBuildOptions options) {
+  public static Journey getDefaultJourneyToStepWithOptions(JourneyBuildOptions options) {
     StepDefinition stepTo = options.getStep();
     ApplicantType applicantType = options.getApplicantType();
     EligibilityCodeField eligibility = options.getEligibility();

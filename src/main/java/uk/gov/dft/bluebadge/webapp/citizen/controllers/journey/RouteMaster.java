@@ -118,6 +118,11 @@ public class RouteMaster {
 
     try {
       Task task = journeySpecification.determineTask(journey, step);
+
+      if (!journeySpecification.arePreviousSectionsComplete(journey, task)) {
+        return false;
+      }
+
       StepDefinition currentLoopStep = task.getFirstStep(journey);
       int stepsWalked = 0;
       while (true) {

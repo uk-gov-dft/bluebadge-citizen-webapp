@@ -21,4 +21,15 @@ public interface Task {
   default StepDefinition getFirstStep(Journey journey) {
     return getSteps().get(0);
   }
+
+  default boolean isComplete(Journey journey) {
+    StepDefinition step = getFirstStep(journey);
+    while (null != step) {
+      if (null == journey.getFormForStep(step)) {
+        return false;
+      }
+      step = this.getNextStep(journey, step);
+    }
+    return true;
+  }
 }

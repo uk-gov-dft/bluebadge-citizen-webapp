@@ -39,11 +39,6 @@ public class JourneySpecification {
     Task task = determineTask(fullJourney, currentStep);
     StepDefinition result = task.getNextStep(journey, currentStep);
 
-    if (null == result) {
-      // Completed task
-      determineApplicationSection(journey);
-    }
-
     //  Return here once Task List page completed.
 
     // TMP
@@ -57,14 +52,7 @@ public class JourneySpecification {
   private JourneySection determineApplicationSection(Journey journey) {
     EligibilityCodeField eligibilityCode = journey.getEligibilityCode();
     if (null != eligibilityCode) {
-      JourneySection journeySection = eligibilityCodeToJourneyMap.get(eligibilityCode);
-      if (null == journeySection) {
-        // TODO config error
-        throw new IllegalStateException(
-            "No application journey found for Eligibility code:" + eligibilityCode);
-      }
-
-      return journeySection;
+      return eligibilityCodeToJourneyMap.get(eligibilityCode);
     }
     return null;
   }
@@ -104,5 +92,34 @@ public class JourneySpecification {
       }
     }
     throw new IllegalStateException("No next task.");
+  }
+
+  public boolean arePreviousSectionsComplete(Journey journey, Task task) {
+    if (preApplicationJourney.getTasks().contains(task)) {
+      return true;
+    } else if (!preApplicationJourney.isComplete(journey)) {
+      return false;
+    }
+
+    JourneySection applicationSection = determineApplicationSection(journey);
+    if (null == applicationSection) {
+      throw new IllegalStateException(
+          "No application journey found for Eligibility code:" + journey.getEligibilityCode());
+    }
+    if (applicationSection.getTasks().contains(task)) {
+      return true;
+    } else if (!applicationSection.isComplete(journey)) {
+      return false;
+    }
+
+    if (submitAndPayJourney.getTasks().contains(task)) {
+      // error
+      return true;
+    } else if (!preApplicationJourney.isComplete(journey)) {
+      return false;
+    }
+
+    // error
+    return true;
   }
 }
