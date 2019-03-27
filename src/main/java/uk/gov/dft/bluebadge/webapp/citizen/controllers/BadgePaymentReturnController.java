@@ -3,6 +3,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
+import com.google.common.collect.ImmutableMap;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -53,9 +54,24 @@ public class BadgePaymentReturnController implements StepController {
     if (journey.getPaymentJourneyUuid() == null) {
       return "redirect:" + Mappings.URL_NOT_PAID;
     }
-    PaymentStatusResponse paymentStatusResponse =
-        paymentService.retrievePaymentStatus(journey.getPaymentJourneyUuid());
-    journey.setPaymentStatusResponse(paymentStatusResponse);
+    try {
+      PaymentStatusResponse paymentStatusResponse =
+          paymentService.retrievePaymentStatus(journey.getPaymentJourneyUuid());
+      journey.setPaymentStatusResponse(paymentStatusResponse);
+    } catch (Exception ex) {
+      PaymentStatusResponse unknownResponse =
+          PaymentStatusResponse.builder()
+              .data(
+                  ImmutableMap.of(
+                      "paymentJourneyUuid",
+                      journey.getPaymentJourneyUuid(),
+                      "status",
+                      "unknown",
+                      "reference",
+                      "unknown"))
+              .build();
+      journey.setPaymentStatusResponse(unknownResponse);
+    }
 
     if (journey.isPaymentSuccessful() || journey.isPaymentStatusUnknown()) {
       applicationService.create(JourneyToApplicationConverter.convert(journey));
