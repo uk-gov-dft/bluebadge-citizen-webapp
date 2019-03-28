@@ -1,7 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form.blind;
 
 import java.io.Serializable;
-import java.util.Optional;
+
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
@@ -21,14 +21,6 @@ public class RegisteredForm implements Serializable, StepForm {
   @Override
   public StepDefinition getAssociatedStep() {
     return StepDefinition.REGISTERED;
-  }
-
-  @Override
-  public Optional<StepDefinition> determineNextStep(Journey journey) {
-    if (hasRegistered) {
-      return Optional.of(StepDefinition.PERMISSION);
-    }
-    return Optional.of(StepDefinition.PROVE_IDENTITY);
   }
 
   @Override

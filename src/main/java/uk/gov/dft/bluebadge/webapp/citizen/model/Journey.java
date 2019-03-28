@@ -17,13 +17,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 import lombok.Getter;
-
 import lombok.extern.slf4j.Slf4j;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentStatusResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
-
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
@@ -101,7 +99,7 @@ public class Journey implements Serializable {
   }
 
   @SuppressWarnings("unchecked")
-  public <T> T getFormForStep(StepDefinition step) {
+  public <T extends StepForm> T getFormForStep(StepDefinition step) {
     return (T) forms.get(step);
   }
 

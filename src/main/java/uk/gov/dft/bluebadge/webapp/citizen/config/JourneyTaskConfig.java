@@ -10,6 +10,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.JourneySection;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.JourneySpecification;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Task;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks.BlindTask;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks.CheckEligibilityTask;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks.ProveAddressTask;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks.SimpleTask;
@@ -182,7 +183,7 @@ public class JourneyTaskConfig {
   }
 
   private Task proofOfVisual() {
-    return new SimpleTask(
+    return new BlindTask(
         "Provide proof of visual impairment", REGISTERED, PERMISSION, REGISTERED_COUNCIL);
   }
 
