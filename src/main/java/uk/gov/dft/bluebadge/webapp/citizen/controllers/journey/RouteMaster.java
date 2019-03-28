@@ -1,12 +1,11 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey;
 
-import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.StepController;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks.TaskConfigurationException;
+
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 
@@ -30,15 +29,7 @@ public class RouteMaster {
 
   private StepDefinition getNextStep(StepForm form, Journey journey) {
     StepDefinition currentStep = form.getAssociatedStep();
-    Task currentTask = journeySpecification.determineTask(journey, currentStep);
-
-    Optional<StepDefinition> nextStepMaybe = form.determineNextStep(journey);
-    if (nextStepMaybe.isPresent() && !currentTask.getSteps().contains(nextStepMaybe.get())) {
-      throw new TaskConfigurationException(
-          "Step form: " + form + ", returned a step not within the task. " + nextStepMaybe);
-    }
-    return nextStepMaybe.orElseGet(
-        () -> journeySpecification.determineNextStep(journey, currentStep));
+    return journeySpecification.determineNextStep(journey, currentStep);
   }
 
   public String startingPoint() {

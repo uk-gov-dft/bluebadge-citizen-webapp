@@ -11,9 +11,9 @@ public enum StepDefinition {
   TASK_LIST(),
 
   SUBMITTED(), // Terminatory step
-  NOT_PAID(SUBMITTED),
-  BADGE_PAYMENT_RETURN(SUBMITTED, NOT_PAID),
-  BADGE_PAYMENT(SUBMITTED),
+  NOT_PAID(),
+  BADGE_PAYMENT_RETURN(),
+  BADGE_PAYMENT(),
   DECLARATIONS(),
 
   PROVE_ADDRESS(), // Child doesn't need address

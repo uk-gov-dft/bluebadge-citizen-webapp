@@ -4,11 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.APPLICANT_TYPE;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.DECLARATIONS;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.ELIGIBLE;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.FIND_COUNCIL;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.RECEIVE_BENEFITS;
 
 import java.util.Optional;
 import org.junit.Before;
-
 import org.junit.Test;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks.TaskConfigurationException;
@@ -74,7 +74,7 @@ public class RouteMasterTest {
         new StepForm() {
           @Override
           public StepDefinition getAssociatedStep() {
-            return RECEIVE_BENEFITS;
+            return FIND_COUNCIL;
           }
 
           @Override
@@ -88,7 +88,9 @@ public class RouteMasterTest {
           }
         };
 
-    routeMaster.redirectToOnSuccess(testForm, new Journey());
+    Journey journey = new Journey();
+    journey.setFormForStep(testForm);
+    routeMaster.redirectToOnSuccess(testForm, journey);
   }
 
   @Test

@@ -1,7 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
 import java.io.Serializable;
-import java.util.Optional;
+
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
@@ -27,13 +27,5 @@ public class NotPaidForm implements StepForm, Serializable {
   @Override
   public boolean preserveStep(Journey journey) {
     return true;
-  }
-
-  @Override
-  public Optional<StepDefinition> determineNextStep(Journey journey) {
-    if (!"no".equals(retry)) {
-      log.warn("NotPaidForm retry value is {}, but must be 'no' to determine next step.", retry);
-    }
-    return Optional.of(StepDefinition.SUBMITTED);
   }
 }

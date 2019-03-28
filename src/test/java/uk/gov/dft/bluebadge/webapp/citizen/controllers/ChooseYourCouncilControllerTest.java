@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.CHOOSE_COUNCIL;
 
 import java.util.List;
 import org.assertj.core.util.Lists;
@@ -18,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.RefDataGroupEnum;
+import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalCouncilRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.ReferenceData;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
@@ -36,11 +38,12 @@ public class ChooseYourCouncilControllerTest {
   private MockMvc mockMvc;
 
   @Mock ReferenceDataService mockReferenceDataService;
-  @Mock Journey journeyMock;
 
   Journey journey;
 
   private List<ReferenceData> councils;
+  private LocalAuthorityRefData activeLA;
+  private LocalAuthorityRefData inactiveLA;
 
   @Before
   public void setup() {
@@ -51,7 +54,7 @@ public class ChooseYourCouncilControllerTest {
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
-    journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.CHOOSE_COUNCIL);
+    journey = JourneyFixture.getDefaultJourneyToStep(CHOOSE_COUNCIL);
 
     LocalCouncilRefData.LocalCouncilMetaData localCouncilMetaData1 =
         new LocalCouncilRefData.LocalCouncilMetaData();
@@ -70,6 +73,17 @@ public class ChooseYourCouncilControllerTest {
     localCouncilRefData2.setLocalCouncilMetaData(localCouncilMetaData2);
 
     councils = Lists.newArrayList(localCouncilRefData1, localCouncilRefData2);
+
+    LocalAuthorityRefData.LocalAuthorityMetaData meta =
+        new LocalAuthorityRefData.LocalAuthorityMetaData();
+    meta.setDifferentServiceSignpostUrl(null);
+    activeLA = new LocalAuthorityRefData();
+    activeLA.setLocalAuthorityMetaData(meta);
+
+    meta = new LocalAuthorityRefData.LocalAuthorityMetaData();
+    meta.setDifferentServiceSignpostUrl("/signpostUrl");
+    inactiveLA = new LocalAuthorityRefData();
+    inactiveLA.setLocalAuthorityMetaData(meta);
   }
 
   @Test
@@ -103,23 +117,36 @@ public class ChooseYourCouncilControllerTest {
 
   @Test
   public void submit_givenValidForm_thenShouldDisplayRedirectToSuccess() throws Exception {
-    when(journeyMock.isLocalAuthorityActive()).thenReturn(true);
+    when(mockReferenceDataService.lookupLocalAuthorityFromCouncilCode(COUNCIL_SHORT_CODE))
+        .thenReturn(activeLA);
 
     mockMvc
         .perform(
             post(Mappings.URL_CHOOSE_YOUR_COUNCIL)
                 .param("councilShortCode", COUNCIL_SHORT_CODE)
-                .sessionAttr("JOURNEY", journeyMock))
+                .sessionAttr("JOURNEY", journey))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl(Mappings.URL_YOUR_ISSUING_AUTHORITY));
   }
 
   @Test
-  public void submit_whenBindingException_ThenShouldHaveValidationError() throws Exception {
-    when(journeyMock.isLocalAuthorityActive()).thenReturn(true);
+  public void submit_givenInactiveLA_thenShouldDisplayRedirectToSignpost() throws Exception {
+    when(mockReferenceDataService.lookupLocalAuthorityFromCouncilCode(COUNCIL_SHORT_CODE))
+        .thenReturn(inactiveLA);
 
     mockMvc
-        .perform(post(Mappings.URL_CHOOSE_YOUR_COUNCIL).sessionAttr("JOURNEY", journeyMock))
+        .perform(
+            post(Mappings.URL_CHOOSE_YOUR_COUNCIL)
+                .param("councilShortCode", COUNCIL_SHORT_CODE)
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(Mappings.URL_DIFFERENT_SERVICE_SIGNPOST));
+  }
+
+  @Test
+  public void submit_whenBindingException_ThenShouldHaveValidationError() throws Exception {
+    mockMvc
+        .perform(post(Mappings.URL_CHOOSE_YOUR_COUNCIL).sessionAttr("JOURNEY", journey))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl(Mappings.URL_CHOOSE_YOUR_COUNCIL + RouteMaster.ERROR_SUFFIX))
         .andExpect(

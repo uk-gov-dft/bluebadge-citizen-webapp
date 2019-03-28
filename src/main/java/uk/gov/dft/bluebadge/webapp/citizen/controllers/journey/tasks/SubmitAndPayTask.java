@@ -1,6 +1,8 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.BADGE_PAYMENT;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.NOT_PAID;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.SUBMITTED;
 
 import lombok.EqualsAndHashCode;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
@@ -19,15 +21,23 @@ public class SubmitAndPayTask extends Task {
     if (journey.isPaymentsEnabled()) {
       return BADGE_PAYMENT;
     } else {
-      return StepDefinition.SUBMITTED;
+      return SUBMITTED;
     }
   }
 
   @Override
   public StepDefinition getNextStep(Journey journey, StepDefinition current) {
-    if (current == BADGE_PAYMENT) {
-      return StepDefinition.SUBMITTED;
+    switch (current) {
+      case BADGE_PAYMENT_RETURN:
+        if (!journey.isPaymentSuccessful()) {
+          return NOT_PAID;
+        } // else fall through to submitted
+      case BADGE_PAYMENT:
+      case NOT_PAID:
+        return SUBMITTED;
+      default:
+        throw new IllegalStateException(
+            "Unsupported step within Submit and Pay task. Step:" + current);
     }
-    return super.getNextStep(journey, current);
   }
 }
