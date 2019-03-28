@@ -191,4 +191,81 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete main reason page for "WALKD"
     And   I complete what makes walking difficult page for "NONE"
     Then  I should see "They're not" eligible page
+#
+  Scenario: Walking application for yourself and "UPHILL" breathlessness selected - check screen flow
+    Given I complete applicant page for "yourself"
+    And   I skip find council page
+    And   I complete select council page for "wales"
+    And   I complete your local authority page
+    And   I complete the already have a blue badge page for "YES BUT DON'T KNOW"
+    And   I complete receive benefit page for "AFRFCS"
+    And   I complete lump sum of the AFRFCS Scheme page for "NO"
+    And   I complete has mental disorder page for "NO"
+    And   I complete main reason page for "WALKD"
+    And   I complete what makes walking difficult page for "PLAN"
+    Then  I should see "You may be" eligible page
+    When  I complete eligible page
+    And   I complete what's your name page
+    And   I complete date of birth page for "ADULT"
+    And   I complete gender page for "Man"
+    And   I complete NI number page
+    And   I complete address page
+    And   I complete contact page for "yourself"
+    And   I complete describe health conditions page
+    And   I complete the what makes walking difficult page for "BREATH"
+    Then   I should see page titled "When do you get breathless?" with GOV.UK suffix
+    When  I complete the breathlessness page for "UPHILL"
+    Then   I should see page titled "Do you use mobility aids?" with GOV.UK suffix
 
+  Scenario: Walking application for yourself and "OTHER" breathlessness selected with OTHER description - check screen flow
+    Given I complete applicant page for "yourself"
+    And   I skip find council page
+    And   I complete select council page for "wales"
+    And   I complete your local authority page
+    And   I complete the already have a blue badge page for "YES BUT DON'T KNOW"
+    And   I complete receive benefit page for "AFRFCS"
+    And   I complete lump sum of the AFRFCS Scheme page for "NO"
+    And   I complete has mental disorder page for "NO"
+    And   I complete main reason page for "WALKD"
+    And   I complete what makes walking difficult page for "PLAN"
+    Then  I should see "You may be" eligible page
+    When  I complete eligible page
+    And   I complete what's your name page
+    And   I complete date of birth page for "ADULT"
+    And   I complete gender page for "Man"
+    And   I complete NI number page
+    And   I complete address page
+    And   I complete contact page for "yourself"
+    And   I complete describe health conditions page
+    And   I complete the what makes walking difficult page for "BREATH"
+    And   I should see page titled "When do you get breathless?" with GOV.UK suffix
+    And  I complete the breathlessness page for "OTHER"
+    And   I type "Some description" for "breathlessnessOtherDescription" field by id
+    And I click on Continue button
+    Then   I should see page titled "Do you use mobility aids?" with GOV.UK suffix
+
+  Scenario: Walking application for yourself and "OTHER" breathlessness selected without OTHER description - should see error
+    Given I complete applicant page for "yourself"
+    And   I skip find council page
+    And   I complete select council page for "wales"
+    And   I complete your local authority page
+    And   I complete the already have a blue badge page for "YES BUT DON'T KNOW"
+    And   I complete receive benefit page for "AFRFCS"
+    And   I complete lump sum of the AFRFCS Scheme page for "NO"
+    And   I complete has mental disorder page for "NO"
+    And   I complete main reason page for "WALKD"
+    And   I complete what makes walking difficult page for "PLAN"
+    Then  I should see "You may be" eligible page
+    When  I complete eligible page
+    And   I complete what's your name page
+    And   I complete date of birth page for "ADULT"
+    And   I complete gender page for "Man"
+    And   I complete NI number page
+    And   I complete address page
+    And   I complete contact page for "yourself"
+    And   I complete describe health conditions page
+    And   I complete the what makes walking difficult page for "BREATH"
+    And   I should see page titled "When do you get breathless?" with GOV.UK suffix
+    And   I complete the breathlessness page for "OTHER"
+    And   I click on Continue button
+    Then   I verify validation message "Enter a description"

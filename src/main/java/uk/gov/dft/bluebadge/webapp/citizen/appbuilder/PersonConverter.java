@@ -31,6 +31,7 @@ class PersonConverter {
         nino = nino.replaceAll("\\s+", "").toUpperCase();
       }
     }
+
     return Person.builder()
         .badgeHolderName(
             ValidationPattern.replaceUnapprovedApostrophes(applicantNameForm.getFullName()))
