@@ -73,7 +73,7 @@ public class BreathlessnessController implements StepController {
 
     journey.setFormForStep(breathlessnessForm);
 
-    return routeMaster.redirectToOnSuccess(breathlessnessForm);
+    return routeMaster.redirectToOnSuccess(breathlessnessForm, journey);
   }
 
   @Override
@@ -99,15 +99,15 @@ public class BreathlessnessController implements StepController {
     options.add(
         new RadioOption(
             BreathlessnessCodeField.OWNPACE.name(),
-            journey.who + "breathlessnessPage.select.option.OWNPACE"));
+            journey.getWho() + "breathlessnessPage.select.option.OWNPACE"));
     options.add(
         new RadioOption(
             BreathlessnessCodeField.DRESSED.name(),
-            journey.who + "breathlessnessPage.select.option.DRESSED"));
+            journey.getWho() + "breathlessnessPage.select.option.DRESSED"));
     options.add(
         new RadioOption(
             BreathlessnessCodeField.OTHER.name(),
-            journey.who + "breathlessnessPage.select.option.OTHER"));
+            journey.getWho() + "breathlessnessPage.select.option.OTHER"));
 
     return new RadioOptionsGroup("breathlessnessPage.select.title", options);
   }

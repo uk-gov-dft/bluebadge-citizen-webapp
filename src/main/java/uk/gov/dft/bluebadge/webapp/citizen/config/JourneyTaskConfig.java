@@ -15,6 +15,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks.CheckEligib
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks.ProveAddressTask;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks.SimpleTask;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks.SubmitAndPayTask;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks.WalkingTask;
 
 @Configuration
 public class JourneyTaskConfig {
@@ -201,10 +202,11 @@ public class JourneyTaskConfig {
   }
 
   private Task descWalkingAbility() {
-    return new SimpleTask(
+    return new WalkingTask(
         "Describe walking ability",
         HEALTH_CONDITIONS,
         WHAT_MAKES_WALKING_DIFFICULT,
+        BREATHLESSNESS,
         MOBILITY_AID_LIST,
         WALKING_TIME,
         WHERE_CAN_YOU_WALK);
