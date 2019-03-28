@@ -89,7 +89,7 @@ public class FindYourCouncilControllerTest {
 
   @Test
   @SneakyThrows
-  public void formByPass_shouldRedirectToChoouseYourCouncil() {
+  public void formByPass_shouldRedirectToChooseYourCouncil() {
     mockMvc
         .perform(get(Mappings.URL_FIND_YOUR_COUNCIL_BYPASS).sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
@@ -132,7 +132,7 @@ public class FindYourCouncilControllerTest {
         .andExpect(redirectedUrl(Mappings.URL_FIND_YOUR_COUNCIL + RouteMaster.ERROR_SUFFIX))
         .andExpect(
             ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
-                "postcode", "NotBlank"));
+                "postcode", "Pattern"));
   }
 
   @Test

@@ -93,7 +93,7 @@ public class EnterAddressControllerTest {
                 "townOrCity", "NotBlank"))
         .andExpect(
             ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
-                "postcode", "NotBlank"));
+                "postcode", "Pattern"));
   }
 
   @Test

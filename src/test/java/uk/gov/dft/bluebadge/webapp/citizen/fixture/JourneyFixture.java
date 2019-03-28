@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.SneakyThrows;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.BreathlessnessCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.GenderCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.HowProvidedCodeField;
@@ -90,6 +91,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.organisation.OrganisationT
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipDlaQuestionForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipMovingAroundForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.pip.PipPlanningJourneyForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.BreathlessnessForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WalkingTimeForm;
@@ -111,7 +113,16 @@ public class JourneyFixture {
     static final WalkingLengthOfTimeCodeField WALKING_TIME = WalkingLengthOfTimeCodeField.LESSMIN;
     static final List<WalkingDifficultyTypeCodeField> WHAT_MAKES_WALKING_DIFFICULT =
         Lists.newArrayList(
-            WalkingDifficultyTypeCodeField.PAIN, WalkingDifficultyTypeCodeField.SOMELSE);
+            WalkingDifficultyTypeCodeField.PAIN,
+            WalkingDifficultyTypeCodeField.BREATH,
+            WalkingDifficultyTypeCodeField.SOMELSE);
+    static final List<WalkingDifficultyTypeCodeField>
+        WHAT_MAKES_WALKING_DIFFICULT_WITHOUT_SOMETHING_ELSE =
+            Lists.newArrayList(WalkingDifficultyTypeCodeField.PAIN);
+    static final List<BreathlessnessCodeField> BREATHLESSNESS_TYPES =
+        Lists.newArrayList(BreathlessnessCodeField.UPHILL, BreathlessnessCodeField.OTHER);
+    static final List<BreathlessnessCodeField> BREATHLESSNESS_TYPE =
+        Lists.newArrayList(BreathlessnessCodeField.UPHILL);
     public static final String BIRTH_NAME = "Birth";
     public static final String FULL_NAME = "Full";
     public static final GenderCodeField GENDER = GenderCodeField.FEMALE;
@@ -129,6 +140,7 @@ public class JourneyFixture {
     static final String WHERE_WALK_DESTINATION = "London";
     static final String WHERE_WALK_TIME = "10 minutes";
     static final String WHAT_WALKING_SOME_ELSE_DESC = "Some description of walking";
+    static final String BREATHLESSNESS_OTHER_DESC = "Some description of breathlessness";
     public static final String DOB_AS_EQUAL_TO_STRING = "1990-01-01";
     public static final String SECONDARY_PHONE_NO = "07970123456";
     public static final String EMAIL_ADDRESS = "a@b.c";
@@ -206,6 +218,24 @@ public class JourneyFixture {
         .whatWalkingDifficulties(Values.WHAT_MAKES_WALKING_DIFFICULT)
         .somethingElseDescription(Values.WHAT_WALKING_SOME_ELSE_DESC)
         .build();
+  }
+
+  public static WhatMakesWalkingDifficultForm
+      getWhatMakesWalkingDifficultFormWithoutSomethingElse() {
+    return WhatMakesWalkingDifficultForm.builder()
+        .whatWalkingDifficulties(Values.WHAT_MAKES_WALKING_DIFFICULT_WITHOUT_SOMETHING_ELSE)
+        .build();
+  }
+
+  public static BreathlessnessForm getBreathlessnessForm() {
+    return BreathlessnessForm.builder()
+        .breathlessnessTypes(Values.BREATHLESSNESS_TYPES)
+        .breathlessnessOtherDescription(Values.BREATHLESSNESS_OTHER_DESC)
+        .build();
+  }
+
+  public static BreathlessnessForm getBreathlessnessFormWithoutOther() {
+    return BreathlessnessForm.builder().breathlessnessTypes(Values.BREATHLESSNESS_TYPE).build();
   }
 
   private static WhereCanYouWalkForm getWhereCanYouWalkForm() {
@@ -504,6 +534,8 @@ public class JourneyFixture {
     if (WALKD == eligibility) {
       journey.setFormForStep(getWhatMakesWalkingDifficultForm());
       if (StepDefinition.WHAT_MAKES_WALKING_DIFFICULT == stepTo) return journey;
+      journey.setFormForStep(getBreathlessnessForm());
+      if (StepDefinition.BREATHLESSNESS == stepTo) return journey;
       journey.setFormForStep(getMobilityAidListForm());
       if (StepDefinition.MOBILITY_AID_LIST == stepTo) return journey;
       journey.setFormForStep(getWalkingTimeForm());

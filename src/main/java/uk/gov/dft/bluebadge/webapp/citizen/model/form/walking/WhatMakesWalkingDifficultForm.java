@@ -3,6 +3,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.model.form.walking;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -30,6 +31,14 @@ public class WhatMakesWalkingDifficultForm implements StepForm, Serializable {
   @Override
   public StepDefinition getAssociatedStep() {
     return StepDefinition.WHAT_MAKES_WALKING_DIFFICULT;
+  }
+
+  @Override
+  public Optional<StepDefinition> determineNextStep() {
+    if (whatWalkingDifficulties.contains(WalkingDifficultyTypeCodeField.BREATH)) {
+      return Optional.of(StepDefinition.BREATHLESSNESS);
+    }
+    return Optional.of(StepDefinition.MOBILITY_AID_LIST);
   }
 
   @Override
