@@ -1,10 +1,12 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey;
 
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.StepController;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks.TaskConfigurationException;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 
@@ -28,7 +30,14 @@ public class RouteMaster {
 
   private StepDefinition getNextStep(StepForm form, Journey journey) {
     StepDefinition currentStep = form.getAssociatedStep();
-    return form.determineNextStep(journey)
+    Task currentTask = journeySpecification.determineTask(journey, currentStep);
+
+    Optional<StepDefinition> nextStepMaybe = form.determineNextStep(journey);
+    if(nextStepMaybe.isPresent() && !currentTask.getSteps().contains(nextStepMaybe)){
+      throw new TaskConfigurationException(
+          "Step form: " + form + ", returned a step not within the task. " + nextStepMaybe);
+    }
+    return nextStepMaybe
         .orElseGet(() -> journeySpecification.determineNextStep(journey, currentStep));
   }
 
@@ -114,50 +123,43 @@ public class RouteMaster {
    */
   public boolean isValidStateInner(StepDefinition step, Journey journey) {
 
-    // if the previous sections are complete.
+    Task task = journeySpecification.determineTask(journey, step);
 
-    try {
-      Task task = journeySpecification.determineTask(journey, step);
+    if (!journeySpecification.arePreviousSectionsComplete(journey, task)) {
+      return false;
+    }
 
-      if (!journeySpecification.arePreviousSectionsComplete(journey, task)) {
+    StepDefinition currentLoopStep = task.getFirstStep(journey);
+    int stepsWalked = 0;
+    while (true) {
+
+      if (currentLoopStep == step) {
+        // Got to step being validated in journey, so it is valid.
+        return true;
+      }
+
+      // Should not need next...but don't want an infinite loop.
+      if (stepsWalked++ > task.getSteps().size()) {
+        log.error("IsValidState journey walk got into infinite loop. Step being checked {}.", step);
+        throw new IllegalStateException();
+      }
+      // Break in the journey, expected only if a guard question has been changed
+      // and an attempt to navigate past it happened.
+      if (!journey.hasStepForm(currentLoopStep)) {
         return false;
       }
 
-      StepDefinition currentLoopStep = task.getFirstStep(journey);
-      int stepsWalked = 0;
-      while (true) {
+      StepDefinition nextStep;
 
-        if (currentLoopStep == step) {
-          // Got to step being validated in journey, so it is valid.
-          return true;
-        }
-
-        // Should not need next...but don't want an infinite loop.
-        if (stepsWalked++ > task.getSteps().size()) {
-          log.error(
-              "IsValidState journey walk got into infinite loop. Step being checked {}.", step);
-          throw new IllegalStateException();
-        }
-        // Break in the journey, expected only if a guard question has been changed
-        // and an attempt to navigate past it happened.
-        if (!journey.hasStepForm(currentLoopStep)) {
-          return false;
-        }
-
-        StepDefinition nextStep;
-
-        StepForm currentLoopForm = journey.getFormForStep(currentLoopStep);
-        nextStep = getNextStep(currentLoopForm, journey);
-        if (null == nextStep) {
-          // Got to the end of the task without finding the step.
-          // Error!!
-          return false;
-        }
-
-        currentLoopStep = nextStep;
+      StepForm currentLoopForm = journey.getFormForStep(currentLoopStep);
+      nextStep = getNextStep(currentLoopForm, journey);
+      if (null == nextStep) {
+        // Got to the end of the task without finding the step.
+        // Error!!
+        return false;
       }
-    } catch (IllegalStateException e) {
-      return false;
+
+      currentLoopStep = nextStep;
     }
   }
 }

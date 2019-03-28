@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks.TaskConfigurationException;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
@@ -65,6 +66,29 @@ public class RouteMasterTest {
 
     assertThat(routeMaster.redirectToOnSuccess(testForm, new Journey()))
         .isEqualTo("redirect:" + Mappings.URL_ELIGIBLE);
+  }
+
+  @Test(expected = TaskConfigurationException.class)
+  public void redirectOnSuccessWithForm_whenDeterminesInvalid_thenException() {
+    StepForm testForm =
+        new StepForm() {
+          @Override
+          public StepDefinition getAssociatedStep() {
+            return RECEIVE_BENEFITS;
+          }
+
+          @Override
+          public Optional<StepDefinition> determineNextStep(Journey j) {
+            return Optional.of(DECLARATIONS);
+          }
+
+          @Override
+          public boolean preserveStep(Journey journey) {
+            return false;
+          }
+        };
+
+    routeMaster.redirectToOnSuccess(testForm, new Journey());
   }
 
   @Test
