@@ -33,12 +33,12 @@ public class RouteMaster {
     Task currentTask = journeySpecification.determineTask(journey, currentStep);
 
     Optional<StepDefinition> nextStepMaybe = form.determineNextStep(journey);
-    if(nextStepMaybe.isPresent() && !currentTask.getSteps().contains(nextStepMaybe)){
+    if (nextStepMaybe.isPresent() && !currentTask.getSteps().contains(nextStepMaybe.get())) {
       throw new TaskConfigurationException(
           "Step form: " + form + ", returned a step not within the task. " + nextStepMaybe);
     }
-    return nextStepMaybe
-        .orElseGet(() -> journeySpecification.determineNextStep(journey, currentStep));
+    return nextStepMaybe.orElseGet(
+        () -> journeySpecification.determineNextStep(journey, currentStep));
   }
 
   public String startingPoint() {

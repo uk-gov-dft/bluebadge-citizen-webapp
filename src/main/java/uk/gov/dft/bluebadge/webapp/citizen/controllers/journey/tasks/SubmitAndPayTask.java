@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.BADGE_PAYMENT;
+
 import lombok.EqualsAndHashCode;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Task;
@@ -15,9 +17,17 @@ public class SubmitAndPayTask extends Task {
   @Override
   public StepDefinition getFirstStep(Journey journey) {
     if (journey.isPaymentsEnabled()) {
-      return StepDefinition.BADGE_PAYMENT;
+      return BADGE_PAYMENT;
     } else {
       return StepDefinition.SUBMITTED;
     }
+  }
+
+  @Override
+  public StepDefinition getNextStep(Journey journey, StepDefinition current) {
+    if (current == BADGE_PAYMENT) {
+      return StepDefinition.SUBMITTED;
+    }
+    return super.getNextStep(journey, current);
   }
 }

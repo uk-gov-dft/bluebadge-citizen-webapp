@@ -8,7 +8,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefini
 
 import java.util.Optional;
 import org.junit.Before;
-import org.junit.Ignore;
+
 import org.junit.Test;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks.TaskConfigurationException;
