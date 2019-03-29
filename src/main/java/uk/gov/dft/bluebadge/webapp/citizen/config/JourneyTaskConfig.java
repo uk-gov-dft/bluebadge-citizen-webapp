@@ -163,34 +163,34 @@ public class JourneyTaskConfig {
   }
 
   private Task proveAddress() {
-    return new ProveAddressTask("Prove address", PROVE_ADDRESS);
+    return new ProveAddressTask("taskList.application.section.proveAddress", PROVE_ADDRESS);
   }
 
   private Task personalDetails() {
     return new SimpleTask(
-        "Enter personal detail", NAME, DOB, GENDER, NINO, ADDRESS, CONTACT_DETAILS);
+        "taskList.application.section.personalDetails", NAME, DOB, GENDER, NINO, ADDRESS, CONTACT_DETAILS);
   }
 
   private Task proofOfBenefit() {
-    return new SimpleTask("Provide proof of benefit", PROVE_BENEFIT, UPLOAD_BENEFIT);
+    return new SimpleTask("taskList.application.section.provideProofBenefit", PROVE_BENEFIT, UPLOAD_BENEFIT);
   }
 
   private Task proveId() {
-    return new SimpleTask("Prove identity", PROVE_IDENTITY);
+    return new SimpleTask("taskList.application.section.proveIdentity", PROVE_IDENTITY);
   }
 
   private Task providePhoto() {
-    return new SimpleTask("Add a photo of yourself", StepDefinition.PROVIDE_PHOTO);
+    return new SimpleTask("taskList.application.section.providePhoto", StepDefinition.PROVIDE_PHOTO);
   }
 
   private Task proofOfVisual() {
     return new BlindTask(
-        "Provide proof of visual impairment", REGISTERED, PERMISSION, REGISTERED_COUNCIL);
+        "taskList.application.section.provideProofVisual", REGISTERED, PERMISSION, REGISTERED_COUNCIL);
   }
 
   private Task descConditionArms() {
     return new SimpleTask(
-        "Describe your condition",
+        "taskList.application.section.descCondition",
         HEALTH_CONDITIONS,
         ARMS_HOW_OFTEN_DRIVE,
         ARMS_DRIVE_ADAPTED_VEHICLE,
@@ -198,12 +198,12 @@ public class JourneyTaskConfig {
   }
 
   private Task descConditionChild() {
-    return new SimpleTask("Describe your condition", HEALTH_CONDITIONS);
+    return new SimpleTask("taskList.application.section.descCondition", HEALTH_CONDITIONS);
   }
 
   private Task descWalkingAbility() {
     return new WalkingTask(
-        "Describe walking ability",
+        "taskList.application.section.descWalkingAbility",
         HEALTH_CONDITIONS,
         WHAT_MAKES_WALKING_DIFFICULT,
         BREATHLESSNESS,
@@ -213,32 +213,32 @@ public class JourneyTaskConfig {
   }
 
   private Task supportingDocs() {
-    return new SimpleTask("Add supporting documents", UPLOAD_SUPPORTING_DOCUMENTS);
+    return new SimpleTask("taskList.application.section.supportingDocs", UPLOAD_SUPPORTING_DOCUMENTS);
   }
 
   private Task listMedicalEquip() {
-    return new SimpleTask("List medical equipment", MEDICAL_EQUIPMENT);
+    return new SimpleTask("taskList.application.section.medicalEquip", MEDICAL_EQUIPMENT);
   }
 
   private Task listHealthProfs() {
-    return new SimpleTask("List healthcare professionals", HEALTHCARE_PROFESSIONAL_LIST);
+    return new SimpleTask("taskList.application.section.healthcaseProfs", HEALTHCARE_PROFESSIONAL_LIST);
   }
 
   private Task listMedication() {
-    return new SimpleTask("List medication", MEDICATION_LIST);
+    return new SimpleTask("taskList.application.section.medication", MEDICATION_LIST);
   }
 
   private Task listTreatments() {
-    return new SimpleTask("List treatments", TREATMENT_LIST);
+    return new SimpleTask("taskList.application.section.treatments", TREATMENT_LIST);
   }
 
   private Task declaration() {
-    return new SimpleTask("Read Declaration", DECLARATIONS);
+    return new SimpleTask("taskList.apply.section.declaration", DECLARATIONS);
   }
 
   private Task submitAndPay() {
     return new SubmitAndPayTask(
-        "Submit and Pay", // TODO Different if payments enabled/not
+        "taskList.apply.section.submitAndPay", // TODO Different if payments enabled/not
         BADGE_PAYMENT,
         NOT_PAID,
         BADGE_PAYMENT_RETURN,

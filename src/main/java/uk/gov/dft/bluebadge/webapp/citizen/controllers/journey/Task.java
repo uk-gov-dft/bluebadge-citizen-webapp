@@ -11,6 +11,10 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 @Getter
 @EqualsAndHashCode
 public abstract class Task {
+  enum TaskState{
+    NOT_STARTED, IN_PROGRESS, COMPLETED
+  }
+
   private final String titleCode;
   private final List<StepDefinition> steps;
 
@@ -49,13 +53,18 @@ public abstract class Task {
   }
 
   public boolean isComplete(Journey journey) {
+    return TaskState.COMPLETED == getState(journey);
+  }
+
+  public TaskState getState(Journey journey){
     StepDefinition step = getFirstStep(journey);
+    boolean foundOne = false;
     while (null != step) {
       if (null == journey.getFormForStep(step)) {
-        return false;
+        return foundOne ? TaskState.IN_PROGRESS : TaskState.NOT_STARTED;
       }
       step = this.getNextStep(journey, step);
     }
-    return true;
+    return TaskState.COMPLETED;
   }
 }

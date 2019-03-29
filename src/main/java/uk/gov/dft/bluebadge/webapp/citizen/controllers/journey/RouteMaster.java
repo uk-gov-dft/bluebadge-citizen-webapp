@@ -24,6 +24,9 @@ public class RouteMaster {
 
   public String redirectToOnSuccess(StepForm form, Journey journey) {
     StepDefinition nextStep = getNextStep(form, journey);
+    if(null == nextStep){
+      nextStep = StepDefinition.TASK_LIST;
+    }
     return REDIRECT + Mappings.getUrl(nextStep);
   }
 
@@ -115,6 +118,8 @@ public class RouteMaster {
   public boolean isValidStateInner(StepDefinition step, Journey journey) {
 
     Task task = journeySpecification.determineTask(journey, step);
+
+    // TODO Final section is sequencial - not in any order.
 
     if (!journeySpecification.arePreviousSectionsComplete(journey, task)) {
       return false;

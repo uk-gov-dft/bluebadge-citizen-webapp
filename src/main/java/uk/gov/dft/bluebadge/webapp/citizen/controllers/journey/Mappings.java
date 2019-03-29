@@ -9,6 +9,8 @@ public class Mappings {
 
   public static final String URL_REMOVE_PART = "/remove";
 
+  public static final String URL_TASK_LIST = "/task-list";
+
   public static final String URL_ROOT = "/";
   public static final String URL_APPLICANT_TYPE = "/applicant";
   public static final String URL_APPLICANT_NAME = "/name";
@@ -104,6 +106,7 @@ public class Mappings {
   private static final BiMap<StepDefinition, String> stepToUrlMapping =
       ImmutableBiMap.<StepDefinition, String>builder()
           .put(StepDefinition.HOME, URL_ROOT)
+          .put(StepDefinition.TASK_LIST, URL_TASK_LIST)
           .put(StepDefinition.APPLICANT_TYPE, URL_APPLICANT_TYPE)
           .put(StepDefinition.DOB, URL_DOB)
           .put(StepDefinition.CONTACT_DETAILS, URL_CONTACT_DETAILS)

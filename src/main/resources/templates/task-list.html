@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l" th:text="#{'taskList.title'}"></h1>
+
+            <ol>
+                <li class="govuk-heading-m" th:text="#{taskList.pre.section.title}"></li>
+                <div th:text="#{taskList.pre.section.checkEligibility}"></div><span>COMPLETED</span>
+
+                <li class="govuk-heading-m" th:text="#{taskList.application.section.title}"></li>
+                <th:block th:each="task : ${applicationSectionTasks}">
+                    <div><a th:href="${task.url}" th:text="#{${task.titleCode}}"></a><span th:text="${task.taskState}">state</span></div>
+                </th:block>
+
+                <li class="govuk-heading-m" th:text="#{taskList.apply.section.title}"></li>
+                <th:block th:each="task : ${applySectionTasks}">
+                    <div th:if="${task.enabled}"><a th:href="${task.url}" th:text="#{${task.titleCode}}"></a><span th:text="${task.taskState}">TODO state</span></div>
+                    <div th:if="${!task.enabled}"><span th:text="#{${task.titleCode}}"></span><span th:text="${task.taskState}">state</span></div>
+                </th:block>
+
+            </ol>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

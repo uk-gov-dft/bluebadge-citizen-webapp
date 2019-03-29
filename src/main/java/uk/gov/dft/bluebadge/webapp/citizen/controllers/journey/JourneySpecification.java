@@ -19,7 +19,11 @@ public class JourneySpecification {
   @Getter private JourneySection submitAndPayJourney;
   @Getter private Map<EligibilityCodeField, JourneySection> eligibilityCodeToJourneyMap;
 
-  private List<JourneySection> getFullJourney(Journey journey) {
+  public JourneySection getApplicationSection(Journey journey){
+    return determineApplicationSection(journey);
+  }
+
+  List<JourneySection> getFullJourney(Journey journey) {
     ImmutableList.Builder<JourneySection> result =
         ImmutableList.<JourneySection>builder().add(preApplicationJourney);
 
@@ -40,13 +44,14 @@ public class JourneySpecification {
     StepDefinition result = task.getNextStep(journey, currentStep);
 
     //  Return here once Task List page completed.
+    return result;
 
     // TMP
-    while (null == result) {
-      task = determineNextTask(fullJourney, task);
-      result = task.getFirstStep(journey);
-    }
-    return result;
+//    while (null == result) {
+//      task = determineNextTask(fullJourney, task);
+//      result = task.getFirstStep(journey);
+//    }
+//    return result;
   }
 
   private JourneySection determineApplicationSection(Journey journey) {
@@ -113,7 +118,7 @@ public class JourneySpecification {
     }
 
     if (submitAndPayJourney.getTasks().contains(task)) {
-      // error
+      // TODO error
       return true;
     } else if (!preApplicationJourney.isComplete(journey)) {
       return false;
