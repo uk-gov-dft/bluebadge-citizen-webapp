@@ -44,11 +44,6 @@ public class DeclarationSubmitController implements StepController {
     if (!model.containsAttribute("formRequest")) {
       model.addAttribute("formRequest", DeclarationSubmitForm.builder().build());
     }
-    model.addAttribute(
-        "submitButtonMessage",
-        journey.isPaymentsEnabled()
-            ? "declarationPage.continue.button.label"
-            : "declarationPage.submit.button.label");
 
     return TEMPLATE;
   }
