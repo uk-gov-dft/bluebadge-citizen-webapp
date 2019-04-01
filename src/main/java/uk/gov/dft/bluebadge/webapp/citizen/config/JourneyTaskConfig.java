@@ -238,10 +238,11 @@ public class JourneyTaskConfig {
 
   private Task submitAndPay() {
     return new SubmitAndPayTask(
-        "taskList.apply.section.submitAndPay", // TODO Different if payments enabled/not
+        "taskList.apply.section.submitAndPay", "taskList.apply.section.submit",
         BADGE_PAYMENT,
         NOT_PAID,
         BADGE_PAYMENT_RETURN,
+        SUBMIT_APPLICATION,
         SUBMITTED);
   }
 }

@@ -32,7 +32,7 @@ public class TaskListController implements StepController {
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey){
 
     if(!journeySpecification.getPreApplicationJourney().isComplete(journey)){
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
 
     JourneySection applicationSection = journeySpecification.getApplicationSection(journey);
@@ -59,7 +59,7 @@ public class TaskListController implements StepController {
     List<TaskView> taskViews = applicationSection.getTasks().stream()
         .filter(t->null != t.getFirstStep(journey))// Hide task if no first step
         .map(t -> TaskView.builder()
-            .titleCode(t.getTitleCode())
+            .titleCode(t.getTitleCode(journey))
             .url(Mappings.getUrl(t.getFirstStep(journey)))
             .enabled(true)
             .taskState(t.getState(journey))
@@ -72,7 +72,7 @@ public class TaskListController implements StepController {
     taskViews = new ArrayList<>();
     for(Task t : journeySpecification.getSubmitAndPayJourney().getTasks()){
       taskViews.add(TaskView.builder()
-          .titleCode(t.getTitleCode())
+          .titleCode(t.getTitleCode(journey))
           .url(Mappings.getUrl(t.getFirstStep(journey)))
           .enabled(previousComplete)
           .taskState(t.getState(journey))

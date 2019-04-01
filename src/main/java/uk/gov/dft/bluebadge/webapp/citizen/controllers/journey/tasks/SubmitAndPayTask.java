@@ -3,6 +3,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.BADGE_PAYMENT;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.NOT_PAID;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.SUBMITTED;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.SUBMIT_APPLICATION;
 
 import lombok.EqualsAndHashCode;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
@@ -12,8 +13,18 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 @EqualsAndHashCode(callSuper = true)
 public class SubmitAndPayTask extends Task {
 
-  public SubmitAndPayTask(String titleCode, StepDefinition... steps) {
-    super(titleCode, steps);
+  private final String submitAndPayTitle;
+  private final String submitTitle;
+
+  public SubmitAndPayTask(String submitAndPayTitle, String submitTitle, StepDefinition... steps) {
+    super(null, steps);
+    this.submitAndPayTitle = submitAndPayTitle;
+    this.submitTitle = submitTitle;
+  }
+
+  @Override
+  public String getTitleCode(Journey journey){
+    return journey.isPaymentsEnabled() ? submitAndPayTitle : submitTitle;
   }
 
   @Override
@@ -21,7 +32,7 @@ public class SubmitAndPayTask extends Task {
     if (journey.isPaymentsEnabled()) {
       return BADGE_PAYMENT;
     } else {
-      return SUBMITTED;
+      return SUBMIT_APPLICATION;
     }
   }
 
@@ -34,10 +45,17 @@ public class SubmitAndPayTask extends Task {
         } // else fall through to submitted
       case BADGE_PAYMENT:
       case NOT_PAID:
+      case SUBMIT_APPLICATION:
         return SUBMITTED;
       default:
         throw new IllegalStateException(
             "Unsupported step within Submit and Pay task. Step:" + current);
     }
+  }
+
+  @Override
+  public boolean isValidStep(Journey journey, StepDefinition step) {
+    // TODO
+    return super.isValidStep(journey, step);
   }
 }

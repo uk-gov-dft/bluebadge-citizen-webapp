@@ -11,6 +11,7 @@ public enum StepDefinition {
   TASK_LIST(),
 
   SUBMITTED(), // Terminatory step
+  SUBMIT_APPLICATION(),
   NOT_PAID(),
   BADGE_PAYMENT_RETURN(),
   BADGE_PAYMENT(),

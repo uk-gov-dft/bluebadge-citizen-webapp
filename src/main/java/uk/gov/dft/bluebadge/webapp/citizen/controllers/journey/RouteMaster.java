@@ -23,15 +23,17 @@ public class RouteMaster {
   }
 
   public String redirectToOnSuccess(StepForm form, Journey journey) {
-    StepDefinition nextStep = getNextStep(form, journey);
+    return redirectToOnSuccess(form.getAssociatedStep(), journey);
+  }
+  public String redirectToOnSuccess(StepDefinition currentStep, Journey journey) {
+    StepDefinition nextStep = getNextStep(currentStep, journey);
     if(null == nextStep){
       nextStep = StepDefinition.TASK_LIST;
     }
     return REDIRECT + Mappings.getUrl(nextStep);
   }
 
-  private StepDefinition getNextStep(StepForm form, Journey journey) {
-    StepDefinition currentStep = form.getAssociatedStep();
+  private StepDefinition getNextStep(StepDefinition currentStep, Journey journey) {
     return journeySpecification.determineNextStep(journey, currentStep);
   }
 
@@ -41,9 +43,10 @@ public class RouteMaster {
     return REDIRECT + Mappings.getUrl(StepDefinition.HOME.getDefaultNext());
   }
 
-  public String backToCompletedPrevious() {
-    // TODO Go to the Task List. Or first page if pre task not done
-    return REDIRECT + Mappings.getUrl(StepDefinition.HOME);
+  public String backToCompletedPrevious(Journey journey) {
+    return journeySpecification.getPreApplicationJourney().isComplete(journey)
+        ? REDIRECT + Mappings.getUrl(StepDefinition.TASK_LIST)
+        : REDIRECT + Mappings.getUrl(StepDefinition.HOME);
   }
 
   public String redirectToOnBindingError(
@@ -84,7 +87,6 @@ public class RouteMaster {
       case MEDICATION_ADD:
         return isValidState(StepDefinition.MEDICATION_LIST, journey);
       case BADGE_PAYMENT_RETURN:
-        return isValidState(StepDefinition.BADGE_PAYMENT, journey);
       case NOT_PAID:
         return isValidState(StepDefinition.BADGE_PAYMENT, journey);
       case HOME:
@@ -101,61 +103,29 @@ public class RouteMaster {
     StepForm form = journey.getFormForStep(StepDefinition.getFirstStep());
     if (null == form) return false;
 
-    return isValidStateInner(step, journey);
-  }
-
-  /**
-   * The step is valid, if it is within a task that is part of the current journey and that all the
-   * previous steps within the task have been complete.
-   *
-   * <p>And that the previous section is complete. For example, Pay step is invalid if the pre
-   * application and the application sections are incomplete.
-   *
-   * @param step
-   * @param journey
-   * @return
-   */
-  public boolean isValidStateInner(StepDefinition step, Journey journey) {
-
     Task task = journeySpecification.determineTask(journey, step);
-
-    // TODO Final section is sequencial - not in any order.
-
     if (!journeySpecification.arePreviousSectionsComplete(journey, task)) {
       return false;
     }
 
-    StepDefinition currentLoopStep = task.getFirstStep(journey);
-    int stepsWalked = 0;
-    while (true) {
+    // Final section is sequential
+    JourneySection journeySection = journeySpecification.determineSection(journey, step);
+    return journeySection == journeySpecification.getSubmitAndPayJourney()
+        ? sequenceOrderValid(journeySection, task, step, journey)
+        : anyOrderValid(task, step, journey);
+  }
 
-      if (currentLoopStep == step) {
-        // Got to step being validated in journey, so it is valid.
-        return true;
-      }
-
-      // Should not need next...but don't want an infinite loop.
-      if (stepsWalked++ > task.getSteps().size()) {
-        log.error("IsValidState journey walk got into infinite loop. Step being checked {}.", step);
-        throw new IllegalStateException();
-      }
-      // Break in the journey, expected only if a guard question has been changed
-      // and an attempt to navigate past it happened.
-      if (!journey.hasStepForm(currentLoopStep)) {
-        return false;
-      }
-
-      StepDefinition nextStep;
-
-      StepForm currentLoopForm = journey.getFormForStep(currentLoopStep);
-      nextStep = getNextStep(currentLoopForm, journey);
-      if (null == nextStep) {
-        // Got to the end of the task without finding the step.
-        // Error!!
-        return false;
-      }
-
-      currentLoopStep = nextStep;
+  /** All tasks prior to the current one must be complete */
+  private boolean sequenceOrderValid(JourneySection journeySection, Task task, StepDefinition step, Journey journey) {
+    for (Task priorTask : journeySection.getTasks()) {
+      if(task.equals(priorTask)) break;
+      if(!priorTask.isComplete(journey)) return false;
     }
+
+    return task.isValidStep(journey, step);
+  }
+
+  private boolean anyOrderValid(Task task, StepDefinition step, Journey journey) {
+    return task.isValidStep(journey, step);
   }
 }
