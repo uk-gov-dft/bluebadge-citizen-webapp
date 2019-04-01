@@ -40,7 +40,7 @@ public class MedicationAddController implements StepController {
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
 
     // Can hit add link before previous form submitted.

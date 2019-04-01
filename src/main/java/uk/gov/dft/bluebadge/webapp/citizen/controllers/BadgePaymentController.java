@@ -52,7 +52,7 @@ public class BadgePaymentController implements StepController {
       @ModelAttribute(FORM_REQUEST) BadgePaymentForm formRequest) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
 
     if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {

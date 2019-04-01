@@ -45,7 +45,7 @@ public class PipPlanningJourneyController implements StepController {
   @GetMapping
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
 
     // On returning to form, take previously submitted values.

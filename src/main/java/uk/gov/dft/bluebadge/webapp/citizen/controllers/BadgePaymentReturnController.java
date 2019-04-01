@@ -49,7 +49,7 @@ public class BadgePaymentReturnController implements StepController {
       @Valid @ModelAttribute(FORM_REQUEST) BadgePaymentReturnForm formRequest) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
 
     if (journey.getPaymentJourneyUuid() == null) {

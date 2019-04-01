@@ -75,7 +75,7 @@ public class DifferentServiceSignpostControllerTest {
   public void show_ShouldRedirectBackToCompletePreviousPage_WhenYouAreInAnInValidState() {
     when(routeMasterMock.isValidState(StepDefinition.DIFFERENT_SERVICE_SIGNPOST, journeyMock))
         .thenReturn(false);
-    when(routeMasterMock.backToCompletedPrevious()).thenReturn("redirect:/backToCompletePrevious");
+    when(routeMasterMock.backToCompletedPrevious(journey)).thenReturn("redirect:/backToCompletePrevious");
 
     mockMvc
         .perform(get("/different-service-signpost").sessionAttr("JOURNEY", journeyMock))

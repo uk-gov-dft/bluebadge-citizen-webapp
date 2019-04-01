@@ -32,7 +32,7 @@ public class MayBeEligibleController implements StepController {
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
 
     model.addAttribute("isWalkD", EligibilityCodeField.WALKD == journey.getEligibilityCode());
