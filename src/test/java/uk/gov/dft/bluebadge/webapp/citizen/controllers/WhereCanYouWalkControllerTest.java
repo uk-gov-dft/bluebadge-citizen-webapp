@@ -34,7 +34,7 @@ public class WhereCanYouWalkControllerTest {
   private static final String TIME_TO_DESTINATION_MAX = StringUtils.leftPad("a", 100, 'b');
   private static final String TIME_TO_DESTINATION_OVER_MAX = TIME_TO_DESTINATION_MAX + "a";
 
-  private static final String SUCCESS_URL = Mappings.URL_UPLOAD_SUPPORTING_DOCUMENTS;
+  private static final String SUCCESS_URL = Mappings.URL_TASK_LIST;
   private static final String ERROR_URL =
       Mappings.URL_WHERE_CAN_YOU_WALK + RouteMaster.ERROR_SUFFIX;
   private MockMvc mockMvc;

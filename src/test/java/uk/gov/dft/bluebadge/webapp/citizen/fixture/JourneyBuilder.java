@@ -19,6 +19,7 @@ public class JourneyBuilder {
   private CompoundDate dob;
   private ApplicantType applicantType;
   private Boolean orgDoesCare;
+  private Boolean paymentsEnabled;
 
   public JourneyBuilder() {
     // Set defaults
@@ -28,6 +29,7 @@ public class JourneyBuilder {
     dob = JourneyFixture.Values.DOB_ADULT;
     applicantType = JourneyFixture.Values.APPLICANT_TYPE;
     orgDoesCare = Boolean.TRUE;
+    paymentsEnabled = Boolean.FALSE;
   }
 
   public JourneyBuilder forYou() {
@@ -85,6 +87,11 @@ public class JourneyBuilder {
     return this;
   }
 
+  public JourneyBuilder paymentsEnabled(Boolean paymentsEnabled) {
+    this.paymentsEnabled = paymentsEnabled;
+    return this;
+  }
+
   public Journey build() {
     return getDefaultJourneyToStepWithOptions(
         JourneyBuildOptions.builder()
@@ -94,7 +101,7 @@ public class JourneyBuilder {
             .dob(dob)
             .applicantType(applicantType)
             .orgDoesCare(orgDoesCare)
-            .paymentsEnable(false)
+            .paymentsEnable(paymentsEnabled)
             .build());
   }
 }

@@ -12,8 +12,10 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 @EqualsAndHashCode
 @Slf4j
 public abstract class Task {
-  enum TaskState{
-    NOT_STARTED, IN_PROGRESS, COMPLETED
+  enum TaskState {
+    NOT_STARTED,
+    IN_PROGRESS,
+    COMPLETED
   }
 
   private final String titleCode;
@@ -24,7 +26,7 @@ public abstract class Task {
     this.steps = ImmutableList.copyOf(steps);
   }
 
-  public String getTitleCode(Journey journey){
+  public String getTitleCode(Journey journey) {
     return titleCode;
   }
 
@@ -61,7 +63,7 @@ public abstract class Task {
     return TaskState.COMPLETED == getState(journey);
   }
 
-  public TaskState getState(Journey journey){
+  public TaskState getState(Journey journey) {
     StepDefinition step = getFirstStep(journey);
     boolean foundOne = false;
     while (null != step) {
@@ -76,8 +78,9 @@ public abstract class Task {
 
   /**
    * Default method for determining if the step within the task is valid for the given journey.
-   * @return false if step not within task. false is any prior step does not have a form within
-   * the journey
+   *
+   * @return false if step not within task. false is any prior step does not have a form within the
+   *     journey
    */
   public boolean isValidStep(Journey journey, StepDefinition step) {
     StepDefinition currentLoopStep = this.getFirstStep(journey);

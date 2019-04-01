@@ -50,7 +50,7 @@ public class UploadBenefitControllerTest {
   private MockMvc mockMvc;
 
   private Journey journey;
-  private static final String SUCCESS_URL = Mappings.URL_PROVE_IDENTITY;
+  private static final String SUCCESS_URL = Mappings.URL_TASK_LIST;
   private static final String ERROR_URL = Mappings.URL_UPLOAD_BENEFIT + RouteMaster.ERROR_SUFFIX;
   private ArtifactService artifactServiceMock;
   private URL signedUrl;

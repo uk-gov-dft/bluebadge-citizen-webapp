@@ -31,7 +31,7 @@ public class SubmitApplicationController implements StepController {
 
   @GetMapping
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
-    if(!routeMaster.isValidState(getStepDefinition(), journey)){
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious(journey);
     }
 
@@ -40,7 +40,7 @@ public class SubmitApplicationController implements StepController {
 
   @PostMapping
   public String submit(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
-    if(!routeMaster.isValidState(getStepDefinition(), journey)){
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       throw new IllegalStateException("Not in a valid state to submit.");
     }
 

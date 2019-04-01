@@ -29,14 +29,14 @@ public class TaskListController implements StepController {
   }
 
   @GetMapping
-  public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey){
+  public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    if(!journeySpecification.getPreApplicationJourney().isComplete(journey)){
+    if (!journeySpecification.getPreApplicationJourney().isComplete(journey)) {
       return routeMaster.backToCompletedPrevious(journey);
     }
 
     JourneySection applicationSection = journeySpecification.getApplicationSection(journey);
-    if(null == applicationSection){
+    if (null == applicationSection) {
       throw new IllegalStateException("Task list page, but no application section found.");
     }
 
@@ -54,34 +54,37 @@ public class TaskListController implements StepController {
     return TEMPLATE;
   }
 
-  private void setupModel(Model model, Journey journey){
+  private void setupModel(Model model, Journey journey) {
     JourneySection applicationSection = journeySpecification.getApplicationSection(journey);
-    List<TaskView> taskViews = applicationSection.getTasks().stream()
-        .filter(t->null != t.getFirstStep(journey))// Hide task if no first step
-        .map(t -> TaskView.builder()
-            .titleCode(t.getTitleCode(journey))
-            .url(Mappings.getUrl(t.getFirstStep(journey)))
-            .enabled(true)
-            .taskState(t.getState(journey))
-            .build()
-        )
-        .collect(Collectors.toList());
+    List<TaskView> taskViews =
+        applicationSection
+            .getTasks()
+            .stream()
+            .filter(t -> null != t.getFirstStep(journey)) // Hide task if no first step
+            .map(
+                t ->
+                    TaskView.builder()
+                        .titleCode(t.getTitleCode(journey))
+                        .url(Mappings.getUrl(t.getFirstStep(journey)))
+                        .enabled(true)
+                        .taskState(t.getState(journey))
+                        .build())
+            .collect(Collectors.toList());
     model.addAttribute("applicationSectionTasks", taskViews);
 
     boolean previousComplete = applicationSection.isComplete(journey);
     taskViews = new ArrayList<>();
-    for(Task t : journeySpecification.getSubmitAndPayJourney().getTasks()){
-      taskViews.add(TaskView.builder()
-          .titleCode(t.getTitleCode(journey))
-          .url(Mappings.getUrl(t.getFirstStep(journey)))
-          .enabled(previousComplete)
-          .taskState(t.getState(journey))
-          .build());
+    for (Task t : journeySpecification.getSubmitAndPayJourney().getTasks()) {
+      taskViews.add(
+          TaskView.builder()
+              .titleCode(t.getTitleCode(journey))
+              .url(Mappings.getUrl(t.getFirstStep(journey)))
+              .enabled(previousComplete)
+              .taskState(t.getState(journey))
+              .build());
       previousComplete = t.isComplete(journey);
     }
     model.addAttribute("applySectionTasks", taskViews);
-
-
   }
 
   @Override
@@ -91,7 +94,7 @@ public class TaskListController implements StepController {
 
   @Builder
   @Getter
-  private static class TaskView{
+  private static class TaskView {
     private final String titleCode;
     private final String url;
     private final boolean enabled;

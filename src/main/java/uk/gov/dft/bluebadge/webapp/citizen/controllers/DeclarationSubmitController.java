@@ -17,7 +17,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationSubmitForm;
-import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 
 @Controller
 @RequestMapping(Mappings.URL_DECLARATIONS)
@@ -25,12 +24,10 @@ public class DeclarationSubmitController implements StepController {
 
   private static final String TEMPLATE = "application-end/declaration";
 
-  private final ApplicationManagementService appService;
   private final RouteMaster routeMaster;
 
   @Autowired
-  DeclarationSubmitController(ApplicationManagementService appService, RouteMaster routeMaster) {
-    this.appService = appService;
+  DeclarationSubmitController(RouteMaster routeMaster) {
     this.routeMaster = routeMaster;
   }
 

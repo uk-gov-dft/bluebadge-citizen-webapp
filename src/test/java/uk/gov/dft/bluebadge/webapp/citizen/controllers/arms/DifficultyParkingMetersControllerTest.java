@@ -66,7 +66,7 @@ public class DifficultyParkingMetersControllerTest {
                 .param("parkingMetersDifficultyDescription", "Stuff")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(Mappings.URL_UPLOAD_SUPPORTING_DOCUMENTS));
+        .andExpect(redirectedUrl(Mappings.URL_TASK_LIST));
   }
 
   @Test

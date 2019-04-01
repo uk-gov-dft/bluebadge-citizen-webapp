@@ -168,11 +168,18 @@ public class JourneyTaskConfig {
 
   private Task personalDetails() {
     return new SimpleTask(
-        "taskList.application.section.personalDetails", NAME, DOB, GENDER, NINO, ADDRESS, CONTACT_DETAILS);
+        "taskList.application.section.personalDetails",
+        NAME,
+        DOB,
+        GENDER,
+        NINO,
+        ADDRESS,
+        CONTACT_DETAILS);
   }
 
   private Task proofOfBenefit() {
-    return new SimpleTask("taskList.application.section.provideProofBenefit", PROVE_BENEFIT, UPLOAD_BENEFIT);
+    return new SimpleTask(
+        "taskList.application.section.provideProofBenefit", PROVE_BENEFIT, UPLOAD_BENEFIT);
   }
 
   private Task proveId() {
@@ -180,12 +187,16 @@ public class JourneyTaskConfig {
   }
 
   private Task providePhoto() {
-    return new SimpleTask("taskList.application.section.providePhoto", StepDefinition.PROVIDE_PHOTO);
+    return new SimpleTask(
+        "taskList.application.section.providePhoto", StepDefinition.PROVIDE_PHOTO);
   }
 
   private Task proofOfVisual() {
     return new BlindTask(
-        "taskList.application.section.provideProofVisual", REGISTERED, PERMISSION, REGISTERED_COUNCIL);
+        "taskList.application.section.provideProofVisual",
+        REGISTERED,
+        PERMISSION,
+        REGISTERED_COUNCIL);
   }
 
   private Task descConditionArms() {
@@ -213,7 +224,8 @@ public class JourneyTaskConfig {
   }
 
   private Task supportingDocs() {
-    return new SimpleTask("taskList.application.section.supportingDocs", UPLOAD_SUPPORTING_DOCUMENTS);
+    return new SimpleTask(
+        "taskList.application.section.supportingDocs", UPLOAD_SUPPORTING_DOCUMENTS);
   }
 
   private Task listMedicalEquip() {
@@ -221,7 +233,8 @@ public class JourneyTaskConfig {
   }
 
   private Task listHealthProfs() {
-    return new SimpleTask("taskList.application.section.healthcaseProfs", HEALTHCARE_PROFESSIONAL_LIST);
+    return new SimpleTask(
+        "taskList.application.section.healthcaseProfs", HEALTHCARE_PROFESSIONAL_LIST);
   }
 
   private Task listMedication() {
@@ -238,7 +251,8 @@ public class JourneyTaskConfig {
 
   private Task submitAndPay() {
     return new SubmitAndPayTask(
-        "taskList.apply.section.submitAndPay", "taskList.apply.section.submit",
+        "taskList.apply.section.submitAndPay",
+        "taskList.apply.section.submit",
         BADGE_PAYMENT,
         NOT_PAID,
         BADGE_PAYMENT_RETURN,

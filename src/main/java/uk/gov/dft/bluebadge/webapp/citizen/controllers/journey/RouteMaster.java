@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.StepController;
-
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 
@@ -25,9 +24,10 @@ public class RouteMaster {
   public String redirectToOnSuccess(StepForm form, Journey journey) {
     return redirectToOnSuccess(form.getAssociatedStep(), journey);
   }
+
   public String redirectToOnSuccess(StepDefinition currentStep, Journey journey) {
     StepDefinition nextStep = getNextStep(currentStep, journey);
-    if(null == nextStep){
+    if (null == nextStep) {
       nextStep = StepDefinition.TASK_LIST;
     }
     return REDIRECT + Mappings.getUrl(nextStep);
@@ -116,10 +116,11 @@ public class RouteMaster {
   }
 
   /** All tasks prior to the current one must be complete */
-  private boolean sequenceOrderValid(JourneySection journeySection, Task task, StepDefinition step, Journey journey) {
+  private boolean sequenceOrderValid(
+      JourneySection journeySection, Task task, StepDefinition step, Journey journey) {
     for (Task priorTask : journeySection.getTasks()) {
-      if(task.equals(priorTask)) break;
-      if(!priorTask.isComplete(journey)) return false;
+      if (task.equals(priorTask)) break;
+      if (!priorTask.isComplete(journey)) return false;
     }
 
     return task.isValidStep(journey, step);

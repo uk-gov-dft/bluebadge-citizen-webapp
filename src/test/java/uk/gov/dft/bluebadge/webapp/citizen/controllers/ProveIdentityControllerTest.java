@@ -44,7 +44,7 @@ public class ProveIdentityControllerTest {
   private MockMvc mockMvc;
 
   private Journey journey;
-  private static final String SUCCESS_URL = Mappings.URL_PROVE_ADDRESS;
+  private static final String SUCCESS_URL = Mappings.URL_TASK_LIST;
   private static final String ERROR_URL = Mappings.URL_PROVE_IDENTITY + RouteMaster.ERROR_SUFFIX;
   private ArtifactService artifactServiceMock;
   private URL signedUrl;

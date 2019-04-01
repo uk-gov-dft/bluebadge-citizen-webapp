@@ -70,6 +70,6 @@ public class EligibleControllerTest {
                 .sessionAttr(
                     "JOURNEY", JourneyFixture.getDefaultJourneyToStep(StepDefinition.ELIGIBLE)))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(Mappings.URL_APPLICANT_NAME));
+        .andExpect(redirectedUrl(Mappings.URL_TASK_LIST));
   }
 }

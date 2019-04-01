@@ -70,8 +70,7 @@ public class BadgePaymentController implements StepController {
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute(FORM_REQUEST) BadgePaymentForm formRequest) {
-    PaymentResponse response = null;
-    response = createPayment(journey);
+    PaymentResponse response = createPayment(journey);
 
     journey.setPaymentJourneyUuid(response != null ? response.getPaymentJourneyUuid() : null);
     journey.setFormForStep(formRequest);

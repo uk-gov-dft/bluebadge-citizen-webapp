@@ -21,7 +21,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
 
 public class TreatmentListControllerTest extends ControllerTestFixture<TreatmentListController> {
 
-  private static final String SUCCESS_URL = Mappings.URL_HEALTHCARE_PROFESSIONALS_LIST;
+  private static final String SUCCESS_URL = Mappings.URL_TASK_LIST;
 
   @Before
   public void setup() {

@@ -22,7 +22,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm
 
 public class MedicationListControllerTest extends ControllerTestFixture<MedicationListController> {
 
-  private static final String SUCCESS_URL = Mappings.URL_TREATMENT_LIST;
+  private static final String SUCCESS_URL = Mappings.URL_TASK_LIST;
 
   @Before
   public void setup() {

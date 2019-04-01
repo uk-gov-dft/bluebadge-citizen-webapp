@@ -18,7 +18,7 @@ public class JourneySpecification {
   @Getter private JourneySection submitAndPayJourney;
   @Getter private Map<EligibilityCodeField, JourneySection> eligibilityCodeToJourneyMap;
 
-  public JourneySection getApplicationSection(Journey journey){
+  public JourneySection getApplicationSection(Journey journey) {
     return determineApplicationSection(journey);
   }
 
@@ -54,10 +54,13 @@ public class JourneySpecification {
   }
 
   /** @throws IllegalStateException If step not part of the journey */
-  JourneySection determineSection(Journey journey, StepDefinition step) throws IllegalStateException {
+  JourneySection determineSection(Journey journey, StepDefinition step)
+      throws IllegalStateException {
     List<JourneySection> fullJourney = getFullJourney(journey);
     return determineSection(fullJourney, step)
-        .orElseThrow(()->new IllegalStateException(
+        .orElseThrow(
+            () ->
+                new IllegalStateException(
                     "Can't find task, step " + step + " not part of journey:" + fullJourney));
   }
   /** @throws IllegalStateException If step not part of the journey */
@@ -66,8 +69,10 @@ public class JourneySpecification {
     return determineTask(fullJourney, step);
   }
 
-  private Optional<JourneySection> determineSection(List<JourneySection> fullJourney, StepDefinition step) {
-    return fullJourney.stream()
+  private Optional<JourneySection> determineSection(
+      List<JourneySection> fullJourney, StepDefinition step) {
+    return fullJourney
+        .stream()
         .filter(Objects::nonNull)
         .filter(js -> js.findTaskByStep(step).isPresent())
         .findAny();

@@ -1,6 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.BADGE_PAYMENT;
+
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.NOT_PAID;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.SUBMITTED;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.SUBMIT_APPLICATION;
@@ -23,7 +24,7 @@ public class SubmitAndPayTask extends Task {
   }
 
   @Override
-  public String getTitleCode(Journey journey){
+  public String getTitleCode(Journey journey) {
     return journey.isPaymentsEnabled() ? submitAndPayTitle : submitTitle;
   }
 
@@ -55,7 +56,6 @@ public class SubmitAndPayTask extends Task {
 
   @Override
   public boolean isValidStep(Journey journey, StepDefinition step) {
-    // TODO
-    return super.isValidStep(journey, step);
+    return !journey.isPaymentsEnabled() || null != journey.getFormForStep(BADGE_PAYMENT);
   }
 }

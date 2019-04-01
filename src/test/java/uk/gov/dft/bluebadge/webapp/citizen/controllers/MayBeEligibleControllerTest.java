@@ -73,6 +73,6 @@ public class MayBeEligibleControllerTest {
                     "JOURNEY",
                     JourneyFixture.getDefaultJourneyToStep(StepDefinition.MAY_BE_ELIGIBLE)))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(Mappings.URL_APPLICANT_NAME));
+        .andExpect(redirectedUrl(Mappings.URL_TASK_LIST));
   }
 }

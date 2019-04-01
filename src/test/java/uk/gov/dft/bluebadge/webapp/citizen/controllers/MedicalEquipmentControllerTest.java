@@ -94,7 +94,7 @@ public class MedicalEquipmentControllerTest {
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(Mappings.URL_HEALTHCARE_PROFESSIONALS_LIST));
+        .andExpect(redirectedUrl(Mappings.URL_TASK_LIST));
   }
 
   @Test
