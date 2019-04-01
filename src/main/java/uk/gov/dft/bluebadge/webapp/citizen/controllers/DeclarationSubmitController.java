@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import uk.gov.dft.bluebadge.webapp.citizen.appbuilder.JourneyToApplicationConverter;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
@@ -39,7 +38,7 @@ public class DeclarationSubmitController implements StepController {
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
 
     if (!model.containsAttribute("formRequest")) {
@@ -63,9 +62,6 @@ public class DeclarationSubmitController implements StepController {
 
     if (bindingResult.hasErrors()) {
       return routeMaster.redirectToOnBindingError(this, form, bindingResult, attr);
-    }
-    if (!journey.isPaymentsEnabled()) {
-      appService.create(JourneyToApplicationConverter.convert(journey));
     }
     journey.setFormForStep(form);
     return routeMaster.redirectToOnSuccess(form, journey);
