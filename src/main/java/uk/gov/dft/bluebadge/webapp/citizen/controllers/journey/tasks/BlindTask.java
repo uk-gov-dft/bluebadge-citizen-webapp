@@ -4,7 +4,6 @@ import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefini
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.REGISTERED;
 
 import lombok.EqualsAndHashCode;
-
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Task;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;

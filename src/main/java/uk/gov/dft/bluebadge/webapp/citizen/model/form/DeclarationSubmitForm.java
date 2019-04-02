@@ -1,7 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
 import java.io.Serializable;
-
 import javax.validation.constraints.AssertTrue;
 import lombok.Builder;
 import lombok.Data;

@@ -12,13 +12,13 @@
                 <h1 class="govuk-heading-l" th:text="#{'taskList.title'}"></h1>
 
                 <ol class="app-task-list">
-                    <th:block th:with="eligibilitySectionTasks=${ {{url: '', taskState: 'COMPLETED', titleCode: 'taskList.pre.section.checkEligibility'}} }">
-                        <th:block th:replace="~{ fragments/task-list :: task-list-group(${eligibilitySectionTasks}, #{taskList.pre.section.title}, 1, true)}" />
+                    <th:block th:with="eligibilitySectionTasks=${ {{enabled: false, url: '', taskState: 'COMPLETED', titleCode: 'taskList.pre.section.checkEligibility'}} }">
+                        <th:block th:replace="~{ fragments/task-list :: task-list-group(${eligibilitySectionTasks}, #{taskList.pre.section.title}, 1)}" />
                     </th:block>
 
-                    <th:block th:replace="~{ fragments/task-list :: task-list-group(${applicationSectionTasks}, #{taskList.application.section.title}, 2, true)}" />
+                    <th:block th:replace="~{ fragments/task-list :: task-list-group(${applicationSectionTasks}, #{taskList.application.section.title}, 2)}" />
 
-                    <th:block th:replace="~{ fragments/task-list :: task-list-group(${applySectionTasks}, #{taskList.apply.section.title}, 3, false)}" />
+                    <th:block th:replace="~{ fragments/task-list :: task-list-group(${applySectionTasks}, #{taskList.apply.section.title}, 3)}" />
                 </ol>
 
             </div>
