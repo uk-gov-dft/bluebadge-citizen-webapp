@@ -18,7 +18,7 @@ public class TaskListSteps extends AbstractSpringSteps {
 
   @Then("^I see the \"([^\"]*)\" task list page$")
   public void iSeeTheTaskListPage(String taskListType) throws Throwable {
-    iSeeTheTaskListPage(taskListType, null);
+    iSeeTheTaskListPage(taskListType, "Adult"); // TODO Prove address shown by default??
   }
 
   @Then("^I see the \"([^\"]*)\" task list page as (Child|Adult)$")
@@ -27,20 +27,40 @@ public class TaskListSteps extends AbstractSpringSteps {
     commonSteps.thenIShouldSeeTheContent("Check before you start");
 
     Boolean isAdult = "Adult".equalsIgnoreCase(ageGroup);
+    iSeeCommonTaskList(isAdult);
     switch (taskListType) {
       case "AFRFCS":
         iSeeAFCSTaskList(isAdult);
         break;
+      case "ARMS":
+        iSeeArmsTaskList(isAdult);
+        break;
+      case "BLIND":
+        iSeeBlindTaskList(isAdult);
+        break;
     }
   }
 
-  public void iSeeAFCSTaskList(Boolean isAdult) throws Throwable {
+  public void iSeeCommonTaskList(Boolean isAdult) throws Throwable {
     commonSteps.thenISeeLinkWithText("Enter personal details");
     commonSteps.thenISeeLinkWithText("Prove identity");
     if (isAdult) {
       commonSteps.thenISeeLinkWithText("Prove address");
+    } else {
+      commonSteps.thenIDontSeeLinkWithText("Prove address");
     }
     commonSteps.thenISeeLinkWithText("Add a photo of yourself");
+  }
+
+  public void iSeeAFCSTaskList(Boolean isAdult) throws Throwable {
+    iSeeCommonTaskList(isAdult);
+  }
+  public void iSeeArmsTaskList(Boolean isAdult) throws Throwable {
+    commonSteps.thenISeeLinkWithText("Describe your condition");
+    commonSteps.thenISeeLinkWithText("Add supporting documents");
+  }
+  public void iSeeBlindTaskList(Boolean isAdult) throws Throwable {
+    commonSteps.thenISeeLinkWithText("Provide proof of visual impairment");
   }
 
   @And("^I see task \"([^\"]*)\" as (COMPLETED|IN_PROGRESS|NOT_STARTED)$")
