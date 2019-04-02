@@ -26,6 +26,10 @@ public abstract class Task {
     this.steps = ImmutableList.copyOf(steps);
   }
 
+  /**
+   * @param journey The journey, can be used to determine the title
+   * @return The title specific to the supplied journey
+   */
   public String getTitleCode(Journey journey) {
     return titleCode;
   }

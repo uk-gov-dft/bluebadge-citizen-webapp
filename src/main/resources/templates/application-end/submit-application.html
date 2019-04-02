@@ -4,7 +4,7 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/master.html}">
 <head>
-    <title th:text="#{declarationPage.title}"></title>
+    <title th:text="#{submitApplicationPage.title}"></title>
 </head>
 <body>
 
@@ -13,8 +13,7 @@
         <div class="govuk-grid-column-two-thirds">
 
 
-            <h1 class="govuk-heading-l" >TODO - Submit Application</h1>
-            <h1 class="govuk-heading-l" th:text="#{declarationPage.title}"></h1>
+            <h1 class="govuk-heading-l" th:text="#{submitApplicationPage.title}"></h1>
 
             <form data-prevent-double-submission th:action="@{/submit-application}" th:object="${formRequest}" method="post" novalidate>
                 <button type="submit" class="govuk-button" data-uipath="button.continue" th:text="#{submitApplicationPage.submit.button.label}"></button>

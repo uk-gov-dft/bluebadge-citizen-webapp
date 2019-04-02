@@ -1,7 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.BADGE_PAYMENT;
-
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.NOT_PAID;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.SUBMITTED;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.SUBMIT_APPLICATION;
@@ -54,8 +53,16 @@ public class SubmitAndPayTask extends Task {
     }
   }
 
+  /** This task is only enabled once all previous have been completed */
   @Override
   public boolean isValidStep(Journey journey, StepDefinition step) {
-    return !journey.isPaymentsEnabled() || null != journey.getFormForStep(BADGE_PAYMENT);
+    if (journey.isPaymentsEnabled()) {
+      if (step == BADGE_PAYMENT) {
+        return true;
+      }
+
+      return null != journey.getFormForStep(BADGE_PAYMENT);
+    }
+    return true;
   }
 }
