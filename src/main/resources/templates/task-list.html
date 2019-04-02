@@ -12,25 +12,13 @@
                 <h1 class="govuk-heading-l" th:text="#{'taskList.title'}"></h1>
 
                 <ol class="app-task-list">
-                    <li>
-                        <h2 class="app-task-list__section">
-                            <span class="app-task-list__section-number">1. </span>
-                            <span th:text="#{taskList.pre.section.title}"></span>
-                        </h2>
+                    <th:block th:with="eligibilitySectionTasks=${ {{url: '', taskState: 'COMPLETED', titleCode: 'taskList.pre.section.checkEligibility'}} }">
+                        <th:block th:replace="~{ fragments/task-list :: task-list-group(${eligibilitySectionTasks}, #{taskList.pre.section.title}, 1)}" />
+                    </th:block>
 
-                        <ul class="app-task-list__items">
-                            <li class="app-task-list__item">
-                                <th:block th:with="describeById=${#strings.randomAlphanumeric(4) + '-' + #strings.randomAlphanumeric(4)}">
-                                    <p class="app-task-list__task-name" th:aria-describedby="${describeById}" th:text="#{taskList.pre.section.checkEligibility}"></p>
-                                    <div th:replace="~{ fragments/task-list :: task-list-status-tag('COMPLETED', ${describeById})}"></div>
-                                </th:block>
-                            </li>
-                        </ul>
-                    </li>
+                    <th:block th:replace="~{ fragments/task-list :: task-list-group(${applicationSectionTasks}, #{taskList.application.section.title}, 2)}" />
 
-                    <th:block th:replace="~{ fragments/task-list :: task-list-status-tag(${applicationSectionTasks}, #{taskList.application.section.title}, 2)}" />
-
-                    <th:block th:replace="~{ fragments/task-list :: task-list-status-tag(${applySectionTasks}, #{taskList.apply.section.title}, 3)}" />
+                    <th:block th:replace="~{ fragments/task-list :: task-list-group(${applySectionTasks}, #{taskList.apply.section.title}, 3)}" />
                 </ol>
 
             </div>
