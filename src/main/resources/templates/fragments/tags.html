@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+/* ------------------------------------------------------------------------------
+
+* Error Summary
+
+@title - String: Overrides default error title
+@description - String: Adds description message to the error summary
+
+Individual input field errors will be displayed automatically
+if form validation fails. These errors are included inside the fields
+variable which comes from Thymleaf / Spring integration.
+
+
+-------------------------------------------------------------------------------- */
+
+    <div th:fragment="state-tag(taskState)" th:remove="tag">
+        <th:block th:switch="${#strings.toString(taskState)}">
+            <th:block th:case="NOT_STARTED">
+                <strong class="app-task-list__task-tag app-task-list__task-tag--not-started" th:text="#{'taskList.task.state.' + ${#strings.toString(taskState)}}"></strong>
+            </th:block>
+            <th:block th:case="IN_PROGRESS">
+                <strong class="app-task-list__task-tag app-task-list__task-tag--in-progress" th:text="#{'taskList.task.state.' + ${#strings.toString(taskState)}}"></strong>
+            </th:block>
+            <th:block th:case="COMPLETED">
+                <strong class="app-task-list__task-tag app-task-list__task-tag--completed" th:text="#{'taskList.task.state.' + ${#strings.toString(taskState)}}"></strong>
+            </th:block>
+        </th:block>
+    </div>
+
+</body>
+
+</html>
+
