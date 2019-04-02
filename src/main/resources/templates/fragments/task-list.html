@@ -23,7 +23,7 @@ variable which comes from Thymleaf / Spring integration.
     </th:block>
 </th:block>
 
-<li th:fragment="task-list-group(tasks, title, count)">
+<li th:fragment="task-list-group(tasks, title, count, enabled)">
     <h2 class="app-task-list__section">
         <span class="app-task-list__section-number" th:text="${count} + '.'"></span>
         <span th:text="${title}"></span>
@@ -32,8 +32,8 @@ variable which comes from Thymleaf / Spring integration.
     <ul class="app-task-list__items">
         <li th:each="task : ${tasks}" class="app-task-list__item">
             <th:block th:with="describeById=${#strings.randomAlphanumeric(4) + '-' + #strings.randomAlphanumeric(4)}">
-                <p th:if="${#strings.isEmpty(task.url)}" class="app-task-list__task-name" th:aria-describedby="${describeById}" th:text="#{${task.titleCode}}"></p>
-                <a th:unless="${#strings.isEmpty(task.url)}" th:href="${task.url}" class="app-task-list__task-name" th:aria-describedby="${describeById}" th:text="#{${task.titleCode}}"></a>
+                <p th:if="${!enabled} OR ${#strings.isEmpty(task.url)}" class="app-task-list__task-name" th:aria-describedby="${describeById}" th:text="#{${task.titleCode}}"></p>
+                <a th:if="${enabled} AND ${!#strings.isEmpty(task.url)}" th:href="${task.url}" class="app-task-list__task-name" th:aria-describedby="${describeById}" th:text="#{${task.titleCode}}"></a>
                 <div th:replace="~{ fragments/task-list :: task-list-status-tag(${task.taskState}, ${describeById})}"></div>
             </th:block>
         </li>
