@@ -27,16 +27,33 @@ public class TaskListSteps extends AbstractSpringSteps {
     commonSteps.thenIShouldSeeTheContent("Check before you start");
 
     Boolean isAdult = "Adult".equalsIgnoreCase(ageGroup);
+    if("CHILDBULK".equals(taskListType) || "CHILDVEHIC".equals(taskListType)){
+      isAdult = false;
+    }
+
     iSeeCommonTaskList(isAdult);
     switch (taskListType) {
       case "AFRFCS":
-        iSeeAFCSTaskList(isAdult);
+      case "WPMS":
+        break;
+      case "PIP":
+      case "DLA":
+        iSeeDLAorPIPTaskList(isAdult);
         break;
       case "ARMS":
         iSeeArmsTaskList(isAdult);
         break;
       case "BLIND":
         iSeeBlindTaskList(isAdult);
+        break;
+      case "CHILDBULK":
+        iSeeChildBulkEquipTaskList(isAdult);
+        break;
+      case "CHILDVEHIC":
+        iSeeChildVehicleTaskList(isAdult);
+        break;
+      case "WALKD":
+        iSeeWalkingTaskList(isAdult);
         break;
     }
   }
@@ -52,8 +69,8 @@ public class TaskListSteps extends AbstractSpringSteps {
     commonSteps.thenISeeLinkWithText("Add a photo of yourself");
   }
 
-  public void iSeeAFCSTaskList(Boolean isAdult) throws Throwable {
-    iSeeCommonTaskList(isAdult);
+  public void iSeeDLAorPIPTaskList(Boolean isAdult) throws Throwable {
+    commonSteps.thenISeeLinkWithText("Provide proof of benefit");
   }
   public void iSeeArmsTaskList(Boolean isAdult) throws Throwable {
     commonSteps.thenISeeLinkWithText("Describe your condition");
@@ -61,6 +78,24 @@ public class TaskListSteps extends AbstractSpringSteps {
   }
   public void iSeeBlindTaskList(Boolean isAdult) throws Throwable {
     commonSteps.thenISeeLinkWithText("Provide proof of visual impairment");
+  }
+  public void iSeeChildBulkEquipTaskList(Boolean isAdult) throws Throwable {
+    commonSteps.thenISeeLinkWithText("Describe your condition");
+    commonSteps.thenISeeLinkWithText("Add supporting documents");
+    commonSteps.thenISeeLinkWithText("List medical equipment");
+    commonSteps.thenISeeLinkWithText("List healthcare professionals");
+  }
+  public void iSeeChildVehicleTaskList(Boolean isAdult) throws Throwable {
+    commonSteps.thenISeeLinkWithText("Describe your condition");
+    commonSteps.thenISeeLinkWithText("Add supporting documents");
+    commonSteps.thenISeeLinkWithText("List healthcare professionals");
+  }
+  public void iSeeWalkingTaskList(Boolean isAdult) throws Throwable {
+    commonSteps.thenISeeLinkWithText("Describe walking ability");
+    commonSteps.thenISeeLinkWithText("Add supporting documents");
+    commonSteps.thenISeeLinkWithText("List medication");
+    commonSteps.thenISeeLinkWithText("List treatments");
+    commonSteps.thenISeeLinkWithText("List healthcare professionals");
   }
 
   @And("^I see task \"([^\"]*)\" as (COMPLETED|IN_PROGRESS|NOT_STARTED)$")
