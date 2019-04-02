@@ -114,13 +114,13 @@ public class TaskListSteps extends AbstractSpringSteps {
   public void iSeeTaskAs(String taskLink, String taskStatus) throws Throwable {
     WebElement taskLinkElement = commonSteps.thenISeeLinkWithText(taskLink);
     List<WebElement> elements = taskLinkElement.findElements(By.xpath("following-sibling::strong"));
-    if(elements.size() != 1){
+    if (elements.size() != 1) {
       fail("No sibling task status element found for Task link: " + taskLink);
     }
     WebElement taskStatusElement = elements.get(0);
 
     String expectedClass;
-    switch (taskStatus){
+    switch (taskStatus) {
       case "COMPLETED":
         expectedClass = "app-task-list__task-tag--completed";
         break;
@@ -132,9 +132,10 @@ public class TaskListSteps extends AbstractSpringSteps {
         break;
       default:
         throw new IllegalArgumentException("Not a valid status" + taskStatus);
-
     }
-    assertThat("Task status class not as expected. Expected is:" + taskStatus,
-        taskStatusElement.getAttribute("class"), Matchers.containsString(expectedClass));
+    assertThat(
+        "Task status class not as expected. Expected is:" + taskStatus,
+        taskStatusElement.getAttribute("class"),
+        Matchers.containsString(expectedClass));
   }
 }
