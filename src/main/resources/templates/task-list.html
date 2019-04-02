@@ -12,47 +12,13 @@
                 <h1 class="govuk-heading-l" th:text="#{'taskList.title'}"></h1>
 
                 <ol class="app-task-list">
-                    <li>
-                        <h2 class="app-task-list__section">
-                         task-   <span class="app-task-list__section-number">1. </span>
-                            <span th:text="#{taskList.pre.section.title}"></span>
-                        </h2>
+                    <th:block th:with="eligibilitySectionTasks=${ {{url: '', taskState: 'COMPLETED', titleCode: 'taskList.pre.section.checkEligibility'}} }">
+                        <th:block th:replace="~{ fragments/task-list :: task-list-group(${eligibilitySectionTasks}, #{taskList.pre.section.title}, 1)}" />
+                    </th:block>
 
-                        <ul class="app-task-list__items">
-                            <li class="app-task-list__item">
-                                <p class="app-task-list__task-name" th:text="#{taskList.pre.section.checkEligibility}"></p>
-                                <div th:replace="~{ fragments/tags :: state-tag('COMPLETED')}"></div>
-                            </li>
-                        </ul>
-                    </li>
+                    <th:block th:replace="~{ fragments/task-list :: task-list-group(${applicationSectionTasks}, #{taskList.application.section.title}, 2)}" />
 
-                    <li>
-                        <h2 class="app-task-list__section">
-                            <span class="app-task-list__section-number">2. </span>
-                            <span th:text="#{taskList.application.section.title}"></span>
-                        </h2>
-
-                        <ul class="app-task-list__items">
-                            <li th:each="task : ${applicationSectionTasks}" class="app-task-list__item">
-                                <a th:href="${task.url}" class="app-task-list__task-name" th:text="#{${task.titleCode}}"></a>
-                                <div th:replace="~{ fragments/tags :: state-tag(${task.taskState})}"></div>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <h2 class="app-task-list__section">
-                            <span class="app-task-list__section-number">3. </span>
-                            <span th:text="#{taskList.apply.section.title}"></span>
-                        </h2>
-
-                        <ul class="app-task-list__items">
-                            <li th:each="task : ${applySectionTasks}" class="app-task-list__item">
-                                <a th:href="${task.url}" class="app-task-list__task-name" th:classappend="${!task.enabled} ? 'app-task-list--inactivelink'" th:text="#{${task.titleCode}}"></a>
-                                <div th:replace="~{ fragments/tags :: state-tag(${task.taskState})}"></div>
-                            </li>
-                        </ul>
-                    </li>
+                    <th:block th:replace="~{ fragments/task-list :: task-list-group(${applySectionTasks}, #{taskList.apply.section.title}, 3)}" />
                 </ol>
 
             </div>

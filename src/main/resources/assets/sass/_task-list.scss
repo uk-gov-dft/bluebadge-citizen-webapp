@@ -74,6 +74,7 @@ $task-list-indent: 35px;
 	padding-bottom: govuk-spacing(1);
 	margin-bottom: 0;
 	font-size: 100%;
+	line-height: 1.25;
 
 	&.app-task-list__task-name--inactive {
 		color: govuk-colour("black");
@@ -95,8 +96,8 @@ $task-list-indent: 35px;
 	text-align: center;
 	position: absolute;
 	right: 0;
-	top: 50%;
-	margin-top: -13px;
+	top: 0;
+	margin-top: 7px;
 	z-index: 1;
 }
 
@@ -107,4 +108,11 @@ $task-list-indent: 35px;
 
 .app-task-list__task--in-progress {
 	background-color: govuk-colour(light-blue);
+}
+
+
+@media screen and (max-width: 26.25em) {
+	.app-task-list__task-name {
+		max-width: 140px;
+	}
 }
