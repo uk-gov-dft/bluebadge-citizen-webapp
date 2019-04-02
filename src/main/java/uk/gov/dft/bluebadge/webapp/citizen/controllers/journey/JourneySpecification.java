@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks.InvalidStateForJourneyException;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 @Builder
@@ -88,7 +89,7 @@ public class JourneySpecification {
         .findAny() // Ok because tasks never duplicated across journeys
         .orElseThrow(
             () ->
-                new IllegalStateException(
+                new InvalidStateForJourneyException(
                     "Can't find task, step " + step + " not part of journey:" + fullJourney));
   }
 

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.StepController;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks.InvalidStateForJourneyException;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 
@@ -103,7 +104,13 @@ public class RouteMaster {
     StepForm form = journey.getFormForStep(StepDefinition.getFirstStep());
     if (null == form) return false;
 
-    Task task = journeySpecification.determineTask(journey, step);
+    Task task;
+    try {
+      task = journeySpecification.determineTask(journey, step);
+    } catch (InvalidStateForJourneyException e) {
+      return false;
+    }
+
     if (!journeySpecification.arePreviousSectionsComplete(journey, task)) {
       return false;
     }
