@@ -12,27 +12,39 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate walking difficulty page for "yourself" for "HELP"
     Then  I should see "You may be" eligible page
     When  I complete eligible page
+    And   I can click on the "Enter personal details" link
     And   I validate name page for a "yourself" application
     And   I validate date of birth page for a "yourself" application
     And   I validate gender page for a "yourself" application with option as "FEMALE"
     And   I validate nino page for a "yourself" application
     And   I validate enter address page for a "yourself" application
     And   I validate contact details page for a "yourself" application
+    And   I can click on the "Describe walking ability" link
     And   I validate health conditions page for a "yourself" application
     And   I validate what makes walking difficult page for a "yourself" application for "PAIN"
     And   I validate the mobility aids page for a "yourself" application for "YES"
     And   I validate walking time page for a "yourself" application for "FEWMIN"
     And   I validate where can you walk page for a "yourself" application
+    And   I can click on the "Add supporting documents" link
     And   I validate the supporting documents page for a "yourself" application for "YES"
+    And   I can click on the "List medication" link
     And   I validate the medication page for a "yourself" application for "YES"
+    And   I can click on the "List treatments" link
     And   I validate the treatments page for a "yourself" application for "YES"
+    And   I can click on the "List healthcare professionals" link
     And   I validate the healthcare professional page for a "yourself" application for "YES"
 
 #    Following page To be added for page validations
+    And   I can click on the "Prove identity" link
     And   I complete "prove ID" page with a "PDF" document
+    And   I can click on the "Prove address" link
     And   I complete "prove address" page with a "PNG" document
+    And   I can click on the "Add a photo of yourself" link
     And   I complete "provide photo" page with a "JPG" document
+    And   I can click on the "Read Declaration" link
     And   I complete declaration page
+    And   I can click on the "Submit application" link
+    And   I complete Submit application page
     Then  I should see page titled "Application submitted" with GOV.UK suffix
 
   Scenario: Page title and error message validation - yourself - with choose council
@@ -46,27 +58,39 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate walking difficulty page for "yourself" for "HELP"
     Then  I should see "You may be" eligible page
     When  I complete eligible page
+    And   I can click on the "Enter personal details" link
     And   I validate name page for a "yourself" application
     And   I validate date of birth page for a "yourself" application
     And   I validate gender page for a "yourself" application with option as "FEMALE"
     And   I validate nino page for a "yourself" application
     And   I validate enter address page for a "yourself" application
     And   I validate contact details page for a "yourself" application
+    And   I can click on the "Describe walking ability" link
     And   I validate health conditions page for a "yourself" application
     And   I validate what makes walking difficult page for a "yourself" application for "PAIN"
     And   I validate the mobility aids page for a "yourself" application for "YES"
     And   I validate walking time page for a "yourself" application for "FEWMIN"
     And   I validate where can you walk page for a "yourself" application
+    And   I can click on the "Add supporting documents" link
     And   I validate the supporting documents page for a "yourself" application for "YES"
+    And   I can click on the "List medication" link
     And   I validate the medication page for a "yourself" application for "YES"
+    And   I can click on the "List treatments" link
     And   I validate the treatments page for a "yourself" application for "YES"
+    And   I can click on the "List healthcare professionals" link
     And   I validate the healthcare professional page for a "yourself" application for "YES"
 
 #    Following page To be added for page validations
+    And   I can click on the "Prove identity" link
     And   I complete "prove ID" page with a "PDF" document
+    And   I can click on the "Prove address" link
     And   I complete "prove address" page with a "PNG" document
+    And   I can click on the "Add a photo of yourself" link
     And   I complete "provide photo" page with a "JPG" document
+    And   I can click on the "Read Declaration" link
     And   I complete declaration page
+    And   I can click on the "Submit application" link
+    And   I complete Submit application page
     Then  I should see page titled "Application submitted" with GOV.UK suffix
 
 
@@ -81,20 +105,26 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate walking difficulty page for "someone else" for "HELP"
     Then  I should see "They may be" eligible page
     When  I complete eligible page
+    And   I can click on the "Enter personal details" link
     And   I validate name page for a "someone else" application
     And   I validate date of birth page for a "someone else" application
     And   I validate gender page for a "someone else" application with option as "MALE"
     And   I validate nino page for a "someone else" application
     And   I validate enter address page for a "someone else" application
     And   I validate contact details page for a "someone else" application
+    And   I can click on the "Describe walking ability" link
     And   I validate health conditions page for a "someone else" application
     And   I validate what makes walking difficult page for a "someone else" application for "BALANCE"
     And   I validate the mobility aids page for a "someone else" application for "NO"
     And   I validate walking time page for a "someone else" application for "CANTWALK"
     #And   I complete upload "supporting documents page" with a "GIF" document
+    And   I can click on the "Add supporting documents" link
     And   I validate the supporting documents page for a "yourself" application for "NO"
+    And   I can click on the "List medication" link
     And   I validate the medication page for a "someone else" application for "YES"
+    And   I can click on the "List treatments" link
     And   I validate the treatments page for a "someone else" application for "NO"
+    And   I can click on the "List healthcare professionals" link
     And   I validate the healthcare professional page for a "someone else" application for "NO"
 
   Scenario: Page title and error message validation - someone else - with choose council
@@ -108,20 +138,26 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate walking difficulty page for "someone else" for "HELP"
     Then  I should see "They may be" eligible page
     When  I complete eligible page
+    And   I can click on the "Enter personal details" link
     And   I validate name page for a "someone else" application
     And   I validate date of birth page for a "someone else" application
     And   I validate gender page for a "someone else" application with option as "MALE"
     And   I validate nino page for a "someone else" application
     And   I validate enter address page for a "someone else" application
     And   I validate contact details page for a "someone else" application
+    And   I can click on the "Describe walking ability" link
     And   I validate health conditions page for a "someone else" application
     And   I validate what makes walking difficult page for a "someone else" application for "BALANCE"
     And   I validate the mobility aids page for a "someone else" application for "NO"
     And   I validate walking time page for a "someone else" application for "CANTWALK"
     #And   I complete upload "supporting documents page" with a "GIF" document
+    And   I can click on the "Add supporting documents" link
     And   I validate the supporting documents page for a "yourself" application for "NO"
+    And   I can click on the "List medication" link
     And   I validate the medication page for a "someone else" application for "YES"
+    And   I can click on the "List treatments" link
     And   I validate the treatments page for a "someone else" application for "NO"
+    And   I can click on the "List healthcare professionals" link
     And   I validate the healthcare professional page for a "someone else" application for "NO"
 
 

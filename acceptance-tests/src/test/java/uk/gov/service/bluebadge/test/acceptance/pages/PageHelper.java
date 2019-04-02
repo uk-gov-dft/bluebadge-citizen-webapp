@@ -46,7 +46,8 @@ public class PageHelper {
                 return isEmpty(elements) ? null : elements;
               });
     } catch (TimeoutException exception) {
-      fail("Failed to find element matching '"
+      fail(
+          "Failed to find element matching '"
               + bySelector
               + "', on page with title:'"
               + getWebDriver().getTitle()

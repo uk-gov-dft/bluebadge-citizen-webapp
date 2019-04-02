@@ -30,6 +30,9 @@ Feature: The 'Apply for a Blue Badge' link in the citizen app header should
     And   I complete moving around points page for "12"
     Then  I should see "You're" eligible page
     When  I complete eligible page
+
+    Then  I see the "PIP" task list page
+    And   I can click on the "Enter personal details" link
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Man"
