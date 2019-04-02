@@ -134,6 +134,16 @@ public class CommonSteps extends AbstractSpringSteps {
     assertNull("Can see link with text: '" + linkText + "'", linkMaybe);
   }
 
+  public WebElement thenISeeElementWithText(String elementTagName, String text) {
+    WebElement maybe = commonPage.findElementWithText(text);
+    assertNotNull("Can't see element with text: '" + text + "'", maybe);
+    assertEquals(
+        "Element with text '" + text + "', not a '" + elementTagName + "'",
+        elementTagName,
+        maybe.getTagName());
+    return maybe;
+  }
+
   @Then("^I (?:can )?see labelled element \"([^\"]+)\" with content \"([^\"]+)\"$")
   public void thenISeeElementWithUiPathAndContent(String uiPath, String content) {
     assertNotNull(

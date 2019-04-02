@@ -111,9 +111,19 @@ public class TaskListSteps extends AbstractSpringSteps {
   }
 
   @And("^I see task \"([^\"]*)\" as (COMPLETED|IN_PROGRESS|NOT_STARTED)$")
-  public void iSeeTaskAs(String taskLink, String taskStatus) throws Throwable {
-    WebElement taskLinkElement = commonSteps.thenISeeLinkWithText(taskLink);
-    List<WebElement> elements = taskLinkElement.findElements(By.xpath("following-sibling::strong"));
+  public void iSeeTaskAs(String taskTitle, String taskStatus) throws Throwable {
+    WebElement taskLinkElement = commonSteps.thenISeeLinkWithText(taskTitle);
+    checkStatusOfTask(taskLinkElement, taskTitle, taskStatus);
+  }
+
+  @And("^I see disabled task \"([^\"]*)\" as (COMPLETED|IN_PROGRESS|NOT_STARTED)$")
+  public void iSeeDisabledTaskAs(String taskTitle, String taskStatus) throws Throwable {
+    WebElement disabledTaskElement = commonSteps.thenISeeElementWithText("p", taskTitle);
+    checkStatusOfTask(disabledTaskElement, taskTitle, taskStatus);
+  }
+
+  public void checkStatusOfTask(WebElement taskElement, String taskLink, String taskStatus) {
+    List<WebElement> elements = taskElement.findElements(By.xpath("following-sibling::strong"));
     if (elements.size() != 1) {
       fail("No sibling task status element found for Task link: " + taskLink);
     }
