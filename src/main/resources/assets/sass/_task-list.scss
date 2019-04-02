@@ -72,6 +72,8 @@ $task-list-indent: 35px;
 	top: 1px;
 	padding-top: govuk-spacing(1);
 	padding-bottom: govuk-spacing(1);
+	margin-bottom: 0;
+	font-size: 100%;
 
 	&.app-task-list__task-name--inactive {
 		color: govuk-colour("black");
@@ -103,6 +105,6 @@ $task-list-indent: 35px;
 	color: #626262;
 }
 
-.app-task-list__task-in-progress {
+.app-task-list__task--in-progress {
 	background-color: govuk-colour(light-blue);
 }
