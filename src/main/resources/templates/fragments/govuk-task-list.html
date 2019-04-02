@@ -34,7 +34,7 @@ variable which comes from Thymleaf / Spring integration.
             <th:block th:with="describeById=${#strings.randomAlphanumeric(4) + '-' + #strings.randomAlphanumeric(4)}">
                 <p th:if="${!task.enabled} OR ${#strings.isEmpty(task.url)}" class="app-task-list__task-name" th:aria-describedby="${describeById}" th:text="#{${task.titleCode}}"></p>
                 <a th:if="${task.enabled} AND ${!#strings.isEmpty(task.url)}" th:href="${task.url}" class="app-task-list__task-name" th:aria-describedby="${describeById}" th:text="#{${task.titleCode}}"></a>
-                <div th:replace="~{ fragments/task-list :: task-list-status-tag(${task.taskState}, ${describeById})}"></div>
+                <div th:replace="~{ fragments/govuk-task-list :: task-list-status-tag(${task.taskState}, ${describeById})}"></div>
             </th:block>
         </li>
     </ul>
