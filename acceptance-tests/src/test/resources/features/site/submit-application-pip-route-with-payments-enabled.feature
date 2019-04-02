@@ -14,18 +14,40 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete moving around points page for "12"
     Then  I should see "You're" eligible page
     When  I complete eligible page
+
+    Then  I see the "PIP" task list page
+    And   I can click on the "Enter personal details" link
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Man"
     And   I complete NI number page
     And   I complete address page
     And   I complete contact page for "yourself"
+
+    Then  I see the "PIP" task list page as Adult
+    And   I see task "Enter personal details" as COMPLETED
+    And   I can click on the "Provide proof of benefit" link
     And   I complete prove benefit page for "yes"
     And   I complete "upload benefit" page with a "GIF" document
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Prove identity" link
     And   I complete "prove ID" page with a "GIF" document
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Prove address" link
     And   I complete "prove address" page with a "GIF" document
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Add a photo of yourself" link
     And   I complete "provide photo" page with a "GIF" document
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Read Declaration" link
     And   I complete declaration page
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Submit and pay" link
     Then  I should see page titled "Pay for the Blue Badge" with GOV.UK suffix
     And   I complete badge payment page with submit application and pay later
     Then  I should see page titled "Application submitted" with GOV.UK suffix
@@ -41,18 +63,40 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete moving around points page for "12"
     Then  I should see "You're" eligible page
     When  I complete eligible page
+
+    Then  I see the "PIP" task list page
+    And   I can click on the "Enter personal details" link
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Man"
     And   I complete NI number page
     And   I complete address page
     And   I complete contact page for "yourself"
+
+    Then  I see the "PIP" task list page as Adult
+    And   I see task "Enter personal details" as COMPLETED
+    And   I can click on the "Provide proof of benefit" link
     And   I complete prove benefit page for "yes"
     And   I complete "upload benefit" page with a "GIF" document
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Prove identity" link
     And   I complete "prove ID" page with a "GIF" document
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Prove address" link
     And   I complete "prove address" page with a "GIF" document
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Add a photo of yourself" link
     And   I complete "provide photo" page with a "GIF" document
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Read Declaration" link
     And   I complete declaration page
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Submit and pay" link
     Then  I should see page titled "Pay for the Blue Badge" with GOV.UK suffix
     And   I complete badge payment page with pay online now
     Then  I should see page titled "Enter card details"
@@ -76,18 +120,40 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete moving around points page for "12"
     Then  I should see "You're" eligible page
     When  I complete eligible page
+
+    Then  I see the "PIP" task list page
+    And   I can click on the "Enter personal details" link
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Man"
     And   I complete NI number page
     And   I complete address page
     And   I complete contact page for "yourself"
+
+    Then  I see the "PIP" task list page as Adult
+    And   I see task "Enter personal details" as COMPLETED
+    And   I can click on the "Provide proof of benefit" link
     And   I complete prove benefit page for "yes"
     And   I complete "upload benefit" page with a "GIF" document
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Prove identity" link
     And   I complete "prove ID" page with a "GIF" document
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Prove address" link
     And   I complete "prove address" page with a "GIF" document
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Add a photo of yourself" link
     And   I complete "provide photo" page with a "GIF" document
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Read Declaration" link
     And   I complete declaration page
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Submit and pay" link
     Then  I should see page titled "Pay for the Blue Badge" with GOV.UK suffix
     And   I change language
     Then  I should see page titled in Welsh "Talu am y Bathodyn Glas" with GOV.UK suffix
@@ -111,20 +177,41 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete the already have a blue badge page for "YES"
     And   I complete receive benefit page for "PIP"
     And   I complete moving around points page for "12"
-    Then  I should see "You're" eligible page
     When  I complete eligible page
+
+    Then  I see the "PIP" task list page
+    And   I can click on the "Enter personal details" link
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Man"
     And   I complete NI number page
     And   I complete address page
     And   I complete contact page for "yourself"
+
+    Then  I see the "PIP" task list page as Adult
+    And   I see task "Enter personal details" as COMPLETED
+    And   I can click on the "Provide proof of benefit" link
     And   I complete prove benefit page for "yes"
     And   I complete "upload benefit" page with a "GIF" document
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Prove identity" link
     And   I complete "prove ID" page with a "GIF" document
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Prove address" link
     And   I complete "prove address" page with a "GIF" document
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Add a photo of yourself" link
     And   I complete "provide photo" page with a "GIF" document
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Read Declaration" link
     And   I complete declaration page
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Submit and pay" link
     Then  I should see page titled "Pay for the Blue Badge" with GOV.UK suffix
     And   I complete badge payment page with pay online now
     Then  I should see page titled "Enter card details"
@@ -160,20 +247,41 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete the already have a blue badge page for "YES"
     And   I complete receive benefit page for "PIP"
     And   I complete moving around points page for "12"
-    Then  I should see "You're" eligible page
     When  I complete eligible page
+
+    Then  I see the "PIP" task list page
+    And   I can click on the "Enter personal details" link
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Man"
     And   I complete NI number page
     And   I complete address page
     And   I complete contact page for "yourself"
+
+    Then  I see the "PIP" task list page as Adult
+    And   I see task "Enter personal details" as COMPLETED
+    And   I can click on the "Provide proof of benefit" link
     And   I complete prove benefit page for "yes"
     And   I complete "upload benefit" page with a "GIF" document
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Prove identity" link
     And   I complete "prove ID" page with a "GIF" document
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Prove address" link
     And   I complete "prove address" page with a "GIF" document
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Add a photo of yourself" link
     And   I complete "provide photo" page with a "GIF" document
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Read Declaration" link
     And   I complete declaration page
+
+    Then  I see the "PIP" task list page as Adult
+    And   I can click on the "Submit and pay" link
     Then  I should see page titled "Pay for the Blue Badge" with GOV.UK suffix
     And   I complete badge payment page with pay online now
     Then  I should see page titled "Enter card details"
