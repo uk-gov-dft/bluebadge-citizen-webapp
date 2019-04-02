@@ -7,7 +7,7 @@
 
 <main layout:fragment="content">
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-three-quarters">
+        <th:block class="govuk-grid-column-three-quarters">
 
             <h1 class="govuk-heading-l" th:text="#{'taskList.title'}"></h1>
 
@@ -21,7 +21,7 @@
                     <ul class="app-task-list__items">
                         <li class="app-task-list__item">
                             <a href="#" class="app-task-list__task-name app-task-list__task-name--inactive" th:text="#{taskList.pre.section.checkEligibility}"></a>
-                            <strong class="app-task-list__task-tag app-task-list__task-tag--completed" th:text="#{taskList.task.state.COMPLETED}"></strong>
+                            <div th:replace="~{ fragments/tags :: state-tag('COMPLETED')}"></div>
                         </li>
                     </ul>
                 </li>
@@ -35,8 +35,8 @@
                     <ul class="app-task-list__items">
                         <li th:each="task : ${applicationSectionTasks}" class="app-task-list__item">
                             <a th:href="${task.url}" class="app-task-list__task-name" th:text="#{${task.titleCode}}"></a>
-                            <!-- TODO: Use conditional class name based on state -->
-                            <strong class="app-task-list__task-tag app-task-list__task-tag--not-started" th:text="#{'taskList.task.state.' + ${#strings.toString(task.taskState)}}"></strong>
+
+                            <div th:replace="~{ fragments/tags :: state-tag(${task.taskState})}"></div>
                         </li>
                     </ul>
                 </li>
@@ -49,10 +49,9 @@
 
                     <ul class="app-task-list__items">
                         <li th:each="task : ${applySectionTasks}" class="app-task-list__item">
-                            <!-- TODO: set links inactive based on task state -->
                             <a th:href="${task.url}" class="app-task-list__task-name" th:classappend="${!task.enabled} ? 'app-task-list--inactivelink'" th:text="#{${task.titleCode}}"></a>
-                            <!-- TODO: Use conditional class name based on state -->
-                            <strong class="app-task-list__task-tag app-task-list__task-tag--not-started" th:text="#{'taskList.task.state.' + ${#strings.toString(task.taskState)}}"></strong>
+
+                            <div th:replace="~{ fragments/tags :: state-tag(${task.taskState})}"></div>
                         </li>
                     </ul>
                 </li>
