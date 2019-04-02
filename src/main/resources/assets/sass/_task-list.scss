@@ -56,7 +56,7 @@ $task-list-indent: 35px;
 	display: block;
 	border-bottom: 1px solid $govuk-border-colour;
 	padding-top: govuk-spacing(1);
-	padding-bottom: govuk-spacing(1) + 1px;
+	padding-bottom: govuk-spacing(1);
 	@include govuk-clearfix;
 
 	&:first-child {
@@ -111,7 +111,7 @@ $task-list-indent: 35px;
 }
 
 
-@media screen and (max-width: 26.25em) {
+@media screen and (max-width: 33.75em) {
 	.app-task-list__task-name {
 		max-width: 140px;
 	}
