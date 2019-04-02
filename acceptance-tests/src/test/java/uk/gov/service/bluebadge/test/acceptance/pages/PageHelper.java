@@ -1,5 +1,6 @@
 package uk.gov.service.bluebadge.test.acceptance.pages;
 
+import static org.junit.Assert.fail;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 import java.time.Duration;
@@ -45,14 +46,13 @@ public class PageHelper {
                 return isEmpty(elements) ? null : elements;
               });
     } catch (TimeoutException exception) {
-      throw new RuntimeException(
-          "Failed to find element matching '"
+      fail("Failed to find element matching '"
               + bySelector
               + "', on page with title:'"
               + getWebDriver().getTitle()
-              + "'",
-          exception);
+              + "'");
     }
+    return null;
   }
 
   public WebElement findChildElement(final WebElement parentElement, final By bySelector) {
