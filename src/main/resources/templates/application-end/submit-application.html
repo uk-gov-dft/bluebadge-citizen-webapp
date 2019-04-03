@@ -11,9 +11,14 @@
 <main layout:fragment="content">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-
-
             <h1 class="govuk-heading-l" th:text="#{submitApplicationPage.title}"></h1>
+
+            <p class="govuk-body">
+                <span th:remove="tag" th:text="#{${JOURNEY.who} + 'submittedPage.content.p1.pretext'}"></span>
+                <a th:href="${JOURNEY.localAuthority.contactUrl}"
+                   th:text="${JOURNEY.localeAwareLocalAuthority.description}"></a>
+                <span th:remove="tag" th:text="#{${JOURNEY.who} + 'submittedPage.content.p1.posttext'}"></span>
+            </p>
 
             <form data-prevent-double-submission th:action="@{/submit-application}" th:object="${formRequest}" method="post" novalidate>
                 <button type="submit" class="govuk-button" data-uipath="button.continue" th:text="#{submitApplicationPage.submit.button.label}"></button>
