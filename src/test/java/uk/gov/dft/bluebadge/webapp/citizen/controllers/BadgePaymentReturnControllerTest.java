@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.client.RestClientException;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
@@ -163,14 +164,14 @@ public class BadgePaymentReturnControllerTest {
 
   @Test
   public void
-      show_shouldRedirectToApplicationSubmittedAndCreateApplicationWithoutPaymentReference_whenPaymentStatusIsUnknown()
+      show_shouldRedirectToApplicationSubmittedAndCreateApplicationWithoutPaymentReference_whenPaymentStatusCannotBeRetrieved()
           throws Exception {
 
     journey.setPaymentJourneyUuid(PAYMENT_JOURNEY_UUID);
     journey.setFormForStep(BadgePaymentForm.builder().build());
 
     when(paymentServiceMock.retrievePaymentStatus(PAYMENT_JOURNEY_UUID))
-        .thenReturn(UNKNOWN_PAYMENT_STATUS_RESPONSE);
+        .thenThrow(new RestClientException("Rest client exception"));
 
     mockMvc
         .perform(get("/badge-payment-return").sessionAttr("JOURNEY", journey))
@@ -180,7 +181,12 @@ public class BadgePaymentReturnControllerTest {
     verify(applicationManagementServiceMock).create(any());
     ArgumentCaptor<Application> argument = ArgumentCaptor.forClass(Application.class);
     verify(applicationManagementServiceMock).create(argument.capture());
-    assertThat(argument.getValue().getPaymentReference()).isNull();
+    assertThat(argument.getValue().getPaymentReference()).isEqualTo("Unknown");
+    assertThat(journey.getPaymentStatus()).isEqualTo("unknown");
+    assertThat(journey.getPaymentReference()).isEqualTo("Unknown");
+    assertThat(journey.isPaymentSuccessful()).isEqualTo(false);
+    assertThat(journey.isPaymentStatusUnknown()).isEqualTo(true);
+    assertThat(journey.getPaymentJourneyUuid()).isEqualTo(PAYMENT_JOURNEY_UUID);
   }
 
   @Test

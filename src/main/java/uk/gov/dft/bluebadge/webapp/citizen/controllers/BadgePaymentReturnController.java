@@ -68,7 +68,7 @@ public class BadgePaymentReturnController implements StepController {
                       "status",
                       "unknown",
                       "reference",
-                      "unknown"))
+                      "Unknown"))
               .build();
       journey.setPaymentStatusResponse(unknownResponse);
     }
