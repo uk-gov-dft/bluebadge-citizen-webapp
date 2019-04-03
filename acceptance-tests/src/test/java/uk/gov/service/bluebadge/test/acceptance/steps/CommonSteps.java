@@ -383,7 +383,7 @@ public class CommonSteps extends AbstractSpringSteps {
     }
   }
 
-  @And("^I verify validation message \"([^\"]*)\" \"$")
+  @And("^I verify validation message \"([^\"]*)\"$")
   public void iVerifyValidationMessage(String message) {
     this.iClickOnContinueButton();
     this.andIshouldSeeErrorSummaryBox();
@@ -391,7 +391,7 @@ public class CommonSteps extends AbstractSpringSteps {
     this.iShouldSeeTextOnPage(message);
   }
 
-  @And("^I verify multiple validation messages \"([^\"]*)\" \"$")
+  @And("^I verify multiple validation messages \"([^\"]*)\"$")
   public void iVerifyMultipleValidationMessages(List<String> messages) {
 
     this.iClickOnContinueButton();

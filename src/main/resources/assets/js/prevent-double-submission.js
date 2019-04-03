@@ -5,21 +5,21 @@ export default (form) => {
 	}
 
 	let isSubmitted = false;
-	const button = form.getElementsByTagName('button');
-	
+	const button = Array.from(form.querySelectorAll('[type="submit"]'));
+
 	form.addEventListener('submit', event => {
 		event.preventDefault();
 
-		if(isSubmitted) {
-			return;
-		}
+	if(isSubmitted) {
+		return;
+	}
 
-		isSubmitted = true;
-		
-		if(button.length > 0) {
-			button.item(0).disabled = true;
-		}
+	isSubmitted = true;
 
-		form.submit();
-	});
+	if(button.length > 0) {
+		button[0].setAttribute('disabled', 'disabled');
+	}
+
+	form.submit();
+});
 }
