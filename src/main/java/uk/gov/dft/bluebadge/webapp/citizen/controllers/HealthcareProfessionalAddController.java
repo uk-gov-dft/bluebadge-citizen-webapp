@@ -65,11 +65,11 @@ public class HealthcareProfessionalAddController implements StepController {
         journey.getFormForStep(HEALTHCARE_PROFESSIONAL_LIST);
     if (null == healthcareProfessionalListForm) {
       healthcareProfessionalListForm = HealthcareProfessionalListForm.builder().build();
-      journey.setFormForStep(healthcareProfessionalListForm);
     }
 
     healthcareProfessionalListForm.setHasHealthcareProfessional("yes");
     healthcareProfessionalListForm.addHealthcareProfessional(healthcareProfessionalAddForm);
+    journey.setFormForStep(healthcareProfessionalListForm);
 
     return "redirect:" + Mappings.URL_HEALTHCARE_PROFESSIONALS_LIST;
   }

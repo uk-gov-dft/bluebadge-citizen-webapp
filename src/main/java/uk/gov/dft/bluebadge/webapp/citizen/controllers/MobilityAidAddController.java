@@ -20,7 +20,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
-
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 
@@ -75,11 +74,11 @@ public class MobilityAidAddController implements StepController {
     MobilityAidListForm listForm = journey.getFormForStep(MOBILITY_AID_LIST);
     if (null == listForm) {
       listForm = MobilityAidListForm.builder().build();
-      journey.setFormForStep(listForm);
     }
 
     listForm.setHasWalkingAid("yes");
     listForm.addMobilityAid(mobilityAidAddForm);
+    journey.setFormForStep(listForm);
 
     return "redirect:" + Mappings.URL_MOBILITY_AID_LIST;
   }

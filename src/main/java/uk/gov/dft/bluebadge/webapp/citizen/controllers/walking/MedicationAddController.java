@@ -72,11 +72,11 @@ public class MedicationAddController implements StepController {
     MedicationListForm medicationListForm = journey.getFormForStep(MEDICATION_LIST);
     if (null == medicationListForm) {
       medicationListForm = MedicationListForm.builder().build();
-      journey.setFormForStep(medicationListForm);
     }
 
     medicationListForm.setHasMedication("yes");
     medicationListForm.addMedication(medicationAddForm);
+    journey.setFormForStep(medicationListForm);
 
     return "redirect:" + Mappings.URL_MEDICATION_LIST;
   }

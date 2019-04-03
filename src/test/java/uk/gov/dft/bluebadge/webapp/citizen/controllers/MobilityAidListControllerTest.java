@@ -5,10 +5,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.util.ArrayList;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.web.servlet.MockMvc;
@@ -67,7 +69,13 @@ public class MobilityAidListControllerTest {
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(SUCCESS_URL));
+        .andExpect(redirectedUrl(SUCCESS_URL))
+        .andExpect(
+            request()
+                .sessionAttribute(
+                    "JOURNEY",
+                    Matchers.hasProperty("walkingAid", Matchers.equalTo("withoutWalkingAid."))));
+    ;
   }
 
   @Test

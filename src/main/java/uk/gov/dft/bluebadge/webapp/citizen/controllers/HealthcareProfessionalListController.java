@@ -74,6 +74,7 @@ public class HealthcareProfessionalListController implements StepController {
     } else if (journeyForm.getHealthcareProfessionals().isEmpty()) {
       journeyForm.setHasHealthcareProfessional("no");
     }
+    journey.setFormForStep(journeyForm);
 
     // Don't overwrite healthcareProfessionals in journey
     // as it is not bound to inputs in ui form and always null on submit

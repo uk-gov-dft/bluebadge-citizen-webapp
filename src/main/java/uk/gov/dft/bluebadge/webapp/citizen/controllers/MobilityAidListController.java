@@ -21,7 +21,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 
 @Controller
@@ -71,6 +70,7 @@ public class MobilityAidListController implements StepController {
     } else if (journeyForm.getMobilityAids().isEmpty()) {
       journeyForm.setHasWalkingAid("no");
     }
+    journey.setFormForStep(journeyForm);
 
     // Don't overwrite mobility/AidList in journey
     // as it is not bound to inputs in ui form and always null on submit

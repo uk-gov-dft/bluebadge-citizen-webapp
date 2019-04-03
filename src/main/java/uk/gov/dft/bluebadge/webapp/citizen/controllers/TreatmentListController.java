@@ -21,7 +21,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
 
 @Controller
@@ -72,6 +71,7 @@ public class TreatmentListController implements StepController {
     } else if (journeyForm.getTreatments().isEmpty()) {
       journeyForm.setHasTreatment("no");
     }
+    journey.setFormForStep(journeyForm);
 
     // Don't overwrite treatmentList in journey
     // as it is not bound to inputs in ui form and always null on submit

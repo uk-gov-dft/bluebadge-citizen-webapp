@@ -18,7 +18,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
 
@@ -63,11 +62,11 @@ public class TreatmentAddController implements StepController {
     TreatmentListForm treatmentListForm = journey.getFormForStep(TREATMENT_LIST);
     if (null == treatmentListForm) {
       treatmentListForm = TreatmentListForm.builder().build();
-      journey.setFormForStep(treatmentListForm);
     }
 
     treatmentListForm.setHasTreatment("yes");
     treatmentListForm.addTreatment(treatmentAddForm);
+    journey.setFormForStep(treatmentListForm);
 
     return "redirect:" + Mappings.URL_TREATMENT_LIST;
   }

@@ -70,6 +70,7 @@ public class MedicationListController implements StepController {
     } else if (journeyForm.getMedications().isEmpty()) {
       journeyForm.setHasMedication("no");
     }
+    journey.setFormForStep(journeyForm);
 
     // Don't overwrite medications in journey
     // as it is not bound to inputs in ui form and always null on submit
