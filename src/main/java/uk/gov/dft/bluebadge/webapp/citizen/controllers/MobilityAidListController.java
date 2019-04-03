@@ -21,6 +21,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 
 @Controller
@@ -46,12 +47,8 @@ public class MobilityAidListController implements StepController {
       model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
-    // If navigating forward from previous form, reset
     if (!model.containsAttribute(FORM_REQUEST)) {
-      // Create object in journey with empty list.
-      // Want to not get any null pointers accessing list.
-      journey.setFormForStep(MobilityAidListForm.builder().mobilityAids(new ArrayList<>()).build());
-      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
+      model.addAttribute(FORM_REQUEST, MobilityAidListForm.builder().build());
     }
     return TEMPLATE;
   }
@@ -67,20 +64,12 @@ public class MobilityAidListController implements StepController {
       return routeMaster.redirectToOnBindingError(this, mobilityAidListForm, bindingResult, attr);
     }
 
-    MobilityAidListForm journeyListForm = journey.getFormForStep(MOBILITY_AID_LIST);
-    // Reset if no selected
-    // Treat as No selected if no aids added whilst yes was selected
-    if ("no".equals(mobilityAidListForm.getHasWalkingAid())
-        || ("yes".equals(mobilityAidListForm.getHasWalkingAid())
-            && journeyListForm.getMobilityAids().isEmpty())) {
-      journey.setFormForStep(
-          MobilityAidListForm.builder()
-              .hasWalkingAid("no")
-              .mobilityAids(new ArrayList<>())
-              .build());
-    } else {
-      journeyListForm.setHasWalkingAid(mobilityAidListForm.getHasWalkingAid());
-      journey.setFormForStep(journeyListForm);
+    MobilityAidListForm journeyForm = journey.getOrSetFormForStep(mobilityAidListForm);
+    journeyForm.setHasWalkingAid(mobilityAidListForm.getHasWalkingAid());
+    if ("no".equals(mobilityAidListForm.getHasWalkingAid())) {
+      journeyForm.setMobilityAids(new ArrayList<>());
+    } else if (journeyForm.getMobilityAids().isEmpty()) {
+      journeyForm.setHasWalkingAid("no");
     }
 
     // Don't overwrite mobility/AidList in journey

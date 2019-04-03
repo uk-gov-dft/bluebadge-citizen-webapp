@@ -21,6 +21,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
 
 @Controller
@@ -48,10 +49,7 @@ public class TreatmentListController implements StepController {
 
     // If navigating forward from previous form, reset
     if (!model.containsAttribute(FORM_REQUEST)) {
-      // Create object in journey with empty list.
-      // Want to not get any null pointers accessing list.
-      journey.setFormForStep(TreatmentListForm.builder().treatments(new ArrayList<>()).build());
-      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
+      model.addAttribute(FORM_REQUEST, TreatmentListForm.builder().build());
     }
     return TEMPLATE;
   }
@@ -67,16 +65,12 @@ public class TreatmentListController implements StepController {
       return routeMaster.redirectToOnBindingError(this, treatmentListForm, bindingResult, attr);
     }
 
-    TreatmentListForm journeyForm = journey.getFormForStep(getStepDefinition());
-    // Reset if no selected
-    // Treat as No selected if no aids added whilst yes was selected
-    if ("no".equals(treatmentListForm.getHasTreatment())
-        || ("yes".equals(treatmentListForm.getHasTreatment())
-            && journeyForm.getTreatments().isEmpty())) {
-      journey.setFormForStep(
-          TreatmentListForm.builder().hasTreatment("no").treatments(new ArrayList<>()).build());
-    } else {
-      journeyForm.setHasTreatment(treatmentListForm.getHasTreatment());
+    TreatmentListForm journeyForm = journey.getOrSetFormForStep(treatmentListForm);
+    journeyForm.setHasTreatment(treatmentListForm.getHasTreatment());
+    if ("no".equals(treatmentListForm.getHasTreatment())) {
+      journeyForm.setTreatments(new ArrayList<>());
+    } else if (journeyForm.getTreatments().isEmpty()) {
+      journeyForm.setHasTreatment("no");
     }
 
     // Don't overwrite treatmentList in journey

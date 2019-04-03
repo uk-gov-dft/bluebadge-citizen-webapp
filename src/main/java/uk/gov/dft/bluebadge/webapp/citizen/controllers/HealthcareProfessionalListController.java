@@ -46,15 +46,8 @@ public class HealthcareProfessionalListController implements StepController {
       model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
-    // If navigating forward from previous form, reset
     if (!model.containsAttribute(FORM_REQUEST)) {
-      // Create object in journey with empty list.
-      // Want to not get any null pointers accessing list.
-      journey.setFormForStep(
-          HealthcareProfessionalListForm.builder()
-              .healthcareProfessionals(new ArrayList<>())
-              .build());
-      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
+      model.addAttribute(FORM_REQUEST, HealthcareProfessionalListForm.builder().build());
     }
     return TEMPLATE;
   }
@@ -73,20 +66,13 @@ public class HealthcareProfessionalListController implements StepController {
     }
 
     HealthcareProfessionalListForm journeyForm =
-        journey.getFormForStep(HEALTHCARE_PROFESSIONAL_LIST);
-    // Reset if no selected
-    // Treat as No selected if no aids added whilst yes was selected
-    if ("no".equals(healthcareProfessionalListForm.getHasHealthcareProfessional())
-        || ("yes".equals(healthcareProfessionalListForm.getHasHealthcareProfessional())
-            && journeyForm.getHealthcareProfessionals().isEmpty())) {
-      journey.setFormForStep(
-          HealthcareProfessionalListForm.builder()
-              .hasHealthcareProfessional("no")
-              .healthcareProfessionals(new ArrayList<>())
-              .build());
-    } else {
-      journeyForm.setHasHealthcareProfessional(
-          healthcareProfessionalListForm.getHasHealthcareProfessional());
+        journey.getOrSetFormForStep(healthcareProfessionalListForm);
+    journeyForm.setHasHealthcareProfessional(
+        healthcareProfessionalListForm.getHasHealthcareProfessional());
+    if ("no".equals(healthcareProfessionalListForm.getHasHealthcareProfessional())) {
+      journeyForm.setHealthcareProfessionals(new ArrayList<>());
+    } else if (journeyForm.getHealthcareProfessionals().isEmpty()) {
+      journeyForm.setHasHealthcareProfessional("no");
     }
 
     // Don't overwrite healthcareProfessionals in journey

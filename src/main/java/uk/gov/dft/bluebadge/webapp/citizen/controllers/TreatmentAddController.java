@@ -4,7 +4,6 @@ import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefini
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
-import java.util.ArrayList;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +18,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
 
@@ -41,14 +41,6 @@ public class TreatmentAddController implements StepController {
       return routeMaster.backToCompletedPrevious(journey);
     }
 
-    // Can hit add link before previous form submitted.
-    if (!journey.hasStepForm(TREATMENT_LIST)
-        || null == ((TreatmentListForm) journey.getFormForStep(TREATMENT_LIST)).getTreatments()) {
-      journey.setFormForStep(TreatmentListForm.builder().treatments(new ArrayList<>()).build());
-    }
-
-    ((TreatmentListForm) journey.getFormForStep(TREATMENT_LIST)).setHasTreatment("yes");
-
     // On returning to form, take previously submitted values.
     if (!model.containsAttribute(FORM_REQUEST)) {
       model.addAttribute(FORM_REQUEST, new TreatmentAddForm());
@@ -68,9 +60,14 @@ public class TreatmentAddController implements StepController {
       return routeMaster.redirectToOnBindingError(this, treatmentAddForm, bindingResult, attr);
     }
 
-    ((TreatmentListForm) journey.getFormForStep(TREATMENT_LIST))
-        .getTreatments()
-        .add(treatmentAddForm);
+    TreatmentListForm treatmentListForm = journey.getFormForStep(TREATMENT_LIST);
+    if (null == treatmentListForm) {
+      treatmentListForm = TreatmentListForm.builder().build();
+      journey.setFormForStep(treatmentListForm);
+    }
+
+    treatmentListForm.setHasTreatment("yes");
+    treatmentListForm.addTreatment(treatmentAddForm);
 
     return "redirect:" + Mappings.URL_TREATMENT_LIST;
   }

@@ -1,6 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
@@ -28,5 +29,16 @@ public class MobilityAidListForm implements Serializable, StepForm {
   @Override
   public boolean preserveStep(Journey journey) {
     return false;
+  }
+
+  public void addMobilityAid(MobilityAidAddForm mobilityAidAddForm) {
+    if (null == mobilityAids) {
+      mobilityAids = new ArrayList<>();
+    }
+    mobilityAids.add(mobilityAidAddForm);
+  }
+
+  public static class MedicationListFormBuilder {
+    private List<MobilityAidAddForm> mobilityAids = new ArrayList<>();
   }
 }

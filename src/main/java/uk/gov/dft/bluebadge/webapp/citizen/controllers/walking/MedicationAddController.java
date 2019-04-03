@@ -4,7 +4,6 @@ import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefini
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
-import java.util.ArrayList;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,15 +42,6 @@ public class MedicationAddController implements StepController {
       return routeMaster.backToCompletedPrevious(journey);
     }
 
-    // Can hit add link before previous form submitted.
-    if (!journey.hasStepForm(MEDICATION_LIST)
-        || null
-            == ((MedicationListForm) journey.getFormForStep(MEDICATION_LIST)).getMedications()) {
-      journey.setFormForStep(MedicationListForm.builder().medications(new ArrayList<>()).build());
-    }
-
-    ((MedicationListForm) journey.getFormForStep(MEDICATION_LIST)).setHasMedication("yes");
-
     // On returning to form, take previously submitted values.
     if (!model.containsAttribute(FORM_REQUEST)) {
       model.addAttribute(FORM_REQUEST, new MedicationAddForm());
@@ -79,9 +69,14 @@ public class MedicationAddController implements StepController {
       return routeMaster.redirectToOnBindingError(this, medicationAddForm, bindingResult, attr);
     }
 
-    ((MedicationListForm) journey.getFormForStep(MEDICATION_LIST))
-        .getMedications()
-        .add(medicationAddForm);
+    MedicationListForm medicationListForm = journey.getFormForStep(MEDICATION_LIST);
+    if (null == medicationListForm) {
+      medicationListForm = MedicationListForm.builder().build();
+      journey.setFormForStep(medicationListForm);
+    }
+
+    medicationListForm.setHasMedication("yes");
+    medicationListForm.addMedication(medicationAddForm);
 
     return "redirect:" + Mappings.URL_MEDICATION_LIST;
   }
