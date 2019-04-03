@@ -25,7 +25,7 @@ Feature: DFT Blue badge Citizen app new application - ARMS
 
     Then  I see the "ARMS" task list page as Adult
     And   I see task "Enter personal details" as COMPLETED
-    And   I can click on the "Describe your condition" link
+    And   I can click on the "Describe conditions" link
     And   I complete describe health conditions page
     And   I complete the how often do you drive page
     And   I complete the adapted vehicle page for "YES"
@@ -44,11 +44,11 @@ Feature: DFT Blue badge Citizen app new application - ARMS
     And   I complete "prove address" page with a "PNG" document
 
     Then  I see the "ARMS" task list page as Adult
-    And   I can click on the "Add a photo of yourself" link
+    And   I can click on the "Add a photo for the badge" link
     And   I complete "provide photo" page with no documents
 
     Then  I see the "ARMS" task list page as Adult
-    And   I can click on the "Read Declaration" link
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
 
     Then  I see the "ARMS" task list page as Adult

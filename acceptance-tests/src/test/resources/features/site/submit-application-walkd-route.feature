@@ -58,11 +58,11 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete "prove address" page with a "JPG" document
 
     Then  I see the "WALKD" task list page as Adult
-    And   I can click on the "Add a photo of yourself" link
+    And   I can click on the "Add a photo for the badge" link
     And   I complete "provide photo" page with a "PNG" document
 
     Then  I see the "WALKD" task list page as Adult
-    And   I can click on the "Read Declaration" link
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
 
     Then  I see the "WALKD" task list page as Adult
@@ -125,11 +125,11 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete "prove address" page with a "PDF" document
 
     Then  I see the "WALKD" task list page as Adult
-    And   I can click on the "Add a photo of yourself" link
+    And   I can click on the "Add a photo for the badge" link
     And   I complete "provide photo" page with a "JPG" document
 
     Then  I see the "WALKD" task list page as Adult
-    And   I can click on the "Read Declaration" link
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
 
     Then  I see the "WALKD" task list page as Adult
@@ -188,11 +188,11 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete "prove ID" page with no documents
 
     Then  I see the "WALKD" task list page as Child
-    And   I can click on the "Add a photo of yourself" link
+    And   I can click on the "Add a photo for the badge" link
     And   I complete "provide photo" page with no documents
 
     Then  I see the "WALKD" task list page as Child
-    And   I can click on the "Read Declaration" link
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
 
     Then  I see the "WALKD" task list page as Child
@@ -255,11 +255,11 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete "prove address" page with no documents
 
     Then  I see the "WALKD" task list page as Adult
-    And   I can click on the "Add a photo of yourself" link
+    And   I can click on the "Add a photo for the badge" link
     And   I complete "provide photo" page with no documents
 
     Then  I see the "WALKD" task list page as Adult
-    And   I can click on the "Read Declaration" link
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
 
     Then  I see the "WALKD" task list page as Adult
@@ -324,11 +324,11 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete "prove address" page with a "PNG" document
 
     Then  I see the "WALKD" task list page as Adult
-    And   I can click on the "Add a photo of yourself" link
+    And   I can click on the "Add a photo for the badge" link
     And   I complete "provide photo" page with no documents
 
     Then  I see the "WALKD" task list page as Adult
-    And   I can click on the "Read Declaration" link
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
 
     Then  I see the "WALKD" task list page as Adult

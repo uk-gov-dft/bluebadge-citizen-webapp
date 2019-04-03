@@ -39,9 +39,9 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I complete "prove ID" page with a "PDF" document
     And   I can click on the "Prove address" link
     And   I complete "prove address" page with a "PNG" document
-    And   I can click on the "Add a photo of yourself" link
+    And   I can click on the "Add a photo for the badge" link
     And   I complete "provide photo" page with a "JPG" document
-    And   I can click on the "Read Declaration" link
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
     And   I can click on the "Submit application" link
     And   I complete Submit application page
@@ -85,9 +85,9 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I complete "prove ID" page with a "PDF" document
     And   I can click on the "Prove address" link
     And   I complete "prove address" page with a "PNG" document
-    And   I can click on the "Add a photo of yourself" link
+    And   I can click on the "Add a photo for the badge" link
     And   I complete "provide photo" page with a "JPG" document
-    And   I can click on the "Read Declaration" link
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
     And   I can click on the "Submit application" link
     And   I complete Submit application page

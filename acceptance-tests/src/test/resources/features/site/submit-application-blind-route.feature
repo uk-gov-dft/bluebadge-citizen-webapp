@@ -34,11 +34,11 @@ Feature: DFT Blue badge Citizen app new application - BLIND
     And   I complete "prove ID" page with no documents
 
     Then  I see the "BLIND" task list page as Child
-    And   I can click on the "Add a photo of yourself" link
+    And   I can click on the "Add a photo for the badge" link
     And   I complete "provide photo" page with no documents
 
     Then  I see the "BLIND" task list page as Child
-    And   I can click on the "Read Declaration" link
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
 
     Then  I see the "BLIND" task list page as Child
@@ -77,11 +77,11 @@ Feature: DFT Blue badge Citizen app new application - BLIND
     And   I complete "prove ID" page with no documents
 
     Then  I see the "BLIND" task list page as Child
-    And   I can click on the "Add a photo of yourself" link
+    And   I can click on the "Add a photo for the badge" link
     And   I complete "provide photo" page with no documents
 
     Then  I see the "BLIND" task list page as Child
-    And   I can click on the "Read Declaration" link
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
 
     Then  I see the "BLIND" task list page as Child
@@ -119,11 +119,11 @@ Feature: DFT Blue badge Citizen app new application - BLIND
     And   I complete "prove ID" page with no documents
 
     Then  I see the "BLIND" task list page as Child
-    And   I can click on the "Add a photo of yourself" link
+    And   I can click on the "Add a photo for the badge" link
     And   I complete "provide photo" page with no documents
 
     Then  I see the "BLIND" task list page as Child
-    And   I can click on the "Read Declaration" link
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
 
     Then  I see the "BLIND" task list page as Child

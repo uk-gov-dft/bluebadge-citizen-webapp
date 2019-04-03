@@ -14,7 +14,7 @@ Feature: DFT Blue badge Citizen app - Task List
     When  I complete eligible page
 
     Then  I see the "PIP" task list page as Adult
-    And   I can click on the "Add a photo of yourself" link
+    And   I can click on the "Add a photo for the badge" link
     And   I complete "provide photo" page with a "GIF" document
 
     Then  I see the "PIP" task list page
@@ -41,7 +41,7 @@ Feature: DFT Blue badge Citizen app - Task List
     And   I complete "prove ID" page with a "GIF" document
 
     Then  I see the "PIP" task list page as Adult
-    And   I can click on the "Read Declaration" link
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
 
     Then  I see the "PIP" task list page as Adult
@@ -65,11 +65,11 @@ Feature: DFT Blue badge Citizen app - Task List
     And   I see task "Provide proof of benefit" as NOT_STARTED
     And   I see task "Prove identity" as NOT_STARTED
     And   I see task "Prove address" as NOT_STARTED
-    And   I see task "Add a photo of yourself" as NOT_STARTED
-    And   I see disabled task "Read Declaration" as NOT_STARTED
+    And   I see task "Add a photo for the badge" as NOT_STARTED
+    And   I see disabled task "Agree to declaration" as NOT_STARTED
     And   I see disabled task "Submit application" as NOT_STARTED
 
-    And   I can click on the "Add a photo of yourself" link
+    And   I can click on the "Add a photo for the badge" link
     And   I complete "provide photo" page with no documents
 
     Then  I see the "PIP" task list page
@@ -77,8 +77,8 @@ Feature: DFT Blue badge Citizen app - Task List
     And   I see task "Provide proof of benefit" as NOT_STARTED
     And   I see task "Prove identity" as NOT_STARTED
     And   I see task "Prove address" as NOT_STARTED
-    And   I see task "Add a photo of yourself" as COMPLETED
-    And   I see disabled task "Read Declaration" as NOT_STARTED
+    And   I see task "Add a photo for the badge" as COMPLETED
+    And   I see disabled task "Agree to declaration" as NOT_STARTED
 
     And   I can click on the "Enter personal details" link
     And   I complete what's your name page
@@ -101,8 +101,8 @@ Feature: DFT Blue badge Citizen app - Task List
     And   I see task "Provide proof of benefit" as NOT_STARTED
     And   I see task "Prove identity" as NOT_STARTED
     And   I see task "Prove address" as NOT_STARTED
-    And   I see task "Add a photo of yourself" as COMPLETED
-    And   I see disabled task "Read Declaration" as NOT_STARTED
+    And   I see task "Add a photo for the badge" as COMPLETED
+    And   I see disabled task "Agree to declaration" as NOT_STARTED
 
     And   I can click on the "Provide proof of benefit" link
     And   I complete prove benefit page for "yes"
@@ -113,8 +113,8 @@ Feature: DFT Blue badge Citizen app - Task List
     And   I see task "Provide proof of benefit" as COMPLETED
     And   I see task "Prove identity" as NOT_STARTED
     And   I see task "Prove address" as NOT_STARTED
-    And   I see task "Add a photo of yourself" as COMPLETED
-    And   I see disabled task "Read Declaration" as NOT_STARTED
+    And   I see task "Add a photo for the badge" as COMPLETED
+    And   I see disabled task "Agree to declaration" as NOT_STARTED
 
     And   I can click on the "Prove address" link
     And   I complete "prove address" page with a "GIF" document
@@ -128,13 +128,13 @@ Feature: DFT Blue badge Citizen app - Task List
     And   I see task "Provide proof of benefit" as COMPLETED
     And   I see task "Prove identity" as COMPLETED
     And   I see task "Prove address" as COMPLETED
-    And   I see task "Add a photo of yourself" as COMPLETED
-    And   I see task "Read Declaration" as NOT_STARTED
+    And   I see task "Add a photo for the badge" as COMPLETED
+    And   I see task "Agree to declaration" as NOT_STARTED
     And   I see disabled task "Submit application" as NOT_STARTED
 
-    And   I can click on the "Read Declaration" link
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
-    And   I see task "Read Declaration" as COMPLETED
+    And   I see task "Agree to declaration" as COMPLETED
     And   I see task "Submit application" as NOT_STARTED
 
     Then  I see the "PIP" task list page as Adult

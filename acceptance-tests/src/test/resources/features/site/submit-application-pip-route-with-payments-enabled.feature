@@ -39,11 +39,11 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete "prove address" page with a "GIF" document
 
     Then  I see the "PIP" task list page as Adult
-    And   I can click on the "Add a photo of yourself" link
+    And   I can click on the "Add a photo for the badge" link
     And   I complete "provide photo" page with a "GIF" document
 
     Then  I see the "PIP" task list page as Adult
-    And   I can click on the "Read Declaration" link
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
 
     Then  I see the "PIP" task list page as Adult
@@ -88,11 +88,11 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete "prove address" page with a "GIF" document
 
     Then  I see the "PIP" task list page as Adult
-    And   I can click on the "Add a photo of yourself" link
+    And   I can click on the "Add a photo for the badge" link
     And   I complete "provide photo" page with a "GIF" document
 
     Then  I see the "PIP" task list page as Adult
-    And   I can click on the "Read Declaration" link
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
 
     Then  I see the "PIP" task list page as Adult
@@ -145,11 +145,11 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete "prove address" page with a "GIF" document
 
     Then  I see the "PIP" task list page as Adult
-    And   I can click on the "Add a photo of yourself" link
+    And   I can click on the "Add a photo for the badge" link
     And   I complete "provide photo" page with a "GIF" document
 
     Then  I see the "PIP" task list page as Adult
-    And   I can click on the "Read Declaration" link
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
 
     Then  I see the "PIP" task list page as Adult
@@ -203,11 +203,11 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete "prove address" page with a "GIF" document
 
     Then  I see the "PIP" task list page as Adult
-    And   I can click on the "Add a photo of yourself" link
+    And   I can click on the "Add a photo for the badge" link
     And   I complete "provide photo" page with a "GIF" document
 
     Then  I see the "PIP" task list page as Adult
-    And   I can click on the "Read Declaration" link
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
 
     Then  I see the "PIP" task list page as Adult
@@ -273,11 +273,11 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete "prove address" page with a "GIF" document
 
     Then  I see the "PIP" task list page as Adult
-    And   I can click on the "Add a photo of yourself" link
+    And   I can click on the "Add a photo for the badge" link
     And   I complete "provide photo" page with a "GIF" document
 
     Then  I see the "PIP" task list page as Adult
-    And   I can click on the "Read Declaration" link
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
 
     Then  I see the "PIP" task list page as Adult

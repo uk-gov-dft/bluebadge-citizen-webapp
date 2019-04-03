@@ -73,7 +73,7 @@ public class TaskListSteps extends AbstractSpringSteps {
     } else {
       commonSteps.thenIDontSeeLinkWithText("Prove address");
     }
-    commonSteps.thenISeeLinkWithText("Add a photo of yourself");
+    commonSteps.thenISeeLinkWithText("Add a photo for the badge");
   }
 
   public void iSeeDLAorPIPTaskList(Boolean isAdult) throws Throwable {
@@ -81,7 +81,7 @@ public class TaskListSteps extends AbstractSpringSteps {
   }
 
   public void iSeeArmsTaskList(Boolean isAdult) throws Throwable {
-    commonSteps.thenISeeLinkWithText("Describe your condition");
+    commonSteps.thenISeeLinkWithText("Describe conditions");
     commonSteps.thenISeeLinkWithText("Add supporting documents");
   }
 
@@ -90,14 +90,14 @@ public class TaskListSteps extends AbstractSpringSteps {
   }
 
   public void iSeeChildBulkEquipTaskList(Boolean isAdult) throws Throwable {
-    commonSteps.thenISeeLinkWithText("Describe your condition");
+    commonSteps.thenISeeLinkWithText("Describe conditions");
     commonSteps.thenISeeLinkWithText("Add supporting documents");
     commonSteps.thenISeeLinkWithText("List medical equipment");
     commonSteps.thenISeeLinkWithText("List healthcare professionals");
   }
 
   public void iSeeChildVehicleTaskList(Boolean isAdult) throws Throwable {
-    commonSteps.thenISeeLinkWithText("Describe your condition");
+    commonSteps.thenISeeLinkWithText("Describe conditions");
     commonSteps.thenISeeLinkWithText("Add supporting documents");
     commonSteps.thenISeeLinkWithText("List healthcare professionals");
   }
