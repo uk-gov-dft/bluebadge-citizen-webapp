@@ -1,22 +1,24 @@
 blue-badge:
   auth-server:
-    url: https://authorisation-service.${bb_env}.${url}/bb_auth
-  referencedataservice:
-    servicehost:
-      host: reference-service.${bb_env}.${url}
-      port: 443
-      scheme: https
-  applicationmanagementservice:
-    servicehost:
-      host: application-service.${bb_env}.${url}
-      port: 443
-      scheme: https
+    url: https://api.${bb_env}.${url}/bb_auth
   paymentservice:
     servicehost:
-      host: payment-service.${bb_env}.${url}
+      host: api.${bb_env}.${url}
       port: 443
       scheme: https
-
+      contextpath: /payments-service1
+  referencedataservice:
+    servicehost:
+      host: api.${bb_env}.${url}
+      port: 443
+      scheme: https
+      contextpath: /reference-data1
+  applicationsservice:
+    servicehost:
+      host: api.${bb_env}.${url}
+      port: 443
+      scheme: https
+      contextpath: /applications1
 management:
   server:
     port: ${bb_health:-8081}
