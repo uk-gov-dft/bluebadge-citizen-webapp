@@ -4,20 +4,17 @@ import com.google.common.collect.ImmutableList;
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.TreatmentWhenType;
 
 @Data
 @EqualsAndHashCode
 public class TreatmentAddForm implements BaseForm, Serializable {
-  @NotNull(message = "{NotNull.treatment.whenTypeCodeField}")
-  private String whenTypeCodeField;
-
   @Size(max = 100)
   @NotBlank
   private String treatmentDescription;
@@ -25,11 +22,16 @@ public class TreatmentAddForm implements BaseForm, Serializable {
   @Size(max = 100)
   private String treatmentWhen;
 
-  @Size(max = 100)
-  private String treatmentDetailField;
+  @NotNull(message = "{NotNull.treatment.fields.treatmentWhenType}")
+  private TreatmentWhenType treatmentWhenType;
 
-  @Size(max = 100)
-  private String treatmentOptionalDetailField;
+  private String treatmentPastWhen;
+
+  private String treatmentOngoingFrequency;
+
+  private String treatmentFutureWhen;
+
+  private String treatmentFutureImprove;
 
   private String id = UUID.randomUUID().toString();
 

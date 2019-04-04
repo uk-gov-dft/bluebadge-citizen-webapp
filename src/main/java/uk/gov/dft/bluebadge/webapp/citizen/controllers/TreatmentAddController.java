@@ -4,8 +4,14 @@ import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefini
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.TreatmentWhenType;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,18 +31,13 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
 
+@Slf4j
 @Controller
 @RequestMapping(Mappings.URL_TREATMENT_ADD)
 public class TreatmentAddController implements StepController {
 
   private RouteMaster routeMaster;
   private static final String TEMPLATE = "treatment-add";
-
-  private enum WHEN_TYPE_CODE {
-    PAST,
-    ONGOING,
-    FUTURE;
-  }
 
   @Autowired
   TreatmentAddController(RouteMaster routeMaster) {
@@ -73,6 +74,55 @@ public class TreatmentAddController implements StepController {
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
+    // Validate conditional input fields
+    if (null != treatmentAddForm.getTreatmentWhenType()) {
+      String treatmentWhen = null;
+
+      switch (treatmentAddForm.getTreatmentWhenType()) {
+        case PAST:
+          if (StringUtils.isEmpty(treatmentAddForm.getTreatmentPastWhen())) {
+            bindingResult.rejectValue("treatmentPastWhen", "NotNull.treatment.fields.treatmentPastWhen");
+          } else if (treatmentAddForm.getTreatmentPastWhen().length() > 100) {
+            bindingResult.rejectValue("treatmentPastWhen", "Size.treatment.fields.treatmentPastWhen");
+          } else {
+            treatmentWhen = treatmentAddForm.getTreatmentPastWhen();
+          }
+          break;
+        case ONGOING:
+          if (StringUtils.isEmpty(treatmentAddForm.getTreatmentOngoingFrequency())) {
+            bindingResult.rejectValue("treatmentOngoingFrequency", "NotNull.treatment.fields.treatmentOngoingFrequency");
+          } else if (treatmentAddForm.getTreatmentOngoingFrequency().length() > 90) {
+            bindingResult.rejectValue("treatmentOngoingFrequency", "Size.treatment.fields.treatmentOngoingFrequency");
+          } else {
+            treatmentWhen = "Ongoing - " + treatmentAddForm.getTreatmentOngoingFrequency();
+          }
+          break;
+        case FUTURE:
+          Boolean validWhenFound = true;
+
+          if (StringUtils.isEmpty(treatmentAddForm.getTreatmentFutureWhen())) {
+            bindingResult.rejectValue("treatmentFutureWhen", "NotNull.treatment.fields.treatmentFutureWhen");
+            validWhenFound = false;
+          } else if (treatmentAddForm.getTreatmentFutureWhen().length() > 35) {
+            bindingResult.rejectValue("treatmentFutureWhen", "Size.treatment.fields.treatmentFutureWhen");
+            validWhenFound = false;
+          }
+
+          if (StringUtils.isEmpty(treatmentAddForm.getTreatmentFutureImprove())) {
+            bindingResult.rejectValue("treatmentFutureImprove", "NotNull.treatment.fields.treatmentFutureImprove");
+          } else if (treatmentAddForm.getTreatmentFutureImprove().length() > 25) {
+            bindingResult.rejectValue("treatmentFutureImprove", "Size.treatment.fields.treatmentFutureImprove");
+          } else if (validWhenFound) {
+            treatmentWhen = treatmentAddForm.getTreatmentFutureWhen() + " - Expected to improve? " + treatmentAddForm.getTreatmentFutureImprove();
+          }
+          break;
+      }
+
+      if (null != treatmentWhen) {
+        treatmentAddForm.setTreatmentWhen(treatmentWhen);
+      }
+    }
+
     if (bindingResult.hasErrors()) {
       return routeMaster.redirectToOnBindingError(this, treatmentAddForm, bindingResult, attr);
     }
@@ -91,9 +141,9 @@ public class TreatmentAddController implements StepController {
       }
 
       List<RadioOption> options = new ArrayList<>();
-      options.add(new RadioOption(WHEN_TYPE_CODE.PAST, "treatment.add.when.past.title"));
-      options.add(new RadioOption(WHEN_TYPE_CODE.ONGOING, "treatment.add.when.ongoing.title"));
-      options.add(new RadioOption(WHEN_TYPE_CODE.FUTURE, "treatment.add.when.future.title"));
+      options.add(new RadioOption(TreatmentWhenType.PAST, "treatment.add.when.past.title"));
+      options.add(new RadioOption(TreatmentWhenType.ONGOING, "treatment.add.when.ongoing.title"));
+      options.add(new RadioOption(TreatmentWhenType.FUTURE, "treatment.add.when.future.title"));
 
       return new RadioOptionsGroup("treatment.add.when.title", options);
     }
