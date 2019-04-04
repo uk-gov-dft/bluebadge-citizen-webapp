@@ -112,6 +112,7 @@ public class Journey implements Serializable {
     return formForStep;
   }
 
+  // This should not be within the journey class. See BBB-1347
   private void cleanUpSteps(Set<StepDefinition> alreadyCleaned, Set<StepDefinition> steps) {
 
     if (null == steps) {
