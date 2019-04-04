@@ -22,7 +22,8 @@ public abstract class BaseFinalStepController implements StepController {
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       Model model,
       SessionStatus sessionStatus) {
-    // TODO This is potentially really bad. As the application could have been submitted and then keeping the session
+    // This is potentially really bad. As the application could have been submitted and then
+    // keeping the session. see BBB-1346
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious(journey);
     }

@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks.InvalidStateForJourneyException;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks.TaskConfigurationException;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 @Builder
@@ -112,13 +113,10 @@ public class JourneySpecification {
     }
 
     if (submitAndPayJourney.getTasks().contains(task)) {
-      // TODO error
       return true;
-    } else if (!preApplicationJourney.isComplete(journey)) {
-      return false;
+    } else {
+      throw new TaskConfigurationException(
+          "Failed to find task " + task + ", anywhere in the journey.");
     }
-
-    // error
-    return true;
   }
 }
