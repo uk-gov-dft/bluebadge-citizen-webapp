@@ -82,7 +82,7 @@ public class TaskListController implements StepController {
               .enabled(previousComplete)
               .taskState(t.getState(journey))
               .build());
-      previousComplete = t.isComplete(journey);
+      previousComplete &= t.isComplete(journey);
     }
     model.addAttribute("applySectionTasks", taskViews);
   }

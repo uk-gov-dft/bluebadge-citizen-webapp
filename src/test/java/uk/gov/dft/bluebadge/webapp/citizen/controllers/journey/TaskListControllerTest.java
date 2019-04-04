@@ -1,6 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.groups.Tuple.tuple;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -9,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 import java.util.Map;
+
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +22,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.El
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.DeclarationSubmitForm;
 
 class TaskListControllerTest {
   private MockMvc mockMvc;
@@ -64,8 +67,10 @@ class TaskListControllerTest {
     List<TaskListController.TaskView> applySectionTasks =
         (List<TaskListController.TaskView>) model.get("applySectionTasks");
     assertThat(applySectionTasks)
-        .extracting("titleCode")
-        .containsExactly("taskList.apply.section.declaration", "taskList.apply.section.submit");
+        .extracting("titleCode", "enabled")
+        .containsExactly(
+            tuple("taskList.apply.section.declaration", false),
+            tuple("taskList.apply.section.submit", false));
   }
 
   @Test
@@ -76,5 +81,32 @@ class TaskListControllerTest {
         .perform(get("/task-list").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/"));
+  }
+
+  @Test
+  void show_whenApplicationSectionIncomplete_thenApplySectionAllDisabled() throws Exception {
+    Journey journey =
+        JourneyFixture.getDefaultJourneyToStep(
+            StepDefinition.GENDER, EligibilityCodeField.PIP, false);
+    // Unusual behaviour. Simulating changing the elig type once application started
+    journey.setFormForStep(DeclarationSubmitForm.builder().agreed(true).build());
+
+    MvcResult mvcResult =
+        mockMvc
+            .perform(get("/task-list").sessionAttr("JOURNEY", journey))
+            .andExpect(status().isOk())
+            .andExpect(view().name("task-list"))
+            .andExpect(model().attribute("applicationSectionTasks", Matchers.notNullValue()))
+            .andExpect(model().attribute("applySectionTasks", Matchers.notNullValue()))
+            .andReturn();
+
+    Map<String, Object> model = mvcResult.getModelAndView().getModel();
+    List<TaskListController.TaskView> applySectionTasks =
+        (List<TaskListController.TaskView>) model.get("applySectionTasks");
+    assertThat(applySectionTasks)
+        .extracting("titleCode", "enabled")
+        .containsExactly(
+            tuple("taskList.apply.section.declaration", false),
+            tuple("taskList.apply.section.submit", false));
   }
 }
