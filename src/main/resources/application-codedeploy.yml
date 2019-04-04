@@ -6,25 +6,25 @@ blue-badge:
       host: api.${bb_env}.${url}
       port: 443
       scheme: https
-      contextpath: /payments-service1
+      contextpath: /
   referencedataservice:
     servicehost:
       host: api.${bb_env}.${url}
       port: 443
       scheme: https
-      contextpath: /reference-data1
+      contextpath: /
   applicationsservice:
     servicehost:
       host: api.${bb_env}.${url}
       port: 443
       scheme: https
-      contextpath: /applications1
+      contextpath: /
 management:
   server:
-    port: ${bb_health:-8081}
+    port: ${bb_health:8081}
 
 server:
-  port: ${bb_port:-8080}
+  port: ${bb_port:8080}
 
 # Google Analytics Code
 GACode:  ${GACODE:UA-124760983-5}
