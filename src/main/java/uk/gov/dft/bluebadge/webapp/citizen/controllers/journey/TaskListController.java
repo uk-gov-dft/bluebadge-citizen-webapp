@@ -94,7 +94,7 @@ public class TaskListController implements StepController {
 
   @Builder
   @Getter
-  private static class TaskView {
+  static class TaskView {
     private final String titleCode;
     private final String url;
     private final boolean enabled;

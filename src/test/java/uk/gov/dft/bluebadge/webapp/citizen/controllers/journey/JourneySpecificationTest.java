@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.dft.bluebadge.webapp.citizen.BaseSpringBootTest;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks.InvalidStateForJourneyException;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks.TaskConfigurationException;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
@@ -24,7 +25,7 @@ class JourneySpecificationTest extends BaseSpringBootTest {
   private Task checkEligTask;
 
   @BeforeEach
-  public void setup(){
+  public void setup() {
     checkEligTask = journeySpecification.getPreApplicationJourney().getTasks().get(0);
     JourneySection journeySection =
         journeySpecification.getEligibilityCodeToJourneyMap().get(EligibilityCodeField.WALKD);
@@ -102,6 +103,35 @@ class JourneySpecificationTest extends BaseSpringBootTest {
           .describedAs("Full journey %s, has duplicate steps.", fullJourney)
           .isEmpty();
     }
+  }
+
+  @Test
+  void determineTask_checkEligibility() {
+    Journey journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.APPLICANT_TYPE);
+    Task task = journeySpecification.determineTask(journey, StepDefinition.CHOOSE_COUNCIL);
+    assertThat(task).isEqualTo(checkEligTask);
+  }
+
+  @Test
+  void determineTask_personalDetails() {
+    Journey journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS);
+    Task task = journeySpecification.determineTask(journey, StepDefinition.GENDER);
+    assertThat(task).isEqualTo(personalDetailsTask);
+  }
+
+  @Test
+  void determineTask_declaration() {
+    Journey journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS);
+    Task task = journeySpecification.determineTask(journey, StepDefinition.DECLARATIONS);
+    assertThat(task).isEqualTo(declarationTask);
+  }
+
+  @Test
+  void determineTask_invalidForJourney() {
+    Journey journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.APPLICANT_TYPE);
+    assertThrows(
+        InvalidStateForJourneyException.class,
+        () -> journeySpecification.determineTask(journey, StepDefinition.WALKING_TIME));
   }
 
   @Test
