@@ -56,7 +56,7 @@ public class TreatmentAddControllerTest extends ControllerTestFixture<TreatmentA
   }
 
   @Test
-  public void submit_showRedirectToNextStepInJourney_withValidPastTreatmentDetails()
+  public void submit_shouldRedirectToListTreatments_withValidOngoingTreatmentDetails()
       throws Exception {
 
     mockMvc
@@ -90,7 +90,7 @@ public class TreatmentAddControllerTest extends ControllerTestFixture<TreatmentA
   }
 
   @Test
-  public void submit_showRedirectToNextStepInJourney_withValidFutureTreatmentDetails()
+  public void submit_shouldRedirectToListTreatments_withValidFutureTreatmentDetails()
       throws Exception {
 
     mockMvc
@@ -128,7 +128,7 @@ public class TreatmentAddControllerTest extends ControllerTestFixture<TreatmentA
 
   @Test
   public void
-      submit_whenDescriptionIsSet_andNoDateOptionChosen_andFormSubmitted_thenShouldRedirectToShowWithValidationErrors()
+      submit_whenDescriptionIsSet_andNoDateOptionChosen_andFormSubmitted_thenShouldRedirectToAddTreatmentWithValidationErrors()
           throws Exception {
 
     TreatmentAddForm form = new TreatmentAddForm();
@@ -149,7 +149,7 @@ public class TreatmentAddControllerTest extends ControllerTestFixture<TreatmentA
 
   @Test
   public void
-      submit_whenDescriptionIsSet_andPastDateOptionChosen_andNoDateSet_andFormSubmitted_thenShouldRedirectToShowWithValidationErrors()
+      submit_whenDescriptionIsSet_andPastDateOptionChosen_andNoDateSet_andFormSubmitted_thenShouldRedirectToAddTreatmentsWithValidationErrors()
           throws Exception {
 
     TreatmentAddForm form = new TreatmentAddForm();
@@ -174,7 +174,7 @@ public class TreatmentAddControllerTest extends ControllerTestFixture<TreatmentA
 
   @Test
   public void
-      submit_whenDescriptionIsSet_andOngoingDateOptionChosen_andNoFrequencySet_andFormSubmitted_thenShouldRedirectToShowWithValidationErrors()
+      submit_whenDescriptionIsSet_andOngoingDateOptionChosen_andNoFrequencySet_andFormSubmitted_thenShouldRedirectToAddTreatmentsWithValidationErrors()
           throws Exception {
 
     TreatmentAddForm form = new TreatmentAddForm();
