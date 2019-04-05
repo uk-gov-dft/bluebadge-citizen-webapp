@@ -56,15 +56,16 @@ public class TreatmentAddControllerTest extends ControllerTestFixture<TreatmentA
   }
 
   @Test
-  public void submit_showRedirectToNextStepInJourney_withValidPastTreatmentDetails() throws Exception {
+  public void submit_showRedirectToNextStepInJourney_withValidPastTreatmentDetails()
+      throws Exception {
 
     mockMvc
         .perform(
             post(getUrl())
                 .param("treatmentDescription", DESCRIPTION)
-                    .param("treatmentWhenType", "PAST")
-                    .param("treatmentPastWhen", "10th May 2017")
-                    .param("treatmentWhen", "10th May 2017")
+                .param("treatmentWhenType", "PAST")
+                .param("treatmentPastWhen", "10th May 2017")
+                .param("treatmentWhen", "10th May 2017")
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
@@ -72,36 +73,38 @@ public class TreatmentAddControllerTest extends ControllerTestFixture<TreatmentA
   }
 
   @Test
-  public void submit_showRedirectToNextStepInJourney_withValidOngoingTreatmentDetails() throws Exception {
+  public void submit_showRedirectToNextStepInJourney_withValidOngoingTreatmentDetails()
+      throws Exception {
 
     mockMvc
-            .perform(
-                    post(getUrl())
-                            .param("treatmentDescription", DESCRIPTION)
-                            .param("treatmentWhenType", "ONGOING")
-                            .param("treatmentOngoingFrequency", "Forthnightly")
-                            .param("treatmentWhen", "Ongoing - Forthnightly")
-                            .contentType("application/x-www-form-urlencoded")
-                            .sessionAttr("JOURNEY", journey))
-            .andExpect(status().isFound())
-            .andExpect(redirectedUrl("/list-treatments"));
+        .perform(
+            post(getUrl())
+                .param("treatmentDescription", DESCRIPTION)
+                .param("treatmentWhenType", "ONGOING")
+                .param("treatmentOngoingFrequency", "Forthnightly")
+                .param("treatmentWhen", "Ongoing - Forthnightly")
+                .contentType("application/x-www-form-urlencoded")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/list-treatments"));
   }
 
   @Test
-  public void submit_showRedirectToNextStepInJourney_withValidFutureTreatmentDetails() throws Exception {
+  public void submit_showRedirectToNextStepInJourney_withValidFutureTreatmentDetails()
+      throws Exception {
 
     mockMvc
-            .perform(
-                    post(getUrl())
-                            .param("treatmentDescription", DESCRIPTION)
-                            .param("treatmentWhenType", "FUTURE")
-                            .param("treatmentFutureWhen", "21/21/2121")
-                            .param("treatmentFutureImprove", "Yes")
-                            .param("treatmentWhen", "21/21/2121 - - Expected to improve? Yes")
-                            .contentType("application/x-www-form-urlencoded")
-                            .sessionAttr("JOURNEY", journey))
-            .andExpect(status().isFound())
-            .andExpect(redirectedUrl("/list-treatments"));
+        .perform(
+            post(getUrl())
+                .param("treatmentDescription", DESCRIPTION)
+                .param("treatmentWhenType", "FUTURE")
+                .param("treatmentFutureWhen", "21/21/2121")
+                .param("treatmentFutureImprove", "Yes")
+                .param("treatmentWhen", "21/21/2121 - - Expected to improve? Yes")
+                .contentType("application/x-www-form-urlencoded")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/list-treatments"));
   }
 
   @Test
@@ -120,31 +123,33 @@ public class TreatmentAddControllerTest extends ControllerTestFixture<TreatmentA
         .andExpect(redirectedUrl("/add-treatment#error"))
         .andExpect(flash().attribute("formRequest", form))
         .andExpect(formRequestFlashAttributeHasFieldErrorCode("treatmentDescription", "NotBlank"))
-    .andExpect(formRequestFlashAttributeHasFieldErrorCode("treatmentWhenType", "NotNull"));
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("treatmentWhenType", "NotNull"));
   }
 
   @Test
-  public void submit_whenDescriptionIsSet_andNoDateOptionChosen_andFormSubmitted_thenShouldRedirectToShowWithValidationErrors()
+  public void
+      submit_whenDescriptionIsSet_andNoDateOptionChosen_andFormSubmitted_thenShouldRedirectToShowWithValidationErrors()
           throws Exception {
 
     TreatmentAddForm form = new TreatmentAddForm();
     form.setTreatmentDescription(DESCRIPTION);
     form.setId("1234");
     mockMvc
-            .perform(
-                    post(getUrl())
-                            .param("id", "1234")
-                            .param("treatmentDescription", DESCRIPTION)
-                            .contentType("application/x-www-form-urlencoded")
-                            .sessionAttr("JOURNEY", journey))
-            .andExpect(status().isFound())
-            .andExpect(redirectedUrl("/add-treatment#error"))
-            .andExpect(flash().attribute("formRequest", form))
-            .andExpect(formRequestFlashAttributeHasFieldErrorCode("treatmentWhenType", "NotNull"));
+        .perform(
+            post(getUrl())
+                .param("id", "1234")
+                .param("treatmentDescription", DESCRIPTION)
+                .contentType("application/x-www-form-urlencoded")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/add-treatment#error"))
+        .andExpect(flash().attribute("formRequest", form))
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("treatmentWhenType", "NotNull"));
   }
 
   @Test
-  public void submit_whenDescriptionIsSet_andPastDateOptionChosen_andNoDateSet_andFormSubmitted_thenShouldRedirectToShowWithValidationErrors()
+  public void
+      submit_whenDescriptionIsSet_andPastDateOptionChosen_andNoDateSet_andFormSubmitted_thenShouldRedirectToShowWithValidationErrors()
           throws Exception {
 
     TreatmentAddForm form = new TreatmentAddForm();
@@ -152,21 +157,24 @@ public class TreatmentAddControllerTest extends ControllerTestFixture<TreatmentA
     form.setTreatmentDescription(DESCRIPTION);
     form.setTreatmentWhenType(TreatmentWhenType.PAST);
     mockMvc
-            .perform(
-                    post(getUrl())
-                            .param("id", "1234")
-                            .param("treatmentDescription", DESCRIPTION)
-                            .param("treatmentWhenType", "PAST")
-                            .contentType("application/x-www-form-urlencoded")
-                            .sessionAttr("JOURNEY", journey))
-            .andExpect(status().isFound())
-            .andExpect(redirectedUrl("/add-treatment#error"))
-            .andExpect(flash().attribute("formRequest", form))
-            .andExpect(formRequestFlashAttributeHasFieldErrorCode("treatmentPastWhen", "NotNull.treatment.fields.treatmentPastWhen"));
+        .perform(
+            post(getUrl())
+                .param("id", "1234")
+                .param("treatmentDescription", DESCRIPTION)
+                .param("treatmentWhenType", "PAST")
+                .contentType("application/x-www-form-urlencoded")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/add-treatment#error"))
+        .andExpect(flash().attribute("formRequest", form))
+        .andExpect(
+            formRequestFlashAttributeHasFieldErrorCode(
+                "treatmentPastWhen", "NotNull.treatment.fields.treatmentPastWhen"));
   }
 
   @Test
-  public void submit_whenDescriptionIsSet_andOngoingDateOptionChosen_andNoFrequencySet_andFormSubmitted_thenShouldRedirectToShowWithValidationErrors()
+  public void
+      submit_whenDescriptionIsSet_andOngoingDateOptionChosen_andNoFrequencySet_andFormSubmitted_thenShouldRedirectToShowWithValidationErrors()
           throws Exception {
 
     TreatmentAddForm form = new TreatmentAddForm();
@@ -174,21 +182,24 @@ public class TreatmentAddControllerTest extends ControllerTestFixture<TreatmentA
     form.setTreatmentDescription(DESCRIPTION);
     form.setTreatmentWhenType(TreatmentWhenType.ONGOING);
     mockMvc
-            .perform(
-                    post(getUrl())
-                            .param("id", "1234")
-                            .param("treatmentDescription", DESCRIPTION)
-                            .param("treatmentWhenType", "ONGOING")
-                            .contentType("application/x-www-form-urlencoded")
-                            .sessionAttr("JOURNEY", journey))
-            .andExpect(status().isFound())
-            .andExpect(redirectedUrl("/add-treatment#error"))
-            .andExpect(flash().attribute("formRequest", form))
-            .andExpect(formRequestFlashAttributeHasFieldErrorCode("treatmentOngoingFrequency", "NotNull.treatment.fields.treatmentOngoingFrequency"));
+        .perform(
+            post(getUrl())
+                .param("id", "1234")
+                .param("treatmentDescription", DESCRIPTION)
+                .param("treatmentWhenType", "ONGOING")
+                .contentType("application/x-www-form-urlencoded")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/add-treatment#error"))
+        .andExpect(flash().attribute("formRequest", form))
+        .andExpect(
+            formRequestFlashAttributeHasFieldErrorCode(
+                "treatmentOngoingFrequency", "NotNull.treatment.fields.treatmentOngoingFrequency"));
   }
 
   @Test
-  public void submit_whenDescriptionIsSet_andFutureDateOptionChosen_andNoDateSet_andFormSubmitted_thenShouldRedirectToShowWithValidationErrors()
+  public void
+      submit_whenDescriptionIsSet_andFutureDateOptionChosen_andNoDateSet_andFormSubmitted_thenShouldRedirectToShowWithValidationErrors()
           throws Exception {
 
     TreatmentAddForm form = new TreatmentAddForm();
@@ -196,17 +207,21 @@ public class TreatmentAddControllerTest extends ControllerTestFixture<TreatmentA
     form.setTreatmentDescription(DESCRIPTION);
     form.setTreatmentWhenType(TreatmentWhenType.FUTURE);
     mockMvc
-            .perform(
-                    post(getUrl())
-                            .param("id", "1234")
-                            .param("treatmentDescription", DESCRIPTION)
-                            .param("treatmentWhenType", "FUTURE")
-                            .contentType("application/x-www-form-urlencoded")
-                            .sessionAttr("JOURNEY", journey))
-            .andExpect(status().isFound())
-            .andExpect(redirectedUrl("/add-treatment#error"))
-            .andExpect(flash().attribute("formRequest", form))
-            .andExpect(formRequestFlashAttributeHasFieldErrorCode("treatmentFutureWhen", "NotNull.treatment.fields.treatmentFutureWhen"))
-    .andExpect(formRequestFlashAttributeHasFieldErrorCode("treatmentFutureImprove", "NotNull.treatment.fields.treatmentFutureImprove"));
+        .perform(
+            post(getUrl())
+                .param("id", "1234")
+                .param("treatmentDescription", DESCRIPTION)
+                .param("treatmentWhenType", "FUTURE")
+                .contentType("application/x-www-form-urlencoded")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/add-treatment#error"))
+        .andExpect(flash().attribute("formRequest", form))
+        .andExpect(
+            formRequestFlashAttributeHasFieldErrorCode(
+                "treatmentFutureWhen", "NotNull.treatment.fields.treatmentFutureWhen"))
+        .andExpect(
+            formRequestFlashAttributeHasFieldErrorCode(
+                "treatmentFutureImprove", "NotNull.treatment.fields.treatmentFutureImprove"));
   }
 }

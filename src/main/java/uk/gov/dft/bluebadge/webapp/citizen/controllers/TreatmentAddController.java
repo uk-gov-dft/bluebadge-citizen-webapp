@@ -4,13 +4,11 @@ import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefini
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.TreatmentWhenType;
-
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.TreatmentWhenType;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
@@ -79,18 +78,22 @@ public class TreatmentAddController implements StepController {
       switch (treatmentAddForm.getTreatmentWhenType()) {
         case PAST:
           if (StringUtils.isEmpty(treatmentAddForm.getTreatmentPastWhen())) {
-            bindingResult.rejectValue("treatmentPastWhen", "NotNull.treatment.fields.treatmentPastWhen");
+            bindingResult.rejectValue(
+                "treatmentPastWhen", "NotNull.treatment.fields.treatmentPastWhen");
           } else if (treatmentAddForm.getTreatmentPastWhen().length() > 100) {
-            bindingResult.rejectValue("treatmentPastWhen", "Size.treatment.fields.treatmentPastWhen");
+            bindingResult.rejectValue(
+                "treatmentPastWhen", "Size.treatment.fields.treatmentPastWhen");
           } else {
             treatmentWhen = treatmentAddForm.getTreatmentPastWhen();
           }
           break;
         case ONGOING:
           if (StringUtils.isEmpty(treatmentAddForm.getTreatmentOngoingFrequency())) {
-            bindingResult.rejectValue("treatmentOngoingFrequency", "NotNull.treatment.fields.treatmentOngoingFrequency");
+            bindingResult.rejectValue(
+                "treatmentOngoingFrequency", "NotNull.treatment.fields.treatmentOngoingFrequency");
           } else if (treatmentAddForm.getTreatmentOngoingFrequency().length() > 90) {
-            bindingResult.rejectValue("treatmentOngoingFrequency", "Size.treatment.fields.treatmentOngoingFrequency");
+            bindingResult.rejectValue(
+                "treatmentOngoingFrequency", "Size.treatment.fields.treatmentOngoingFrequency");
           } else {
             treatmentWhen = "Ongoing - " + treatmentAddForm.getTreatmentOngoingFrequency();
           }
@@ -99,19 +102,26 @@ public class TreatmentAddController implements StepController {
           Boolean validWhenFound = true;
 
           if (StringUtils.isEmpty(treatmentAddForm.getTreatmentFutureWhen())) {
-            bindingResult.rejectValue("treatmentFutureWhen", "NotNull.treatment.fields.treatmentFutureWhen");
+            bindingResult.rejectValue(
+                "treatmentFutureWhen", "NotNull.treatment.fields.treatmentFutureWhen");
             validWhenFound = false;
           } else if (treatmentAddForm.getTreatmentFutureWhen().length() > 35) {
-            bindingResult.rejectValue("treatmentFutureWhen", "Size.treatment.fields.treatmentFutureWhen");
+            bindingResult.rejectValue(
+                "treatmentFutureWhen", "Size.treatment.fields.treatmentFutureWhen");
             validWhenFound = false;
           }
 
           if (StringUtils.isEmpty(treatmentAddForm.getTreatmentFutureImprove())) {
-            bindingResult.rejectValue("treatmentFutureImprove", "NotNull.treatment.fields.treatmentFutureImprove");
+            bindingResult.rejectValue(
+                "treatmentFutureImprove", "NotNull.treatment.fields.treatmentFutureImprove");
           } else if (treatmentAddForm.getTreatmentFutureImprove().length() > 25) {
-            bindingResult.rejectValue("treatmentFutureImprove", "Size.treatment.fields.treatmentFutureImprove");
+            bindingResult.rejectValue(
+                "treatmentFutureImprove", "Size.treatment.fields.treatmentFutureImprove");
           } else if (validWhenFound) {
-            treatmentWhen = treatmentAddForm.getTreatmentFutureWhen() + " - Expected to improve? " + treatmentAddForm.getTreatmentFutureImprove();
+            treatmentWhen =
+                treatmentAddForm.getTreatmentFutureWhen()
+                    + " - Expected to improve? "
+                    + treatmentAddForm.getTreatmentFutureImprove();
           }
           break;
       }
@@ -132,19 +142,19 @@ public class TreatmentAddController implements StepController {
     return "redirect:" + Mappings.URL_TREATMENT_LIST;
   }
 
-    @ModelAttribute("whenTypeCodes")
-    public RadioOptionsGroup whenTypeCodes(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
-      if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-        return null;
-      }
-
-      List<RadioOption> options = new ArrayList<>();
-      options.add(new RadioOption(TreatmentWhenType.PAST, "treatment.add.when.past.title"));
-      options.add(new RadioOption(TreatmentWhenType.ONGOING, "treatment.add.when.ongoing.title"));
-      options.add(new RadioOption(TreatmentWhenType.FUTURE, "treatment.add.when.future.title"));
-
-      return new RadioOptionsGroup("treatment.add.when.title", options);
+  @ModelAttribute("whenTypeCodes")
+  public RadioOptionsGroup whenTypeCodes(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+    if (!routeMaster.isValidState(getStepDefinition(), journey)) {
+      return null;
     }
+
+    List<RadioOption> options = new ArrayList<>();
+    options.add(new RadioOption(TreatmentWhenType.PAST, "treatment.add.when.past.title"));
+    options.add(new RadioOption(TreatmentWhenType.ONGOING, "treatment.add.when.ongoing.title"));
+    options.add(new RadioOption(TreatmentWhenType.FUTURE, "treatment.add.when.future.title"));
+
+    return new RadioOptionsGroup("treatment.add.when.title", options);
+  }
 
   @Override
   public StepDefinition getStepDefinition() {
