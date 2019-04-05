@@ -33,7 +33,7 @@ public class SubmittedControllerTest {
   }
 
   @Test
-  public void showSubmitted_ShouldDisplaySubmittedTemplate_WhenThereIsAJourney() throws Exception {
+  public void show_ShouldDisplaySubmittedTemplate_WhenThereIsAJourney() throws Exception {
     Journey journey = new JourneyBuilder().forYou().build();
 
     mockMvc
@@ -45,8 +45,7 @@ public class SubmittedControllerTest {
   }
 
   @Test
-  public void showSubmitted_givenNoSession_ShouldRedirectBackToStart() throws Exception {
-
+  public void show_givenNoSession_ShouldRedirectBackToStart() throws Exception {
     mockMvc
         .perform(get("/application-submitted"))
         .andExpect(status().isFound())
@@ -54,8 +53,7 @@ public class SubmittedControllerTest {
   }
 
   @Test
-  public void showDeclaration_givenInvalidState_ShouldRedirectBackToStart() throws Exception {
-
+  public void show_givenInvalidState_ShouldRedirectBackToStart() throws Exception {
     mockMvc
         .perform(get("/application-submitted"))
         .andExpect(status().isFound())

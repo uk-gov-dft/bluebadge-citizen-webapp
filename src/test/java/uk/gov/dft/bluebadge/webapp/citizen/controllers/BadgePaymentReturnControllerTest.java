@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -11,11 +12,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.client.RestClientException;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Application;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentStatusResponse;
@@ -36,6 +40,7 @@ public class BadgePaymentReturnControllerTest {
   private static final String PAYMENT_STATUS_CREATED = "created";
   private static final String PAYMENT_STATUS_SUCCESS = "success";
   private static final String PAYMENT_STATUS_FAILED = "failed";
+  private static final String PAYMENT_STATUS_UNKWOWN = "unknown";
   private static final String PAYMENT_REFERENCE = "payref1010";
 
   PaymentResponse PAYMENT_RESPONSE =
@@ -78,6 +83,17 @@ public class BadgePaymentReturnControllerTest {
                   put("paymentJourneyUuid", PAYMENT_JOURNEY_UUID);
                   put("status", PAYMENT_STATUS_FAILED);
                   put("reference", PAYMENT_REFERENCE);
+                }
+              })
+          .build();
+  PaymentStatusResponse UNKNOWN_PAYMENT_STATUS_RESPONSE =
+      PaymentStatusResponse.builder()
+          .data(
+              new HashMap<String, String>() {
+                {
+                  put("paymentJourneyUuid", PAYMENT_JOURNEY_UUID);
+                  put("status", PAYMENT_STATUS_UNKWOWN);
+                  put("reference", null);
                 }
               })
           .build();
@@ -127,7 +143,7 @@ public class BadgePaymentReturnControllerTest {
 
   @Test
   public void
-      show_shouldRedirectToApplicationSubmittedAndCreateApplication_whenPaymentIsSuccessful()
+      show_shouldRedirectToApplicationSubmittedAndCreateApplicationWithPaymentReference_whenPaymentIsSuccessful()
           throws Exception {
 
     journey.setPaymentJourneyUuid(PAYMENT_JOURNEY_UUID);
@@ -140,7 +156,38 @@ public class BadgePaymentReturnControllerTest {
         .perform(get("/badge-payment-return").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/application-submitted"));
+
     verify(applicationManagementServiceMock).create(any());
+    ArgumentCaptor<Application> argument = ArgumentCaptor.forClass(Application.class);
+    verify(applicationManagementServiceMock).create(argument.capture());
+    assertThat(argument.getValue().getPaymentReference()).isEqualTo(PAYMENT_REFERENCE);
+  }
+
+  @Test
+  public void
+      show_shouldRedirectToApplicationSubmittedAndCreateApplicationWithoutPaymentReference_whenPaymentStatusCannotBeRetrieved()
+          throws Exception {
+
+    journey.setPaymentJourneyUuid(PAYMENT_JOURNEY_UUID);
+    journey.setFormForStep(BadgePaymentForm.builder().build());
+
+    when(paymentServiceMock.retrievePaymentStatus(PAYMENT_JOURNEY_UUID))
+        .thenThrow(new RestClientException("Rest client exception"));
+
+    mockMvc
+        .perform(get("/badge-payment-return").sessionAttr("JOURNEY", journey))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/application-submitted"));
+
+    verify(applicationManagementServiceMock).create(any());
+    ArgumentCaptor<Application> argument = ArgumentCaptor.forClass(Application.class);
+    verify(applicationManagementServiceMock).create(argument.capture());
+    assertThat(argument.getValue().getPaymentReference()).isEqualTo("Unknown");
+    assertThat(journey.getPaymentStatus()).isEqualTo("unknown");
+    assertThat(journey.getPaymentReference()).isEqualTo("Unknown");
+    assertThat(journey.isPaymentSuccessful()).isEqualTo(false);
+    assertThat(journey.isPaymentStatusUnknown()).isEqualTo(true);
+    assertThat(journey.getPaymentJourneyUuid()).isEqualTo(PAYMENT_JOURNEY_UUID);
   }
 
   @Test

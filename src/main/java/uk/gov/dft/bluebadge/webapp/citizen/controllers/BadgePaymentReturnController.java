@@ -3,6 +3,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
+import com.google.common.collect.ImmutableMap;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,9 +56,24 @@ public class BadgePaymentReturnController implements StepController {
     if (journey.getPaymentJourneyUuid() == null) {
       return "redirect:" + Mappings.URL_NOT_PAID;
     }
-    PaymentStatusResponse paymentStatusResponse =
-        paymentService.retrievePaymentStatus(journey.getPaymentJourneyUuid());
-    journey.setPaymentStatusResponse(paymentStatusResponse);
+    try {
+      PaymentStatusResponse paymentStatusResponse =
+          paymentService.retrievePaymentStatus(journey.getPaymentJourneyUuid());
+      journey.setPaymentStatusResponse(paymentStatusResponse);
+    } catch (Exception ex) {
+      PaymentStatusResponse unknownResponse =
+          PaymentStatusResponse.builder()
+              .data(
+                  ImmutableMap.of(
+                      "paymentJourneyUuid",
+                      journey.getPaymentJourneyUuid(),
+                      "status",
+                      "unknown",
+                      "reference",
+                      "Unknown"))
+              .build();
+      journey.setPaymentStatusResponse(unknownResponse);
+    }
 
     log.info(
         "Payment response. Status code [{}], reference [{}], journey uuid [{}]",
@@ -65,7 +81,7 @@ public class BadgePaymentReturnController implements StepController {
         journey.getPaymentReference(),
         journey.getPaymentJourneyUuid());
 
-    if (journey.isPaymentSuccessful()) {
+    if (journey.isPaymentSuccessful() || journey.isPaymentStatusUnknown()) {
       applicationService.create(JourneyToApplicationConverter.convert(journey));
     }
     return routeMaster.redirectToOnSuccess(formRequest, journey);
