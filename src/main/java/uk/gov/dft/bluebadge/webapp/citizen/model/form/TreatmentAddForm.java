@@ -36,6 +36,13 @@ public class TreatmentAddForm implements BaseForm, Serializable {
 
   @Override
   public List<String> getFieldOrder() {
-    return ImmutableList.of("treatmentDescription", "treatmentWhen");
+    return ImmutableList.of(
+        "treatmentDescription",
+        "treatmentWhenType",
+        "treatmentPastWhen",
+        "treatmentOngoingFrequency",
+        "treatmentFutureWhen",
+        "treatmentFutureImprove",
+        "treatmentWhen");
   }
 }
