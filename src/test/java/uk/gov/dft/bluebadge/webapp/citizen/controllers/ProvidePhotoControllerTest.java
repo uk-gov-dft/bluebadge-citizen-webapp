@@ -33,6 +33,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.JourneyArtifact;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProvidePhotoForm;
@@ -43,7 +44,7 @@ public class ProvidePhotoControllerTest {
   private MockMvc mockMvc;
 
   private Journey journey;
-  private static final String SUCCESS_URL = Mappings.URL_PROVE_ADDRESS;
+  private static final String SUCCESS_URL = Mappings.URL_TASK_LIST;
   private static final String ERROR_URL = Mappings.URL_PROVIDE_PHOTO + RouteMaster.ERROR_SUFFIX;
   private ArtifactService artifactServiceMock;
   private URL signedUrl;
@@ -54,7 +55,7 @@ public class ProvidePhotoControllerTest {
   public void setup() {
     artifactServiceMock = mock(ArtifactService.class);
     ProvidePhotoController controller =
-        new ProvidePhotoController(new RouteMaster(), artifactServiceMock);
+        new ProvidePhotoController(RouteMasterFixture.routeMaster(), artifactServiceMock);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())

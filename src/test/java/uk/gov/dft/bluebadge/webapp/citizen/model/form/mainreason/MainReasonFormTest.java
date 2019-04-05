@@ -14,16 +14,16 @@ public class MainReasonFormTest {
   public void determineNextStep_whenTermIll_thenContactCouncil() {
     MainReasonForm form =
         MainReasonForm.builder().mainReasonOption(EligibilityCodeField.TERMILL).build();
-    assertThat(form.determineNextStep()).isNotEmpty();
-    assertThat(form.determineNextStep().get()).isEqualTo(StepDefinition.CONTACT_COUNCIL);
+    assertThat(form.determineNextStep(null)).isNotEmpty();
+    assertThat(form.determineNextStep(null).get()).isEqualTo(StepDefinition.CONTACT_COUNCIL);
   }
 
   @Test
   public void determineNextStep_whenWalking_thenContactCouncil() {
     MainReasonForm form =
         MainReasonForm.builder().mainReasonOption(EligibilityCodeField.WALKD).build();
-    assertThat(form.determineNextStep()).isNotEmpty();
-    assertThat(form.determineNextStep().get()).isEqualTo(StepDefinition.WALKING_DIFFICULTY);
+    assertThat(form.determineNextStep(null)).isNotEmpty();
+    assertThat(form.determineNextStep(null).get()).isEqualTo(StepDefinition.WALKING_DIFFICULTY);
   }
 
   @Test
@@ -35,8 +35,9 @@ public class MainReasonFormTest {
         .forEach(
             e -> {
               MainReasonForm form = MainReasonForm.builder().mainReasonOption(e).build();
-              assertThat(form.determineNextStep()).isNotEmpty();
-              assertThat(form.determineNextStep().get()).isEqualTo(StepDefinition.MAY_BE_ELIGIBLE);
+              assertThat(form.determineNextStep(null)).isNotEmpty();
+              assertThat(form.determineNextStep(null).get())
+                  .isEqualTo(StepDefinition.MAY_BE_ELIGIBLE);
             });
   }
 
@@ -44,15 +45,15 @@ public class MainReasonFormTest {
   public void determineNextStep_whenNone_thenNotEligible() {
     MainReasonForm form =
         MainReasonForm.builder().mainReasonOption(EligibilityCodeField.NONE).build();
-    assertThat(form.determineNextStep()).isNotEmpty();
-    assertThat(form.determineNextStep().get()).isEqualTo(StepDefinition.NOT_ELIGIBLE);
+    assertThat(form.determineNextStep(null)).isNotEmpty();
+    assertThat(form.determineNextStep(null).get()).isEqualTo(StepDefinition.NOT_ELIGIBLE);
   }
 
   @Test
   public void determineNextStep_whenBlind_thenEligible() {
     MainReasonForm form =
         MainReasonForm.builder().mainReasonOption(EligibilityCodeField.BLIND).build();
-    assertThat(form.determineNextStep()).isNotEmpty();
-    assertThat(form.determineNextStep().get()).isEqualTo(StepDefinition.ELIGIBLE);
+    assertThat(form.determineNextStep(null)).isNotEmpty();
+    assertThat(form.determineNextStep(null).get()).isEqualTo(StepDefinition.ELIGIBLE);
   }
 }

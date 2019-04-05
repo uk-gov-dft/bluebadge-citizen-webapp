@@ -22,6 +22,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.blind.RegisteredCouncilForm;
@@ -39,7 +40,7 @@ public class RegisteredCouncilControllerTest {
     MockitoAnnotations.initMocks(this);
 
     RegisteredCouncilController controller =
-        new RegisteredCouncilController(referenceDataServiceMock, new RouteMaster());
+        new RegisteredCouncilController(referenceDataServiceMock, RouteMasterFixture.routeMaster());
 
     LocalAuthorityRefData localAuthorityRefData = new LocalAuthorityRefData();
     LocalAuthorityRefData.LocalAuthorityMetaData localAuthorityMetaData =
@@ -121,6 +122,6 @@ public class RegisteredCouncilControllerTest {
                 .sessionAttr("JOURNEY", journey)
                 .param("registeredCouncil", "WARCC"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(Mappings.URL_PROVE_IDENTITY));
+        .andExpect(redirectedUrl(Mappings.URL_TASK_LIST));
   }
 }

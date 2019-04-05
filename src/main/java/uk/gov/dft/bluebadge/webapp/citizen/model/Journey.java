@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentStatusResponse;
@@ -42,9 +43,9 @@ public class Journey implements Serializable {
   public static final String SEPARATOR = "\n- - - - - - - - - - - - - - - - -\n";
 
   private Map<StepDefinition, StepForm> forms = new HashMap<>();
-  public String who;
-  public String ageGroup;
-  public String walkingAid;
+  @Getter private String who;
+  @Getter private String ageGroup;
+  @Getter private String walkingAid;
 
   private LocalAuthorityRefData localAuthority;
 
@@ -109,7 +110,7 @@ public class Journey implements Serializable {
   }
 
   @SuppressWarnings("unchecked")
-  public <T> T getFormForStep(StepDefinition step) {
+  public <T extends StepForm> T getFormForStep(StepDefinition step) {
     return (T) forms.get(step);
   }
 
@@ -122,6 +123,7 @@ public class Journey implements Serializable {
     return formForStep;
   }
 
+  // This should not be within the journey class. See BBB-1347
   private void cleanUpSteps(Set<StepDefinition> alreadyCleaned, Set<StepDefinition> steps) {
 
     if (null == steps) {

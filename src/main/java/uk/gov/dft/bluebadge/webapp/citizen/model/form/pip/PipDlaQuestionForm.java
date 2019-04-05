@@ -28,7 +28,7 @@ public class PipDlaQuestionForm implements Serializable, StepForm {
   }
 
   @Override
-  public Optional<StepDefinition> determineNextStep() {
+  public Optional<StepDefinition> determineNextStep(Journey journey) {
     if (HAS_RECEIVED_DLA.equals(receivedDlaOption)) {
       return Optional.of(StepDefinition.ELIGIBLE);
     }

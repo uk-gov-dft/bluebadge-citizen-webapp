@@ -4,7 +4,6 @@ import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefini
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
-import java.util.ArrayList;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,23 +37,8 @@ public class HealthcareProfessionalAddController implements StepController {
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
-
-    // Can hit add link before previous form submitted.
-    if (!journey.hasStepForm(HEALTHCARE_PROFESSIONAL_LIST)
-        || null
-            == ((HealthcareProfessionalListForm)
-                    journey.getFormForStep(HEALTHCARE_PROFESSIONAL_LIST))
-                .getHealthcareProfessionals()) {
-      journey.setFormForStep(
-          HealthcareProfessionalListForm.builder()
-              .healthcareProfessionals(new ArrayList<>())
-              .build());
-    }
-
-    ((HealthcareProfessionalListForm) journey.getFormForStep(HEALTHCARE_PROFESSIONAL_LIST))
-        .setHasHealthcareProfessional("yes");
 
     // On returning to form (binding errors), take previously submitted values.
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -77,9 +61,15 @@ public class HealthcareProfessionalAddController implements StepController {
           this, healthcareProfessionalAddForm, bindingResult, attr);
     }
 
-    ((HealthcareProfessionalListForm) journey.getFormForStep(HEALTHCARE_PROFESSIONAL_LIST))
-        .getHealthcareProfessionals()
-        .add(healthcareProfessionalAddForm);
+    HealthcareProfessionalListForm healthcareProfessionalListForm =
+        journey.getFormForStep(HEALTHCARE_PROFESSIONAL_LIST);
+    if (null == healthcareProfessionalListForm) {
+      healthcareProfessionalListForm = HealthcareProfessionalListForm.builder().build();
+    }
+
+    healthcareProfessionalListForm.setHasHealthcareProfessional("yes");
+    healthcareProfessionalListForm.addHealthcareProfessional(healthcareProfessionalAddForm);
+    journey.setFormForStep(healthcareProfessionalListForm);
 
     return "redirect:" + Mappings.URL_HEALTHCARE_PROFESSIONALS_LIST;
   }

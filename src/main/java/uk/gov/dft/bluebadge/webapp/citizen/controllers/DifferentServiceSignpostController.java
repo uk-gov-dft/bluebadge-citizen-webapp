@@ -45,7 +45,7 @@ public class DifferentServiceSignpostController implements StepController {
       SessionStatus sessionStatus) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
 
     return TEMPLATE;

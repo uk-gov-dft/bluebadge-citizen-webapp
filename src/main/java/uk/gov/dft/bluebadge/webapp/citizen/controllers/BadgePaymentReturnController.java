@@ -5,6 +5,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_
 
 import com.google.common.collect.ImmutableMap;
 import javax.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.PaymentService;
 
 @Controller
 @RequestMapping(Mappings.URL_BADGE_PAYMENT_RETURN)
+@Slf4j
 public class BadgePaymentReturnController implements StepController {
 
   private final ApplicationManagementService applicationService;
@@ -48,7 +50,7 @@ public class BadgePaymentReturnController implements StepController {
       @Valid @ModelAttribute(FORM_REQUEST) BadgePaymentReturnForm formRequest) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
 
     if (journey.getPaymentJourneyUuid() == null) {
@@ -72,6 +74,12 @@ public class BadgePaymentReturnController implements StepController {
               .build();
       journey.setPaymentStatusResponse(unknownResponse);
     }
+
+    log.info(
+        "Payment response. Status code [{}], reference [{}], journey uuid [{}]",
+        journey.getPaymentStatus(),
+        journey.getPaymentReference(),
+        journey.getPaymentJourneyUuid());
 
     if (journey.isPaymentSuccessful() || journey.isPaymentStatusUnknown()) {
       applicationService.create(JourneyToApplicationConverter.convert(journey));

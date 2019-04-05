@@ -13,8 +13,8 @@ public class ReceiveBenefitsFormTest {
     ReceiveBenefitsForm form =
         ReceiveBenefitsForm.builder().benefitType(EligibilityCodeField.WPMS).build();
 
-    assertThat(form.determineNextStep()).isNotEmpty();
-    assertThat(form.determineNextStep().get()).isEqualTo(StepDefinition.ELIGIBLE);
+    assertThat(form.determineNextStep(null)).isNotEmpty();
+    assertThat(form.determineNextStep(null).get()).isEqualTo(StepDefinition.ELIGIBLE);
   }
 
   @Test
@@ -22,8 +22,8 @@ public class ReceiveBenefitsFormTest {
     ReceiveBenefitsForm form =
         ReceiveBenefitsForm.builder().benefitType(EligibilityCodeField.DLA).build();
 
-    assertThat(form.determineNextStep()).isNotEmpty();
-    assertThat(form.determineNextStep().get()).isEqualTo(StepDefinition.HIGHER_RATE_MOBILITY);
+    assertThat(form.determineNextStep(null)).isNotEmpty();
+    assertThat(form.determineNextStep(null).get()).isEqualTo(StepDefinition.HIGHER_RATE_MOBILITY);
   }
 
   @Test
@@ -39,8 +39,8 @@ public class ReceiveBenefitsFormTest {
             e -> {
               ReceiveBenefitsForm form = ReceiveBenefitsForm.builder().benefitType(e).build();
 
-              assertThat(form.determineNextStep()).isNotEmpty();
-              assertThat(form.determineNextStep().get())
+              assertThat(form.determineNextStep(null)).isNotEmpty();
+              assertThat(form.determineNextStep(null).get())
                   .as("Eligibility %s result in Main Reason", e)
                   .isEqualTo(StepDefinition.MAIN_REASON);
             });
@@ -54,8 +54,8 @@ public class ReceiveBenefitsFormTest {
             e -> {
               ReceiveBenefitsForm form = ReceiveBenefitsForm.builder().benefitType(e).build();
 
-              assertThat(form.determineNextStep()).isNotEmpty();
-              assertThat(form.determineNextStep().get())
+              assertThat(form.determineNextStep(null)).isNotEmpty();
+              assertThat(form.determineNextStep(null).get())
                   .as("Eligibility %s result in Eligible", e)
                   .isEqualTo(StepDefinition.PIP_MOVING_AROUND);
             });

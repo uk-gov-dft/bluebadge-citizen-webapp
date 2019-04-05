@@ -29,7 +29,7 @@ public class WalkingDifficultyForm implements StepForm, Serializable {
   }
 
   @Override
-  public Optional<StepDefinition> determineNextStep() {
+  public Optional<StepDefinition> determineNextStep(Journey journey) {
     if (WalkingDifficulty.NONE == walkingDifficulty) {
       return Optional.of(StepDefinition.NOT_ELIGIBLE);
     } else {

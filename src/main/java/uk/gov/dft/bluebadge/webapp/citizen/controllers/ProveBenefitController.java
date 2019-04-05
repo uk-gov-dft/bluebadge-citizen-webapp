@@ -36,7 +36,7 @@ public class ProveBenefitController implements StepController {
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
 
     if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
@@ -75,7 +75,7 @@ public class ProveBenefitController implements StepController {
 
     journey.setFormForStep(proveBenefitForm);
 
-    return routeMaster.redirectToOnSuccess(proveBenefitForm);
+    return routeMaster.redirectToOnSuccess(proveBenefitForm, journey);
   }
 
   @Override

@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalListForm;
 
@@ -19,7 +19,7 @@ public class HealthcareProfessionalAddControllerTest
 
   @Before
   public void setup() {
-    super.setup(new HealthcareProfessionalAddController(new RouteMaster()));
+    super.setup(new HealthcareProfessionalAddController(RouteMasterFixture.routeMaster()));
     journey.setFormForStep(
         HealthcareProfessionalListForm.builder()
             .healthcareProfessionals(new ArrayList<>())

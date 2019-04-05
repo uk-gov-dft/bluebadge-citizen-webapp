@@ -1,7 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
 import java.io.Serializable;
-import java.util.Optional;
 import javax.validation.constraints.AssertTrue;
 import lombok.Builder;
 import lombok.Data;
@@ -21,15 +20,6 @@ public class DeclarationSubmitForm implements StepForm, Serializable {
   @Override
   public StepDefinition getAssociatedStep() {
     return StepDefinition.DECLARATIONS;
-  }
-
-  @Override
-  public Optional<StepDefinition> determineNextStep(Journey journey) {
-    if (journey.isPaymentsEnabled()) {
-      return Optional.of(StepDefinition.BADGE_PAYMENT);
-    } else {
-      return Optional.of(StepDefinition.SUBMITTED);
-    }
   }
 
   @Override

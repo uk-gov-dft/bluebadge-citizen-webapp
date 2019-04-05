@@ -11,8 +11,8 @@ public class DisabilityFormTest {
   public void determineNextStep_whenDisabilityIsYes_thenEligible() {
     DisabilityForm form = DisabilityForm.builder().hasDisability(true).build();
 
-    assertThat(form.determineNextStep()).isNotEmpty();
-    assertThat(form.determineNextStep().get()).isEqualTo(StepDefinition.ELIGIBLE);
+    assertThat(form.determineNextStep(null)).isNotEmpty();
+    assertThat(form.determineNextStep(null).get()).isEqualTo(StepDefinition.ELIGIBLE);
   }
 
   @Test
@@ -20,7 +20,7 @@ public class DisabilityFormTest {
 
     DisabilityForm form = DisabilityForm.builder().hasDisability(false).build();
 
-    assertThat(form.determineNextStep()).isNotEmpty();
-    assertThat(form.determineNextStep().get()).isEqualTo(StepDefinition.MAIN_REASON);
+    assertThat(form.determineNextStep(null)).isNotEmpty();
+    assertThat(form.determineNextStep(null).get()).isEqualTo(StepDefinition.MAIN_REASON);
   }
 }

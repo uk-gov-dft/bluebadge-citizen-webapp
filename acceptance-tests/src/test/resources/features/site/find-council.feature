@@ -70,3 +70,11 @@ Feature: DFT Blue badge Citizen app - find council
     Then I should see the page titled "Choose your local council" with GOV.UK suffix
     When I complete select council page for different service signpost for "england"
     Then I should see page titled "London borough of Southwark uses a different service" with GOV.UK suffix
+
+  Scenario: Find your council - yourself - english - skip find council
+    Given I complete applicant page for "yourself"
+    Then  I should see the page titled "Find your local council" with GOV.UK suffix
+    And   I skip find council page
+    Then  I should see the page titled "Choose your local council" with GOV.UK suffix
+    And I can click on element "dontKnowCouncil" link
+    Then I should see the page titled "Find your local council" with GOV.UK suffix

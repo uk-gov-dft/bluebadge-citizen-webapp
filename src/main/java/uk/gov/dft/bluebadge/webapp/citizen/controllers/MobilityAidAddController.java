@@ -4,7 +4,6 @@ import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefini
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
-import java.util.ArrayList;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,18 +39,8 @@ public class MobilityAidAddController implements StepController {
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
-
-    // Can hit add link before previous form submitted.
-    if (!journey.hasStepForm(MOBILITY_AID_LIST)
-        || null
-            == ((MobilityAidListForm) journey.getFormForStep(MOBILITY_AID_LIST))
-                .getMobilityAids()) {
-      journey.setFormForStep(MobilityAidListForm.builder().mobilityAids(new ArrayList<>()).build());
-    }
-
-    ((MobilityAidListForm) journey.getFormForStep(MOBILITY_AID_LIST)).setHasWalkingAid("yes");
 
     // On returning to form, take previously submitted values.
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -83,7 +72,13 @@ public class MobilityAidAddController implements StepController {
     }
 
     MobilityAidListForm listForm = journey.getFormForStep(MOBILITY_AID_LIST);
-    listForm.getMobilityAids().add(mobilityAidAddForm);
+    if (null == listForm) {
+      listForm = MobilityAidListForm.builder().build();
+    }
+
+    listForm.setHasWalkingAid("yes");
+    listForm.addMobilityAid(mobilityAidAddForm);
+    journey.setFormForStep(listForm);
 
     return "redirect:" + Mappings.URL_MOBILITY_AID_LIST;
   }

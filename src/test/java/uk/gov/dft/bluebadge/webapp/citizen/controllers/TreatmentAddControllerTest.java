@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
 
@@ -18,7 +18,7 @@ public class TreatmentAddControllerTest extends ControllerTestFixture<TreatmentA
 
   @Before
   public void setup() {
-    super.setup(new TreatmentAddController(new RouteMaster()));
+    super.setup(new TreatmentAddController(RouteMasterFixture.routeMaster()));
     journey.setFormForStep(TreatmentListForm.builder().treatments(new ArrayList<>()).build());
   }
 

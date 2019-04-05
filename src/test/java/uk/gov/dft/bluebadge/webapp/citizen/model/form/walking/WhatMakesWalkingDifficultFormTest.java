@@ -22,14 +22,15 @@ public class WhatMakesWalkingDifficultFormTest {
   @Test
   public void determineNextStep_whenBreathlessnessIsSelected_thenRedirectToBreathlessPage() {
     form.setWhatWalkingDifficulties(Lists.newArrayList(WalkingDifficultyTypeCodeField.BREATH));
-    assertThat(form.determineNextStep()).isEqualTo(Optional.of(StepDefinition.BREATHLESSNESS));
+    assertThat(form.determineNextStep(null)).isEqualTo(Optional.of(StepDefinition.BREATHLESSNESS));
   }
 
   @Test
   public void
       determineNextStep_whenBreathlessnessIsNotSelected_thenRedirectToMobilityAidListPage() {
     form.setWhatWalkingDifficulties(Lists.newArrayList(WalkingDifficultyTypeCodeField.PAIN));
-    assertThat(form.determineNextStep()).isEqualTo(Optional.of(StepDefinition.MOBILITY_AID_LIST));
+    assertThat(form.determineNextStep(null))
+        .isEqualTo(Optional.of(StepDefinition.MOBILITY_AID_LIST));
   }
 
   @Test
