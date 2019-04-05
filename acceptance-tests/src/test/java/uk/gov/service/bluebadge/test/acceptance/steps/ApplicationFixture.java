@@ -399,12 +399,21 @@ public class ApplicationFixture extends AbstractSpringSteps {
       commonPage.selectRadioButton(Ids.Walkd.TREATMENT_HAS_TREATMENT_OPTION);
       clickButtonById(Ids.Walkd.TREATMENT_ADD_FIRST_LINK);
       clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_DESCRIPTION, "Treatment description");
-      clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_WHEN, "Treatment when");
+      commonPage.selectRadioButton(Ids.Walkd.TREATMENT_ADD_TREATMENT_PAST_OPTION);
+      clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_PAST_WHEN, "Treatment when");
       clickButtonById(Ids.Walkd.TREATMENT_ADD_CONFIRM_BUTTON);
       clickButtonById(Ids.Walkd.TREATMENT_REMOVE_LINK_PREFIX + "1");
       clickButtonById(Ids.Walkd.TREATMENT_ADD_FIRST_LINK);
       clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_DESCRIPTION, "Treatment description");
-      clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_WHEN, "Treatment when");
+      commonPage.selectRadioButton(Ids.Walkd.TREATMENT_ADD_TREATMENT_ONGOING_OPTION);
+      clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_ONGOING_FREQUENCY, "Treatment frequency");
+      clickButtonById(Ids.Walkd.TREATMENT_ADD_CONFIRM_BUTTON);
+      clickButtonById(Ids.Walkd.TREATMENT_REMOVE_LINK_PREFIX + "1");
+      clickButtonById(Ids.Walkd.TREATMENT_ADD_FIRST_LINK);
+      clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_DESCRIPTION, "Treatment description");
+      commonPage.selectRadioButton(Ids.Walkd.TREATMENT_ADD_TREATMENT_FUTURE_OPTION);
+      clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_FUTURE_WHEN, "Treatment when");
+      clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_FUTURE_IMPROVE, "Treatment improvement");
       clickButtonById(Ids.Walkd.TREATMENT_ADD_CONFIRM_BUTTON);
     }
     pressContinue();
