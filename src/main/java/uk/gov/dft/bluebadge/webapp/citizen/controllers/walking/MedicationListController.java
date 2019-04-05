@@ -38,7 +38,7 @@ public class MedicationListController implements StepController {
   @GetMapping
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
 
     // On returning to form, take previously submitted values.
@@ -46,12 +46,8 @@ public class MedicationListController implements StepController {
       model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
     }
 
-    // If navigating forward from previous form, reset
     if (!model.containsAttribute(FORM_REQUEST)) {
-      // Create object in journey with empty list.
-      // Want to not get any null pointers accessing list.
-      journey.setFormForStep(MedicationListForm.builder().medications(new ArrayList<>()).build());
-      model.addAttribute(FORM_REQUEST, journey.getFormForStep(MEDICATION_LIST));
+      model.addAttribute(FORM_REQUEST, MedicationListForm.builder().build());
     }
     return TEMPLATE;
   }
@@ -67,22 +63,19 @@ public class MedicationListController implements StepController {
       return routeMaster.redirectToOnBindingError(this, medicationListForm, bindingResult, attr);
     }
 
-    MedicationListForm journeyForm = journey.getFormForStep(MEDICATION_LIST);
-    // Reset if no selected
-    // Treat as No selected if no aids added whilst yes was selected
-    if (journeyForm.getMedications() == null
-        || journeyForm.getMedications().isEmpty()
-        || "no".equals(journeyForm.getHasMedication())) {
-      journey.setFormForStep(
-          MedicationListForm.builder().hasMedication("no").medications(new ArrayList<>()).build());
-    } else {
-      journeyForm.setHasMedication(medicationListForm.getHasMedication());
+    MedicationListForm journeyForm = journey.getOrSetFormForStep(medicationListForm);
+    journeyForm.setHasMedication(medicationListForm.getHasMedication());
+    if ("no".equals(medicationListForm.getHasMedication())) {
+      journeyForm.setMedications(new ArrayList<>());
+    } else if (journeyForm.getMedications().isEmpty()) {
+      journeyForm.setHasMedication("no");
     }
+    journey.setFormForStep(journeyForm);
 
     // Don't overwrite medications in journey
     // as it is not bound to inputs in ui form and always null on submit
 
-    return routeMaster.redirectToOnSuccess(medicationListForm);
+    return routeMaster.redirectToOnSuccess(journeyForm, journey);
   }
 
   @GetMapping(value = "/remove")

@@ -45,16 +45,8 @@ public class TreatmentAddController implements StepController {
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
-
-    // Can hit add link before previous form submitted.
-    if (!journey.hasStepForm(TREATMENT_LIST)
-        || null == ((TreatmentListForm) journey.getFormForStep(TREATMENT_LIST)).getTreatments()) {
-      journey.setFormForStep(TreatmentListForm.builder().treatments(new ArrayList<>()).build());
-    }
-
-    ((TreatmentListForm) journey.getFormForStep(TREATMENT_LIST)).setHasTreatment("yes");
 
     // On returning to form, take previously submitted values.
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -135,9 +127,14 @@ public class TreatmentAddController implements StepController {
       return routeMaster.redirectToOnBindingError(this, treatmentAddForm, bindingResult, attr);
     }
 
-    ((TreatmentListForm) journey.getFormForStep(TREATMENT_LIST))
-        .getTreatments()
-        .add(treatmentAddForm);
+    TreatmentListForm treatmentListForm = journey.getFormForStep(TREATMENT_LIST);
+    if (null == treatmentListForm) {
+      treatmentListForm = TreatmentListForm.builder().build();
+    }
+
+    treatmentListForm.setHasTreatment("yes");
+    treatmentListForm.addTreatment(treatmentAddForm);
+    journey.setFormForStep(treatmentListForm);
 
     return "redirect:" + Mappings.URL_TREATMENT_LIST;
   }

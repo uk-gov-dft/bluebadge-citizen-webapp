@@ -9,6 +9,8 @@ public class Mappings {
 
   public static final String URL_REMOVE_PART = "/remove";
 
+  public static final String URL_TASK_LIST = "/task-list";
+
   public static final String URL_ROOT = "/";
   public static final String URL_APPLICANT_TYPE = "/applicant";
   public static final String URL_APPLICANT_NAME = "/name";
@@ -22,6 +24,7 @@ public class Mappings {
   public static final String URL_BADGE_PAYMENT_BYPASS = "/badge-payment-by-pass";
   public static final String URL_NOT_PAID = "/not-paid";
   public static final String URL_BADGE_PAYMENT_RETURN = "/badge-payment-return";
+  public static final String URL_SUBMIT_APPLICATION = "/submit-application";
   public static final String URL_APPLICATION_SUBMITTED = "/application-submitted";
   public static final String URL_FIND_YOUR_COUNCIL = "/find-council";
   public static final String URL_FIND_YOUR_COUNCIL_BYPASS = "/find-council-by-pass";
@@ -104,6 +107,7 @@ public class Mappings {
   private static final BiMap<StepDefinition, String> stepToUrlMapping =
       ImmutableBiMap.<StepDefinition, String>builder()
           .put(StepDefinition.HOME, URL_ROOT)
+          .put(StepDefinition.TASK_LIST, URL_TASK_LIST)
           .put(StepDefinition.APPLICANT_TYPE, URL_APPLICANT_TYPE)
           .put(StepDefinition.DOB, URL_DOB)
           .put(StepDefinition.CONTACT_DETAILS, URL_CONTACT_DETAILS)
@@ -159,6 +163,7 @@ public class Mappings {
           .put(StepDefinition.BADGE_PAYMENT_RETURN, URL_BADGE_PAYMENT_RETURN)
           .put(StepDefinition.NOT_PAID, URL_NOT_PAID)
           .put(StepDefinition.BADGE_PAYMENT, URL_BADGE_PAYMENT)
+          .put(StepDefinition.SUBMIT_APPLICATION, URL_SUBMIT_APPLICATION)
           .put(StepDefinition.SUBMITTED, URL_APPLICATION_SUBMITTED)
           .put(StepDefinition.MOBILITY_AID_LIST, URL_MOBILITY_AID_LIST)
           .put(StepDefinition.MOBILITY_AID_ADD, URL_MOBILITY_AID_ADD)

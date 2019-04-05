@@ -21,10 +21,10 @@ import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.FindYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataService;
@@ -40,7 +40,8 @@ public class YourIssuingAuthorityControllerTest {
   public void setup() {
     MockitoAnnotations.initMocks(this);
     YourIssuingAuthorityController controller =
-        new YourIssuingAuthorityController(new RouteMaster(), mockReferenceDataService);
+        new YourIssuingAuthorityController(
+            RouteMasterFixture.routeMaster(), mockReferenceDataService);
     journey = new JourneyBuilder().toStep(StepDefinition.YOUR_ISSUING_AUTHORITY).build();
     when(mockReferenceDataService.lookupLocalAuthorityFromCouncilCode(anyString()))
         .thenReturn(JourneyFixture.getLocalAuthorityRefData(Nation.ENG, false));

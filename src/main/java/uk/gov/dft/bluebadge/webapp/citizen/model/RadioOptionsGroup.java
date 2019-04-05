@@ -64,7 +64,7 @@ public class RadioOptionsGroup {
     }
 
     public Builder titleMessageKeyApplicantAware(String titleKey, Journey journey) {
-      return titleMessageKey(journey.who + titleKey);
+      return titleMessageKey(journey.getWho() + titleKey);
     }
 
     public Builder addOption(Enum<?> value, String messageKey) {
@@ -72,16 +72,16 @@ public class RadioOptionsGroup {
     }
 
     public Builder addOptionApplicantAware(Enum<?> value, String messageKey, Journey journey) {
-      return addOption(value.name(), journey.who + messageKey);
+      return addOption(value.name(), journey.getWho() + messageKey);
     }
 
     public Builder addOptionApplicantAware(String value, String messageKey, Journey journey) {
-      return addOption(value, journey.who + messageKey);
+      return addOption(value, journey.getWho() + messageKey);
     }
 
     public Builder addOptionApplicantAndNationAware(
         Enum<?> value, String messageKey, Journey journey) {
-      return addOption(value, journey.who + journey.getNation() + "." + messageKey);
+      return addOption(value, journey.getWho() + journey.getNation() + "." + messageKey);
     }
 
     public Builder addOption(String value, String messageKey) {

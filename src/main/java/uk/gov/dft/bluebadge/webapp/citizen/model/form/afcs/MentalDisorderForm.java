@@ -24,7 +24,7 @@ public class MentalDisorderForm implements Serializable, StepForm {
   }
 
   @Override
-  public Optional<StepDefinition> determineNextStep() {
+  public Optional<StepDefinition> determineNextStep(Journey journey) {
     if (hasMentalDisorder) {
       return Optional.of(StepDefinition.ELIGIBLE);
     }

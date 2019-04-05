@@ -52,7 +52,7 @@ public class ApplicantControllerTest {
   @Test
   public void submitApplicant_ShouldStoreApplicantFormIntoSessionAndDisplayNextPageInTheJourney()
       throws Exception {
-    when(mockRouteMaster.redirectToOnSuccess(any(ApplicantForm.class)))
+    when(mockRouteMaster.redirectToOnSuccess(any(ApplicantForm.class), any()))
         .thenReturn("redirect:/testSuccess");
 
     mockMvc

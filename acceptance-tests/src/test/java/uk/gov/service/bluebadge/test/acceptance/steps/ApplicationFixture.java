@@ -26,17 +26,17 @@ import uk.gov.service.bluebadge.test.acceptance.pages.site.ApplicantPage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.BenifitsPage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.ChooseCouncilPage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
-import uk.gov.service.bluebadge.test.acceptance.steps.site.ContactDetailsSteps;
 import uk.gov.service.bluebadge.test.acceptance.util.FileHelper;
 
 public class ApplicationFixture extends AbstractSpringSteps {
 
   private CommonPage commonPage;
-  private ContactDetailsSteps contactDetailsSteps;
+  private CommonSteps commonSteps;
 
   @Autowired
-  public ApplicationFixture(CommonPage commonPage) {
+  public ApplicationFixture(CommonPage commonPage, CommonSteps commonSteps) {
     this.commonPage = commonPage;
+    this.commonSteps = commonSteps;
   }
 
   private void pressContinue() {
@@ -63,7 +63,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("I skip find council page")
   public void iSkipFindCouncilPage() {
-    commonPage.findElementWithUiPath(CHOOSE_YOUR_COUNCIL_LINK).click();
+    commonPage.getElementWithUiPath(CHOOSE_YOUR_COUNCIL_LINK).click();
   }
 
   @And("^I complete select council page$")
@@ -264,6 +264,12 @@ public class ApplicationFixture extends AbstractSpringSteps {
   @And("^I complete declaration page$")
   public void iCompleteDeclarationPage() {
     commonPage.selectRadioButton("agreed");
+    commonPage.findElementWithUiPath("button.continue").click();
+  }
+
+  @And("^I complete Submit application page$")
+  public void iCompleteSubmitApplicationPage() {
+    commonSteps.thenIShouldSeePageTitledWithGovUkSuffix("Submit application");
     commonPage.findElementWithUiPath("button.continue").click();
   }
 

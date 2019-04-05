@@ -17,6 +17,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 public class DifficultyParkingMetersControllerTest {
@@ -28,7 +29,7 @@ public class DifficultyParkingMetersControllerTest {
   @Before
   public void setup() {
     DifficultyParkingMetersController controller =
-        new DifficultyParkingMetersController(new RouteMaster());
+        new DifficultyParkingMetersController(RouteMasterFixture.routeMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -65,7 +66,7 @@ public class DifficultyParkingMetersControllerTest {
                 .param("parkingMetersDifficultyDescription", "Stuff")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(Mappings.URL_PROVE_IDENTITY));
+        .andExpect(redirectedUrl(Mappings.URL_TASK_LIST));
   }
 
   @Test

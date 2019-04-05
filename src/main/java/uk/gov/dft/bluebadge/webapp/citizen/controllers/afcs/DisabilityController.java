@@ -39,7 +39,7 @@ public class DisabilityController implements StepController {
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
 
     if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
@@ -51,7 +51,7 @@ public class DisabilityController implements StepController {
     }
 
     RadioOptionsGroup radioOptions =
-        new RadioOptionsGroup(journey.who + "afcs.disabilityPage.title")
+        new RadioOptionsGroup(journey.getWho() + "afcs.disabilityPage.title")
             .withYesNoOptions(YesNoType.IAM);
 
     model.addAttribute("radioOptions", radioOptions);
@@ -71,7 +71,7 @@ public class DisabilityController implements StepController {
     }
 
     journey.setFormForStep(disabilityForm);
-    return routeMaster.redirectToOnSuccess(disabilityForm);
+    return routeMaster.redirectToOnSuccess(disabilityForm, journey);
   }
 
   @Override

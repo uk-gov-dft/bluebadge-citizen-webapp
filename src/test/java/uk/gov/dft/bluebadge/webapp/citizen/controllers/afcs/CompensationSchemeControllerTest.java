@@ -17,6 +17,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.El
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.YesNoType;
@@ -28,7 +29,8 @@ public class CompensationSchemeControllerTest {
 
   @Before
   public void setup() {
-    CompensationSchemeController controller = new CompensationSchemeController(new RouteMaster());
+    CompensationSchemeController controller =
+        new CompensationSchemeController(RouteMasterFixture.routeMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
