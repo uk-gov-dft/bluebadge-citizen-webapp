@@ -336,18 +336,33 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete moving around points page for "12"
     Then  I should see "You're" eligible page
     When  I complete eligible page
+
+    And   I can click on the "Enter personal details" link
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Man"
     And   I complete NI number page
     And   I complete address page
     And   I complete contact page for "yourself"
+
+    And   I can click on the "Provide proof of benefit" link
     And   I complete prove benefit page for "yes"
     And   I complete "upload benefit" page with a "GIF" document
+
+    And   I can click on the "Prove identity" link
     And   I complete "prove ID" page with a "GIF" document
-    And   I complete "provide photo" page with a "GIF" document
+
+    And   I can click on the "Prove address" link
     And   I complete "prove address" page with a "GIF" document
+
+    And   I can click on the "Add a photo for the badge" link
+    And   I complete "provide photo" page with a "GIF" document
+
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
+
+    And   I can click on the "Submit application" link
+    And   I complete Submit application page
     Then  I should see page titled "Application submitted" with GOV.UK suffix
     And   I cannot see labelled element "p.paymentSuccessfulText"
     And   I cannot see labelled element "p.paymentsEnabledButPaymentNotSuccessful"
@@ -363,19 +378,33 @@ Feature: DFT Blue badge Citizen app new application - PIP
     And   I complete moving around points page for "12"
     Then  I should see "You're" eligible page
     When  I complete eligible page
+    And   I can click on the "Enter personal details" link
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Man"
     And   I complete NI number page
     And   I complete address page
     And   I complete contact page for "yourself"
+    And   I can click on the "Provide proof of benefit" link
     And   I complete prove benefit page for "yes"
     And   I complete "upload benefit" page with a "GIF" document
+
+    And   I can click on the "Prove identity" link
     And   I complete "prove ID" page with a "GIF" document
-    And   I complete "provide photo" page with a "GIF" document
+
+    And   I can click on the "Prove address" link
     And   I complete "prove address" page with a "GIF" document
-    And   I change language
+
+    And   I can click on the "Add a photo for the badge" link
+    And   I complete "provide photo" page with a "GIF" document
+
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
+
+    And   I can click on the "Submit application" link
+    And   I change language
+    Then  I should see page titled in Welsh "Cyflwyno cais" with GOV.UK suffix
+    And   I click on Continue button
     Then  I should see page titled in Welsh "Cais wedi ei gyflwyno" with GOV.UK suffix
     And   I cannot see labelled element "p.paymentSuccessfulText"
     And   I cannot see labelled element "p.paymentsEnabledButPaymentNotSuccessful"
