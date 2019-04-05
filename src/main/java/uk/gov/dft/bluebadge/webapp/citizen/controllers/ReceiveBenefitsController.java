@@ -40,7 +40,7 @@ public class ReceiveBenefitsController implements StepController {
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
 
     //On returning to form, take previously submitted values.
@@ -68,7 +68,7 @@ public class ReceiveBenefitsController implements StepController {
 
     List<RadioOption> options = Lists.newArrayList(pip, dla, afrfcs, wpms, none);
 
-    String title = journey.who + "receiveBenefitsPage.title";
+    String title = journey.getWho() + "receiveBenefitsPage.title";
     return new RadioOptionsGroup(title, options);
   }
 
@@ -83,7 +83,7 @@ public class ReceiveBenefitsController implements StepController {
     }
 
     journey.setFormForStep(receiveBenefitsForm);
-    return routeMaster.redirectToOnSuccess(receiveBenefitsForm);
+    return routeMaster.redirectToOnSuccess(receiveBenefitsForm, journey);
   }
 
   @Override

@@ -18,8 +18,9 @@ public class WalkingDifficultyFormTest {
             e -> {
               WalkingDifficultyForm form =
                   WalkingDifficultyForm.builder().walkingDifficulty(e).build();
-              assertThat(form.determineNextStep()).isNotEmpty();
-              assertThat(form.determineNextStep().get()).isEqualTo(StepDefinition.MAY_BE_ELIGIBLE);
+              assertThat(form.determineNextStep(null)).isNotEmpty();
+              assertThat(form.determineNextStep(null).get())
+                  .isEqualTo(StepDefinition.MAY_BE_ELIGIBLE);
             });
   }
 
@@ -29,7 +30,7 @@ public class WalkingDifficultyFormTest {
         WalkingDifficultyForm.builder()
             .walkingDifficulty(WalkingDifficultyForm.WalkingDifficulty.NONE)
             .build();
-    assertThat(form.determineNextStep()).isNotEmpty();
-    assertThat(form.determineNextStep().get()).isEqualTo(StepDefinition.NOT_ELIGIBLE);
+    assertThat(form.determineNextStep(null)).isNotEmpty();
+    assertThat(form.determineNextStep(null).get()).isEqualTo(StepDefinition.NOT_ELIGIBLE);
   }
 }

@@ -14,25 +14,60 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete what makes walking difficult page for "HELP"
     Then  I should see "You may be" eligible page
     When  I complete eligible page
+
+    Then  I see the "WALKD" task list page
+    And   I can click on the "Enter personal details" link
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Man"
     And   I complete NI number page
     And   I complete address page
     And   I complete contact page for "yourself"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I see task "Enter personal details" as COMPLETED
+    And   I can click on the "Describe walking ability" link
     And   I complete describe health conditions page
     And   I complete the what makes walking difficult page
     And   I complete the mobility aids page for "NO"
     And   I complete the walking time page with option "LESSMIN"
     And   I complete where can you walk page
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "Add supporting documents" link
     And   I complete upload "supporting documents page" with a "GIF" document
-    And   I complete the treatments page for "YES"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "List medication" link
     And   I complete the medications page for "YES"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "List treatments" link
+    And   I complete the treatments page for "YES"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "List healthcare professionals" link
     And   I complete the healthcare professionals page for "YES"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "Prove identity" link
     And   I complete "prove ID" page with a "PNG" document
-    And   I complete "provide photo" page with a "PNG" document
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "Prove address" link
     And   I complete "prove address" page with a "JPG" document
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "Add a photo for the badge" link
+    And   I complete "provide photo" page with a "PNG" document
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "Submit application" link
+    And   I complete Submit application page
     Then  I should see page titled "Application submitted" with GOV.UK suffix
 
   Scenario: Walking application for yourself, where the applicant can't walk - full application
@@ -47,24 +82,59 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete what makes walking difficult page for "HELP"
     Then  I should see "You may be" eligible page
     When  I complete eligible page
+
+    Then  I see the "WALKD" task list page
+    And   I can click on the "Enter personal details" link
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Man"
     And   I complete NI number page
     And   I complete address page
     And   I complete contact page for "yourself"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I see task "Enter personal details" as COMPLETED
+    And   I can click on the "Describe walking ability" link
     And   I complete describe health conditions page
     And   I complete the what makes walking difficult page
     And   I complete the mobility aids page for "NO"
     And   I complete the walking time page with option "CANTWALK"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "Add supporting documents" link
     And   I complete upload "supporting documents page" with a "GIF" document
-    And   I complete the treatments page for "YES"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "List medication" link
     And   I complete the medications page for "YES"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "List treatments" link
+    And   I complete the treatments page for "YES"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "List healthcare professionals" link
     And   I complete the healthcare professionals page for "YES"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "Prove identity" link
     And   I complete "prove ID" page with a "PDF" document
-    And   I complete "provide photo" page with a "JPG" document
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "Prove address" link
     And   I complete "prove address" page with a "PDF" document
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "Add a photo for the badge" link
+    And   I complete "provide photo" page with a "JPG" document
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "Submit application" link
+    And   I complete Submit application page
     Then  I should see page titled "Application submitted" with GOV.UK suffix
 
   Scenario: Walking application for someone else need help selected full application, and council in England
@@ -79,24 +149,55 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete what makes walking difficult page for "HELP"
     Then  I should see "They may be" eligible page
     When  I complete eligible page
+
+    Then  I see the "WALKD" task list page
+    And   I can click on the "Enter personal details" link
     And   I complete what's your name page
     And   I complete date of birth page for "CHILD"
     And   I complete gender page for "Boy"
     And   I complete address page
     And   I complete contact page for "someone else"
+
+    Then  I see the "WALKD" task list page as Child
+    And   I see task "Enter personal details" as COMPLETED
+    And   I can click on the "Describe walking ability" link
     And   I complete describe health conditions page
     And   I complete the what makes walking difficult page
     And   I complete the mobility aids page for "YES"
     And   I complete the walking time page with option "LESSMIN"
     And   I complete where can you walk page
+
+    Then  I see the "WALKD" task list page as Child
+    And   I can click on the "Add supporting documents" link
     And   I complete upload "supporting documents page" with a "GIF" document
-    And   I complete the treatments page for "YES"
+
+    Then  I see the "WALKD" task list page as Child
+    And   I can click on the "List medication" link
     And   I complete the medications page for "YES"
+
+    Then  I see the "WALKD" task list page as Child
+    And   I can click on the "List treatments" link
+    And   I complete the treatments page for "YES"
+
+    Then  I see the "WALKD" task list page as Child
+    And   I can click on the "List healthcare professionals" link
     And   I complete the healthcare professionals page for "YES"
+
+    Then  I see the "WALKD" task list page as Child
+    And   I can click on the "Prove identity" link
     And   I complete "prove ID" page with no documents
+
+    Then  I see the "WALKD" task list page as Child
+    And   I can click on the "Add a photo for the badge" link
     And   I complete "provide photo" page with no documents
-    And   I complete "prove address" page with no documents
+
+    Then  I see the "WALKD" task list page as Child
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
+
+    Then  I see the "WALKD" task list page as Child
+    And   I can click on the "Submit application" link
+    And   I complete Submit application page
     Then  I should see page titled "Application submitted" with GOV.UK suffix
 
   Scenario: Walking application for yourself, need help selected full application, and council in Scotland
@@ -111,24 +212,59 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete what makes walking difficult page for "PLAN"
     Then  I should see "You may be" eligible page
     When  I complete eligible page
+
+    Then  I see the "WALKD" task list page
+    And   I can click on the "Enter personal details" link
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Man"
     And   I complete NI number page without a NI
     And   I complete address page
     And   I complete contact page for "yourself"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I see task "Enter personal details" as COMPLETED
+    And   I can click on the "Describe walking ability" link
     And   I complete describe health conditions page
     And   I complete the what makes walking difficult page for "STRUGGLE"
     And   I complete the mobility aids page for "YES"
     And   I complete the walking time page with option "CANTWALK"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "Add supporting documents" link
     And   I complete upload "supporting documents page" with a "GIF" document
-    And   I complete the treatments page for "YES"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "List medication" link
     And   I complete the medications page for "YES"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "List treatments" link
+    And   I complete the treatments page for "YES"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "List healthcare professionals" link
     And   I complete the healthcare professionals page for "YES"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "Prove identity" link
     And   I complete "prove ID" page with no documents
-    And   I complete "provide photo" page with no documents
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "Prove address" link
     And   I complete "prove address" page with no documents
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "Add a photo for the badge" link
+    And   I complete "provide photo" page with no documents
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "Submit application" link
+    And   I complete Submit application page
     Then  I should see page titled "Application submitted" with GOV.UK suffix
 
   Scenario: Walking application for yourself, need help selected full application, and council in Wales
@@ -144,25 +280,60 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete what makes walking difficult page for "PLAN"
     Then  I should see "You may be" eligible page
     When  I complete eligible page
+
+    Then  I see the "WALKD" task list page
+    And   I can click on the "Enter personal details" link
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Man"
     And   I complete NI number page
     And   I complete address page
     And   I complete contact page for "yourself"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I see task "Enter personal details" as COMPLETED
+    And   I can click on the "Describe walking ability" link
     And   I complete describe health conditions page
     And   I complete the what makes walking difficult page for "STRUGGLE"
     And   I complete the mobility aids page for "YES"
     And   I complete the walking time page with option "LESSMIN"
     And   I complete where can you walk page
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "Add supporting documents" link
     And   I complete upload "supporting documents page" with a "GIF" document
-    And   I complete the treatments page for "NO"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "List medication" link
     And   I complete the medications page for "YES"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "List treatments" link
+    And   I complete the treatments page for "NO"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "List healthcare professionals" link
     And   I complete the healthcare professionals page for "YES"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "Prove identity" link
     And   I complete "prove ID" page with no documents
-    And   I complete "provide photo" page with no documents
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "Prove address" link
     And   I complete "prove address" page with a "PNG" document
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "Add a photo for the badge" link
+    And   I complete "provide photo" page with no documents
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "Agree to declaration" link
     And   I complete declaration page
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I can click on the "Submit application" link
+    And   I complete Submit application page
     Then  I should see page titled "Application submitted" with GOV.UK suffix
 
   Scenario: Walking application for yourself and painful selected check screen flow
@@ -205,12 +376,19 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete what makes walking difficult page for "PLAN"
     Then  I should see "You may be" eligible page
     When  I complete eligible page
+
+    Then  I see the "WALKD" task list page
+    And   I can click on the "Enter personal details" link
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Man"
     And   I complete NI number page
     And   I complete address page
     And   I complete contact page for "yourself"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I see task "Enter personal details" as COMPLETED
+    And   I can click on the "Describe walking ability" link
     And   I complete describe health conditions page
     And   I complete the what makes walking difficult page for "BREATH"
     Then   I should see page titled "When do you get breathless?" with GOV.UK suffix
@@ -230,12 +408,19 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete what makes walking difficult page for "PLAN"
     Then  I should see "You may be" eligible page
     When  I complete eligible page
+
+    Then  I see the "WALKD" task list page
+    And   I can click on the "Enter personal details" link
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Man"
     And   I complete NI number page
     And   I complete address page
     And   I complete contact page for "yourself"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I see task "Enter personal details" as COMPLETED
+    And   I can click on the "Describe walking ability" link
     And   I complete describe health conditions page
     And   I complete the what makes walking difficult page for "BREATH"
     And   I should see page titled "When do you get breathless?" with GOV.UK suffix
@@ -257,12 +442,19 @@ Feature: DFT Blue badge Citizen app new application - Walking Route
     And   I complete what makes walking difficult page for "PLAN"
     Then  I should see "You may be" eligible page
     When  I complete eligible page
+
+    Then  I see the "WALKD" task list page
+    And   I can click on the "Enter personal details" link
     And   I complete what's your name page
     And   I complete date of birth page for "ADULT"
     And   I complete gender page for "Man"
     And   I complete NI number page
     And   I complete address page
     And   I complete contact page for "yourself"
+
+    Then  I see the "WALKD" task list page as Adult
+    And   I see task "Enter personal details" as COMPLETED
+    And   I can click on the "Describe walking ability" link
     And   I complete describe health conditions page
     And   I complete the what makes walking difficult page for "BREATH"
     And   I should see page titled "When do you get breathless?" with GOV.UK suffix

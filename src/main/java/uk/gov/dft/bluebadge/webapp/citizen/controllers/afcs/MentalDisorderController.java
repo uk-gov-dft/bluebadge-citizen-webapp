@@ -39,7 +39,7 @@ public class MentalDisorderController implements StepController {
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
 
     if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
@@ -51,7 +51,7 @@ public class MentalDisorderController implements StepController {
     }
 
     RadioOptionsGroup radioOptions =
-        new RadioOptionsGroup(journey.who + "afcs.mentalDisorderPage.title")
+        new RadioOptionsGroup(journey.getWho() + "afcs.mentalDisorderPage.title")
             .withYesNoOptions(YesNoType.IAM);
 
     model.addAttribute("radioOptions", radioOptions);
@@ -72,7 +72,7 @@ public class MentalDisorderController implements StepController {
     }
 
     journey.setFormForStep(permanentMentalDisorderForm);
-    return routeMaster.redirectToOnSuccess(permanentMentalDisorderForm);
+    return routeMaster.redirectToOnSuccess(permanentMentalDisorderForm, journey);
   }
 
   @Override

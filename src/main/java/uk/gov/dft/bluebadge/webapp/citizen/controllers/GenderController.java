@@ -41,7 +41,7 @@ public class GenderController implements StepController {
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
 
     if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
@@ -84,16 +84,17 @@ public class GenderController implements StepController {
 
   private RadioOptionsGroup getOptions(Journey journey) {
     RadioOption male =
-        new RadioOption(GenderCodeField.MALE.name(), journey.ageGroup + "radio.label.male");
+        new RadioOption(GenderCodeField.MALE.name(), journey.getAgeGroup() + "radio.label.male");
     RadioOption female =
-        new RadioOption(GenderCodeField.FEMALE.name(), journey.ageGroup + "radio.label.female");
+        new RadioOption(
+            GenderCodeField.FEMALE.name(), journey.getAgeGroup() + "radio.label.female");
     RadioOption unspecified =
         new RadioOption(
             GenderCodeField.UNSPECIFIE.name(),
-            journey.who + journey.ageGroup + "radio.label.unspecified");
+            journey.getWho() + journey.getAgeGroup() + "radio.label.unspecified");
 
     List<RadioOption> options = Lists.newArrayList(male, female, unspecified);
 
-    return new RadioOptionsGroup(journey.who + "genderPage.body.title", options);
+    return new RadioOptionsGroup(journey.getWho() + "genderPage.body.title", options);
   }
 }

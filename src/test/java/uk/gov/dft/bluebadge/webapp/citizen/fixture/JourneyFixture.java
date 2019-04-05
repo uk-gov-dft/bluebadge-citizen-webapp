@@ -395,7 +395,7 @@ public class JourneyFixture {
     return journey;
   }
 
-  static Journey getDefaultJourneyToStepWithOptions(JourneyBuildOptions options) {
+  public static Journey getDefaultJourneyToStepWithOptions(JourneyBuildOptions options) {
     StepDefinition stepTo = options.getStep();
     ApplicantType applicantType = options.getApplicantType();
     EligibilityCodeField eligibility = options.getEligibility();
@@ -544,10 +544,10 @@ public class JourneyFixture {
       if (StepDefinition.WHERE_CAN_YOU_WALK == stepTo) return journey;
       journey.setFormForStep(getUploadSupportingDocumentsForm());
       if (StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS == stepTo) return journey;
-      journey.setFormForStep(getTreatmentListForm());
-      if (StepDefinition.TREATMENT_LIST == stepTo) return journey;
       journey.setFormForStep(getMedicationListForm());
       if (StepDefinition.MEDICATION_LIST == stepTo) return journey;
+      journey.setFormForStep(getTreatmentListForm());
+      if (StepDefinition.TREATMENT_LIST == stepTo) return journey;
     }
 
     if (ARMS == eligibility) {
@@ -603,12 +603,12 @@ public class JourneyFixture {
             .journeyArtifact(buildJourneyArtifact("http://s3/proveIdLink"))
             .build());
     journey.setFormForStep(
-        ProvidePhotoForm.builder()
-            .journeyArtifact(buildJourneyArtifact("http://s3/photoLink"))
-            .build());
-    journey.setFormForStep(
         ProveAddressForm.builder()
             .journeyArtifact(buildJourneyArtifact("http://s3/proveAddress"))
+            .build());
+    journey.setFormForStep(
+        ProvidePhotoForm.builder()
+            .journeyArtifact(buildJourneyArtifact("http://s3/photoLink"))
             .build());
 
     journey.setFormForStep(DeclarationSubmitForm.builder().agreed(Boolean.TRUE).build());

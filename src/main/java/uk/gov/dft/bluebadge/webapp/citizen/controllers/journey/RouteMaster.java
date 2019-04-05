@@ -1,11 +1,11 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey;
 
-import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.StepController;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks.InvalidStateForJourneyException;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 
@@ -13,41 +13,41 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.view.ErrorViewModel;
 @Slf4j
 public class RouteMaster {
 
+  private final JourneySpecification journeySpecification;
+
   private static final String REDIRECT = "redirect:";
   public static final String ERROR_SUFFIX = "#error";
 
-  public String redirectToOnSuccess(StepForm form) {
-    return redirectToOnSuccess(form, null);
+  public RouteMaster(JourneySpecification journeySpecification) {
+    this.journeySpecification = journeySpecification;
   }
 
   public String redirectToOnSuccess(StepForm form, Journey journey) {
-    StepDefinition nextStep = getNextStep(form, journey);
+    return redirectToOnSuccess(form.getAssociatedStep(), journey);
+  }
+
+  public String redirectToOnSuccess(StepDefinition currentStep, Journey journey) {
+    StepDefinition nextStep = getNextStep(currentStep, journey);
+    if (null == nextStep) {
+      nextStep = StepDefinition.TASK_LIST;
+    }
     return REDIRECT + Mappings.getUrl(nextStep);
   }
 
-  private StepDefinition getNextStep(StepForm form, Journey journey) {
-    StepDefinition currentStep = form.getAssociatedStep();
-    Optional<StepDefinition> nextStep = form.determineNextStep();
-    if (!nextStep.isPresent()) {
-      nextStep = form.determineNextStep(journey);
-    }
-    if (!nextStep.isPresent()) {
-      nextStep = Optional.of(form.getAssociatedStep().getDefaultNext());
-    }
-
-    if (!currentStep.getNext().contains(nextStep.get())) {
-      throw new IllegalStateException(
-          "Next step '" + nextStep + "', not associated with the current one:" + currentStep);
-    }
-    return nextStep.get();
+  private StepDefinition getNextStep(StepDefinition currentStep, Journey journey) {
+    return journeySpecification.determineNextStep(journey, currentStep);
   }
 
   public String startingPoint() {
+    // TODO Change starting point logic
+    // preApplicationTask.getFirstStep()
     return REDIRECT + Mappings.getUrl(StepDefinition.HOME.getDefaultNext());
   }
 
-  public String backToCompletedPrevious() {
-    return REDIRECT + Mappings.getUrl(StepDefinition.HOME);
+  public String backToCompletedPrevious(Journey journey) {
+    return journeySpecification.getPreApplicationJourney().isComplete(journey)
+        ? REDIRECT + Mappings.getUrl(StepDefinition.TASK_LIST)
+        : REDIRECT + Mappings.getUrl(StepDefinition.HOME);
   }
 
   public String redirectToOnBindingError(
@@ -88,7 +88,6 @@ public class RouteMaster {
       case MEDICATION_ADD:
         return isValidState(StepDefinition.MEDICATION_LIST, journey);
       case BADGE_PAYMENT_RETURN:
-        return isValidState(StepDefinition.BADGE_PAYMENT, journey);
       case NOT_PAID:
         return isValidState(StepDefinition.BADGE_PAYMENT, journey);
       case HOME:
@@ -105,37 +104,36 @@ public class RouteMaster {
     StepForm form = journey.getFormForStep(StepDefinition.getFirstStep());
     if (null == form) return false;
 
-    StepDefinition currentLoopStep = form.getAssociatedStep();
-    int stepsWalked = 0;
-    // Walk the journey up to step being checked.
-    while (true) {
-
-      if (currentLoopStep == step) {
-        // Got to step being validated in journey, so it is valid.
-        return true;
-      }
-
-      // Should not need next...but don't want an infinite loop.
-      if (stepsWalked++ > StepDefinition.values().length) {
-        log.error("IsValidState journey walk got into infinite loop. Step being checked {}.", step);
-        throw new IllegalStateException();
-      }
-      // Break in the journey, expected only if a guard question has been changed
-      // and an attempt to navigate past it happened.
-      if (!journey.hasStepForm(currentLoopStep)) return false;
-
-      StepDefinition nextStep;
-      if (currentLoopStep.getNext().isEmpty()) {
-        // Got to end of journey and did not hit step being validated.
-        // So the url requested is for a step invalid in this journey.
-        return false;
-      } else {
-        // Get next step.
-        StepForm currentLoopForm = journey.getFormForStep(currentLoopStep);
-        nextStep = getNextStep(currentLoopForm, journey);
-      }
-
-      currentLoopStep = nextStep;
+    Task task;
+    try {
+      task = journeySpecification.determineTask(journey, step);
+    } catch (InvalidStateForJourneyException e) {
+      return false;
     }
+
+    if (!journeySpecification.arePreviousSectionsComplete(journey, task)) {
+      return false;
+    }
+
+    // Final section is sequential
+    JourneySection journeySection = journeySpecification.determineSection(journey, step);
+    return journeySection == journeySpecification.getSubmitAndPayJourney()
+        ? sequenceOrderValid(journeySection, task, step, journey)
+        : anyOrderValid(task, step, journey);
+  }
+
+  /** All tasks prior to the current one must be complete */
+  private boolean sequenceOrderValid(
+      JourneySection journeySection, Task task, StepDefinition step, Journey journey) {
+    for (Task priorTask : journeySection.getTasks()) {
+      if (task.equals(priorTask)) break;
+      if (!priorTask.isComplete(journey)) return false;
+    }
+
+    return task.isValidStep(journey, step);
+  }
+
+  private boolean anyOrderValid(Task task, StepDefinition step, Journey journey) {
+    return task.isValidStep(journey, step);
   }
 }

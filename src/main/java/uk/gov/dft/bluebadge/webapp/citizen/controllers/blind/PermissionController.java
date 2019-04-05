@@ -38,7 +38,7 @@ public class PermissionController implements StepController {
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
 
     if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
@@ -50,8 +50,8 @@ public class PermissionController implements StepController {
     }
 
     RadioOptionsGroup radioOptions =
-        new RadioOptionsGroup(journey.who + "permissionPage.title").withYesNoOptions();
-    radioOptions.setHintKey(journey.who + "permissionPage.hint");
+        new RadioOptionsGroup(journey.getWho() + "permissionPage.title").withYesNoOptions();
+    radioOptions.setHintKey(journey.getWho() + "permissionPage.hint");
 
     model.addAttribute("radioOptions", radioOptions);
 

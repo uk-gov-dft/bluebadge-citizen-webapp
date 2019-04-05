@@ -43,7 +43,7 @@ public class WhatMakesWalkingDifficultController implements StepController {
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
 
     // On returning to form, take previously submitted values.
@@ -76,7 +76,7 @@ public class WhatMakesWalkingDifficultController implements StepController {
 
     journey.setFormForStep(whatMakesWalkingDifficultForm);
 
-    return routeMaster.redirectToOnSuccess(whatMakesWalkingDifficultForm);
+    return routeMaster.redirectToOnSuccess(whatMakesWalkingDifficultForm, journey);
   }
 
   @Override
@@ -108,18 +108,18 @@ public class WhatMakesWalkingDifficultController implements StepController {
     options.add(
         new RadioOption(
             WalkingDifficultyTypeCodeField.LONGTIME.name(),
-            journey.who + "whatMakesWalkingDifficult.select.option.longtime"));
+            journey.getWho() + "whatMakesWalkingDifficult.select.option.longtime"));
     options.add(
         new RadioOption(
             WalkingDifficultyTypeCodeField.DANGER.name(),
-            journey.who
+            journey.getWho()
                 + journey.getNation().name()
                 + ".whatMakesWalkingDifficult.select.option.dangerous"));
     if (Nation.SCO.equals(journey.getNation()) || Nation.WLS.equals(journey.getNation())) {
       options.add(
           new RadioOption(
               WalkingDifficultyTypeCodeField.STRUGGLE.name(),
-              journey.who + "whatMakesWalkingDifficult.select.option.struggle"));
+              journey.getWho() + "whatMakesWalkingDifficult.select.option.struggle"));
     }
     options.add(
         new RadioOption(

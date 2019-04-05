@@ -6,6 +6,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.startsWith;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -99,7 +100,14 @@ public class CommonSteps extends AbstractSpringSteps {
 
   @When("^I (?:can )?click on(?: the| link)? \"([^\"]+)\"(?: link| button)?$")
   public void whenIClickOn(String linkTitle) {
-    commonPage.findElementWithText(linkTitle).click();
+    WebElement elementWithText = commonPage.findElementWithText(linkTitle);
+    assertNotNull(
+        "Element with text: '"
+            + linkTitle
+            + "', not found on page with title:"
+            + commonPage.getDocumentTitle(),
+        elementWithText);
+    elementWithText.click();
   }
 
   @When("^I click on button with id \"([^\"]+)\"$")
@@ -109,7 +117,31 @@ public class CommonSteps extends AbstractSpringSteps {
 
   @Then("^I (?:can )?see \"([^\"]+)\" (?:link|button|image)$")
   public void thenISeeLink(String linkTitle) {
-    assertNotNull("Can see element", commonPage.findElementWithTitle(linkTitle));
+    assertNotNull(
+        "Can't see element with title: '" + linkTitle + "'",
+        commonPage.findElementWithTitle(linkTitle));
+  }
+
+  public WebElement thenISeeLinkWithText(String linkText) {
+    WebElement linkMaybe = commonPage.findElementWithText(linkText);
+    assertNotNull("Can't see link with text: '" + linkText + "'", linkMaybe);
+    assertEquals("Element with text '" + linkText + "', not a link", "a", linkMaybe.getTagName());
+    return linkMaybe;
+  }
+
+  public void thenIDontSeeLinkWithText(String linkText) {
+    WebElement linkMaybe = commonPage.findElementWithText(linkText);
+    assertNull("Can see link with text: '" + linkText + "'", linkMaybe);
+  }
+
+  public WebElement thenISeeElementWithText(String elementTagName, String text) {
+    WebElement maybe = commonPage.findElementWithText(text);
+    assertNotNull("Can't see element with text: '" + text + "'", maybe);
+    assertEquals(
+        "Element with text '" + text + "', not a '" + elementTagName + "'",
+        elementTagName,
+        maybe.getTagName());
+    return maybe;
   }
 
   @Then("^I (?:can )?see labelled element \"([^\"]+)\" with content \"([^\"]+)\"$")
@@ -248,7 +280,7 @@ public class CommonSteps extends AbstractSpringSteps {
     assertThat("Incorrect page title", commonPage.getH1Tag(), getMatcherForText(title));
   }
 
-  @When("^I click on Start now button$")
+  @When("^I click on Start now button$") // TODO Click not done??
   public void iClickOnStartNowButton() {
     commonPage.findPageElementById("get-started");
   }

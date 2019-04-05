@@ -1,0 +1,118 @@
+// Task list pattern
+
+// Override column width for tablet and up
+.app-column-minimum {
+	@include govuk-media-query($from: tablet) {
+		min-width: 600px;
+	}
+}
+
+// Spacing to the left of the task list
+$task-list-indent: 35px;
+
+.app-task-list {
+	list-style: none;
+	padding: 0;
+	margin-top: $govuk-gutter;
+	@include govuk-media-query($from: tablet) {
+		margin-top: ($govuk-gutter * 2);
+	}
+}
+
+.app-task-list__section {
+	display: table;
+
+	@include govuk-font(24, $weight: bold);
+	margin: 0;
+	padding-bottom: ($govuk-gutter / 6);
+}
+
+.app-task-list__section-number {
+	display: table-cell;
+	padding-right: ($govuk-gutter / 6);
+
+	@include govuk-media-query($from: tablet) {
+		min-width: $task-list-indent;
+		padding-right: 0;
+	}
+}
+
+
+.app-task-list__items {
+	list-style: none;
+	padding: 0;
+	margin-bottom: $govuk-gutter;
+	@include govuk-media-query($from: tablet) {
+		margin-bottom: ($govuk-gutter * 2);
+	}
+
+	@include govuk-media-query($from: tablet) {
+		padding-left: $task-list-indent;
+	}
+}
+
+.app-task-list__item {
+	position: relative;
+	display: block;
+	border-bottom: 1px solid $govuk-border-colour;
+	padding-top: govuk-spacing(1);
+	padding-bottom: govuk-spacing(1);
+	@include govuk-clearfix;
+
+	&:first-child {
+		border-top: 1px solid $govuk-border-colour;
+	}
+}
+
+.app-task-list__task-name {
+	position: relative;
+	display: inline-block;
+	width: 100%;
+	left: 0;
+	top: 1px;
+	padding-top: govuk-spacing(1);
+	padding-bottom: govuk-spacing(1);
+	margin-bottom: 0;
+	font-size: 100%;
+	line-height: 1.25;
+
+	&.app-task-list__task-name--inactive {
+		color: govuk-colour("black");
+		cursor: default;
+		pointer-events: none;
+		text-decoration: none;
+	}
+}
+
+.task-list-deactivated-item {;
+	padding-top: govuk-spacing(1);
+	padding-bottom: govuk-spacing(1);
+}
+
+.app-task-list__task-tag {
+	@extend .govuk-tag;
+
+	min-width: 7.5em;
+	text-align: center;
+	position: absolute;
+	right: 0;
+	top: 0;
+	margin-top: 8px;
+	z-index: 1;
+}
+
+.app-task-list__task-tag--not-started {
+	background-color: govuk-colour(grey-3);
+	color: #626262;
+}
+
+.app-task-list__task-tag--in-progress {
+	background-color: govuk-colour(light-blue);
+}
+
+
+@media screen and (max-width: 33.75em) {
+	.app-task-list__task-name {
+		max-width: 140px;
+	}
+}

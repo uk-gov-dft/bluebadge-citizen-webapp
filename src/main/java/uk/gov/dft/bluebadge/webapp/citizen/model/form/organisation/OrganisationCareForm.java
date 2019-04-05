@@ -28,7 +28,7 @@ public class OrganisationCareForm implements StepForm, Serializable {
   }
 
   @Override
-  public Optional<StepDefinition> determineNextStep() {
+  public Optional<StepDefinition> determineNextStep(Journey journey) {
     if (null == doesCare) {
       throw new IllegalStateException(
           "You must select if organisation does care or not for blue badge customers");

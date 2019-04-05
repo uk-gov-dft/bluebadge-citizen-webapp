@@ -18,6 +18,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.blind.PermissionForm;
@@ -29,7 +30,7 @@ public class PermissionControllerTest {
 
   @Before
   public void setup() {
-    PermissionController controller = new PermissionController(new RouteMaster());
+    PermissionController controller = new PermissionController(RouteMasterFixture.routeMaster());
 
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
@@ -102,6 +103,6 @@ public class PermissionControllerTest {
         .perform(
             post("/permission").sessionAttr("JOURNEY", journey).param("hasPermission", "false"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(Mappings.URL_PROVE_IDENTITY));
+        .andExpect(redirectedUrl(Mappings.URL_TASK_LIST));
   }
 }
