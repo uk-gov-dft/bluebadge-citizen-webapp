@@ -40,7 +40,7 @@ public class SubmitAndPayTask extends Task {
   public StepDefinition getNextStep(Journey journey, StepDefinition current) {
     switch (current) {
       case BADGE_PAYMENT_RETURN:
-        if (!journey.isPaymentSuccessful()) {
+        if (!journey.isPaymentSuccessful() && !journey.isPaymentStatusUnknown()) {
           return NOT_PAID;
         } // else fall through to submitted
       case BADGE_PAYMENT:

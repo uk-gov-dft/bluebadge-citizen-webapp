@@ -73,7 +73,6 @@ public class BadgePaymentControllerTest {
 
   @Test
   public void show_givenNoSession_ShouldRedirectBackToStart() throws Exception {
-
     mockMvc
         .perform(get("/badge-payment"))
         .andExpect(status().isFound())
@@ -81,12 +80,15 @@ public class BadgePaymentControllerTest {
   }
 
   @Test
-  public void submit_shouldRedirectToApplicationSubmitted_WhenPayLater() throws Exception {
-
+  public void formByPass_shouldRedirectToApplicationSubmitted_WhenPayLater() throws Exception {
     mockMvc
         .perform(get("/badge-payment-by-pass").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/application-submitted"));
+    BadgePaymentForm expectedBadgePaymentFormRequest =
+        BadgePaymentForm.builder().payNow(false).build();
+    assertThat((BadgePaymentForm) journey.getFormForStep(StepDefinition.BADGE_PAYMENT))
+        .isEqualTo(expectedBadgePaymentFormRequest);
     verify(applicationServiceMock).create(any());
   }
 

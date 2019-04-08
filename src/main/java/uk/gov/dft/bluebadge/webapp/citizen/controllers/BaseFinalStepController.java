@@ -27,7 +27,6 @@ public abstract class BaseFinalStepController implements StepController {
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
       return routeMaster.backToCompletedPrevious(journey);
     }
-
     sessionStatus.setComplete();
     return getTemplate();
   }
