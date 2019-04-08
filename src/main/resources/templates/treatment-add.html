@@ -84,12 +84,12 @@
                                     </div>
                                     <div th:if="${shortCode == 'ONGOING'}" class="govuk-radios__conditional govuk-radios__conditional--hidden"
                                          th:id="${optionalElId}">
-                                        <div th:replace="~{ fragments/govuk-input :: govuk-input(#{treatment.add.when.ongoing.text}, 'treatmentOngoingFrequency', #{treatment.add.when.ongoing.hint}, 'text', 'govuk-!-width-two-thirds')}"></div>
+                                        <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + 'treatment.add.when.ongoing.text'}, 'treatmentOngoingFrequency', #{treatment.add.when.ongoing.hint}, 'text', 'govuk-!-width-two-thirds')}"></div>
                                     </div>
                                     <div th:if="${shortCode == 'FUTURE'}" class="govuk-radios__conditional govuk-radios__conditional--hidden"
                                          th:id="${optionalElId}">
-                                        <div th:replace="~{ fragments/govuk-input :: govuk-input(#{treatment.add.when.future.text}, 'treatmentFutureWhen', #{treatment.add.when.future.hint}, 'text', 'govuk-!-width-two-thirds')}"></div>
-                                        <div th:replace="~{ fragments/govuk-input :: govuk-input(#{treatment.add.when.future.text2}, 'treatmentFutureImprove', null, 'text', 'govuk-!-width-two-thirds')}"></div>
+                                        <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + 'treatment.add.when.future.text'}, 'treatmentFutureWhen', #{treatment.add.when.future.hint}, 'text', 'govuk-!-width-two-thirds')}"></div>
+                                        <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + 'treatment.add.when.future.text2'}, 'treatmentFutureImprove', null, 'text', 'govuk-!-width-two-thirds')}"></div>
                                     </div>
                                 </th:block>
                             </div>
