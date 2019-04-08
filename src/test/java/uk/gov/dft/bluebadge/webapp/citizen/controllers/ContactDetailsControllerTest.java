@@ -138,6 +138,38 @@ public class ContactDetailsControllerTest {
   }
 
   @Test
+  public void submit_givenYouApply_validPrimaryContactNumberWith10Characters() throws Exception {
+
+    givenDefaultJourney();
+
+    mockMvc
+        .perform(
+            post(URL_CONTACT_DETAILS)
+                .param("fullName", "") // empty - valid
+                .param("primaryPhoneNumber", "0123 45 67 89")
+                .param("ignoreEmailAddress", "true")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(SUCCESS_URL));
+  }
+
+  @Test
+  public void submit_givenYouApply_validPrimaryContactNumberWith44Prefix() throws Exception {
+
+    givenDefaultJourney();
+
+    mockMvc
+        .perform(
+            post(URL_CONTACT_DETAILS)
+                .param("fullName", "") // empty - valid
+                .param("primaryPhoneNumber", "+44 123 45 67893")
+                .param("ignoreEmailAddress", "true")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(SUCCESS_URL));
+  }
+
+  @Test
   public void submit_givenYouApply_InvalidSecondaryContactNumber() throws Exception {
 
     givenDefaultJourney();
