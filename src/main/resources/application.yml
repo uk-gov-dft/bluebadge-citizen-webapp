@@ -11,6 +11,7 @@ blue-badge:
       connectiontimeout: 6000
       requesttimeout: 6000
       contextpath: /uk-gov-dft/reference-data-service/1.0.0
+      versionaccept: application/vnd.bluebadge-api.v1+json, application/json
   applicationmanagementservice:
     servicehost:
       host: localhost
@@ -19,6 +20,7 @@ blue-badge:
       connectiontimeout: 6000
       requesttimeout: 6000
       contextpath: /uk-gov-dft/application-management-service/1.0.0
+      versionaccept: application/vnd.bluebadge-api.v1+json, application/json
   paymentservice:
     servicehost:
       host: localhost
@@ -27,6 +29,7 @@ blue-badge:
       connectiontimeout: 6000
       requesttimeout: 6000
       contextpath: /uk-gov-dft/payment-service/1.0.0
+      versionaccept: application/vnd.bluebadge-api.v1+json, application/json
   env: ${bb_env:dev}
   defaultDifferentServiceSignpostUrl: https://bluebadge.direct.gov.uk/bluebadge/why-are-you-here
 

@@ -86,6 +86,13 @@ public class ApiConfig {
     oAuth2RestTemplate.setUriTemplateHandler(
         new DefaultUriBuilderFactory(apiConfig.getUrlPrefix()));
     oAuth2RestTemplate.setErrorHandler(commonResponseErrorHandler());
+    oAuth2RestTemplate
+        .getInterceptors()
+        .add(
+            (request, body, execution) -> {
+              request.getHeaders().set("Accept", apiConfig.getVersionaccept());
+              return execution.execute(request, body);
+            });
     return oAuth2RestTemplate;
   }
 
