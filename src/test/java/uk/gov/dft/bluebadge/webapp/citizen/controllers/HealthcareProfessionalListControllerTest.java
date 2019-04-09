@@ -1,6 +1,8 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -121,6 +123,29 @@ public class HealthcareProfessionalListControllerTest
         "no",
         ((HealthcareProfessionalListForm) journey.getFormForStep(HEALTHCARE_PROFESSIONAL_LIST))
             .getHasHealthcareProfessional());
+  }
+
+  @Test
+  public void submit_setHasProfessionalsToNoIfEmpty_whenJourneyFormNull() throws Exception {
+
+    HealthcareProfessionalListForm journeyForm =
+        journey.getFormForStep(HEALTHCARE_PROFESSIONAL_LIST);
+    journeyForm.setHasHealthcareProfessional(null);
+    journeyForm.setHealthcareProfessionals(null);
+    mockMvc
+        .perform(
+            post(getUrl())
+                .param("hasHealthcareProfessional", "yes")
+                .contentType("application/x-www-form-urlencoded")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl(Mappings.URL_TASK_LIST));
+
+    journeyForm = journey.getFormForStep(HEALTHCARE_PROFESSIONAL_LIST);
+    // Then has reset to no.
+    assertEquals("no", journeyForm.getHasHealthcareProfessional());
+    assertNotNull(journeyForm.getHealthcareProfessionals());
+    assertTrue(journeyForm.getHealthcareProfessionals().isEmpty());
   }
 
   @Test

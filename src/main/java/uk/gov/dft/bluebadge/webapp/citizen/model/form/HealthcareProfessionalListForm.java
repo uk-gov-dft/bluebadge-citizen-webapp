@@ -38,7 +38,7 @@ public class HealthcareProfessionalListForm implements Serializable, StepForm {
     healthcareProfessionals.add(healthcareProfessionalAddForm);
   }
 
-  public static class HealthcareProfessionalListFormBuilder {
-    private List<HealthcareProfessionalAddForm> healthcareProfessionals = new ArrayList<>();
+  public List<HealthcareProfessionalAddForm> getHealthcareProfessionals() {
+    return null == healthcareProfessionals ? new ArrayList<>() : healthcareProfessionals;
   }
 }
