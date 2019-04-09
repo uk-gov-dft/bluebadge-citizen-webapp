@@ -4,7 +4,7 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/master.html}">
 <head>
-    <title th:text="(${errorSummary}? #{common.title.error} : '')  + #{${JOURNEY.who} + 'contact.page.title'}"></title>
+    <title th:text="(${errorSummary}? #{common.title.error} : '')  + #{contact.page.title}"></title>
 </head>
 <body>
 
@@ -12,7 +12,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-            <h1 class="govuk-heading-l" th:text="#{${JOURNEY.who} + 'contact.body.title'}"></h1>
+            <h1 class="govuk-heading-l" th:text="#{contact.body.title}"></h1>
 
             <form th:action="@{/contact-details}" th:object="${formRequest}" method="POST" novalidate>
 
