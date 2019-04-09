@@ -38,7 +38,7 @@ public class MedicationListForm implements Serializable, StepForm {
     medications.add(medicationAddForm);
   }
 
-  public static class MedicationListFormBuilder {
-    private List<MedicationAddForm> medications = new ArrayList<>();
+  public List<MedicationAddForm> getMedications() {
+    return medications == null ? new ArrayList<>() : medications;
   }
 }
