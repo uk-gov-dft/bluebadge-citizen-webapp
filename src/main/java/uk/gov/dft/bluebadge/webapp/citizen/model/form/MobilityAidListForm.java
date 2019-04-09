@@ -38,7 +38,7 @@ public class MobilityAidListForm implements Serializable, StepForm {
     mobilityAids.add(mobilityAidAddForm);
   }
 
-  public static class MedicationListFormBuilder {
-    private List<MobilityAidAddForm> mobilityAids = new ArrayList<>();
+  public List<MobilityAidAddForm> getMobilityAids() {
+    return mobilityAids == null ? new ArrayList<>() : mobilityAids;
   }
 }

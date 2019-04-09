@@ -16,19 +16,86 @@
 
             <form th:action="@{/add-treatment}" th:object="${formRequest}" method="POST" novalidate>
 
-                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{treatment.add.description.text}, 'treatmentDescription', null, 'text', 'govuk-!-width-one-half')}"></div>
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{treatment.add.description.text}, 'treatmentDescription', null, 'text', 'govuk-!-width-two-thirds')}"></div>
 
                 <details class="govuk-details" role="group">
                     <summary class="govuk-details__summary" role="button"
                              aria-controls="details-content-0c2358aa-a947-44a8-929c-acaa4d341ab9" aria-expanded="false">
                         <span class="govuk-details__summary-text" th:text="#{treatments.what.counts}" data-uipath="what.counts.link"></span>
                     </summary>
-                    <div class="govuk-details__text" id="details-content-0c2358aa-a947-44a8-929c-acaa4d341ab9"
+                    <div class="govuk-details__text govuk-!-width-two-thirds" id="details-content-0c2358aa-a947-44a8-929c-acaa4d341ab9"
                          aria-hidden="true" th:text="#{${JOURNEY.who} + 'treatment.what.counts.text'}" data-uipath="what.counts.expanded.text"></div>
 
                 </details>
 
-                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + 'treatment.add.when.text'}, 'treatmentWhen', #{treatment.add.when.hint}, 'text', 'govuk-!-width-one-half')}"></div>
+                <th:block th:with="name=${'treatmentWhenType'}, radioGroup=${whenTypeCodes}">
+                    <div th:class="${#fields.hasErrors(name)} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
+
+                        <fieldset class="govuk-fieldset">
+                            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                                <div th:data-uipath="${name} + '.label'"
+                                     th:text="#{treatment.add.when.title}" th:remove="tag"></div>
+                            </legend>
+
+                            <span class="govuk-error-message"
+                                  th:data-uipath="${name} + '.error'"
+                                  th:if="${#fields.hasErrors(name)}"
+                                  th:errors="*{__${name}__}"></span>
+
+                            <div class="govuk-radios" data-module="radios">
+                                <th:block th:each="option, iter : ${radioGroup.options}"
+                                          th:with="shortCode=${option.shortCode}, optionalElId=${shortCode} +'-conditional'">
+
+                                    <div class="govuk-radios__item" th:data-uipath="${name} + '.radio-options'">
+                                        <div th:remove="tag" th:if="${iter.index == 0}">
+                                            <input th:id="${name}"
+                                                   class="govuk-radios__input"
+                                                   th:data-uipath="${name} + '.option.' + ${shortCode}"
+                                                   type="radio"
+                                                   th:value="${shortCode}"
+                                                   th:attr="data-aria-controls=${optionalElId}"
+                                                   th:field="*{__${name}__}">
+
+                                            <label class="govuk-label govuk-radios__label"
+                                                   th:data-uipath="${name} + '.label.' + ${shortCode}"
+                                                   th:for="${name}"
+                                                   th:text="#{${option.messageKey}}"></label>
+                                        </div>
+
+                                        <div th:remove="tag" th:unless="${iter.index == 0}">
+                                            <input th:id="${name} + '.' + ${shortCode}"
+                                                   class="govuk-radios__input"
+                                                   th:data-uipath="${name} + '.option.' + ${shortCode}"
+                                                   type="radio"
+                                                   th:value="${shortCode}"
+                                                   th:attr="data-aria-controls=${optionalElId}"
+                                                   th:field="*{__${name}__}">
+
+                                            <label class="govuk-label govuk-radios__label"
+                                                   th:data-uipath="${name} + '.label.' + ${shortCode}"
+                                                   th:for="${name} + '.' + ${shortCode}"
+                                                   th:text="#{${option.messageKey}}"></label>
+                                        </div>
+                                    </div>
+
+                                    <div th:if="${shortCode == 'PAST'}" class="govuk-radios__conditional govuk-radios__conditional--hidden"
+                                         th:id="${optionalElId}">
+                                        <div th:replace="~{ fragments/govuk-input :: govuk-input(#{treatment.add.when.past.text}, 'treatmentPastWhen', #{treatment.add.when.past.hint}, 'text', 'govuk-!-width-two-thirds')}"></div>
+                                    </div>
+                                    <div th:if="${shortCode == 'ONGOING'}" class="govuk-radios__conditional govuk-radios__conditional--hidden"
+                                         th:id="${optionalElId}">
+                                        <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + 'treatment.add.when.ongoing.text'}, 'treatmentOngoingFrequency', #{treatment.add.when.ongoing.hint}, 'text', 'govuk-!-width-two-thirds')}"></div>
+                                    </div>
+                                    <div th:if="${shortCode == 'FUTURE'}" class="govuk-radios__conditional govuk-radios__conditional--hidden"
+                                         th:id="${optionalElId}">
+                                        <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + 'treatment.add.when.future.text'}, 'treatmentFutureWhen', #{treatment.add.when.future.hint}, 'text', 'govuk-!-width-two-thirds')}"></div>
+                                        <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + 'treatment.add.when.future.text2'}, 'treatmentFutureImprove', null, 'text', 'govuk-!-width-two-thirds')}"></div>
+                                    </div>
+                                </th:block>
+                            </div>
+                        </fieldset>
+                    </div>
+                </th:block>
 
                 <button type="submit"
                         class="govuk-button"
