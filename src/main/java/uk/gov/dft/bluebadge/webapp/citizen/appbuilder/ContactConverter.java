@@ -21,8 +21,10 @@ class ContactConverter {
         .townCity(enterAddressForm.getTownOrCity())
         .postCode(enterAddressForm.getPostcode())
         .fullName(contactDetailsForm.getFullName())
-        .primaryPhoneNumber(StringUtils.trimAllWhitespace(contactDetailsForm.getPrimaryPhoneNumber()))
-        .secondaryPhoneNumber(StringUtils.trimAllWhitespace(contactDetailsForm.getSecondaryPhoneNumber()))
+        .primaryPhoneNumber(
+            StringUtils.trimAllWhitespace(contactDetailsForm.getPrimaryPhoneNumber()))
+        .secondaryPhoneNumber(
+            StringUtils.trimAllWhitespace(contactDetailsForm.getSecondaryPhoneNumber()))
         .emailAddress(contactDetailsForm.getEmailAddress())
         .build();
   }
