@@ -3,13 +3,13 @@ package uk.gov.service.bluebadge.test.acceptance.pages.site;
 public class WhereCanWalkPage {
 
   public static final String PAGE_URL = "/where-can-you-walk";
-  public static final String PAGE_TITLE = "Where can you walk to?";
-  public static final String PAGE_TITLE_SOMEONE_ELSE = "Where can they walk to?";
+  public static final String PAGE_TITLE = "Where can you walk from and to?";
+  public static final String PAGE_TITLE_SOMEONE_ELSE = "Where can they walk from and to?";
 
-  public static final String PAGE_HEADING = "Where can you walk to?";
-  public static final String PAGE_HEADING_SOMEONE_ELSE = "Where can they walk to?";
+  public static final String PAGE_HEADING = "Where can you walk from and to?";
+  public static final String PAGE_HEADING_SOMEONE_ELSE = "Where can they walk from and to?";
 
-  public static final String VALIDATION_MESSAGE_FOR_EMPTY_PLACE = "Enter a place";
+  public static final String VALIDATION_MESSAGE_FOR_EMPTY_PLACE = "Enter from and to";
   public static final String VALIDATION_MESSAGE_FOR_EMPTY_TIME = "Enter how long it takes";
 
   public static final String VALIDATION_MESSAGE_FOR_INVALID_PLACE =
