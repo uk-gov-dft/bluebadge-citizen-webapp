@@ -104,8 +104,8 @@ public class WalkingTimeController implements StepController {
             WalkingLengthOfTimeCodeField.ONEFIVE.name(), "walkingTime.select.option.ONEFIVE"));
 
     options.add(
-            new RadioOption(
-                    WalkingLengthOfTimeCodeField.FIVETEN.name(), "walkingTime.select.option.FIVETEN"));
+        new RadioOption(
+            WalkingLengthOfTimeCodeField.FIVETEN.name(), "walkingTime.select.option.FIVETEN"));
 
     options.add(
         new RadioOption(
