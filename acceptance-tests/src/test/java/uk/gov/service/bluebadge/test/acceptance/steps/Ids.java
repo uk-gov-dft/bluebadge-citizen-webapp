@@ -55,7 +55,13 @@ class Ids {
     static final String TREATMENT_REMOVE_LINK_PREFIX = "treatment.remove.link.";
     static final String TREATMENT_ADD_FIRST_LINK = "firstaddtreatmentlink";
     static final String TREATMENT_ADD_TREATMENT_DESCRIPTION = "treatmentDescription";
-    static final String TREATMENT_ADD_TREATMENT_WHEN = "treatmentWhen";
+    static final String TREATMENT_ADD_TREATMENT_PAST_OPTION = "treatmentWhenType";
+    static final String TREATMENT_ADD_TREATMENT_PAST_WHEN = "treatmentPastWhen";
+    static final String TREATMENT_ADD_TREATMENT_ONGOING_OPTION = "treatmentWhenType.ONGOING";
+    static final String TREATMENT_ADD_TREATMENT_ONGOING_FREQUENCY = "treatmentOngoingFrequency";
+    static final String TREATMENT_ADD_TREATMENT_FUTURE_OPTION = "treatmentWhenType.FUTURE";
+    static final String TREATMENT_ADD_TREATMENT_FUTURE_WHEN = "treatmentFutureWhen";
+    static final String TREATMENT_ADD_TREATMENT_FUTURE_IMPROVE = "treatmentFutureImprove";
 
     static final String WALKING_TIME = "walkingTime";
 

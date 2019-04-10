@@ -18,6 +18,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
@@ -29,12 +30,13 @@ public class ContactDetailsControllerTest {
   private MockMvc mockMvc;
   private Journey journey;
 
-  private static final String SUCCESS_URL = Mappings.URL_PROVE_IDENTITY;
+  private static final String SUCCESS_URL = Mappings.URL_TASK_LIST;
   private static final String ERROR_URL = Mappings.URL_CONTACT_DETAILS + RouteMaster.ERROR_SUFFIX;
 
   @Before
   public void setup() {
-    ContactDetailsController controller = new ContactDetailsController(new RouteMaster());
+    ContactDetailsController controller =
+        new ContactDetailsController(RouteMasterFixture.routeMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())

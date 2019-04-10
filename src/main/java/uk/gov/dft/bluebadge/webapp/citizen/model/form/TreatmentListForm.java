@@ -1,6 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.model.form;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
@@ -27,5 +28,16 @@ public class TreatmentListForm implements Serializable, StepForm {
   @Override
   public boolean preserveStep(Journey journey) {
     return false;
+  }
+
+  public void addTreatment(TreatmentAddForm treatmentAddForm) {
+    if (null == treatments) {
+      treatments = new ArrayList<>();
+    }
+    treatments.add(treatmentAddForm);
+  }
+
+  public List<TreatmentAddForm> getTreatments() {
+    return treatments == null ? new ArrayList<>() : treatments;
   }
 }

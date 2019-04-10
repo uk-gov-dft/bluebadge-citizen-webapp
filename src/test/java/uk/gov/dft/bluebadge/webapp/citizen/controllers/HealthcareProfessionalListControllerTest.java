@@ -1,6 +1,8 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -13,8 +15,8 @@ import org.junit.Before;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthcareProfessionalListForm;
@@ -24,7 +26,7 @@ public class HealthcareProfessionalListControllerTest
 
   @Before
   public void setup() {
-    super.setup(new HealthcareProfessionalListController(new RouteMaster()));
+    super.setup(new HealthcareProfessionalListController(RouteMasterFixture.routeMaster()));
     journey.setFormForStep(
         HealthcareProfessionalListForm.builder()
             .healthcareProfessionals(new ArrayList<>())
@@ -70,7 +72,7 @@ public class HealthcareProfessionalListControllerTest
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(Mappings.URL_PROVE_IDENTITY));
+        .andExpect(redirectedUrl(Mappings.URL_TASK_LIST));
   }
 
   @Test
@@ -92,7 +94,7 @@ public class HealthcareProfessionalListControllerTest
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(Mappings.URL_PROVE_IDENTITY));
+        .andExpect(redirectedUrl(Mappings.URL_TASK_LIST));
 
     // Get form again.  Will be different instance in journey now
     journeyForm = journey.getFormForStep(HEALTHCARE_PROFESSIONAL_LIST);
@@ -114,13 +116,36 @@ public class HealthcareProfessionalListControllerTest
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl(Mappings.URL_PROVE_IDENTITY));
+        .andExpect(redirectedUrl(Mappings.URL_TASK_LIST));
 
     // Then has reset to no.
     assertEquals(
         "no",
         ((HealthcareProfessionalListForm) journey.getFormForStep(HEALTHCARE_PROFESSIONAL_LIST))
             .getHasHealthcareProfessional());
+  }
+
+  @Test
+  public void submit_setHasProfessionalsToNoIfEmpty_whenJourneyFormNull() throws Exception {
+
+    HealthcareProfessionalListForm journeyForm =
+        journey.getFormForStep(HEALTHCARE_PROFESSIONAL_LIST);
+    journeyForm.setHasHealthcareProfessional(null);
+    journeyForm.setHealthcareProfessionals(null);
+    mockMvc
+        .perform(
+            post(getUrl())
+                .param("hasHealthcareProfessional", "yes")
+                .contentType("application/x-www-form-urlencoded")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl(Mappings.URL_TASK_LIST));
+
+    journeyForm = journey.getFormForStep(HEALTHCARE_PROFESSIONAL_LIST);
+    // Then has reset to no.
+    assertEquals("no", journeyForm.getHasHealthcareProfessional());
+    assertNotNull(journeyForm.getHealthcareProfessionals());
+    assertTrue(journeyForm.getHealthcareProfessionals().isEmpty());
   }
 
   @Test

@@ -12,6 +12,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.BreathlessnessForm;
 
 public class BreathlessnessControllerTest extends ControllerTestFixture<BreathlessnessController> {
@@ -21,7 +22,7 @@ public class BreathlessnessControllerTest extends ControllerTestFixture<Breathle
 
   @Before
   public void setup() {
-    super.setup(new BreathlessnessController(new RouteMaster()));
+    super.setup(new BreathlessnessController(RouteMasterFixture.routeMaster()));
     journey =
         JourneyFixture.getDefaultJourneyToStep(
             StepDefinition.BREATHLESSNESS, EligibilityCodeField.WALKD, false);

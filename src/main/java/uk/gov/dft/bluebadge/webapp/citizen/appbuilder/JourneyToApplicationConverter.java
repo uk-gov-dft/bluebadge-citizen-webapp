@@ -15,7 +15,7 @@ public class JourneyToApplicationConverter {
     ExistingBadgeForm existingBadgeForm = journey.getFormForStep(StepDefinition.EXISTING_BADGE);
 
     boolean paymentTaken = journey.isPaymentSuccessful();
-    String paymentReference = (paymentTaken ? journey.getPaymentReference() : null);
+    String paymentReference = journey.getPaymentReference();
 
     return Application.builder()
         .applicationTypeCode(ApplicationTypeCodeField.NEW)

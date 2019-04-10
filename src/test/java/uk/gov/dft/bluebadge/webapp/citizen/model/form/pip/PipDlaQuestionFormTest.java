@@ -13,8 +13,8 @@ public class PipDlaQuestionFormTest {
         PipDlaQuestionForm.builder()
             .receivedDlaOption(PipDlaQuestionForm.PipReceivedDlaOption.HAS_RECEIVED_DLA)
             .build();
-    assertThat(form.determineNextStep()).isNotEmpty();
-    assertThat(form.determineNextStep().get()).isEqualTo(StepDefinition.ELIGIBLE);
+    assertThat(form.determineNextStep(null)).isNotEmpty();
+    assertThat(form.determineNextStep(null).get()).isEqualTo(StepDefinition.ELIGIBLE);
   }
 
   @Test
@@ -23,7 +23,7 @@ public class PipDlaQuestionFormTest {
         PipDlaQuestionForm.builder()
             .receivedDlaOption(PipDlaQuestionForm.PipReceivedDlaOption.NEVER_RECEIVED_DLA)
             .build();
-    assertThat(form.determineNextStep()).isNotEmpty();
-    assertThat(form.determineNextStep().get()).isEqualTo(StepDefinition.MAIN_REASON);
+    assertThat(form.determineNextStep(null)).isNotEmpty();
+    assertThat(form.determineNextStep(null).get()).isEqualTo(StepDefinition.MAIN_REASON);
   }
 }

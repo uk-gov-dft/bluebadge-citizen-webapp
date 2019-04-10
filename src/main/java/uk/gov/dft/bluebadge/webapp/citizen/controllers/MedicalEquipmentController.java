@@ -90,7 +90,7 @@ public class MedicalEquipmentController extends SimpleStepController {
     options.add(new RadioOption(CAST.name(), "medicalEquipment.option.cast"));
     options.add(new RadioOption(OTHER.name(), "medicalEquipment.option.other"));
 
-    return new RadioOptionsGroup(journey.who + "medicalEquipment.title", options);
+    return new RadioOptionsGroup(journey.getWho() + "medicalEquipment.title", options);
   }
 
   @Override

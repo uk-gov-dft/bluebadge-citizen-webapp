@@ -42,7 +42,7 @@ public class WalkingTimeController implements StepController {
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
 
     //On returning to form, take previously submitted values.
@@ -73,7 +73,7 @@ public class WalkingTimeController implements StepController {
 
     journey.setFormForStep(walkingTimeForm);
 
-    return routeMaster.redirectToOnSuccess(walkingTimeForm);
+    return routeMaster.redirectToOnSuccess(walkingTimeForm, journey);
   }
 
   @Override
@@ -93,7 +93,7 @@ public class WalkingTimeController implements StepController {
     options.add(
         new RadioOption(
             WalkingLengthOfTimeCodeField.CANTWALK.name(),
-            journey.who + "walkingTime.select.option.CANTWALK"));
+            journey.getWho() + "walkingTime.select.option.CANTWALK"));
 
     options.add(
         new RadioOption(
@@ -107,7 +107,7 @@ public class WalkingTimeController implements StepController {
         new RadioOption(
             WalkingLengthOfTimeCodeField.MORETEN.name(), "walkingTime.select.option.MORETEN"));
 
-    String selectTitle = journey.who + journey.walkingAid + "walkingTime.select.title";
+    String selectTitle = journey.getWho() + journey.getWalkingAid() + "walkingTime.select.title";
     return new RadioOptionsGroup(selectTitle, options);
   }
 }

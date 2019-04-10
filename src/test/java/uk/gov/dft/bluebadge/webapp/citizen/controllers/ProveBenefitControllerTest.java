@@ -10,8 +10,8 @@ import org.junit.Test;
 import uk.gov.dft.bluebadge.webapp.citizen.FormObjectToParamMapper;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.component.CompoundDate;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveBenefitForm;
 
@@ -19,7 +19,7 @@ public class ProveBenefitControllerTest extends ControllerTestFixture<ProveBenef
 
   @Before
   public void setup() {
-    super.setup(new ProveBenefitController(new RouteMaster()));
+    super.setup(new ProveBenefitController(RouteMasterFixture.routeMaster()));
   }
 
   @Test

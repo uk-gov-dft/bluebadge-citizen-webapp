@@ -37,7 +37,7 @@ public class HigherRateMobilityController implements StepController {
   @GetMapping
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
 
     // On returning to form, take previously submitted values.
@@ -66,7 +66,7 @@ public class HigherRateMobilityController implements StepController {
     }
 
     journey.setFormForStep(formRequest);
-    return routeMaster.redirectToOnSuccess(formRequest);
+    return routeMaster.redirectToOnSuccess(formRequest, journey);
   }
 
   @Override
@@ -77,7 +77,7 @@ public class HigherRateMobilityController implements StepController {
   private void setupModel(Model model, Journey journey) {
     model.addAttribute(
         "options",
-        new RadioOptionsGroup(journey.who + "higherRateMobilityPage.content.title")
+        new RadioOptionsGroup(journey.getWho() + "higherRateMobilityPage.content.title")
             .withYesNoOptions(YesNoType.PAST));
   }
 }

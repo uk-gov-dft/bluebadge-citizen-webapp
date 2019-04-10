@@ -45,7 +45,7 @@ public class PipPlanningJourneyController implements StepController {
   @GetMapping
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
 
     // On returning to form, take previously submitted values.
@@ -71,7 +71,7 @@ public class PipPlanningJourneyController implements StepController {
 
     List<RadioOption> options = Lists.newArrayList(points12, points10, points8, points4, points0);
 
-    String title = journey.who + "pipPlanningAndFollowingPage.content.title";
+    String title = journey.getWho() + "pipPlanningAndFollowingPage.content.title";
     return new RadioOptionsGroup(title, options);
   }
 

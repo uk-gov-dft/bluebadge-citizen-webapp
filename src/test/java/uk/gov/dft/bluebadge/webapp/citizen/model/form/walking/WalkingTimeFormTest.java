@@ -3,11 +3,14 @@ package uk.gov.dft.bluebadge.webapp.citizen.model.form.walking;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.EnumSet;
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingLengthOfTimeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 class WalkingTimeFormTest {
 
@@ -18,34 +21,15 @@ class WalkingTimeFormTest {
   }
 
   @Test
-  void determineNextStep_whenCantWalk() {
-    WalkingTimeForm walkingTimeForm =
-        WalkingTimeForm.builder().walkingTime(WalkingLengthOfTimeCodeField.CANTWALK).build();
-    Optional<StepDefinition> actual = walkingTimeForm.determineNextStep();
-    assertThat(actual.get()).isEqualTo(StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS);
-  }
-
-  @Test
-  void determineNextStep_whenAnyOther() {
-    EnumSet<WalkingLengthOfTimeCodeField> otherTypes =
-        EnumSet.complementOf(EnumSet.of(WalkingLengthOfTimeCodeField.CANTWALK));
-    assertThat(otherTypes).isNotEmpty();
-
-    for (WalkingLengthOfTimeCodeField walkingTimeType : otherTypes) {
-      WalkingTimeForm walkingTimeForm =
-          WalkingTimeForm.builder().walkingTime(walkingTimeType).build();
-      Optional<StepDefinition> actual = walkingTimeForm.determineNextStep();
-      assertThat(actual.get()).isEqualTo(StepDefinition.WHERE_CAN_YOU_WALK);
-    }
-  }
-
-  @Test
   public void routeMaster_validSteps() {
-    RouteMaster routeMaster = new RouteMaster();
+    RouteMaster routeMaster = RouteMasterFixture.routeMaster();
+    Journey journey =
+        JourneyFixture.getDefaultJourneyToStep(
+            StepDefinition.WALKING_TIME, EligibilityCodeField.WALKD, false);
 
     WalkingTimeForm walkingTimeForm =
         WalkingTimeForm.builder().walkingTime(WalkingLengthOfTimeCodeField.CANTWALK).build();
-    routeMaster.redirectToOnSuccess(walkingTimeForm);
+    routeMaster.redirectToOnSuccess(walkingTimeForm, journey);
 
     EnumSet<WalkingLengthOfTimeCodeField> otherTypes =
         EnumSet.complementOf(EnumSet.of(WalkingLengthOfTimeCodeField.CANTWALK));
@@ -53,7 +37,7 @@ class WalkingTimeFormTest {
 
     for (WalkingLengthOfTimeCodeField walkingTimeType : otherTypes) {
       walkingTimeForm = WalkingTimeForm.builder().walkingTime(walkingTimeType).build();
-      routeMaster.redirectToOnSuccess(walkingTimeForm);
+      routeMaster.redirectToOnSuccess(walkingTimeForm, journey);
     }
   }
 }

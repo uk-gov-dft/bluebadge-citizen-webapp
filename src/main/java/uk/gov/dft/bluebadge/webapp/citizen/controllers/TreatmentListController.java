@@ -38,7 +38,7 @@ public class TreatmentListController implements StepController {
   @GetMapping
   public String show(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey, Model model) {
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
 
     // On returning to form, take previously submitted values.
@@ -48,10 +48,7 @@ public class TreatmentListController implements StepController {
 
     // If navigating forward from previous form, reset
     if (!model.containsAttribute(FORM_REQUEST)) {
-      // Create object in journey with empty list.
-      // Want to not get any null pointers accessing list.
-      journey.setFormForStep(TreatmentListForm.builder().treatments(new ArrayList<>()).build());
-      model.addAttribute(FORM_REQUEST, journey.getFormForStep(getStepDefinition()));
+      model.addAttribute(FORM_REQUEST, TreatmentListForm.builder().build());
     }
     return TEMPLATE;
   }
@@ -67,22 +64,19 @@ public class TreatmentListController implements StepController {
       return routeMaster.redirectToOnBindingError(this, treatmentListForm, bindingResult, attr);
     }
 
-    TreatmentListForm journeyForm = journey.getFormForStep(getStepDefinition());
-    // Reset if no selected
-    // Treat as No selected if no aids added whilst yes was selected
-    if ("no".equals(treatmentListForm.getHasTreatment())
-        || ("yes".equals(treatmentListForm.getHasTreatment())
-            && journeyForm.getTreatments().isEmpty())) {
-      journey.setFormForStep(
-          TreatmentListForm.builder().hasTreatment("no").treatments(new ArrayList<>()).build());
-    } else {
-      journeyForm.setHasTreatment(treatmentListForm.getHasTreatment());
+    TreatmentListForm journeyForm = journey.getOrSetFormForStep(treatmentListForm);
+    journeyForm.setHasTreatment(treatmentListForm.getHasTreatment());
+    if ("no".equals(treatmentListForm.getHasTreatment())) {
+      journeyForm.setTreatments(new ArrayList<>());
+    } else if (journeyForm.getTreatments().isEmpty()) {
+      journeyForm.setHasTreatment("no");
     }
+    journey.setFormForStep(journeyForm);
 
     // Don't overwrite treatmentList in journey
     // as it is not bound to inputs in ui form and always null on submit
 
-    return routeMaster.redirectToOnSuccess(treatmentListForm);
+    return routeMaster.redirectToOnSuccess(treatmentListForm, journey);
   }
 
   @GetMapping(value = URL_REMOVE_PART)

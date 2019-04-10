@@ -36,7 +36,7 @@ public class ApplicantNameController implements StepController {
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
 
     //On returning to form, take previously submitted values.
@@ -72,7 +72,7 @@ public class ApplicantNameController implements StepController {
     }
 
     journey.setFormForStep(applicantNameForm);
-    return routeMaster.redirectToOnSuccess(applicantNameForm);
+    return routeMaster.redirectToOnSuccess(applicantNameForm, journey);
   }
 
   @Override

@@ -18,6 +18,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 public class HealthConditionsControllerTest {
@@ -28,7 +29,8 @@ public class HealthConditionsControllerTest {
 
   @Before
   public void setup() {
-    HealthConditionsController controller = new HealthConditionsController(new RouteMaster());
+    HealthConditionsController controller =
+        new HealthConditionsController(RouteMasterFixture.routeMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -61,9 +63,9 @@ public class HealthConditionsControllerTest {
         .perform(
             post("/health-conditions")
                 .param("descriptionOfConditions", "test test")
-                .sessionAttr("JOURNEY", new Journey()))
+                .sessionAttr("JOURNEY", journey))
         .andExpect(status().is3xxRedirection())
-        .andExpect(redirectedUrl(Mappings.URL_PROVE_IDENTITY));
+        .andExpect(redirectedUrl(Mappings.URL_WHAT_MAKES_WALKING_DIFFICULT));
   }
 
   @Test

@@ -24,9 +24,9 @@ import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.BadgePaymentForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
@@ -49,7 +49,8 @@ public class BadgePaymentControllerTest {
     MockitoAnnotations.initMocks(this);
 
     BadgePaymentController controller =
-        new BadgePaymentController(paymentServiceMock, applicationServiceMock, new RouteMaster());
+        new BadgePaymentController(
+            paymentServiceMock, applicationServiceMock, RouteMasterFixture.routeMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -72,7 +73,6 @@ public class BadgePaymentControllerTest {
 
   @Test
   public void show_givenNoSession_ShouldRedirectBackToStart() throws Exception {
-
     mockMvc
         .perform(get("/badge-payment"))
         .andExpect(status().isFound())
@@ -80,12 +80,15 @@ public class BadgePaymentControllerTest {
   }
 
   @Test
-  public void submit_shouldRedirectToApplicationSubmitted_WhenPayLater() throws Exception {
-
+  public void formByPass_shouldRedirectToApplicationSubmitted_WhenPayLater() throws Exception {
     mockMvc
         .perform(get("/badge-payment-by-pass").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/application-submitted"));
+    BadgePaymentForm expectedBadgePaymentFormRequest =
+        BadgePaymentForm.builder().payNow(false).build();
+    assertThat((BadgePaymentForm) journey.getFormForStep(StepDefinition.BADGE_PAYMENT))
+        .isEqualTo(expectedBadgePaymentFormRequest);
     verify(applicationServiceMock).create(any());
   }
 

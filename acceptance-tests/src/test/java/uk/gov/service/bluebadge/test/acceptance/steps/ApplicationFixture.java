@@ -26,17 +26,17 @@ import uk.gov.service.bluebadge.test.acceptance.pages.site.ApplicantPage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.BenifitsPage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.ChooseCouncilPage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
-import uk.gov.service.bluebadge.test.acceptance.steps.site.ContactDetailsSteps;
 import uk.gov.service.bluebadge.test.acceptance.util.FileHelper;
 
 public class ApplicationFixture extends AbstractSpringSteps {
 
   private CommonPage commonPage;
-  private ContactDetailsSteps contactDetailsSteps;
+  private CommonSteps commonSteps;
 
   @Autowired
-  public ApplicationFixture(CommonPage commonPage) {
+  public ApplicationFixture(CommonPage commonPage, CommonSteps commonSteps) {
     this.commonPage = commonPage;
+    this.commonSteps = commonSteps;
   }
 
   private void pressContinue() {
@@ -63,7 +63,7 @@ public class ApplicationFixture extends AbstractSpringSteps {
 
   @And("I skip find council page")
   public void iSkipFindCouncilPage() {
-    commonPage.findElementWithUiPath(CHOOSE_YOUR_COUNCIL_LINK).click();
+    commonPage.getElementWithUiPath(CHOOSE_YOUR_COUNCIL_LINK).click();
   }
 
   @And("^I complete select council page$")
@@ -267,6 +267,12 @@ public class ApplicationFixture extends AbstractSpringSteps {
     commonPage.findElementWithUiPath("button.continue").click();
   }
 
+  @And("^I complete Submit application page$")
+  public void iCompleteSubmitApplicationPage() {
+    commonSteps.thenIShouldSeePageTitledWithGovUkSuffix("Submit application");
+    commonPage.findElementWithUiPath("button.continue").click();
+  }
+
   @And("^I complete planning points page for \"(12|10|8|4|0)\"")
   public void iCompletePlanningPointsPageFor(String points) {
     if ("12".equals(points)) {
@@ -399,12 +405,21 @@ public class ApplicationFixture extends AbstractSpringSteps {
       commonPage.selectRadioButton(Ids.Walkd.TREATMENT_HAS_TREATMENT_OPTION);
       clickButtonById(Ids.Walkd.TREATMENT_ADD_FIRST_LINK);
       clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_DESCRIPTION, "Treatment description");
-      clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_WHEN, "Treatment when");
+      commonPage.selectRadioButton(Ids.Walkd.TREATMENT_ADD_TREATMENT_PAST_OPTION);
+      clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_PAST_WHEN, "Treatment when");
       clickButtonById(Ids.Walkd.TREATMENT_ADD_CONFIRM_BUTTON);
       clickButtonById(Ids.Walkd.TREATMENT_REMOVE_LINK_PREFIX + "1");
       clickButtonById(Ids.Walkd.TREATMENT_ADD_FIRST_LINK);
       clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_DESCRIPTION, "Treatment description");
-      clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_WHEN, "Treatment when");
+      commonPage.selectRadioButton(Ids.Walkd.TREATMENT_ADD_TREATMENT_ONGOING_OPTION);
+      clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_ONGOING_FREQUENCY, "Treatment frequency");
+      clickButtonById(Ids.Walkd.TREATMENT_ADD_CONFIRM_BUTTON);
+      clickButtonById(Ids.Walkd.TREATMENT_REMOVE_LINK_PREFIX + "1");
+      clickButtonById(Ids.Walkd.TREATMENT_ADD_FIRST_LINK);
+      clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_DESCRIPTION, "Treatment description");
+      commonPage.selectRadioButton(Ids.Walkd.TREATMENT_ADD_TREATMENT_FUTURE_OPTION);
+      clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_FUTURE_WHEN, "Treatment when");
+      clearAndSendKeys(Ids.Walkd.TREATMENT_ADD_TREATMENT_FUTURE_IMPROVE, "Treatment improvement");
       clickButtonById(Ids.Walkd.TREATMENT_ADD_CONFIRM_BUTTON);
     }
     pressContinue();

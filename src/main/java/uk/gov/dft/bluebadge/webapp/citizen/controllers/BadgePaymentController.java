@@ -52,7 +52,7 @@ public class BadgePaymentController implements StepController {
       @ModelAttribute(FORM_REQUEST) BadgePaymentForm formRequest) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
 
     if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
@@ -70,9 +70,7 @@ public class BadgePaymentController implements StepController {
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute(FORM_REQUEST) BadgePaymentForm formRequest) {
-    PaymentResponse response = null;
-    response = createPayment(journey);
-
+    PaymentResponse response = createPayment(journey);
     journey.setPaymentJourneyUuid(response != null ? response.getPaymentJourneyUuid() : null);
     journey.setFormForStep(formRequest);
     if (response == null) {
@@ -85,9 +83,9 @@ public class BadgePaymentController implements StepController {
   @GetMapping(URL_BADGE_PAYMENT_BYPASS)
   public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     applicationService.create(JourneyToApplicationConverter.convert(journey));
-    BadgePaymentForm formRequest = BadgePaymentForm.builder().build();
+    BadgePaymentForm formRequest = BadgePaymentForm.builder().payNow(false).build();
     journey.setFormForStep(formRequest);
-    return routeMaster.redirectToOnSuccess(formRequest);
+    return routeMaster.redirectToOnSuccess(formRequest, journey);
   }
 
   private PaymentResponse createPayment(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {

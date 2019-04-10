@@ -15,8 +15,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
+import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
 public class SubmittedControllerTest {
@@ -25,7 +25,7 @@ public class SubmittedControllerTest {
 
   @Before
   public void setup() {
-    SubmittedController controller = new SubmittedController(new RouteMaster());
+    SubmittedController controller = new SubmittedController(RouteMasterFixture.routeMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -33,7 +33,7 @@ public class SubmittedControllerTest {
   }
 
   @Test
-  public void showSubmitted_ShouldDisplaySubmittedTemplate_WhenThereIsAJourney() throws Exception {
+  public void show_ShouldDisplaySubmittedTemplate_WhenThereIsAJourney() throws Exception {
     Journey journey = new JourneyBuilder().forYou().build();
 
     mockMvc
@@ -45,8 +45,7 @@ public class SubmittedControllerTest {
   }
 
   @Test
-  public void showSubmitted_givenNoSession_ShouldRedirectBackToStart() throws Exception {
-
+  public void show_givenNoSession_ShouldRedirectBackToStart() throws Exception {
     mockMvc
         .perform(get("/application-submitted"))
         .andExpect(status().isFound())
@@ -54,8 +53,7 @@ public class SubmittedControllerTest {
   }
 
   @Test
-  public void showDeclaration_givenInvalidState_ShouldRedirectBackToStart() throws Exception {
-
+  public void show_givenInvalidState_ShouldRedirectBackToStart() throws Exception {
     mockMvc
         .perform(get("/application-submitted"))
         .andExpect(status().isFound())

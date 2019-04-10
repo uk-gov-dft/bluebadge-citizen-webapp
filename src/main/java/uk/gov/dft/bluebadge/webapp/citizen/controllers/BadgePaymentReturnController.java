@@ -3,7 +3,9 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
+import com.google.common.collect.ImmutableMap;
 import javax.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +24,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.PaymentService;
 
 @Controller
 @RequestMapping(Mappings.URL_BADGE_PAYMENT_RETURN)
+@Slf4j
 public class BadgePaymentReturnController implements StepController {
 
   private final ApplicationManagementService applicationService;
@@ -47,17 +50,38 @@ public class BadgePaymentReturnController implements StepController {
       @Valid @ModelAttribute(FORM_REQUEST) BadgePaymentReturnForm formRequest) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
-      return routeMaster.backToCompletedPrevious();
+      return routeMaster.backToCompletedPrevious(journey);
     }
 
     if (journey.getPaymentJourneyUuid() == null) {
       return "redirect:" + Mappings.URL_NOT_PAID;
     }
-    PaymentStatusResponse paymentStatusResponse =
-        paymentService.retrievePaymentStatus(journey.getPaymentJourneyUuid());
-    journey.setPaymentStatusResponse(paymentStatusResponse);
+    try {
+      PaymentStatusResponse paymentStatusResponse =
+          paymentService.retrievePaymentStatus(journey.getPaymentJourneyUuid());
+      journey.setPaymentStatusResponse(paymentStatusResponse);
+    } catch (Exception ex) {
+      PaymentStatusResponse unknownResponse =
+          PaymentStatusResponse.builder()
+              .data(
+                  ImmutableMap.of(
+                      "paymentJourneyUuid",
+                      journey.getPaymentJourneyUuid(),
+                      "status",
+                      "unknown",
+                      "reference",
+                      "Unknown"))
+              .build();
+      journey.setPaymentStatusResponse(unknownResponse);
+    }
 
-    if (journey.isPaymentSuccessful()) {
+    log.info(
+        "Payment response. Status code [{}], reference [{}], journey uuid [{}]",
+        journey.getPaymentStatus(),
+        journey.getPaymentReference(),
+        journey.getPaymentJourneyUuid());
+
+    if (journey.isPaymentSuccessful() || journey.isPaymentStatusUnknown()) {
       applicationService.create(JourneyToApplicationConverter.convert(journey));
     }
     return routeMaster.redirectToOnSuccess(formRequest, journey);

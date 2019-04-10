@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentStatusResponse;
@@ -25,6 +26,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.BadgePaymentForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.DateOfBirthForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.HealthConditionsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
@@ -41,9 +43,9 @@ public class Journey implements Serializable {
   public static final String SEPARATOR = "\n- - - - - - - - - - - - - - - - -\n";
 
   private Map<StepDefinition, StepForm> forms = new HashMap<>();
-  public String who;
-  public String ageGroup;
-  public String walkingAid;
+  @Getter private String who;
+  @Getter private String ageGroup;
+  @Getter private String walkingAid;
 
   private LocalAuthorityRefData localAuthority;
 
@@ -76,6 +78,16 @@ public class Journey implements Serializable {
         && "success".equalsIgnoreCase(paymentStatusResponse.getStatus());
   }
 
+  public boolean isPaymentStatusUnknown() {
+    return paymentStatusResponse != null
+        && "unknown".equalsIgnoreCase(paymentStatusResponse.getStatus());
+  }
+
+  public boolean isChosenToPay() {
+    BadgePaymentForm form = (BadgePaymentForm) getFormForStep(StepDefinition.BADGE_PAYMENT);
+    return (form != null ? form.isPayNow() : false);
+  }
+
   public void setFormForStep(StepForm form) {
     // If changing values in a form may need to invalidate later forms in the journey
     boolean doCleanUp =
@@ -98,7 +110,7 @@ public class Journey implements Serializable {
   }
 
   @SuppressWarnings("unchecked")
-  public <T> T getFormForStep(StepDefinition step) {
+  public <T extends StepForm> T getFormForStep(StepDefinition step) {
     return (T) forms.get(step);
   }
 
@@ -111,6 +123,7 @@ public class Journey implements Serializable {
     return formForStep;
   }
 
+  // This should not be within the journey class. See BBB-1347
   private void cleanUpSteps(Set<StepDefinition> alreadyCleaned, Set<StepDefinition> steps) {
 
     if (null == steps) {

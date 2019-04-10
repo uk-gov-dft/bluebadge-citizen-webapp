@@ -24,7 +24,7 @@ public class DisabilityForm implements Serializable, StepForm {
   }
 
   @Override
-  public Optional<StepDefinition> determineNextStep() {
+  public Optional<StepDefinition> determineNextStep(Journey journey) {
     if (hasDisability) {
       return Optional.of(StepDefinition.ELIGIBLE);
     }
