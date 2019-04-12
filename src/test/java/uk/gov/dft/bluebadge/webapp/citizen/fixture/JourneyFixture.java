@@ -136,13 +136,15 @@ public class JourneyFixture {
     public static final String TOWN_OR_CITY = "London";
     public static final String CONTACT_NAME = "Contact Name";
     public static final String POSTCODE = "BR4 9NA";
-    public static final String PRIMARY_PHONE_NO = "01270646362";
+    public static final String PRIMARY_PHONE_NO = " 0 1 27 064 6362";
+    public static final String PRIMARY_PHONE_NO_TRIMMED = "01270646362";
     static final String WHERE_WALK_DESTINATION = "London";
     static final String WHERE_WALK_TIME = "10 minutes";
     static final String WHAT_WALKING_SOME_ELSE_DESC = "Some description of walking";
     static final String BREATHLESSNESS_OTHER_DESC = "Some description of breathlessness";
     public static final String DOB_AS_EQUAL_TO_STRING = "1990-01-01";
-    public static final String SECONDARY_PHONE_NO = "07970123456";
+    public static final String SECONDARY_PHONE_NO = "+4479 701 23456 ";
+    public static final String SECONDARY_PHONE_NO_TRIMMED = "+447970123456";
     public static final String EMAIL_ADDRESS = "a@b.c";
     static final String HEALTHCARE_PRO_LOCATION = "location";
     static final String HEALTHCARE_PRO_NAME = "name";
