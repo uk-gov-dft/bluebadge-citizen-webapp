@@ -17,9 +17,10 @@ public class ContactConverterTest {
     assertThat(contact.getPostCode()).isEqualTo(JourneyFixture.Values.POSTCODE);
     assertThat(contact.getTownCity()).isEqualTo(JourneyFixture.Values.TOWN_OR_CITY);
     assertThat(contact.getFullName()).isEqualTo(JourneyFixture.Values.CONTACT_NAME);
-    assertThat(contact.getPrimaryPhoneNumber()).isEqualTo(JourneyFixture.Values.PRIMARY_PHONE_NO);
+    assertThat(contact.getPrimaryPhoneNumber())
+        .isEqualTo(JourneyFixture.Values.PRIMARY_PHONE_NO_TRIMMED);
     assertThat(contact.getSecondaryPhoneNumber())
-        .isEqualTo(JourneyFixture.Values.SECONDARY_PHONE_NO);
+        .isEqualTo(JourneyFixture.Values.SECONDARY_PHONE_NO_TRIMMED);
     assertThat(contact.getEmailAddress()).isEqualTo(JourneyFixture.Values.EMAIL_ADDRESS);
   }
 }
