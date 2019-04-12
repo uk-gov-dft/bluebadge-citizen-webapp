@@ -12,6 +12,7 @@ import org.springframework.security.oauth2.client.token.grant.client.ClientCrede
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import uk.gov.dft.bluebadge.common.api.common.ServiceConfiguration;
+import uk.gov.dft.bluebadge.common.api.common.VersionHeaderRestTemplateInterceptor;
 import uk.gov.dft.bluebadge.common.logging.LoggingAspect;
 import uk.gov.dft.bluebadge.webapp.citizen.client.CommonResponseErrorHandler;
 
@@ -88,11 +89,7 @@ public class ApiConfig {
     oAuth2RestTemplate.setErrorHandler(commonResponseErrorHandler());
     oAuth2RestTemplate
         .getInterceptors()
-        .add(
-            (request, body, execution) -> {
-              request.getHeaders().set("Accept", apiConfig.getVersionaccept());
-              return execution.execute(request, body);
-            });
+        .add(new VersionHeaderRestTemplateInterceptor(apiConfig.getVersionaccept()));
     return oAuth2RestTemplate;
   }
 
