@@ -78,8 +78,8 @@ public class ContactDetailsSteps extends AbstractSpringSteps {
       commonPage.clearAndSendKeys(ContactDetailsPage.FULL_NAME, "Test Contact");
     }
 
-    commonPage.clearAndSendKeys(ContactDetailsPage.PRIMARY_CONTACT_NUMBER, "020 12212123");
-    commonPage.clearAndSendKeys(ContactDetailsPage.SECONDARY_CONTACT_NUMBER, "078 13345456");
+    commonPage.clearAndSendKeys(ContactDetailsPage.PRIMARY_CONTACT_NUMBER, " 020 1221 2123 ");
+    commonPage.clearAndSendKeys(ContactDetailsPage.SECONDARY_CONTACT_NUMBER, " +44 78 133 45456 ");
     commonPage.clearAndSendKeys(ContactDetailsPage.EMAIL_ADDRESS, "test@testmail.com");
 
     commonSteps.iClickOnContinueButton();

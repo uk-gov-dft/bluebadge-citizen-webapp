@@ -19,7 +19,7 @@ public class WalkingTimeSteps extends AbstractSpringSteps {
   }
 
   @And(
-      "^I validate walking time page for a \"([^\"]*)\" application for \"(CANTWALK|LESSMIN|FEWMIN|MORETEN)\"")
+      "^I validate walking time page for a \"([^\"]*)\" application for \"(CANTWALK|LESSMIN|ONEFIVE|FIVETEN|MORETEN)\"")
   public void iValidateWalkingTimePage(String applicant, String option) {
     verifyPageContent(applicant);
     commonSteps.iVerifyValidationMessage(WalkingTimePage.VALIDATION_MESSAGE_FOR_NO_OPTION);

@@ -23,7 +23,7 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate health conditions page for a "yourself" application
     And   I validate what makes walking difficult page for a "yourself" application for "PAIN"
     And   I validate the mobility aids page for a "yourself" application for "YES"
-    And   I validate walking time page for a "yourself" application for "FEWMIN"
+    And   I validate walking time page for a "yourself" application for "ONEFIVE"
     And   I validate where can you walk page for a "yourself" application
     And   I can click on the "Add supporting documents" link
     And   I validate the supporting documents page for a "yourself" application for "YES"
@@ -69,7 +69,7 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate health conditions page for a "yourself" application
     And   I validate what makes walking difficult page for a "yourself" application for "PAIN"
     And   I validate the mobility aids page for a "yourself" application for "YES"
-    And   I validate walking time page for a "yourself" application for "FEWMIN"
+    And   I validate walking time page for a "yourself" application for "FIVETEN"
     And   I validate where can you walk page for a "yourself" application
     And   I can click on the "Add supporting documents" link
     And   I validate the supporting documents page for a "yourself" application for "YES"
