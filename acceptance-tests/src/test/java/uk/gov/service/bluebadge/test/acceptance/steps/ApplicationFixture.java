@@ -313,7 +313,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
-  @And("^I complete the walking time page with option \"(CANTWALK|LESSMIN|FEWMIN|MORETEN)\"$")
+  @And(
+      "^I complete the walking time page with option \"(CANTWALK|LESSMIN|ONEFIVE|FIVETEN|MORETEN)\"$")
   public void iCompleteTheWalkingTimePage(String option) {
     if ("CANTWALK".equals(option)) {
       commonPage.selectRadioButton(Ids.Walkd.WALKING_TIME);
