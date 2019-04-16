@@ -322,7 +322,7 @@ public class Journey implements Serializable {
       WhereCanYouWalkForm whereCanYouWalkForm = getFormForStep(StepDefinition.WHERE_CAN_YOU_WALK);
       descriptionOfCondition
           .append(SEPARATOR)
-          .append("Able to walk to and from:\n")
+          .append("Able to walk from and to:\n")
           .append(whereCanYouWalkForm.getDestinationToHome())
           .append(SEPARATOR)
           .append("How long it takes:\n")
