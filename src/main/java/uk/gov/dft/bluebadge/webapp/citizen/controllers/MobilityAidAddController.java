@@ -51,11 +51,11 @@ public class MobilityAidAddController implements StepController {
         "howProvidedOptions",
         new RadioOptionsGroup.Builder()
             .titleIsLabel()
-            .titleMessageKeyApplicantAware("mobilityaid.howprovided.optiongroup.title", journey)
+            .titleMessageKey("mobilityaid.howprovided.optiongroup.title")
+            .addOption(HowProvidedCodeField.PERSON, "mobilityaid.howprovided.option.person")
             .addOption(HowProvidedCodeField.PRESCRIBE, "mobilityaid.howprovided.option.prescribed")
             .addOption(HowProvidedCodeField.PRIVATE, "mobilityaid.howprovided.option.private")
             .addOption(HowProvidedCodeField.SOCIAL, "mobilityaid.howprovided.option.social")
-            .addOption(HowProvidedCodeField.PERSON, "mobilityaid.howprovided.option.person")
             .build());
     return TEMPLATE;
   }

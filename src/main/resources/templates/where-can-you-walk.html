@@ -18,7 +18,7 @@
                         <h1 class="govuk-fieldset__heading" th:text="#{${JOURNEY.who} + 'whereCanYouWalkPage.content.title'}"></h1>
                     </legend>
 
-                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + ${JOURNEY.walkingAid} + 'whereCanYouWalkPage.destinationToHome.field.label'}, 'destinationToHome', #{whereCanYouWalkPage.destinationToHome.field.hint}, 'text', null)}"></div>
+                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + ${JOURNEY.walkingAid} + 'whereCanYouWalkPage.destinationToHome.field.label'}, 'destinationToHome', #{${JOURNEY.who} + 'whereCanYouWalkPage.destinationToHome.field.hint'}, 'text', null)}"></div>
 
                     <div th:replace="~{ fragments/govuk-input :: govuk-input(#{${JOURNEY.who} + 'whereCanYouWalkPage.timeToDestination.field.label'}, 'timeToDestination', #{whereCanYouWalkPage.timeToDestination.field.hint}, 'text', null)}"></div>
 
