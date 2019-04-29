@@ -95,11 +95,12 @@ node {
             )
 
             timeout(time: 20, unit: 'MINUTES') {
-                withEnv(["BASE_SELENIUM_URL=http://localhost:8780"]) {
+                withEnv(["BASE_SELENIUM_URL=http://localhost:8780", "BASE_MANAGEMENT_URL=http://localhost:8781"]) {
                   withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_TOKEN')]) {
                     try {
                         sh '''
                           echo " Base Selenium URL is $BASE_SELENIUM_URL"
+                          echo " Base Management URL is $BASE_MANAGEMENT_URL"
                           cd acceptance-tests
                           curl -s -o run-regression-script.sh -H "Authorization: token ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.v3.raw' -O -L https://raw.githubusercontent.com/uk-gov-dft/shell-scripts/master/run-regression.sh
 
