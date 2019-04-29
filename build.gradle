@@ -158,6 +158,7 @@ dependencies {
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth', version: '2.0.2.RELEASE'
     compile('org.owasp.esapi:esapi:2.1.0')
     compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.385'
+    compile group: 'redis.clients', name: 'jedis', version: '3.0.1'
 
     compileOnly ('org.projectlombok:lombok:1.16.22')
 

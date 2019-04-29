@@ -30,6 +30,15 @@ blue-badge:
       requesttimeout: 6000
       contextpath: /uk-gov-dft/payment-service/1.0.0
       versionaccept: application/vnd.bluebadge-api.v1+json
+  cryptoservice:
+    servicehost:
+      host: localhost
+      port: 9180
+      scheme: http
+      connectiontimeout: 6000
+      requesttimeout: 6000
+      contextpath: /uk-gov-dft/crypto-service/1.0.0
+      versionaccept: application/vnd.bluebadge-api.v1+json
   env: ${bb_env:dev}
   defaultDifferentServiceSignpostUrl: https://bluebadge.direct.gov.uk/bluebadge/why-are-you-here
 
@@ -100,3 +109,8 @@ GACode:  ${GACODE:UA-124760983-5}
 amazon:
   s3bucket: uk-gov-dft-dev-applications-temp
   signed-url-duration-ms: 60000
+session:
+  save-expires-after-hours: 168
+  save-code-expires-after-mins: 30
+  save-submit-throttle-time-mins: 5
+  save-submit-throttle-tries: 3
