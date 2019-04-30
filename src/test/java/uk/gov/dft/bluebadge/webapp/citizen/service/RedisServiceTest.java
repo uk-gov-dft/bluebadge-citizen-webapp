@@ -18,10 +18,4 @@ public class RedisServiceTest {
     MockitoAnnotations.initMocks(this);
     service = new RedisService(mockJedis, new RedisSessionConfig());
   }
-
-  @Test
-  public void getJourneySaveForReturnKey() {
-    String key = service.getJourneySaveForReturnKey("bob@email.com");
-    assertThat(key).isEqualTo("bob@email.com:citizen-application:save-and-return-journey");
-  }
 }

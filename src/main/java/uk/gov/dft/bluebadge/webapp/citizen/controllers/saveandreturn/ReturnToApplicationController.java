@@ -1,6 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.saveandreturn;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -8,27 +9,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.StepController;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
-import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantNameForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveAndReturnForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveAndReturnJourney;
 import uk.gov.dft.bluebadge.webapp.citizen.service.CryptoService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.CryptoVersionException;
+import uk.gov.dft.bluebadge.webapp.citizen.service.MessageService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.RedisService;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.Random;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.errorhandler.ErrorControllerAdvice.REDIRECT;
-import static uk.gov.dft.bluebadge.webapp.citizen.controllers.saveandreturn.EnterCodeController.getVersionCookie;
-import static uk.gov.dft.bluebadge.webapp.citizen.controllers.saveandreturn.SaveAndReturnController.SAVE_AND_RETURN_JOURNEY_KEY;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.CODE;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.EMAIL_TRIES;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.JOURNEY;
 
 @Controller
 @Slf4j
@@ -39,22 +37,28 @@ public class ReturnToApplicationController implements SaveAndReturnController {
   public static final String FORM_REQUEST = "formRequest";
   private final CryptoService cryptoService;
   private final RedisService redisService;
+  private MessageService messageService;
+  private Random random = new Random();
 
-
-  public ReturnToApplicationController(CryptoService cryptoService, RedisService redisService) {
+  public ReturnToApplicationController(
+      CryptoService cryptoService, RedisService redisService, MessageService messageService) {
     this.cryptoService = cryptoService;
     this.redisService = redisService;
+    this.messageService = messageService;
   }
 
   @GetMapping
-  public String show(Model model, @ModelAttribute(SAVE_AND_RETURN_JOURNEY_KEY) SaveAndReturnJourney saveAndReturnJourney) {
+  public String show(
+      Model model,
+      @ModelAttribute(SAVE_AND_RETURN_JOURNEY_KEY) SaveAndReturnJourney saveAndReturnJourney) {
 
-    if(null == saveAndReturnJourney.getSaveAndReturnForm()){
-      saveAndReturnJourney.setSaveAndReturnForm(SaveAndReturnForm.builder().build());
+    if (!model.containsAttribute(FORM_REQUEST)
+        && null != saveAndReturnJourney.getSaveAndReturnForm()) {
+      model.addAttribute(FORM_REQUEST, saveAndReturnJourney.getSaveAndReturnForm());
     }
 
-    if(!model.containsAttribute(FORM_REQUEST)){
-      model.addAttribute(FORM_REQUEST, saveAndReturnJourney.getSaveAndReturnForm());
+    if (!model.containsAttribute(FORM_REQUEST)) {
+      model.addAttribute(FORM_REQUEST, SaveAndReturnForm.builder().build());
     }
 
     return TEMPLATE;
@@ -62,53 +66,75 @@ public class ReturnToApplicationController implements SaveAndReturnController {
 
   @PostMapping
   public String submit(
-      @ModelAttribute("saveAndReturnJourney") SaveAndReturnJourney journey,
+      @ModelAttribute(SAVE_AND_RETURN_JOURNEY_KEY) SaveAndReturnJourney saveAndReturnJourney,
       @Valid @ModelAttribute(FORM_REQUEST) SaveAndReturnForm saveAndReturnForm,
-      HttpServletRequest request,
-      HttpServletResponse response,
       BindingResult bindingResult,
+      HttpServletResponse response,
       RedirectAttributes attr) {
 
     if (bindingResult.hasErrors()) {
-      return redirectToOnBindingError(Mappings.URL_RETURN_TO_APPLICATION, saveAndReturnForm, bindingResult, attr);
+      return redirectToOnBindingError(
+          Mappings.URL_RETURN_TO_APPLICATION, saveAndReturnForm, bindingResult, attr);
     }
 
+    saveAndReturnJourney.setSaveAndReturnForm(saveAndReturnForm);
+
     String emailAddress = saveAndReturnForm.getEmailAddress();
-    Long postCount = redisService.incrementEmailPostCount(emailAddress);
+    Long postCount = redisService.incrementAndSetExpiryIfNew(EMAIL_TRIES, emailAddress);
     // If email address matches a saved journey then send email and security code.
     // Don't do anything if throttle exceeded.
     // Else just redirect.
-    if (redisService.journeyExistsForEmail(emailAddress) && !redisService.emailPostLimitExceeded(postCount)) {
+    if (redisService.exists(JOURNEY, emailAddress) && !redisService.throttleExceeded(postCount)) {
 
       // Generate and store security code.
       // Use same code for 30 mins and don't regenerate. (Send email repeatedly though).
-      String code;
-      if(redisService.securityCodeExistsForEmail(saveAndReturnForm.getEmailAddress())){
-        code = redisService.getCodeOnReturn(saveAndReturnForm.getEmailAddress());
-      }else {
-        code = redisService.setCodeForReturn(
-            saveAndReturnForm.getEmailAddress());
-      }
+      String code = getOrCreateSecurityCode(emailAddress);
 
-      // TODO
       // Send email with code.
-      // TODO remove me!!!!! (Without email address context fairly useless though).
-      log.info("Save and return code {}", code);
+      messageService.sendReturnToApplicationCodeEmail(
+          code, emailAddress, redisService.getExpiryTimeFormatted(CODE, emailAddress));
 
-      // Retrieve the stored session
-      // Validate it's version
+      // Validate stored session version
       // If version does not match set version cookie.
       try {
         // TODO Api version
         cryptoService.checkEncryptedJourneyVersion(
-            redisService.getEncryptedJourneyOnReturn(
-                saveAndReturnJourney().getSaveAndReturnForm().getEmailAddress()),
-            "1.0.0");
+            redisService.get(JOURNEY, emailAddress), "1.0.0");
       } catch (CryptoVersionException e) {
+        log.info("Switching citizen app version to {} via cookie.", e.getEncryptedVersion());
         response.addCookie(getVersionCookie(e.getEncryptedVersion()));
       }
     }
 
     return REDIRECT + Mappings.URL_ENTER_CODE;
+  }
+
+  /**
+   * A cookie to set to allow nginx to redirect to correct version of citizen webapp.
+   *
+   * @param version e.g. 1.0.1
+   * @return The cookie.
+   */
+  Cookie getVersionCookie(String version) {
+    Cookie cookie = new Cookie("BlueBadgeAppVersion", version);
+    cookie.setSecure(true);
+    cookie.setHttpOnly(true);
+    // Default to domain creating cookie (us).
+    // cookie.setDomain("uk-gov-dft.gov.uk");
+    return cookie;
+  }
+
+  String getOrCreateSecurityCode(String emailAddress) {
+    if (redisService.exists(CODE, emailAddress)) {
+      return redisService.get(CODE, emailAddress);
+    } else {
+      String code = generate4DigitCode();
+      redisService.setAndExpire(CODE, emailAddress, code);
+      return code;
+    }
+  }
+
+  String generate4DigitCode() {
+    return StringUtils.leftPad(String.valueOf(random.nextInt(9999)), 4, "0");
   }
 }

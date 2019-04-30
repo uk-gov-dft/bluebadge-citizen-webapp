@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.saveandreturn;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,10 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.StepController;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.EnterCodeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveAndReturnJourney;
@@ -21,17 +21,19 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.CryptoService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.CryptoVersionException;
 import uk.gov.dft.bluebadge.webapp.citizen.service.RedisService;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.errorhandler.ErrorControllerAdvice.REDIRECT;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.CODE;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.CODE_TRIES;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.JOURNEY;
 
+@Slf4j
 @Controller
 @RequestMapping(Mappings.URL_ENTER_CODE)
-public class EnterCodeController implements SaveAndReturnController, StepController {
+public class EnterCodeController implements SaveAndReturnController {
   private static final String TEMPLATE = "save-and-return/enter-code";
   public static final String FORM_REQUEST = "formRequest";
   private CryptoService cryptoService;
@@ -67,10 +69,10 @@ public class EnterCodeController implements SaveAndReturnController, StepControl
   public String submit(
       @ModelAttribute(SAVE_AND_RETURN_JOURNEY_KEY) SaveAndReturnJourney journey,
       @Valid @ModelAttribute(FORM_REQUEST) EnterCodeForm enterCodeForm,
-      HttpServletRequest request,
-      HttpServletResponse response,
       BindingResult bindingResult,
-      RedirectAttributes attr)
+      HttpServletRequest request,
+      RedirectAttributes attr,
+      SessionStatus sessionStatus)
       throws CryptoVersionException {
 
     if (bindingResult.hasErrors()) {
@@ -78,63 +80,60 @@ public class EnterCodeController implements SaveAndReturnController, StepControl
     }
 
     String emailAddress = journey.getSaveAndReturnForm().getEmailAddress();
-    boolean loadJourney =
-        redisService.journeyExistsForEmail(emailAddress);
-    Long postCount = redisService.incrementCodePostCount(emailAddress);
-    if (loadJourney && !redisService.emailCodeLimitExceeded(postCount)) {
-      // Check code.
-      String storedCode =
-          redisService.getCodeOnReturn(emailAddress);
-      if (StringUtils.isEmpty(storedCode)) {
-        loadJourney = false;
-      } else {
-        // Compare stored code to entered code
-        loadJourney = storedCode.equalsIgnoreCase(enterCodeForm.getCode().trim());
-      }
-    }
+    Long postCount = redisService.incrementAndSetExpiryIfNew(CODE_TRIES, emailAddress);
 
-    // Need the journey loaded from here...
-    Journey storedJourney = null;
-
-    if (loadJourney) {
-      // Check postcode
+    if (journeyExists(emailAddress)
+        && throttleNotExceeded(postCount)
+        && codesMatch(emailAddress, enterCodeForm.getCode())) {
       try {
-        storedJourney =
+        Journey storedJourney =
             cryptoService.decryptJourney(
-                redisService.getEncryptedJourneyOnReturn(
-                    emailAddress),
+                redisService.get(JOURNEY, emailAddress),
                 "1.0.0",
-                saveAndReturnJourney().getEnterCodeForm().getPostcode());
+                enterCodeForm.getPostcode());
+        sessionStatus.setComplete();
+        request.getSession().setAttribute(JOURNEY_SESSION_KEY, storedJourney);
+        return REDIRECT + Mappings.URL_TASK_LIST;
       } catch (CryptoPostcodeException e) {
-        loadJourney = false;
+        log.info(
+            "Attempt to return to application with postcode mismatch {} vs {}.",
+            e.getEnteredPostcode(),
+            e.getSavedPostcode());
       }
     }
 
-    if (loadJourney) {
-      request.getSession().setAttribute(JOURNEY_SESSION_KEY, storedJourney);
-      return REDIRECT + Mappings.URL_TASK_LIST;
-    }else{
-      bindingResult.reject("enter.code.no.applications");
-      return redirectToOnBindingError(Mappings.URL_ENTER_CODE, enterCodeForm, bindingResult, attr);
+    // Reject - could not load/find saved session
+    bindingResult.reject("enter.code.no.applications");
+    return redirectToOnBindingError(Mappings.URL_ENTER_CODE, enterCodeForm, bindingResult, attr);
+  }
+
+  boolean journeyExists(String emailAddress) {
+    if (!redisService.exists(JOURNEY, emailAddress)) {
+      log.info("Attempt to return to application when no saved app existed for email address");
+      return false;
     }
+    return true;
   }
 
-  @Override
-  public StepDefinition getStepDefinition() {
-    return null;
+  boolean throttleNotExceeded(Long postCount) {
+    if (redisService.throttleExceeded(postCount)) {
+      log.info("Too many tries posting 4-digit code to retrieve application.");
+      return false;
+    }
+    return true;
   }
 
-  /**
-   * A cookie to set to allow nginx to redirect to correct version of citizen webapp.
-   *
-   * @param version e.g. 1.0.1
-   * @return The cookie.
-   */
-  public static Cookie getVersionCookie(String version) {
-    Cookie cookie = new Cookie("BlueBadgeAppVersion", version);
-    cookie.setSecure(true);
-    cookie.setHttpOnly(true);
-    cookie.setDomain("uk-gov-dft.gov.uk");
-    return cookie;
+  boolean codesMatch(String emailAddress, String enteredCode) {
+    String storedCode = redisService.get(CODE, emailAddress);
+    if (StringUtils.isEmpty(storedCode)) {
+      log.info(
+          "Attempt to return to application when no 4-digit code stored in redis for email address.");
+      return false;
+    }
+    if (!storedCode.equalsIgnoreCase(enteredCode.trim())) {
+      log.info("Attempt to return to application when stored code did not match entered code.");
+      return false;
+    }
+    return true;
   }
 }

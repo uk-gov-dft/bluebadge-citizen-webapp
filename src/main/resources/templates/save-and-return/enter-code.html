@@ -16,7 +16,9 @@
             <form th:action="@{/enter-code}" th:object="${formRequest}" method="POST" novalidate>
 
                 <div class="govuk-inset-text">
-                    <p class="govuk-body" th:text="#{enter.code.title.hint.prefix} + ${emailAddress} + #{enter.code.title.hint.prefix}"></p>
+                    <span class="govuk-body" th:text="#{enter.code.title.hint.prefix}"></span>
+                    <b th:text="${emailAddress} + '.'"></b>
+                    <span class="govuk-body" th:text="#{enter.code.title.hint.suffix}"></span>
                 </div>
 
                 <div th:replace="~{ fragments/govuk-input :: govuk-input(#{enter.code.postcode.label}, 'postcode', #{enter.code.postcode.hint}, 'text', null)}"></div>

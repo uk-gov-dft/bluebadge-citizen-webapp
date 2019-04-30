@@ -18,6 +18,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveApplicationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.CryptoService;
+import uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys;
 import uk.gov.dft.bluebadge.webapp.citizen.service.RedisService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +26,7 @@ import javax.validation.Valid;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.errorhandler.ErrorControllerAdvice.REDIRECT;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.JOURNEY;
 
 @Slf4j
 @Controller
@@ -77,7 +79,7 @@ public class SaveApplicationController implements StepController, SaveAndReturnC
     }
 
     String cipher = cryptoService.encryptJourney(journey, saveApplicationForm.getPostcode());
-    redisService.setEncryptedJourneyForReturn(saveApplicationForm.getEmailAddress(), cipher);
+    redisService.setAndExpire(JOURNEY, saveApplicationForm.getEmailAddress(), cipher);
     log.info("Session saved for return.");
     return REDIRECT + Mappings.URL_TASK_LIST;
   }

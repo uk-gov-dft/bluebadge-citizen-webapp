@@ -46,7 +46,6 @@ public class CryptoService {
   public void checkEncryptedJourneyVersion(String cipherText, String appVersion) throws CryptoVersionException {
     DecryptionData decryptionData = apiClient.decrypt(cipherText);
     String encryptedVersion = decryptionData.getEncryptionContext().get(VERSION_CONTEXT_KEY);
-    String encryptedPostcode = decryptionData.getEncryptionContext().get(POSTCODE_CONTEXT_KEY);
     if (!appVersion.equalsIgnoreCase(encryptedVersion)) {
       throw new CryptoVersionException(encryptedVersion, encryptedVersion, appVersion);
     }
@@ -55,7 +54,8 @@ public class CryptoService {
   public Journey decryptJourney(String cipherText, String appVersion, String postcode)
       throws CryptoVersionException, CryptoPostcodeException {
     Assert.notNull(appVersion, "App version required.");
-    Assert.notNull(postcode, "Postcode required.  Overload method if not required.");
+    Assert.notNull(postcode, "Postcode required.  Overload method if check not required.");
+
     DecryptionData decryptionData = apiClient.decrypt(cipherText);
     String encryptedVersion = decryptionData.getEncryptionContext().get(VERSION_CONTEXT_KEY);
     String encryptedPostcode = decryptionData.getEncryptionContext().get(POSTCODE_CONTEXT_KEY);
