@@ -19,7 +19,8 @@
                     <p class="govuk-body" th:text="#{return.to.application.title.hint}"></p>
                 </div>
 
-                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{save.application.email.label}, 'emailAddress', #{return.to.application.email.hint}, 'text', null)}"></div>
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{save.application.email.label}, 'emailAddress', null, 'text', null)}"></div>
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{save.application.postcode.label}, 'postcode', null, 'text', null)}"></div>
 
                 <button type="submit"
                         class="govuk-button"

@@ -3,6 +3,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import redis.clients.jedis.Jedis;
 import uk.gov.dft.bluebadge.common.service.exception.InternalServerException;
 import uk.gov.dft.bluebadge.webapp.citizen.config.RedisSessionConfig;
@@ -95,23 +96,39 @@ public class RedisService {
     return jedis.get(getJourneySaveForReturnKey(emailAddress));
   }
 
-  public void incrementEmailPostCount(String emailAddress){
+  public Long incrementEmailPostCount(String emailAddress){
     String key = getEmailSubmitCountKey(emailAddress);
-    boolean exists = jedis.exists(key);
-    jedis.incr(key);
 
-    // If new expiry, then set window.
-    if(!exists){
+    Long count = jedis.incr(key);
+
+    // If new count, then set expiry window.
+    if(count.equals(1L)){
       jedis.expire(key, redisSessionConfig.getSaveSubmitThrottleTimeMins() * 60);
     }
+    return count;
   }
 
-  public boolean emailPostLimitExceeded(String emailAddress){
-    // TODO !!!! get Long
-    return jedis.get(getEmailSubmitCountKey(emailAddress))
+  public boolean emailPostLimitExceeded(Long count){
+    Assert.notNull(count, "Count cant be null.");
+    return redisSessionConfig.getSaveSubmitThrottleTries() <= count.intValue();
   }
 
-  public int createOrIncrementSecurityCodePostCount(String emailAddress){
+  public Long incrementCodePostCount(String emailAddress){
+    String key = getCodeSubmitCountKey(emailAddress);
 
+    Long count = jedis.incr(key);
+
+    // If new count, then set expiry window.
+    if(count.equals(1L)){
+      jedis.expire(key, redisSessionConfig.getSaveSubmitThrottleTimeMins() * 60);
+    }
+    return count;
   }
+
+  public boolean emailCodeLimitExceeded(Long count){
+    Assert.notNull(count, "Count cant be null.");
+    return redisSessionConfig.getSaveSubmitThrottleTries() <= count.intValue();
+  }
+
+
 }

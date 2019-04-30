@@ -73,10 +73,13 @@ public class ReturnToApplicationController implements SaveAndReturnController {
       return redirectToOnBindingError(Mappings.URL_RETURN_TO_APPLICATION, saveAndReturnForm, bindingResult, attr);
     }
 
+    String emailAddress = saveAndReturnForm.getEmailAddress();
+    Long postCount = redisService.incrementEmailPostCount(emailAddress);
     // If email address matches a saved journey then send email and security code.
+    // Don't do anything if throttle exceeded.
     // Else just redirect.
-    if (redisService.journeyExistsForEmail(
-        saveAndReturnForm.getEmailAddress())) {
+    if (redisService.journeyExistsForEmail(emailAddress) && !redisService.emailPostLimitExceeded(postCount)) {
+
       // Generate and store security code.
       // Use same code for 30 mins and don't regenerate. (Send email repeatedly though).
       String code;
@@ -96,7 +99,8 @@ public class ReturnToApplicationController implements SaveAndReturnController {
       // Validate it's version
       // If version does not match set version cookie.
       try {
-        cryptoService.decryptJourney(
+        // TODO Api version
+        cryptoService.checkEncryptedJourneyVersion(
             redisService.getEncryptedJourneyOnReturn(
                 saveAndReturnJourney().getSaveAndReturnForm().getEmailAddress()),
             "1.0.0");

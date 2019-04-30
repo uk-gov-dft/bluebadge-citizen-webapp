@@ -1,9 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.saveandreturn;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.common.util.SerializationUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,22 +14,22 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.StepController;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveAndReturnForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveApplicationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.CryptoService;
-import uk.gov.dft.bluebadge.webapp.citizen.service.CryptoVersionException;
 import uk.gov.dft.bluebadge.webapp.citizen.service.RedisService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import java.util.Base64;
-
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.errorhandler.ErrorControllerAdvice.REDIRECT;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
+@Slf4j
 @Controller
 @RequestMapping("/save-application")
-public class SaveApplicationController implements StepController {
+public class SaveApplicationController implements StepController, SaveAndReturnController {
   private static final String TEMPLATE = "save-and-return/save-application";
   public static final String FORM_REQUEST = "formRequest";
   private RedisService redisService;
@@ -46,25 +44,41 @@ public class SaveApplicationController implements StepController {
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
-    model.addAttribute("formRequest", SaveAndReturnForm.builder().build());
+    if (!model.containsAttribute("formRequest")) {
+      ContactDetailsForm contactDetailsForm =
+          journey.getFormForStep(StepDefinition.CONTACT_DETAILS);
+      EnterAddressForm enterAddressForm = journey.getFormForStep(StepDefinition.ADDRESS);
+      String postcode = null;
+      String emailAddress = null;
+      if (null != enterAddressForm && null != enterAddressForm.getPostcode()) {
+        postcode = enterAddressForm.getPostcode();
+      }
+      if (null != contactDetailsForm && null != contactDetailsForm.getEmailAddress()) {
+        emailAddress = contactDetailsForm.getEmailAddress();
+      }
+      model.addAttribute(
+          "formRequest",
+          SaveApplicationForm.builder().emailAddress(emailAddress).postcode(postcode).build());
+    }
+
     return TEMPLATE;
   }
 
   @PostMapping
   public String submit(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute(FORM_REQUEST) SaveAndReturnForm saveAndReturnForm,
+      @Valid @ModelAttribute(FORM_REQUEST) SaveApplicationForm saveApplicationForm,
       HttpServletRequest request,
       BindingResult bindingResult,
-      RedirectAttributes attr) throws CryptoVersionException {
+      RedirectAttributes attr) {
 
-journey.setPaymentJourneyUuid("AWSE");
-    String cipher = cryptoService.encryptJourney(journey);
-    redisService.setEncryptedJourneyForReturn(saveAndReturnForm.getEmailAddress(), cipher);
-//redisService.setEncryptedJourneyForReturn(saveAndReturnForm.getEmailAddress(), Base64.getEncoder().encodeToString(SerializationUtils.serialize(journey)));
-    Journey read = cryptoService.decryptJourney(redisService.getEncryptedJourneyOnReturn(saveAndReturnForm.getEmailAddress()), "1.0.0");
+    if (bindingResult.hasErrors()) {
+      return redirectToOnBindingError(Mappings.URL_RETURN_TO_APPLICATION, saveApplicationForm, bindingResult, attr);
+    }
 
-    request.getSession().setAttribute(JOURNEY_SESSION_KEY, read);
+    String cipher = cryptoService.encryptJourney(journey, saveApplicationForm.getPostcode());
+    redisService.setEncryptedJourneyForReturn(saveApplicationForm.getEmailAddress(), cipher);
+    log.info("Session saved for return.");
     return REDIRECT + Mappings.URL_TASK_LIST;
   }
 

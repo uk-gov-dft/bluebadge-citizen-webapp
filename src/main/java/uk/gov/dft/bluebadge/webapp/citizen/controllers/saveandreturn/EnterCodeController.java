@@ -16,6 +16,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.EnterCodeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveAndReturnJourney;
+import uk.gov.dft.bluebadge.webapp.citizen.service.CryptoPostcodeException;
 import uk.gov.dft.bluebadge.webapp.citizen.service.CryptoService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.CryptoVersionException;
 import uk.gov.dft.bluebadge.webapp.citizen.service.RedisService;
@@ -59,56 +60,63 @@ public class EnterCodeController implements SaveAndReturnController, StepControl
     model.addAttribute(
         "emailAddress", saveAndReturnJourney.getSaveAndReturnForm().getEmailAddress());
 
-
     return TEMPLATE;
   }
 
   @PostMapping
   public String submit(
-      @ModelAttribute("saveAndReturnJourney") SaveAndReturnJourney journey,
+      @ModelAttribute(SAVE_AND_RETURN_JOURNEY_KEY) SaveAndReturnJourney journey,
       @Valid @ModelAttribute(FORM_REQUEST) EnterCodeForm enterCodeForm,
       HttpServletRequest request,
       HttpServletResponse response,
       BindingResult bindingResult,
-      RedirectAttributes attr) throws CryptoVersionException {
-
+      RedirectAttributes attr)
+      throws CryptoVersionException {
 
     if (bindingResult.hasErrors()) {
       return redirectToOnBindingError(Mappings.URL_ENTER_CODE, enterCodeForm, bindingResult, attr);
     }
 
-    boolean loadJourney = redisService.journeyExistsForEmail(journey.getSaveAndReturnForm().getEmailAddress());
-    if(loadJourney){
+    String emailAddress = journey.getSaveAndReturnForm().getEmailAddress();
+    boolean loadJourney =
+        redisService.journeyExistsForEmail(emailAddress);
+    Long postCount = redisService.incrementCodePostCount(emailAddress);
+    if (loadJourney && !redisService.emailCodeLimitExceeded(postCount)) {
       // Check code.
-      String storedCode = redisService.getCodeOnReturn(journey.getSaveAndReturnForm().getEmailAddress());
-      if(StringUtils.isEmpty(storedCode)){
+      String storedCode =
+          redisService.getCodeOnReturn(emailAddress);
+      if (StringUtils.isEmpty(storedCode)) {
         loadJourney = false;
-      }else{
+      } else {
         // Compare stored code to entered code
         loadJourney = storedCode.equalsIgnoreCase(enterCodeForm.getCode().trim());
       }
     }
 
     // Need the journey loaded from here...
-    Journey storedJourney;
+    Journey storedJourney = null;
 
-    if(loadJourney){
+    if (loadJourney) {
       // Check postcode
-      storedJourney =
-          cryptoService.decryptJourney(
-              redisService.getEncryptedJourneyOnReturn(
-                  saveAndReturnJourney().getSaveAndReturnForm().getEmailAddress()),
-              "1.0.0");
-
+      try {
+        storedJourney =
+            cryptoService.decryptJourney(
+                redisService.getEncryptedJourneyOnReturn(
+                    emailAddress),
+                "1.0.0",
+                saveAndReturnJourney().getEnterCodeForm().getPostcode());
+      } catch (CryptoPostcodeException e) {
+        loadJourney = false;
+      }
     }
 
     if (loadJourney) {
-
-
       request.getSession().setAttribute(JOURNEY_SESSION_KEY, storedJourney);
       return REDIRECT + Mappings.URL_TASK_LIST;
-}
-
+    }else{
+      bindingResult.reject("enter.code.no.applications");
+      return redirectToOnBindingError(Mappings.URL_ENTER_CODE, enterCodeForm, bindingResult, attr);
+    }
   }
 
   @Override

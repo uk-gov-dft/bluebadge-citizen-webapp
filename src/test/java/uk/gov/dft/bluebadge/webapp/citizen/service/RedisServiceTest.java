@@ -24,10 +24,4 @@ public class RedisServiceTest {
     String key = service.getJourneySaveForReturnKey("bob@email.com");
     assertThat(key).isEqualTo("bob@email.com:citizen-application:save-and-return-journey");
   }
-
-  @Test
-  public void get4DigitCode() {
-    int code = service.get4DigitCode("A relatively short string");
-    assertThat(code).isEqualTo(4112);
-  }
 }
