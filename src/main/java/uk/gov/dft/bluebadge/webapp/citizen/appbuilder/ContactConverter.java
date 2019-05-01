@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.appbuilder;
 
+import org.springframework.util.StringUtils;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Contact;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
@@ -20,8 +21,10 @@ class ContactConverter {
         .townCity(enterAddressForm.getTownOrCity())
         .postCode(enterAddressForm.getPostcode())
         .fullName(contactDetailsForm.getFullName())
-        .primaryPhoneNumber(contactDetailsForm.getPrimaryPhoneNumber())
-        .secondaryPhoneNumber(contactDetailsForm.getSecondaryPhoneNumber())
+        .primaryPhoneNumber(
+            StringUtils.trimAllWhitespace(contactDetailsForm.getPrimaryPhoneNumber()))
+        .secondaryPhoneNumber(
+            StringUtils.trimAllWhitespace(contactDetailsForm.getSecondaryPhoneNumber()))
         .emailAddress(contactDetailsForm.getEmailAddress())
         .build();
   }

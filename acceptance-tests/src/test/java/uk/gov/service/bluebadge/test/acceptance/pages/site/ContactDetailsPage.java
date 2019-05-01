@@ -3,8 +3,8 @@ package uk.gov.service.bluebadge.test.acceptance.pages.site;
 public class ContactDetailsPage {
 
   public static final String PAGE_URL = "/contact-details";
-  public static final String PAGE_TITLE = "What are your contact details?";
-  public static final String PAGE_TITLE_SOMEONE_ELSE = "What are their contact details?";
+  public static final String PAGE_TITLE = "Enter contact details";
+  public static final String PAGE_TITLE_SOMEONE_ELSE = "Enter contact details";
 
   public static final String VALIDATION_MESSAGE_FOR_EMPTY_PHONE_NUMBER =
       "Enter main contact number";
