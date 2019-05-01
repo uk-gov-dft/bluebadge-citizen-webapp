@@ -31,7 +31,7 @@ public class CommonPage {
     pagesElements.add(new CommonPageElements());
   }
 
-  private WebDriver getWebDriver() {
+  protected WebDriver getWebDriver() {
     return webDriverProvider.getWebDriver();
   }
 
