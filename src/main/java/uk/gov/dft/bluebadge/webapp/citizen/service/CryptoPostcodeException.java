@@ -3,7 +3,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.service;
 import lombok.Getter;
 
 @Getter
-public class CryptoPostcodeException extends Exception{
+public class CryptoPostcodeException extends Exception {
   private String savedPostcode;
   private final String enteredPostcode;
 

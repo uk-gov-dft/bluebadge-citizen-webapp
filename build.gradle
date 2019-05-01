@@ -203,6 +203,10 @@ test {
     }
 }
 
+springBoot {
+    buildInfo()
+}
+
 bootRun {
     sourceResources sourceSets.main
 }

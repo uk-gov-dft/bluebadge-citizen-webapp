@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.client.crypto;
 
+import java.util.Map;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,9 +16,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.crypto.model.DecryptionRequest
 import uk.gov.dft.bluebadge.webapp.citizen.client.crypto.model.DecryptionResponse;
 import uk.gov.dft.bluebadge.webapp.citizen.client.crypto.model.EncryptionRequest;
 import uk.gov.dft.bluebadge.webapp.citizen.client.crypto.model.EncryptionResponse;
-
-import java.util.Map;
-import java.util.Objects;
 
 @Slf4j
 @Service

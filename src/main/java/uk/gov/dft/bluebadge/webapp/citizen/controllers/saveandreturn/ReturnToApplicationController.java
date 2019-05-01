@@ -1,5 +1,14 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.saveandreturn;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.errorhandler.ErrorControllerAdvice.REDIRECT;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.CODE;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.EMAIL_TRIES;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.JOURNEY;
+
+import java.util.Random;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -17,16 +26,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.CryptoService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.CryptoVersionException;
 import uk.gov.dft.bluebadge.webapp.citizen.service.MessageService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.RedisService;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import java.util.Random;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.controllers.errorhandler.ErrorControllerAdvice.REDIRECT;
-import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.CODE;
-import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.EMAIL_TRIES;
-import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.JOURNEY;
 
 @Controller
 @Slf4j
@@ -90,7 +89,10 @@ public class ReturnToApplicationController implements SaveAndReturnController {
       // Use same code for 30 mins and don't regenerate. (Send email repeatedly though).
       String code = getOrCreateSecurityCode(emailAddress);
 
-      log.info("Save and return code:{}, expires: {}", code, redisService.getExpiryTimeFormatted(CODE, emailAddress));
+      log.info(
+          "Save and return code:{}, expires: {}",
+          code,
+          redisService.getExpiryTimeFormatted(CODE, emailAddress));
 
       // Send email with code.
       messageService.sendReturnToApplicationCodeEmail(
@@ -99,9 +101,7 @@ public class ReturnToApplicationController implements SaveAndReturnController {
       // Validate stored session version
       // If version does not match set version cookie.
       try {
-        // TODO Api version
-        cryptoService.checkEncryptedJourneyVersion(
-            redisService.get(JOURNEY, emailAddress), "1.0.0");
+        cryptoService.checkEncryptedJourneyVersion(redisService.get(JOURNEY, emailAddress));
       } catch (CryptoVersionException e) {
         log.info("Switching citizen app version to {} via cookie.", e.getEncryptedVersion());
         response.addCookie(getVersionCookie(e.getEncryptedVersion()));

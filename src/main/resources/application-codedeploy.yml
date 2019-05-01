@@ -16,6 +16,17 @@ blue-badge:
       host: payment-service.${bb_env}.${url}
       port: 443
       scheme: https
+  cryptoservice:
+    servicehost:
+      host: crypto-service.${bb_env}.${url}
+      port: 443
+      scheme: https
+  messageservice:
+    servicehost:
+      host: api.${bb_env}.${url}
+      port: 443
+      scheme: https
+      contextpath: /
 
 management:
   server:

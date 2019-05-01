@@ -1,5 +1,11 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.saveandreturn;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.errorhandler.ErrorControllerAdvice.REDIRECT;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.JOURNEY;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,15 +24,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveApplicationForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.CryptoService;
-import uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys;
 import uk.gov.dft.bluebadge.webapp.citizen.service.RedisService;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.controllers.errorhandler.ErrorControllerAdvice.REDIRECT;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.JOURNEY;
 
 @Slf4j
 @Controller
@@ -75,7 +73,8 @@ public class SaveApplicationController implements StepController, SaveAndReturnC
       RedirectAttributes attr) {
 
     if (bindingResult.hasErrors()) {
-      return redirectToOnBindingError(Mappings.URL_RETURN_TO_APPLICATION, saveApplicationForm, bindingResult, attr);
+      return redirectToOnBindingError(
+          Mappings.URL_RETURN_TO_APPLICATION, saveApplicationForm, bindingResult, attr);
     }
 
     String cipher = cryptoService.encryptJourney(journey, saveApplicationForm.getPostcode());

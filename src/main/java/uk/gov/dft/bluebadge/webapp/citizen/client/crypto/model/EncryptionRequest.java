@@ -1,11 +1,10 @@
 package uk.gov.dft.bluebadge.webapp.citizen.client.crypto.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Map;
+import javax.validation.constraints.NotEmpty;
 import lombok.Builder;
 import lombok.Data;
-
-import javax.validation.constraints.NotEmpty;
-import java.util.Map;
 
 @Data
 @Builder
@@ -21,6 +20,5 @@ public class EncryptionRequest {
    * decryption request is not an exact, case-sensitive match, the decrypt request fails. Only the
    * order of the encryption context pairs can vary.
    */
-  @JsonProperty
-  Map<String, String> context;
+  @JsonProperty Map<String, String> context;
 }

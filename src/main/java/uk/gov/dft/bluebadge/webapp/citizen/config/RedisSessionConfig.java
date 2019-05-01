@@ -25,7 +25,6 @@ public class RedisSessionConfig {
   @Value("${session.save-code-expires-after-mins:30}")
   private int saveSessionCodeDurationMins;
 
-
   @Value("${session.save-submit-throttle-time-mins:5}")
   private int saveSubmitThrottleTimeMins;
 

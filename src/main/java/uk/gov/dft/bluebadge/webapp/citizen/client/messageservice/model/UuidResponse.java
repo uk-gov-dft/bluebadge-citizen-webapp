@@ -5,9 +5,6 @@ import lombok.Data;
 import org.springframework.validation.annotation.Validated;
 import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
 
-import javax.validation.Valid;
-import java.util.Objects;
-
 /** UuidResponse */
 @Validated
 @Data

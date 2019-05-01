@@ -1,12 +1,11 @@
 package uk.gov.dft.bluebadge.webapp.citizen.service;
 
-import uk.gov.dft.bluebadge.common.service.exception.InternalServerException;
-
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+import uk.gov.dft.bluebadge.common.service.exception.InternalServerException;
 
 public enum RedisKeys {
   JOURNEY("%s:citizen-save-and-return-journey"),

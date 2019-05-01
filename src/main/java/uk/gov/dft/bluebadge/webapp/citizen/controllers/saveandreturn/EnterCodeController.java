@@ -1,5 +1,13 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.saveandreturn;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.errorhandler.ErrorControllerAdvice.REDIRECT;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.CODE;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.CODE_TRIES;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.JOURNEY;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +28,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.CryptoPostcodeException;
 import uk.gov.dft.bluebadge.webapp.citizen.service.CryptoService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.CryptoVersionException;
 import uk.gov.dft.bluebadge.webapp.citizen.service.RedisService;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.controllers.errorhandler.ErrorControllerAdvice.REDIRECT;
-import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
-import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.CODE;
-import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.CODE_TRIES;
-import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.JOURNEY;
 
 @Slf4j
 @Controller
@@ -88,9 +87,7 @@ public class EnterCodeController implements SaveAndReturnController {
       try {
         Journey storedJourney =
             cryptoService.decryptJourney(
-                redisService.get(JOURNEY, emailAddress),
-                "1.0.0",
-                enterCodeForm.getPostcode());
+                redisService.get(JOURNEY, emailAddress), enterCodeForm.getPostcode());
         sessionStatus.setComplete();
         request.getSession().setAttribute(JOURNEY_SESSION_KEY, storedJourney);
         return REDIRECT + Mappings.URL_TASK_LIST;

@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.client.messageservice;
 
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -9,8 +10,6 @@ import org.springframework.web.client.RestTemplate;
 import uk.gov.dft.bluebadge.webapp.citizen.client.messageservice.model.GenericMessageRequest;
 import uk.gov.dft.bluebadge.webapp.citizen.client.messageservice.model.SaveAndReturnCodeMessageRequest;
 import uk.gov.dft.bluebadge.webapp.citizen.client.messageservice.model.UuidResponse;
-
-import java.util.UUID;
 
 @Slf4j
 @Service

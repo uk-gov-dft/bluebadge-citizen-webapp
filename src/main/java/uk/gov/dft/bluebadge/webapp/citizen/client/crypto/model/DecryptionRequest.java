@@ -1,11 +1,9 @@
 package uk.gov.dft.bluebadge.webapp.citizen.client.crypto.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.validation.constraints.NotEmpty;
 import lombok.Builder;
 import lombok.Data;
-
-import javax.validation.constraints.NotEmpty;
-import java.util.Map;
 
 @Data
 @Builder
