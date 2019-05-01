@@ -1,14 +1,31 @@
 package uk.gov.dft.bluebadge.webapp.citizen.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import uk.gov.dft.bluebadge.webapp.citizen.client.messageservice.MessageApiClient;
+import uk.gov.dft.bluebadge.webapp.citizen.client.messageservice.model.SaveAndReturnCodeMessageRequest;
+
+import java.util.UUID;
 
 @Slf4j
 @Service
 public class MessageService {
 
-  public void sendReturnToApplicationCodeEmail(String code, String emailAddress, String expiryDate){
-    // TODO
-    log.info("Return to application code, {}, NOT emailed.  Expires on {}", code, expiryDate);
+  private MessageApiClient api;
+
+  @Autowired
+  public MessageService(MessageApiClient api) {
+    this.api = api;
+  }
+
+  public void sendReturnToApplicationCodeEmail(String emailAddress, String code, String expiryTime){
+    Assert.notNull(emailAddress, "Email address required for send email.");
+    Assert.notNull(code, "Code required for send email.");
+    Assert.notNull(expiryTime, "Expiry time required for send message.");
+    log.info("Sending save and return code via email.");
+    UUID result = api.sendSaveAndReturnCodeMessage(new SaveAndReturnCodeMessageRequest(emailAddress, code, expiryTime));
+    log.info("Message service result {}", result);
   }
 }

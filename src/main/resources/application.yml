@@ -39,6 +39,15 @@ blue-badge:
       requesttimeout: 6000
       contextpath: /uk-gov-dft/crypto-service/1.0.0
       versionaccept: application/vnd.bluebadge-api.v1+json
+  messageservice:
+    servicehost:
+      host: localhost
+      port: 8480
+      scheme: http
+      connectiontimeout: 6000
+      requesttimeout: 6000
+      contextpath: /uk-gov-dft/message-service/1.0.0
+      versionaccept: application/vnd.bluebadge-api.v1+json
   env: ${bb_env:dev}
   defaultDifferentServiceSignpostUrl: https://bluebadge.direct.gov.uk/bluebadge/why-are-you-here
 

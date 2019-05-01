@@ -90,9 +90,11 @@ public class ReturnToApplicationController implements SaveAndReturnController {
       // Use same code for 30 mins and don't regenerate. (Send email repeatedly though).
       String code = getOrCreateSecurityCode(emailAddress);
 
+      log.info("Save and return code:{}, expires: {}", code, redisService.getExpiryTimeFormatted(CODE, emailAddress));
+
       // Send email with code.
       messageService.sendReturnToApplicationCodeEmail(
-          code, emailAddress, redisService.getExpiryTimeFormatted(CODE, emailAddress));
+          emailAddress, code, redisService.getExpiryTimeFormatted(CODE, emailAddress));
 
       // Validate stored session version
       // If version does not match set version cookie.

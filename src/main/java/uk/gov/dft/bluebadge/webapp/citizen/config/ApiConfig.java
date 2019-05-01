@@ -53,6 +53,22 @@ public class ApiConfig {
 
   @SuppressWarnings("unused")
   @Validated
+  @ConfigurationProperties("blue-badge.messageservice.servicehost")
+  @Bean
+  public ServiceConfiguration messageServiceApiConfig() {
+    return new ServiceConfiguration();
+  }
+
+  @SuppressWarnings("unused")
+  @Bean("messageServiceRestTemplate")
+  OAuth2RestTemplate messageServiceRestTemplate(
+      ClientCredentialsResourceDetails resourceDetails,
+      ServiceConfiguration messageServiceApiConfig) {
+    return createOAuthRestTemplate(resourceDetails, messageServiceApiConfig);
+  }
+
+  @SuppressWarnings("unused")
+  @Validated
   @ConfigurationProperties("blue-badge.applicationmanagementservice.servicehost")
   @Bean
   public ServiceConfiguration applicationManagementServiceApiConfig() {

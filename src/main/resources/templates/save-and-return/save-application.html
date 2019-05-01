@@ -16,10 +16,10 @@
             <form th:action="@{/save-application}" th:object="${formRequest}" method="POST" novalidate>
 
                 <div class="govuk-inset-text">
-                    <p class="govuk-body" th:text="#{return.to.application.title.hint}"></p>
+                    <p class="govuk-body" th:text="#{${JOURNEY.who} + 'save.application.title.hint'}"></p>
                 </div>
 
-                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{save.application.email.label}, 'emailAddress', null, 'text', null)}"></div>
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{save.application.email.label}, 'emailAddress', #{save.application.email.hint}, 'text', null)}"></div>
                 <div th:replace="~{ fragments/govuk-input :: govuk-input(#{save.application.postcode.label}, 'postcode', null, 'text', null)}"></div>
 
                 <button type="submit"
