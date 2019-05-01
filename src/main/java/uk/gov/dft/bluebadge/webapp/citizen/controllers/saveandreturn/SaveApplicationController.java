@@ -79,7 +79,7 @@ public class SaveApplicationController implements StepController, SaveAndReturnC
     }
 
     String cipher = cryptoService.encryptJourney(journey, saveApplicationForm.getPostcode());
-    redisService.setAndExpire(JOURNEY, saveApplicationForm.getEmailAddress(), cipher);
+    redisService.setAndExpireIfNew(JOURNEY, saveApplicationForm.getEmailAddress(), cipher);
     log.info("Session saved for return.");
     return REDIRECT + Mappings.URL_TASK_LIST;
   }

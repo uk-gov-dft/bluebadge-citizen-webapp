@@ -22,6 +22,12 @@ public class RedisService {
     this.redisSessionConfig = redisSessionConfig;
   }
 
+  /**
+   * Get expiry in seconds based upon key type.
+   *
+   * @param key Redis key type.
+   * @return The lifetime of the key.
+   */
   int getExpiry(RedisKeys key) {
     switch (key) {
       case CODE:
@@ -36,19 +42,64 @@ public class RedisService {
     }
   }
 
+  /**
+   * Set a value and also set the expiry (as from application config).
+   *
+   * @param key Redis key type
+   * @param emailAddress Email address used to generate redis key
+   * @param value Value to persist
+   */
   public void setAndExpire(RedisKeys key, String emailAddress, String value) {
     jedis.set(key.getKey(emailAddress), value);
     jedis.expire(key.getKey(emailAddress), getExpiry(key));
   }
 
+  /**
+   * Create ans set expiry, or update and leave expiry of original object.
+   *
+   * @param key Redis key type
+   * @param emailAddress Email address.
+   * @param value Value to persist.
+   */
+  public void setAndExpireIfNew(RedisKeys key, String emailAddress, String value) {
+    if (exists(key, emailAddress)) {
+      Long ttl = jedis.ttl(key.getKey(emailAddress));
+      jedis.set(key.getKey(emailAddress), value);
+      jedis.expire(key.getKey(emailAddress), ttl.intValue());
+    } else {
+      setAndExpire(key, emailAddress, value);
+    }
+  }
+
+  /**
+   * Retrieve value from redis.
+   *
+   * @param key Redis key type
+   * @param emailAddress Email address used to create key
+   * @return The value from Redis
+   */
   public String get(RedisKeys key, String emailAddress) {
     return jedis.get(key.getKey(emailAddress));
   }
 
+  /**
+   * Key exists in redis.
+   *
+   * @param key Redis key type
+   * @param emailAddress Email address used to generate key
+   * @return True if exists
+   */
   public boolean exists(RedisKeys key, String emailAddress) {
     return jedis.exists(key.getKey(emailAddress));
   }
 
+  /**
+   * Increment value. If doesn't exist, sets to 1.
+   *
+   * @param key Redis key type.
+   * @param emailAddress Email address used to generate key.
+   * @return New, incremented value.
+   */
   public Long incrementAndSetExpiryIfNew(RedisKeys key, String emailAddress) {
     Long count = jedis.incr(key.getKey(emailAddress));
     if (count.equals(1L)) {
@@ -57,11 +108,25 @@ public class RedisService {
     return count;
   }
 
+  /**
+   * Number of attempts exceeded. Based upon application config. Shared count value in config at the
+   * mo
+   *
+   * @param count Number of tries to compare against
+   * @return True if throttle exceeded
+   */
   public boolean throttleExceeded(Long count) {
     Assert.notNull(count, "Count cant be null.");
     return count.intValue() > redisSessionConfig.getSaveSubmitThrottleTries();
   }
 
+  /**
+   * Get expiry time of Redis key in format for email/display to user.
+   *
+   * @param key Redis key type
+   * @param emailAddress Email address used to generate key
+   * @return Friendly formatted time.
+   */
   public String getExpiryTimeFormatted(RedisKeys key, String emailAddress) {
     Long secondsToLive = jedis.ttl(key.getKey(emailAddress));
     if (secondsToLive.equals(-1L)) {
