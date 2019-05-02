@@ -13,10 +13,13 @@ import java.util.EnumSet;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.Eligibility;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.arms.ArmsAdaptedVehicleForm;
 
 public class EligibilityConverterTest {
 
@@ -28,6 +31,33 @@ public class EligibilityConverterTest {
     assertThat(eligibility.getDisabilityArms()).isNotNull();
     assertThat(eligibility.getDisabilityArms().getAdaptedVehicleDescription())
         .isEqualTo(JourneyFixture.Values.ARMS_ADAPTED_VEH_DESC);
+    assertThat(eligibility.getDisabilityArms().getDrivingFrequency())
+        .isEqualTo(JourneyFixture.Values.ARMS_HOW_OFTEN_DRIVE);
+
+    // Arms null for other types...
+    EnumSet<EligibilityCodeField> notWalking =
+        EnumSet.complementOf(EnumSet.of(ARMS, TERMILL, NONE));
+    notWalking.forEach(
+        i -> {
+          Eligibility eli =
+              EligibilityConverter.convert(
+                  JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS, i));
+          assertThat(eli.getDisabilityArms()).isNull();
+        });
+  }
+
+  @Test
+  public void convert_arms_whenNoAdaptedVehButHasADescription() {
+    Journey journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS, ARMS);
+    ArmsAdaptedVehicleForm form = journey.getFormForStep(StepDefinition.ARMS_DRIVE_ADAPTED_VEHICLE);
+    form.setAdaptedVehicleDescription("Some description");
+    form.setHasAdaptedVehicle(false);
+
+    Eligibility eligibility = EligibilityConverter.convert(journey);
+
+    assertThat(eligibility.getDisabilityArms()).isNotNull();
+    assertThat(eligibility.getDisabilityArms().getIsAdaptedVehicle()).isFalse();
+    assertThat(eligibility.getDisabilityArms().getAdaptedVehicleDescription()).isNull();
     assertThat(eligibility.getDisabilityArms().getDrivingFrequency())
         .isEqualTo(JourneyFixture.Values.ARMS_HOW_OFTEN_DRIVE);
 
