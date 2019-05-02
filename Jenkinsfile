@@ -87,43 +87,47 @@ node {
     }
 
     stage("Acceptance Tests") {
-            node('Functional') {
-                git(
-                   url: "${REPONAME}",
-                   credentialsId: 'dft-buildbot-valtech',
-                   branch: "${BRANCH_NAME}"
-                )
+        node('Functional') {
+            git(
+               url: "${REPONAME}",
+               credentialsId: 'dft-buildbot-valtech',
+               branch: "${BRANCH_NAME}"
+            )
 
-                timeout(time: 20, unit: 'MINUTES') {
-                    withEnv(["BASE_SELENIUM_URL=http://citizen-webapp:8780"]) {
-                      withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_TOKEN')]) {
-                        try {
-                            sh '''
-                              curl -s -o wait_for_it.sh -H "Authorization: token ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.v3.raw' -O -L https://raw.githubusercontent.com/uk-gov-dft/shell-scripts/master/wait_for_it.sh
-                              docker pull elgalu/selenium
-                              docker pull dosel/zalenium
-                              docker run -d --network "dev-env-develop_default" --rm --name zalenium -p 4444:4444 -v /var/run/docker.sock:/var/run/docker.sock dosel/zalenium start --desiredContainers 4 --maxTestSessions 2 --keepOnlyFailedTests true --videoRecordingEnabled false --maxDockerSeleniumContainers 4
-                              chmod +x ./wait_for_it.sh
-                              ./wait_for_it.sh localhost:4444
-                              cd acceptance-tests
-                              curl -s -o run-regression-script.sh -H "Authorization: token ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.v3.raw' -O -L https://raw.githubusercontent.com/uk-gov-dft/shell-scripts/master/run-regression.sh
-                              chmod +x run-regression-script.sh
-                              ./run-regression-script.sh
-                            '''
-                        }
-                        finally {
-                            sh '''
-                                docker kill zalenium || :
-                                docker rm -vf zalenium || :
-                            '''
-                            archiveArtifacts allowEmptyArchive: true, artifacts: '**/docker.log'
-                            junit '**/TEST*.xml'
-                        }
-                      }
+            timeout(time: 20, unit: 'MINUTES') {
+                withEnv(["BASE_SELENIUM_URL=http://localhost:8780", "BASE_MANAGEMENT_URL=http://localhost:8781"]) {
+                  withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_TOKEN')]) {
+                    try {
+                        sh '''
+                            curl -s -o wait_for_it.sh -H "Authorization: token ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.v3.raw' -O -L https://raw.githubusercontent.com/uk-gov-dft/shell-scripts/master/wait_for_it.sh
+                            docker pull elgalu/selenium
+                            docker pull dosel/zalenium
+                            docker run -d --network "dev-env-develop_default" --rm --name zalenium -p 4444:4444 -v /var/run/docker.sock:/var/run/docker.sock dosel/zalenium start --desiredContainers 4 --maxTestSessions 2 --keepOnlyFailedTests true --videoRecordingEnabled false --maxDockerSeleniumContainers 4
+                            chmod +x ./wait_for_it.sh
+                            ./wait_for_it.sh localhost:4444
+
+                            echo " Base Selenium URL is $BASE_SELENIUM_URL"
+                            echo " Base Management URL is $BASE_MANAGEMENT_URL"
+                            cd acceptance-tests
+                            curl -s -o run-regression-script.sh -H "Authorization: token ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.v3.raw' -O -L https://raw.githubusercontent.com/uk-gov-dft/shell-scripts/master/run-regression.sh
+                            chmod +x run-regression-script.sh
+                            ./run-regression-script.sh
+                        '''
                     }
+                    finally {
+                        sh '''
+                            docker kill zalenium || :
+                            docker rm -vf zalenium || :
+                        '''
+                        archiveArtifacts allowEmptyArchive: true, artifacts: '**/docker.log'
+                        junit '**/TEST*.xml'
+                    }
+                  }
                 }
             }
         }
+    }
+
 
 
 }

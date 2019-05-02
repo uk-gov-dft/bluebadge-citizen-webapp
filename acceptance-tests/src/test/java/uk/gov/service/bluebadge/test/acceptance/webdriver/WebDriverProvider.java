@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -43,9 +44,7 @@ public class WebDriverProvider {
   /** When 'true', the WebDriver will be operating through zap proxy. */
   private boolean isZapMode;
 
-  /** When 'true', the tests will run on Selenium Grid. */
-  private boolean isSeleniumGridMode;
-
+  private boolean isSeleniumGrid;
   /** When 'true', the WebDriver will be from BrowserStack. */
   private final boolean isBstackMode;
 
@@ -67,16 +66,16 @@ public class WebDriverProvider {
   private WebDriver webDriver;
 
   public WebDriverProvider(
-      final WebDriverServiceProvider webDriverServiceProvider,
-      final boolean isHeadlessMode,
-      final Path downloadDirectory,
-      final boolean isZapMode,
-      boolean isBstackMode,
-      String bStackBrowserName,
-      String bStackBrowserVersion,
-      String bStackBrowserUser,
-      String bStackBrowserKey,
-      boolean isSeleniumGridMode) {
+          final WebDriverServiceProvider webDriverServiceProvider,
+          final boolean isHeadlessMode,
+          final Path downloadDirectory,
+          final boolean isZapMode,
+          boolean isBstackMode,
+          String bStackBrowserName,
+          String bStackBrowserVersion,
+          String bStackBrowserUser,
+          String bStackBrowserKey,
+          boolean isSeleniumGridMode) {
     this.webDriverServiceProvider = webDriverServiceProvider;
     this.isHeadlessMode = isHeadlessMode;
     this.isZapMode = isZapMode;
@@ -86,7 +85,7 @@ public class WebDriverProvider {
     this.bStackBrowserVersion = bStackBrowserVersion;
     this.bStackBrowserUser = bStackBrowserUser;
     this.bStackBrowserKey = bStackBrowserKey;
-    this.isSeleniumGridMode = isSeleniumGridMode;
+    this.isSeleniumGrid = isSeleniumGridMode;
   }
 
   public WebDriver getWebDriver() {
@@ -114,8 +113,8 @@ public class WebDriverProvider {
 
       chromeOptions.setExperimentalOption("prefs", chromePrefs);
       log.info(
-          "Configuring WebDriver to run in {} mode.",
-          isHeadlessMode ? "headless" : "full, graphical");
+              "Configuring WebDriver to run in {} mode.",
+              isHeadlessMode ? "headless" : "full, graphical");
       chromeOptions.addArguments("window-size=1920,1080");
       if (isHeadlessMode) {
         chromeOptions.addArguments("--headless");
@@ -137,11 +136,11 @@ public class WebDriverProvider {
     } else if (isBstackMode) {
 
       final String URL =
-          "https://"
-              + bStackBrowserUser
-              + ":"
-              + bStackBrowserKey
-              + "@hub-cloud.browserstack.com/wd/hub";
+              "https://"
+                      + bStackBrowserUser
+                      + ":"
+                      + bStackBrowserKey
+                      + "@hub-cloud.browserstack.com/wd/hub";
 
       DesiredCapabilities caps = new DesiredCapabilities();
       caps.setCapability("browser", bStackBrowserName.toUpperCase());
@@ -159,9 +158,7 @@ public class WebDriverProvider {
         e.printStackTrace();
       }
 
-    }
-
-    else if (isSeleniumGridMode) {
+    } else if (isSeleniumGrid) {
 
       chromeOptions = new ChromeOptions();
 
@@ -198,7 +195,6 @@ public class WebDriverProvider {
     } else {
       webDriver = new RemoteWebDriver(webDriverServiceProvider.getUrl(), chromeOptions);
     }
-
   }
 
   /**

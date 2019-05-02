@@ -51,7 +51,7 @@ public class AcceptanceTestConfiguration {
         acceptanceTestProperties.getBrowserVersion(),
         acceptanceTestProperties.getBrowserStackUser(),
         acceptanceTestProperties.getBrowserStackKey(),
-        acceptanceTestProperties.isSeleniumGridMode());
+        acceptanceTestProperties.isSeleniumGrid());
   }
 
   @Bean(initMethod = "initialise", destroyMethod = "dispose")

@@ -51,6 +51,10 @@ public class AcceptanceTestProperties {
     return zapMode;
   }
 
+  public boolean isSeleniumGrid() {
+    return seleniumGrid;
+  }
+
   public boolean isbStackMode() {
     return bStackMode;
   }
@@ -73,10 +77,6 @@ public class AcceptanceTestProperties {
 
   public Path getTempDir() {
     return tempDir;
-  }
-
-  public boolean isSeleniumGridMode() {
-    return seleniumGrid;
   }
 
   @Override
