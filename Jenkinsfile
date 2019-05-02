@@ -95,7 +95,7 @@ node {
             )
 
             timeout(time: 20, unit: 'MINUTES') {
-                withEnv(["BASE_SELENIUM_URL=http://citizen-webapp:8780", "BASE_MANAGEMENT_URL=http://localhost:8781"]) {
+                withEnv(["BASE_SELENIUM_URL=http://citizen-webapp:8780", "BASE_MANAGEMENT_URL=http://citizen-webapp:8781"]) {
                   withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_TOKEN')]) {
                     try {
                         sh '''
