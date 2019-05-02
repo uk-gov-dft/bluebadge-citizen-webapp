@@ -14,17 +14,19 @@ public class AcceptanceTestProperties {
   private final String browserVersion;
   private final String browserStackUser;
   private final String browserStackKey;
+  private final boolean seleniumGrid;
 
   AcceptanceTestProperties(
-      final boolean headlessMode,
-      final Path downloadDir,
-      final Path tempDir,
-      boolean zapMode,
-      boolean bStackMode,
-      String browserName,
-      String browserVersion,
-      String browserStackUser,
-      String browserStackKey) {
+          final boolean headlessMode,
+          final Path downloadDir,
+          final Path tempDir,
+          boolean zapMode,
+          boolean bStackMode,
+          String browserName,
+          String browserVersion,
+          String browserStackUser,
+          String browserStackKey,
+          boolean seleniumGrid) {
     this.headlessMode = headlessMode;
     this.downloadDir = downloadDir;
     this.tempDir = tempDir;
@@ -34,6 +36,7 @@ public class AcceptanceTestProperties {
     this.browserVersion = browserVersion;
     this.browserStackUser = browserStackUser;
     this.browserStackKey = browserStackKey;
+    this.seleniumGrid = seleniumGrid;
   }
 
   public Path getDownloadDir() {
@@ -72,27 +75,33 @@ public class AcceptanceTestProperties {
     return tempDir;
   }
 
+  public boolean isSeleniumGridMode() {
+    return seleniumGrid;
+  }
+
   @Override
   public String toString() {
     return "AcceptanceTestProperties{"
-        + "headlessMode="
-        + headlessMode
-        + ", downloadDir="
-        + downloadDir
-        + ", tempDir="
-        + tempDir
-        + ", zapMode="
-        + zapMode
-        + ", bStackMode="
-        + bStackMode
-        + ", browserName="
-        + browserName
-        + ", browserVersion="
-        + browserVersion
-        + ", browserStackUser="
-        + browserStackUser
-        + ", browserStackKey="
-        + browserStackKey
-        + '}';
+            + "headlessMode="
+            + headlessMode
+            + ", downloadDir="
+            + downloadDir
+            + ", tempDir="
+            + tempDir
+            + ", zapMode="
+            + zapMode
+            + ", bStackMode="
+            + bStackMode
+            + ", browserName="
+            + browserName
+            + ", browserVersion="
+            + browserVersion
+            + ", browserStackUser="
+            + browserStackUser
+            + ", browserStackKey="
+            + browserStackKey
+            + ", seleniumGrid="
+            + seleniumGrid
+            + '}';
   }
 }

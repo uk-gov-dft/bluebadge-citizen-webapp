@@ -49,6 +49,7 @@ test {
 }
 
 task acceptanceTests(type:Test) {
+    maxParallelForks = 5
     testLogging.showStandardStreams = true
     // Make gradle JVM properties available to cucumber JVM
     systemProperties System.getProperties()

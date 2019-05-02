@@ -50,7 +50,8 @@ public class AcceptanceTestConfiguration {
         acceptanceTestProperties.getBrowserName(),
         acceptanceTestProperties.getBrowserVersion(),
         acceptanceTestProperties.getBrowserStackUser(),
-        acceptanceTestProperties.getBrowserStackKey());
+        acceptanceTestProperties.getBrowserStackKey(),
+        acceptanceTestProperties.isSeleniumGridMode());
   }
 
   @Bean(initMethod = "initialise", destroyMethod = "dispose")
@@ -82,7 +83,8 @@ public class AcceptanceTestConfiguration {
             System.getProperty("bStackBrowserName", "false"),
             System.getProperty("bStackBrowserVersion", "false"),
             System.getProperty("bStackUser", " "),
-            System.getProperty("bStackKey", " "));
+            System.getProperty("bStackKey", " "),
+            Boolean.parseBoolean(System.getProperty("seleniumGrid", "false")));
 
     log.info("Applying test properties: {}", acceptanceTestProperties);
 

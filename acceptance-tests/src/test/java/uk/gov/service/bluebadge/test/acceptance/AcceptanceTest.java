@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 /** Entry point required by {@code cucumber-jvm} to discover and run tests. */
 @RunWith(Cucumber.class)
 @CucumberOptions(
-  features = "src/test/resources/features",
+  features = "src/test/resources/features/site/testSuite1/",
   plugin = {"com.cucumber.listener.ExtentCucumberFormatter:output/report.html"}
 )
 public class AcceptanceTest {
