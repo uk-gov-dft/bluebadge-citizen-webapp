@@ -12,5 +12,5 @@ import lombok.NonNull;
 public class GenericMessageRequest {
   @NonNull private final String template;
   @NonNull private final String emailAddress;
-  private final Map<String, ?> attributes;
+  private final Map<String, String> attributes;
 }

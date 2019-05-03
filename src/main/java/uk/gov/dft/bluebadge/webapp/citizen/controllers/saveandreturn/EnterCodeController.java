@@ -5,6 +5,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.CODE;
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.CODE_TRIES;
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.JOURNEY;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.hashEmailAddress;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -33,8 +34,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.RedisService;
 @Controller
 @RequestMapping(Mappings.URL_ENTER_CODE)
 public class EnterCodeController implements SaveAndReturnController {
-  private static final String TEMPLATE = "save-and-return/enter-code";
-  public static final String FORM_REQUEST = "formRequest";
+  static final String TEMPLATE = "save-and-return/enter-code";
+  private static final String FORM_REQUEST = "formRequest";
   private CryptoService cryptoService;
   private RedisService redisService;
 
@@ -49,8 +50,13 @@ public class EnterCodeController implements SaveAndReturnController {
       Model model,
       @ModelAttribute(SAVE_AND_RETURN_JOURNEY_KEY) SaveAndReturnJourney saveAndReturnJourney) {
 
+    if (null == saveAndReturnJourney.getSaveAndReturnForm()
+        || StringUtils.isBlank(saveAndReturnJourney.getSaveAndReturnForm().getEmailAddress())) {
+      return REDIRECT + Mappings.URL_RETURN_TO_APPLICATION;
+    }
+
     if (null == saveAndReturnJourney.getEnterCodeForm()) {
-      saveAndReturnJourney.setEnterCodeForm(new EnterCodeForm());
+      saveAndReturnJourney.setEnterCodeForm(EnterCodeForm.builder().build());
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
@@ -79,10 +85,11 @@ public class EnterCodeController implements SaveAndReturnController {
     }
 
     String emailAddress = journey.getSaveAndReturnForm().getEmailAddress();
+
     Long postCount = redisService.incrementAndSetExpiryIfNew(CODE_TRIES, emailAddress);
 
     if (journeyExists(emailAddress)
-        && throttleNotExceeded(postCount)
+        && throttleNotExceeded(postCount, emailAddress)
         && codesMatch(emailAddress, enterCodeForm.getCode())) {
       try {
         Journey storedJourney =
@@ -90,12 +97,16 @@ public class EnterCodeController implements SaveAndReturnController {
                 redisService.get(JOURNEY, emailAddress), enterCodeForm.getPostcode());
         sessionStatus.setComplete();
         request.getSession().setAttribute(JOURNEY_SESSION_KEY, storedJourney);
+        log.info(
+            "Successfully loaded saved application for email hash {}",
+            hashEmailAddress(emailAddress));
         return REDIRECT + Mappings.URL_TASK_LIST;
       } catch (CryptoPostcodeException e) {
         log.info(
-            "Attempt to return to application with postcode mismatch {} vs {}.",
+            "Attempt to return to application with postcode mismatch {} vs {}. Email hash {}",
             e.getEnteredPostcode(),
-            e.getSavedPostcode());
+            e.getSavedPostcode(),
+            hashEmailAddress(emailAddress));
       }
     }
 
@@ -106,15 +117,20 @@ public class EnterCodeController implements SaveAndReturnController {
 
   boolean journeyExists(String emailAddress) {
     if (!redisService.exists(JOURNEY, emailAddress)) {
-      log.info("Attempt to return to application when no saved app existed for email address");
+      log.info(
+          "Attempt to return to application when no saved app existed for email address. Email hash {}",
+          hashEmailAddress(emailAddress));
       return false;
     }
     return true;
   }
 
-  boolean throttleNotExceeded(Long postCount) {
+  boolean throttleNotExceeded(Long postCount, String emailAddress) {
     if (redisService.throttleExceeded(postCount)) {
-      log.info("Too many tries posting 4-digit code to retrieve application.");
+      log.info(
+          "Too many tries ({}) posting 4-digit code to retrieve application. Email hash {}",
+          postCount,
+          hashEmailAddress(emailAddress));
       return false;
     }
     return true;
@@ -124,11 +140,14 @@ public class EnterCodeController implements SaveAndReturnController {
     String storedCode = redisService.get(CODE, emailAddress);
     if (StringUtils.isEmpty(storedCode)) {
       log.info(
-          "Attempt to return to application when no 4-digit code stored in redis for email address.");
+          "Attempt to return to application when no 4-digit code stored in redis for email address. Email hash {}",
+          hashEmailAddress(emailAddress));
       return false;
     }
     if (!storedCode.equalsIgnoreCase(enteredCode.trim())) {
-      log.info("Attempt to return to application when stored code did not match entered code.");
+      log.info(
+          "Attempt to return to application when stored code did not match entered code. Email hash {}",
+          hashEmailAddress(emailAddress));
       return false;
     }
     return true;

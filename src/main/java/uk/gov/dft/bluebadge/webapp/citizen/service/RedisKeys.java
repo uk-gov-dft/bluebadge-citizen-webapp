@@ -24,7 +24,7 @@ public enum RedisKeys {
     return String.format(pattern, hashEmailAddress(emailAddress));
   }
 
-  String hashEmailAddress(String emailAddress) {
+  public static String hashEmailAddress(String emailAddress) {
 
     Mac hasher;
     try {

@@ -27,7 +27,7 @@ public class RedisService {
    * @param key Redis key type.
    * @return The lifetime of the key.
    */
-  int getExpiry(RedisKeys key) {
+  int getRedisKeyExpiryInSeconds(RedisKeys key) {
     switch (key) {
       case CODE:
         return redisSessionConfig.getSaveSessionCodeDurationMins() * 60;
@@ -50,7 +50,7 @@ public class RedisService {
    */
   public void setAndExpire(RedisKeys key, String emailAddress, String value) {
     jedis.set(key.getKey(emailAddress), value);
-    jedis.expire(key.getKey(emailAddress), getExpiry(key));
+    jedis.expire(key.getKey(emailAddress), getRedisKeyExpiryInSeconds(key));
   }
 
   /**
@@ -102,7 +102,7 @@ public class RedisService {
   public Long incrementAndSetExpiryIfNew(RedisKeys key, String emailAddress) {
     Long count = jedis.incr(key.getKey(emailAddress));
     if (count.equals(1L)) {
-      jedis.expire(key.getKey(emailAddress), getExpiry(key));
+      jedis.expire(key.getKey(emailAddress), getRedisKeyExpiryInSeconds(key));
     }
     return count;
   }

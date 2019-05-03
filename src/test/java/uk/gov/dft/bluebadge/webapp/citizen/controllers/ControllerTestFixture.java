@@ -43,6 +43,13 @@ public abstract class ControllerTestFixture<T> {
     journey = JourneyFixture.getDefaultJourneyToStep(getStep(), getEligibilityType(), false);
   }
 
+  public static ResultMatcher formRequestFlashAttributeHasGlobalErrorCode(String error) {
+    return flash()
+        .attribute(
+            "org.springframework.validation.BindingResult.formRequest",
+            hasProperty("globalErrors", hasItem(hasProperty("code", equalTo(error)))));
+  }
+
   public static ResultMatcher formRequestFlashAttributeHasFieldErrorCode(
       String fieldName, String error) {
     return flash()

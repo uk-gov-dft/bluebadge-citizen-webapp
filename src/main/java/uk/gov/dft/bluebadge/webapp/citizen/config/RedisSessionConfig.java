@@ -1,6 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.config;
 
-import lombok.Getter;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +10,7 @@ import org.springframework.session.web.http.DefaultCookieSerializer;
 import redis.clients.jedis.Jedis;
 
 @Configuration
-@Getter
+@Data
 public class RedisSessionConfig {
 
   @Value("${spring.redis.host:#{null}}")

@@ -4,6 +4,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.controllers.errorhandler.Error
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.CODE;
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.EMAIL_TRIES;
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.JOURNEY;
+import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.hashEmailAddress;
 
 import java.util.Random;
 import javax.servlet.http.Cookie;
@@ -32,7 +33,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.RedisService;
 @RequestMapping(Mappings.URL_RETURN_TO_APPLICATION)
 public class ReturnToApplicationController implements SaveAndReturnController {
 
-  private static final String TEMPLATE = "save-and-return/return-to-application";
+  static final String TEMPLATE = "save-and-return/return-to-application";
   public static final String FORM_REQUEST = "formRequest";
   private final CryptoService cryptoService;
   private final RedisService redisService;
@@ -80,35 +81,59 @@ public class ReturnToApplicationController implements SaveAndReturnController {
 
     String emailAddress = saveAndReturnForm.getEmailAddress();
     Long postCount = redisService.incrementAndSetExpiryIfNew(EMAIL_TRIES, emailAddress);
-    // If email address matches a saved journey then send email and security code.
-    // Don't do anything if throttle exceeded.
-    // Else just redirect.
-    if (redisService.exists(JOURNEY, emailAddress) && !redisService.throttleExceeded(postCount)) {
 
-      // Generate and store security code.
-      // Use same code for 30 mins and don't regenerate. (Send email repeatedly though).
-      String code = getOrCreateSecurityCode(emailAddress);
-
-      log.info(
-          "Save and return code:{}, expires: {}",
-          code,
-          redisService.getExpiryTimeFormatted(CODE, emailAddress));
-
-      // Send email with code.
-      messageService.sendReturnToApplicationCodeEmail(
-          emailAddress, code, redisService.getExpiryTimeFormatted(CODE, emailAddress));
-
-      // Validate stored session version
-      // If version does not match set version cookie.
-      try {
-        cryptoService.checkEncryptedJourneyVersion(redisService.get(JOURNEY, emailAddress));
-      } catch (CryptoVersionException e) {
-        log.info("Switching citizen app version to {} via cookie.", e.getEncryptedVersion());
-        response.addCookie(getVersionCookie(e.getEncryptedVersion()));
-      }
+    if (journeyExistsInRedis(emailAddress) && throttleNotExceeded(emailAddress, postCount)) {
+      send4digitCodeEmail(emailAddress);
+      addRedirectCookieIfNecessary(emailAddress, response);
     }
 
     return REDIRECT + Mappings.URL_ENTER_CODE;
+  }
+
+  void addRedirectCookieIfNecessary(String emailAddress, HttpServletResponse response) {
+    // Validate stored session version
+    // If version does not match set version cookie for redirect to correct version of
+    // application.
+    try {
+      cryptoService.checkEncryptedJourneyVersion(redisService.get(JOURNEY, emailAddress));
+    } catch (CryptoVersionException e) {
+      log.info("Switching citizen app version to {} via cookie.", e.getEncryptedVersion());
+      response.addCookie(getVersionCookie(e.getEncryptedVersion()));
+    }
+  }
+
+  void send4digitCodeEmail(String emailAddress) {
+    // Generate and store security code.
+    // Use same code for 30 mins and don't regenerate. (Send email repeatedly though).
+    String code = getOrCreateSecurityCode(emailAddress);
+
+    log.info(
+        "Save and return code:{}, expires: {}",
+        code,
+        redisService.getExpiryTimeFormatted(CODE, emailAddress));
+
+    // Send email with code.
+    messageService.sendReturnToApplicationCodeEmail(
+        emailAddress, code, redisService.getExpiryTimeFormatted(CODE, emailAddress));
+  }
+
+  boolean journeyExistsInRedis(String emailAddress) {
+    if (redisService.exists(JOURNEY, emailAddress)) {
+      return true;
+    }
+    log.info("No journey exists for email entered. Email hash {}", hashEmailAddress(emailAddress));
+    return false;
+  }
+
+  boolean throttleNotExceeded(String emailAddress, Long tries) {
+    if (redisService.throttleExceeded(tries)) {
+      log.info(
+          "Too many tries ({}) at submitting email to resume journey. Email hash {}",
+          tries,
+          hashEmailAddress(emailAddress));
+      return false;
+    }
+    return true;
   }
 
   /**
