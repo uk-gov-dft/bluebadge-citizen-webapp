@@ -115,13 +115,11 @@ class WalkingConverter {
   static Breathlessness getBreathlessness(BreathlessnessForm breathlessnessForm) {
 
     if (null != breathlessnessForm) {
-      Breathlessness breathlessness =
-          Breathlessness.builder()
-              .typeCodes(breathlessnessForm.getBreathlessnessTypes())
-              .otherDescription(breathlessnessForm.getBreathlessnessOtherDescription())
-              .build();
 
-      return breathlessness;
+      return Breathlessness.builder()
+          .typeCodes(breathlessnessForm.getBreathlessnessTypes())
+          .otherDescription(breathlessnessForm.getBreathlessnessOtherDescription())
+          .build();
     }
     return null;
   }

@@ -20,11 +20,11 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 @Service
 public class CryptoService {
 
-  static String VERSION_CONTEXT_KEY = "version";
-  static String POSTCODE_CONTEXT_KEY = "postcode";
+  static final String VERSION_CONTEXT_KEY = "version";
+  static final String POSTCODE_CONTEXT_KEY = "postcode";
 
   private CryptoApiClient apiClient;
-  final String buildNumber;
+  private final String buildNumber;
 
   @Autowired
   CryptoService(CryptoApiClient apiClient, BuildProperties buildProperties) {
