@@ -1,4 +1,4 @@
-package uk.gov.service.bluebadge.test.acceptance;
+package uk.gov.service.bluebadge.test.acceptance.runners;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
