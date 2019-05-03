@@ -1,4 +1,4 @@
-package uk.gov.service.bluebadge.test.acceptance.runners;
+package uk.gov.service.bluebadge.test.acceptance;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 
 /** Entry point required by {@code cucumber-jvm} to discover and run tests. */
 @RunWith(Cucumber.class)
-@CucumberOptions(features = "src/test/resources/features/site/testSuite1/")
-public class AcceptanceTest {
+@CucumberOptions(features = "src/test/resources/features/site/testSuite8/")
+public class AcceptanceTest8 {
   // no-op, config class only
 }

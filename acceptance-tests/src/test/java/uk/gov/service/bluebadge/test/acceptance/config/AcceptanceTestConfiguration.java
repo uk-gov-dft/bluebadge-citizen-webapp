@@ -2,19 +2,20 @@ package uk.gov.service.bluebadge.test.acceptance.config;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-import java.nio.file.Paths;
 import org.slf4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import uk.gov.service.bluebadge.test.acceptance.runners.AcceptanceTest;
+import uk.gov.service.bluebadge.test.acceptance.AcceptanceTest;
 import uk.gov.service.bluebadge.test.acceptance.pages.PageHelper;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
 import uk.gov.service.bluebadge.test.acceptance.steps.ScenarioContext;
 import uk.gov.service.bluebadge.test.acceptance.util.TestContentUrls;
 import uk.gov.service.bluebadge.test.acceptance.webdriver.WebDriverProvider;
 import uk.gov.service.bluebadge.test.acceptance.webdriver.WebDriverServiceProvider;
+
+import java.nio.file.Paths;
 
 /**
  * Central configuration class, enabling acceptance tests to benefit from Spring-based dependency
