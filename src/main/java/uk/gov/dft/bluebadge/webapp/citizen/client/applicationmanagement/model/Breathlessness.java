@@ -7,6 +7,15 @@ import lombok.Data;
 @Builder
 @Data
 public class Breathlessness {
-  private List<BreathlessnessCodeField> typeCodes;
-  private String otherDescription;
+  private final List<BreathlessnessCodeField> typeCodes;
+  private final String otherDescription;
+
+  Breathlessness(List<BreathlessnessCodeField> typeCodes, String otherDescription) {
+    this.typeCodes = typeCodes;
+    if (null != typeCodes && typeCodes.contains(BreathlessnessCodeField.OTHER)) {
+      this.otherDescription = otherDescription;
+    } else {
+      this.otherDescription = null;
+    }
+  }
 }
