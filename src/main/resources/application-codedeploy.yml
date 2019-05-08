@@ -1,28 +1,31 @@
 blue-badge:
   auth-server:
-    url: https://authorisation-service.${bb_env}.${url}/bb_auth
+    url: https://api.${bb_env}.${url}/bb_auth
   referencedataservice:
     servicehost:
-      host: reference-service.${bb_env}.${url}
+      host: api.${bb_env}.${url}
       port: 443
       scheme: https
+      contextpath: /
   applicationmanagementservice:
     servicehost:
-      host: application-service.${bb_env}.${url}
+      host: api.${bb_env}.${url}
       port: 443
       scheme: https
+      contextpath: /
   paymentservice:
     servicehost:
-      host: payment-service.${bb_env}.${url}
+      host: api.${bb_env}.${url}
       port: 443
       scheme: https
+      contextpath: /
 
 management:
   server:
-    port: ${bb_health:-8081}
+    port: ${bb_health:8081}
 
 server:
-  port: ${bb_port:-8080}
+  port: ${bb_port:8080}
 
 # Google Analytics Code
 GACode:  ${GACODE:UA-124760983-5}
