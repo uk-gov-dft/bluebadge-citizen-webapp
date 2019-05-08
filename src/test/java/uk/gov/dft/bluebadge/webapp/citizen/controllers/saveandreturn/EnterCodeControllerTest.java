@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture.formRequestFlashAttributeCount;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture.formRequestFlashAttributeHasGlobalErrorCode;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.saveandreturn.SaveAndReturnController.SAVE_AND_RETURN_JOURNEY_KEY;
@@ -38,7 +39,6 @@ public class EnterCodeControllerTest {
   private static final String ERROR_URL = Mappings.URL_ENTER_CODE + "#error";
   private MockMvc mockMvc;
 
-  private EnterCodeController controller;
   @Mock private CryptoService mockCryptoService;
   @Mock private RedisService mockRedisService;
   private SaveAndReturnJourney journey;
@@ -47,7 +47,7 @@ public class EnterCodeControllerTest {
   public void setup() {
     MockitoAnnotations.initMocks(this);
     journey = new SaveAndReturnJourney();
-    controller = new EnterCodeController(mockCryptoService, mockRedisService);
+    EnterCodeController controller = new EnterCodeController(mockCryptoService, mockRedisService);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -102,9 +102,31 @@ public class EnterCodeControllerTest {
 
   @Test
   @SneakyThrows
-  public void submit_bindingErrors() {
+  public void submit_bindingErrorsNulls() {
     journey.setSaveAndReturnForm(SaveAndReturnForm.builder().emailAddress("emailAddress").build());
-    EnterCodeForm form = EnterCodeForm.builder().code(null).postcode(null).build();
+
+    when(mockRedisService.exists(any(), any())).thenReturn(true);
+    when(mockRedisService.throttleExceeded(any())).thenReturn(false);
+    when(mockRedisService.get(JOURNEY, "emailAddress")).thenReturn("bindingErrors");
+    when(mockRedisService.get(CODE, "emailAddress")).thenReturn("1234");
+
+    mockMvc
+        .perform(
+            post(Mappings.URL_ENTER_CODE)
+                .sessionAttr(SAVE_AND_RETURN_JOURNEY_KEY, journey)
+                .params(FormObjectToParamMapper.convert(EnterCodeForm.builder().build())))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("code", "NotEmpty"))
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("postcode", "NotEmpty"))
+        .andExpect(formRequestFlashAttributeCount(2))
+        .andExpect(redirectedUrl(ERROR_URL));
+  }
+
+  @Test
+  @SneakyThrows
+  public void submit_bindingErrorsPatterns() {
+    journey.setSaveAndReturnForm(SaveAndReturnForm.builder().emailAddress("emailAddress").build());
+    EnterCodeForm form = EnterCodeForm.builder().code("1234").postcode("A").build();
 
     when(mockRedisService.exists(any(), any())).thenReturn(true);
     when(mockRedisService.throttleExceeded(any())).thenReturn(false);
@@ -117,8 +139,8 @@ public class EnterCodeControllerTest {
                 .sessionAttr(SAVE_AND_RETURN_JOURNEY_KEY, journey)
                 .params(FormObjectToParamMapper.convert(form)))
         .andExpect(status().is3xxRedirection())
-        .andExpect(formRequestFlashAttributeHasFieldErrorCode("code", "NotEmpty"))
-        .andExpect(formRequestFlashAttributeHasFieldErrorCode("postcode", "NotEmpty"))
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("postcode", "Pattern"))
+        .andExpect(formRequestFlashAttributeCount(1))
         .andExpect(redirectedUrl(ERROR_URL));
   }
 

@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.errorhandler.ErrorControllerAdvice.REDIRECT;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
@@ -56,20 +58,16 @@ public class RouteMaster {
       BindingResult bindingResult,
       RedirectAttributes attr) {
     return redirectToOnBindingError(
-        currentStep, formRequest, bindingResult, attr, new ErrorViewModel());
+        Mappings.getUrl(currentStep.getStepDefinition()), formRequest, bindingResult, attr);
   }
 
-  public String redirectToOnBindingError(
-      StepController currentStep,
-      Object formRequest,
-      BindingResult bindingResult,
-      RedirectAttributes attr,
-      ErrorViewModel errorViewModel) {
-    attr.addFlashAttribute("errorSummary", errorViewModel);
+  public static String redirectToOnBindingError(
+      String url, Object formRequest, BindingResult bindingResult, RedirectAttributes attr) {
+    attr.addFlashAttribute("errorSummary", new ErrorViewModel());
     attr.addFlashAttribute(
         "org.springframework.validation.BindingResult.formRequest", bindingResult);
     attr.addFlashAttribute("formRequest", formRequest);
-    return REDIRECT + Mappings.getUrl(currentStep.getStepDefinition()) + ERROR_SUFFIX;
+    return REDIRECT + url + ERROR_SUFFIX;
   }
 
   public boolean isValidState(StepDefinition step, Journey journey) {

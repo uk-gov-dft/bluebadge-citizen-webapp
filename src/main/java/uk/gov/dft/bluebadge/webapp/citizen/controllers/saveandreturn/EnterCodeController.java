@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.EnterCodeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveAndReturnJourney;
@@ -40,7 +41,7 @@ public class EnterCodeController implements SaveAndReturnController {
   private RedisService redisService;
 
   @Autowired
-  public EnterCodeController(CryptoService cryptoService, RedisService redisService) {
+  EnterCodeController(CryptoService cryptoService, RedisService redisService) {
     this.cryptoService = cryptoService;
     this.redisService = redisService;
   }
@@ -81,7 +82,8 @@ public class EnterCodeController implements SaveAndReturnController {
       throws CryptoVersionException {
 
     if (bindingResult.hasErrors()) {
-      return redirectToOnBindingError(Mappings.URL_ENTER_CODE, enterCodeForm, bindingResult, attr);
+      return RouteMaster.redirectToOnBindingError(
+          Mappings.URL_ENTER_CODE, enterCodeForm, bindingResult, attr);
     }
 
     String emailAddress = journey.getSaveAndReturnForm().getEmailAddress();
@@ -112,10 +114,11 @@ public class EnterCodeController implements SaveAndReturnController {
 
     // Reject - could not load/find saved session
     bindingResult.reject("enter.code.no.applications");
-    return redirectToOnBindingError(Mappings.URL_ENTER_CODE, enterCodeForm, bindingResult, attr);
+    return RouteMaster.redirectToOnBindingError(
+        Mappings.URL_ENTER_CODE, enterCodeForm, bindingResult, attr);
   }
 
-  boolean journeyExists(String emailAddress) {
+  private boolean journeyExists(String emailAddress) {
     if (!redisService.exists(JOURNEY, emailAddress)) {
       log.info(
           "Attempt to return to application when no saved app existed for email address. Email hash {}",
@@ -125,7 +128,7 @@ public class EnterCodeController implements SaveAndReturnController {
     return true;
   }
 
-  boolean throttleNotExceeded(Long postCount, String emailAddress) {
+  private boolean throttleNotExceeded(Long postCount, String emailAddress) {
     if (redisService.throttleExceeded(postCount)) {
       log.info(
           "Too many tries ({}) posting 4-digit code to retrieve application. Email hash {}",
@@ -136,7 +139,7 @@ public class EnterCodeController implements SaveAndReturnController {
     return true;
   }
 
-  boolean codesMatch(String emailAddress, String enteredCode) {
+  private boolean codesMatch(String emailAddress, String enteredCode) {
     String storedCode = redisService.get(CODE, emailAddress);
     if (StringUtils.isEmpty(storedCode)) {
       log.info(

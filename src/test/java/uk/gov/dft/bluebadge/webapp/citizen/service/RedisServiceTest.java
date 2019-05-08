@@ -108,4 +108,44 @@ public class RedisServiceTest {
             .matcher(time);
     assertThat(p.find()).isTrue();
   }
+
+  @Test
+  public void getDaysToExpiryRoundedUp() {
+    String key = JOURNEY.getKey("days");
+    // 1 min
+    when(mockJedis.ttl(key)).thenReturn(60L);
+    assertThat(service.getDaysToExpiryRoundedUp(JOURNEY, "days")).isEqualTo(0L);
+
+    // Just over half a day
+    when(mockJedis.ttl(key)).thenReturn((12L * 60 * 60) + 1);
+    assertThat(service.getDaysToExpiryRoundedUp(JOURNEY, "days")).isEqualTo(1L);
+
+    // 4 and a bit days
+    when(mockJedis.ttl(key)).thenReturn((96L * 60 * 60) + 1000);
+    assertThat(service.getDaysToExpiryRoundedUp(JOURNEY, "days")).isEqualTo(4L);
+
+    // Never
+    when(mockJedis.ttl(key)).thenReturn(-1L);
+    assertThat(service.getDaysToExpiryRoundedUp(JOURNEY, "days")).isEqualTo(-1L);
+  }
+
+  @Test
+  public void getHoursToExpiry() {
+    String key = JOURNEY.getKey("hours");
+    // 1 min
+    when(mockJedis.ttl(key)).thenReturn(60L);
+    assertThat(service.getHoursToExpiry(JOURNEY, "hours")).isEqualTo(0L);
+
+    // 12 H
+    when(mockJedis.ttl(key)).thenReturn(12L * 60 * 60);
+    assertThat(service.getHoursToExpiry(JOURNEY, "hours")).isEqualTo(12L);
+
+    // 12 H + a bit
+    when(mockJedis.ttl(key)).thenReturn((12L * 60 * 60) + 100);
+    assertThat(service.getHoursToExpiry(JOURNEY, "hours")).isEqualTo(12L);
+
+    // Never
+    when(mockJedis.ttl(key)).thenReturn(-1L);
+    assertThat(service.getHoursToExpiry(JOURNEY, "hours")).isEqualTo(-1L);
+  }
 }

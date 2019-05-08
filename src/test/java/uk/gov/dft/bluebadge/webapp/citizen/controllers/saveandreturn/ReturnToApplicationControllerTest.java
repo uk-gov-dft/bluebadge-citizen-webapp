@@ -27,6 +27,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.FormObjectToParamMapper;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.config.RedisSessionConfig;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveAndReturnForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveAndReturnJourney;
@@ -43,6 +44,7 @@ public class ReturnToApplicationControllerTest {
   @Mock private CryptoService mockCryptoService;
   @Mock private MessageService mockMessageService;
   @Mock private RedisService mockRedisService;
+  @Mock private RedisSessionConfig mockRedisSessionConfig;
   private SaveAndReturnJourney journey;
 
   @Before
@@ -50,7 +52,8 @@ public class ReturnToApplicationControllerTest {
     MockitoAnnotations.initMocks(this);
     journey = new SaveAndReturnJourney();
     controller =
-        new ReturnToApplicationController(mockCryptoService, mockRedisService, mockMessageService);
+        new ReturnToApplicationController(
+            mockCryptoService, mockRedisService, mockMessageService, mockRedisSessionConfig);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -145,7 +148,7 @@ public class ReturnToApplicationControllerTest {
     doThrow(new CryptoVersionException("", "", ""))
         .when(mockCryptoService)
         .checkEncryptedJourneyVersion(any());
-
+    when(mockRedisSessionConfig.getStoredJourneyVersionCookieName()).thenReturn("MyNewCookie");
     mockMvc
         .perform(
             post(Mappings.URL_RETURN_TO_APPLICATION)
@@ -153,7 +156,7 @@ public class ReturnToApplicationControllerTest {
                 .params(FormObjectToParamMapper.convert(form)))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl(Mappings.URL_ENTER_CODE))
-        .andExpect(cookie().exists("BlueBadgeAppVersion"));
+        .andExpect(cookie().exists("MyNewCookie"));
     verify(mockCryptoService, times(1)).checkEncryptedJourneyVersion("encrypted3");
   }
 

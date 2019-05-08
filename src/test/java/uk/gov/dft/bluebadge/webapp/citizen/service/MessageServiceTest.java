@@ -10,6 +10,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import uk.gov.dft.bluebadge.webapp.citizen.client.messageservice.MessageApiClient;
+import uk.gov.dft.bluebadge.webapp.citizen.client.messageservice.model.ApplicationSavedMessageRequest;
 import uk.gov.dft.bluebadge.webapp.citizen.client.messageservice.model.SaveAndReturnCodeMessageRequest;
 
 public class MessageServiceTest {
@@ -35,5 +36,17 @@ public class MessageServiceTest {
         .contains(entry(SaveAndReturnCodeMessageRequest.RETURN_CODE_KEY, "1234"));
     assertThat(argumentCaptor.getValue().getAttributes())
         .contains(entry(SaveAndReturnCodeMessageRequest.EXPIRY_TIME_KEY, "expiry"));
+  }
+
+  @Test
+  public void sendApplicationSavedEmail() {
+    service.sendApplicationSavedEmail("emailAddress1", "expiry");
+    ArgumentCaptor<ApplicationSavedMessageRequest> argumentCaptor =
+        ArgumentCaptor.forClass(ApplicationSavedMessageRequest.class);
+    verify(apiClient).sendApplicationSavedEmail(argumentCaptor.capture());
+    assertThat(argumentCaptor.getValue().getEmailAddress()).isEqualTo("emailAddress1");
+
+    assertThat(argumentCaptor.getValue().getAttributes())
+        .contains(entry(ApplicationSavedMessageRequest.EXPIRY_TIME_KEY, "expiry"));
   }
 }
