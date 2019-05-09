@@ -2,7 +2,9 @@ package uk.gov.dft.bluebadge.webapp.citizen.appbuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField.PAIN;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import java.util.EnumSet;
 import java.util.List;
@@ -21,6 +23,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.TreatmentListForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.BreathlessnessForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
 
@@ -51,6 +54,36 @@ public class WalkingConverterTest {
     WalkingDifficulty result = WalkingConverter.convert(journey);
     // Detail covered in other tests.
     assertThat(result.getBreathlessness()).isEqualTo(BREATHLESSNESS_RESULTS);
+  }
+
+  @Test
+  public void convert_withBreathlessness_withOtherDescButNotOther() {
+    Journey journey = new JourneyBuilder().withEligibility(WALKD).build();
+    BreathlessnessForm breathlessnessForm = JourneyFixture.getBreathlessnessForm();
+    breathlessnessForm.setBreathlessnessTypes(ImmutableList.of(BreathlessnessCodeField.OWNPACE));
+    breathlessnessForm.setBreathlessnessOtherDescription("something");
+    journey.setFormForStep(breathlessnessForm);
+
+    WalkingDifficulty result = WalkingConverter.convert(journey);
+    // Detail covered in other tests.
+    assertThat(result.getBreathlessness()).isNotNull();
+    assertThat(result.getBreathlessness().getOtherDescription()).isNull();
+    assertThat(result.getBreathlessness().getTypeCodes())
+        .containsExactly(BreathlessnessCodeField.OWNPACE);
+  }
+
+  @Test
+  public void convert_withBreathlessnessFormButNotBreathlessnessDifficulty() {
+    Journey journey = new JourneyBuilder().withEligibility(WALKD).build();
+    WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm =
+        JourneyFixture.getWhatMakesWalkingDifficultForm();
+    whatMakesWalkingDifficultForm.setWhatWalkingDifficulties(ImmutableList.of(PAIN));
+    journey.setFormForStep(whatMakesWalkingDifficultForm);
+    journey.setFormForStep(JourneyFixture.getBreathlessnessForm());
+
+    WalkingDifficulty result = WalkingConverter.convert(journey);
+    // Detail covered in other tests.
+    assertThat(result.getBreathlessness()).isNull();
   }
 
   @Test
@@ -109,13 +142,16 @@ public class WalkingConverterTest {
   @Test
   public void getBreathlessness_withOtherDescription() {
     Breathlessness result =
-        WalkingConverter.getBreathlessness(JourneyFixture.getBreathlessnessForm());
+        WalkingConverter.getBreathlessness(
+            JourneyFixture.getWhatMakesWalkingDifficultForm(),
+            JourneyFixture.getBreathlessnessForm());
     assertThat(result).isEqualTo(BREATHLESSNESS_RESULTS);
   }
 
   @Test
   public void getBreathlessness_withNull() {
-    Breathlessness result = WalkingConverter.getBreathlessness(null);
+    Breathlessness result =
+        WalkingConverter.getBreathlessness(JourneyFixture.getWhatMakesWalkingDifficultForm(), null);
     assertThat(result).isNull();
   }
 

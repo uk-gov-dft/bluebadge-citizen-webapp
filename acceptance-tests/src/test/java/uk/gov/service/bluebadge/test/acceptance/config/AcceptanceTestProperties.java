@@ -14,6 +14,7 @@ public class AcceptanceTestProperties {
   private final String browserVersion;
   private final String browserStackUser;
   private final String browserStackKey;
+  private final boolean seleniumGrid;
 
   AcceptanceTestProperties(
       final boolean headlessMode,
@@ -24,7 +25,8 @@ public class AcceptanceTestProperties {
       String browserName,
       String browserVersion,
       String browserStackUser,
-      String browserStackKey) {
+      String browserStackKey,
+      boolean seleniumGrid) {
     this.headlessMode = headlessMode;
     this.downloadDir = downloadDir;
     this.tempDir = tempDir;
@@ -34,6 +36,7 @@ public class AcceptanceTestProperties {
     this.browserVersion = browserVersion;
     this.browserStackUser = browserStackUser;
     this.browserStackKey = browserStackKey;
+    this.seleniumGrid = seleniumGrid;
   }
 
   public Path getDownloadDir() {
@@ -46,6 +49,10 @@ public class AcceptanceTestProperties {
 
   public boolean isZapMode() {
     return zapMode;
+  }
+
+  public boolean isSeleniumGrid() {
+    return seleniumGrid;
   }
 
   public boolean isbStackMode() {
@@ -93,6 +100,8 @@ public class AcceptanceTestProperties {
         + browserStackUser
         + ", browserStackKey="
         + browserStackKey
+        + ", seleniumGrid="
+        + seleniumGrid
         + '}';
   }
 }

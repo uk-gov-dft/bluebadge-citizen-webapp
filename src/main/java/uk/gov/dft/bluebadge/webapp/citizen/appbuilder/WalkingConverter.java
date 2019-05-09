@@ -39,7 +39,7 @@ class WalkingConverter {
         .walkingAids(getWalkingAids(mobilityAidListForm))
         .treatments(getTreatments(treatmentListForm))
         .medications(getMedications(medicationListForm))
-        .breathlessness(getBreathlessness(breathlessnessForm))
+        .breathlessness(getBreathlessness(whatMakesWalkingDifficultForm, breathlessnessForm))
         .build();
   }
 
@@ -112,14 +112,21 @@ class WalkingConverter {
   }
 
   @SuppressWarnings("squid:S1168")
-  static Breathlessness getBreathlessness(BreathlessnessForm breathlessnessForm) {
+  static Breathlessness getBreathlessness(
+      WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm,
+      BreathlessnessForm breathlessnessForm) {
 
-    if (null != breathlessnessForm) {
+    if (whatMakesWalkingDifficultForm
+            .getWhatWalkingDifficulties()
+            .contains(WalkingDifficultyTypeCodeField.BREATH)
+        && null != breathlessnessForm) {
+      Breathlessness breathlessness =
+          Breathlessness.builder()
+              .typeCodes(breathlessnessForm.getBreathlessnessTypes())
+              .otherDescription(breathlessnessForm.getBreathlessnessOtherDescription())
+              .build();
 
-      return Breathlessness.builder()
-          .typeCodes(breathlessnessForm.getBreathlessnessTypes())
-          .otherDescription(breathlessnessForm.getBreathlessnessOtherDescription())
-          .build();
+      return breathlessness;
     }
     return null;
   }

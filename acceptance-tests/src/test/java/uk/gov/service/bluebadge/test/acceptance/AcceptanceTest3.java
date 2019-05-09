@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 
 /** Entry point required by {@code cucumber-jvm} to discover and run tests. */
 @RunWith(Cucumber.class)
-@CucumberOptions(features = "src/test/resources/features/site/testSuite1/")
-public class AcceptanceTest {
+@CucumberOptions(features = "src/test/resources/features/site/testSuite3/")
+public class AcceptanceTest3 {
   // no-op, config class only
 }
