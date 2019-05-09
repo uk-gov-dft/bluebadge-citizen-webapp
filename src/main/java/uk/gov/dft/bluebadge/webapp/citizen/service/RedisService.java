@@ -1,13 +1,15 @@
 package uk.gov.dft.bluebadge.webapp.citizen.service;
 
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import redis.clients.jedis.Jedis;
 import uk.gov.dft.bluebadge.webapp.citizen.config.RedisSessionConfig;
+
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Slf4j
 @Service
@@ -132,8 +134,7 @@ public class RedisService {
       log.warn("Call to get expiry of redis key when none set, key type: {}", key.name());
       return "Never";
     }
-
-    return OffsetDateTime.now()
+    return ZonedDateTime.now(ZoneId.of("Europe/London"))
         .plusSeconds(secondsToLive)
         .format(DateTimeFormatter.ofPattern("d MMM yyyy 'at' HH:mm"));
   }

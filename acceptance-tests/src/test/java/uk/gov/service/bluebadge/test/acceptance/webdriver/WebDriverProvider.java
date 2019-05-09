@@ -12,6 +12,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 
@@ -42,6 +43,7 @@ public class WebDriverProvider {
   /** When 'true', the WebDriver will be operating through zap proxy. */
   private boolean isZapMode;
 
+  private boolean isSeleniumGrid;
   /** When 'true', the WebDriver will be from BrowserStack. */
   private final boolean isBstackMode;
 
@@ -71,7 +73,8 @@ public class WebDriverProvider {
       String bStackBrowserName,
       String bStackBrowserVersion,
       String bStackBrowserUser,
-      String bStackBrowserKey) {
+      String bStackBrowserKey,
+      boolean isSeleniumGridMode) {
     this.webDriverServiceProvider = webDriverServiceProvider;
     this.isHeadlessMode = isHeadlessMode;
     this.isZapMode = isZapMode;
@@ -81,6 +84,7 @@ public class WebDriverProvider {
     this.bStackBrowserVersion = bStackBrowserVersion;
     this.bStackBrowserUser = bStackBrowserUser;
     this.bStackBrowserKey = bStackBrowserKey;
+    this.isSeleniumGrid = isSeleniumGridMode;
   }
 
   public WebDriver getWebDriver() {
@@ -149,6 +153,40 @@ public class WebDriverProvider {
 
       try {
         webDriver = new RemoteWebDriver(new URL(URL), caps);
+      } catch (MalformedURLException e) {
+        e.printStackTrace();
+      }
+
+    } else if (isSeleniumGrid) {
+
+      chromeOptions = new ChromeOptions();
+
+      final Map<String, Object> chromePrefs = new HashMap<>();
+      log.info("Setting WebDriver download directory to '{}'.", downloadDirectory);
+      chromePrefs.put("download.default_directory", downloadDirectory.toAbsolutePath().toString());
+
+      chromeOptions.setExperimentalOption("prefs", chromePrefs);
+      log.info(
+          "Configuring WebDriver to run in {} mode.",
+          isHeadlessMode ? "headless" : "full, graphical");
+      chromeOptions.addArguments("window-size=1920,1080");
+      if (isHeadlessMode) {
+        chromeOptions.addArguments("--headless");
+      }
+
+      String URL = "http://localhost:4444/wd/hub";
+      //DesiredCapabilities capabilities=DesiredCapabilities.chrome();
+
+      chromeOptions.addArguments("--whitelisted-ips");
+      chromeOptions.addArguments("--no-sandbox");
+      chromeOptions.addArguments("--disable-extensions");
+
+      chromeOptions.setCapability("version", "");
+      //chromeOptions.setCapability("platform", "LINUX");
+
+      try {
+        webDriver = new RemoteWebDriver(new URL(URL), chromeOptions);
+        ((RemoteWebDriver) webDriver).setFileDetector(new LocalFileDetector());
       } catch (MalformedURLException e) {
         e.printStackTrace();
       }
