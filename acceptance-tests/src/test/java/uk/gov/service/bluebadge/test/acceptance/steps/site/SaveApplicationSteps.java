@@ -1,15 +1,14 @@
 package uk.gov.service.bluebadge.test.acceptance.steps.site;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.SaveApplicationPage;
 import uk.gov.service.bluebadge.test.acceptance.steps.AbstractSpringSteps;
 import uk.gov.service.bluebadge.test.acceptance.steps.CommonSteps;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class SaveApplicationSteps extends AbstractSpringSteps {
 
@@ -58,9 +57,4 @@ public class SaveApplicationSteps extends AbstractSpringSteps {
             is("M4 1FS"));
   }
 
-  @And("^I validate return to saved application page for a \"([^\"]*)\" application$")
-  public void iValidateReturnToSavedApplicationPageForAApplication(String arg0) throws Throwable {
-    // Write code here that turns the phrase above into concrete actions
-    throw new PendingException();
-  }
 }
