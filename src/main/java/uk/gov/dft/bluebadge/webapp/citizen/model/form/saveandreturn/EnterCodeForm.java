@@ -12,9 +12,9 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.BaseForm;
 @Data
 @Builder
 public class EnterCodeForm implements BaseForm, Serializable {
-  @NotEmpty
   @Pattern(regexp = POSTCODE_CASE_INSENSITIVE)
-  String postcode;
+  private String postcode;
 
-  @NotEmpty String code;
+  @Pattern(regexp = "^[0-9]{4}$")
+  private String code;
 }
