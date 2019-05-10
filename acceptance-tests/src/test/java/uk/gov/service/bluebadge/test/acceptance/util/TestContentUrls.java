@@ -35,6 +35,8 @@ public class TestContentUrls {
     add("home", "/");
     add("task-list", "/task-list");
     add("what-makes-walking-difficult", "/what-makes-walking-difficult");
+    add("save-application", "/save-application");
+    add("return-to-application", "/return-to-application");
   }
 
   private void add(String pageName, String url) {
