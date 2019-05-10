@@ -29,7 +29,9 @@ Feature: DFT Blue badge Citizen app - Save application
     And   I navigate to the "return-to-application" page
     Then  I should see page titled "Return to a saved application" with GOV.UK suffix
     And   I validate return to saved application page for a "yourself" application
-    And   I validate the enter code for a "yourself" application
+    
+    Then  I should see page titled "Enter the 4-digit code" with GOV.UK suffix
+    And   I validate enter the 4 digit code page for a "yourself" application
 
 
 
