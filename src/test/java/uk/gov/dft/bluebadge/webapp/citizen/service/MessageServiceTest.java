@@ -12,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 import uk.gov.dft.bluebadge.webapp.citizen.client.messageservice.MessageApiClient;
 import uk.gov.dft.bluebadge.webapp.citizen.client.messageservice.model.ApplicationSavedMessageRequest;
 import uk.gov.dft.bluebadge.webapp.citizen.client.messageservice.model.SaveAndReturnCodeMessageRequest;
+import uk.gov.dft.bluebadge.webapp.citizen.config.RedisSessionConfig;
 
 public class MessageServiceTest {
 
@@ -21,7 +22,9 @@ public class MessageServiceTest {
   @Before
   public void setUp() {
     MockitoAnnotations.initMocks(this);
-    service = new MessageService(apiClient);
+    RedisSessionConfig config = new RedisSessionConfig();
+    config.setSaveReturnLink("returnLink");
+    service = new MessageService(apiClient, config);
   }
 
   @Test
@@ -48,5 +51,7 @@ public class MessageServiceTest {
 
     assertThat(argumentCaptor.getValue().getAttributes())
         .contains(entry(ApplicationSavedMessageRequest.EXPIRY_TIME_KEY, "expiry"));
+    assertThat(argumentCaptor.getValue().getAttributes())
+        .contains(entry(ApplicationSavedMessageRequest.RETURN_LINK_KEY, "returnLink"));
   }
 }

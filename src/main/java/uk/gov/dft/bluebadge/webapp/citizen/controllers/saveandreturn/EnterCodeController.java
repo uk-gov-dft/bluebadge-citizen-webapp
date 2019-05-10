@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers.saveandreturn;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.errorhandler.ErrorControllerAdvice.REDIRECT;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveAndReturnJourney.SAVE_AND_RETURN_JOURNEY_KEY;
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.CODE;
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.CODE_TRIES;
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.JOURNEY;
@@ -37,6 +38,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.RedisService;
 public class EnterCodeController implements SaveAndReturnController {
   static final String TEMPLATE = "save-and-return/enter-code";
   private static final String FORM_REQUEST = "formRequest";
+  static final String EMAIL_MODEL_KEY = "emailAddress";
   private CryptoService cryptoService;
   private RedisService redisService;
 
@@ -66,7 +68,7 @@ public class EnterCodeController implements SaveAndReturnController {
 
     // emailAddress needed in ui
     model.addAttribute(
-        "emailAddress", saveAndReturnJourney.getSaveAndReturnForm().getEmailAddress());
+        EMAIL_MODEL_KEY, saveAndReturnJourney.getSaveAndReturnForm().getEmailAddress());
 
     return TEMPLATE;
   }

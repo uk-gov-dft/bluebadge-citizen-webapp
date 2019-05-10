@@ -58,3 +58,5 @@ spring:
 
 amazon:
   s3bucket: ${bb_application_tmp_bucket}
+session:
+  save-return-link: https://apply-blue-badge.service.gov.uk/return-to-application

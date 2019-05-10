@@ -5,6 +5,7 @@ import java.util.Map;
 
 public class ApplicationSavedMessageRequest extends GenericMessageRequest {
   public static final String EXPIRY_TIME_KEY = "expiryTime";
+  public static final String RETURN_LINK_KEY = "returnLink";
   public static final String TEMPLATE = "APPLICATION_SAVED";
 
   private ApplicationSavedMessageRequest(
@@ -12,7 +13,10 @@ public class ApplicationSavedMessageRequest extends GenericMessageRequest {
     super(template, emailAddress, attributes);
   }
 
-  public ApplicationSavedMessageRequest(String emailAddress, String expiryTime) {
-    this(TEMPLATE, emailAddress, ImmutableMap.of(EXPIRY_TIME_KEY, expiryTime));
+  public ApplicationSavedMessageRequest(String emailAddress, String expiryTime, String returnLink) {
+    this(
+        TEMPLATE,
+        emailAddress,
+        ImmutableMap.of(EXPIRY_TIME_KEY, expiryTime, RETURN_LINK_KEY, returnLink));
   }
 }

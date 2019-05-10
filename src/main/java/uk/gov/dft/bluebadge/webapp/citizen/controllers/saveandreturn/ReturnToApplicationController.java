@@ -1,6 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.saveandreturn;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.errorhandler.ErrorControllerAdvice.REDIRECT;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveAndReturnJourney.SAVE_AND_RETURN_JOURNEY_KEY;
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.CODE;
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.EMAIL_TRIES;
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.JOURNEY;
@@ -153,8 +154,7 @@ public class ReturnToApplicationController implements SaveAndReturnController {
     Cookie cookie = new Cookie(redisSessionConfig.getStoredJourneyVersionCookieName(), version);
     cookie.setSecure(true);
     cookie.setHttpOnly(true);
-    // Default to domain creating cookie (us).
-    // cookie.setDomain("uk-gov-dft.gov.uk");
+    // Default to domain creating cookie (us). i.e. Don't call setDomain
     return cookie;
   }
 

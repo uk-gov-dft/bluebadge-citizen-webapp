@@ -14,8 +14,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture.formRequestFlashAttributeCount;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode;
-import static uk.gov.dft.bluebadge.webapp.citizen.controllers.saveandreturn.SaveAndReturnController.SAVE_AND_RETURN_JOURNEY_KEY;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveAndReturnJourney.SAVE_AND_RETURN_JOURNEY_KEY;
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.JOURNEY;
 
 import lombok.SneakyThrows;
@@ -78,7 +79,7 @@ public class ReturnToApplicationControllerTest {
   @SneakyThrows
   public void submit_loadsApplicationFailBeanValidation() {
     // Given a valid submission
-    SaveAndReturnForm form = SaveAndReturnForm.builder().build();
+    SaveAndReturnForm form = SaveAndReturnForm.builder().emailAddress("").build();
 
     when(mockRedisService.exists(any(), any())).thenReturn(true);
     when(mockRedisService.throttleExceeded(any())).thenReturn(false);
@@ -91,7 +92,8 @@ public class ReturnToApplicationControllerTest {
                 .params(FormObjectToParamMapper.convert(form)))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl(Mappings.URL_RETURN_TO_APPLICATION + "#error"))
-        .andExpect(formRequestFlashAttributeHasFieldErrorCode("emailAddress", "NotEmpty"));
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("emailAddress", "Pattern"))
+        .andExpect(formRequestFlashAttributeCount(1));
     verify(mockCryptoService, never()).checkEncryptedJourneyVersion("encrypted5");
   }
 

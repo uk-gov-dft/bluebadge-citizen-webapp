@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class CryptoPostcodeException extends Exception {
-  private String savedPostcode;
+  private final String savedPostcode;
   private final String enteredPostcode;
 
   public CryptoPostcodeException(String message, String savedPostcode, String enteredPostcode) {

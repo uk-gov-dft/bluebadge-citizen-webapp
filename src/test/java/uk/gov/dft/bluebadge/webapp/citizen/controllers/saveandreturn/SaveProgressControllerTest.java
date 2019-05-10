@@ -125,10 +125,12 @@ public class SaveProgressControllerTest {
         .perform(
             post(Mappings.URL_SAVE_PROGRESS)
                 .sessionAttr(JOURNEY_SESSION_KEY, new Journey())
-                .params(FormObjectToParamMapper.convert(SaveProgressForm.builder().build())))
+                .params(
+                    FormObjectToParamMapper.convert(
+                        SaveProgressForm.builder().emailAddress("").postcode("").build())))
         .andExpect(status().is3xxRedirection())
-        .andExpect(formRequestFlashAttributeHasFieldErrorCode("emailAddress", "NotEmpty"))
-        .andExpect(formRequestFlashAttributeHasFieldErrorCode("postcode", "NotEmpty"))
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("emailAddress", "Pattern"))
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("postcode", "Pattern"))
         .andExpect(formRequestFlashAttributeCount(2))
         .andExpect(redirectedUrl(ERROR_URL));
   }

@@ -124,3 +124,4 @@ session:
   save-submit-throttle-time-mins: 5
   save-submit-throttle-tries: 3
   stored-journey-version-cookie-name: BlueBadgeAppVersion
+  save-return-link: https://localhost:8780/return-to-application

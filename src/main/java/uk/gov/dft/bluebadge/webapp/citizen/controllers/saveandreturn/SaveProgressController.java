@@ -58,7 +58,7 @@ public class SaveProgressController implements StepController {
       model.addAttribute(HIDE_POSTCODE_MODEL_KEY, false);
     }
 
-    if (!model.containsAttribute("formRequest")) {
+    if (!model.containsAttribute(FORM_REQUEST)) {
 
       String postcode = null;
       String emailAddress = null;
@@ -69,7 +69,7 @@ public class SaveProgressController implements StepController {
         emailAddress = contactDetailsForm.getEmailAddress();
       }
       model.addAttribute(
-          "formRequest",
+          FORM_REQUEST,
           SaveProgressForm.builder().emailAddress(emailAddress).postcode(postcode).build());
     }
 

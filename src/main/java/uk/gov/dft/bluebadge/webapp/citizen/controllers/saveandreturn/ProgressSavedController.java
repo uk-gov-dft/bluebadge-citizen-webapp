@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.support.SessionStatus;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.StepController;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
@@ -36,7 +37,10 @@ public class ProgressSavedController implements StepController {
   }
 
   @GetMapping
-  public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+  public String show(
+      Model model,
+      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
+      SessionStatus sessionStatus) {
 
     // If here should have a saved progress form.
     if (null == journey.getSaveProgressForm()
@@ -58,6 +62,7 @@ public class ProgressSavedController implements StepController {
       model.addAttribute(TIME_TO_EXPIRY_MODEL_KEY, daysToExpiry);
     }
 
+    sessionStatus.setComplete();
     return TEMPLATE;
   }
 

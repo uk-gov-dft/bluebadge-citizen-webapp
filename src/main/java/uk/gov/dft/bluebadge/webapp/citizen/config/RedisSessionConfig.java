@@ -34,6 +34,9 @@ public class RedisSessionConfig {
   @Value("${session.stored-journey-version-cookie-name:BlueBadgeAppVersion}")
   private String storedJourneyVersionCookieName;
 
+  @Value("${session.save-return-link}")
+  private String saveReturnLink;
+
   @Bean
   public static ConfigureRedisAction configureRedisAction() {
     return ConfigureRedisAction.NO_OP;

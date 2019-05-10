@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.client.common;
 
 import java.util.stream.Collectors;
 import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
+import uk.gov.dft.bluebadge.common.api.model.ErrorErrors;
 
 public class ClientApiException extends RuntimeException {
   final transient CommonResponse commonResponse;
@@ -25,7 +26,7 @@ public class ClientApiException extends RuntimeException {
         cr.getError()
             .getErrors()
             .stream()
-            .map(e -> e.getMessage())
+            .map(ErrorErrors::getMessage)
             .collect(Collectors.joining(", ", result, ""));
     return result;
   }
