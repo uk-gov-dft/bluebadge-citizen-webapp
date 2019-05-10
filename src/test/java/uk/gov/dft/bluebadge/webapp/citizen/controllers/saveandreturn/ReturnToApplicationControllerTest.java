@@ -75,7 +75,7 @@ public class ReturnToApplicationControllerTest {
   @SneakyThrows
   public void submit_loadsApplicationFailBeanValidation() {
     // Given a valid submission
-    SaveAndReturnForm form = SaveAndReturnForm.builder().build();
+    SaveAndReturnForm form = SaveAndReturnForm.builder().emailAddress("").build();
 
     when(mockRedisService.exists(any(), any())).thenReturn(true);
     when(mockRedisService.throttleExceeded(any())).thenReturn(false);
@@ -88,7 +88,7 @@ public class ReturnToApplicationControllerTest {
                 .params(FormObjectToParamMapper.convert(form)))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl(Mappings.URL_RETURN_TO_APPLICATION + "#error"))
-        .andExpect(formRequestFlashAttributeHasFieldErrorCode("emailAddress", "NotEmpty"));
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("emailAddress", "Pattern"));
     verify(mockCryptoService, never()).checkEncryptedJourneyVersion("encrypted5");
   }
 

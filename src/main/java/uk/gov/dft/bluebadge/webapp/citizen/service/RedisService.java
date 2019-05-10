@@ -1,15 +1,14 @@
 package uk.gov.dft.bluebadge.webapp.citizen.service;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import redis.clients.jedis.Jedis;
 import uk.gov.dft.bluebadge.webapp.citizen.config.RedisSessionConfig;
-
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Slf4j
 @Service

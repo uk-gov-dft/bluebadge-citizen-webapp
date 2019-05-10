@@ -82,13 +82,14 @@ public class EnterCodeControllerTest {
   @SneakyThrows
   public void submit_ok() {
     // Given a valid submission
-    journey.setSaveAndReturnForm(SaveAndReturnForm.builder().emailAddress("emailAddress").build());
+    journey.setSaveAndReturnForm(
+        SaveAndReturnForm.builder().emailAddress("emailAddress@a.b").build());
     EnterCodeForm form = EnterCodeForm.builder().code("1234").postcode("wv164aw").build();
 
     when(mockRedisService.exists(any(), any())).thenReturn(true);
     when(mockRedisService.throttleExceeded(any())).thenReturn(false);
-    when(mockRedisService.get(JOURNEY, "emailAddress")).thenReturn("encrypted");
-    when(mockRedisService.get(CODE, "emailAddress")).thenReturn("1234");
+    when(mockRedisService.get(JOURNEY, "emailAddress@a.b")).thenReturn("encrypted");
+    when(mockRedisService.get(CODE, "emailAddress@a.b")).thenReturn("1234");
 
     mockMvc
         .perform(
@@ -104,7 +105,7 @@ public class EnterCodeControllerTest {
   @SneakyThrows
   public void submit_bindingErrors() {
     journey.setSaveAndReturnForm(SaveAndReturnForm.builder().emailAddress("emailAddress").build());
-    EnterCodeForm form = EnterCodeForm.builder().code(null).postcode(null).build();
+    EnterCodeForm form = EnterCodeForm.builder().code("").postcode("").build();
 
     when(mockRedisService.exists(any(), any())).thenReturn(true);
     when(mockRedisService.throttleExceeded(any())).thenReturn(false);
@@ -117,8 +118,8 @@ public class EnterCodeControllerTest {
                 .sessionAttr(SAVE_AND_RETURN_JOURNEY_KEY, journey)
                 .params(FormObjectToParamMapper.convert(form)))
         .andExpect(status().is3xxRedirection())
-        .andExpect(formRequestFlashAttributeHasFieldErrorCode("code", "NotEmpty"))
-        .andExpect(formRequestFlashAttributeHasFieldErrorCode("postcode", "NotEmpty"))
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("code", "Pattern"))
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("postcode", "Pattern"))
         .andExpect(redirectedUrl(ERROR_URL));
   }
 
