@@ -18,7 +18,7 @@ public class JourneyToApplicationConverter {
     String paymentReference = journey.getPaymentReference();
 
     return Application.builder()
-        .applicationTypeCode(ApplicationTypeCodeField.NEW)
+        .applicationTypeCode(getApplicationType(existingBadgeForm))
         .localAuthorityCode(journey.getLocalAuthority().getShortCode())
         .paymentTaken(paymentTaken)
         .paymentReference(paymentReference)
@@ -40,5 +40,16 @@ public class JourneyToApplicationConverter {
     }
 
     return null;
+  }
+
+  static ApplicationTypeCodeField getApplicationType(ExistingBadgeForm existingBadgeForm) {
+
+    if (existingBadgeForm != null
+        && existingBadgeForm.getHasExistingBadge() != null
+        && existingBadgeForm.getHasExistingBadge()) {
+      return ApplicationTypeCodeField.RENEW;
+    }
+
+    return ApplicationTypeCodeField.NEW;
   }
 }
