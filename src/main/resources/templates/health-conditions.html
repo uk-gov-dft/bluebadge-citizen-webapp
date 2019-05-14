@@ -17,11 +17,6 @@
 
             <form th:action="@{/health-conditions}" th:object="${formRequest}" method="post" novalidate>
                 <div>
-                    <div class="govuk-inset-text"
-                         th:text="#{${JOURNEY.who} + 'healthConditionsPage.hint'}"
-                         th:id="'descriptionOfConditions-hint'"
-                         th:data-uipath="${name} + '.label_hint'"></div>
-
                     <div th:class="${#fields.hasErrors('descriptionOfConditions')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
                         <label class="govuk-label" for="descriptionOfConditions"
                                th:text="#{healthConditionsPage.descriptionOfConditions}"></label>
