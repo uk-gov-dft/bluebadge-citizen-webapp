@@ -1,13 +1,14 @@
 package uk.gov.service.bluebadge.test.acceptance.steps.site;
 
 import cucumber.api.java.en.And;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.HealthConditionsPage;
 import uk.gov.service.bluebadge.test.acceptance.steps.AbstractSpringSteps;
 import uk.gov.service.bluebadge.test.acceptance.steps.CommonSteps;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HealthConditionsSteps extends AbstractSpringSteps {
 
@@ -21,7 +22,7 @@ public class HealthConditionsSteps extends AbstractSpringSteps {
   }
 
   @And(
-      "^I validate health conditions page for a \"(yourself|someone else)\" application and eligibility \"(WALKD)\"$")
+      "^I validate health conditions page for a \"(yourself|someone else)\" application and eligibility \"(PIP|DLA|AFRFCS|WPMS|BLIND|WALKD|ARMS|CHILDBULK|CHILDVEHIC|TERMILL|NONE)\"$")
   public void iValidateHealthConditionsPageForAApplication(String applicant, String eligibility) {
     verifyPageContent(applicant, eligibility);
     validateMandatoryFields();
@@ -42,9 +43,9 @@ public class HealthConditionsSteps extends AbstractSpringSteps {
       }
     } else {
       if ("WALKD".equals(eligibility)) {
-        commonSteps.iShouldSeeTheHeading(HealthConditionsPage.PAGE_HEADER_SOMEONE_ELSE);
-      } else {
         commonSteps.iShouldSeeTheHeading(HealthConditionsPage.PAGE_HEADER_SOMEONE_ELSE_WALKING);
+      } else {
+        commonSteps.iShouldSeeTheHeading(HealthConditionsPage.PAGE_HEADER_SOMEONE_ELSE);
       }
     }
   }
