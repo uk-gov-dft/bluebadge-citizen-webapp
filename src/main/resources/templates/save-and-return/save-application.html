@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="(${errorSummary}? #{common.title.error} : '')  + #{save.application.title}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l" th:text="#{save.application.title}"></h1>
+
+            <form th:action="@{/save-application}" th:object="${formRequest}" method="POST" novalidate>
+
+                <div class="govuk-inset-text">
+                    <p class="govuk-body" th:text="#{${JOURNEY.who} + 'save.application.title.hint'}"></p>
+                </div>
+
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{save.application.email.label}, 'emailAddress', #{save.application.email.hint}, 'text', null)}"></div>
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{save.application.postcode.label}, 'postcode', null, 'text', null)}"></div>
+
+                <button type="submit"
+                        class="govuk-button"
+                        data-uipath="button.continue"
+                        th:text="#{btn.label.continue}"></button>
+
+            </form>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

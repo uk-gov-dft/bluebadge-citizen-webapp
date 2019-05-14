@@ -10,6 +10,12 @@ blue-badge:
   paymentservice:
     servicehost:
       host: payment-service
+  messageservice:
+    servicehost:
+      host: message-service
+  cryptoservice:
+    servicehost:
+      host: crypto-service
 
 spring:
   main:

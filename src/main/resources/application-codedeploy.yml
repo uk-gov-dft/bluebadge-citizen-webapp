@@ -19,6 +19,17 @@ blue-badge:
       port: 443
       scheme: https
       contextpath: /
+  cryptoservice:
+    servicehost:
+      host: api.${bb_env}.${url}
+      port: 443
+      scheme: https
+  messageservice:
+    servicehost:
+      host: api.${bb_env}.${url}
+      port: 443
+      scheme: https
+      contextpath: /
 
 management:
   server:

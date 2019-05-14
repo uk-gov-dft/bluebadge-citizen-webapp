@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="(${errorSummary}? #{common.title.error} : '')  + #{return.to.application.title}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l" th:text="#{return.to.application.title}"></h1>
+
+            <form th:action="@{/return-to-application}" th:object="${formRequest}" method="POST" novalidate>
+
+                <div class="govuk-inset-text">
+                    <p class="govuk-body" th:text="#{return.to.application.title.hint}"></p>
+                </div>
+
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{return.to.application.email.label}, 'emailAddress', #{return.to.application.email.hint}, 'text', null)}"></div>
+
+                <button type="submit"
+                        class="govuk-button"
+                        data-uipath="button.continue"
+                        th:text="#{btn.label.continue}"></button>
+
+            </form>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
