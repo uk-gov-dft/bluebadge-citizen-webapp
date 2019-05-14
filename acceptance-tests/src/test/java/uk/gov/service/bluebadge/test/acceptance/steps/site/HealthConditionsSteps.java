@@ -20,24 +20,32 @@ public class HealthConditionsSteps extends AbstractSpringSteps {
     this.commonSteps = commonSteps;
   }
 
-  @And("^I validate health conditions page for a \"(yourself|someone else)\" application$")
-  public void iValidateHealthConditionsPageForAApplication(String applicant) {
-    verifyPageContent(applicant);
+  @And(
+      "^I validate health conditions page for a \"(yourself|someone else)\" application and eligibility \"(WALKD)\"$")
+  public void iValidateHealthConditionsPageForAApplication(String applicant, String eligibility) {
+    verifyPageContent(applicant, eligibility);
     validateMandatoryFields();
 
     enterValidValuesAndContinue(applicant);
   }
 
-  public void verifyPageContent(String applicant) {
+  public void verifyPageContent(String applicant, String eligibility) {
 
     commonSteps.iShouldSeeTheCorrectURL(HealthConditionsPage.PAGE_URL);
+    commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(HealthConditionsPage.PAGE_TITLE);
 
     if ("yourself".equals(applicant.toLowerCase())) {
-      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(HealthConditionsPage.PAGE_TITLE);
-      commonSteps.iShouldSeeTheHeading(HealthConditionsPage.PAGE_HEADER);
+      if ("WALKD".equals(eligibility)) {
+        commonSteps.iShouldSeeTheHeading(HealthConditionsPage.PAGE_HEADER_WALKING);
+      } else {
+        commonSteps.iShouldSeeTheHeading(HealthConditionsPage.PAGE_HEADER);
+      }
     } else {
-      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(HealthConditionsPage.PAGE_TITLE);
-      commonSteps.iShouldSeeTheHeading(HealthConditionsPage.PAGE_HEADER_SOMEONE_ELSE);
+      if ("WALKD".equals(eligibility)) {
+        commonSteps.iShouldSeeTheHeading(HealthConditionsPage.PAGE_HEADER_SOMEONE_ELSE);
+      } else {
+        commonSteps.iShouldSeeTheHeading(HealthConditionsPage.PAGE_HEADER_SOMEONE_ELSE_WALKING);
+      }
     }
   }
 
