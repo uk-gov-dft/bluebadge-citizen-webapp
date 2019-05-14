@@ -7,8 +7,11 @@ public class CryptoVersionException extends Exception {
   private final String encryptedVersion;
   private final String currentVersion;
 
-  public CryptoVersionException(String message, String encryptedVersion, String currentVersion) {
-    super(message);
+  public CryptoVersionException(String encryptedVersion, String currentVersion) {
+    super(
+        String.format(
+            "Journey application versions don't match, saved: %s, running app: %s",
+            encryptedVersion, currentVersion));
     this.encryptedVersion = encryptedVersion;
     this.currentVersion = currentVersion;
   }

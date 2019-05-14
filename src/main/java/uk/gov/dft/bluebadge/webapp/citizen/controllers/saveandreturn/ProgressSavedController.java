@@ -16,6 +16,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.StepController;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveProgressForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys;
 import uk.gov.dft.bluebadge.webapp.citizen.service.RedisService;
 
@@ -41,15 +42,15 @@ public class ProgressSavedController implements StepController {
       Model model,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       SessionStatus sessionStatus) {
+    SaveProgressForm saveProgressForm = journey.getSaveProgressForm();
 
     // If here should have a saved progress form.
-    if (null == journey.getSaveProgressForm()
-        || StringUtils.isEmpty(journey.getSaveProgressForm().getEmailAddress())) {
+    if (null == saveProgressForm || StringUtils.isEmpty(saveProgressForm.getEmailAddress())) {
       return REDIRECT + Mappings.URL_TASK_LIST;
     }
 
-    model.addAttribute(FORM_REQUEST, journey.getSaveProgressForm());
-    String emailAddress = journey.getSaveProgressForm().getEmailAddress();
+    model.addAttribute(FORM_REQUEST, saveProgressForm);
+    String emailAddress = saveProgressForm.getEmailAddress();
 
     long daysToExpiry = redisService.getDaysToExpiryRoundedUp(RedisKeys.JOURNEY, emailAddress);
 
