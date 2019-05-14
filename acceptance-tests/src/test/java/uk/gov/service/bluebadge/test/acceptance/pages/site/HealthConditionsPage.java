@@ -7,11 +7,11 @@ public class HealthConditionsPage {
   public static final String PAGE_HEADER =
       "Describe any health conditions or disabilities that affect your walking";
   public static final String PAGE_HEADER_WALKING =
-      "Name any health condition or disabilities that affect your walking";
+      "Name any health conditions or disabilities that affect your walking";
   public static final String PAGE_HEADER_SOMEONE_ELSE =
       "Describe any health conditions or disabilities that affect their walking";
   public static final String PAGE_HEADER_SOMEONE_ELSE_WALKING =
-      "Name any health condition or disabilities that affect their walking";
+      "Name any health conditions or disabilities that affect their walking";
 
   public static final String VALID_DESCRIPTION =
       "This is my sample description!!@£$%^&*()_+{};\"|\n <>?~±§1234567890-=[];'\\,./`. I'm happy";
