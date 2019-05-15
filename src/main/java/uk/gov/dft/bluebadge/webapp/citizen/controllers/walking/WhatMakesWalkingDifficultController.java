@@ -89,35 +89,30 @@ public class WhatMakesWalkingDifficultController implements StepController {
         whatMakesWalkingDifficultForm.getWhatWalkingDifficulties();
     if (null != types) {
       if (types.contains(WalkingDifficultyTypeCodeField.PAIN)) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(
-            bindingResult, "painDescription", "NotBlank.painDescription");
+        ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "painDescription", "NotBlank");
         BBValidationUtils.rejectIfTooLong(
-            bindingResult, "painDescription", "Size.painDescription", DESC_MAX_LENGTH);
+            bindingResult, "painDescription", "Size", DESC_MAX_LENGTH);
       }
       if (types.contains(WalkingDifficultyTypeCodeField.BALANCE)) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(
-            bindingResult, "balanceDescription", "NotBlank.balanceDescription");
+        ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "balanceDescription", "NotBlank");
         BBValidationUtils.rejectIfTooLong(
-            bindingResult, "balanceDescription", "Size.balanceDescription", DESC_MAX_LENGTH);
+            bindingResult, "balanceDescription", "Size", DESC_MAX_LENGTH);
         ValidationUtils.rejectIfEmptyOrWhitespace(
-            bindingResult, "healthProfessionsForFalls", "NotNull.healthProfessionsForFalls");
+            bindingResult, "healthProfessionsForFalls", "NotNull");
       }
       if (types.contains(WalkingDifficultyTypeCodeField.DANGER)) {
         ValidationUtils.rejectIfEmptyOrWhitespace(
-            bindingResult, "dangerousDescription", "NotBlank.dangerousDescription");
+            bindingResult, "dangerousDescription", "NotBlank");
         BBValidationUtils.rejectIfTooLong(
-            bindingResult, "dangerousDescription", "Size.dangerousDescription", DESC_MAX_LENGTH);
+            bindingResult, "dangerousDescription", "Size", DESC_MAX_LENGTH);
         ValidationUtils.rejectIfEmptyOrWhitespace(
-            bindingResult, "chestLungHeartEpilepsy", "NotNull.chestLungHeartEpilepsy");
+            bindingResult, "chestLungHeartEpilepsy", "NotNull");
       }
       if (types.contains(WalkingDifficultyTypeCodeField.SOMELSE)) {
         ValidationUtils.rejectIfEmptyOrWhitespace(
-            bindingResult, "somethingElseDescription", "NotBlank.somethingElseDescription");
+            bindingResult, "somethingElseDescription", "NotBlank");
         BBValidationUtils.rejectIfTooLong(
-            bindingResult,
-            "somethingElseDescription",
-            "Size.somethingElseDescription",
-            DESC_MAX_LENGTH);
+            bindingResult, "somethingElseDescription", "Size", DESC_MAX_LENGTH);
       }
     }
   }

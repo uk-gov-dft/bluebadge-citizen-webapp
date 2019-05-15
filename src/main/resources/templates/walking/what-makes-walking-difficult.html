@@ -56,41 +56,12 @@
 
                                 <div th:if="${checkboxOption.shortCode == 'PAIN'}" class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden"
                                      th:id="${optionalElId}">
-                                    <div class="govuk-form-group" th:classappend="${#fields.hasErrors('painDescription')} ? 'govuk-form-group--error'">
-                                        <label class="govuk-label" th:for="*{painDescription}" th:text="#{${JOURNEY.who} + whatMakesWalkingDifficult.select.pain.desc}">
-                                            Describe the pain you get when walking. How severe is the pain?
-                                        </label>
-
-                                        <span class="govuk-error-message"
-                                              data-uipath="painDescription.error"
-                                              th:if="${#fields.hasErrors('painDescription')}"
-                                              th:errors="*{painDescription}" />
-
-                                        <textarea class="govuk-textarea govuk-textarea--fixed" th:field="*{painDescription}"
-                                                  rows="3"
-                                                  data-uipath="painDescription"></textarea>
-                                    </div>
-
+                                    <div th:replace="~{ fragments/govuk-textarea :: govuk-textarea(#{${JOURNEY.who} + whatMakesWalkingDifficult.select.pain.desc}, 'painDescription', null, 3)}"></div>
                                 </div>
 
                                 <div th:if="${checkboxOption.shortCode == 'BALANCE'}" class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden"
                                      th:id="${optionalElId}">
-                                    <div class="govuk-form-group" th:classappend="${#fields.hasErrors('balanceDescription')} ? 'govuk-form-group--error'">
-                                        <label class="govuk-label" th:for="*{balanceDescription}" th:text="#{${JOURNEY.who} + whatMakesWalkingDifficult.select.balance.desc}">
-                                            Describe how the way you walk is affected by your condition
-                                        </label>
-                                        <span id="balance-question-hint" class="govuk-hint" th:text="#{${JOURNEY.who} + whatMakesWalkingDifficult.select.balance.hint}">
-                                            For example, if your posture is affected or you struggle to take full steps
-                                        </span>
-                                        <span class="govuk-error-message"
-                                              data-uipath="painDescription.error"
-                                              th:if="${#fields.hasErrors('balanceDescription')}"
-                                              th:errors="*{balanceDescription}" />
-
-                                        <textarea class="govuk-textarea govuk-textarea--fixed" th:field="*{balanceDescription}"
-                                                  rows="3"
-                                                  data-uipath="balanceDescription"></textarea>
-                                    </div>
+                                    <div th:replace="~{ fragments/govuk-textarea :: govuk-textarea(#{${JOURNEY.who} + whatMakesWalkingDifficult.select.balance.desc}, 'balanceDescription', #{${JOURNEY.who} + whatMakesWalkingDifficult.select.balance.hint}, 3)}"></div>
 
                                     <div class="govuk-form-group" th:classappend="${#fields.hasErrors('healthProfessionsForFalls')} ? 'govuk-form-group--error'">
                                         <fieldset class="govuk-fieldset">
@@ -127,19 +98,7 @@
 
                                 <div th:if="${checkboxOption.shortCode == 'DANGER'}" class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden"
                                      th:id="${optionalElId}">
-                                    <div class="govuk-form-group" th:classappend="${#fields.hasErrors('dangerousDescription')} ? 'govuk-form-group--error'">
-                                        <label class="govuk-label" th:for="*{dangerousDescription}" th:text="#{${JOURNEY.who} + whatMakesWalkingDifficult.select.danger.desc}">
-                                            Describe how your condition makes walking dangerous
-                                        </label>
-                                        <span class="govuk-error-message"
-                                              data-uipath="painDescription.error"
-                                              th:if="${#fields.hasErrors('dangerousDescription')}"
-                                              th:errors="*{dangerousDescription}" />
-
-                                        <textarea class="govuk-textarea govuk-textarea--fixed" th:field="*{dangerousDescription}"
-                                                  rows="3"
-                                                  data-uipath="dangerousDescription"></textarea>
-                                    </div>
+                                    <div th:replace="~{ fragments/govuk-textarea :: govuk-textarea(#{${JOURNEY.who} + whatMakesWalkingDifficult.select.danger.desc}, 'dangerousDescription', null, 3)}"></div>
 
                                     <div class="govuk-form-group" th:classappend="${#fields.hasErrors('chestLungHeartEpilepsy')} ? 'govuk-form-group--error'">
                                         <fieldset class="govuk-fieldset">
@@ -179,19 +138,7 @@
 
                                 <div th:if="${checkboxOption.shortCode == 'SOMELSE'}" class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden"
                                      th:id="${optionalElId}">
-                                    <div class="govuk-form-group" th:classappend="${#fields.hasErrors('somethingElseDescription')} ? 'govuk-form-group--error'">
-                                        <label class="govuk-label" th:for="*{somethingElseDescription}" th:text="#{${JOURNEY.who} + 'whatMakesWalkingDifficult.select.somethingelse.desc'}">
-                                            What is it about your condition that causes you difficulty walking?
-                                        </label>
-                                        <span class="govuk-error-message"
-                                              data-uipath="painDescription.error"
-                                              th:if="${#fields.hasErrors('somethingElseDescription')}"
-                                              th:errors="*{somethingElseDescription}" />
-
-                                        <textarea class="govuk-textarea govuk-textarea--fixed" th:field="*{somethingElseDescription}"
-                                                  rows="3"
-                                                  data-uipath="somethingElseDescription"></textarea>
-                                    </div>
+                                    <div th:replace="~{ fragments/govuk-textarea :: govuk-textarea(#{${JOURNEY.who} + whatMakesWalkingDifficult.select.somethingelse.desc}, 'somethingElseDescription', null, 3)}"></div>
                                 </div>
                             </div>
                         </div>
