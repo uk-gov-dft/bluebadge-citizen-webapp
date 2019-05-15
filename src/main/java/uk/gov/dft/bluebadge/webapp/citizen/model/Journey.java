@@ -8,6 +8,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.m
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.PIP;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -178,6 +179,7 @@ public class Journey implements Serializable {
     return null;
   }
 
+  @JsonIgnore
   public Boolean isLocalAuthorityActive() {
     return getLocalAuthority()
         .getLocalAuthorityMetaData()
@@ -187,6 +189,7 @@ public class Journey implements Serializable {
         .orElse(true);
   }
 
+  @JsonIgnore
   private boolean hasMobilityAid() {
     if (hasStepForm(StepDefinition.MOBILITY_AID_LIST)) {
       MobilityAidListForm mobilityAidListForm = getFormForStep(StepDefinition.MOBILITY_AID_LIST);
@@ -200,6 +203,7 @@ public class Journey implements Serializable {
     return localAuthority;
   }
 
+  @JsonIgnore
   public LocaleAwareRefData<LocalAuthorityRefData> getLocaleAwareLocalAuthority() {
     return new LocaleAwareRefData<>(getLocalAuthority());
   }
@@ -208,6 +212,7 @@ public class Journey implements Serializable {
     this.localAuthority = localAuthority;
   }
 
+  @JsonIgnore
   public Nation getNation() {
     if (null != localAuthority) {
       return localAuthority.getNation();
@@ -215,6 +220,7 @@ public class Journey implements Serializable {
     return null;
   }
 
+  @JsonIgnore
   public BigDecimal getBadgeCost() {
     if (null != localAuthority) {
       return localAuthority.getBadgeCost();
@@ -222,6 +228,7 @@ public class Journey implements Serializable {
     return null;
   }
 
+  @JsonIgnore
   public boolean isPaymentsEnabled() {
     if (null != localAuthority) {
       return localAuthority.getPaymentsEnabled();
@@ -229,10 +236,12 @@ public class Journey implements Serializable {
     return false;
   }
 
+  @JsonIgnore
   public boolean isNationWales() {
     return Nation.WLS == getNation();
   }
 
+  @JsonIgnore
   public EligibilityCodeField getEligibilityCode() {
     if (hasStepForm(StepDefinition.MAIN_REASON)) {
       MainReasonForm mainReasonForm = getFormForStep(StepDefinition.MAIN_REASON);
@@ -249,26 +258,32 @@ public class Journey implements Serializable {
   }
 
   // Eligibility codes
+  @JsonIgnore
   public boolean isEligibilityCodePIP() {
     return PIP == getEligibilityCode();
   }
 
+  @JsonIgnore
   public boolean isEligibilityCodeDLA() {
     return DLA == getEligibilityCode();
   }
 
+  @JsonIgnore
   public boolean isEligibilityCodeBLIND() {
     return BLIND == getEligibilityCode();
   }
 
+  @JsonIgnore
   public boolean isEligibilityCodeCHILDBULK() {
     return CHILDBULK == getEligibilityCode();
   }
 
+  @JsonIgnore
   public boolean isEligibilityCodeCHILDVEHIC() {
     return CHILDVEHIC == getEligibilityCode();
   }
 
+  @JsonIgnore
   public boolean isRelatedDocumentProofNeeded() {
     switch (getEligibilityCode()) {
       case WALKD:
@@ -281,6 +296,7 @@ public class Journey implements Serializable {
     }
   }
 
+  @JsonIgnore
   public boolean isAutomaticEligibilityType() {
     switch (getEligibilityCode()) {
       case PIP:
@@ -299,6 +315,7 @@ public class Journey implements Serializable {
    *
    * @return String aggregated string of conditions
    */
+  @JsonIgnore
   public String getDescriptionOfCondition() {
 
     StringBuilder descriptionOfCondition = new StringBuilder();

@@ -25,16 +25,19 @@ public class ApiConfig {
   @Autowired
   private ObjectMapper objectMapper;
 
+  @SuppressWarnings("unused")
   @Autowired
   public ApiConfig(OAuth2ClientContext oauth2ClientContext) {
     this.oauth2ClientContext = oauth2ClientContext;
   }
 
+  @SuppressWarnings("unused")
   @Bean
   public CommonResponseErrorHandler commonResponseErrorHandler() {
     return new CommonResponseErrorHandler(objectMapper);
   }
 
+  @SuppressWarnings("unused")
   @Validated
   @ConfigurationProperties("blue-badge.referencedataservice.servicehost")
   @Bean
@@ -42,6 +45,7 @@ public class ApiConfig {
     return new ServiceConfiguration();
   }
 
+  @SuppressWarnings("unused")
   @Bean("referenceDataRestTemplate")
   OAuth2RestTemplate referenceDataRestTemplate(
       ClientCredentialsResourceDetails resourceDetails,
@@ -49,6 +53,23 @@ public class ApiConfig {
     return createOAuthRestTemplate(resourceDetails, referenceDataManagementApiConfig);
   }
 
+  @SuppressWarnings("unused")
+  @Validated
+  @ConfigurationProperties("blue-badge.messageservice.servicehost")
+  @Bean
+  public ServiceConfiguration messageServiceApiConfig() {
+    return new ServiceConfiguration();
+  }
+
+  @SuppressWarnings("unused")
+  @Bean("messageServiceRestTemplate")
+  OAuth2RestTemplate messageServiceRestTemplate(
+      ClientCredentialsResourceDetails resourceDetails,
+      ServiceConfiguration messageServiceApiConfig) {
+    return createOAuthRestTemplate(resourceDetails, messageServiceApiConfig);
+  }
+
+  @SuppressWarnings("unused")
   @Validated
   @ConfigurationProperties("blue-badge.applicationmanagementservice.servicehost")
   @Bean
@@ -56,6 +77,7 @@ public class ApiConfig {
     return new ServiceConfiguration();
   }
 
+  @SuppressWarnings("unused")
   @Bean("applicationManagementServiceRestTemplate")
   OAuth2RestTemplate applicationManagementServiceRestTemplate(
       ClientCredentialsResourceDetails resourceDetails,
@@ -63,6 +85,7 @@ public class ApiConfig {
     return createOAuthRestTemplate(resourceDetails, applicationManagementServiceApiConfig);
   }
 
+  @SuppressWarnings("unused")
   @Validated
   @ConfigurationProperties("blue-badge.paymentservice.servicehost")
   @Bean
@@ -70,11 +93,28 @@ public class ApiConfig {
     return new ServiceConfiguration();
   }
 
+  @SuppressWarnings("unused")
   @Bean("paymentServiceRestTemplate")
   OAuth2RestTemplate paymentServiceRestTemplate(
       ClientCredentialsResourceDetails resourceDetails,
       ServiceConfiguration paymentServiceApiConfig) {
     return createOAuthRestTemplate(resourceDetails, paymentServiceApiConfig);
+  }
+
+  @SuppressWarnings("unused")
+  @Validated
+  @ConfigurationProperties("blue-badge.cryptoservice.servicehost")
+  @Bean
+  public ServiceConfiguration cryptoServiceApiConfig() {
+    return new ServiceConfiguration();
+  }
+
+  @SuppressWarnings("unused")
+  @Bean("cryptoServiceRestTemplate")
+  OAuth2RestTemplate cryptoServiceRestTemplate(
+      ClientCredentialsResourceDetails resourceDetails,
+      ServiceConfiguration cryptoServiceApiConfig) {
+    return createOAuthRestTemplate(resourceDetails, cryptoServiceApiConfig);
   }
 
   private OAuth2RestTemplate createOAuthRestTemplate(
@@ -93,6 +133,7 @@ public class ApiConfig {
     return oAuth2RestTemplate;
   }
 
+  @SuppressWarnings("unused")
   @Bean
   LoggingAspect getControllerLoggingAspect() {
     return new LoggingAspect();

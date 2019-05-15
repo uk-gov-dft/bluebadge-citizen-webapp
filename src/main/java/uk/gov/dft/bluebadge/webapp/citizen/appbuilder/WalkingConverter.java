@@ -120,13 +120,11 @@ class WalkingConverter {
             .getWhatWalkingDifficulties()
             .contains(WalkingDifficultyTypeCodeField.BREATH)
         && null != breathlessnessForm) {
-      Breathlessness breathlessness =
-          Breathlessness.builder()
-              .typeCodes(breathlessnessForm.getBreathlessnessTypes())
-              .otherDescription(breathlessnessForm.getBreathlessnessOtherDescription())
-              .build();
 
-      return breathlessness;
+      return Breathlessness.builder()
+          .typeCodes(breathlessnessForm.getBreathlessnessTypes())
+          .otherDescription(breathlessnessForm.getBreathlessnessOtherDescription())
+          .build();
     }
     return null;
   }
