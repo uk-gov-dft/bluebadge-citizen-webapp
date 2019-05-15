@@ -1,9 +1,12 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.validator;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.validation.Errors;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BBValidationUtils {
   public static final String NOT_BLANK = "NotBlank";
   public static final String SIZE = "Size";

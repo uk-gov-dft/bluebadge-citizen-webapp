@@ -28,7 +28,6 @@ for data-uipath and attaching label to the input field.
 
     <span class="govuk-error-message"
           th:data-uipath="${name} + '.error'"
-          th:if="${#fields.hasErrors(name)}"
           th:errors="*{__${name}__}" />
 
     <textarea class="govuk-textarea govuk-textarea--fixed"
