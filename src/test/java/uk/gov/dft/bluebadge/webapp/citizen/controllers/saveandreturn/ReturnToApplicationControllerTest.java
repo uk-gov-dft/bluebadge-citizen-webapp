@@ -147,7 +147,7 @@ public class ReturnToApplicationControllerTest {
     when(mockRedisService.exists(any(), any())).thenReturn(true);
     when(mockRedisService.throttleExceeded(any())).thenReturn(false);
     when(mockRedisService.get(JOURNEY, "emai@l")).thenReturn("encrypted3");
-    doThrow(new CryptoVersionException("", "", ""))
+    doThrow(new CryptoVersionException("", ""))
         .when(mockCryptoService)
         .checkEncryptedJourneyVersion(any());
     when(mockRedisSessionConfig.getStoredJourneyVersionCookieName()).thenReturn("MyNewCookie");

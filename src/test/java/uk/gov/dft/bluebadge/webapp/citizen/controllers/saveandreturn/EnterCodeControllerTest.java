@@ -309,7 +309,7 @@ public class EnterCodeControllerTest {
 
     // Now tweak for specific fail
     when(mockCryptoService.decryptJourney(any(), any()))
-        .thenThrow(new CryptoPostcodeException("", "", ""));
+        .thenThrow(new CryptoPostcodeException("", ""));
 
     mockMvc
         .perform(
@@ -344,7 +344,7 @@ public class EnterCodeControllerTest {
 
     // Now tweak for specific fail
     when(mockCryptoService.decryptJourney(any(), any()))
-        .thenThrow(new CryptoVersionException("", "", ""));
+        .thenThrow(new CryptoVersionException("", ""));
 
     // Should get unchecked exception
     mockMvc.perform(
