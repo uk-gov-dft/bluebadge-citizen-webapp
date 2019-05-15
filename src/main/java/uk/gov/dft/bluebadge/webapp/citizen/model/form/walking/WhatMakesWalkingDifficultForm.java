@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.constraints.NotEmpty;
-
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
