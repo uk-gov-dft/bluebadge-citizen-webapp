@@ -1,5 +1,8 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.walking;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.validator.BBValidationUtils.NOT_BLANK;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.validator.BBValidationUtils.NOT_NULL;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.validator.BBValidationUtils.SIZE;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
@@ -33,7 +36,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDi
 public class WhatMakesWalkingDifficultController implements StepController {
 
   private static final String TEMPLATE = "walking/what-makes-walking-difficult";
-  public static final int DESC_MAX_LENGTH = 2000;
+  private static final int DESC_MAX_LENGTH = 2000;
 
   private final RouteMaster routeMaster;
 
@@ -89,30 +92,28 @@ public class WhatMakesWalkingDifficultController implements StepController {
         whatMakesWalkingDifficultForm.getWhatWalkingDifficulties();
     if (null != types) {
       if (types.contains(WalkingDifficultyTypeCodeField.PAIN)) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "painDescription", "NotBlank");
-        BBValidationUtils.rejectIfTooLong(
-            bindingResult, "painDescription", "Size", DESC_MAX_LENGTH);
+        ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "painDescription", NOT_BLANK);
+        BBValidationUtils.rejectIfTooLong(bindingResult, "painDescription", SIZE, DESC_MAX_LENGTH);
       }
       if (types.contains(WalkingDifficultyTypeCodeField.BALANCE)) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "balanceDescription", "NotBlank");
+        ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "balanceDescription", NOT_BLANK);
         BBValidationUtils.rejectIfTooLong(
-            bindingResult, "balanceDescription", "Size", DESC_MAX_LENGTH);
+            bindingResult, "balanceDescription", SIZE, DESC_MAX_LENGTH);
         ValidationUtils.rejectIfEmptyOrWhitespace(
-            bindingResult, "healthProfessionsForFalls", "NotNull");
+            bindingResult, "healthProfessionsForFalls", NOT_NULL);
       }
       if (types.contains(WalkingDifficultyTypeCodeField.DANGER)) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(
-            bindingResult, "dangerousDescription", "NotBlank");
+        ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "dangerousDescription", NOT_BLANK);
         BBValidationUtils.rejectIfTooLong(
-            bindingResult, "dangerousDescription", "Size", DESC_MAX_LENGTH);
+            bindingResult, "dangerousDescription", SIZE, DESC_MAX_LENGTH);
         ValidationUtils.rejectIfEmptyOrWhitespace(
-            bindingResult, "chestLungHeartEpilepsy", "NotNull");
+            bindingResult, "chestLungHeartEpilepsy", NOT_NULL);
       }
       if (types.contains(WalkingDifficultyTypeCodeField.SOMELSE)) {
         ValidationUtils.rejectIfEmptyOrWhitespace(
-            bindingResult, "somethingElseDescription", "NotBlank");
+            bindingResult, "somethingElseDescription", NOT_BLANK);
         BBValidationUtils.rejectIfTooLong(
-            bindingResult, "somethingElseDescription", "Size", DESC_MAX_LENGTH);
+            bindingResult, "somethingElseDescription", SIZE, DESC_MAX_LENGTH);
       }
     }
   }
