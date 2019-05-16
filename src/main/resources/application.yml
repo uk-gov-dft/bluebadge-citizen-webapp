@@ -101,7 +101,7 @@ server:
     protocol-header: x-forwarded-proto
   servlet:
     session:
-      timeout: 60m
+      timeout: 1m
 
 security:
   oauth2:

@@ -23,7 +23,22 @@ public class RouteMaster {
   }
 
   public String redirectToOnSuccess(StepForm form, Journey journey) {
-    return redirectToOnSuccess(form.getAssociatedStep(), journey);
+    StepDefinition currentStep = form.getAssociatedStep();
+    try {
+      return redirectToOnSuccess(currentStep, journey);
+    } catch (InvalidStateForJourneyException e) {
+      // The controllers set the form before bypassing. So ignore the current step.
+      // Only possibility of error would be the first step. But an error on the first step!?
+      if (!journey.isEmptyJourney(currentStep)) {
+        log.error("Invalid state when redirecting from state:{}.", currentStep, e);
+      } else {
+        log.info(
+            "Invalid state when redirecting from state:{}. Exception:{}",
+            currentStep,
+            e.toString());
+      }
+      return REDIRECT + Mappings.getUrl(StepDefinition.TASK_LIST);
+    }
   }
 
   public String redirectToOnSuccess(StepDefinition currentStep, Journey journey) {

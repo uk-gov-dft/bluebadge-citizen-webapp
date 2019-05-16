@@ -10,7 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
+
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.client.common.NotFoundException;
 import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.LocalAuthorityRefData;
@@ -56,7 +56,7 @@ public class FindYourCouncilController implements StepController {
   }
 
   @GetMapping(Mappings.URL_FIND_YOUR_COUNCIL_BYPASS)
-  public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+  public String formByPass(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     FindYourCouncilForm formRequest = FindYourCouncilForm.builder().build();
     if (journey != null) {
       journey.setFormForStep(formRequest);

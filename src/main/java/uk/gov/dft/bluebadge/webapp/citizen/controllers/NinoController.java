@@ -10,7 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
+
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
@@ -51,7 +51,7 @@ public class NinoController implements StepController {
   }
 
   @GetMapping(NINO_BYPASS_URL)
-  public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+  public String formByPass(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     NinoForm formRequest = NinoForm.builder().build();
     journey.setFormForStep(formRequest);
     return routeMaster.redirectToOnSuccess(formRequest, journey);
