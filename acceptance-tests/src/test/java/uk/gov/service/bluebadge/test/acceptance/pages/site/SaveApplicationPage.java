@@ -14,5 +14,4 @@ public class SaveApplicationPage {
 
   public static final String VALID_EMAIL = "save_application@test.dft.gov.uk";
   public static final String VALID_POSTCODE = "M4 1FS";
-
 }
