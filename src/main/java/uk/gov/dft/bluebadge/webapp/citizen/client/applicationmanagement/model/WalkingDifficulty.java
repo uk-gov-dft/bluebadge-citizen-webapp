@@ -1,7 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model;
 
 import java.util.List;
-import javax.validation.constraints.*;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,6 +9,11 @@ import lombok.Data;
 public class WalkingDifficulty {
 
   private List<WalkingDifficultyTypeCodeField> typeCodes;
+  private String painDescription;
+  private String balanceDescription;
+  private Boolean healthProfessionsForFalls;
+  private String dangerousDescription;
+  private Boolean chestLungHeartEpilepsy;
   private String otherDescription;
   private List<WalkingAid> walkingAids;
   private WalkingLengthOfTimeCodeField walkingLengthOfTimeCode;

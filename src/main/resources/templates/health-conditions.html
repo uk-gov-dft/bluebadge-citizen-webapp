@@ -17,18 +17,12 @@
 
             <form th:action="@{/health-conditions}" th:object="${formRequest}" method="post" novalidate>
                 <div>
-                    <div th:class="${#fields.hasErrors('descriptionOfConditions')} ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'">
-                        <label class="govuk-label" for="descriptionOfConditions"
-                               th:text="#{healthConditionsPage.descriptionOfConditions}"></label>
+                    <div class="govuk-inset-text"
+                         th:text="#{${JOURNEY.who} + 'healthConditionsPage.hint'}"
+                         th:id="'descriptionOfConditions-hint'"
+                         th:data-uipath="${name} + '.label_hint'"></div>
 
-                        <span class="govuk-error-message"
-                              data-uipath="descriptionOfConditions.error"
-                              th:errors="*{descriptionOfConditions}"></span>
-
-                        <textarea class="govuk-textarea govuk-textarea--fixed" th:field="*{descriptionOfConditions}"
-                                  id="descriptionOfConditions" rows="4" name="descriptionOfConditions"
-                                  data-uipath="healthconditions.text"></textarea>
-                    </div>
+                    <div th:replace="~{ fragments/govuk-textarea :: govuk-textarea(#{healthConditionsPage.descriptionOfConditions}, 'descriptionOfConditions', null, 4)}"></div>
                 </div>
                 <button type="submit"
                         class="govuk-button"

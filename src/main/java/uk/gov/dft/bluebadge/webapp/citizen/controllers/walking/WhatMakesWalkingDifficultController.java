@@ -1,5 +1,8 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.walking;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.validator.BBValidationUtils.NOT_BLANK;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.validator.BBValidationUtils.NOT_NULL;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.validator.BBValidationUtils.SIZE;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
@@ -10,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +25,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.StepController;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.validator.BBValidationUtils;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
@@ -31,6 +36,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDi
 public class WhatMakesWalkingDifficultController implements StepController {
 
   private static final String TEMPLATE = "walking/what-makes-walking-difficult";
+  private static final int DESC_MAX_LENGTH = 2000;
 
   private final RouteMaster routeMaster;
 
@@ -69,6 +75,7 @@ public class WhatMakesWalkingDifficultController implements StepController {
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
+    validateForm(whatMakesWalkingDifficultForm, bindingResult);
     if (bindingResult.hasErrors()) {
       return routeMaster.redirectToOnBindingError(
           this, whatMakesWalkingDifficultForm, bindingResult, attr);
@@ -77,6 +84,38 @@ public class WhatMakesWalkingDifficultController implements StepController {
     journey.setFormForStep(whatMakesWalkingDifficultForm);
 
     return routeMaster.redirectToOnSuccess(whatMakesWalkingDifficultForm, journey);
+  }
+
+  private void validateForm(
+      WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm, BindingResult bindingResult) {
+    List<WalkingDifficultyTypeCodeField> types =
+        whatMakesWalkingDifficultForm.getWhatWalkingDifficulties();
+    if (null != types) {
+      if (types.contains(WalkingDifficultyTypeCodeField.PAIN)) {
+        ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "painDescription", NOT_BLANK);
+        BBValidationUtils.rejectIfTooLong(bindingResult, "painDescription", SIZE, DESC_MAX_LENGTH);
+      }
+      if (types.contains(WalkingDifficultyTypeCodeField.BALANCE)) {
+        ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "balanceDescription", NOT_BLANK);
+        BBValidationUtils.rejectIfTooLong(
+            bindingResult, "balanceDescription", SIZE, DESC_MAX_LENGTH);
+        ValidationUtils.rejectIfEmptyOrWhitespace(
+            bindingResult, "healthProfessionsForFalls", NOT_NULL);
+      }
+      if (types.contains(WalkingDifficultyTypeCodeField.DANGER)) {
+        ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "dangerousDescription", NOT_BLANK);
+        BBValidationUtils.rejectIfTooLong(
+            bindingResult, "dangerousDescription", SIZE, DESC_MAX_LENGTH);
+        ValidationUtils.rejectIfEmptyOrWhitespace(
+            bindingResult, "chestLungHeartEpilepsy", NOT_NULL);
+      }
+      if (types.contains(WalkingDifficultyTypeCodeField.SOMELSE)) {
+        ValidationUtils.rejectIfEmptyOrWhitespace(
+            bindingResult, "somethingElseDescription", NOT_BLANK);
+        BBValidationUtils.rejectIfTooLong(
+            bindingResult, "somethingElseDescription", SIZE, DESC_MAX_LENGTH);
+      }
+    }
   }
 
   @Override

@@ -1,14 +1,13 @@
 package uk.gov.service.bluebadge.test.acceptance.steps.site;
 
 import cucumber.api.java.en.And;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.HealthConditionsPage;
 import uk.gov.service.bluebadge.test.acceptance.steps.AbstractSpringSteps;
 import uk.gov.service.bluebadge.test.acceptance.steps.CommonSteps;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class HealthConditionsSteps extends AbstractSpringSteps {
 
