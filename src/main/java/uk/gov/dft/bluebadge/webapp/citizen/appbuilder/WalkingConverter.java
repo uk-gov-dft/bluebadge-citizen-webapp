@@ -32,10 +32,13 @@ class WalkingConverter {
     MedicationListForm medicationListForm = journey.getFormForStep(StepDefinition.MEDICATION_LIST);
     BreathlessnessForm breathlessnessForm = journey.getFormForStep(StepDefinition.BREATHLESSNESS);
 
-    return WalkingDifficulty.builder()
-        .walkingLengthOfTimeCode(walkingTimeForm.getWalkingTime())
-        .typeCodes(whatMakesWalkingDifficultForm.getWhatWalkingDifficulties())
-        .otherDescription(getOtherDesc(whatMakesWalkingDifficultForm))
+    WalkingDifficulty.WalkingDifficultyBuilder walkingDifficultyBuilder =
+        WalkingDifficulty.builder()
+            .walkingLengthOfTimeCode(walkingTimeForm.getWalkingTime())
+            .typeCodes(whatMakesWalkingDifficultForm.getWhatWalkingDifficulties());
+
+    setWalkingExtraQuestions(walkingDifficultyBuilder, whatMakesWalkingDifficultForm);
+    return walkingDifficultyBuilder
         .walkingAids(getWalkingAids(mobilityAidListForm))
         .treatments(getTreatments(treatmentListForm))
         .medications(getMedications(medicationListForm))
@@ -43,12 +46,30 @@ class WalkingConverter {
         .build();
   }
 
-  static String getOtherDesc(WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm) {
-    return whatMakesWalkingDifficultForm
-            .getWhatWalkingDifficulties()
-            .contains(WalkingDifficultyTypeCodeField.SOMELSE)
-        ? whatMakesWalkingDifficultForm.getSomethingElseDescription()
-        : null;
+  static void setWalkingExtraQuestions(
+      WalkingDifficulty.WalkingDifficultyBuilder walkingDifficultyBuilder,
+      WhatMakesWalkingDifficultForm whatMakesWalkingDifficultForm) {
+    List<WalkingDifficultyTypeCodeField> types =
+        whatMakesWalkingDifficultForm.getWhatWalkingDifficulties();
+    if (types.contains(WalkingDifficultyTypeCodeField.PAIN)) {
+      walkingDifficultyBuilder.painDescription(whatMakesWalkingDifficultForm.getPainDescription());
+    }
+    if (types.contains(WalkingDifficultyTypeCodeField.BALANCE)) {
+      walkingDifficultyBuilder.balanceDescription(
+          whatMakesWalkingDifficultForm.getBalanceDescription());
+      walkingDifficultyBuilder.healthProfessionsForFalls(
+          whatMakesWalkingDifficultForm.getHealthProfessionsForFalls());
+    }
+    if (types.contains(WalkingDifficultyTypeCodeField.DANGER)) {
+      walkingDifficultyBuilder.dangerousDescription(
+          whatMakesWalkingDifficultForm.getDangerousDescription());
+      walkingDifficultyBuilder.chestLungHeartEpilepsy(
+          whatMakesWalkingDifficultForm.getChestLungHeartEpilepsy());
+    }
+    if (types.contains(WalkingDifficultyTypeCodeField.SOMELSE)) {
+      walkingDifficultyBuilder.otherDescription(
+          whatMakesWalkingDifficultForm.getSomethingElseDescription());
+    }
   }
 
   @SuppressWarnings("squid:S1168")

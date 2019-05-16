@@ -87,30 +87,79 @@ public class WalkingConverterTest {
   }
 
   @Test
-  public void getOtherDesc() {
-    EnumSet<WalkingDifficultyTypeCodeField> someelse =
-        EnumSet.of(WalkingDifficultyTypeCodeField.SOMELSE);
+  public void setWalkingExtraQuestions() {
+    EnumSet<WalkingDifficultyTypeCodeField> allTypes =
+        EnumSet.allOf(WalkingDifficultyTypeCodeField.class);
+    WhatMakesWalkingDifficultForm form =
+        WhatMakesWalkingDifficultForm.builder()
+            .whatWalkingDifficulties(Lists.newArrayList(allTypes))
+            .painDescription("pain")
+            .balanceDescription("balance")
+            .healthProfessionsForFalls(true)
+            .dangerousDescription("danger")
+            .chestLungHeartEpilepsy(true)
+            .somethingElseDescription("X")
+            .build();
 
-    someelse.forEach(
-        i ->
-            assertThat(
-                    WalkingConverter.getOtherDesc(
-                        WhatMakesWalkingDifficultForm.builder()
-                            .whatWalkingDifficulties(Lists.newArrayList(i))
-                            .somethingElseDescription("X")
-                            .build()))
-                .isEqualTo("X"));
+    WalkingDifficulty.WalkingDifficultyBuilder builder = WalkingDifficulty.builder();
+    WalkingConverter.setWalkingExtraQuestions(builder, form);
+    WalkingDifficulty walkingDifficulty = builder.build();
 
-    EnumSet.complementOf(someelse)
+    assertThat(walkingDifficulty.getPainDescription()).isEqualTo("pain");
+    assertThat(walkingDifficulty.getBalanceDescription()).isEqualTo("balance");
+    assertThat(walkingDifficulty.getHealthProfessionsForFalls()).isEqualTo(true);
+    assertThat(walkingDifficulty.getDangerousDescription()).isEqualTo("danger");
+    assertThat(walkingDifficulty.getChestLungHeartEpilepsy()).isEqualTo(true);
+  }
+
+  @Test
+  public void setWalkingExtraQuestions_notExtraType() {
+    WhatMakesWalkingDifficultForm form =
+        WhatMakesWalkingDifficultForm.builder()
+            .whatWalkingDifficulties(Lists.newArrayList(WalkingDifficultyTypeCodeField.BREATH))
+            .painDescription("pain")
+            .balanceDescription("balance")
+            .healthProfessionsForFalls(true)
+            .dangerousDescription("danger")
+            .chestLungHeartEpilepsy(true)
+            .somethingElseDescription("X")
+            .build();
+
+    WalkingDifficulty.WalkingDifficultyBuilder builder = WalkingDifficulty.builder();
+    WalkingConverter.setWalkingExtraQuestions(builder, form);
+    WalkingDifficulty walkingDifficulty = builder.build();
+
+    assertThat(walkingDifficulty.getPainDescription()).isNull();
+    assertThat(walkingDifficulty.getBalanceDescription()).isNull();
+    assertThat(walkingDifficulty.getHealthProfessionsForFalls()).isNull();
+    assertThat(walkingDifficulty.getDangerousDescription()).isNull();
+    assertThat(walkingDifficulty.getChestLungHeartEpilepsy()).isNull();
+  }
+
+  @Test
+  public void setWalkingExtraQuestions_otherDesc() {
+    WalkingDifficulty.WalkingDifficultyBuilder builder = WalkingDifficulty.builder();
+
+    WalkingConverter.setWalkingExtraQuestions(
+        builder,
+        WhatMakesWalkingDifficultForm.builder()
+            .whatWalkingDifficulties(Lists.newArrayList(WalkingDifficultyTypeCodeField.SOMELSE))
+            .somethingElseDescription("X")
+            .build());
+    assertThat(builder.build().getOtherDescription()).isEqualTo("X");
+
+    EnumSet.complementOf(EnumSet.of(WalkingDifficultyTypeCodeField.SOMELSE))
         .forEach(
-            i ->
-                assertThat(
-                        WalkingConverter.getOtherDesc(
-                            WhatMakesWalkingDifficultForm.builder()
-                                .whatWalkingDifficulties(Lists.newArrayList(i))
-                                .somethingElseDescription("X")
-                                .build()))
-                    .isNull());
+            i -> {
+              WalkingDifficulty.WalkingDifficultyBuilder tmp = WalkingDifficulty.builder();
+              WalkingConverter.setWalkingExtraQuestions(
+                  tmp,
+                  WhatMakesWalkingDifficultForm.builder()
+                      .whatWalkingDifficulties(Lists.newArrayList(i))
+                      .somethingElseDescription("X")
+                      .build());
+              assertThat(tmp.build().getOtherDescription()).isNull();
+            });
   }
 
   @Test

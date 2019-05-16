@@ -55,6 +55,9 @@ public class WhatMakesWalkingDifficultSteps extends AbstractSpringSteps {
   @And("^I complete the what makes walking difficult page$")
   public void iCompleteTheWhatMakesWalkingDifficultPage() {
     commonPage.selectRadioButton(WhatMakesWalkingDifficultiesPage.WHAT_WALKING_DIFFICULTY_LIST);
+    commonPage.clearAndSendKeys(
+        WhatMakesWalkingDifficultiesPage.PAIN_DESC,
+        WhatMakesWalkingDifficultiesPage.VALID_DESCRIPTION);
     commonSteps.iClickOnContinueButton();
   }
 
@@ -63,10 +66,32 @@ public class WhatMakesWalkingDifficultSteps extends AbstractSpringSteps {
   public void iCompleteTheWhatMakesWalkingDifficultPageFor(String difficulty) {
     if ("PAIN".equals(difficulty)) {
       commonPage.selectRadioButton(WhatMakesWalkingDifficultiesPage.WHAT_WALKING_DIFFICULTY_LIST);
+      commonPage.clearAndSendKeys(
+          WhatMakesWalkingDifficultiesPage.PAIN_DESC,
+          WhatMakesWalkingDifficultiesPage.VALID_DESCRIPTION);
     } else {
       commonPage.selectRadioButton(
           WhatMakesWalkingDifficultiesPage.WHAT_WALKING_DIFFICULTY_LIST + difficulty);
     }
+
+    if ("BALANCE".equals(difficulty)) {
+      commonPage.clearAndSendKeys(
+          WhatMakesWalkingDifficultiesPage.BALANCE_DESC,
+          WhatMakesWalkingDifficultiesPage.VALID_DESCRIPTION);
+      commonPage.selectRadioButton(WhatMakesWalkingDifficultiesPage.HCP_FALLS);
+
+    } else if ("DANGER".equals(difficulty)) {
+      commonPage.clearAndSendKeys(
+          WhatMakesWalkingDifficultiesPage.DANGER_DESC,
+          WhatMakesWalkingDifficultiesPage.VALID_DESCRIPTION);
+      commonPage.selectRadioButton(WhatMakesWalkingDifficultiesPage.LUNGS_HEART_CHEST);
+
+    } else if ("SOMELSE".equals(difficulty)) {
+      commonPage.clearAndSendKeys(
+          WhatMakesWalkingDifficultiesPage.OTHER_DESC,
+          WhatMakesWalkingDifficultiesPage.VALID_DESCRIPTION);
+    }
+
     commonSteps.iClickOnContinueButton();
   }
 }
