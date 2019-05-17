@@ -6,23 +6,28 @@
 <body>
 
 <main layout:fragment="content">
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-three-quarters">
-
-                <h1 class="govuk-heading-l" th:text="#{'taskList.title'}"></h1>
-
-                <ol class="app-task-list">
-                    <th:block th:with="eligibilitySectionTasks=${ {{enabled: false, url: '', taskState: 'COMPLETED', titleCode: 'taskList.pre.section.checkEligibility'}} }">
-                        <th:block th:replace="~{ fragments/govuk-task-list :: task-list-group(${eligibilitySectionTasks}, #{taskList.pre.section.title}, 1)}" />
-                    </th:block>
-
-                    <th:block th:replace="~{ fragments/govuk-task-list :: task-list-group(${applicationSectionTasks}, #{taskList.application.section.title}, 2)}" />
-
-                    <th:block th:replace="~{ fragments/govuk-task-list :: task-list-group(${applySectionTasks}, #{taskList.apply.section.title}, 3)}" />
-                </ol>
-
-            </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column govuk-grid-column-full govuk-!-margin-bottom-3 right-aligned right-aligned--reset-on-mobile">
+            <a th:href="'/save-progress'" class="govuk-!-font-size-19" th:text="#{tasklist.save.progress}"></a>
         </div>
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l" th:text="#{'taskList.title'}"></h1>
+            <ol class="app-task-list">
+                <th:block
+                        th:with="eligibilitySectionTasks=${ {{enabled: false, url: '', taskState: 'COMPLETED', titleCode: 'taskList.pre.section.checkEligibility'}} }">
+                    <th:block
+                            th:replace="~{ fragments/govuk-task-list :: task-list-group(${eligibilitySectionTasks}, #{taskList.pre.section.title}, 1)}"/>
+                </th:block>
+
+                <th:block
+                        th:replace="~{ fragments/govuk-task-list :: task-list-group(${applicationSectionTasks}, #{taskList.application.section.title}, 2)}"/>
+
+                <th:block
+                        th:replace="~{ fragments/govuk-task-list :: task-list-group(${applySectionTasks}, #{taskList.apply.section.title}, 3)}"/>
+            </ol>
+
+        </div>
+    </div>
 </main>
 
 </body>

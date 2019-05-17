@@ -3,6 +3,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import javax.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.FindYourCouncilForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.referencedata.ReferenceDataService;
 
 @Controller
+@Slf4j
 public class FindYourCouncilController implements StepController {
 
   private static final String TEMPLATE = "find-council";
@@ -81,7 +83,7 @@ public class FindYourCouncilController implements StepController {
       journey.setLocalAuthority(localAuthority);
       journey.setFormForStep(formRequest);
       // We populate this form because we skip it but still want to keep the linearility of state
-      // transations to make implementation easier.
+      // transitions to make implementation easier.
       ChooseYourCouncilForm chooseYourCouncilFormRequest =
           ChooseYourCouncilForm.builder().councilShortCode(localAuthority.getShortCode()).build();
       journey.setFormForStep(chooseYourCouncilFormRequest);
@@ -89,6 +91,8 @@ public class FindYourCouncilController implements StepController {
       bindingResult.rejectValue("postcode", "NotFound.findYourcouncil.postcode");
       return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
     } catch (Exception ex) {
+      log.error(
+          "Unexpected exception looking up council for postcode:" + formRequest.getPostcode(), ex);
       bindingResult.rejectValue("postcode", "ServerError.findYourcouncil.postcode");
       return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
     }

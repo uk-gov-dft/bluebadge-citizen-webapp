@@ -31,6 +31,12 @@ public class RedisSessionConfig {
   @Value("${session.save-submit-throttle-tries:3}")
   private int saveSubmitThrottleTries;
 
+  @Value("${session.stored-journey-version-cookie-name:BlueBadgeAppVersion}")
+  private String storedJourneyVersionCookieName;
+
+  @Value("${session.save-return-link}")
+  private String saveReturnLink;
+
   @Bean
   public static ConfigureRedisAction configureRedisAction() {
     return ConfigureRedisAction.NO_OP;

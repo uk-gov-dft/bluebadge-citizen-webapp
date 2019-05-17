@@ -1,21 +1,12 @@
 package uk.gov.service.bluebadge.test.acceptance.steps;
 
 import static java.util.stream.Collectors.toList;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static uk.gov.service.bluebadge.test.acceptance.pages.site.FindCouncilPage.CHOOSE_YOUR_COUNCIL_LINK;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.APPLY_IN_WELSH_EXTERNAL_URL;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.FEEDBACK_URL;
-import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.GOOGLE_ANALYTICS_TAG;
+import static uk.gov.service.bluebadge.test.acceptance.steps.Ids.EleCheck.*;
 
 import com.google.common.collect.Lists;
 import cucumber.api.DataTable;
@@ -23,10 +14,6 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.hamcrest.Matcher;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -34,6 +21,11 @@ import org.openqa.selenium.support.ui.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.AlreadyHaveBlueBadgePage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CommonSteps extends AbstractSpringSteps {
 
@@ -178,6 +170,14 @@ public class CommonSteps extends AbstractSpringSteps {
         "I should see page titled.",
         commonPage.getDocumentTitle(),
         is(pageTitle + " - Gwneud cais am Fathodyn Glas - GOV.UK"));
+  }
+
+  @Then("^I should see (?:.* )?page title contains \"([^\"]+)\"$")
+  public void thenIShouldSeePageTitleContains(String pageTitle) {
+    assertThat(
+            "I should see page title contains",
+            commonPage.getDocumentTitle(),
+            containsString(pageTitle));
   }
 
   @Then("^I should see the content \"([^\"]*)\"$")

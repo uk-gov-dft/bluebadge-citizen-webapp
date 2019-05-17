@@ -105,6 +105,8 @@ public class Mappings {
   // Save and return
   public static final String URL_RETURN_TO_APPLICATION = "/return-to-application";
   public static final String URL_ENTER_CODE = "/enter-code";
+  public static final String URL_SAVE_PROGRESS = "/save-progress";
+  public static final String URL_PROGRESS_SAVED = "/progress-saved";
 
   private Mappings() {}
 

@@ -14,8 +14,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture.formRequestFlashAttributeCount;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode;
-import static uk.gov.dft.bluebadge.webapp.citizen.controllers.saveandreturn.SaveAndReturnController.SAVE_AND_RETURN_JOURNEY_KEY;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveAndReturnJourney.SAVE_AND_RETURN_JOURNEY_KEY;
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.JOURNEY;
 
 import lombok.SneakyThrows;
@@ -27,6 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.FormObjectToParamMapper;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.config.RedisSessionConfig;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveAndReturnForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveAndReturnJourney;
@@ -43,6 +45,7 @@ public class ReturnToApplicationControllerTest {
   @Mock private CryptoService mockCryptoService;
   @Mock private MessageService mockMessageService;
   @Mock private RedisService mockRedisService;
+  @Mock private RedisSessionConfig mockRedisSessionConfig;
   private SaveAndReturnJourney journey;
 
   @Before
@@ -50,7 +53,8 @@ public class ReturnToApplicationControllerTest {
     MockitoAnnotations.initMocks(this);
     journey = new SaveAndReturnJourney();
     controller =
-        new ReturnToApplicationController(mockCryptoService, mockRedisService, mockMessageService);
+        new ReturnToApplicationController(
+            mockCryptoService, mockRedisService, mockMessageService, mockRedisSessionConfig);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -88,7 +92,8 @@ public class ReturnToApplicationControllerTest {
                 .params(FormObjectToParamMapper.convert(form)))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl(Mappings.URL_RETURN_TO_APPLICATION + "#error"))
-        .andExpect(formRequestFlashAttributeHasFieldErrorCode("emailAddress", "Pattern"));
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("emailAddress", "Pattern"))
+        .andExpect(formRequestFlashAttributeCount(1));
     verify(mockCryptoService, never()).checkEncryptedJourneyVersion("encrypted5");
   }
 
@@ -142,10 +147,10 @@ public class ReturnToApplicationControllerTest {
     when(mockRedisService.exists(any(), any())).thenReturn(true);
     when(mockRedisService.throttleExceeded(any())).thenReturn(false);
     when(mockRedisService.get(JOURNEY, "emai@l")).thenReturn("encrypted3");
-    doThrow(new CryptoVersionException("", "", ""))
+    doThrow(new CryptoVersionException("", ""))
         .when(mockCryptoService)
         .checkEncryptedJourneyVersion(any());
-
+    when(mockRedisSessionConfig.getStoredJourneyVersionCookieName()).thenReturn("MyNewCookie");
     mockMvc
         .perform(
             post(Mappings.URL_RETURN_TO_APPLICATION)
@@ -153,7 +158,7 @@ public class ReturnToApplicationControllerTest {
                 .params(FormObjectToParamMapper.convert(form)))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl(Mappings.URL_ENTER_CODE))
-        .andExpect(cookie().exists("BlueBadgeAppVersion"));
+        .andExpect(cookie().exists("MyNewCookie"));
     verify(mockCryptoService, times(1)).checkEncryptedJourneyVersion("encrypted3");
   }
 

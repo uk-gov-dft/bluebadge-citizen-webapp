@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="(${errorSummary}? #{common.title.error} : '') + #{progress.saved.title.prefix} + ' ' + ${saveTimeToExpiry} + ' ' + #{__'progress.saved.title.suffix.' + ${saveTimeToExpiryUnits}__}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-panel govuk-panel--confirmation">
+                <h1 class="govuk-panel__title govuk-!-margin-top-2">
+                    <span th:text="#{progress.saved.title.prefix}"></span>
+                    <span th:text="${saveTimeToExpiry}"></span>
+                    <span th:text="#{__'progress.saved.title.suffix.' + ${saveTimeToExpiryUnits}__}"></span>
+                </h1>
+            </div>
+            <p class="govuk-body">
+                <span th:text="#{progress.saved.sent.message.prefix}"></span>
+                <span class="govuk-!-font-weight-bold" th:text="${formRequest.emailAddress}"></span>
+                <span th:text="#{progress.saved.sent.message.suffix}"></span>
+            </p>
+            <h2 class="govuk-heading-m" th:text="#{progress.saved.what.next.title}"></h2>
+            <p class="govuk-body">
+                <span th:text="#{progress.saved.what.next.p1.prefix}"></span>
+                <span th:text="${saveTimeToExpiry}"></span>
+                <span th:text="#{__'progress.saved.what.next.p1.suffix.' + ${saveTimeToExpiryUnits}__}"></span>
+            </p>
+            <p class="govuk-body" th:text="#{progress.saved.what.next.p2}"></p>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

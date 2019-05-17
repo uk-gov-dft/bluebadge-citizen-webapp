@@ -14,7 +14,7 @@ public class SaveAndReturnCodeMessageRequest extends GenericMessageRequest {
   }
 
   public SaveAndReturnCodeMessageRequest(String emailAddress, String code, String expiryTime) {
-    super(
+    this(
         TEMPLATE,
         emailAddress,
         ImmutableMap.of(RETURN_CODE_KEY, code, EXPIRY_TIME_KEY, expiryTime));
