@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation.ENG;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.WHAT_MAKES_WALKING_DIFFICULT;
 
 import com.google.common.collect.ImmutableList;
 import java.util.List;
@@ -27,7 +28,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
-import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
@@ -53,8 +53,7 @@ public class WhatMakesWalkingDifficultControllerTest {
             .build();
 
     journey =
-        JourneyFixture.getDefaultJourneyToStep(
-            StepDefinition.WHAT_MAKES_WALKING_DIFFICULT, WALKD, ENG, false);
+        JourneyFixture.getDefaultJourneyToStep(WHAT_MAKES_WALKING_DIFFICULT, WALKD, ENG, false);
   }
 
   @Test
@@ -124,7 +123,7 @@ public class WhatMakesWalkingDifficultControllerTest {
     Journey wales =
         new JourneyBuilder()
             .inWales()
-            .toStep(StepDefinition.WHAT_MAKES_WALKING_DIFFICULT)
+            .toStep(WHAT_MAKES_WALKING_DIFFICULT)
             .withEligibility(WALKD)
             .build();
 
@@ -179,11 +178,54 @@ public class WhatMakesWalkingDifficultControllerTest {
         .perform(
             post("/what-makes-walking-difficult")
                 .param("whatWalkingDifficulties", "PAIN, SOMELSE")
+                .param("painDescription", "test test")
                 .param("somethingElseDescription", "test test")
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(Mappings.URL_MOBILITY_AID_LIST));
+
+    WhatMakesWalkingDifficultForm form = journey.getFormForStep(WHAT_MAKES_WALKING_DIFFICULT);
+    assertThat(form).isNotNull();
+    assertThat(form.getWhatWalkingDifficulties())
+        .containsOnly(WalkingDifficultyTypeCodeField.PAIN, WalkingDifficultyTypeCodeField.SOMELSE);
+    assertThat(form.getPainDescription()).isEqualTo("test test");
+    assertThat(form.getSomethingElseDescription()).isEqualTo("test test");
+    assertThat(form.getBalanceDescription()).isNull();
+    assertThat(form.getDangerousDescription()).isNull();
+  }
+
+  @Test
+  public void submit_showRedirectToNextStepInJourney_fullForm() throws Exception {
+
+    mockMvc
+        .perform(
+            post("/what-makes-walking-difficult")
+                .param("whatWalkingDifficulties", "BALANCE, BREATH, DANGER, PAIN, SOMELSE")
+                .param("painDescription", "test pain")
+                .param("balanceDescription", "test balance")
+                .param("healthProfessionsForFalls", "true")
+                .param("dangerousDescription", "test danger")
+                .param("chestLungHeartEpilepsy", "false")
+                .param("somethingElseDescription", "test test")
+                .contentType("application/x-www-form-urlencoded")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl(Mappings.URL_BREATHLESS));
+
+    WhatMakesWalkingDifficultForm form = journey.getFormForStep(WHAT_MAKES_WALKING_DIFFICULT);
+    assertThat(form).isNotNull();
+    assertThat(form.getWhatWalkingDifficulties())
+        .containsOnly(
+            WalkingDifficultyTypeCodeField.PAIN,
+            WalkingDifficultyTypeCodeField.SOMELSE,
+            WalkingDifficultyTypeCodeField.BREATH,
+            WalkingDifficultyTypeCodeField.BALANCE,
+            WalkingDifficultyTypeCodeField.DANGER);
+    assertThat(form.getPainDescription()).isEqualTo("test pain");
+    assertThat(form.getSomethingElseDescription()).isEqualTo("test test");
+    assertThat(form.getBalanceDescription()).isEqualTo("test balance");
+    assertThat(form.getDangerousDescription()).isEqualTo("test danger");
   }
 
   @Test
@@ -193,7 +235,7 @@ public class WhatMakesWalkingDifficultControllerTest {
     mockMvc
         .perform(
             post("/what-makes-walking-difficult")
-                .param("whatWalkingDifficulties", "PAIN, BREATH")
+                .param("whatWalkingDifficulties", "BREATH")
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
@@ -238,7 +280,7 @@ public class WhatMakesWalkingDifficultControllerTest {
     mockMvc
         .perform(
             post("/what-makes-walking-difficult")
-                .param("whatWalkingDifficulties", "PAIN, SOMELSE")
+                .param("whatWalkingDifficulties", "SOMELSE")
                 .contentType("application/x-www-form-urlencoded")
                 .sessionAttr("JOURNEY", journey))
         .andExpect(status().is3xxRedirection())
@@ -246,5 +288,64 @@ public class WhatMakesWalkingDifficultControllerTest {
         .andExpect(
             ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
                 "somethingElseDescription", "NotBlank"));
+  }
+
+  @Test
+  public void submit_whenPainSelectedAndNoDescription_thenShouldRedirectToShowWithValidationErrors()
+      throws Exception {
+
+    mockMvc
+        .perform(
+            post("/what-makes-walking-difficult")
+                .param("whatWalkingDifficulties", "PAIN")
+                .contentType("application/x-www-form-urlencoded")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(ERROR_URL))
+        .andExpect(
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "painDescription", "NotBlank"));
+  }
+
+  @Test
+  public void
+      submit_whenBalanceSelectedAndNoDescriptionOrFalls_thenShouldRedirectToShowWithValidationErrors()
+          throws Exception {
+
+    mockMvc
+        .perform(
+            post("/what-makes-walking-difficult")
+                .param("whatWalkingDifficulties", "BALANCE")
+                .contentType("application/x-www-form-urlencoded")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(ERROR_URL))
+        .andExpect(
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "balanceDescription", "NotBlank"))
+        .andExpect(
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "healthProfessionsForFalls", "NotNull"));
+  }
+
+  @Test
+  public void
+      submit_whenDangerousSelectedAndNoDescriptionOrHealthBits_thenShouldRedirectToShowWithValidationErrors()
+          throws Exception {
+
+    mockMvc
+        .perform(
+            post("/what-makes-walking-difficult")
+                .param("whatWalkingDifficulties", "DANGER")
+                .contentType("application/x-www-form-urlencoded")
+                .sessionAttr("JOURNEY", journey))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(ERROR_URL))
+        .andExpect(
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "dangerousDescription", "NotBlank"))
+        .andExpect(
+            ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode(
+                "chestLungHeartEpilepsy", "NotNull"));
   }
 }
