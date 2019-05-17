@@ -17,12 +17,7 @@
 
             <form th:action="@{/health-conditions}" th:object="${formRequest}" method="post" novalidate>
                 <div>
-                    <div class="govuk-inset-text"
-                         th:text="#{${JOURNEY.who} + 'healthConditionsPage.hint'}"
-                         th:id="'descriptionOfConditions-hint'"
-                         th:data-uipath="${name} + '.label_hint'"></div>
-
-                    <div th:replace="~{ fragments/govuk-textarea :: govuk-textarea(#{healthConditionsPage.descriptionOfConditions}, 'descriptionOfConditions', null, 10)}"></div>
+                    <div th:replace="~{ fragments/govuk-textarea :: govuk-textarea(#{healthConditionsPage.descriptionOfConditions}, 'descriptionOfConditions', null, 4)}"></div>
                 </div>
                 <button type="submit"
                         class="govuk-button"

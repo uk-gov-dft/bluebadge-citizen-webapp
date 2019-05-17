@@ -146,10 +146,6 @@ public class WhatMakesWalkingDifficultController implements StepController {
             "whatMakesWalkingDifficult.select.option.balance"));
     options.add(
         new RadioOption(
-            WalkingDifficultyTypeCodeField.LONGTIME.name(),
-            journey.getWho() + "whatMakesWalkingDifficult.select.option.longtime"));
-    options.add(
-        new RadioOption(
             WalkingDifficultyTypeCodeField.DANGER.name(),
             journey.getWho()
                 + journey.getNation().name()
