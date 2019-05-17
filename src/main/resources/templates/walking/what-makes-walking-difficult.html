@@ -54,6 +54,83 @@
                                            th:text="#{${checkboxOption.messageKey}}"></label>
                                 </div>
 
+                                <div th:if="${checkboxOption.shortCode == 'PAIN'}" class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden"
+                                     th:id="${optionalElId}">
+                                    <div th:replace="~{ fragments/govuk-textarea :: govuk-textarea(#{${JOURNEY.who} + whatMakesWalkingDifficult.select.pain.desc}, 'painDescription', null, 3)}"></div>
+                                </div>
+
+                                <div th:if="${checkboxOption.shortCode == 'BALANCE'}" class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden"
+                                     th:id="${optionalElId}">
+                                    <div th:replace="~{ fragments/govuk-textarea :: govuk-textarea(#{${JOURNEY.who} + whatMakesWalkingDifficult.select.balance.desc}, 'balanceDescription', #{${JOURNEY.who} + whatMakesWalkingDifficult.select.balance.hint}, 3)}"></div>
+
+                                    <div class="govuk-form-group" th:classappend="${#fields.hasErrors('healthProfessionsForFalls')} ? 'govuk-form-group--error'">
+                                        <fieldset class="govuk-fieldset">
+                                            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s" th:text="#{${JOURNEY.who} + whatMakesWalkingDifficult.select.balance.hcpFalls}"/>
+                                            <span class="govuk-error-message"
+                                                  data-uipath="painDescription.error"
+                                                  th:if="${#fields.hasErrors('healthProfessionsForFalls')}"
+                                                  th:errors="*{healthProfessionsForFalls}" />
+
+                                            <div class="govuk-radios govuk-radios--inline" data-module="radios">
+
+                                                <div class="govuk-radios__item">
+                                                    <input class="govuk-radios__input"
+                                                           type="radio"
+                                                           value="true"
+                                                           th:field="*{healthProfessionsForFalls}">
+
+                                                    <label class="govuk-label govuk-radios__label" th:for="${#ids.prev('healthProfessionsForFalls')}" th:text="#{radio.option.yes}"></label>
+                                                </div>
+
+                                                <div class="govuk-radios__item">
+                                                    <input class="govuk-radios__input"
+                                                           type="radio"
+                                                           value="false"
+                                                           th:field="*{healthProfessionsForFalls}">
+
+                                                    <label class="govuk-label govuk-radios__label" th:for="${#ids.prev('healthProfessionsForFalls')}" th:text="#{radio.option.no}"></label>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+
+                                </div>
+
+                                <div th:if="${checkboxOption.shortCode == 'DANGER'}" class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden"
+                                     th:id="${optionalElId}">
+                                    <div th:replace="~{ fragments/govuk-textarea :: govuk-textarea(#{${JOURNEY.who} + whatMakesWalkingDifficult.select.danger.desc}, 'dangerousDescription', null, 3)}"></div>
+
+                                    <div class="govuk-form-group" th:classappend="${#fields.hasErrors('chestLungHeartEpilepsy')} ? 'govuk-form-group--error'">
+                                        <fieldset class="govuk-fieldset">
+                                            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s" th:text="#{${JOURNEY.who} + whatMakesWalkingDifficult.select.danger.chestLung}"/>
+                                            <span class="govuk-error-message"
+                                                  data-uipath="painDescription.error"
+                                                  th:if="${#fields.hasErrors('chestLungHeartEpilepsy')}"
+                                                  th:errors="*{chestLungHeartEpilepsy}" />
+                                            <div class="govuk-radios govuk-radios--inline" data-module="radios">
+
+                                                <div class="govuk-radios__item">
+                                                    <input class="govuk-radios__input"
+                                                           type="radio"
+                                                           value="true"
+                                                           th:field="*{chestLungHeartEpilepsy}">
+
+                                                    <label class="govuk-label govuk-radios__label" th:for="${#ids.prev('chestLungHeartEpilepsy')}" th:text="#{radio.option.yes}"></label>
+                                                </div>
+
+                                                <div class="govuk-radios__item">
+                                                    <input class="govuk-radios__input"
+                                                           type="radio"
+                                                           value="false"
+                                                           th:field="*{chestLungHeartEpilepsy}">
+
+                                                    <label class="govuk-label govuk-radios__label" th:for="${#ids.prev('chestLungHeartEpilepsy')}" th:text="#{radio.option.no}"></label>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+
                                 <div th:if="${checkboxOption.shortCode == 'BREATH'}" class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden"
                                      th:id="${optionalElId}">
                                     <span class="govuk-body-m" th:text="#{${JOURNEY.who} + 'whatMakesWalkingDifficult.select.option.breathless.hint'}"></span>
@@ -61,7 +138,7 @@
 
                                 <div th:if="${checkboxOption.shortCode == 'SOMELSE'}" class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden"
                                      th:id="${optionalElId}">
-                                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{whatMakesWalkingDifficult.select.somethingelse.desc}, 'somethingElseDescription', null, 'text', null)}"></div>
+                                    <div th:replace="~{ fragments/govuk-textarea :: govuk-textarea(#{${JOURNEY.who} + whatMakesWalkingDifficult.select.somethingelse.desc}, 'somethingElseDescription', null, 3)}"></div>
                                 </div>
                             </div>
                         </div>

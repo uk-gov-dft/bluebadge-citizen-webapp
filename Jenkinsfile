@@ -95,17 +95,10 @@ node {
             )
 
             timeout(time: 20, unit: 'MINUTES') {
-                withEnv(["BASE_SELENIUM_URL=http://citizen-webapp:8780", "BASE_MANAGEMENT_URL=http://citizen-webapp:8781"]) {
+                withEnv(["BASE_SELENIUM_URL=http://localhost:8780", "BASE_MANAGEMENT_URL=http://localhost:8781"]) {
                   withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_TOKEN')]) {
                     try {
                         sh '''
-                            curl -s -o wait_for_it.sh -H "Authorization: token ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.v3.raw' -O -L https://raw.githubusercontent.com/uk-gov-dft/shell-scripts/master/wait_for_it.sh
-                            docker pull elgalu/selenium
-                            docker pull dosel/zalenium
-                            docker run -d --network "dev-env-develop_default" --rm --name zalenium -p 4444:4444 -v /var/run/docker.sock:/var/run/docker.sock --privileged dosel/zalenium start --desiredContainers 6 --maxTestSessions 2 --keepOnlyFailedTests true --videoRecordingEnabled false --maxDockerSeleniumContainers 6
-                            chmod +x ./wait_for_it.sh
-                            ./wait_for_it.sh localhost:4444
-
                             echo " Base Selenium URL is $BASE_SELENIUM_URL"
                             echo " Base Management URL is $BASE_MANAGEMENT_URL"
                             cd acceptance-tests
@@ -115,10 +108,6 @@ node {
                         '''
                     }
                     finally {
-                        sh '''
-                            docker kill zalenium || :
-                            docker rm -vf zalenium || :
-                        '''
                         archiveArtifacts allowEmptyArchive: true, artifacts: '**/docker.log'
                         junit '**/TEST*.xml'
                     }

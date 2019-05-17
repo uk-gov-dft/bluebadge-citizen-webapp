@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+/* ------------------------------------------------------------------------------
+
+* Input Field
+
+@label - String: Label for form input field
+@name - String: Name for the form input field. This same name is used
+for data-uipath and attaching label to the input field.
+@hint - String: (optional) Adds hint for the input field underneath the label.
+@rows - int: The initial number of rows for the text area
+
+-------------------------------------------------------------------------------- */
+<div th:fragment="govuk-textarea(label, name, hint, rows)"
+     class="govuk-form-group" th:classappend="${#fields.hasErrors(name)} ? 'govuk-form-group--error'">
+
+    <label class="govuk-label"
+            th:for="${name}"
+            th:text="${label}"
+            th:data-uipath="${name} + '.label'" />
+
+    <span class="govuk-hint"
+          th:if="${hint}"
+          th:text="${hint}"
+          th:data-uipath="${name} + '.label_hint'" />
+
+    <span class="govuk-error-message"
+          th:data-uipath="${name} + '.error'"
+          th:errors="*{__${name}__}" />
+
+    <textarea class="govuk-textarea govuk-textarea--fixed"
+              th:field="*{__${name}__}"
+              th:rows="${rows}"
+              th:data-uipath="${name} + '.field'">
+    </textarea>
+
+</div>
+
+</body>
+</html>

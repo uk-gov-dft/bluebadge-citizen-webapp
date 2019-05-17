@@ -3,13 +3,11 @@ package uk.gov.dft.bluebadge.webapp.citizen.model.form.walking;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.google.common.collect.Lists;
-import java.util.List;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.WalkingDifficultyTypeCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
-import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 
 public class WhatMakesWalkingDifficultFormTest {
   private WhatMakesWalkingDifficultForm form;
@@ -31,31 +29,5 @@ public class WhatMakesWalkingDifficultFormTest {
     form.setWhatWalkingDifficulties(Lists.newArrayList(WalkingDifficultyTypeCodeField.PAIN));
     assertThat(form.determineNextStep(null))
         .isEqualTo(Optional.of(StepDefinition.MOBILITY_AID_LIST));
-  }
-
-  @Test
-  public void
-      getValidationGroups_shouldReturnValidationSequenceWithSomethingElseDescription_whenDifficultyTypeIsSomethingElse() {
-    WhatMakesWalkingDifficultForm.GroupProvider groupProvider =
-        new WhatMakesWalkingDifficultForm.GroupProvider();
-    List<Class<?>> validationSequence =
-        groupProvider.getValidationGroups(JourneyFixture.getWhatMakesWalkingDifficultForm());
-    assertThat(validationSequence)
-        .isEqualTo(
-            Lists.newArrayList(
-                WhatMakesWalkingDifficultForm.class,
-                WhatMakesWalkingDifficultForm.SomethingElseGroup.class));
-  }
-
-  @Test
-  public void
-      getValidationGroups_shouldReturnValidationSequenceWithoutSomethingElseDescription_whenDifficultyTypeIsNotSomethingElse() {
-    WhatMakesWalkingDifficultForm.GroupProvider groupProvider =
-        new WhatMakesWalkingDifficultForm.GroupProvider();
-    List<Class<?>> validationSequence =
-        groupProvider.getValidationGroups(
-            JourneyFixture.getWhatMakesWalkingDifficultFormWithoutSomethingElse());
-    assertThat(validationSequence)
-        .isEqualTo(Lists.newArrayList(WhatMakesWalkingDifficultForm.class));
   }
 }

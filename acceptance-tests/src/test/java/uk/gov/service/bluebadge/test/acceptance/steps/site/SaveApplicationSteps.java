@@ -32,7 +32,9 @@ public class SaveApplicationSteps extends AbstractSpringSteps {
 
     //Enter valid values and move on
     commonPage.findElementWithUiPath(SaveApplicationPage.EMAIL).clear();
-    commonPage.findElementWithUiPath(SaveApplicationPage.EMAIL).sendKeys(SaveApplicationPage.VALID_EMAIL);
+    commonPage
+        .findElementWithUiPath(SaveApplicationPage.EMAIL)
+        .sendKeys(SaveApplicationPage.VALID_EMAIL);
 
     verifyThePostcodeHasAutoFilledInSaveApplicationPage();
 
@@ -47,20 +49,21 @@ public class SaveApplicationSteps extends AbstractSpringSteps {
       commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(SaveApplicationPage.PAGE_TITLE_YOURSELF);
       commonSteps.iShouldSeeTheHeading(SaveApplicationPage.PAGE_TITLE_YOURSELF);
     } else {
-      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(SaveApplicationPage.PAGE_TITLE_SOMEONE_ELSE);
+      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(
+          SaveApplicationPage.PAGE_TITLE_SOMEONE_ELSE);
       commonSteps.iShouldSeeTheHeading(SaveApplicationPage.PAGE_TITLE_SOMEONE_ELSE);
     }
   }
 
   private void verifyThePostcodeHasAutoFilledInSaveApplicationPage() {
     assertThat(
-            "Previously enterred postcode should be auto filled",
-            commonPage.findElementWithUiPath(SaveApplicationPage.POSTCODE).getAttribute("value"),
-            is(SaveApplicationPage.VALID_POSTCODE));
+        "Previously enterred postcode should be auto filled",
+        commonPage.findElementWithUiPath(SaveApplicationPage.POSTCODE).getAttribute("value"),
+        is(SaveApplicationPage.VALID_POSTCODE));
   }
 
-
-  @And("^I validate return to saved application page for a \"(yourself|someone else)\" application$")
+  @And(
+      "^I validate return to saved application page for a \"(yourself|someone else)\" application$")
   public void iValidateReturnToSavedApplicationPageForAApplication(String applicant) {
     VerifyReturnToApplicationPageContent(applicant);
 
@@ -69,21 +72,24 @@ public class SaveApplicationSteps extends AbstractSpringSteps {
 
     //Enter valid values and move on
     commonPage.findElementWithUiPath(ReturnToApplicationPage.EMAIL).clear();
-    commonPage.findElementWithUiPath(ReturnToApplicationPage.EMAIL).sendKeys(SaveApplicationPage.VALID_EMAIL);
+    commonPage
+        .findElementWithUiPath(ReturnToApplicationPage.EMAIL)
+        .sendKeys(SaveApplicationPage.VALID_EMAIL);
 
     commonSteps.iClickOnContinueButton();
   }
-
 
   public void VerifyReturnToApplicationPageContent(String applicant) {
 
     commonSteps.iShouldSeeTheCorrectURL(ReturnToApplicationPage.PAGE_URL);
 
     if ("yourself".equals(applicant.toLowerCase())) {
-      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(ReturnToApplicationPage.PAGE_TITLE_YOURSELF);
+      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(
+          ReturnToApplicationPage.PAGE_TITLE_YOURSELF);
       commonSteps.iShouldSeeTheHeading(ReturnToApplicationPage.PAGE_TITLE_YOURSELF);
     } else {
-      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(ReturnToApplicationPage.PAGE_TITLE_SOMEONE_ELSE);
+      commonSteps.thenIShouldSeePageTitledWithGovUkSuffix(
+          ReturnToApplicationPage.PAGE_TITLE_SOMEONE_ELSE);
       commonSteps.iShouldSeeTheHeading(ReturnToApplicationPage.PAGE_TITLE_SOMEONE_ELSE);
     }
   }
@@ -94,11 +100,12 @@ public class SaveApplicationSteps extends AbstractSpringSteps {
 
     //Enter valid values and move on
     commonPage.findElementWithUiPath(EnterCodePage.POSTCODE).clear();
-    commonPage.findElementWithUiPath(EnterCodePage.POSTCODE).sendKeys(SaveApplicationPage.VALID_POSTCODE);
+    commonPage
+        .findElementWithUiPath(EnterCodePage.POSTCODE)
+        .sendKeys(SaveApplicationPage.VALID_POSTCODE);
 
     commonPage.findElementWithUiPath(EnterCodePage.CODE).clear();
     //commonPage.findElementWithUiPath(EnterCodePage.POSTCODE).sendKeys(SaveApplicationPage.VALID_POSTCODE);
-
 
     commonSteps.iClickOnContinueButton();
   }
