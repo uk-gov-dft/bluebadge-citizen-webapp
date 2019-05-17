@@ -20,7 +20,7 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate enter address page for a "yourself" application
     And   I validate contact details page for a "yourself" application
     And   I can click on the "Describe walking ability" link
-    And   I validate health conditions page for a "yourself" application
+    And   I validate health conditions page for a "yourself" application and eligibility "WALKD"
     And   I validate what makes walking difficult page for a "yourself" application for "PAIN"
     And   I validate the mobility aids page for a "yourself" application for "YES"
     And   I validate walking time page for a "yourself" application for "ONEFIVE"
@@ -66,7 +66,7 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate enter address page for a "yourself" application
     And   I validate contact details page for a "yourself" application
     And   I can click on the "Describe walking ability" link
-    And   I validate health conditions page for a "yourself" application
+    And   I validate health conditions page for a "yourself" application and eligibility "WALKD"
     And   I validate what makes walking difficult page for a "yourself" application for "PAIN"
     And   I validate the mobility aids page for a "yourself" application for "YES"
     And   I validate walking time page for a "yourself" application for "FIVETEN"
@@ -113,7 +113,7 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate enter address page for a "someone else" application
     And   I validate contact details page for a "someone else" application
     And   I can click on the "Describe walking ability" link
-    And   I validate health conditions page for a "someone else" application
+    And   I validate health conditions page for a "someone else" application and eligibility "WALKD"
     And   I validate what makes walking difficult page for a "someone else" application for "BALANCE"
     And   I validate the mobility aids page for a "someone else" application for "NO"
     And   I validate walking time page for a "someone else" application for "CANTWALK"
@@ -146,7 +146,7 @@ Feature: DFT Blue badge Citizen app new application - Page Validations via Walki
     And   I validate enter address page for a "someone else" application
     And   I validate contact details page for a "someone else" application
     And   I can click on the "Describe walking ability" link
-    And   I validate health conditions page for a "someone else" application
+    And   I validate health conditions page for a "someone else" application and eligibility "WALKD"
     And   I validate what makes walking difficult page for a "someone else" application for "BALANCE"
     And   I validate the mobility aids page for a "someone else" application for "NO"
     And   I validate walking time page for a "someone else" application for "CANTWALK"
