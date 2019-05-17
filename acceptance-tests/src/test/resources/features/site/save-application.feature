@@ -27,7 +27,7 @@ Feature: DFT Blue badge Citizen app - Save application
     Then  I should see page titled "Save your progress" with GOV.UK suffix
     And   I validate save application page for a "yourself" application
 
-    Then  I should see page titled "We've saved your application for" with GOV.UK suffix
+    Then  I should see page title contains "We've saved your application for"
     And   I navigate to the "return-to-application" page
     Then  I should see page titled "Return to a saved application" with GOV.UK suffix
     And   I validate return to saved application page for a "yourself" application
