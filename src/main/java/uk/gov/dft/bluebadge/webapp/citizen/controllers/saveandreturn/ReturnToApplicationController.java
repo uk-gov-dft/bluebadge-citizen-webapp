@@ -1,6 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.saveandreturn;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.errorhandler.ErrorControllerAdvice.REDIRECT;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveAndReturnJourney.SAVE_AND_RETURN_JOURNEY_KEY;
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.CODE;
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.EMAIL_TRIES;
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.JOURNEY;
@@ -20,7 +21,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import uk.gov.dft.bluebadge.webapp.citizen.config.RedisSessionConfig;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveAndReturnForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveAndReturnJourney;
 import uk.gov.dft.bluebadge.webapp.citizen.service.CryptoService;
@@ -38,13 +41,18 @@ public class ReturnToApplicationController implements SaveAndReturnController {
   private final CryptoService cryptoService;
   private final RedisService redisService;
   private MessageService messageService;
+  private RedisSessionConfig redisSessionConfig;
   private Random random = new Random();
 
-  public ReturnToApplicationController(
-      CryptoService cryptoService, RedisService redisService, MessageService messageService) {
+  ReturnToApplicationController(
+      CryptoService cryptoService,
+      RedisService redisService,
+      MessageService messageService,
+      RedisSessionConfig redisSessionConfig) {
     this.cryptoService = cryptoService;
     this.redisService = redisService;
     this.messageService = messageService;
+    this.redisSessionConfig = redisSessionConfig;
   }
 
   @GetMapping
@@ -73,7 +81,7 @@ public class ReturnToApplicationController implements SaveAndReturnController {
       RedirectAttributes attr) {
 
     if (bindingResult.hasErrors()) {
-      return redirectToOnBindingError(
+      return RouteMaster.redirectToOnBindingError(
           Mappings.URL_RETURN_TO_APPLICATION, saveAndReturnForm, bindingResult, attr);
     }
 
@@ -90,7 +98,7 @@ public class ReturnToApplicationController implements SaveAndReturnController {
     return REDIRECT + Mappings.URL_ENTER_CODE;
   }
 
-  void addRedirectCookieIfNecessary(String emailAddress, HttpServletResponse response) {
+  private void addRedirectCookieIfNecessary(String emailAddress, HttpServletResponse response) {
     // Validate stored session version
     // If version does not match set version cookie for redirect to correct version of
     // application.
@@ -102,7 +110,7 @@ public class ReturnToApplicationController implements SaveAndReturnController {
     }
   }
 
-  void send4digitCodeEmail(String emailAddress) {
+  private void send4digitCodeEmail(String emailAddress) {
     // Generate and store security code.
     // Use same code for 30 mins and don't regenerate. (Send email repeatedly though).
     String code = getOrCreateSecurityCode(emailAddress);
@@ -117,7 +125,7 @@ public class ReturnToApplicationController implements SaveAndReturnController {
         emailAddress, code, redisService.getExpiryTimeFormatted(CODE, emailAddress));
   }
 
-  boolean journeyExistsInRedis(String emailAddress) {
+  private boolean journeyExistsInRedis(String emailAddress) {
     if (redisService.exists(JOURNEY, emailAddress)) {
       return true;
     }
@@ -125,7 +133,7 @@ public class ReturnToApplicationController implements SaveAndReturnController {
     return false;
   }
 
-  boolean throttleNotExceeded(String emailAddress, Long tries) {
+  private boolean throttleNotExceeded(String emailAddress, Long tries) {
     if (redisService.throttleExceeded(tries)) {
       log.info(
           "Too many tries ({}) at submitting email to resume journey. Email hash {}",
@@ -142,15 +150,15 @@ public class ReturnToApplicationController implements SaveAndReturnController {
    * @param version e.g. 1.0.1
    * @return The cookie.
    */
-  Cookie getVersionCookie(String version) {
-    Cookie cookie = new Cookie("BlueBadgeAppVersion", version);
+  private Cookie getVersionCookie(String version) {
+    Cookie cookie = new Cookie(redisSessionConfig.getStoredJourneyVersionCookieName(), version);
     cookie.setSecure(true);
     cookie.setHttpOnly(true);
     // Default to domain creating cookie (us). i.e. Don't call setDomain
     return cookie;
   }
 
-  String getOrCreateSecurityCode(String emailAddress) {
+  private String getOrCreateSecurityCode(String emailAddress) {
     if (redisService.exists(CODE, emailAddress)) {
       return redisService.get(CODE, emailAddress);
     } else {

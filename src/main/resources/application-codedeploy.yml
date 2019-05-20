@@ -1,21 +1,21 @@
 blue-badge:
   auth-server:
-    url: https://api.${bb_env}.${url}/bb_auth
+    url: https://api-internal.${bb_env}.${url}/bb_auth
   referencedataservice:
     servicehost:
-      host: api.${bb_env}.${url}
+      host: api-internal.${bb_env}.${url}
       port: 443
       scheme: https
       contextpath: /
   applicationmanagementservice:
     servicehost:
-      host: api.${bb_env}.${url}
+      host: api-internal.${bb_env}.${url}
       port: 443
       scheme: https
       contextpath: /
   paymentservice:
     servicehost:
-      host: api.${bb_env}.${url}
+      host: api-internal.${bb_env}.${url}
       port: 443
       scheme: https
       contextpath: /
@@ -58,3 +58,5 @@ spring:
 
 amazon:
   s3bucket: ${bb_application_tmp_bucket}
+session:
+  save-return-link: https://apply-blue-badge.service.gov.uk/return-to-application

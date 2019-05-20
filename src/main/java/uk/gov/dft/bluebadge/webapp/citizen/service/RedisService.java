@@ -137,4 +137,28 @@ public class RedisService {
         .plusSeconds(secondsToLive)
         .format(DateTimeFormatter.ofPattern("d MMM yyyy 'at' HH:mm"));
   }
+
+  public long getDaysToExpiryRoundedUp(RedisKeys key, String emailAddress) {
+    Long secondsToLive = jedis.ttl(key.getKey(emailAddress));
+    if (secondsToLive.equals(-1L)) {
+      log.warn("Call to getDaysToExpiryRoundedUp when no expiry");
+      return -1;
+    }
+    long halfDays = secondsToLive / (12 * 60 * 60);
+
+    if (halfDays % 2 == 1) {
+      return (halfDays / 2) + 1;
+    } else {
+      return halfDays / 2;
+    }
+  }
+
+  public long getHoursToExpiry(RedisKeys key, String emailAddress) {
+    Long secondsToLive = jedis.ttl(key.getKey(emailAddress));
+    if (secondsToLive.equals(-1L)) {
+      log.warn("Call to getHoursToExpiry when no expiry");
+      return -1;
+    }
+    return secondsToLive / (60 * 60);
+  }
 }

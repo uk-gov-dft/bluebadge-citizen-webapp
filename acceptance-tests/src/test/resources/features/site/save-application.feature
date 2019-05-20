@@ -20,12 +20,14 @@ Feature: DFT Blue badge Citizen app - Save application
     And   I complete gender page for "Man"
     And   I complete NI number page
     And   I complete address page
+    And   I complete contact page for "yourself"
+    Then  I see the "PIP" task list page
 
-    And   I navigate to the "save-application" page
+    And   I can click on the "Save and return later" link
     Then  I should see page titled "Save your progress" with GOV.UK suffix
     And   I validate save application page for a "yourself" application
 
-    Then  I see the "PIP" task list page
+    Then  I should see page title contains "We've saved your application for"
     And   I navigate to the "return-to-application" page
     Then  I should see page titled "Return to a saved application" with GOV.UK suffix
     And   I validate return to saved application page for a "yourself" application

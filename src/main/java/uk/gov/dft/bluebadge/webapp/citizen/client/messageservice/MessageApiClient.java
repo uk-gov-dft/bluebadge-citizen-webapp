@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
+import uk.gov.dft.bluebadge.webapp.citizen.client.messageservice.model.ApplicationSavedMessageRequest;
 import uk.gov.dft.bluebadge.webapp.citizen.client.messageservice.model.GenericMessageRequest;
 import uk.gov.dft.bluebadge.webapp.citizen.client.messageservice.model.SaveAndReturnCodeMessageRequest;
 import uk.gov.dft.bluebadge.webapp.citizen.client.messageservice.model.UuidResponse;
@@ -14,7 +15,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.messageservice.model.UuidRespo
 @Slf4j
 @Service
 public class MessageApiClient {
-  static final String SEND_MESSAGE_URL = "/messages";
+  private static final String SEND_MESSAGE_URL = "/messages";
 
   private final RestTemplate restTemplate;
 
@@ -31,6 +32,13 @@ public class MessageApiClient {
     log.debug("Calling message service to request email save and return code.");
     Assert.notNull(codeRequest, "must be set");
     UuidResponse response = sendMessage(codeRequest);
+    return UUID.fromString(response.getData().getUuid());
+  }
+
+  public UUID sendApplicationSavedEmail(ApplicationSavedMessageRequest request) {
+    log.debug("Calling message service to confirm application saved.");
+    Assert.notNull(request, "must be set");
+    UuidResponse response = sendMessage(request);
     return UUID.fromString(response.getData().getUuid());
   }
 }

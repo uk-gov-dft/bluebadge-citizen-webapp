@@ -2,7 +2,7 @@ package uk.gov.service.bluebadge.test.acceptance.pages.site;
 
 public class SaveApplicationPage {
 
-  public static final String PAGE_URL = "/save-application";
+  public static final String PAGE_URL = "/save-progress";
   public static final String PAGE_TITLE_YOURSELF = "Save your progress";
   public static final String PAGE_TITLE_SOMEONE_ELSE = "Save their progress";
 

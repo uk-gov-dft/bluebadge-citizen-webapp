@@ -80,7 +80,7 @@ public class CryptoService {
         buildNumber,
         encryptedVersion);
     if (!buildNumber.equalsIgnoreCase(encryptedVersion)) {
-      throw new CryptoVersionException(encryptedVersion, encryptedVersion, buildNumber);
+      throw new CryptoVersionException(encryptedVersion, buildNumber);
     }
   }
 
@@ -103,11 +103,10 @@ public class CryptoService {
     String encryptedVersion = decryptionData.getEncryptionContext().get(VERSION_CONTEXT_KEY);
     String encryptedPostcode = decryptionData.getEncryptionContext().get(POSTCODE_CONTEXT_KEY);
     if (!buildNumber.equalsIgnoreCase(encryptedVersion)) {
-      throw new CryptoVersionException(encryptedVersion, encryptedVersion, buildNumber);
+      throw new CryptoVersionException(encryptedVersion, buildNumber);
     }
     if (!formatPostcode(postcode).equals(encryptedPostcode)) {
-      throw new CryptoPostcodeException(
-          "Postcodes don't match", encryptedPostcode, formatPostcode(postcode));
+      throw new CryptoPostcodeException(encryptedPostcode, formatPostcode(postcode));
     }
 
     // All good, decrypt.

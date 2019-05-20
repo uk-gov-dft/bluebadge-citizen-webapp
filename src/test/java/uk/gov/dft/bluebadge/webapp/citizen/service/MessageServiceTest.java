@@ -10,7 +10,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import uk.gov.dft.bluebadge.webapp.citizen.client.messageservice.MessageApiClient;
+import uk.gov.dft.bluebadge.webapp.citizen.client.messageservice.model.ApplicationSavedMessageRequest;
 import uk.gov.dft.bluebadge.webapp.citizen.client.messageservice.model.SaveAndReturnCodeMessageRequest;
+import uk.gov.dft.bluebadge.webapp.citizen.config.RedisSessionConfig;
 
 public class MessageServiceTest {
 
@@ -20,7 +22,9 @@ public class MessageServiceTest {
   @Before
   public void setUp() {
     MockitoAnnotations.initMocks(this);
-    service = new MessageService(apiClient);
+    RedisSessionConfig config = new RedisSessionConfig();
+    config.setSaveReturnLink("returnLink");
+    service = new MessageService(apiClient, config);
   }
 
   @Test
@@ -35,5 +39,19 @@ public class MessageServiceTest {
         .contains(entry(SaveAndReturnCodeMessageRequest.RETURN_CODE_KEY, "1234"));
     assertThat(argumentCaptor.getValue().getAttributes())
         .contains(entry(SaveAndReturnCodeMessageRequest.EXPIRY_TIME_KEY, "expiry"));
+  }
+
+  @Test
+  public void sendApplicationSavedEmail() {
+    service.sendApplicationSavedEmail("emailAddress1", "expiry");
+    ArgumentCaptor<ApplicationSavedMessageRequest> argumentCaptor =
+        ArgumentCaptor.forClass(ApplicationSavedMessageRequest.class);
+    verify(apiClient).sendApplicationSavedEmail(argumentCaptor.capture());
+    assertThat(argumentCaptor.getValue().getEmailAddress()).isEqualTo("emailAddress1");
+
+    assertThat(argumentCaptor.getValue().getAttributes())
+        .contains(entry(ApplicationSavedMessageRequest.EXPIRY_TIME_KEY, "expiry"));
+    assertThat(argumentCaptor.getValue().getAttributes())
+        .contains(entry(ApplicationSavedMessageRequest.RETURN_LINK_KEY, "returnLink"));
   }
 }

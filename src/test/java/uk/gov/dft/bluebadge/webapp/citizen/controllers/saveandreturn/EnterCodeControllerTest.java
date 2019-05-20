@@ -6,12 +6,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture.formRequestFlashAttributeCount;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture.formRequestFlashAttributeHasGlobalErrorCode;
-import static uk.gov.dft.bluebadge.webapp.citizen.controllers.saveandreturn.SaveAndReturnController.SAVE_AND_RETURN_JOURNEY_KEY;
+import static uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveAndReturnJourney.SAVE_AND_RETURN_JOURNEY_KEY;
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.CODE;
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.JOURNEY;
 
@@ -38,7 +40,6 @@ public class EnterCodeControllerTest {
   private static final String ERROR_URL = Mappings.URL_ENTER_CODE + "#error";
   private MockMvc mockMvc;
 
-  private EnterCodeController controller;
   @Mock private CryptoService mockCryptoService;
   @Mock private RedisService mockRedisService;
   private SaveAndReturnJourney journey;
@@ -47,7 +48,7 @@ public class EnterCodeControllerTest {
   public void setup() {
     MockitoAnnotations.initMocks(this);
     journey = new SaveAndReturnJourney();
-    controller = new EnterCodeController(mockCryptoService, mockRedisService);
+    EnterCodeController controller = new EnterCodeController(mockCryptoService, mockRedisService);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -63,6 +64,7 @@ public class EnterCodeControllerTest {
     mockMvc
         .perform(get(Mappings.URL_ENTER_CODE).sessionAttr(SAVE_AND_RETURN_JOURNEY_KEY, journey))
         .andExpect(status().isOk())
+        .andExpect(model().attribute(EnterCodeController.EMAIL_MODEL_KEY, "email"))
         .andExpect(view().name(EnterCodeController.TEMPLATE));
   }
 
@@ -103,7 +105,7 @@ public class EnterCodeControllerTest {
 
   @Test
   @SneakyThrows
-  public void submit_bindingErrors() {
+  public void submit_bindingErrorsNulls() {
     journey.setSaveAndReturnForm(SaveAndReturnForm.builder().emailAddress("emailAddress").build());
     EnterCodeForm form = EnterCodeForm.builder().code("").postcode("").build();
 
@@ -120,6 +122,30 @@ public class EnterCodeControllerTest {
         .andExpect(status().is3xxRedirection())
         .andExpect(formRequestFlashAttributeHasFieldErrorCode("code", "Pattern"))
         .andExpect(formRequestFlashAttributeHasFieldErrorCode("postcode", "Pattern"))
+        .andExpect(formRequestFlashAttributeCount(2))
+        .andExpect(redirectedUrl(ERROR_URL));
+  }
+
+  @Test
+  @SneakyThrows
+  public void submit_bindingErrorsPatterns() {
+    journey.setSaveAndReturnForm(SaveAndReturnForm.builder().emailAddress("emailAddress").build());
+    EnterCodeForm form = EnterCodeForm.builder().code("12T4").postcode("A").build();
+
+    when(mockRedisService.exists(any(), any())).thenReturn(true);
+    when(mockRedisService.throttleExceeded(any())).thenReturn(false);
+    when(mockRedisService.get(JOURNEY, "emailAddress")).thenReturn("bindingErrors");
+    when(mockRedisService.get(CODE, "emailAddress")).thenReturn("1234");
+
+    mockMvc
+        .perform(
+            post(Mappings.URL_ENTER_CODE)
+                .sessionAttr(SAVE_AND_RETURN_JOURNEY_KEY, journey)
+                .params(FormObjectToParamMapper.convert(form)))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("code", "Pattern"))
+        .andExpect(formRequestFlashAttributeHasFieldErrorCode("postcode", "Pattern"))
+        .andExpect(formRequestFlashAttributeCount(2))
         .andExpect(redirectedUrl(ERROR_URL));
   }
 
@@ -283,7 +309,7 @@ public class EnterCodeControllerTest {
 
     // Now tweak for specific fail
     when(mockCryptoService.decryptJourney(any(), any()))
-        .thenThrow(new CryptoPostcodeException("", "", ""));
+        .thenThrow(new CryptoPostcodeException("", ""));
 
     mockMvc
         .perform(
@@ -318,7 +344,7 @@ public class EnterCodeControllerTest {
 
     // Now tweak for specific fail
     when(mockCryptoService.decryptJourney(any(), any()))
-        .thenThrow(new CryptoVersionException("", "", ""));
+        .thenThrow(new CryptoVersionException("", ""));
 
     // Should get unchecked exception
     mockMvc.perform(
