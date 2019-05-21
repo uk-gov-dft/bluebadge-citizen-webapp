@@ -3,22 +3,23 @@ package uk.gov.dft.bluebadge.webapp.citizen.service;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import redis.clients.jedis.Jedis;
 import uk.gov.dft.bluebadge.webapp.citizen.config.RedisSessionConfig;
 
 @Slf4j
 @Service
 public class RedisService {
-  private Jedis jedis;
+  private StringRedisTemplate redisTemplate;
   private RedisSessionConfig redisSessionConfig;
 
   @Autowired
-  public RedisService(Jedis jedis, RedisSessionConfig redisSessionConfig) {
-    this.jedis = jedis;
+  public RedisService(StringRedisTemplate redisTemplate, RedisSessionConfig redisSessionConfig) {
+    this.redisTemplate = redisTemplate;
     this.redisSessionConfig = redisSessionConfig;
   }
 
@@ -50,8 +51,9 @@ public class RedisService {
    * @param value Value to persist
    */
   public void setAndExpire(RedisKeys key, String emailAddress, String value) {
-    jedis.set(key.getKey(emailAddress), value);
-    jedis.expire(key.getKey(emailAddress), getRedisKeyExpiryInSeconds(key));
+    redisTemplate
+        .opsForValue()
+        .set(key.getKey(emailAddress), value, getRedisKeyExpiryInSeconds(key), TimeUnit.SECONDS);
   }
 
   /**
@@ -62,10 +64,10 @@ public class RedisService {
    * @param value Value to persist.
    */
   public void setAndExpireIfNew(RedisKeys key, String emailAddress, String value) {
+
     if (exists(key, emailAddress)) {
-      Long ttl = jedis.ttl(key.getKey(emailAddress));
-      jedis.set(key.getKey(emailAddress), value);
-      jedis.expire(key.getKey(emailAddress), ttl.intValue());
+      Long ttl = redisTemplate.getExpire(key.getKey(emailAddress));
+      redisTemplate.opsForValue().set(key.getKey(emailAddress), value, ttl, TimeUnit.SECONDS);
     } else {
       setAndExpire(key, emailAddress, value);
     }
@@ -79,7 +81,7 @@ public class RedisService {
    * @return The value from Redis
    */
   public String get(RedisKeys key, String emailAddress) {
-    return jedis.get(key.getKey(emailAddress));
+    return redisTemplate.opsForValue().get(key.getKey(emailAddress));
   }
 
   /**
@@ -90,7 +92,7 @@ public class RedisService {
    * @return True if exists
    */
   public boolean exists(RedisKeys key, String emailAddress) {
-    return jedis.exists(key.getKey(emailAddress));
+    return redisTemplate.hasKey(key.getKey(emailAddress));
   }
 
   /**
@@ -101,11 +103,14 @@ public class RedisService {
    * @return New, incremented value.
    */
   public Long incrementAndSetExpiryIfNew(RedisKeys key, String emailAddress) {
-    Long count = jedis.incr(key.getKey(emailAddress));
-    if (count.equals(1L)) {
-      jedis.expire(key.getKey(emailAddress), getRedisKeyExpiryInSeconds(key));
+    if (exists(key, emailAddress)) {
+      return redisTemplate.opsForValue().increment(key.getKey(emailAddress));
+    } else {
+      redisTemplate
+          .opsForValue()
+          .set(key.getKey(emailAddress), "1", getRedisKeyExpiryInSeconds(key), TimeUnit.SECONDS);
+      return 1L;
     }
-    return count;
   }
 
   /**
@@ -128,10 +133,11 @@ public class RedisService {
    * @return Friendly formatted time.
    */
   public String getExpiryTimeFormatted(RedisKeys key, String emailAddress) {
-    Long secondsToLive = jedis.ttl(key.getKey(emailAddress));
-    if (secondsToLive.equals(-1L)) {
+
+    Long secondsToLive = redisTemplate.getExpire(key.getKey(emailAddress));
+    if (null == secondsToLive || secondsToLive.equals(-1L)) {
       log.warn("Call to get expiry of redis key when none set, key type: {}", key.name());
-      return "Never";
+      return "";
     }
     return ZonedDateTime.now(ZoneId.of("Europe/London"))
         .plusSeconds(secondsToLive)
@@ -139,8 +145,8 @@ public class RedisService {
   }
 
   public long getDaysToExpiryRoundedUp(RedisKeys key, String emailAddress) {
-    Long secondsToLive = jedis.ttl(key.getKey(emailAddress));
-    if (secondsToLive.equals(-1L)) {
+    Long secondsToLive = redisTemplate.getExpire(key.getKey(emailAddress));
+    if (null == secondsToLive || secondsToLive < 0) {
       log.warn("Call to getDaysToExpiryRoundedUp when no expiry");
       return -1;
     }
@@ -154,8 +160,8 @@ public class RedisService {
   }
 
   public long getHoursToExpiry(RedisKeys key, String emailAddress) {
-    Long secondsToLive = jedis.ttl(key.getKey(emailAddress));
-    if (secondsToLive.equals(-1L)) {
+    Long secondsToLive = redisTemplate.getExpire(key.getKey(emailAddress));
+    if (null == secondsToLive || secondsToLive < 0) {
       log.warn("Call to getHoursToExpiry when no expiry");
       return -1;
     }
