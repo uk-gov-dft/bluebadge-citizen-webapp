@@ -21,12 +21,13 @@ blue-badge:
       contextpath: /
   cryptoservice:
     servicehost:
-      host: api.${bb_env}.${url}
+      host: api-internal.${bb_env}.${url}
       port: 443
       scheme: https
+      contextpath: /
   messageservice:
     servicehost:
-      host: api.${bb_env}.${url}
+      host: api-internal.${bb_env}.${url}
       port: 443
       scheme: https
       contextpath: /
