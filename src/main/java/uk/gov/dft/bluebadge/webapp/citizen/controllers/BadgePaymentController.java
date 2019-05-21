@@ -74,7 +74,7 @@ public class BadgePaymentController implements StepController {
     journey.setPaymentJourneyUuid(response != null ? response.getPaymentJourneyUuid() : null);
     journey.setFormForStep(formRequest);
     if (response == null) {
-      return "redirect:" + Mappings.URL_NOT_PAID;
+      return "redirect:" + Mappings.URL_PAYMENT_UNAVAILABLE;
     } else {
       return "redirect:" + response.getNextUrl();
     }

@@ -23,22 +23,22 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.NotPaidForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PaymentUnavailableForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.PaymentService;
 
 @Controller
-@RequestMapping(Mappings.URL_NOT_PAID)
-public class NotPaidController implements StepController {
+@RequestMapping
+public class PaymentUnavailableController implements StepController {
 
-  private static final String TEMPLATE = "not-paid";
+  private static final String TEMPLATE = "payment-unavailable";
 
   private final RouteMaster routeMaster;
   private final PaymentService paymentService;
   private final ApplicationManagementService applicationService;
 
   @Autowired
-  NotPaidController(
+  PaymentUnavailableController(
       PaymentService paymentService,
       ApplicationManagementService applicationService,
       RouteMaster routeMaster) {
@@ -47,7 +47,7 @@ public class NotPaidController implements StepController {
     this.routeMaster = routeMaster;
   }
 
-  @GetMapping
+  @GetMapping(Mappings.URL_PAYMENT_UNAVAILABLE)
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
 
     if (!routeMaster.isValidState(getStepDefinition(), journey)) {
@@ -55,42 +55,38 @@ public class NotPaidController implements StepController {
     }
 
     if (!model.containsAttribute(FORM_REQUEST) && journey.hasStepForm(getStepDefinition())) {
-      NotPaidForm formRequest = journey.getFormForStep(getStepDefinition());
-      formRequest.setRetry(null);
+      PaymentUnavailableForm formRequest = journey.getFormForStep(getStepDefinition());
       model.addAttribute(FORM_REQUEST, formRequest);
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
-      model.addAttribute(FORM_REQUEST, NotPaidForm.builder().build());
+      model.addAttribute(FORM_REQUEST, PaymentUnavailableForm.builder().build());
     }
 
     return TEMPLATE;
   }
 
-  @PostMapping
-  public String submit(
+  @PostMapping(Mappings.URL_PAYMENT_UNAVAILABLE)
+  public String submitAndPayLater(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      @Valid @ModelAttribute(FORM_REQUEST) NotPaidForm formRequest,
+      @Valid @ModelAttribute(FORM_REQUEST) PaymentUnavailableForm formRequest,
       BindingResult bindingResult,
       RedirectAttributes attr) {
 
-    if (bindingResult.hasErrors()) {
-      return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);
-    }
+    applicationService.create(JourneyToApplicationConverter.convert(journey));
+    journey.setFormForStep(formRequest);
+    return routeMaster.redirectToOnSuccess(formRequest, journey);
+  }
 
-    if ("yes".equalsIgnoreCase(formRequest.getRetry())) {
-      PaymentResponse response = createPayment(journey);
-      journey.setPaymentJourneyUuid(response != null ? response.getPaymentJourneyUuid() : null);
-      journey.setFormForStep(formRequest);
-      if (response == null) {
-        return "redirect:" + Mappings.URL_PAYMENT_UNAVAILABLE;
-      } else {
-        return "redirect:" + response.getNextUrl();
-      }
+  @GetMapping(Mappings.URL_PAYMENT_UNAVAILABLE_RETRY)
+  public String payAndSubmit(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+    PaymentResponse response = createPayment(journey);
+    journey.setPaymentJourneyUuid(response != null ? response.getPaymentJourneyUuid() : null);
+    //      journey.setFormForStep(formRequest);
+    if (response == null) {
+      return "redirect:" + Mappings.URL_PAYMENT_UNAVAILABLE;
     } else {
-      applicationService.create(JourneyToApplicationConverter.convert(journey));
-      journey.setFormForStep(formRequest);
-      return routeMaster.redirectToOnSuccess(formRequest, journey);
+      return "redirect:" + response.getNextUrl();
     }
   }
 
@@ -103,7 +99,7 @@ public class NotPaidController implements StepController {
 
   @Override
   public StepDefinition getStepDefinition() {
-    return StepDefinition.NOT_PAID;
+    return StepDefinition.PAYMENT_UNAVAILABLE;
   }
 
   private PaymentResponse createPayment(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="(${errorSummary}? #{common.title.error} : '')  + #{paymentUnavailablePage.title}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l" th:text="#{paymentUnavailablePage.title}"></h1>
+
+            <p class="govuk-body" th:text="#{paymentUnavailablePage.content.p1}"></p>
+
+            <p class="govuk-body">
+                <span th:text="#{paymentUnavailablePage.content.p2}"/>
+
+                <a th:href="@{/payment-unavailable-retry}" th:text="#{paymentUnavailablePage.content.a.text}"></a>
+
+                <span th:text="#{paymentUnavailablePage.content.p3}"/>
+            </p>
+
+            <form data-prevent-double-submission th:action="@{/payment-unavailable}" th:object="${formRequest}"
+                  method="post" novalidate>
+                <button type="submit" class="govuk-button" data-uipath="button.continue"
+                        th:text="#{paymentUnavailablePage.submitNowAndPayLater.button}"></button>
+            </form>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

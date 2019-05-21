@@ -255,6 +255,7 @@ public class JourneyTaskConfig {
         "taskList.apply.section.submit",
         BADGE_PAYMENT,
         NOT_PAID,
+        PAYMENT_UNAVAILABLE,
         BADGE_PAYMENT_RETURN,
         SUBMIT_APPLICATION,
         SUBMITTED);

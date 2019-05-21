@@ -25,6 +25,8 @@ public class Mappings {
   public static final String URL_NOT_PAID = "/not-paid";
   public static final String URL_BADGE_PAYMENT_RETURN = "/badge-payment-return";
   public static final String URL_SUBMIT_APPLICATION = "/submit-application";
+  public static final String URL_PAYMENT_UNAVAILABLE = "/payment-unavailable";
+  public static final String URL_PAYMENT_UNAVAILABLE_RETRY = "/payment-unavailable-retry";
   public static final String URL_APPLICATION_SUBMITTED = "/application-submitted";
   public static final String URL_FIND_YOUR_COUNCIL = "/find-council";
   public static final String URL_FIND_YOUR_COUNCIL_BYPASS = "/find-council-by-pass";
@@ -168,6 +170,7 @@ public class Mappings {
           .put(StepDefinition.DECLARATIONS, URL_DECLARATIONS)
           .put(StepDefinition.BADGE_PAYMENT_RETURN, URL_BADGE_PAYMENT_RETURN)
           .put(StepDefinition.NOT_PAID, URL_NOT_PAID)
+          .put(StepDefinition.PAYMENT_UNAVAILABLE, URL_PAYMENT_UNAVAILABLE)
           .put(StepDefinition.BADGE_PAYMENT, URL_BADGE_PAYMENT)
           .put(StepDefinition.SUBMIT_APPLICATION, URL_SUBMIT_APPLICATION)
           .put(StepDefinition.SUBMITTED, URL_APPLICATION_SUBMITTED)
