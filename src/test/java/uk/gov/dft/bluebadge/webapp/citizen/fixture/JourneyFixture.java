@@ -1,29 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.fixture;
 
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.BulkyMedicalEquipmentTypeCodeField.OTHER;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.BulkyMedicalEquipmentTypeCodeField.PUMP;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.AFRFCS;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.ARMS;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.BLIND;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDBULK;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDVEHIC;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.DLA;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.NONE;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.PIP;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.TERMILL;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WPMS;
-import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation.SCO;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import java.math.BigDecimal;
-import java.net.URL;
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import lombok.SneakyThrows;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.BreathlessnessCodeField;
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
@@ -64,6 +42,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.NotPaidForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.OrganisationMayBeEligibleForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PaymentUnavailableForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveAddressForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveBenefitForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveIdentityForm;
@@ -96,6 +75,29 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationAddForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.MedicationListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WalkingTimeForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.walking.WhatMakesWalkingDifficultForm;
+
+import java.math.BigDecimal;
+import java.net.URL;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.BulkyMedicalEquipmentTypeCodeField.OTHER;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.BulkyMedicalEquipmentTypeCodeField.PUMP;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.AFRFCS;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.ARMS;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.BLIND;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDBULK;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDVEHIC;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.DLA;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.NONE;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.PIP;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.TERMILL;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WPMS;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.referencedata.model.Nation.SCO;
 
 public class JourneyFixture {
 
@@ -634,15 +636,19 @@ public class JourneyFixture {
         journey.setPaymentStatusResponse(PaymentStatusResponse.builder().data(data).build());
         journey.setFormForStep(NotPaidForm.builder().retry("no").build());
       } else {
-        data =
-            new HashMap<String, String>() {
-              {
-                put("paymentJourneyUuid", "paymentJourneyUuid1");
-                put("status", "success");
-                put("reference", "paymentReference1");
-              }
-            };
-        journey.setPaymentStatusResponse(PaymentStatusResponse.builder().data(data).build());
+        if (StepDefinition.PAYMENT_UNAVAILABLE == stepTo) {
+          journey.setFormForStep(PaymentUnavailableForm.builder().build());
+        } else {
+          data =
+              new HashMap<String, String>() {
+                {
+                  put("paymentJourneyUuid", "paymentJourneyUuid1");
+                  put("status", "success");
+                  put("reference", "paymentReference1");
+                }
+              };
+          journey.setPaymentStatusResponse(PaymentStatusResponse.builder().data(data).build());
+        }
       }
     }
 

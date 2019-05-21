@@ -1,19 +1,6 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import java.util.HashMap;
-import java.util.Map;
+import lombok.SneakyThrows;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -28,11 +15,26 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.form.BadgePaymentForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PaymentUnavailableForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.PaymentService;
 
-public class BadgePaymentControllerTest {
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+public class PaymentUnavailableControllerTest {
 
   private static final String URL_BADGE_PAYMENT_RETURN = "http://localhost/badge-payment-return";
   private static final String NEXT_URL = "http://localhost/next-url";
@@ -48,8 +50,8 @@ public class BadgePaymentControllerTest {
   public void setup() {
     MockitoAnnotations.initMocks(this);
 
-    BadgePaymentController controller =
-        new BadgePaymentController(
+    PaymentUnavailableController controller =
+        new PaymentUnavailableController(
             paymentServiceMock, applicationServiceMock, RouteMasterFixture.routeMaster());
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
@@ -57,43 +59,41 @@ public class BadgePaymentControllerTest {
             .build();
     journey =
         JourneyFixture.getDefaultJourneyToStep(
-            StepDefinition.BADGE_PAYMENT, EligibilityCodeField.DLA, true);
+            StepDefinition.PAYMENT_UNAVAILABLE, EligibilityCodeField.DLA, true);
   }
 
   @Test
-  public void show_ShouldDisplayBadgePaymentTemplate() throws Exception {
-    BadgePaymentForm formRequest = BadgePaymentForm.builder().build();
+  public void show_ShouldDisplayPaymentUnavailableTemplate() throws Exception {
+    PaymentUnavailableForm formRequest = PaymentUnavailableForm.builder().build();
 
     mockMvc
-        .perform(get("/badge-payment").sessionAttr("JOURNEY", journey))
+        .perform(get("/payment-unavailable").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
-        .andExpect(view().name("badge-payment"))
+        .andExpect(view().name("payment-unavailable"))
         .andExpect(model().attribute("formRequest", formRequest));
   }
 
   @Test
   public void show_givenNoSession_ShouldRedirectBackToStart() throws Exception {
+
     mockMvc
-        .perform(get("/badge-payment"))
+        .perform(get("/payment-unavailable"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(Mappings.URL_ROOT));
   }
 
   @Test
-  public void formByPass_shouldRedirectToApplicationSubmitted_WhenPayLater() throws Exception {
+  public void submit_shouldRedirectToApplicationSubmitted_WhenSubmitAndPayLater() throws Exception {
+
     mockMvc
-        .perform(get("/badge-payment-by-pass").sessionAttr("JOURNEY", journey))
+        .perform(post("/payment-unavailable").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/application-submitted"));
-    BadgePaymentForm expectedBadgePaymentFormRequest =
-        BadgePaymentForm.builder().payNow(false).build();
-    assertThat((BadgePaymentForm) journey.getFormForStep(StepDefinition.BADGE_PAYMENT))
-        .isEqualTo(expectedBadgePaymentFormRequest);
     verify(applicationServiceMock).create(any());
   }
 
   @Test
-  public void submit_shouldRedirectToNextUrl_WhenPayNow() throws Exception {
+  public void submit_shouldRedirectToNextUrl_WhenRetryPaymentIsSuccessful() throws Exception {
     Map<String, String> data = new HashMap<>();
     data.put("paymentJourneyUuid", PAYMENT_JOURNEY_UUID);
     data.put("nextUrl", NEXT_URL);
@@ -101,7 +101,7 @@ public class BadgePaymentControllerTest {
     when(paymentServiceMock.createPayment(eq("ABERD"), eq(URL_BADGE_PAYMENT_RETURN)))
         .thenReturn(paymentResponse);
     mockMvc
-        .perform(post("/badge-payment").sessionAttr("JOURNEY", journey))
+        .perform(get("/payment-unavailable-retry").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(NEXT_URL));
     verify(paymentServiceMock).createPayment(any(), eq(URL_BADGE_PAYMENT_RETURN));
@@ -109,15 +109,12 @@ public class BadgePaymentControllerTest {
   }
 
   @Test
-  public void submit_shouldRedirectToNotPaid_WhenPaymentIsNotSuccessful() throws Exception {
-    Map<String, String> data = new HashMap<>();
-    data.put("paymentJourneyUuid", PAYMENT_JOURNEY_UUID);
-    data.put("nextUrl", NEXT_URL);
-    PaymentResponse paymentResponse = PaymentResponse.builder().data(data).build();
+  @SneakyThrows
+  public void submit_shouldDisplayPaymentUnavailableTemplate_whenRetryPaymentIsUnsuccessful() {
     when(paymentServiceMock.createPayment(eq("ABERD"), eq(URL_BADGE_PAYMENT_RETURN)))
         .thenReturn(null);
     mockMvc
-        .perform(post("/badge-payment").sessionAttr("JOURNEY", journey))
+        .perform(get("/payment-unavailable-retry").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/payment-unavailable"));
     verify(paymentServiceMock).createPayment(any(), eq(URL_BADGE_PAYMENT_RETURN));

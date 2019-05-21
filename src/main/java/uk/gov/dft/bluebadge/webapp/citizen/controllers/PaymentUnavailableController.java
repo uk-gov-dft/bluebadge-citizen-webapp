@@ -21,8 +21,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
-import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.PaymentUnavailableForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.ApplicationManagementService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.PaymentService;
@@ -82,19 +80,11 @@ public class PaymentUnavailableController implements StepController {
   public String payAndSubmit(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     PaymentResponse response = createPayment(journey);
     journey.setPaymentJourneyUuid(response != null ? response.getPaymentJourneyUuid() : null);
-    //      journey.setFormForStep(formRequest);
     if (response == null) {
       return "redirect:" + Mappings.URL_PAYMENT_UNAVAILABLE;
     } else {
       return "redirect:" + response.getNextUrl();
     }
-  }
-
-  @ModelAttribute("retryOptions")
-  RadioOptionsGroup getRetryOptions() {
-    RadioOption yes = new RadioOption("yes", "notPaidPage.retry.option.yes");
-    RadioOption no = new RadioOption("no", "notPaidPage.retry.option.no");
-    return new RadioOptionsGroup("notPaidPage.content.title", Lists.newArrayList(yes, no));
   }
 
   @Override
