@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
+
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.appbuilder.JourneyToApplicationConverter;
 import uk.gov.dft.bluebadge.webapp.citizen.client.payment.model.PaymentResponse;
@@ -81,7 +81,7 @@ public class BadgePaymentController implements StepController {
   }
 
   @GetMapping(URL_BADGE_PAYMENT_BYPASS)
-  public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+  public String formByPass(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     applicationService.create(JourneyToApplicationConverter.convert(journey));
     BadgePaymentForm formRequest = BadgePaymentForm.builder().payNow(false).build();
     journey.setFormForStep(formRequest);

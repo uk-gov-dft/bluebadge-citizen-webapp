@@ -10,6 +10,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ChooseYourCouncilForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ExistingBadgeForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.YourIssuingAuthorityForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.mainreason.MainReasonForm;
@@ -137,5 +139,20 @@ public class JourneyTest {
     localAuthority.setLocalAuthorityMetaData(localAuthorityMetaData);
     journey.setLocalAuthority(localAuthority);
     assertThat(journey.isLocalAuthorityActive()).isFalse();
+  }
+
+  @Test
+  public void isEmptyJourney() {
+    Journey journey = new Journey();
+    assertThat(journey.isEmptyJourney()).isTrue();
+
+    journey.setFormForStep(ExistingBadgeForm.builder().build());
+    assertThat(journey.isEmptyJourney()).isFalse();
+    assertThat(journey.isEmptyJourney(StepDefinition.EXISTING_BADGE)).isTrue();
+
+    journey.setFormForStep(NinoForm.builder().build());
+    assertThat(journey.isEmptyJourney()).isFalse();
+    assertThat(journey.isEmptyJourney(StepDefinition.EXISTING_BADGE)).isFalse();
+    assertThat(journey.isEmptyJourney(StepDefinition.EXISTING_BADGE, StepDefinition.NINO)).isTrue();
   }
 }

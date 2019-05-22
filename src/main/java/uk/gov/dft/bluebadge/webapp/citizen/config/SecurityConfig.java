@@ -9,10 +9,14 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.session.InvalidSessionAccessDeniedHandler;
+import org.springframework.security.web.session.SimpleRedirectInvalidSessionStrategy;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 
 @Configuration
@@ -54,6 +58,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .permitAll()
         .and()
         .sessionManagement()
-        .invalidSessionUrl(Mappings.URL_ROOT);
+        .invalidSessionUrl(Mappings.URL_ROOT)
+        .and()
+        .exceptionHandling()
+        .accessDeniedHandler(accessDeniedHandler());
+  }
+
+  AccessDeniedHandler accessDeniedHandler() {
+    return new InvalidSessionAccessDeniedHandler(
+        new SimpleRedirectInvalidSessionStrategy(Mappings.URL_ROOT));
   }
 }
