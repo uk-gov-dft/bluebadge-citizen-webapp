@@ -106,7 +106,7 @@ public class NotPaidController implements StepController {
     return StepDefinition.NOT_PAID;
   }
 
-  private PaymentResponse createPayment(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+  private PaymentResponse createPayment(Journey journey) {
     String returnUrl =
         ServletUriComponentsBuilder.fromCurrentContextPath()
             .path(Mappings.URL_BADGE_PAYMENT_RETURN)
