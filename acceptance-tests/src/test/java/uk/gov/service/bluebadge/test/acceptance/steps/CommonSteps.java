@@ -14,6 +14,10 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.hamcrest.Matcher;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -21,11 +25,6 @@ import org.openqa.selenium.support.ui.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.AlreadyHaveBlueBadgePage;
 import uk.gov.service.bluebadge.test.acceptance.pages.site.CommonPage;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class CommonSteps extends AbstractSpringSteps {
 
@@ -175,9 +174,9 @@ public class CommonSteps extends AbstractSpringSteps {
   @Then("^I should see (?:.* )?page title contains \"([^\"]+)\"$")
   public void thenIShouldSeePageTitleContains(String pageTitle) {
     assertThat(
-            "I should see page title contains",
-            commonPage.getDocumentTitle(),
-            containsString(pageTitle));
+        "I should see page title contains",
+        commonPage.getDocumentTitle(),
+        containsString(pageTitle));
   }
 
   @Then("^I should see the content \"([^\"]*)\"$")

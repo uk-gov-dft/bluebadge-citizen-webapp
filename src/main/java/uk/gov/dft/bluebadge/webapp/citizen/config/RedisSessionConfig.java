@@ -7,17 +7,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.session.data.redis.config.ConfigureRedisAction;
 import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
-import redis.clients.jedis.Jedis;
 
 @Configuration
 @Data
 public class RedisSessionConfig {
-
-  @Value("${spring.redis.host:#{null}}")
-  private String host;
-
-  @Value("${spring.redis.port:#{null}}")
-  private Integer port;
 
   @Value("${session.save-expires-after-hours:168}")
   private int saveSessionDurationHours;
@@ -47,16 +40,5 @@ public class RedisSessionConfig {
     DefaultCookieSerializer cookieSerializer = new DefaultCookieSerializer();
     cookieSerializer.setSameSite(null);
     return cookieSerializer;
-  }
-
-  @Bean
-  public Jedis jedis() {
-    if (null == host && null == port) {
-      return new Jedis();
-    }
-    if (null == port) {
-      return new Jedis(host);
-    }
-    return new Jedis(host, port);
   }
 }
