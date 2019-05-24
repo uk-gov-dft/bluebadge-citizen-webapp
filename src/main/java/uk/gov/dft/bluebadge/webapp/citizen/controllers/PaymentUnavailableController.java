@@ -3,7 +3,6 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
-import com.google.common.collect.Lists;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
