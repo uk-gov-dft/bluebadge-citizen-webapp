@@ -123,6 +123,16 @@ public class ProveAddressControllerTest {
   }
 
   @Test
+  public void onByPassLink_whenNoSession_redirectSuccess() throws Exception {
+    // Note that when this happens, that after the redirect the next controller
+    // will redirect again to home.
+    mockMvc
+        .perform(get("/prove-address-bypass"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl(SUCCESS_URL));
+  }
+
+  @Test
   public void ajaxSubmit_givenSuccessUpload_thenArtifactInSession() throws Exception {
     JourneyArtifact journeyArtifact =
         JourneyArtifact.builder()

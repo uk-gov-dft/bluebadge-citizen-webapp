@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttribute;
+
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
@@ -79,7 +79,7 @@ public class UploadSupportingDocumentsController implements StepController {
   }
 
   @GetMapping(DOC_BYPASS_URL)
-  public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+  public String formByPass(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     UploadSupportingDocumentsForm formRequest =
         UploadSupportingDocumentsForm.builder()
             .hasDocuments(false)

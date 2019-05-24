@@ -11,7 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
+
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
@@ -51,7 +51,7 @@ public class ExistingBadgeController implements StepController {
   }
 
   @GetMapping(EXISTING_BADGE_BYPASS_URL)
-  public String formByPass(@SessionAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+  public String formByPass(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
     ExistingBadgeForm formRequest = ExistingBadgeForm.builder().hasExistingBadge(true).build();
     journey.setFormForStep(formRequest);
     return routeMaster.redirectToOnSuccess(formRequest, journey);

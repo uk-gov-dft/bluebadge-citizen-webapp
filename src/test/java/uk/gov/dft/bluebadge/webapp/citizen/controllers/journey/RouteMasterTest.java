@@ -1,20 +1,25 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.journey;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.APPLICANT_TYPE;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.DECLARATIONS;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.ELIGIBLE;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.FIND_COUNCIL;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.RECEIVE_BENEFITS;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition.UPLOAD_SUPPORTING_DOCUMENTS;
 
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
+
 import uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField;
+
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.tasks.TaskConfigurationException;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ReceiveBenefitsForm;
 
 public class RouteMasterTest {
@@ -91,6 +96,50 @@ public class RouteMasterTest {
     Journey journey = new Journey();
     journey.setFormForStep(testForm);
     routeMaster.redirectToOnSuccess(testForm, journey);
+  }
+
+  @Test
+  public void redirectOnSuccessWithForm_whenInvalidStepForJourney_thenRedirectToTaskList() {
+    StepForm testForm =
+        new StepForm() {
+          @Override
+          public StepDefinition getAssociatedStep() {
+            return UPLOAD_SUPPORTING_DOCUMENTS;
+          }
+
+          @Override
+          public boolean preserveStep(Journey journey) {
+            return false;
+          }
+        };
+
+    Journey journey = new Journey();
+    journey.setFormForStep(testForm);
+    assertThat(routeMaster.redirectToOnSuccess(testForm, journey))
+        .isEqualTo("redirect:" + Mappings.URL_TASK_LIST);
+  }
+
+  @Test
+  public void
+      redirectOnSuccessWithForm_whenInvalidStepForJourneyAndNonEmptyJourney_thenRedirectToTaskList() {
+    StepForm testForm =
+        new StepForm() {
+          @Override
+          public StepDefinition getAssociatedStep() {
+            return UPLOAD_SUPPORTING_DOCUMENTS;
+          }
+
+          @Override
+          public boolean preserveStep(Journey journey) {
+            return false;
+          }
+        };
+
+    Journey journey = new Journey();
+    journey.setFormForStep(NinoForm.builder().nino("test").build());
+    journey.setFormForStep(testForm);
+    assertThat(routeMaster.redirectToOnSuccess(testForm, journey))
+        .isEqualTo("redirect:" + Mappings.URL_TASK_LIST);
   }
 
   @Test

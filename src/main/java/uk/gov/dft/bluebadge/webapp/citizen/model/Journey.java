@@ -9,6 +9,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.m
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.collect.Sets;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -89,6 +90,12 @@ public class Journey implements Serializable {
   public boolean isChosenToPay() {
     BadgePaymentForm form = (BadgePaymentForm) getFormForStep(StepDefinition.BADGE_PAYMENT);
     return (form != null ? form.isPayNow() : false);
+  }
+
+  public boolean isEmptyJourney(StepDefinition... stepsToIgnore) {
+    HashSet<StepDefinition> copy = Sets.newHashSet(forms.keySet());
+    copy.removeAll(Sets.newHashSet(stepsToIgnore));
+    return copy.isEmpty();
   }
 
   public void setFormForStep(StepForm form) {
