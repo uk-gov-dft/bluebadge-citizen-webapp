@@ -119,7 +119,7 @@ public class NotPaidControllerTest {
     mockMvc
         .perform(post("/not-paid").sessionAttr("JOURNEY", journey).param("retry", "yes"))
         .andExpect(status().isFound())
-        .andExpect(redirectedUrl("/not-paid"));
+        .andExpect(redirectedUrl("/payment-unavailable"));
     verify(paymentServiceMock).createPayment(any(), eq(URL_BADGE_PAYMENT_RETURN));
     assertThat(journey.getPaymentJourneyUuid()).isNull();
   }

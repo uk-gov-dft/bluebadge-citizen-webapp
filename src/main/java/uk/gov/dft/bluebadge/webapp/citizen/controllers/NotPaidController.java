@@ -83,7 +83,7 @@ public class NotPaidController implements StepController {
       journey.setPaymentJourneyUuid(response != null ? response.getPaymentJourneyUuid() : null);
       journey.setFormForStep(formRequest);
       if (response == null) {
-        return "redirect:" + Mappings.URL_NOT_PAID;
+        return "redirect:" + Mappings.URL_PAYMENT_UNAVAILABLE;
       } else {
         return "redirect:" + response.getNextUrl();
       }
@@ -106,7 +106,7 @@ public class NotPaidController implements StepController {
     return StepDefinition.NOT_PAID;
   }
 
-  private PaymentResponse createPayment(@ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+  private PaymentResponse createPayment(Journey journey) {
     String returnUrl =
         ServletUriComponentsBuilder.fromCurrentContextPath()
             .path(Mappings.URL_BADGE_PAYMENT_RETURN)
