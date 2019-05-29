@@ -13,6 +13,7 @@ public enum StepDefinition {
   SUBMITTED(), // Terminatory step
   SUBMIT_APPLICATION(),
   NOT_PAID(),
+  PAYMENT_UNAVAILABLE(),
   BADGE_PAYMENT_RETURN(),
   BADGE_PAYMENT(),
   DECLARATIONS(),

@@ -45,6 +45,7 @@ public class SubmitAndPayTask extends Task {
         } // else fall through to submitted
       case BADGE_PAYMENT:
       case NOT_PAID:
+      case PAYMENT_UNAVAILABLE:
       case SUBMIT_APPLICATION:
         return SUBMITTED;
       default:

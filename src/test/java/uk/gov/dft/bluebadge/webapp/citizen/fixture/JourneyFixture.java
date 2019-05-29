@@ -64,6 +64,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.form.MobilityAidListForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.NinoForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.NotPaidForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.OrganisationMayBeEligibleForm;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.PaymentUnavailableForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveAddressForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveBenefitForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ProveIdentityForm;
@@ -634,15 +635,19 @@ public class JourneyFixture {
         journey.setPaymentStatusResponse(PaymentStatusResponse.builder().data(data).build());
         journey.setFormForStep(NotPaidForm.builder().retry("no").build());
       } else {
-        data =
-            new HashMap<String, String>() {
-              {
-                put("paymentJourneyUuid", "paymentJourneyUuid1");
-                put("status", "success");
-                put("reference", "paymentReference1");
-              }
-            };
-        journey.setPaymentStatusResponse(PaymentStatusResponse.builder().data(data).build());
+        if (StepDefinition.PAYMENT_UNAVAILABLE == stepTo) {
+          journey.setFormForStep(PaymentUnavailableForm.builder().build());
+        } else {
+          data =
+              new HashMap<String, String>() {
+                {
+                  put("paymentJourneyUuid", "paymentJourneyUuid1");
+                  put("status", "success");
+                  put("reference", "paymentReference1");
+                }
+              };
+          journey.setPaymentStatusResponse(PaymentStatusResponse.builder().data(data).build());
+        }
       }
     }
 
