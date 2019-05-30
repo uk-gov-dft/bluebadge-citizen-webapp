@@ -38,6 +38,7 @@ public class ReturnToApplicationController implements SaveAndReturnController {
 
   static final String TEMPLATE = "save-and-return/return-to-application";
   public static final String FORM_REQUEST = "formRequest";
+  public static final int EXPIRY_7_DAYS = 604800;
   private final CryptoService cryptoService;
   private final RedisService redisService;
   private MessageService messageService;
@@ -79,6 +80,10 @@ public class ReturnToApplicationController implements SaveAndReturnController {
       BindingResult bindingResult,
       HttpServletResponse response,
       RedirectAttributes attr) {
+
+    if (saveAndReturnJourney == null) {
+      return REDIRECT + Mappings.URL_RETURN_TO_APPLICATION;
+    }
 
     if (bindingResult.hasErrors()) {
       return RouteMaster.redirectToOnBindingError(
@@ -154,6 +159,7 @@ public class ReturnToApplicationController implements SaveAndReturnController {
     Cookie cookie = new Cookie(redisSessionConfig.getStoredJourneyVersionCookieName(), version);
     cookie.setSecure(true);
     cookie.setHttpOnly(true);
+    cookie.setMaxAge(EXPIRY_7_DAYS);
     // Default to domain creating cookie (us). i.e. Don't call setDomain
     return cookie;
   }

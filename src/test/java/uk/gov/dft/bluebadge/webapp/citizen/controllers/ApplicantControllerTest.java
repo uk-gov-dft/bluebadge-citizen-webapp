@@ -17,17 +17,19 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
+import uk.gov.dft.bluebadge.webapp.citizen.utilities.VersionCookieUtils;
 
 public class ApplicantControllerTest {
 
   private MockMvc mockMvc;
   private ApplicantController controller;
   @Mock private RouteMaster mockRouteMaster;
+  @Mock private VersionCookieUtils mockCookieUtils;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new ApplicantController(mockRouteMaster);
+    controller = new ApplicantController(mockRouteMaster, mockCookieUtils);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())

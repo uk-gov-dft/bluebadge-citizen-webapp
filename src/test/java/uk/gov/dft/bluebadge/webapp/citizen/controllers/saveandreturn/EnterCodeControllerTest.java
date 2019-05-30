@@ -70,6 +70,18 @@ public class EnterCodeControllerTest {
 
   @Test
   @SneakyThrows
+  public void show_noJourney() {
+    // Given
+    // Valid journey
+    journey.setSaveAndReturnForm(SaveAndReturnForm.builder().emailAddress("email").build());
+    mockMvc
+      .perform(get(Mappings.URL_ENTER_CODE))
+      .andExpect(status().is3xxRedirection())
+      .andExpect(redirectedUrl(Mappings.URL_RETURN_TO_APPLICATION));
+  }
+
+  @Test
+  @SneakyThrows
   public void show_noEmail() {
     // Given
     // Email form not filled in
@@ -101,6 +113,19 @@ public class EnterCodeControllerTest {
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl(Mappings.URL_TASK_LIST));
     verify(mockCryptoService, times(1)).decryptJourney("encrypted", "wv164aw");
+  }
+
+  @Test
+  @SneakyThrows
+  public void submit_journeyMissing() {
+    EnterCodeForm form = EnterCodeForm.builder().code("").postcode("").build();
+
+    mockMvc
+      .perform(
+        post(Mappings.URL_ENTER_CODE)
+          .params(FormObjectToParamMapper.convert(form)))
+      .andExpect(status().is3xxRedirection())
+      .andExpect(redirectedUrl(Mappings.URL_RETURN_TO_APPLICATION));
   }
 
   @Test

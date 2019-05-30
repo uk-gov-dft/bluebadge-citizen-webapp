@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -26,6 +27,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.utilities.VersionCookieUtils;
 
 @Slf4j
 @TestInstance(Lifecycle.PER_CLASS)
@@ -33,6 +35,7 @@ class OrganisationNotEligibleControllerTest {
 
   private MockMvc mockMvc;
   private Journey journey;
+  @Mock VersionCookieUtils cookieUtilsMock;
 
   @BeforeEach
   void beforeEachTest(TestInfo testInfo) {
@@ -48,7 +51,7 @@ class OrganisationNotEligibleControllerTest {
   void setup() {
     MockitoAnnotations.initMocks(this);
     OrganisationNotEligibleController controller =
-        new OrganisationNotEligibleController(RouteMasterFixture.routeMaster());
+        new OrganisationNotEligibleController(RouteMasterFixture.routeMaster(), cookieUtilsMock);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())

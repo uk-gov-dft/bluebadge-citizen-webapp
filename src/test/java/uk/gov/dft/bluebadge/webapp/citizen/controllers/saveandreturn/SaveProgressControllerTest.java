@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture.formRequestFlashAttributeCount;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture.formRequestFlashAttributeHasFieldErrorCode;
+import static uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings.URL_ROOT;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.saveandreturn.SaveProgressController.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.saveandreturn.SaveProgressController.HIDE_POSTCODE_MODEL_KEY;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
@@ -29,6 +30,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.FormObjectToParamMapper;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveProgressForm;
@@ -49,6 +51,7 @@ public class SaveProgressControllerTest {
   public void setup() {
     MockitoAnnotations.initMocks(this);
     journey = new Journey();
+    journey.setFormForStep(ApplicantForm.builder().applicantType("YOURSELF").build());
     SaveProgressController controller =
         new SaveProgressController(mockRedisService, mockCryptoService, mockMessageService);
     mockMvc =
@@ -63,11 +66,20 @@ public class SaveProgressControllerTest {
     // Given
     // Valid journey
     mockMvc
-        .perform(get(Mappings.URL_SAVE_PROGRESS).sessionAttr(JOURNEY_SESSION_KEY, new Journey()))
+        .perform(get(Mappings.URL_SAVE_PROGRESS).sessionAttr(JOURNEY_SESSION_KEY, journey))
         .andExpect(status().isOk())
         .andExpect(view().name(SaveProgressController.TEMPLATE))
         .andExpect(model().attributeExists(HIDE_POSTCODE_MODEL_KEY, "formRequest"))
         .andExpect(model().attribute(HIDE_POSTCODE_MODEL_KEY, false));
+  }
+
+  @Test
+  @SneakyThrows
+  public void show_emptyJourney() {
+    mockMvc
+      .perform(get(Mappings.URL_SAVE_PROGRESS).sessionAttr(JOURNEY_SESSION_KEY, new Journey()))
+      .andExpect(status().is3xxRedirection())
+      .andExpect(redirectedUrl(URL_ROOT));
   }
 
   @Test
@@ -108,13 +120,28 @@ public class SaveProgressControllerTest {
     mockMvc
         .perform(
             post(Mappings.URL_SAVE_PROGRESS)
-                .sessionAttr(JOURNEY_SESSION_KEY, new Journey())
+                .sessionAttr(JOURNEY_SESSION_KEY, journey)
                 .params(FormObjectToParamMapper.convert(form)))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl(Mappings.URL_PROGRESS_SAVED));
 
     verify(mockRedisService, times(1)).setAndExpireIfNew(JOURNEY, "submitOk@a.b", "encrypted");
     verify(mockMessageService, times(1)).sendApplicationSavedEmail("submitOk@a.b", "expiryTime");
+  }
+
+  @SneakyThrows
+  @Test
+  public void submit_emptyJourney() {
+    // Given a valid submission
+    SaveProgressForm form =
+      SaveProgressForm.builder().emailAddress("submitOk@a.b").postcode("wv164aw").build();
+    mockMvc
+      .perform(
+        post(Mappings.URL_SAVE_PROGRESS)
+          .sessionAttr(JOURNEY_SESSION_KEY, new Journey())
+          .params(FormObjectToParamMapper.convert(form)))
+      .andExpect(status().is3xxRedirection())
+      .andExpect(redirectedUrl(Mappings.URL_ROOT));
   }
 
   @Test
@@ -124,7 +151,7 @@ public class SaveProgressControllerTest {
     mockMvc
         .perform(
             post(Mappings.URL_SAVE_PROGRESS)
-                .sessionAttr(JOURNEY_SESSION_KEY, new Journey())
+                .sessionAttr(JOURNEY_SESSION_KEY, journey)
                 .params(
                     FormObjectToParamMapper.convert(
                         SaveProgressForm.builder().emailAddress("").postcode("").build())))
@@ -142,7 +169,7 @@ public class SaveProgressControllerTest {
     mockMvc
         .perform(
             post(Mappings.URL_SAVE_PROGRESS)
-                .sessionAttr(JOURNEY_SESSION_KEY, new Journey())
+                .sessionAttr(JOURNEY_SESSION_KEY, journey)
                 .params(
                     FormObjectToParamMapper.convert(
                         SaveProgressForm.builder().postcode("W").emailAddress("A").build())))

@@ -24,18 +24,21 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveProgressForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys;
 import uk.gov.dft.bluebadge.webapp.citizen.service.RedisService;
+import uk.gov.dft.bluebadge.webapp.citizen.utilities.VersionCookieUtils;
 
 public class ProgressSavedControllerTest {
   private MockMvc mockMvc;
 
   @Mock private RedisService mockRedisService;
+  @Mock private VersionCookieUtils mockCookieUtils;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
 
     mockMvc =
-        MockMvcBuilders.standaloneSetup(new ProgressSavedController(mockRedisService))
+        MockMvcBuilders.standaloneSetup(
+                new ProgressSavedController(mockRedisService, mockCookieUtils))
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
   }

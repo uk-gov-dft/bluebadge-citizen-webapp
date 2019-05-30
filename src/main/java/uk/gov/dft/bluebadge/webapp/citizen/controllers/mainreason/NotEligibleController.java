@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers.mainreason;
 
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.utilities.VersionCookieUtils;
 
 @Controller
 @RequestMapping(Mappings.URL_NOT_ELIGIBLE)
@@ -23,8 +25,8 @@ public class NotEligibleController extends BaseFinalStepController implements St
   private static final String TEMPLATE = "mainreason/not-eligible";
 
   @Autowired
-  NotEligibleController(RouteMaster routeMaster) {
-    super(routeMaster);
+  NotEligibleController(RouteMaster routeMaster, VersionCookieUtils cookieUtils) {
+    super(routeMaster, cookieUtils);
   }
 
   @Override
@@ -37,9 +39,10 @@ public class NotEligibleController extends BaseFinalStepController implements St
   public String show(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       Model model,
+      HttpServletResponse response,
       SessionStatus sessionStatus) {
 
-    return super.show(journey, model, sessionStatus);
+    return super.show(journey, model, response, sessionStatus);
   }
 
   @Override

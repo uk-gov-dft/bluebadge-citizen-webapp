@@ -11,6 +11,8 @@ import static uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture.Values.
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
@@ -18,14 +20,18 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
+import uk.gov.dft.bluebadge.webapp.citizen.utilities.VersionCookieUtils;
 
 public class SubmittedControllerTest {
 
   private MockMvc mockMvc;
+  @Mock VersionCookieUtils mockCookieUtils;
 
   @Before
   public void setup() {
-    SubmittedController controller = new SubmittedController(RouteMasterFixture.routeMaster());
+    MockitoAnnotations.initMocks(this);
+    SubmittedController controller =
+        new SubmittedController(RouteMasterFixture.routeMaster(), mockCookieUtils);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())

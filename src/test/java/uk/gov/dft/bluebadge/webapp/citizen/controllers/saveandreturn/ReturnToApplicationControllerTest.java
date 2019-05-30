@@ -77,6 +77,19 @@ public class ReturnToApplicationControllerTest {
 
   @Test
   @SneakyThrows
+  public void submit_journeyMissing() {
+    SaveAndReturnForm form = SaveAndReturnForm.builder().emailAddress("").build();
+
+    mockMvc
+      .perform(
+        post(Mappings.URL_RETURN_TO_APPLICATION)
+          .params(FormObjectToParamMapper.convert(form)))
+      .andExpect(status().is3xxRedirection())
+      .andExpect(redirectedUrl(Mappings.URL_RETURN_TO_APPLICATION + "#error"));
+  }
+
+  @Test
+  @SneakyThrows
   public void submit_loadsApplicationFailBeanValidation() {
     // Given a valid submission
     SaveAndReturnForm form = SaveAndReturnForm.builder().emailAddress("").build();

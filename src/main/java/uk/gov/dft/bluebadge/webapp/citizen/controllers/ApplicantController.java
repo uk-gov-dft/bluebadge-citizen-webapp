@@ -4,6 +4,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import com.google.common.collect.Lists;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,19 +22,27 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
+import uk.gov.dft.bluebadge.webapp.citizen.utilities.VersionCookieUtils;
 
 @Controller
 @RequestMapping(Mappings.URL_APPLICANT_TYPE)
 public class ApplicantController implements StepController {
   private static final String TEMPLATE_APPLICANT = "applicant";
   private final RouteMaster routeMaster;
+  private final VersionCookieUtils cookieUtils;
 
-  public ApplicantController(RouteMaster routeMaster) {
+  public ApplicantController(RouteMaster routeMaster, VersionCookieUtils cookieUtils) {
     this.routeMaster = routeMaster;
+    this.cookieUtils = cookieUtils;
   }
 
   @GetMapping
-  public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+  public String show(
+      Model model,
+      @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
+      HttpServletResponse response) {
+
+    cookieUtils.removeRedirectCookie(response);
 
     if (!model.containsAttribute(FORM_REQUEST)
         && journey.hasStepForm(StepDefinition.APPLICANT_TYPE)) {
