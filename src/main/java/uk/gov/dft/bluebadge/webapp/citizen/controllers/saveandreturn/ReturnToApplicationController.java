@@ -81,10 +81,6 @@ public class ReturnToApplicationController implements SaveAndReturnController {
       HttpServletResponse response,
       RedirectAttributes attr) {
 
-    if (saveAndReturnJourney == null) {
-      return REDIRECT + Mappings.URL_RETURN_TO_APPLICATION;
-    }
-
     if (bindingResult.hasErrors()) {
       return RouteMaster.redirectToOnBindingError(
           Mappings.URL_RETURN_TO_APPLICATION, saveAndReturnForm, bindingResult, attr);
