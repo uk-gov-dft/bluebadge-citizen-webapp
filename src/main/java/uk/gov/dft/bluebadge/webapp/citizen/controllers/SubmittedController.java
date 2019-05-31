@@ -14,7 +14,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
-import uk.gov.dft.bluebadge.webapp.citizen.utilities.VersionCookieUtils;
+import uk.gov.dft.bluebadge.webapp.citizen.utilities.RedirectVersionCookieManager;
 
 @Controller
 public class SubmittedController extends BaseFinalStepController implements StepController {
@@ -22,8 +22,8 @@ public class SubmittedController extends BaseFinalStepController implements Step
   private static final String TEMPLATE_APPLICATION_SUBMITTED = "application-end/submitted";
 
   @Autowired
-  SubmittedController(RouteMaster routeMaster, VersionCookieUtils cookieUtils) {
-    super(routeMaster, cookieUtils);
+  SubmittedController(RouteMaster routeMaster, RedirectVersionCookieManager cookieManager) {
+    super(routeMaster, cookieManager);
   }
 
   @Override

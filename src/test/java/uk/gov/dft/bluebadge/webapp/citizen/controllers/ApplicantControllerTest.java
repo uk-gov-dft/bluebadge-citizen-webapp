@@ -1,6 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -17,19 +18,19 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
-import uk.gov.dft.bluebadge.webapp.citizen.utilities.VersionCookieUtils;
+import uk.gov.dft.bluebadge.webapp.citizen.utilities.RedirectVersionCookieManager;
 
 public class ApplicantControllerTest {
 
   private MockMvc mockMvc;
   private ApplicantController controller;
   @Mock private RouteMaster mockRouteMaster;
-  @Mock private VersionCookieUtils mockCookieUtils;
+  @Mock private RedirectVersionCookieManager mockCookieManager;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    controller = new ApplicantController(mockRouteMaster, mockCookieUtils);
+    controller = new ApplicantController(mockRouteMaster, mockCookieManager);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -49,6 +50,7 @@ public class ApplicantControllerTest {
         .andExpect(view().name("applicant"))
         .andExpect(model().attribute("applicantOptions", applicantOptions))
         .andExpect(model().attribute("formRequest", formRequest));
+    verify(mockCookieManager).removeCookie(any());
   }
 
   @Test

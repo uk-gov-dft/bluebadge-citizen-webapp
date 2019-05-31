@@ -1,5 +1,8 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.organisation;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -27,7 +30,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.utilities.VersionCookieUtils;
+import uk.gov.dft.bluebadge.webapp.citizen.utilities.RedirectVersionCookieManager;
 
 @Slf4j
 @TestInstance(Lifecycle.PER_CLASS)
@@ -35,7 +38,7 @@ class OrganisationMayBeEligibleControllerTest {
 
   private MockMvc mockMvc;
   private Journey journey;
-  @Mock private VersionCookieUtils cookieUtilsMock;
+  @Mock private RedirectVersionCookieManager cookieManagerMock;
 
   @BeforeEach
   void beforeEachTest(TestInfo testInfo) {
@@ -51,7 +54,8 @@ class OrganisationMayBeEligibleControllerTest {
   void setup() {
     MockitoAnnotations.initMocks(this);
     OrganisationMayBeEligibleController controller =
-        new OrganisationMayBeEligibleController(RouteMasterFixture.routeMaster(), cookieUtilsMock);
+        new OrganisationMayBeEligibleController(
+            RouteMasterFixture.routeMaster(), cookieManagerMock);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -73,6 +77,7 @@ class OrganisationMayBeEligibleControllerTest {
         .andExpect(status().isOk())
         .andExpect(view().name("organisation/organisation-may-be-eligible"))
         .andExpect(model().attribute("formRequest", Matchers.nullValue()));
+    verify(cookieManagerMock).removeCookie(any());
   }
 
   @Test
@@ -84,5 +89,6 @@ class OrganisationMayBeEligibleControllerTest {
         .perform(get("/organisation-may-be-eligible"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(Mappings.URL_ROOT));
+    verifyZeroInteractions(cookieManagerMock);
   }
 }

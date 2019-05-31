@@ -77,9 +77,9 @@ public class SaveProgressControllerTest {
   @SneakyThrows
   public void show_emptyJourney() {
     mockMvc
-      .perform(get(Mappings.URL_SAVE_PROGRESS).sessionAttr(JOURNEY_SESSION_KEY, new Journey()))
-      .andExpect(status().is3xxRedirection())
-      .andExpect(redirectedUrl(URL_ROOT));
+        .perform(get(Mappings.URL_SAVE_PROGRESS).sessionAttr(JOURNEY_SESSION_KEY, new Journey()))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(URL_ROOT));
   }
 
   @Test
@@ -134,14 +134,14 @@ public class SaveProgressControllerTest {
   public void submit_emptyJourney() {
     // Given a valid submission
     SaveProgressForm form =
-      SaveProgressForm.builder().emailAddress("submitOk@a.b").postcode("wv164aw").build();
+        SaveProgressForm.builder().emailAddress("submitOk@a.b").postcode("wv164aw").build();
     mockMvc
-      .perform(
-        post(Mappings.URL_SAVE_PROGRESS)
-          .sessionAttr(JOURNEY_SESSION_KEY, new Journey())
-          .params(FormObjectToParamMapper.convert(form)))
-      .andExpect(status().is3xxRedirection())
-      .andExpect(redirectedUrl(Mappings.URL_ROOT));
+        .perform(
+            post(Mappings.URL_SAVE_PROGRESS)
+                .sessionAttr(JOURNEY_SESSION_KEY, new Journey())
+                .params(FormObjectToParamMapper.convert(form)))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(Mappings.URL_ROOT));
   }
 
   @Test

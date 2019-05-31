@@ -1,5 +1,8 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.mainreason;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -18,18 +21,18 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.utilities.VersionCookieUtils;
+import uk.gov.dft.bluebadge.webapp.citizen.utilities.RedirectVersionCookieManager;
 
 public class NotEligibleControllerTest {
   private MockMvc mockMvc;
   private Journey journey;
-  @Mock private VersionCookieUtils mockCookieUtils;
+  @Mock private RedirectVersionCookieManager mockCookieManager;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
     NotEligibleController controller =
-        new NotEligibleController(RouteMasterFixture.routeMaster(), mockCookieUtils);
+        new NotEligibleController(RouteMasterFixture.routeMaster(), mockCookieManager);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -46,6 +49,7 @@ public class NotEligibleControllerTest {
         .perform(get("/not-eligible").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("mainreason/not-eligible"));
+    verify(mockCookieManager).removeCookie(any());
   }
 
   @Test
@@ -55,5 +59,6 @@ public class NotEligibleControllerTest {
         .perform(get("/not-eligible"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(Mappings.URL_ROOT));
+    verifyZeroInteractions(mockCookieManager);
   }
 }

@@ -1,7 +1,7 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers.saveandreturn;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -24,13 +24,13 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveProgressForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys;
 import uk.gov.dft.bluebadge.webapp.citizen.service.RedisService;
-import uk.gov.dft.bluebadge.webapp.citizen.utilities.VersionCookieUtils;
+import uk.gov.dft.bluebadge.webapp.citizen.utilities.RedirectVersionCookieManager;
 
 public class ProgressSavedControllerTest {
   private MockMvc mockMvc;
 
   @Mock private RedisService mockRedisService;
-  @Mock private VersionCookieUtils mockCookieUtils;
+  @Mock private RedirectVersionCookieManager mockCookieManager;
 
   @Before
   public void setup() {
@@ -38,7 +38,7 @@ public class ProgressSavedControllerTest {
 
     mockMvc =
         MockMvcBuilders.standaloneSetup(
-                new ProgressSavedController(mockRedisService, mockCookieUtils))
+                new ProgressSavedController(mockRedisService, mockCookieManager))
             .setViewResolvers(new StandaloneMvcTestViewResolver())
             .build();
   }
@@ -63,6 +63,7 @@ public class ProgressSavedControllerTest {
                     ProgressSavedController.TIME_TO_EXPIRY_UNITS_MODEL_KEY,
                     ProgressSavedController.UNITS_DAYS));
     verify(mockRedisService, never()).getHoursToExpiry(RedisKeys.JOURNEY, emailAddress);
+    verify(mockCookieManager).removeCookie(any());
   }
 
   @Test
@@ -84,7 +85,8 @@ public class ProgressSavedControllerTest {
                 .attribute(
                     ProgressSavedController.TIME_TO_EXPIRY_UNITS_MODEL_KEY,
                     ProgressSavedController.UNITS_HOURS));
-    verify(mockRedisService, times(1)).getHoursToExpiry(RedisKeys.JOURNEY, emailAddress);
+    verify(mockRedisService).getHoursToExpiry(RedisKeys.JOURNEY, emailAddress);
+    verify(mockCookieManager).removeCookie(any());
   }
 
   @Test
@@ -95,5 +97,6 @@ public class ProgressSavedControllerTest {
         .perform(get(Mappings.URL_PROGRESS_SAVED).sessionAttr(JOURNEY_SESSION_KEY, new Journey()))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl(Mappings.URL_TASK_LIST));
+    verify(mockCookieManager, never()).removeCookie(any());
   }
 }

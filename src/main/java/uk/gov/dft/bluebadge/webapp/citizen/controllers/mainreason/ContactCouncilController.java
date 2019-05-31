@@ -14,7 +14,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.utilities.VersionCookieUtils;
+import uk.gov.dft.bluebadge.webapp.citizen.utilities.RedirectVersionCookieManager;
 
 @Controller
 @RequestMapping(Mappings.URL_CONTACT_COUNCIL)
@@ -22,8 +22,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.utilities.VersionCookieUtils;
 public class ContactCouncilController extends BaseFinalStepController {
   private static final String TEMPLATE = "mainreason/contact-council";
 
-  ContactCouncilController(RouteMaster routeMaster, VersionCookieUtils cookieUtils) {
-    super(routeMaster, cookieUtils);
+  ContactCouncilController(RouteMaster routeMaster, RedirectVersionCookieManager cookieManager) {
+    super(routeMaster, cookieManager);
   }
 
   @Override

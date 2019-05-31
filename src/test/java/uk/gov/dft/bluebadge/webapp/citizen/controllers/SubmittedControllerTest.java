@@ -1,5 +1,8 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -20,18 +23,18 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.JourneyBuilder;
 import uk.gov.dft.bluebadge.webapp.citizen.fixture.RouteMasterFixture;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.utilities.VersionCookieUtils;
+import uk.gov.dft.bluebadge.webapp.citizen.utilities.RedirectVersionCookieManager;
 
 public class SubmittedControllerTest {
 
   private MockMvc mockMvc;
-  @Mock VersionCookieUtils mockCookieUtils;
+  @Mock RedirectVersionCookieManager mockCookieManager;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
     SubmittedController controller =
-        new SubmittedController(RouteMasterFixture.routeMaster(), mockCookieUtils);
+        new SubmittedController(RouteMasterFixture.routeMaster(), mockCookieManager);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -48,6 +51,7 @@ public class SubmittedControllerTest {
         .andExpect(model().attribute("JOURNEY", journey))
         .andExpect(model().attribute("contactEmail", EMAIL_ADDRESS))
         .andExpect(request().sessionAttribute("JOURNEY", Matchers.nullValue()));
+    verify(mockCookieManager).removeCookie(any());
   }
 
   @Test
@@ -56,6 +60,7 @@ public class SubmittedControllerTest {
         .perform(get("/application-submitted"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(Mappings.URL_ROOT));
+    verifyZeroInteractions(mockCookieManager);
   }
 
   @Test
@@ -64,5 +69,6 @@ public class SubmittedControllerTest {
         .perform(get("/application-submitted"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(Mappings.URL_ROOT));
+    verifyZeroInteractions(mockCookieManager);
   }
 }

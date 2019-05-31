@@ -22,18 +22,18 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
-import uk.gov.dft.bluebadge.webapp.citizen.utilities.VersionCookieUtils;
+import uk.gov.dft.bluebadge.webapp.citizen.utilities.RedirectVersionCookieManager;
 
 @Controller
 @RequestMapping(Mappings.URL_APPLICANT_TYPE)
 public class ApplicantController implements StepController {
   private static final String TEMPLATE_APPLICANT = "applicant";
   private final RouteMaster routeMaster;
-  private final VersionCookieUtils cookieUtils;
+  private final RedirectVersionCookieManager cookieManager;
 
-  public ApplicantController(RouteMaster routeMaster, VersionCookieUtils cookieUtils) {
+  public ApplicantController(RouteMaster routeMaster, RedirectVersionCookieManager cookieManager) {
     this.routeMaster = routeMaster;
-    this.cookieUtils = cookieUtils;
+    this.cookieManager = cookieManager;
   }
 
   @GetMapping
@@ -42,7 +42,7 @@ public class ApplicantController implements StepController {
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       HttpServletResponse response) {
 
-    cookieUtils.removeRedirectCookie(response);
+    cookieManager.removeCookie(response);
 
     if (!model.containsAttribute(FORM_REQUEST)
         && journey.hasStepForm(StepDefinition.APPLICANT_TYPE)) {

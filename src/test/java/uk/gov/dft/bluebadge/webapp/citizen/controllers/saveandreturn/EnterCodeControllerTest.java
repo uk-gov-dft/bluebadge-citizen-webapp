@@ -75,9 +75,9 @@ public class EnterCodeControllerTest {
     // Valid journey
     journey.setSaveAndReturnForm(SaveAndReturnForm.builder().emailAddress("email").build());
     mockMvc
-      .perform(get(Mappings.URL_ENTER_CODE))
-      .andExpect(status().is3xxRedirection())
-      .andExpect(redirectedUrl(Mappings.URL_RETURN_TO_APPLICATION));
+        .perform(get(Mappings.URL_ENTER_CODE))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(Mappings.URL_RETURN_TO_APPLICATION));
   }
 
   @Test
@@ -121,11 +121,9 @@ public class EnterCodeControllerTest {
     EnterCodeForm form = EnterCodeForm.builder().code("").postcode("").build();
 
     mockMvc
-      .perform(
-        post(Mappings.URL_ENTER_CODE)
-          .params(FormObjectToParamMapper.convert(form)))
-      .andExpect(status().is3xxRedirection())
-      .andExpect(redirectedUrl(Mappings.URL_RETURN_TO_APPLICATION));
+        .perform(post(Mappings.URL_ENTER_CODE).params(FormObjectToParamMapper.convert(form)))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(Mappings.URL_RETURN_TO_APPLICATION));
   }
 
   @Test

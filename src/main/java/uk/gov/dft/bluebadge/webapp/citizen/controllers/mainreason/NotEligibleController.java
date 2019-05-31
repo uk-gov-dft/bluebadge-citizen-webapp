@@ -16,7 +16,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.utilities.VersionCookieUtils;
+import uk.gov.dft.bluebadge.webapp.citizen.utilities.RedirectVersionCookieManager;
 
 @Controller
 @RequestMapping(Mappings.URL_NOT_ELIGIBLE)
@@ -25,8 +25,8 @@ public class NotEligibleController extends BaseFinalStepController implements St
   private static final String TEMPLATE = "mainreason/not-eligible";
 
   @Autowired
-  NotEligibleController(RouteMaster routeMaster, VersionCookieUtils cookieUtils) {
-    super(routeMaster, cookieUtils);
+  NotEligibleController(RouteMaster routeMaster, RedirectVersionCookieManager cookieManager) {
+    super(routeMaster, cookieManager);
   }
 
   @Override

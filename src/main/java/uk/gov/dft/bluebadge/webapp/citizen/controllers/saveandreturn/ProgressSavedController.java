@@ -20,7 +20,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveProgressForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys;
 import uk.gov.dft.bluebadge.webapp.citizen.service.RedisService;
-import uk.gov.dft.bluebadge.webapp.citizen.utilities.VersionCookieUtils;
+import uk.gov.dft.bluebadge.webapp.citizen.utilities.RedirectVersionCookieManager;
 
 @Slf4j
 @Controller
@@ -34,12 +34,12 @@ public class ProgressSavedController implements StepController {
   public static final String FORM_REQUEST = "formRequest";
 
   private RedisService redisService;
-  private VersionCookieUtils cookieUtils;
+  private RedirectVersionCookieManager cookieManager;
 
   @Autowired
-  ProgressSavedController(RedisService redisService, VersionCookieUtils cookieUtils) {
+  ProgressSavedController(RedisService redisService, RedirectVersionCookieManager cookieManager) {
     this.redisService = redisService;
-    this.cookieUtils = cookieUtils;
+    this.cookieManager = cookieManager;
   }
 
   @GetMapping
@@ -70,7 +70,7 @@ public class ProgressSavedController implements StepController {
     }
 
     sessionStatus.setComplete();
-    cookieUtils.removeRedirectCookie(response);
+    cookieManager.removeCookie(response);
 
     return TEMPLATE;
   }

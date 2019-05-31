@@ -15,7 +15,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-import uk.gov.dft.bluebadge.webapp.citizen.utilities.VersionCookieUtils;
+import uk.gov.dft.bluebadge.webapp.citizen.utilities.RedirectVersionCookieManager;
 
 @Controller
 @RequestMapping(Mappings.URL_ORGANISATION_MAY_BE_ELIGIBLE)
@@ -24,8 +24,9 @@ public class OrganisationMayBeEligibleController extends BaseFinalStepController
   private static final String TEMPLATE = "organisation/organisation-may-be-eligible";
 
   @Autowired
-  OrganisationMayBeEligibleController(RouteMaster routeMaster, VersionCookieUtils cookieUtils) {
-    super(routeMaster, cookieUtils);
+  OrganisationMayBeEligibleController(
+      RouteMaster routeMaster, RedirectVersionCookieManager cookieManager) {
+    super(routeMaster, cookieManager);
   }
 
   @Override
