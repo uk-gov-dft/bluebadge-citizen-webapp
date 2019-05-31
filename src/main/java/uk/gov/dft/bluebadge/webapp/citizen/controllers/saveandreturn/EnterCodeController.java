@@ -53,8 +53,7 @@ public class EnterCodeController implements SaveAndReturnController {
       Model model,
       @ModelAttribute(SAVE_AND_RETURN_JOURNEY_KEY) SaveAndReturnJourney saveAndReturnJourney) {
 
-    if (null == saveAndReturnJourney
-        || null == saveAndReturnJourney.getSaveAndReturnForm()
+    if (null == saveAndReturnJourney.getSaveAndReturnForm()
         || StringUtils.isBlank(saveAndReturnJourney.getSaveAndReturnForm().getEmailAddress())) {
       return REDIRECT + Mappings.URL_RETURN_TO_APPLICATION;
     }
@@ -84,8 +83,7 @@ public class EnterCodeController implements SaveAndReturnController {
       SessionStatus sessionStatus)
       throws CryptoVersionException {
 
-    if (null == saveAndReturnJourney
-        || null == saveAndReturnJourney.getSaveAndReturnForm()
+    if (null == saveAndReturnJourney.getSaveAndReturnForm()
         || StringUtils.isBlank(saveAndReturnJourney.getSaveAndReturnForm().getEmailAddress())) {
       return REDIRECT + Mappings.URL_RETURN_TO_APPLICATION;
     }
