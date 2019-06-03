@@ -42,14 +42,13 @@ public class ApplicantController implements StepController {
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       HttpServletResponse response) {
 
-    cookieManager.removeCookie(response);
-
     if (!model.containsAttribute(FORM_REQUEST)
         && journey.hasStepForm(StepDefinition.APPLICANT_TYPE)) {
       model.addAttribute(FORM_REQUEST, journey.getFormForStep(StepDefinition.APPLICANT_TYPE));
     }
 
     if (!model.containsAttribute(FORM_REQUEST)) {
+      cookieManager.removeCookie(response);
       model.addAttribute(FORM_REQUEST, ApplicantForm.builder().build());
     }
 

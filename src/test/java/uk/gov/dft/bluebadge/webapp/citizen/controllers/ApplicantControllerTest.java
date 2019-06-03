@@ -54,6 +54,26 @@ public class ApplicantControllerTest {
   }
 
   @Test
+  public void
+      showApplicant_shouldDisplayTheApplicantTemplateAndDontRemoveRedirecTcookie_whenFormDoesNotExistsInJourney()
+          throws Exception {
+
+    ApplicantForm formRequest = ApplicantForm.builder().build();
+
+    RadioOptionsGroup applicantOptions = controller.getApplicantOptions();
+
+    Journey journey = new Journey();
+
+    mockMvc
+        .perform(get("/applicant").sessionAttr("JOURNEY", journey))
+        .andExpect(status().isOk())
+        .andExpect(view().name("applicant"))
+        .andExpect(model().attribute("applicantOptions", applicantOptions))
+        .andExpect(model().attribute("formRequest", formRequest));
+    verify(mockCookieManager).removeCookie(any());
+  }
+
+  @Test
   public void submitApplicant_ShouldStoreApplicantFormIntoSessionAndDisplayNextPageInTheJourney()
       throws Exception {
     when(mockRouteMaster.redirectToOnSuccess(any(ApplicantForm.class), any()))
