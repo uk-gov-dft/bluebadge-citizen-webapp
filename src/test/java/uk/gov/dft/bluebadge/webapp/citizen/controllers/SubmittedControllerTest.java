@@ -65,8 +65,9 @@ public class SubmittedControllerTest {
 
   @Test
   public void show_givenInvalidState_ShouldRedirectBackToStart() throws Exception {
+    Journey journey = new Journey();
     mockMvc
-        .perform(get("/application-submitted"))
+        .perform(get("/application-submitted").sessionAttr("JOURNEY", journey))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(Mappings.URL_ROOT));
     verifyZeroInteractions(mockCookieManager);
