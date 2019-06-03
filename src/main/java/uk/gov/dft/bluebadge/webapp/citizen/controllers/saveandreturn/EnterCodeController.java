@@ -99,7 +99,7 @@ public class EnterCodeController implements SaveAndReturnController {
         Journey storedJourney =
             cryptoService.decryptJourney(
                 redisService.get(JOURNEY, emailAddress), enterCodeForm.getPostcode());
-        sessionStatus.setComplete();
+        request.getSession().invalidate();
         request.getSession().setAttribute(JOURNEY_SESSION_KEY, storedJourney);
         log.info(
             "Successfully loaded saved application for email hash {}",
