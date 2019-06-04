@@ -5,9 +5,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import javax.servlet.http.Cookie;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -59,7 +64,9 @@ public class ApplicantControllerTest {
         .andExpect(view().name("applicant"))
         .andExpect(model().attribute("applicantOptions", applicantOptions))
         .andExpect(model().attribute("formRequest", formRequest))
-        .andExpect(cookie().value(APP_VERSION_COOKIE_NAME, "0.55.0"));
+        .andExpect(cookie().value(APP_VERSION_COOKIE_NAME, "0.55.0"))
+        .andExpect(cookie().maxAge(APP_VERSION_COOKIE_NAME, Matchers.greaterThan(24*60*60)))
+    ;
 
     verify(cookieManager).removeCookie(any());
   }
@@ -77,7 +84,9 @@ public class ApplicantControllerTest {
                 .cookie(new Cookie(APP_VERSION_COOKIE_NAME, "999")))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/applicant"))
-        .andExpect(cookie().doesNotExist(APP_VERSION_COOKIE_NAME));
+        .andExpect(cookie().value(APP_VERSION_COOKIE_NAME, ""))
+        .andExpect(cookie().maxAge(APP_VERSION_COOKIE_NAME, 0))
+    ;
 
     verify(cookieManager).removeCookie(any());
   }
@@ -95,7 +104,9 @@ public class ApplicantControllerTest {
                 .cookie(new Cookie(APP_VERSION_COOKIE_NAME, "0.55.0")))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/applicant"))
-        .andExpect(cookie().doesNotExist(APP_VERSION_COOKIE_NAME));
+        .andExpect(cookie().value(APP_VERSION_COOKIE_NAME, ""))
+        .andExpect(cookie().maxAge(APP_VERSION_COOKIE_NAME, 0))
+        ;
 
     verify(cookieManager).removeCookie(any());
   }
