@@ -7,13 +7,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import javax.servlet.http.Cookie;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
+import uk.gov.dft.bluebadge.webapp.citizen.config.RedisSessionConfig;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
@@ -22,15 +25,19 @@ import uk.gov.dft.bluebadge.webapp.citizen.utilities.RedirectVersionCookieManage
 
 public class ApplicantControllerTest {
 
+  private static final String APP_VERSION_COOKIE_NAME = "V_Cookie";
   private MockMvc mockMvc;
   private ApplicantController controller;
   @Mock private RouteMaster mockRouteMaster;
-  @Mock private RedirectVersionCookieManager mockCookieManager;
+  @Spy private RedirectVersionCookieManager cookieManager;
 
   @Before
   public void setup() {
+    RedisSessionConfig redisConfig = new RedisSessionConfig();
+    redisConfig.setStoredJourneyVersionCookieName(APP_VERSION_COOKIE_NAME);
+    cookieManager = new RedirectVersionCookieManager(redisConfig);
     MockitoAnnotations.initMocks(this);
-    controller = new ApplicantController(mockRouteMaster, mockCookieManager);
+    controller = new ApplicantController(mockRouteMaster, cookieManager);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -38,7 +45,9 @@ public class ApplicantControllerTest {
   }
 
   @Test
-  public void showApplicant_ShouldDisplayTheApplicantTemplate() throws Exception {
+  public void
+      show_whenNewJourneyAndNoVersionCookie_thenShouldDisplayTheApplicantTemplateAndSetVersionCookie()
+          throws Exception {
 
     ApplicantForm formRequest = ApplicantForm.builder().build();
 
@@ -49,28 +58,93 @@ public class ApplicantControllerTest {
         .andExpect(status().isOk())
         .andExpect(view().name("applicant"))
         .andExpect(model().attribute("applicantOptions", applicantOptions))
-        .andExpect(model().attribute("formRequest", formRequest));
-    verify(mockCookieManager).removeCookie(any());
+        .andExpect(model().attribute("formRequest", formRequest))
+        .andExpect(cookie().value(APP_VERSION_COOKIE_NAME, "0.55.0"));
+
+    verify(cookieManager).removeCookie(any());
+  }
+
+  @Test
+  public void show_whenNewJourneyAndVersionCookieSetWithDiffValue_thenRedirectAndClearCookie()
+      throws Exception {
+
+    Journey journey = new Journey();
+
+    mockMvc
+        .perform(
+            get("/applicant")
+                .sessionAttr("JOURNEY", journey)
+                .cookie(new Cookie(APP_VERSION_COOKIE_NAME, "999")))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/applicant"))
+        .andExpect(cookie().doesNotExist(APP_VERSION_COOKIE_NAME));
+
+    verify(cookieManager).removeCookie(any());
+  }
+
+  @Test
+  public void show_whenNewJourneyAndVersionCookieSetWithSameValue_thenRedirectAndClearCookie()
+      throws Exception {
+
+    Journey journey = new Journey();
+
+    mockMvc
+        .perform(
+            get("/applicant")
+                .sessionAttr("JOURNEY", journey)
+                .cookie(new Cookie(APP_VERSION_COOKIE_NAME, "0.55.0")))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/applicant"))
+        .andExpect(cookie().doesNotExist(APP_VERSION_COOKIE_NAME));
+
+    verify(cookieManager).removeCookie(any());
   }
 
   @Test
   public void
-      showApplicant_shouldDisplayTheApplicantTemplateAndDontRemoveRedirecTcookie_whenFormDoesNotExistsInJourney()
+      show_whenExistingJourneyAndNoVersionCookie_thenShouldDisplayTheApplicantTemplateAndSetVersionCookie()
           throws Exception {
 
-    ApplicantForm formRequest = ApplicantForm.builder().build();
+    ApplicantForm formRequest = ApplicantForm.builder().applicantType("whatever").build();
 
     RadioOptionsGroup applicantOptions = controller.getApplicantOptions();
 
     Journey journey = new Journey();
-
+    journey.setFormForStep(formRequest);
     mockMvc
         .perform(get("/applicant").sessionAttr("JOURNEY", journey))
         .andExpect(status().isOk())
         .andExpect(view().name("applicant"))
         .andExpect(model().attribute("applicantOptions", applicantOptions))
-        .andExpect(model().attribute("formRequest", formRequest));
-    verify(mockCookieManager).removeCookie(any());
+        .andExpect(model().attribute("formRequest", formRequest))
+        .andExpect(cookie().value(APP_VERSION_COOKIE_NAME, "0.55.0"));
+
+    verify(cookieManager).removeCookie(any());
+  }
+
+  @Test
+  public void
+      show_whenExistingJourneyAndVersionCookieSet_thenShouldDisplayTheApplicantTemplateAndDoNotChangeCookie()
+          throws Exception {
+
+    ApplicantForm formRequest = ApplicantForm.builder().applicantType("whatever").build();
+
+    RadioOptionsGroup applicantOptions = controller.getApplicantOptions();
+
+    Journey journey = new Journey();
+    journey.setFormForStep(formRequest);
+    mockMvc
+        .perform(
+            get("/applicant")
+                .sessionAttr("JOURNEY", journey)
+                .cookie(new Cookie(APP_VERSION_COOKIE_NAME, "999")))
+        .andExpect(status().isOk())
+        .andExpect(view().name("applicant"))
+        .andExpect(model().attribute("applicantOptions", applicantOptions))
+        .andExpect(model().attribute("formRequest", formRequest))
+        .andExpect(cookie().value(APP_VERSION_COOKIE_NAME, "999"));
+
+    verify(cookieManager).removeCookie(any());
   }
 
   @Test
