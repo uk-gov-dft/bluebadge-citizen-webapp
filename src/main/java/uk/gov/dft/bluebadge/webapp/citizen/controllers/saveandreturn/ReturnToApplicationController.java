@@ -8,6 +8,8 @@ import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.JOURNEY;
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.hashEmailAddress;
 
 import java.util.Random;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -78,6 +80,7 @@ public class ReturnToApplicationController implements SaveAndReturnController {
       @ModelAttribute(SAVE_AND_RETURN_JOURNEY_KEY) SaveAndReturnJourney saveAndReturnJourney,
       @Valid @ModelAttribute(FORM_REQUEST) SaveAndReturnForm saveAndReturnForm,
       BindingResult bindingResult,
+      HttpServletRequest request,
       HttpServletResponse response,
       RedirectAttributes attr) {
 
@@ -93,13 +96,14 @@ public class ReturnToApplicationController implements SaveAndReturnController {
 
     if (journeyExistsInRedis(emailAddress) && throttleNotExceeded(emailAddress, postCount)) {
       send4digitCodeEmail(emailAddress);
-      addRedirectCookieIfNecessary(emailAddress, response);
+      addRedirectCookieIfNecessary(emailAddress, request, response);
+      request.getSession().setAttribute(SAVE_AND_RETURN_JOURNEY_KEY, saveAndReturnJourney);
     }
 
     return REDIRECT + Mappings.URL_ENTER_CODE;
   }
 
-  private void addRedirectCookieIfNecessary(String emailAddress, HttpServletResponse response) {
+  private void addRedirectCookieIfNecessary(String emailAddress, HttpServletRequest request, HttpServletResponse response) {
     // Validate stored session version
     // If version does not match set version cookie for redirect to correct version of
     // application.
@@ -110,6 +114,9 @@ public class ReturnToApplicationController implements SaveAndReturnController {
     } catch (CryptoVersionException e) {
       log.info("Switching citizen app version to {} via cookie.", e.getEncryptedVersion());
       cookieManager.addCookie(response, e);
+      // Make sure there is nothing in the session before redirecting to other version.
+      // Stops the possibility of incompatible classes
+      request.getSession().invalidate();
     }
   }
 
