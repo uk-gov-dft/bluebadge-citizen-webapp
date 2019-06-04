@@ -3,6 +3,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers.saveandreturn;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -12,6 +13,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture.formRequestFlashAttributeCount;
@@ -20,6 +22,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveA
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.JOURNEY;
 
 import lombok.SneakyThrows;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -170,9 +173,11 @@ public class ReturnToApplicationControllerTest {
         .perform(
             post(Mappings.URL_RETURN_TO_APPLICATION)
                 .sessionAttr(SAVE_AND_RETURN_JOURNEY_KEY, journey)
+                .sessionAttr("SOMETHING_RANDOM", "should be cleared")
                 .params(FormObjectToParamMapper.convert(form)))
         .andExpect(status().is3xxRedirection())
-        .andExpect(redirectedUrl(Mappings.URL_ENTER_CODE));
+        .andExpect(redirectedUrl(Mappings.URL_ENTER_CODE))
+        .andExpect(request().sessionAttribute("SOMETHING_RANDOM", Matchers.nullValue()));
     verify(mockCryptoService, times(1)).checkEncryptedJourneyVersion("encrypted3");
     verify(mockCookieManager).addCookie(any(), any());
   }

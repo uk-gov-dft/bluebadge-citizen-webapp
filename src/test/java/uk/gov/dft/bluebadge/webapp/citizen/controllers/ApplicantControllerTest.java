@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -65,8 +66,7 @@ public class ApplicantControllerTest {
         .andExpect(model().attribute("applicantOptions", applicantOptions))
         .andExpect(model().attribute("formRequest", formRequest))
         .andExpect(cookie().value(APP_VERSION_COOKIE_NAME, "0.55.0"))
-        .andExpect(cookie().maxAge(APP_VERSION_COOKIE_NAME, Matchers.greaterThan(24*60*60)))
-    ;
+        .andExpect(cookie().maxAge(APP_VERSION_COOKIE_NAME, Matchers.greaterThan(24 * 60 * 60)));
 
     verify(cookieManager).removeCookie(any());
   }
@@ -81,12 +81,14 @@ public class ApplicantControllerTest {
         .perform(
             get("/applicant")
                 .sessionAttr("JOURNEY", journey)
+                .sessionAttr("SOMETHING_RANDOM", "should be cleared")
                 .cookie(new Cookie(APP_VERSION_COOKIE_NAME, "999")))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/applicant"))
         .andExpect(cookie().value(APP_VERSION_COOKIE_NAME, ""))
         .andExpect(cookie().maxAge(APP_VERSION_COOKIE_NAME, 0))
-    ;
+        .andExpect(request().sessionAttribute("SOMETHING_RANDOM", Matchers.nullValue()));
+
 
     verify(cookieManager).removeCookie(any());
   }
@@ -101,12 +103,13 @@ public class ApplicantControllerTest {
         .perform(
             get("/applicant")
                 .sessionAttr("JOURNEY", journey)
+                .sessionAttr("SOMETHING_RANDOM", "should be cleared")
                 .cookie(new Cookie(APP_VERSION_COOKIE_NAME, "0.55.0")))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/applicant"))
         .andExpect(cookie().value(APP_VERSION_COOKIE_NAME, ""))
         .andExpect(cookie().maxAge(APP_VERSION_COOKIE_NAME, 0))
-        ;
+        .andExpect(request().sessionAttribute("SOMETHING_RANDOM", Matchers.nullValue()));
 
     verify(cookieManager).removeCookie(any());
   }
