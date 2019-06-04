@@ -16,6 +16,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.client.crypto.CryptoApiClient;
 import uk.gov.dft.bluebadge.webapp.citizen.client.crypto.model.DecryptionData;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.utilities.CookieUtils.extractBuildNumber;
+
 @Slf4j
 @Service
 public class CryptoService {
@@ -33,16 +35,6 @@ public class CryptoService {
     Assert.isTrue(
         null != buildNumber && buildNumber.length() > 1, "Could not extract build version.");
     log.info("Crypto client created for citizen app build no: {}", buildProperties);
-  }
-
-  String extractBuildNumber(String buildVersion) {
-    Assert.notNull(buildVersion, "Build version required.");
-    Matcher m = Pattern.compile("^v([0-9]{1,}\\.[0-9]{1,}\\.[0-9]{1,}).*").matcher(buildVersion);
-    if (m.find() && m.groupCount() == 1) {
-      return m.group(1);
-    } else {
-      return null;
-    }
   }
 
   String formatPostcode(String postcode) {

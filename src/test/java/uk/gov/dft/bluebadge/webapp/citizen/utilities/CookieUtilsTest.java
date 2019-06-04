@@ -1,15 +1,25 @@
 package uk.gov.dft.bluebadge.webapp.citizen.utilities;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import org.junit.Test;
+import org.mockito.Mockito;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.junit.Test;
-import org.mockito.Mockito;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 public class CookieUtilsTest {
+
+  @Test
+  public void extractBuildNumber() {
+    // Valid format
+    assertThat(CookieUtils.extractBuildNumber("v1.2.3.somestuff")).isEqualTo("1.2.3");
+    // Invalid format
+    assertThat(CookieUtils.extractBuildNumber("1.2.3")).isNull();
+    assertThat(CookieUtils.extractBuildNumber("v1.2.stuff")).isNull();
+  }
 
   @Test
   public void isCookieBannerSet_ShouldReturnTrue_WhenCookieBannerIsSet() {

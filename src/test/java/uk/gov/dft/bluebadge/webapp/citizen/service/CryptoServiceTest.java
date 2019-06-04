@@ -39,15 +39,6 @@ public class CryptoServiceTest {
   }
 
   @Test
-  public void extractBuildNumber() {
-    // Valid format
-    assertThat(service.extractBuildNumber("v1.2.3.somestuff")).isEqualTo("1.2.3");
-    // Invalid format
-    assertThat(service.extractBuildNumber("1.2.3")).isNull();
-    assertThat(service.extractBuildNumber("v1.2.stuff")).isNull();
-  }
-
-  @Test
   public void formatPostcode() {
     assertThat(service.formatPostcode(" WV 16 4 aw ")).isEqualTo("wv164aw");
   }

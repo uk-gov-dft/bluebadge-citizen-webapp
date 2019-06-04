@@ -154,7 +154,8 @@ public class ReturnToApplicationControllerTest {
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl(Mappings.URL_ENTER_CODE));
     verify(mockCryptoService).checkEncryptedJourneyVersion("encrypted");
-    verifyZeroInteractions(mockCookieManager);
+
+    verify(mockCookieManager).addCookie(any());
   }
 
   @Test

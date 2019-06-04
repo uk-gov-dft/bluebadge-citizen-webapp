@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.info.BuildProperties;
 import uk.gov.dft.bluebadge.webapp.citizen.config.RedisSessionConfig;
 import uk.gov.dft.bluebadge.webapp.citizen.service.CryptoVersionException;
 
@@ -22,13 +23,14 @@ public class RedirectVersionCookieManagerTest {
   @Mock private RedisSessionConfig mockRedisSessionConfig;
   @Mock private HttpServletResponse mockResponse;
   @Mock private CryptoVersionException mockException;
+@Mock private BuildProperties mockBuildProperties;
 
   private RedirectVersionCookieManager cookieManager;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    cookieManager = new RedirectVersionCookieManager(mockRedisSessionConfig);
+    cookieManager = new RedirectVersionCookieManager(mockRedisSessionConfig, mockBuildProperties);
     when(mockRedisSessionConfig.getStoredJourneyVersionCookieName()).thenReturn(COOKIE_NAME);
     when(mockException.getEncryptedVersion()).thenReturn(ENCRYPTED_VERSION);
   }

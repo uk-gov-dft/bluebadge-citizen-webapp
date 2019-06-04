@@ -105,6 +105,8 @@ public class ReturnToApplicationController implements SaveAndReturnController {
     // application.
     try {
       cryptoService.checkEncryptedJourneyVersion(redisService.get(JOURNEY, emailAddress));
+      log.info("Stored journey is the same version as this application instance.");
+      cookieManager.addCookie(response);
     } catch (CryptoVersionException e) {
       log.info("Switching citizen app version to {} via cookie.", e.getEncryptedVersion());
       cookieManager.addCookie(response, e);
