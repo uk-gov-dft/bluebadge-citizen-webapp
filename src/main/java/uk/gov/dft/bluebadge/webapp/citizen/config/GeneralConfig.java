@@ -8,6 +8,9 @@ import static javax.servlet.DispatcherType.REQUEST;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,9 +19,15 @@ import org.springframework.core.annotation.Order;
 import uk.gov.dft.bluebadge.common.esapi.EsapiFilter;
 import uk.gov.dft.bluebadge.common.logging.ExceptionLoggingFilter;
 import uk.gov.dft.bluebadge.common.logging.JwtMdcFilter;
+import uk.gov.dft.bluebadge.common.logging.VersionLoggingFilter;
 
 @Configuration
 public class GeneralConfig {
+  @Autowired(required = false)
+  BuildProperties buildProperties;
+
+  @Value("${blue-badge.api.version}")
+  private String apiVersion;
 
   @Bean
   public ObjectMapper objectMapper() {
@@ -35,6 +44,12 @@ public class GeneralConfig {
   @Bean
   public JwtMdcFilter getJwtMdcFilter() {
     return new JwtMdcFilter();
+  }
+
+  @Bean
+  @Order(Ordered.HIGHEST_PRECEDENCE)
+  public VersionLoggingFilter versionLoggingFilter() {
+    return new VersionLoggingFilter(apiVersion, buildProperties);
   }
 
   @Bean

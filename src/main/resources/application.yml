@@ -1,4 +1,6 @@
 blue-badge:
+  api:
+    version: 1
   auth-server:
     url: http://localhost:8380/bb_auth
     client-id: bb_citizen_web_app_id
@@ -11,7 +13,7 @@ blue-badge:
       connectiontimeout: 6000
       requesttimeout: 6000
       contextpath: /uk-gov-dft/reference-data-service/1.0.0
-      versionaccept: application/vnd.bluebadge-api.v1+json
+      versionaccept: application/vnd.bluebadge-api.v${blue-badge.api.version}+json
   applicationmanagementservice:
     servicehost:
       host: localhost
@@ -20,7 +22,7 @@ blue-badge:
       connectiontimeout: 6000
       requesttimeout: 6000
       contextpath: /uk-gov-dft/application-management-service/1.0.0
-      versionaccept: application/vnd.bluebadge-api.v1+json
+      versionaccept: application/vnd.bluebadge-api.v${blue-badge.api.version}+json
   paymentservice:
     servicehost:
       host: localhost
@@ -29,7 +31,7 @@ blue-badge:
       connectiontimeout: 6000
       requesttimeout: 6000
       contextpath: /uk-gov-dft/payment-service/1.0.0
-      versionaccept: application/vnd.bluebadge-api.v1+json
+      versionaccept: application/vnd.bluebadge-api.v${blue-badge.api.version}+json
   cryptoservice:
     servicehost:
       host: localhost
@@ -38,7 +40,7 @@ blue-badge:
       connectiontimeout: 6000
       requesttimeout: 6000
       contextpath: /uk-gov-dft/crypto-service/1.0.0
-      versionaccept: application/vnd.bluebadge-api.v1+json
+      versionaccept: application/vnd.bluebadge-api.v${blue-badge.api.version}+json
   messageservice:
     servicehost:
       host: localhost
@@ -47,7 +49,7 @@ blue-badge:
       connectiontimeout: 6000
       requesttimeout: 6000
       contextpath: /uk-gov-dft/message-service/1.0.0
-      versionaccept: application/vnd.bluebadge-api.v1+json
+      versionaccept: application/vnd.bluebadge-api.v${blue-badge.api.version}+json
   env: ${bb_env:dev}
   defaultDifferentServiceSignpostUrl: https://bluebadge.direct.gov.uk/bluebadge/why-are-you-here
 
