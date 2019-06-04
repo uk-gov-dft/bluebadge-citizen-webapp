@@ -24,7 +24,9 @@ public class RedirectVersionCookieManager {
   }
 
   public void removeCookie(final HttpServletResponse response) {
-    response.addCookie(new Cookie(redisSessionConfig.getStoredJourneyVersionCookieName(), ""));
+    Cookie cookie = getVersionCookie("");
+    cookie.setMaxAge(0);
+    response.addCookie(cookie);
   }
 
   /**
