@@ -5,7 +5,6 @@ import static uk.gov.dft.bluebadge.webapp.citizen.utilities.CookieUtils.extractB
 import com.google.common.collect.ImmutableMap;
 import java.util.Base64;
 import java.util.Objects;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;

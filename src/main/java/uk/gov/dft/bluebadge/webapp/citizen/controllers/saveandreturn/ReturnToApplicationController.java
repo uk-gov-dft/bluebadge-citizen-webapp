@@ -8,7 +8,6 @@ import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.JOURNEY;
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.hashEmailAddress;
 
 import java.util.Random;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
