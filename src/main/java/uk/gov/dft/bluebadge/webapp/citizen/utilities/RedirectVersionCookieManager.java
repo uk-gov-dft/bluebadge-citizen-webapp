@@ -1,15 +1,14 @@
 package uk.gov.dft.bluebadge.webapp.citizen.utilities;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.WebUtils;
 import uk.gov.dft.bluebadge.webapp.citizen.config.RedisSessionConfig;
 import uk.gov.dft.bluebadge.webapp.citizen.service.CryptoVersionException;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @Service
 public class RedirectVersionCookieManager {
@@ -36,8 +35,7 @@ public class RedirectVersionCookieManager {
 
   public String addCookie(final HttpServletResponse response) {
     String version = CookieUtils.extractBuildNumber(buildProperties.getVersion());
-    response.addCookie(
-        getVersionCookie(version));
+    response.addCookie(getVersionCookie(version));
     return version;
   }
 

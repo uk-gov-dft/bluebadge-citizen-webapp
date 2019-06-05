@@ -1,10 +1,11 @@
 package uk.gov.dft.bluebadge.webapp.citizen.service;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.utilities.CookieUtils.extractBuildNumber;
+
 import com.google.common.collect.ImmutableMap;
 import java.util.Base64;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
@@ -15,8 +16,6 @@ import org.springframework.util.StringUtils;
 import uk.gov.dft.bluebadge.webapp.citizen.client.crypto.CryptoApiClient;
 import uk.gov.dft.bluebadge.webapp.citizen.client.crypto.model.DecryptionData;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
-
-import static uk.gov.dft.bluebadge.webapp.citizen.utilities.CookieUtils.extractBuildNumber;
 
 @Slf4j
 @Service

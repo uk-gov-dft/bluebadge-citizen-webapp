@@ -1,5 +1,19 @@
 package uk.gov.dft.bluebadge.webapp.citizen.controllers;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import javax.servlet.http.Cookie;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,20 +30,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.utilities.RedirectVersionCookieManager;
-
-import javax.servlet.http.Cookie;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 public class ApplicantControllerTest {
 
@@ -132,10 +132,9 @@ public class ApplicantControllerTest {
         .andExpect(status().isOk())
         .andExpect(view().name("applicant"))
         .andExpect(model().attribute("applicantOptions", applicantOptions))
-        .andExpect(model().attribute("formRequest", formRequest))
-        .andExpect(cookie().value(APP_VERSION_COOKIE_NAME, "0.55.0"));
+        .andExpect(model().attribute("formRequest", formRequest));
 
-    verify(cookieManager).removeCookie(any());
+    verifyZeroInteractions(cookieManager);
   }
 
   @Test
@@ -157,10 +156,9 @@ public class ApplicantControllerTest {
         .andExpect(status().isOk())
         .andExpect(view().name("applicant"))
         .andExpect(model().attribute("applicantOptions", applicantOptions))
-        .andExpect(model().attribute("formRequest", formRequest))
-        .andExpect(cookie().value(APP_VERSION_COOKIE_NAME, "999"));
+        .andExpect(model().attribute("formRequest", formRequest));
 
-    verify(cookieManager).removeCookie(any());
+    verifyZeroInteractions(cookieManager);
   }
 
   @Test

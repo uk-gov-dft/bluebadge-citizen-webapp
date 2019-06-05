@@ -8,7 +8,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.JOURNEY;
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.hashEmailAddress;
 
 import java.util.Random;
-import javax.servlet.http.Cookie;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -103,7 +103,8 @@ public class ReturnToApplicationController implements SaveAndReturnController {
     return REDIRECT + Mappings.URL_ENTER_CODE;
   }
 
-  private void addRedirectCookieIfNecessary(String emailAddress, HttpServletRequest request, HttpServletResponse response) {
+  private void addRedirectCookieIfNecessary(
+      String emailAddress, HttpServletRequest request, HttpServletResponse response) {
     // Validate stored session version
     // If version does not match set version cookie for redirect to correct version of
     // application.

@@ -4,13 +4,10 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
 import com.google.common.collect.Lists;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +25,6 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOption;
 import uk.gov.dft.bluebadge.webapp.citizen.model.RadioOptionsGroup;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ApplicantType;
-import uk.gov.dft.bluebadge.webapp.citizen.utilities.CookieUtils;
 import uk.gov.dft.bluebadge.webapp.citizen.utilities.RedirectVersionCookieManager;
 
 @Slf4j
@@ -48,7 +44,8 @@ public class ApplicantController implements StepController {
   public String show(
       Model model,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
-      HttpServletResponse response, HttpServletRequest request) {
+      HttpServletResponse response,
+      HttpServletRequest request) {
 
     // Returning to previously visited page
     if (!model.containsAttribute(FORM_REQUEST)
@@ -60,8 +57,11 @@ public class ApplicantController implements StepController {
     if (!model.containsAttribute(FORM_REQUEST)) {
       Cookie versionCookie = cookieManager.getCookie(request);
       if (null != versionCookie) {
-        log.debug("Removing version cookie {} and redirecting on creation of new application.", versionCookie.getName());
+        log.debug(
+            "Removing version cookie {} and redirecting on creation of new application.",
+            versionCookie.getName());
         cookieManager.removeCookie(response);
+        request.getSession().invalidate();
         return "redirect:" + Mappings.URL_APPLICANT_TYPE;
       } else {
         String newVersion = cookieManager.addCookie(response);
@@ -94,7 +94,7 @@ public class ApplicantController implements StepController {
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       @Valid @ModelAttribute(FORM_REQUEST) ApplicantForm formRequest,
       BindingResult bindingResult,
-      RedirectAttributes attr, HttpServletRequest request) {
+      RedirectAttributes attr) {
 
     if (bindingResult.hasErrors()) {
       return routeMaster.redirectToOnBindingError(this, formRequest, bindingResult, attr);

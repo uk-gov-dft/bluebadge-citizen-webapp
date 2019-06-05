@@ -23,7 +23,7 @@ public class RedirectVersionCookieManagerTest {
   @Mock private RedisSessionConfig mockRedisSessionConfig;
   @Mock private HttpServletResponse mockResponse;
   @Mock private CryptoVersionException mockException;
-@Mock private BuildProperties mockBuildProperties;
+  @Mock private BuildProperties mockBuildProperties;
 
   private RedirectVersionCookieManager cookieManager;
 
