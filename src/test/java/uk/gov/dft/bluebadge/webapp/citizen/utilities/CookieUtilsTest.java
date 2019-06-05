@@ -12,6 +12,15 @@ import org.mockito.Mockito;
 public class CookieUtilsTest {
 
   @Test
+  public void extractBuildNumber() {
+    // Valid format
+    assertThat(CookieUtils.extractBuildNumber("v1.2.3.somestuff")).isEqualTo("1.2.3");
+    // Invalid format
+    assertThat(CookieUtils.extractBuildNumber("1.2.3")).isNull();
+    assertThat(CookieUtils.extractBuildNumber("v1.2.stuff")).isNull();
+  }
+
+  @Test
   public void isCookieBannerSet_ShouldReturnTrue_WhenCookieBannerIsSet() {
 
     HttpServletRequest mockReq = Mockito.mock(HttpServletRequest.class);

@@ -13,7 +13,7 @@
         <div class="govuk-grid-column-two-thirds">
             <h1 class="govuk-heading-l" th:text="#{return.to.application.title}"></h1>
 
-            <form th:action="@{/return-to-application}" th:object="${formRequest}" method="POST" novalidate>
+            <form data-prevent-double-submission th:action="@{/return-to-application}" th:object="${formRequest}" method="POST" novalidate>
 
                 <div class="govuk-inset-text">
                     <p class="govuk-body" th:text="#{return.to.application.title.hint}"></p>

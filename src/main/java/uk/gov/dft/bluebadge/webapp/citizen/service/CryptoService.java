@@ -1,10 +1,10 @@
 package uk.gov.dft.bluebadge.webapp.citizen.service;
 
+import static uk.gov.dft.bluebadge.webapp.citizen.utilities.CookieUtils.extractBuildNumber;
+
 import com.google.common.collect.ImmutableMap;
 import java.util.Base64;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
@@ -33,16 +33,6 @@ public class CryptoService {
     Assert.isTrue(
         null != buildNumber && buildNumber.length() > 1, "Could not extract build version.");
     log.info("Crypto client created for citizen app build no: {}", buildProperties);
-  }
-
-  String extractBuildNumber(String buildVersion) {
-    Assert.notNull(buildVersion, "Build version required.");
-    Matcher m = Pattern.compile("^v([0-9]{1,}\\.[0-9]{1,}\\.[0-9]{1,}).*").matcher(buildVersion);
-    if (m.find() && m.groupCount() == 1) {
-      return m.group(1);
-    } else {
-      return null;
-    }
   }
 
   String formatPostcode(String postcode) {

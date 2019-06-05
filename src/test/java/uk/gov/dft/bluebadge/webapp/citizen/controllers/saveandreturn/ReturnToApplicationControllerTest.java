@@ -7,11 +7,12 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.ControllerTestFixture.formRequestFlashAttributeCount;
@@ -20,6 +21,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveA
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.JOURNEY;
 
 import lombok.SneakyThrows;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -28,7 +30,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.dft.bluebadge.webapp.citizen.FormObjectToParamMapper;
 import uk.gov.dft.bluebadge.webapp.citizen.StandaloneMvcTestViewResolver;
-import uk.gov.dft.bluebadge.webapp.citizen.config.RedisSessionConfig;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveAndReturnForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveAndReturnJourney;
@@ -36,6 +37,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.CryptoService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.CryptoVersionException;
 import uk.gov.dft.bluebadge.webapp.citizen.service.MessageService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.RedisService;
+import uk.gov.dft.bluebadge.webapp.citizen.utilities.RedirectVersionCookieManager;
 
 public class ReturnToApplicationControllerTest {
 
@@ -45,7 +47,7 @@ public class ReturnToApplicationControllerTest {
   @Mock private CryptoService mockCryptoService;
   @Mock private MessageService mockMessageService;
   @Mock private RedisService mockRedisService;
-  @Mock private RedisSessionConfig mockRedisSessionConfig;
+  @Mock private RedirectVersionCookieManager mockCookieManager;
   private SaveAndReturnJourney journey;
 
   @Before
@@ -54,7 +56,7 @@ public class ReturnToApplicationControllerTest {
     journey = new SaveAndReturnJourney();
     controller =
         new ReturnToApplicationController(
-            mockCryptoService, mockRedisService, mockMessageService, mockRedisSessionConfig);
+            mockCryptoService, mockRedisService, mockMessageService, mockCookieManager);
     mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setViewResolvers(new StandaloneMvcTestViewResolver())
@@ -77,6 +79,19 @@ public class ReturnToApplicationControllerTest {
 
   @Test
   @SneakyThrows
+  public void submit_journeyMissing() {
+    SaveAndReturnForm form = SaveAndReturnForm.builder().emailAddress("").build();
+
+    mockMvc
+        .perform(
+            post(Mappings.URL_RETURN_TO_APPLICATION).params(FormObjectToParamMapper.convert(form)))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(Mappings.URL_RETURN_TO_APPLICATION + "#error"));
+    verifyZeroInteractions(mockCookieManager);
+  }
+
+  @Test
+  @SneakyThrows
   public void submit_loadsApplicationFailBeanValidation() {
     // Given a valid submission
     SaveAndReturnForm form = SaveAndReturnForm.builder().emailAddress("").build();
@@ -95,6 +110,7 @@ public class ReturnToApplicationControllerTest {
         .andExpect(formRequestFlashAttributeHasFieldErrorCode("emailAddress", "Pattern"))
         .andExpect(formRequestFlashAttributeCount(1));
     verify(mockCryptoService, never()).checkEncryptedJourneyVersion("encrypted5");
+    verifyZeroInteractions(mockCookieManager);
   }
 
   @Test
@@ -116,6 +132,7 @@ public class ReturnToApplicationControllerTest {
         .andExpect(redirectedUrl(Mappings.URL_RETURN_TO_APPLICATION + "#error"))
         .andExpect(formRequestFlashAttributeHasFieldErrorCode("emailAddress", "Pattern"));
     verify(mockCryptoService, never()).checkEncryptedJourneyVersion("encrypted5");
+    verifyZeroInteractions(mockCookieManager);
   }
 
   @Test
@@ -135,7 +152,9 @@ public class ReturnToApplicationControllerTest {
                 .params(FormObjectToParamMapper.convert(form)))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl(Mappings.URL_ENTER_CODE));
-    verify(mockCryptoService, times(1)).checkEncryptedJourneyVersion("encrypted");
+    verify(mockCryptoService).checkEncryptedJourneyVersion("encrypted");
+
+    verify(mockCookieManager).addCookie(any());
   }
 
   @Test
@@ -150,16 +169,17 @@ public class ReturnToApplicationControllerTest {
     doThrow(new CryptoVersionException("", ""))
         .when(mockCryptoService)
         .checkEncryptedJourneyVersion(any());
-    when(mockRedisSessionConfig.getStoredJourneyVersionCookieName()).thenReturn("MyNewCookie");
     mockMvc
         .perform(
             post(Mappings.URL_RETURN_TO_APPLICATION)
                 .sessionAttr(SAVE_AND_RETURN_JOURNEY_KEY, journey)
+                .sessionAttr("SOMETHING_RANDOM", "should be cleared")
                 .params(FormObjectToParamMapper.convert(form)))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl(Mappings.URL_ENTER_CODE))
-        .andExpect(cookie().exists("MyNewCookie"));
+        .andExpect(request().sessionAttribute("SOMETHING_RANDOM", Matchers.nullValue()));
     verify(mockCryptoService, times(1)).checkEncryptedJourneyVersion("encrypted3");
+    verify(mockCookieManager).addCookie(any(), any());
   }
 
   @Test
@@ -181,6 +201,7 @@ public class ReturnToApplicationControllerTest {
         .andExpect(redirectedUrl(Mappings.URL_ENTER_CODE));
     // Does not bother checking version
     verify(mockCryptoService, never()).checkEncryptedJourneyVersion("encrypted1");
+    verifyZeroInteractions(mockCookieManager);
   }
 
   @Test
@@ -201,6 +222,7 @@ public class ReturnToApplicationControllerTest {
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl(Mappings.URL_ENTER_CODE));
     verify(mockCryptoService, never()).checkEncryptedJourneyVersion("encrypted2");
+    verifyZeroInteractions(mockCookieManager);
   }
 
   @Test

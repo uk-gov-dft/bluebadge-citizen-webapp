@@ -3,6 +3,7 @@ package uk.gov.dft.bluebadge.webapp.citizen.controllers.saveandreturn;
 import static uk.gov.dft.bluebadge.webapp.citizen.controllers.errorhandler.ErrorControllerAdvice.REDIRECT;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.JOURNEY_SESSION_KEY;
 
+import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveProgressForm;
 import uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys;
 import uk.gov.dft.bluebadge.webapp.citizen.service.RedisService;
+import uk.gov.dft.bluebadge.webapp.citizen.utilities.RedirectVersionCookieManager;
 
 @Slf4j
 @Controller
@@ -30,17 +32,21 @@ public class ProgressSavedController implements StepController {
   static final String UNITS_DAYS = "days";
   static final String UNITS_HOURS = "hours";
   public static final String FORM_REQUEST = "formRequest";
+
   private RedisService redisService;
+  private RedirectVersionCookieManager cookieManager;
 
   @Autowired
-  ProgressSavedController(RedisService redisService) {
+  ProgressSavedController(RedisService redisService, RedirectVersionCookieManager cookieManager) {
     this.redisService = redisService;
+    this.cookieManager = cookieManager;
   }
 
   @GetMapping
   public String show(
       Model model,
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
+      HttpServletResponse response,
       SessionStatus sessionStatus) {
     SaveProgressForm saveProgressForm = journey.getSaveProgressForm();
 
@@ -64,6 +70,8 @@ public class ProgressSavedController implements StepController {
     }
 
     sessionStatus.setComplete();
+    cookieManager.removeCookie(response);
+
     return TEMPLATE;
   }
 

@@ -13,7 +13,7 @@
         <div class="govuk-grid-column-two-thirds">
             <h1 class="govuk-heading-l" th:text="#{enter.code.title}"></h1>
 
-            <form th:action="@{/enter-code}" th:object="${formRequest}" method="POST" novalidate>
+            <form data-prevent-double-submission th:action="@{/enter-code}" th:object="${formRequest}" method="POST" novalidate>
 
                 <div class="govuk-inset-text">
                     <span class="govuk-body" th:text="#{enter.code.title.hint.prefix}"></span>
@@ -21,8 +21,8 @@
                     <span class="govuk-body" th:text="#{enter.code.title.hint.suffix}"></span>
                 </div>
 
-                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{enter.code.postcode.label}, 'postcode', #{enter.code.postcode.hint}, 'text', null)}"></div>
-                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{enter.code.code.label}, 'code', null, 'text', null)}"></div>
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{enter.code.postcode.label}, 'postcode', #{enter.code.postcode.hint}, 'text', 'govuk-input govuk-input--width-10')}"></div>
+                <div th:replace="~{ fragments/govuk-input :: govuk-input(#{enter.code.code.label}, 'code', null, 'text', 'govuk-input govuk-input--width-4 input-capitals')}"></div>
                 <button type="submit"
                         class="govuk-button"
                         data-uipath="button.continue"

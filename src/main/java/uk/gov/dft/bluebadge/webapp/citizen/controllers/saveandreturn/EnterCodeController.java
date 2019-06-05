@@ -75,7 +75,7 @@ public class EnterCodeController implements SaveAndReturnController {
 
   @PostMapping
   public String submit(
-      @ModelAttribute(SAVE_AND_RETURN_JOURNEY_KEY) SaveAndReturnJourney journey,
+      @ModelAttribute(SAVE_AND_RETURN_JOURNEY_KEY) SaveAndReturnJourney saveAndReturnJourney,
       @Valid @ModelAttribute(FORM_REQUEST) EnterCodeForm enterCodeForm,
       BindingResult bindingResult,
       HttpServletRequest request,
@@ -83,12 +83,17 @@ public class EnterCodeController implements SaveAndReturnController {
       SessionStatus sessionStatus)
       throws CryptoVersionException {
 
+    if (null == saveAndReturnJourney.getSaveAndReturnForm()
+        || StringUtils.isBlank(saveAndReturnJourney.getSaveAndReturnForm().getEmailAddress())) {
+      return REDIRECT + Mappings.URL_RETURN_TO_APPLICATION;
+    }
+
     if (bindingResult.hasErrors()) {
       return RouteMaster.redirectToOnBindingError(
           Mappings.URL_ENTER_CODE, enterCodeForm, bindingResult, attr);
     }
 
-    String emailAddress = journey.getSaveAndReturnForm().getEmailAddress();
+    String emailAddress = saveAndReturnJourney.getSaveAndReturnForm().getEmailAddress();
 
     Long postCount = redisService.incrementAndSetExpiryIfNew(CODE_TRIES, emailAddress);
 

@@ -8,7 +8,6 @@ import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.JOURNEY;
 import static uk.gov.dft.bluebadge.webapp.citizen.service.RedisKeys.hashEmailAddress;
 
 import java.util.Random;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import uk.gov.dft.bluebadge.webapp.citizen.config.RedisSessionConfig;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.saveandreturn.SaveAndReturnForm;
@@ -31,6 +29,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.CryptoService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.CryptoVersionException;
 import uk.gov.dft.bluebadge.webapp.citizen.service.MessageService;
 import uk.gov.dft.bluebadge.webapp.citizen.service.RedisService;
+import uk.gov.dft.bluebadge.webapp.citizen.utilities.RedirectVersionCookieManager;
 
 @Controller
 @Slf4j
@@ -39,21 +38,23 @@ public class ReturnToApplicationController implements SaveAndReturnController {
 
   static final String TEMPLATE = "save-and-return/return-to-application";
   public static final String FORM_REQUEST = "formRequest";
+
   private final CryptoService cryptoService;
   private final RedisService redisService;
   private MessageService messageService;
-  private RedisSessionConfig redisSessionConfig;
+  private RedirectVersionCookieManager cookieManager;
+
   private Random random = new Random();
 
   ReturnToApplicationController(
       CryptoService cryptoService,
       RedisService redisService,
       MessageService messageService,
-      RedisSessionConfig redisSessionConfig) {
+      RedirectVersionCookieManager cookieManager) {
     this.cryptoService = cryptoService;
     this.redisService = redisService;
     this.messageService = messageService;
-    this.redisSessionConfig = redisSessionConfig;
+    this.cookieManager = cookieManager;
   }
 
   @GetMapping
@@ -101,15 +102,18 @@ public class ReturnToApplicationController implements SaveAndReturnController {
     return REDIRECT + Mappings.URL_ENTER_CODE;
   }
 
-  private void addRedirectCookieIfNecessary(String emailAddress, HttpServletRequest request, HttpServletResponse response) {
+  private void addRedirectCookieIfNecessary(
+      String emailAddress, HttpServletRequest request, HttpServletResponse response) {
     // Validate stored session version
     // If version does not match set version cookie for redirect to correct version of
     // application.
     try {
       cryptoService.checkEncryptedJourneyVersion(redisService.get(JOURNEY, emailAddress));
+      log.info("Stored journey is the same version as this application instance.");
+      cookieManager.addCookie(response);
     } catch (CryptoVersionException e) {
       log.info("Switching citizen app version to {} via cookie.", e.getEncryptedVersion());
-      response.addCookie(getVersionCookie(e.getEncryptedVersion()));
+      cookieManager.addCookie(response, e);
       // Make sure there is nothing in the session before redirecting to other version.
       // Stops the possibility of incompatible classes
       request.getSession().invalidate();
@@ -148,20 +152,6 @@ public class ReturnToApplicationController implements SaveAndReturnController {
       return false;
     }
     return true;
-  }
-
-  /**
-   * A cookie to set to allow nginx to redirect to correct version of citizen webapp.
-   *
-   * @param version e.g. 1.0.1
-   * @return The cookie.
-   */
-  private Cookie getVersionCookie(String version) {
-    Cookie cookie = new Cookie(redisSessionConfig.getStoredJourneyVersionCookieName(), version);
-    cookie.setSecure(true);
-    cookie.setHttpOnly(true);
-    // Default to domain creating cookie (us). i.e. Don't call setDomain
-    return cookie;
   }
 
   private String getOrCreateSecurityCode(String emailAddress) {

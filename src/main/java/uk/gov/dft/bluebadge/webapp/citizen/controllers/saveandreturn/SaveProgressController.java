@@ -19,6 +19,7 @@ import uk.gov.dft.bluebadge.webapp.citizen.controllers.StepController;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.Mappings;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.RouteMaster;
 import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepDefinition;
+import uk.gov.dft.bluebadge.webapp.citizen.controllers.journey.StepForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.Journey;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.ContactDetailsForm;
 import uk.gov.dft.bluebadge.webapp.citizen.model.form.EnterAddressForm;
@@ -33,7 +34,8 @@ import uk.gov.dft.bluebadge.webapp.citizen.service.RedisService;
 public class SaveProgressController implements StepController {
   static final String TEMPLATE = "save-and-return/save-progress";
   static final String HIDE_POSTCODE_MODEL_KEY = "hidePostcode";
-  public static final String FORM_REQUEST = "formRequest";
+  static final String FORM_REQUEST = "formRequest";
+
   private RedisService redisService;
   private CryptoService cryptoService;
   private MessageService messageService;
@@ -48,6 +50,11 @@ public class SaveProgressController implements StepController {
 
   @GetMapping
   public String show(Model model, @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey) {
+
+    StepForm form = journey.getFormForStep(StepDefinition.getFirstStep());
+    if (null == form) {
+      return REDIRECT + Mappings.getUrl(StepDefinition.HOME);
+    }
 
     ContactDetailsForm contactDetailsForm = journey.getFormForStep(StepDefinition.CONTACT_DETAILS);
     EnterAddressForm enterAddressForm = journey.getFormForStep(StepDefinition.ADDRESS);
@@ -82,6 +89,11 @@ public class SaveProgressController implements StepController {
       @Valid @ModelAttribute(FORM_REQUEST) SaveProgressForm saveProgressForm,
       BindingResult bindingResult,
       RedirectAttributes attr) {
+
+    StepForm form = journey.getFormForStep(StepDefinition.getFirstStep());
+    if (null == form) {
+      return REDIRECT + Mappings.getUrl(StepDefinition.HOME);
+    }
 
     if (bindingResult.hasErrors()) {
       return RouteMaster.redirectToOnBindingError(

@@ -13,7 +13,7 @@
         <div class="govuk-grid-column-two-thirds">
             <h1 class="govuk-heading-l" th:text="#{save.progress.title}"></h1>
 
-            <form th:action="@{/save-progress}" th:object="${formRequest}" method="POST" novalidate>
+            <form data-prevent-double-submission th:action="@{/save-progress}" th:object="${formRequest}" method="POST" novalidate>
 
                 <div class="govuk-inset-text">
                     <p class="govuk-body" th:text="#{${JOURNEY.who} + 'save.progress.title.hint'}"></p>
@@ -21,7 +21,7 @@
 
                 <div th:replace="~{ fragments/govuk-input :: govuk-input(#{save.progress.email.label}, 'emailAddress', #{save.progress.email.hint}, 'text', null)}"></div>
                 <div th:class="${hidePostcode} ? govuk-visually-hidden">
-                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{save.progress.postcode.label}, 'postcode', null, 'text', 'govuk-!-width-one-third')}"></div>
+                    <div th:replace="~{ fragments/govuk-input :: govuk-input(#{save.progress.postcode.label}, 'postcode', null, 'text', 'govuk-input govuk-input--width-10')}"></div>
                 </div>
                 <button type="submit"
                         class="govuk-button"
