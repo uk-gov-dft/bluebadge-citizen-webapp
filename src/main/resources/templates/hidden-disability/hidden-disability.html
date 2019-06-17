@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html
+        th:data-ga-track-page="${JOURNEY.getEligibilityCode()}"
+        data-ga-track-page-category="eligibility"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/master.html}">
+<head>
+    <title th:text="#{'hiddenDisabilities.title'}"></title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <section class="guidance-layout">
+        <div class="govuk-!-width-three-quarters">
+            <h1 class="govuk-heading-l"
+                th:text="#{'hiddenDisabilities.title'}"></h1>
+            <p class="govuk-body" th:text="#{hiddenDisabilities.p1}"></p>
+            <p class="govuk-body" th:text="#{hiddenDisabilities.p2}"></p>
+            <p class="govuk-body">
+                <span th:text="#{hiddenDisabilities.p3}"></span>
+                <a th:href="@{main-reason/}"
+                   th:text="#{hiddenDisabilities.p3.link}"></a>
+            </p>
+        </div>
+    </section>
+
+
+</main>
+
+</body>
+</html>

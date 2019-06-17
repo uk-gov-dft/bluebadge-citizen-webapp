@@ -94,11 +94,11 @@ class EligibilityConverter {
             .descriptionOfConditions(journey.getDescriptionOfCondition())
             .typeCode(eligibilityType);
         break;
+      case HIDDEN:
       case TERMILL:
       case NONE:
       default:
-        // Invalid to get here with no eligibility if person route
-        // This code is all temporary too.
+        // Invalid to get here with no eligibility (or hidden disability at the moment) if person route
         throw new IllegalStateException("Invalid eligibility:" + eligibilityType);
     }
 
