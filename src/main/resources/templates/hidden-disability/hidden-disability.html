@@ -19,7 +19,7 @@
                     th:text="#{'hiddenDisabilities.title'}"></h1>
                 <p class="govuk-body" th:text="#{hiddenDisabilities.p1}"></p>
                 <p class="govuk-body" th:text="#{hiddenDisabilities.p2}"></p>
-                <p class="govuk-body" th:text="#{hiddenDisabilities.p3}"></p>
+                <p class="govuk-body" th:text="#{${JOURNEY.who} + 'hiddenDisabilities.p3'}"></p>
                 <button type="submit"
                         class="govuk-button"
                         data-uipath="hiddenDisabilities.returnLink"
