@@ -12,16 +12,19 @@
 
 <main layout:fragment="content">
     <section class="guidance-layout">
+
         <div class="govuk-!-width-three-quarters">
-            <h1 class="govuk-heading-l"
-                th:text="#{'hiddenDisabilities.title'}"></h1>
-            <p class="govuk-body" th:text="#{hiddenDisabilities.p1}"></p>
-            <p class="govuk-body" th:text="#{hiddenDisabilities.p2}"></p>
-            <p class="govuk-body">
-                <span th:text="#{hiddenDisabilities.p3}"></span>
-                <a th:href="@{main-reason/}"
-                   th:text="#{hiddenDisabilities.p3.link}"></a>
-            </p>
+            <form th:action="@{/hidden-disabilities}" method="POST" novalidate>
+                <h1 data-uipath="hiddenDisabilities.title" class="govuk-heading-l"
+                    th:text="#{'hiddenDisabilities.title'}"></h1>
+                <p class="govuk-body" th:text="#{hiddenDisabilities.p1}"></p>
+                <p class="govuk-body" th:text="#{hiddenDisabilities.p2}"></p>
+                <p class="govuk-body" th:text="#{hiddenDisabilities.p3}"></p>
+                <button type="submit"
+                        class="govuk-button"
+                        data-uipath="hiddenDisabilities.returnLink"
+                        th:text="#{hiddenDisabilities.returnLink}"></button>
+            </form>
         </div>
     </section>
 

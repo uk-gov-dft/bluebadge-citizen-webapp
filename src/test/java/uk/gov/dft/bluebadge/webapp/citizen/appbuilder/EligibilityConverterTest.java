@@ -137,7 +137,8 @@ public class EligibilityConverterTest {
             JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS, BLIND));
     assertThat(eligibility.getBlind().getRegisteredAtLaId()).isNotNull();
 
-    EnumSet<EligibilityCodeField> notBlind = EnumSet.complementOf(EnumSet.of(BLIND, TERMILL, NONE, HIDDEN));
+    EnumSet<EligibilityCodeField> notBlind =
+        EnumSet.complementOf(EnumSet.of(BLIND, TERMILL, NONE, HIDDEN));
     notBlind.forEach(
         i -> {
           Journey journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS, i);

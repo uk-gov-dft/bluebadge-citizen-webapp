@@ -67,23 +67,23 @@ public class MainReasonController implements StepController {
       walkingKey = walkingKey + ".wales";
     }
 
-    RadioOptionsGroup.Builder optionsBuilder = new RadioOptionsGroup.Builder()
-        .titleMessageKeyApplicantAware("mainReasonPage.content.title", journey)
-        .addOptionApplicantAware(BLIND, "options.mainReasonPage.blind", journey)
-        .addOptionApplicantAware(WALKD, walkingKey, journey)
-        .addOptionApplicantAware(
-            EligibilityCodeField.TERMILL, "options.mainReasonPage.termill", journey);
-    if(Nation.ENG == journey.getNation()){
+    RadioOptionsGroup.Builder optionsBuilder =
+        new RadioOptionsGroup.Builder()
+            .titleMessageKeyApplicantAware("mainReasonPage.content.title", journey)
+            .addOptionApplicantAware(BLIND, "options.mainReasonPage.blind", journey)
+            .addOptionApplicantAware(WALKD, walkingKey, journey)
+            .addOptionApplicantAware(
+                EligibilityCodeField.TERMILL, "options.mainReasonPage.termill", journey);
+    if (Nation.ENG == journey.getNation()) {
       optionsBuilder.addOptionApplicantAware(HIDDEN, "options.mainReasonPage.hidden", journey);
     }
-    optionsBuilder.addOptionApplicantAware(ARMS, "options.mainReasonPage.arms", journey)
+    optionsBuilder
+        .addOptionApplicantAware(ARMS, "options.mainReasonPage.arms", journey)
         .addOptionApplicantAware(CHILDBULK, "options.mainReasonPage.childbulk", journey)
         .addOptionApplicantAware(CHILDVEHIC, "options.mainReasonPage.childvehic", journey)
         .addOptionApplicantAware(NONE, "options.mainReasonPage.none", journey);
 
-    model.addAttribute(
-        "formOptions",
-        optionsBuilder.build());
+    model.addAttribute("formOptions", optionsBuilder.build());
 
     return TEMPLATE;
   }

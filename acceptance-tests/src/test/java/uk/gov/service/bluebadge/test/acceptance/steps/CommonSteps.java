@@ -381,6 +381,15 @@ public class CommonSteps extends AbstractSpringSteps {
     assertThat("I should see page titled.", commonPage.getDocumentTitle(), is(page_title));
   }
 
+  @Then("^I should see Hidden Disability page$")
+  public void iShouldSeeHiddenDisabilityPage() {
+    WebElement title = commonPage.findElementWithUiPath("hiddenDisabilities.title");
+    assertNotNull(title);
+  }
+
+  @Then("^I click on the Return to the start button$")
+  public void iClickTheHiddenDisabilitiesReturnToStartButton() {}
+
   @Then("^I can see feedback link$")
   public void iCanSeeFeedbackLink() {
     assertTrue(

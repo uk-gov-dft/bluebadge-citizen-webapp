@@ -158,7 +158,8 @@ public class ApplicationFixture extends AbstractSpringSteps {
     pressContinue();
   }
 
-  @And("I complete main reason page for \"(TERMILL|CHILDBULK|CHILDVEHIC|WALKD|ARMS|BLIND|NONE)\"")
+  @And(
+      "I complete main reason page for \"(TERMILL|CHILDBULK|CHILDVEHIC|WALKD|ARMS|BLIND|NONE|HIDDEN)\"")
   public void iCompleteMainReasonPageFor(String benefit) {
     if ("BLIND".equals(benefit)) {
       commonPage.selectRadioButton(MAIN_REASON_LIST);
