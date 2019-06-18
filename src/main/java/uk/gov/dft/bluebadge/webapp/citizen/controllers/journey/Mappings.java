@@ -75,6 +75,7 @@ public class Mappings {
   public static final String URL_CONTACT_COUNCIL = "/contact-council";
   public static final String URL_COOKIES = "/cookies";
   public static final String URL_PRIVACY = "/privacy-notice";
+  public static final String URL_HIDDEN_DISABILITY = "/hidden-disabilities";
 
   public static final String URL_MOBILITY_AID_LIST = "/list-mobility-aids";
   public static final String URL_MOBILITY_AID_ADD = "/add-mobility-aid";
@@ -183,6 +184,7 @@ public class Mappings {
           .put(StepDefinition.MEDICATION_LIST, URL_MEDICATION_LIST)
           .put(StepDefinition.MEDICATION_ADD, URL_MEDICATION_ADD)
           .put(StepDefinition.MEDICAL_EQUIPMENT, URL_MEDICAL_EQUIPMENT)
+          .put(StepDefinition.HIDDEN_DISABILITY, URL_HIDDEN_DISABILITY)
 
           // organisation mappings
           .put(StepDefinition.ORGANISATION_CARE, URL_ORGANISATION_CARE)

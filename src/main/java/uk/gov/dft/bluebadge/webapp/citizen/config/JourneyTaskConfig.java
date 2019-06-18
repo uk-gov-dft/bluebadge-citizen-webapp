@@ -147,6 +147,7 @@ public class JourneyTaskConfig {
         WALKING_DIFFICULTY,
         CONTACT_COUNCIL,
         MAIN_REASON,
+        HIDDEN_DISABILITY,
 
         // DLA Journey
         HIGHER_RATE_MOBILITY,

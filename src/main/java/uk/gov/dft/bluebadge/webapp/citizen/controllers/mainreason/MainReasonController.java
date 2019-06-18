@@ -4,6 +4,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.m
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.BLIND;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDBULK;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDVEHIC;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.HIDDEN;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.NONE;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
 import static uk.gov.dft.bluebadge.webapp.citizen.model.Journey.FORM_REQUEST;
@@ -66,19 +67,23 @@ public class MainReasonController implements StepController {
       walkingKey = walkingKey + ".wales";
     }
 
-    model.addAttribute(
-        "formOptions",
+    RadioOptionsGroup.Builder optionsBuilder =
         new RadioOptionsGroup.Builder()
             .titleMessageKeyApplicantAware("mainReasonPage.content.title", journey)
             .addOptionApplicantAware(BLIND, "options.mainReasonPage.blind", journey)
             .addOptionApplicantAware(WALKD, walkingKey, journey)
             .addOptionApplicantAware(
-                EligibilityCodeField.TERMILL, "options.mainReasonPage.termill", journey)
-            .addOptionApplicantAware(ARMS, "options.mainReasonPage.arms", journey)
-            .addOptionApplicantAware(CHILDBULK, "options.mainReasonPage.childbulk", journey)
-            .addOptionApplicantAware(CHILDVEHIC, "options.mainReasonPage.childvehic", journey)
-            .addOptionApplicantAware(NONE, "options.mainReasonPage.none", journey)
-            .build());
+                EligibilityCodeField.TERMILL, "options.mainReasonPage.termill", journey);
+    if (Nation.ENG == journey.getNation()) {
+      optionsBuilder.addOptionApplicantAware(HIDDEN, "options.mainReasonPage.hidden", journey);
+    }
+    optionsBuilder
+        .addOptionApplicantAware(ARMS, "options.mainReasonPage.arms", journey)
+        .addOptionApplicantAware(CHILDBULK, "options.mainReasonPage.childbulk", journey)
+        .addOptionApplicantAware(CHILDVEHIC, "options.mainReasonPage.childvehic", journey)
+        .addOptionApplicantAware(NONE, "options.mainReasonPage.none", journey);
+
+    model.addAttribute("formOptions", optionsBuilder.build());
 
     return TEMPLATE;
   }

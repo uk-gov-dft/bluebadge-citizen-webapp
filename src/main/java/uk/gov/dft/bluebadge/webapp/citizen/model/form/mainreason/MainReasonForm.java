@@ -36,6 +36,8 @@ public class MainReasonForm implements StepForm, Serializable {
         return Optional.of(StepDefinition.ELIGIBLE);
       case NONE:
         return Optional.of(StepDefinition.NOT_ELIGIBLE);
+      case HIDDEN:
+        return Optional.of(StepDefinition.HIDDEN_DISABILITY);
     }
     return Optional.empty();
   }

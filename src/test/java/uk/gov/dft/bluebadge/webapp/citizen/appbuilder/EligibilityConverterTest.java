@@ -5,6 +5,7 @@ import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.m
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.BLIND;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDBULK;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.CHILDVEHIC;
+import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.HIDDEN;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.NONE;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.TERMILL;
 import static uk.gov.dft.bluebadge.webapp.citizen.client.applicationmanagement.model.EligibilityCodeField.WALKD;
@@ -34,7 +35,7 @@ public class EligibilityConverterTest {
 
     // Arms null for other types...
     EnumSet<EligibilityCodeField> notWalking =
-        EnumSet.complementOf(EnumSet.of(ARMS, TERMILL, NONE));
+        EnumSet.complementOf(EnumSet.of(ARMS, TERMILL, NONE, HIDDEN));
     notWalking.forEach(
         i -> {
           Eligibility eli =
@@ -61,7 +62,7 @@ public class EligibilityConverterTest {
 
     // Arms null for other types...
     EnumSet<EligibilityCodeField> notWalking =
-        EnumSet.complementOf(EnumSet.of(ARMS, TERMILL, NONE));
+        EnumSet.complementOf(EnumSet.of(ARMS, TERMILL, NONE, HIDDEN));
     notWalking.forEach(
         i -> {
           Eligibility eli =
@@ -80,7 +81,7 @@ public class EligibilityConverterTest {
     assertThat(eligibility.getWalkingDifficulty()).isNotNull();
 
     EnumSet<EligibilityCodeField> notWalking =
-        EnumSet.complementOf(EnumSet.of(WALKD, TERMILL, NONE));
+        EnumSet.complementOf(EnumSet.of(WALKD, TERMILL, NONE, HIDDEN));
     notWalking.forEach(
         i -> {
           Journey journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS, i);
@@ -97,7 +98,7 @@ public class EligibilityConverterTest {
     assertThat(eligibility.getChildUnder3()).isNotNull();
 
     EnumSet<EligibilityCodeField> notchild =
-        EnumSet.complementOf(EnumSet.of(CHILDBULK, TERMILL, NONE));
+        EnumSet.complementOf(EnumSet.of(CHILDBULK, TERMILL, NONE, HIDDEN));
     notchild.forEach(
         i -> {
           Journey journey = new JourneyBuilder().withEligibility(i).build();
@@ -119,7 +120,7 @@ public class EligibilityConverterTest {
         });
 
     EnumSet<EligibilityCodeField> noHealthcare =
-        EnumSet.complementOf(EnumSet.of(CHILDBULK, CHILDVEHIC, WALKD, NONE, TERMILL));
+        EnumSet.complementOf(EnumSet.of(CHILDBULK, CHILDVEHIC, WALKD, NONE, TERMILL, HIDDEN));
     noHealthcare.forEach(
         i -> {
           Journey journey = new JourneyBuilder().withEligibility(i).build();
@@ -136,7 +137,8 @@ public class EligibilityConverterTest {
             JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS, BLIND));
     assertThat(eligibility.getBlind().getRegisteredAtLaId()).isNotNull();
 
-    EnumSet<EligibilityCodeField> notBlind = EnumSet.complementOf(EnumSet.of(BLIND, TERMILL, NONE));
+    EnumSet<EligibilityCodeField> notBlind =
+        EnumSet.complementOf(EnumSet.of(BLIND, TERMILL, NONE, HIDDEN));
     notBlind.forEach(
         i -> {
           Journey journey = JourneyFixture.getDefaultJourneyToStep(StepDefinition.DECLARATIONS, i);
@@ -157,7 +159,7 @@ public class EligibilityConverterTest {
         });
 
     EnumSet<EligibilityCodeField> noHealthcare =
-        EnumSet.complementOf(EnumSet.of(CHILDBULK, CHILDVEHIC, WALKD, ARMS, NONE, TERMILL));
+        EnumSet.complementOf(EnumSet.of(CHILDBULK, CHILDVEHIC, WALKD, ARMS, NONE, TERMILL, HIDDEN));
     noHealthcare.forEach(
         i -> {
           Journey journey = new JourneyBuilder().withEligibility(i).build();

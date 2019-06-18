@@ -12,5 +12,6 @@ public enum EligibilityCodeField {
   CHILDBULK,
   CHILDVEHIC,
   TERMILL,
-  NONE;
+  NONE,
+  HIDDEN
 }
