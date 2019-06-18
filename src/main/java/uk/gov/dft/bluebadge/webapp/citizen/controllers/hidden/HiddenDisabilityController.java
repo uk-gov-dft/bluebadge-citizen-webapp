@@ -34,6 +34,7 @@ public class HiddenDisabilityController extends BaseFinalStepController implemen
   }
 
   @GetMapping
+  @Override
   public String show(
       @ModelAttribute(JOURNEY_SESSION_KEY) Journey journey,
       Model model,
